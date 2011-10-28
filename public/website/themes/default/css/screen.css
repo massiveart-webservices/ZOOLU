@@ -1,0 +1,938 @@
+/* --------------------------------------------------------------------------
+Style Sheet
+ __  __           _____ _____ _______      ________            _____ _______ 
+|  \/  |   /\    / ____/ ____|_   _\ \    / /  ____|     /\   |  __ \__   __|
+| \  / |  /  \  | (___| (___   | |  \ \  / /| |__       /  \  | |__) | | |   
+| |\/| | / /\ \  \___ \\___ \  | |   \ \/ / |  __|     / /\ \ |  _  /  | |   
+| |  | |/ ____ \ ____) |___) |_| |_   \  /  | |____   / ____ \| | \ \  | |   
+|_|  |_/_/    \_\_____/_____/|_____|   \/   |______| /_/    \_\_|  \_\ |_|   
+                                                                             
+Site:       DEFAULT
+Author:     Cornelius Hansjakob <cha@massiveart.com>
+Version:    1.0
+-------------------------------------------------------------------------- */
+
+/* ----------------
+Reset
+@import url(reset.css); 
+*/
+
+/* -----------------------
+    General */
+
+body {
+  background-color:#fff;
+  color:#000;
+  font-family: Arial,Helvetica,sans-serif;
+  font-size:14px;
+  line-height:20px;
+}
+
+p {
+  padding-bottom:20px;
+}
+
+ul {
+  padding:0 0 20px 20px;
+  list-style-type: disc;
+}
+
+ol {
+  padding:0 0 20px 20px;
+  list-style-type: decimal;
+}
+
+.clear {
+  clear:both;
+  height:0;
+  line-height:0;
+  font-size:0;
+}
+
+/* -----------------------
+    STICKY FOOTER */
+
+* { 
+  margin:0; 
+  padding:0; 
+} 
+
+html, body, #wrap { 
+  height: 100%; 
+}
+
+body > #wrap {
+  height: auto; 
+  min-height: 100%;
+}
+
+#main { 
+  padding-bottom: 30px; /* must be same height as the footer */ 
+}  
+
+#footer {
+  background-color:#d6d6d6;
+  position: relative;
+  margin-top: -30px; /* negative value of footer height */
+  height: 30px;
+  clear: both;
+} 
+
+/* CLEAR FIX */
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
+
+/* -----------------------
+    Main Container Construct */
+
+.inner {
+  margin:0 auto 0 auto;
+  width:940px;
+}
+
+.header {
+  background-color:#fff;
+  height:100px;
+}
+
+.nav {
+  background-color:#333;
+  color:#fff;
+  height:40px;  
+}
+
+.top {
+  background-color:#ccc;
+  padding:40px 0 20px 0;
+}
+
+.contentContainer {
+  background-color:#fff;
+  padding:20px 0 20px 0;
+}
+
+/* -----------------------
+    Headlines */
+
+h1 {
+  font-size:18px;
+  line-height:24px;
+  font-weight:bold;
+  color:#666;
+  padding:0 0 10px 0;
+}
+
+.top h1 {
+  font-size:36px;
+  line-height:42px;
+  font-weight:bold;
+  padding:0 0 10px 0;
+  color:#000;
+}
+
+h2 {
+  font-size:18px;
+  line-height:24px;
+  font-weight:bold;
+  color:#000;
+  padding:0 0 10px 0;
+}
+
+h3 {
+  font-size:16px;
+  line-height:24px;
+  font-weight:bold;
+  padding:0 0 10px 0;
+}
+
+h4 {
+  font-size:14px;
+  line-height:24px;
+  font-weight:bold;
+  padding:0 0 10px 0;
+}
+
+/* -----------------------
+    Links */
+    
+a, a:hover {
+  font-weight: bold;
+  text-decoration: underline;
+  color:#000;
+  font-size:14px;
+}
+
+a:hover {
+  
+}
+
+#footer li a,
+#footer li a:hover {
+  font-size:12px;
+  font-weight:bold;
+  color:#000;
+}
+
+/* -----------------------
+    Header */
+
+.header .inner {
+  position:relative;
+}
+
+.logo {
+  position:absolute;
+  font-size:36px;
+  font-weight:bold;
+  top:35px;
+  left:0;  
+}
+
+.slogan {
+  position:absolute;
+  font-size:14px;
+  top:60px;
+  left:120px;
+}
+
+.languages {
+  position:absolute;
+  font-size:12px;
+  font-weight:bold;
+  top:40px;
+  right:240px;
+  text-align:right;
+}
+
+.languages ul {
+  list-style:none outside none;
+  padding:0;
+}
+
+.languages li {
+  display:inline;
+  padding-right:1em;
+}
+
+.languages li:last-child {
+  padding-right:0;
+}
+
+.languages li a,
+.languages li a:hover {
+  color:#333;
+  font-size:12px;
+  line-height:20px;
+  text-decoration:none;
+}
+
+.languages li a:hover {
+  text-decoration:underline;
+}
+
+.search {
+  position:absolute;
+  top:40px;
+  right:0;
+  width:220px;
+}
+
+.search input {
+  width:210px;
+  font-size:12px;
+  line-height:16px;
+  background-color:#000;
+  color:#fff;
+  border:medium none;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+/* -----------------------
+    Footer */
+
+#footer .inner {
+  font-size:12px;
+  line-height:30px;
+}
+
+#footer .left {
+  float:left;
+}
+
+#footer .right {
+  float:right;
+}
+
+#footer ul {
+  padding:0;
+}
+
+#footer li {
+  display:inline;
+  padding-left:10px;
+}
+
+/* -----------------------
+    Navigation */
+
+.nav ul {
+  padding:10px 0 0 0;
+  list-style: none outside none;
+}
+
+.nav li {
+  display:inline;
+  font-size:14px;
+  margin-right:2em;
+  padding-right:2em;
+}
+
+.nav li:last-child {  
+  margin-right:0;
+  padding-right:0;
+}
+
+.nav li a {
+  color:#fff;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.nav li a:hover {
+  color:#fff;
+  font-weight:bold;
+  text-decoration:underline;
+}
+
+.nav li.selected a,
+.nav li.selected a:hover {
+  color:#fff;
+  font-weight:bold;
+  text-decoration:underline;
+}
+
+/* -----------------------
+    Sub Navigation */
+
+.subnav {
+  float:left;
+  width:140px;
+  padding:0 20px 0 0;
+}
+
+.subnav ul {
+  list-style:none outside none;
+  padding:0;  
+} 
+
+.subnav li {
+
+}
+
+.subnav li ul {
+  padding:0 0 0 20px;
+}
+
+/* -----------------------
+    Sidebar */
+    
+.sidebar {
+  float:left;
+  width:220px;
+}
+
+.sidebar .block {
+  padding:0 0 20px 0;  
+}
+
+.sidebar img {
+  padding:0 0 10px 0; 
+}
+
+/* -----------------------
+    Content */
+
+.content {
+  float:left;
+  width:540px;
+  padding:0 20px 0 0;
+}
+
+.content .description {
+  padding:0 0 20px 0;
+}
+
+/* -----------------------
+    Overview Definitions */
+
+.overview {
+  
+}
+
+.overview h3 {
+  padding-bottom:20px;  
+}
+
+/* 1 col */
+
+.overview .item {
+  
+}
+
+.overview .item .headline {
+  padding:0 0 5px 0;
+}
+
+.overview .item .headline a,
+.overview .item .headline a:hover {
+  color:#666666;
+  font-size:16px;
+  font-weight:bold;
+  line-height:20px;
+  text-decoration: none; 
+}
+
+.overview .item .headline a:hover {
+  text-decoration: underline;
+}
+
+.overview .item .icon {
+  float:left;
+  padding:0 20px 10px 0;  
+}
+
+.overview .item .text {
+  
+}
+
+.overview .item .text p {
+  padding:0;
+}
+
+/* 2 col */
+
+.overview .col2 {
+  padding:0 0 20px 0;  
+}
+
+.overview .col2 .item {
+  float:left;
+  width:220px;  
+}
+
+.overview .col2 .item .headline {
+  padding:0 0 5px 0;
+}
+
+.overview .col2 .item .headline a,
+.overview .col2 .item .headline a:hover {
+  color:#666666;
+  font-size:16px;
+  font-weight:bold;
+  line-height:20px;
+  text-decoration: none; 
+}
+
+.overview .col2 .item .headline a:hover {
+  text-decoration: underline;
+}
+
+.overview .col2 .item .icon {
+  
+}
+
+.overview .col2 .item .text {
+  
+}
+
+/* list */
+
+.overview .list {
+  padding:0 0 30px;  
+}
+
+.overview .list .item {
+  padding:0; 
+}
+
+.overview .list .item .icon {
+  padding:0 10px 10px 0; 
+}
+
+.overview .list .item .text {
+  padding:0 0 10px 0;  
+}
+
+/* -----------------------
+    Content Text Blocks */
+
+.blocks {
+  padding:0 0 40px 0;
+}
+
+.blocks h3 {
+  color:#666666;
+  font-size:16px;
+  font-weight:bold;
+  line-height:20px;
+  text-decoration: none;  
+}
+
+.blocks .description {
+  padding:0;
+}
+
+.blocks .description p {
+  padding-bottom:0;
+}
+
+/* -----------------------
+    Content Internal Links */
+
+.internalLinks {
+  padding:0 0 40px 0;
+}
+
+.internalLinks .item {
+
+}
+
+.internalLinks .item .icon {
+  float:left;
+  padding:0 5px 0 0;
+}
+
+.internalLinks .item .text {
+  float:left;
+}
+
+/* -----------------------
+    Content Gallery */
+
+.gallery {
+  padding:0 0 20px 0; 
+}
+
+.gallery .item {
+  float: left;
+  width: 140px;
+  height: 140px;
+  overflow: hidden;
+}
+
+.gallery .item img {
+  
+}
+
+.gallery #showAll {
+  float: left;
+  padding-top: 117px;
+}
+
+/* -----------------------
+    Content Documents */
+
+.documents {
+  padding:0 0 30px 0;
+}
+
+.documents .item {
+  padding:0 0 10px 0;
+}
+
+.documents .item .icon {
+  float:left;
+  width:14px;
+  padding:2px 5px 0 0;
+}
+
+.documents .item .text {
+  float: left;
+  width: 400px;
+}
+
+.documents .item .text span {
+  font-size:11px; 
+}
+
+/* -----------------------
+    Contacts Definition */
+
+.contact {
+  padding:0 0 20px 0;
+}
+
+.contact .item { 
+  padding:0 0 20px 0;
+}
+
+.contact .item .icon {
+  float:left;
+  width:80px;  
+}
+
+.contact .item .name {
+  
+}
+
+.contact .item .position {
+  font-size:12px;
+  color:#666;
+  padding:0 0 5px 0;  
+}
+
+.contact .item .address {
+  font-size:12px;
+}
+
+.contact .item .numbers {
+  font-size:12px;
+}
+
+.contact .item .mail {
+  font-size:12px;
+}
+
+.contact .item .mail a,
+.contact .item .mail a:hover {
+  font-size:12px;
+}
+
+/* -----------------------
+    Movies Definition */
+
+.movies {
+  padding: 0 0 20px 0;
+}
+
+.movies .item {
+  padding: 0 0 20px 0;
+}
+
+/* -----------------------
+    Forms Definitions */
+
+.formContainer {
+  padding:0 0 20px 0;
+}
+
+.formContainer .success {
+  padding:15px 0 0 10px;
+  background-color:#ccff99;
+  border-top:2px solid #99CC00;
+  border-bottom:2px solid #99CC00;
+  color:#000;
+}
+
+.formContainer .fieldLeft {
+  float:left;
+  width: 280px; 
+  padding: 0 20px 10px 0;
+}
+
+.formContainer .fieldRight {
+  float:left;
+  width: 280px;
+  padding: 0 0 10px 0;
+}
+
+.formContainer .fieldLeft input,
+.formContainer .fieldRight input {
+  padding:2px;
+  width:96%;
+  margin:2px 0 0 0;
+}
+
+.formContainer .fieldLeft select,
+.formContainer .fieldRight select {
+  width:99%;
+  margin:2px 0 0 0;
+}
+
+.formContainer .fieldLeft textarea,
+.formContainer .fieldRight textarea {
+  font-family: Arial, Sans-Serif;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 20px;
+  width:98%;
+}
+
+.formContainer .fieldLeft .bttnSend,
+.formContainer .fieldRight .bttnSend {
+  width:auto;
+}
+
+.formContainer .required {
+  padding-top:5px;
+}
+
+.formContainer .required span {
+  font-size:11px;
+}
+
+.formContainer .legalNotes {
+  
+}
+
+.formContainer .legalNotes input {
+  margin:0 5px 0 0;
+}
+
+.formContainer .missing {
+  color:#ff0000;
+}
+
+.buttonBox .left {
+  float:left;
+  background:url(/website/themes/default/images/bttn_left.gif) no-repeat 0 0;
+  width:9px;
+  height:38px;
+}
+
+.buttonBox .center {
+  float:left;
+  background:url(/website/themes/default/images/bttn_center.gif) repeat-x 0 0;
+  padding: 7px 30px 0 30px;
+  height:31px;
+  text-align:center;
+  color: #FFF;
+  line-height:25px;
+  cursor:pointer;
+}
+
+.buttonBox .right {
+  float:left;
+  background:url(/website/themes/default/images/bttn_right.gif) no-repeat 0 0;
+  width:9px;
+  height:38px;
+}
+
+/* -----------------------
+    Image Definitions */
+
+.imgLeft {
+  float:left;
+  padding:0 20px 0 0;
+}
+
+.imgLeft img {
+  padding:0 0 10px 0;
+}
+
+.imgRight {
+  float:right;
+  padding:0 0 0 20px;
+}
+
+.imgRight img {
+  padding:0 0 10px 0;
+}
+
+/* -----------------------
+    Login */
+    
+.login {
+  width: 206px;
+}
+
+.login .missing{
+  color: #cc0000;
+  font-size: 12px;  
+}
+
+.login .element {
+  margin: 0 0 10px 0;
+}
+
+.login .element input {
+  width: 200px;
+  border: 1px solid #000;
+  padding: 2px;
+}
+
+.login .submit {
+  margin: 10px 0 0 0;
+}
+
+.login .submit input {
+  border: 1px solid #000;
+  background-color: #ebebeb;
+  padding: 2px;
+}
+
+.login .button {
+  float: right;
+}
+
+/* -----------------------
+    Floats */
+
+.left {
+  float:left;
+}
+
+.right {
+  float:right;
+}
+
+/* -----------------------
+    Font Weight */
+
+.bold {
+  font-weight:bold;
+}
+
+.normal {
+  font-weight:normal;
+}
+
+.lighter {
+  font-weight:lighter;
+}
+
+.bolder {
+  font-weight:bolder;
+}
+
+/* -----------------------
+    Colors */
+
+.black {
+  color:#000;
+}
+
+.white {
+  color:#fff;
+}
+
+/* -----------------------
+    Paddings */
+
+.pTop10 {
+  padding-top:10px;
+}
+.pTop20 {
+  padding-top:20px;
+}
+.pBottom10 {
+  padding-bottom:10px;
+}
+.pBottom20 {
+  padding-bottom:20px;
+}
+.pBottom40 {
+  padding-bottom:40px;
+}
+.pLeft10 {
+  padding-left:10px;
+}
+.pLeft20 {
+  padding-left:20px;
+}
+.pLeft40 {
+  padding-left:40px;
+}
+.pRight10 {
+  padding-right:10px;
+}
+.pRight20 {
+  padding-right:20px;
+}
+.pRight40 {
+  padding-right:40px;
+}
+.pRight60 {
+  padding-right:60px;
+}
+.pRight80 {
+  padding-right:80px;
+}
+.pRight100 {
+  padding-right:100px;
+}
+
+/* -----------------------
+    Margins */
+
+.mTop10 {
+  margin-top:10px;
+}
+.mTop20 {
+  margin-top:20px;
+}
+.mTop40 {
+  margin-top: 40px;
+}
+.mTop60 {
+  margin-top: 60px;
+}
+.mBottom10 {
+  margin-bottom: 10px;
+}
+.mBottom20 {
+  margin-bottom: 20px;
+}
+.mBottom40 {
+  margin-bottom: 40px;
+}
+.mBottom60 {
+  margin-bottom: 60px;
+}
+.mLeft10 {
+  margin-left:10px;
+}
+.mLeft20 {
+  margin-left:20px;
+}
+.mRight10 {
+  margin-right:10px;
+}
+.mRight20 {
+  margin-right:20px;
+}
+.mRight60 {
+  margin-right: 60px;
+}
+
+/* -----------------------
+    Grid */
+
+.gridContainer {
+  display: none; /* to display the grid: display: block; */
+}
+
+#divGrid12 {
+  position:absolute;
+  width:940px;
+  height:100%;
+  z-index:1000;
+  top:0;
+  left:50%;
+  margin:0 0 0 -470px;
+}
+
+.grid {
+  position:absolute;
+  z-index:1000;
+  top:0;
+  background:url(/website/themes/default/images/tmp/grid.png) 0 0;
+  bottom:0;
+  width:40px;
+  height:100%;
+}

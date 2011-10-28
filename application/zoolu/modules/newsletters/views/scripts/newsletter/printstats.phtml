@@ -1,0 +1,205 @@
+<?php
+require_once (dirname(__FILE__).'/../../helpers/StatisticHelper.php');
+$objHelper = new StatisticHelper();
+$intRecipientCount = $this->objCampaign->getRecipientCount();
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <style type="text/css">
+      body {
+        font-family:Arial;
+        width:800px;
+      }
+      
+      table {
+        width:100%;
+      }
+      
+      table tr th {
+        text-align:left;
+      }
+    
+      .clear {
+        clear:both;
+      }
+      
+      .field {
+        float:left;
+        margin-bottom:10px;
+        width:50%;
+      }
+      
+      .field .label {
+        display:block;
+        float:left;
+        font-weight:bold;
+        width:150px;
+      }
+    
+      .chartContainer {
+        float:left;
+      }
+    
+      .chartContainer span{
+        display:block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><?php echo $this->translate->_('Newsletter_statistics'); ?> - <?php echo $this->objCampaign->getTitle() ?></h1>
+    
+    <h2><?php echo $this->translate->_('General_information') ?></h2>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Recipients') ?></span>
+      <span><?php echo $this->objCampaign->getRecipientCount() ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Delivery_date') ?></span>
+      <span><?php echo $this->strDeliveryDate ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Delivered_to') ?></span>
+      <span><?php echo $this->strFilterTitle ?></span>
+    </div>
+    <div class="clear"></div>
+    <br>
+    
+    <h2><?php echo $this->translate->_('Graphics') ?></h2>
+    <div class="chartContainer">
+      <span><?php echo $this->translate->_('Open_chart') ?></span>
+      <img src="/tmp/images/OpenChart_<?php echo $this->objCampaign->getCampaignId() ?>.png?v=<?php echo time() ?>" />
+    </div>
+    <div class="chartContainer">
+      <span><?php echo $this->translate->_('Unopen_chart') ?></span>
+      <img src="/tmp/images/UnopenChart_<?php echo $this->objCampaign->getCampaignId() ?>.png?v=<?php echo time() ?>" />
+    </div>
+    <div class="chartContainer">
+      <span><?php echo $this->translate->_('Click_chart') ?></span>
+      <img src="/tmp/images/ClickChart_<?php echo $this->objCampaign->getCampaignId() ?>.png?v=<?php echo time() ?>" />
+    </div>
+    <div class="clear"></div>
+    
+    <h2><?php echo $this->translate->_('Statistics') ?></h2>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Unsubscribers') ?></span>
+      <span><?php echo $objHelper->getPercentage($intRecipientCount, $this->objCampaign->getUnsubscribeCount()) ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Complaints') ?></span>
+      <span><?php echo $objHelper->getPercentage($intRecipientCount, $this->objCampaign->getComplaintCount()) ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Delivered_to') ?></span>
+      <span><?php echo $objHelper->getPercentage($intRecipientCount, $this->objCampaign->getSuccessfulDelivers()) ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Unique_opens') ?></span>
+      <span><?php echo $objHelper->getPercentage($this->objCampaign->getOpenCount(), $this->objCampaign->getUniqueOpenCount()) ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Opens_total') ?></span>
+      <span><?php echo $this->objCampaign->getOpenCount() ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Bounce') ?></span>
+      <span><?php echo $this->objCampaign->getBounceCount() ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Total_clicks') ?></span>
+      <span><?php echo $this->objCampaign->getClicksCount() ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Forward') ?></span>
+      <span><?php echo $this->objCampaign->getForwardCount() ?></span>
+    </div>
+    <div class="field">
+      <span class="label"><?php echo $this->translate->_('Forward_Opens') ?></span>
+      <span><?php echo $this->objCampaign->getForwardOpenCount() ?></span>
+    </div>
+    <div class="clear"></div>
+    
+    <?php if(count($this->objCampaign->getCountryStatistics()) > 0): ?>
+    <h2><?php echo $this->translate->_('Country_statistics') ?></h2>
+    <?php foreach($this->objCampaign->getCountryStatistics() as $arrCountry): ?>
+        <div class="field">
+          <span class="label"><?php echo $arrCountry['name'] ?></span>
+          <span><?php echo $arrCountry['opens'] ?></span>
+        </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    <div class="clear"></div>
+    
+    <?php if($this->type == 'detail'): ?>
+    <h2><?php echo $this->translate->_('Details') ?></h2>
+    <h3><?php echo $this->translate->_('Click') ?></h3>
+    
+    <table>
+      <tr>
+        <th><?php echo $this->translate->_('Link') ?></th>
+        <th><?php echo $this->translate->_('Clicks') ?></th>
+        <th><?php echo $this->translate->_('Unique_clicks') ?></th>
+      </tr>
+    <?php foreach($this->objCampaign->getClickStatistics() as $strLink => $arrLink): ?>
+      <tr>
+        <td><?php echo $strLink ?></td>
+        <td><?php echo $arrLink['clicks'] ?></td>
+        <td><?php echo $arrLink['unique'] ?></td>
+      </tr>
+    <?php endforeach; ?>  
+    </table>
+    
+    <h3><?php echo $this->translate->_('Unsubscribers') ?></h3>
+    <table>
+      <tr>
+        <th><?php echo $this->translate->_('Email') ?></th>
+        <th><?php echo $this->translate->_('Reason') ?></th>
+        <th><?php echo $this->translate->_('Text') ?></th>
+      </tr>
+    <?php foreach($this->objCampaign->getUnsubscribes() as $arrUnsubscriber): ?>
+      <tr>
+        <td><?php echo $arrUnsubscriber['email'] ?></td>
+        <td><?php echo $arrUnsubscriber['reason'] ?></td>
+        <td><?php echo $arrUnsubscriber['reason_text'] ?></td>
+      </tr>
+    <?php endforeach; ?>  
+    </table>
+    
+    <h3><?php echo $this->translate->_('Complaints') ?></h3>
+    <table>
+      <tr>
+        <th><?php echo $this->translate->_('Date') ?></th>
+        <th><?php echo $this->translate->_('Email') ?></th>
+        <th><?php echo $this->translate->_('Type') ?></th>
+      </tr>
+    <?php foreach($this->objCampaign->getComplaints() as $arrComplaint): ?>
+      <tr>
+        <td><?php echo $arrComplaint['date'] ?></td>
+        <td><?php echo $arrComplaint['email'] ?></td>
+        <td><?php echo $arrComplaint['type'] ?></td>
+      </tr>
+    <?php endforeach; ?>  
+    </table>
+    
+    <h3><?php echo $this->translate->_('Bounce') ?></h3>
+    <table>
+      <tr>
+        <th><?php echo $this->translate->_('Date') ?></th>
+        <th><?php echo $this->translate->_('Email') ?></th>
+      </tr>
+    <?php foreach($this->objCampaign->getBounces() as $arrBounce): ?>
+      <tr>
+        <td><?php echo $arrBounce['date'] ?></td>
+        <td><?php echo $arrBounce['email'] ?></td>
+      </tr>
+    <?php endforeach; ?>  
+    </table>
+    <?php endif; ?>
+    <script type="text/javascript">
+      window.print();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/OverlayHelper.php');
+  $objHelper = new OverlayHelper();
+?> 
+
+<div class="oltitle"><?php echo $this->overlaytitle; ?></div>
+<div class="spacer1"></div>
+<div class="olnavigationwrapper">
+  <?php echo $objHelper->getContactNavigationElements($this->navElements); ?>  
+</div>
+<div class="spacer1"></div>
+<div id="olContent" class="olcontentwrapper olcontacts">
+  <?php echo $objHelper->getContactListView($this->listElements, array()); ?>
+</div>
+<div class="spacer1 clear"></div>

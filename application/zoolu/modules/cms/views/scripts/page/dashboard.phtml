@@ -1,0 +1,36 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/PageHelper.php');
+  $objHelper = new PageHelper();
+  
+  if($this->isSelectItem == true || $this->isSelectItem == 'true'){
+    echo '
+    	<script type="text/javascript">//<![CDATA[    		
+    	  myNavigation.getEdit('.$this->objSelectItem->relationId.(($this->objSelectItem->parentTypeId == Zend_Registry::get('Core')->sysConfig->parent_types->folder) ? ','.$this->objSelectItem->parentId : '').');
+    	  //]]>
+      </script>';    
+  }else{
+    /*echo '
+    	<div class="formsubtitle">'.$this->translate->_('Recent_changes').'</div>
+      <table class="tablelist">
+       <thead>
+         <tr>
+           <th class="topcornerleft"></th>
+           <!--<th class="topcheckbox"></th> -->
+           <th class="toptitle">'.$this->translate->_('title').'</th>
+           <th class="topauthor">'.$this->translate->_('Modified_by').'</th>
+           <th class="topchanged">'.$this->translate->_('changed').'</th>
+           <th class="topcreated">'.$this->translate->_('created').'</th>
+           <th class="topcornerright"></th>
+         </tr>
+       </thead>
+       <tbody>
+         '.$objHelper->getDashboardListOutput($this->objPages).'
+       </tbody>
+      </table>
+      <div class="listfooter">
+       <div class="listfootercornerleft"></div>
+       <div class="listfootercornerright"></div>
+      </div>
+      <div class="spacer2"></div>';*/
+  }
+?>

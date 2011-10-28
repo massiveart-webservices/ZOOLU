@@ -1,0 +1,6 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/EventHelper.php');
+  $objHelper = new EventHelper();  
+  echo $objHelper->getList($this->events, $this->quarter, $this->year);
+?>
+ 

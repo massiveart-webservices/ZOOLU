@@ -1,0 +1,37 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/ViewHelper.php');
+  $objHelper = new ViewHelper();
+  
+  if($this->isSelectItem == true || $this->isSelectItem == 'true'){
+    echo '
+    	<script type="text/javascript">//<![CDATA[    		
+    	  myNavigation.getEdit('.$this->objSelectItem->relationId.(($this->objSelectItem->parentTypeId == Zend_Registry::get('Core')->sysConfig->parent_types->folder) ? ','.$this->objSelectItem->parentId : '').');
+    	  //]]>
+      </script>';    
+  }else{
+    /*echo '
+    	<div class="formsubtitle">'.$this->translate->_('Recent_changes').'</div>
+        <table class="tablelist">
+         <thead>
+           <tr>
+             <th class="topcornerleft"></th>
+             <th class="topcheckbox"></th>
+             <th class="topicon"></th>
+             <th class="toptitle">'.$this->translate->_('title').'</th>
+             <th class="topauthor">'.$this->translate->_('Uploaded_by').'</th>
+             <th class="topcreated">'.$this->translate->_('uploaded').'</th>
+             <th class="topcornerright"></th>
+           </tr>
+         </thead>
+         <tbody>
+           '.$objHelper->getDashboardListOutput($this->objFiles).'
+         </tbody>
+        </table>
+        <div class="listfooter">
+         <div class="listfootercornerleft"></div>
+         <div class="listfootercornerright"></div>
+        </div>
+        <div class="spacer2"></div>';*/
+  }
+?>
+                 

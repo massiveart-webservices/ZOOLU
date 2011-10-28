@@ -1,0 +1,17 @@
+<?php
+require_once (dirname(__FILE__).'/../../helpers/VideoHelper.php');
+$objHelper = new VideoHelper();
+
+// TODO: style-Definitionen noch nicht im stylesheet
+?>
+
+
+<div id="divSelected<?php echo $this->strElementId; ?>">
+<?php echo $objHelper->getSelectedVideo($this->objSelectedVideo, $this->intVideoTypeId, $this->strValue, $this->strElementId , $this->strVideoTypeName ,$this->strChannelUserId); ?>
+</div>
+
+<script type="text/javascript" language="javascript">//<![CDATA[
+  $('<?php echo $this->strElementId; ?>SelectedContainer').update($('divSelected<?php echo $this->strElementId; ?>').innerHTML);
+  $('divSelected<?php echo $this->strElementId; ?>').remove();
+//]]>
+</script>

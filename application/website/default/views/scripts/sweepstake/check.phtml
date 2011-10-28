@@ -1,0 +1,31 @@
+<?php if($this->onlySweepstake) : ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title><?php echo $this->pageTitle; ?></title>
+    
+    <meta name="robots" content="all" />
+    <meta name="robots" content="noindex" />
+    <meta name="robots" content="nofollow" />
+  
+    <link type="text/css" rel="stylesheet" href="/website/themes/default/css/screen.css" />
+    <link type="text/css" rel="stylesheet" href="/website/themes/default/sweepstakes/css/sweepstakes.css" />  
+    <link rel="shortcut icon" href="/website/themes/default/favicon.ico" type="image/x-icon"/>
+    
+    <script type="text/javascript" src="/min/b=website/themes/default&amp;f=js_incs/prototype/prototype.js,js_incs/script.aculous/builder.js,js_incs/script.aculous/effects.js,js_incs/script.aculous/controls.js,js_incs/script.aculous/fader.js,flowplayer/js/flowplayer-3.1.4.min.js,sweepstakes/js_incs/sweepstakes.js"></script>
+  </head>
+
+  <body id="body">
+  <?php endif; ?>
+  <?php
+    if(!$this->blnSweepstake){
+      header('HTTP/1.1 302 Found');  
+    }else{
+      include GLOBAL_ROOT_PATH.$this->basePath.$this->file;   
+    }
+  ?>
+  <?php if($this->onlySweepstake) : ?>
+  </body>
+</html>
+<?php endif; ?>

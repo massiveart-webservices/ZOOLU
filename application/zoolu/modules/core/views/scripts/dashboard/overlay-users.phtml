@@ -1,0 +1,12 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/DashboardHelper.php');
+  $objHelper = new DashboardHelper();
+  $objHelper->setTranslate($this->translate);
+?> 
+
+<div class="oltitle"><?php echo $this->overlaytitle; ?></div>
+<div class="spacer1"></div>
+<div id="olContent" class="olnavigationwrapper2 dbrd-content">
+  <?php echo $objHelper->getUserListView($this->elements, $this->arrSelectedIds); ?>
+</div>
+<div class="spacer1 clear"></div>

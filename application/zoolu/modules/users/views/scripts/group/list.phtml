@@ -1,0 +1,13 @@
+<?php
+
+  require_once (dirname(__FILE__).'/../../helpers/ListHelper.php');
+  $objHelper = new ListHelper();
+
+?>
+        <?php echo $objHelper->getList($this->groupPaginator, $this->orderColumn, $this->sortOrder, $this->searchValue); ?>
+        <?php echo $this->paginationControl($this->groupPaginator, 'Sliding', 'pagination.phtml'); ?>
+        <div class="spacer2"></div>
+        <script type="text/javascript">//<![CDATA[
+          myForm.blnShowFormAlert = <?php echo (($this->blnShowFormAlert == true) ? 'true' : 'false') ?>;
+        //]]>
+        </script>

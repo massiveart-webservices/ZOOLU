@@ -1,0 +1,111 @@
+@CHARSET "UTF-8";
+
+/* @group tagcloud */
+
+.tagcloud{
+  padding:0px 0px 0px 0px;	
+   margin:0px 0px 0px 0px; 
+  text-align: justify;  
+}
+
+.tagcloud a{
+  padding:0px 2px 0px 2px;
+  margin:0px 0px 0px 0px;  
+  /*white-space: nowrap;*/
+}
+
+.tagcloud a.selectedtag{
+  background-color: #179FC0;
+  color: #fff;
+}
+
+/* @end */
+
+/* @group tags edit */
+
+.tagswrapper{
+}
+
+.tagswrapper .editinput{
+}
+
+.tagswrapper .editinput input{
+}
+
+.tagswrapper .mostused{
+  text-align: justify;  
+}
+
+.tagswrapper .mostused .mostusedcontainer{
+	padding:0px;
+}
+
+.tagswrapper .mostused .mostusedcontainer a{
+  margin:0px 5px 0px 0px;
+  padding:2px;  
+  line-height: 22px;  
+}
+
+.tagswrapper .mostused .mostusedcontainer a.selectedtag{
+  background-color: #FFD300;
+  color: #000;
+}
+
+.tagpill{
+  background-color: #E4E4E4;
+  position:relative;
+  float:left;
+  margin-bottom:5px;
+  margin-right:5px;
+  padding:3px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+.tagtitle{
+  position:relative;
+  float:left;
+  padding-left:3px;
+}
+
+.tagdelete{
+  position:relative;
+  float:left;
+  cursor:pointer;
+}
+
+.selectedtagwrapper{
+  margin-right:22px;
+  padding-bottom:20px;
+}
+
+.autocomplete{
+  margin:0px;  
+  padding:0px;  
+  width:250px;
+  background:#fff;
+  border:1px solid #888;
+  position:absolute;
+  z-index:999;
+}
+
+.autocomplete ul{
+  margin:0px;
+  padding:0px;
+  list-style-type:none;
+}
+
+.autocomplete ul li.selected{ 
+  background-color:#FFD300;
+}
+
+.autocomplete ul li{
+  margin:0;
+  padding:2px;
+  height:32px;
+  display:block;
+  list-style-type:none;
+  cursor:pointer;
+}
+
+/* @end */

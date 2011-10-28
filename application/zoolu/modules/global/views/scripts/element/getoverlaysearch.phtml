@@ -1,0 +1,20 @@
+<div class="oltitle"><?php echo $this->overlaytitle; ?></div>
+<div class="spacer1"></div>
+<div class="field-6 field">
+  <input type="text" id="elementSearchValue" onkeyup="if(event.keyCode == 13){ myGlobal.search(); return false; }" value=""/>
+  <input type="hidden" id="elementSearchCurrLevel" value="<?php echo $this->currLevel; ?>"/>
+</div>
+<div id="elementSearchButton" style="float:left; padding-top:2px; cursor:pointer;" onclick="myGlobal.search();">
+  <div class="button25leftOn"></div>
+  <div class="button25centerOn">
+      <div><?php echo $this->translate->_('Search'); ?></div>
+  </div>
+  <div class="button25rightOn"></div>
+  <div class="clear"></div>
+</div>
+<div style="float: left; padding:6px 0 0 10px;">
+  <a href="#" onclick="myGlobal.resetSearch(); return false;"><?php echo $this->translate->_('Reset'); ?></a>
+</div>
+<div class="clear"></div>
+<div class="olnavigationwrapper" id="elementSearchResult"></div>
+<div class="spacer1 clear"></div>

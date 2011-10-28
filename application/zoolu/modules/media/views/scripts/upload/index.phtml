@@ -1,0 +1,41 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/ViewHelper.php');
+  $objHelper = new ViewHelper();
+?>
+<div class="mediacontainer">
+  <div class="mediaicon">
+    <?php if(strpos($this->mimeType, 'image/') !== false) : ?>
+      <img src="<?php echo $this->filePath.$this->fileFileId.'.'.$this->fileExtension.'?v='.$this->fileVersion; ?>" width="32" height="32"/>
+    <?php else : ?>
+      <img src="<?php echo $objHelper->getDocIcon($this->fileExtension, 32); ?>" width="32" height="32"/>
+    <?php endif; ?>    
+  </div>
+  <div class="mediainfos">
+    <div class="mediainfotitle"><input id="FileTitle<?php echo $this->fileId; ?>" name="FileTitle<?php echo $this->fileId; ?>" type="text" value="<?php echo $this->fileTitle; ?>"/></div>
+    <div class="mediainfodescription"><textarea onfocus="myMedia.setFocusTextarea(this.id); return false;" id="FileDescription<?php echo $this->fileId; ?>" name="FileDescription<?php echo $this->fileId; ?>"><?php echo $this->strDefaultDescription; ?></textarea></div>
+    <div class="mediainfotags">      
+      <ol>        
+       <li class="autocompletList input-text">
+         <input type="text" value="" id="FileTags<?php echo $this->fileId; ?>" name="FileTags<?php echo $this->fileId; ?>"/>
+         <div id="FileTags<?php echo $this->fileId; ?>_autocompleter" class="autocompleter">
+           <div class="default"><?php echo $this->translate->_('Search_or_add_tags'); ?></div> 
+           <ul class="feed"></ul>
+         </div>
+       </li>
+      </ol>             
+    </div>
+    <div class="mediainfolanguagespecific">
+      <div class="field">
+         <label for="FileIsLanguageSpecific<?php echo $this->fileId; ?>"><input type="checkbox" class="multiCheckbox" value="1" id="FileIsLanguageSpecific<?php echo $this->fileId; ?>" name="FileIsLanguageSpecific<?php echo $this->fileId; ?>"> <?php echo $this->translate->_('Medium_is_language_specific'); ?></label>                            
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">//<![CDATA[
+  myMedia.addUploadedFileId(<?php echo $this->fileId; ?>);
+  FileTags<?php echo $this->fileId; ?>_list = new FacebookList('FileTags<?php echo $this->fileId; ?>', 'FileTags<?php echo $this->fileId; ?>_autocompleter',{ newValues: true, regexSearch: true, fetchFile: '/zoolu/core/tags/livesearch' });
+//]]>
+</script>

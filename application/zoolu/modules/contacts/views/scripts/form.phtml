@@ -1,0 +1,31 @@
+        <div class="formtitle"><?php echo $this->formtitle; ?></div>        
+        <?php echo $this->form; ?>
+        <div class="clear"></div>
+        <script type="text/javascript">//<![CDATA[
+          myForm.intId = <?php echo (($this->intId != '' && $this->intId > 0) ? $this->intId : 'null'); ?>;
+          myForm.blnShowFormAlert = <?php echo (($this->blnShowFormAlert == true) ? 'true' : 'false') ?>;
+          myForm.selectNavigationItemNow = <?php echo (($this->selectNavigationItemNow && $this->selectNavigationItemNow == true) ? 'true' : 'false') ?>;
+          //myForm.isAuthorizedToDelete(<?php echo (($this->authorizedDelete && $this->authorizedDelete == true) ? 'true' : 'false') ?>);
+          //myForm.isAuthorizedToUpdate(<?php echo (($this->authorizedUpdate && $this->authorizedUpdate == true) ? 'true' : 'false') ?>);
+          
+          //Save subscriber status
+          myForm.blnWarn = false;
+          var subscribe = $('subscribed-632');
+          var unsubscribe = $('subscribed-633');
+          if(subscribe){
+            if(subscribe.checked){
+              console.log('check');
+              unsubscribe.observe('change', function(){
+                if(unsubscribe.checked){
+                  myForm.blnWarn = true;
+                }
+              });
+              subscribe.observe('change', function(){
+                if(subscribe.checked){
+                  myForm.blnWarn = false;
+                }
+              });
+            }
+          }         
+          //]]>
+        </script>

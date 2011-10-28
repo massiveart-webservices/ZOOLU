@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configdata>
+  
+  <!--
+  ***********************************************************
+  * config for online evnironment                           *
+  ***********************************************************
+  -->
+  <production>    
+    <sweepstakes>    
+      
+    </sweepstakes>
+  </production>
+  
+  <!--
+  ***********************************************************
+  * config for staging evnironment                          *
+  ***********************************************************
+  -->
+  <staging extends="production">
+    
+  </staging>
+  
+  <!--
+  ***********************************************************
+  * config for testing evnironment                          *
+  ***********************************************************
+  -->
+  <testing extends="staging">
+  
+  </testing>
+  
+  <!--
+  ***********************************************************
+  * config for development evnironment                      *
+  ***********************************************************
+  -->
+  <development extends="testing">
+    
+  </development>
+  
+</configdata>

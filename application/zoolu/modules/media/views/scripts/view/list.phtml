@@ -1,0 +1,27 @@
+<?php
+
+  require_once (dirname(__FILE__).'/../../helpers/ViewHelper.php');
+  $objHelper = new ViewHelper();
+
+?>
+
+  <div class="listwrapper">
+    <?php echo $objHelper->getListTitle($this->filePaginator, $this->strSearchValue); ?>
+    <table class="tablelist">
+      <thead>
+        <?php echo $objHelper->getListHead($this->strOrderColumn, $this->strOrderSort) ?>
+      </thead>
+      <tbody>
+        <?php echo $objHelper->getListView($this->filePaginator); ?>
+      </tbody>
+    </table>
+    <?php echo $this->paginationControl($this->filePaginator, 'Sliding', 'pagination.phtml'); ?>
+    <div class="spacer2"></div>
+    <div class="clear"></div>
+  </div> 
+  <script type="text/javascript">//<![CDATA[
+    myMedia.isAuthorizedToAdd(<?php echo (($this->authorizedAdd && $this->authorizedAdd == true) ? 'true' : 'false') ?>);
+    myMedia.isAuthorizedToDelete(<?php echo (($this->authorizedDelete && $this->authorizedDelete == true) ? 'true' : 'false') ?>);
+    myMedia.isAuthorizedToUpdate(<?php echo (($this->authorizedUpdate && $this->authorizedUpdate == true) ? 'true' : 'false') ?>);
+  //]]>
+  </script>

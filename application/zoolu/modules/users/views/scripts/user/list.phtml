@@ -1,0 +1,15 @@
+<?php
+
+  require_once (dirname(__FILE__).'/../../helpers/ListHelper.php');
+  $objHelper = new ListHelper();
+
+?>
+        <?php echo $objHelper->getList($this->userPaginator, $this->orderColumn, $this->sortOrder, $this->searchValue); ?>
+        <?php echo $this->paginationControl($this->userPaginator, 'Sliding', 'pagination.phtml'); ?>
+        <div class="spacer2"></div>
+        <script type="text/javascript">//<![CDATA[
+          myForm.blnShowFormAlert = <?php echo (($this->blnShowFormAlert == true) ? 'true' : 'false') ?>;
+          myCore.deleteAlertMultiMessage = '<?php echo $this->translate->_('Delete_users'); ?>';
+          myCore.deleteAlertSingleMessage = '<?php echo $this->translate->_('Delete_user'); ?>';
+        //]]>
+        </script>

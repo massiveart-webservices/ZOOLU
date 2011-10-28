@@ -1,0 +1,80 @@
+              <div class="listfooter">
+                <div class="listfootercornerleft"></div>
+                <div class="listfootercornerright"></div>
+                <div class="listfootercontent">
+                  <div class="listpagination">
+                    <?php $core = Zend_Registry::get('Core'); ?>
+                    <!-- Previous page link -->
+                    <?php if (isset($this->previous)): ?>
+                    <div class="listback">
+                      <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->previous; ?>);">
+                        <div class="buttonleft"></div>
+                        <div class="buttoncenter"><?php echo $core->translate->_('previous'); ?></div>
+                        <div class="buttonright"></div>
+                        <div class="clear"></div>
+                      </div>
+                    </div>
+                    <?php else: ?>
+                    <div class="listback">
+                      <div class="listfooterbutton">
+                        <div class="buttonleft"></div>
+                        <div class="buttoncenter"><?php echo $core->translate->_('previous'); ?></div>
+                        <div class="buttonright"></div>
+                        <div class="clear"></div>
+                      </div>
+                    </div>
+                    <?php endif; ?>
+                    <div class="listjumptopage"><?php echo $core->translate->_('Page'); ?>:
+                      <?php if ($this->pageCount): ?>
+                      <select id="paginationControl" size="1">
+                      <?php foreach ($this->pagesInRange as $page): ?>
+                        <?php $selected = ($page == $this->current) ? ' selected="selected"' : ''; ?>
+                        <option value="<?php echo $page ?>"<?php echo $selected ?>><?php echo $page; ?></option>
+                      <?php endforeach; ?>
+                      </select>
+                      <?php endif; ?>
+                    </div>
+                    <!-- Next page link -->
+                    <?php if (isset($this->next)): ?>
+                    <div class="listnext">
+                      <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->next; ?>);">
+                        <div class="buttonleft"></div>
+                        <div class="buttoncenter"><?php echo $core->translate->_('next'); ?></div>
+                        <div class="buttonright"></div>
+                        <div class="clear"></div>
+                      </div>
+                    </div>
+                    <?php else: ?>
+                    <div class="listnext">
+                      <div class="listfooterbutton">
+                        <div class="buttonleft"></div>
+                        <div class="buttoncenter"><?php echo $core->translate->_('next'); ?></div>
+                        <div class="buttonright"></div>
+                        <div class="clear"></div>
+                      </div>
+                    </div>
+                    <?php endif; ?>
+                    <div class="clear"></div>
+                  </div>
+                  <div class="listentriespage"><?php echo $core->translate->_('Items_per_page'); ?>:
+                    <select id="paginationItemsPerPage" size="1">
+                      <option value="20"<?php echo ($this->itemCountPerPage == 20) ? ' selected="selected"' : ''; ?>>20</option>
+                      <option value="50"<?php echo ($this->itemCountPerPage == 50) ? ' selected="selected"' : ''; ?>>50</option>
+                      <option value="100"<?php echo ($this->itemCountPerPage == 100) ? ' selected="selected"' : ''; ?>>100</option>
+                      <option value="500"<?php echo ($this->itemCountPerPage == 500) ? ' selected="selected"' : ''; ?>>500</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                  <script type="text/javascript">
+                    $('paginationControl').observe('change', function() {
+                        myList.getListPage(this.options[this.selectedIndex].value);
+                    });
+      
+                    $('paginationItemsPerPage').observe('change', function() {
+                      myList.ItemsPerPage = this.options[this.selectedIndex].value;
+                      myList.getListPage($('paginationControl').options[$('paginationControl').selectedIndex].value);
+                    });
+                  </script>
+                </div>
+              </div>
+            </div>

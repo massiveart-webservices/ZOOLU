@@ -1,0 +1,77 @@
+/**
+ * Modus
+ *
+ * @author Cornelius Hansjakob <cha@massiveart.com>
+ * @version 1.0
+ */
+
+/* ----------------
+Main (overwrite core.css) */
+ 
+body {
+  padding:40px 0 0 0; 
+  background-position: 0 40px;
+}
+
+/* ----------------
+Modus Container */
+
+.divModusContainer {
+  position:fixed; 
+  z-index:80; 
+  right:0; 
+  top:0; 
+  left:0; 
+  height:40px; 
+  background:url(/zoolu-statics/images/modus/bg_modus.gif) repeat-x 0 0;
+}
+
+.divModusLogo {
+  float:left; 
+  padding:10px 0 0 20px;
+}
+
+.divModusAdvice {
+  float:left; 
+  padding:16px 0 0 20px; 
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+}
+
+.divModusLogout {
+  float:right;
+  padding:16px 20px 0 0; 
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+}
+
+.divModusLogout a {
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+  text-decoration:underline;
+}
+
+.divModusLogout a:hover {
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+  text-decoration:none;
+}
+
+.divModusStatus {
+  float:right; 
+  padding:14px 20px 0 0; 
+  color:#fff; 
+  font-weight:bold;
+}
+
+.divModusStatus select {
+  padding:0 0 0 5px;
+  font-weight:bold;
+}
+
+
+ 

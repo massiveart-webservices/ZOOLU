@@ -1,0 +1,41 @@
+<?php
+
+  require_once (dirname(__FILE__).'/../../helpers/NavigationHelper.php');
+  $objHelper = new NavigationHelper();
+
+?>  
+            
+            <script type="text/javascript">//<![CDATA[
+              rootLevelId = <?php echo $this->rootLevelId; ?>;
+              unitFormDefaultId  = '<?php echo $this->unitFormDefaultId; ?>';
+              contactFormDefaultId  = '<?php echo $this->contactFormDefaultId; ?>';
+            //]]>
+            </script>
+            
+            <div id="level<?php echo $this->currLevel; ?>" class="navlevelinner" onmouseover="myNavigation.toggleAddMenuIcon(<?php echo $this->currLevel; ?>,'show');return false;" onmouseout="myNavigation.toggleAddMenuIcon(<?php echo $this->currLevel; ?>,'hide');return false;">
+              <?php echo $objHelper->getContactNavElements($this->elements, $this->currLevel); ?>
+            </div>
+            
+            <div id="levelmenu<?php echo $this->currLevel; ?>" class="levelmenu" style="display:none;" onclick="myNavigation.showAddMenu(<?php echo $this->currLevel; ?>); return false;" onmouseover="myNavigation.toggleAddMenuIcon(<?php echo $this->currLevel; ?>,'show');return false;">
+              <div><img src="/zoolu-statics/images/icons/icon_add.png" width="16" height="16"/></div>
+            </div>
+              
+            <div id="addmenu<?php echo $this->currLevel; ?>" class="addmenu" style="display:none;">
+              <div class="addmenutopleft"></div>
+              <div class="addmenutopright"></div>
+              <div class="clear"></div>
+              <div class="addmenucontent">
+                <div class="addmenuelement" onclick="myNavigation.addContact(<?php echo $this->currLevel; ?>); return false;">
+                  <img class="icon" src="/zoolu-statics/images/icons/icon_contact_new.png" width="16" height="16"/>
+                  <div class="small white"><?php echo $this->translate->_('New_Contact'); ?></div>
+                  <div class="clear"></div>
+                </div>
+                <div class="addmenuelement" onclick="myNavigation.addUnit(<?php echo $this->currLevel; ?>); return false;">
+                  <img class="icon" src="/zoolu-statics/images/icons/icon_unit_new.png" width="16" height="16"/>
+                  <div class="small white"><?php echo $this->translate->_('New_Group'); ?></div>
+                  <div class="clear"></div>
+                </div> 
+              </div>              
+            </div>
+          
+          

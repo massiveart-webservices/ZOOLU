@@ -1,0 +1,86 @@
+<?php
+/**
+ * ZOOLU - Content Management System
+ * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ *
+ * LICENSE
+ *
+ * This file is part of ZOOLU.
+ *
+ * ZOOLU is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ZOOLU is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
+ *
+ * For further information visit our website www.getzoolu.org 
+ * or contact us at zoolu@getzoolu.org
+ *
+ * @category   ZOOLU
+ * @package    library.massiveart.website.cache.backend
+ * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
+ * @version    $Id: version.php
+ */
+
+/**
+ * StaticBackendCacheAdapter
+ * 
+ *
+ * Version history (please keep backward compatible):
+ * 1.0, 2009-04-05: Thomas Schedler
+ *
+ * @author Thomas Schedler <tsh@massiveart.com>
+ * @version 1.0
+ * @package massiveart.website.cache.backend
+ * @subpackage StaticAdapter
+ */
+
+class StaticBackendCacheAdapter {
+  
+	protected $_cache = null;
+
+  public function __construct(Zend_Cache_Core $cache){
+    $this->_cache = $cache;
+  }
+  
+  public function load($id){
+    $id = $this->_encodeId($id);
+    $this->__call('load', array($id));
+  }
+
+  public function test($id){
+    $id = $this->_encodeId($id);
+    $this->__call('test', array($id));
+  }
+  
+  public function save($data, $id, $tags = array(), $specificLifetime = false){
+    $id = $this->_encodeId($id);
+    $this->__call('save', array($data, $id, $tags, $specificLifetime));
+  }
+  
+  public function remove($id){
+    $id = $this->_encodeId($id);
+    $this->__call('remove', array($id));
+  }
+  
+  public function __call($method, array $args){
+    return call_user_func_array(array($this->_cache, $method), $args);
+  }
+  
+  public function removeRecursive($id) {
+    $this->_cache->getBackend()->removeRecursive($id);
+  }
+  
+  protected function _encodeId($id) {
+    return bin2hex($id); // encode path to alphanumeric hexadecimal
+  }
+}
+?>

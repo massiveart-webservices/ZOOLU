@@ -1,0 +1,38 @@
+<?php
+
+  require_once (dirname(__FILE__).'/../../helpers/ViewHelper.php');
+  $objHelper = new ViewHelper();
+
+?>
+<?php if($this->languageOptions != '') : ?>
+<div style="float:right;">
+  <div class="languagecontainer">
+    <select id="selectMediaFormLanguageId" onchange="myMedia.changeEditFormLanguage(this.value); return false;">
+      <?php echo $this->languageOptions; ?>
+    </select>
+  </div>
+</div>
+<?php endif; ?>
+<div class="oltitle"><?php echo $this->translate->_('Edit_media'); ?></div>
+<div class="clear spacer1"></div>
+<form id="editForm" name="editForm" method="post" action="<?php echo $this->strEditFormAction; ?>" onsubmit="return false;">
+  <input type="hidden" id="mediaFormLanguageId" value="<?php echo $this->languageId; ?>" name="languageId"/>
+  <div id="overlayMediaWrapper" class="mediawrapper">
+	  <?php echo $objHelper->getEditForm($this->objFiles); ?>
+	  <input type="hidden" name="FileIds" id="EditFileIds" value="<?php echo $this->strFileIds; ?>"/>
+  </div>
+  <div class="clear"></div>
+  <div class="buttoncancel" onclick="myOverlay.close(); return false;"><?php echo $this->translate->_('Cancel'); ?></div>  
+  <?php if($this->authorizedUpdate == true): ?>
+  <div onclick="myMedia.editFiles();" id="buttoneditsave">
+    <div class="button25leftOn"></div>
+    <div class="button25centerOn">
+      <img width="13" height="13" src="/zoolu-statics/images/icons/icon_save_black.png" class="iconsave"/>
+      <div><?php echo $this->translate->_('Save'); ?></div>
+    </div>
+    <div class="button25rightOn"></div>
+    <div class="clear"></div>
+  </div>
+  <?php endif; ?>
+  <div class="clear"></div>
+</form>

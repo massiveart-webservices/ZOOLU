@@ -1,0 +1,131 @@
+				<?php if($this->backLink): ?>
+				<div class="pagepreviewcontainer">
+          <div class="pagebackleft"></div>
+          <div class="pagebackcenter white small"><a onclick="myNavigation.selectNavigationItem(<?php echo $this->currLevel - 1; ?>, 'folder', <?php echo $this->parentFolderId; ?>, false); myFolder.getFolderContentList(); return false;" target="_blank"><img src="/zoolu-statics/images/icons/icon_page_preview.png"/><?php echo $this->translate->_('Back'); ?></a></div>
+          <div class="pagebackright"></div>
+          <div class="clear"></div>
+				</div>
+				<? endif; ?>
+				<?php if($this->languageOptions != '') : ?>
+        <div class="languagecontainer">
+          <select id="selectLanguageId" onchange="myForm.changeLanguage(this.value<?php if($this->backLink) echo ', true'; ?>); return false;">
+            <?php echo $this->languageOptions; ?>
+          </select>
+        </div>
+        <?php endif; ?>
+        <div class="formtitle"><?php echo $this->formtitle; ?></div>
+        <?php echo $this->form; ?>
+				<div class="clear"></div>
+				<div style="display:none;" id="divMetaInfos">
+				  <table cellpadding="0" cellspacing="0">
+	          <?php if($this->module == $this->core->sysConfig->modules->cms ||
+	                   $this->module == $this->core->sysConfig->modules->global) : ?>
+	            <tr>
+	              <td class="tdImportant"><?php echo $this->translate->_('Status'); ?>:</td>
+	              <td>
+	                <select id="statusSelect" class="important" onchange="$('idStatus').setValue(this.value); return false;">
+	                  <?php echo $this->statusOptions; ?>
+	                </select>
+	              </td>
+	            </tr>
+	            <?php if($this->publishDate != '') : ?>
+	            <tr>
+	              <td class="tdNormal"><?php echo $this->translate->_('Published'); ?>:</td>
+	              <td>
+	                <div class="publishdate"><?php echo $this->publishDate; ?></div>
+	                <!-- <img class="iconcalendar" src="/zoolu-statics/images/icons/icon_calendar_purple.png" width="13" height="15"/> -->
+	                <div class="clear"></div>
+	              </td>
+	            </tr>
+	            <?php endif; ?>
+	            <!--
+	            <tr>
+	              <td class="tdNormal"><?php echo $this->translate->_('Publish'); ?>:</td>
+	              <td>
+	                <select class="normal">
+	                  <option value="1">&Ouml;ffentlich</option>
+	                  <option value="2">Privat</option>
+	                </select>
+	              </td>
+	            </tr>
+	            -->
+	            <tr>
+	              <td class="tdNormal"><?php echo $this->translate->_('Author'); ?>:</td>
+	              <td>
+	                <select id="creatorSelect" class="normal" onchange="$('creator').setValue(this.value); return false;">
+	                  <?php echo $this->creatorOptions; ?>
+	                </select>
+	              </td>
+	            </tr>
+	            <tr>
+	              <td class="tdNormal"><input type="checkbox" name="showinnavigation" id="showinnavigation"<?php ($this->showinnavigation > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('divShowInNavigationOptions')) { myForm.toggleNavigationOptions(this); } else { $('showInNavigation').value = (this.checked) ? '1' : '0'; }"/></td>
+	              <td>
+                  <label for="showinnavigation"><?php echo $this->translate->_('show_in_navigation'); ?></label>
+                  <?php if($this->blnIsRootLevelChild && $this->module == $this->core->sysConfig->modules->cms): ?>
+                  <div id="divShowInNavigationOptions"<?php echo ($this->showinnavigation == 0) ? ' style="display:none;"' : ''; ?>>
+                    <div class="navigationoptios">
+                      <select name="showinnavigationoption" id="showinnavigationoption" onchange="$('showInNavigation').value = this.value;">
+                        <?php echo $this->navigationOptions; ?>
+                      </select>
+                    </div>
+                  </div>
+                  <?php endif;?>
+                </td>              
+	            </tr>
+              <tr>
+                <td class="tdNormal"><input type="checkbox" name="hideinsitemap" id="hideinsitemap"<?php ($this->hideInSitemap > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('hideInSitemap')) $('hideInSitemap').value = (this.checked) ? '1' : '0';"/></td>
+                <td>
+                  <label for="hideinsitemap"><?php echo $this->translate->_('hide_in_sitemap'); ?></label>
+                </td>
+              </tr>
+	            <!--<tr>
+	              <td class="tdNormal"><input type="checkbox" name="urlfolder" id="urlfolder"<?php ($this->isurlfolder == 1) ? print(' checked="checked"') : print(''); ?> onclick="$('isUrlFolder').value = this.checked ? '1' : '0'"/></td>
+	              <td><label for="urlfolder">in URL-Pfad &uuml;bernehmen</label></td>
+	            </tr>-->            
+            <?php endif; ?>
+            <?php if($this->folderId && $this->authorizedSecurityManager == true) : ?>
+              <tr>
+                <td></td>
+                <td><a href="#" onclick="myFolder.getCurrentFolderSecurity(); return false;"><?php echo $this->translate->_('Folder_permission'); ?></a></td>
+              </tr>
+            <?php endif; ?>
+            <?php if($this->version > 0) : ?>
+              <!--<tr>
+                <td class="tdNormal"><?php echo $this->translate->_('Version'); ?>:</td>
+                <td>
+                  <div class="currversion"><?php echo $this->version; ?>.0</div>
+                   <div id="buttonnewversion">
+                    <div class="button17leftOff"></div>
+                    <div class="button17centerOff">
+                      <img src="/zoolu-statics/images/icons/icon_plus_white_small.png" width="8" height="8"/>
+                      <div>Neue Version</div>
+                    </div>
+                    <div class="button17rightOff"></div>
+                  </div>
+                  <div class="clear"></div>
+                </td>
+              </tr>-->
+            <?php endif; ?>
+            <?php if($this->changeUser != '' && $this->changeDate != '') : ?>
+              <tr>
+                <td class="tdNormal"><?php echo $this->translate->_('Last_change'); ?>:</td>
+                <td><?php echo $this->changeDate; ?><br/><?php echo $this->changeUser; ?></td>
+              </tr>
+            <?php endif; ?>
+            <?php if($this->version > 1 && $this->module == $this->core->sysConfig->modules->cms) : ?>
+              <!-- <tr>
+                <td class="tdNormal">&nbsp;</td>
+                <td><a href="#"><?php echo $this->translate->_('Version_list'); ?></a></td>
+              </tr> -->
+            <?php endif; ?>
+          </table>
+				</div>
+				<script type="text/javascript">//<![CDATA[
+          myForm.blnShowFormAlert = <?php echo (($this->blnShowFormAlert == true) ? 'true' : 'false') ?>;
+          myForm.selectNavigationItemNow = <?php echo (($this->selectNavigationItemNow && $this->selectNavigationItemNow == true) ? 'true' : 'false') ?>;
+          myForm.isAuthorizedToDelete(<?php echo (($this->authorizedDelete && $this->authorizedDelete == true) ? 'true' : 'false') ?>);
+          myForm.isAuthorizedToUpdate(<?php echo (($this->authorizedUpdate && $this->authorizedUpdate == true) ? 'true' : 'false') ?>);
+          <?php if($this->itemId): ?>myNavigation.itemId = '<?php echo $this->itemId ?>';<?php endif; ?>
+          <?php if($this->folderId): ?>myFolder.folderId = <?php echo $this->folderId ?>;<?php endif; ?>
+        //]]>
+        </script>

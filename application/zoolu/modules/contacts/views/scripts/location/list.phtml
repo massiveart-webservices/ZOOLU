@@ -1,0 +1,17 @@
+<?php
+
+  require_once (dirname(__FILE__).'/../../helpers/ListHelper.php');
+  $objHelper = new ListHelper();
+
+?>
+        <?php echo $objHelper->getList($this->paginator, $this->orderColumn, $this->sortOrder, $this->searchValue, 'getEditForm'); ?>
+        <?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+        <div class="spacer2"></div>
+        <script type="text/javascript">//<![CDATA[
+          if(typeof(myForm) != 'undefined' && typeof(myCore) != 'undefined'){
+            myForm.blnShowFormAlert = <?php echo (($this->blnShowFormAlert == true) ? 'true' : 'false') ?>;
+            myCore.deleteAlertMultiMessage = '<?php echo $this->translate->_('Delete_locations'); ?>';
+            myCore.deleteAlertSingleMessage = '<?php echo $this->translate->_('Delete_location'); ?>';
+          }
+        //]]>
+        </script>

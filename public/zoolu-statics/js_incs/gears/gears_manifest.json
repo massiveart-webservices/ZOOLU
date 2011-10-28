@@ -1,0 +1,12 @@
+{
+  "betaManifestVersion": 1,
+  "version": "version 0.1",
+  "entries": [
+      { "url": "gears_init.js"},
+      { "url": "gears_managed_store.js"},
+      { "url": "../prototype/prototype.js"},
+      { "url": "../script.aculous/scriptaculous.js"},
+      { "url": "../ext.js/ext-build.js"},      
+      { "url": "../../tinymce/jscripts/tiny_mce/tiny_mce.js"}
+    ]
+}

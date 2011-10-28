@@ -1,0 +1,10 @@
+        <?php if($this->languageOptions != '') : ?>
+        <div class="languagecontainer">
+          <select id="selectLanguageId" onchange="myForm.changeLanguage(this.value); return false;">
+            <?php echo $this->languageOptions; ?>
+          </select>
+        </div>
+        <?php endif; ?>
+        <div class="formtitle"><?php echo $this->formtitle; ?></div>
+        <?php echo $this->form; ?>
+        <div class="clear"></div>

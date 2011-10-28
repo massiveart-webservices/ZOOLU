@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configdata>
+  
+  <!--
+  ***********************************************************
+  * config for online evnironment                           *
+  ***********************************************************
+  -->
+  <production>
+    <!-- languages -->
+    <languages>
+      <language>
+        <id>1</id>
+        <code>de</code>
+      </language>
+      <language>
+        <id>2</id>
+        <code>en</code>
+      </language>
+      <default>
+        <id>1</id>
+        <code>de</code>
+      </default>
+    </languages>
+  </production>
+  
+  <!--
+  ***********************************************************
+  * config for staging evnironment                          *
+  ***********************************************************
+  -->
+  <staging extends="production">
+  
+  </staging>
+  
+  <!--
+  ***********************************************************
+  * config for testing evnironment                          *
+  ***********************************************************
+  -->
+  <testing extends="staging">
+  
+  </testing>
+  
+  <!--
+  ***********************************************************
+  * config for development evnironment                      *
+  ***********************************************************
+  -->
+  <development extends="testing">
+  
+  </development>
+</configdata>

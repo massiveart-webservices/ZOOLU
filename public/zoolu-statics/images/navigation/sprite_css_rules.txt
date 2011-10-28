@@ -1,0 +1,6 @@
+.sprite-tab_left_off { background-position: 0 0; } 
+.sprite-tab_left_on { background-position: 0 -80px; } 
+.sprite-tab_middle_off { background-position: 0 -160px; } 
+.sprite-tab_middle_on { background-position: 0 -240px; } 
+.sprite-tab_right_off { background-position: 0 -320px; } 
+.sprite-tab_right_on { background-position: 0 -400px; } 

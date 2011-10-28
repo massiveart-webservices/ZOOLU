@@ -1,0 +1,7 @@
+<?php
+require_once (dirname(__FILE__).'/../../helpers/UrlHelper.php');
+$objHelper = new UrlHistoryHelper();
+
+echo $objHelper->getUrlHistory($this->strElementId, $this->objUrls);
+?>
+

@@ -1,0 +1,363 @@
+/**
+ * Core Font
+ *
+ * @author Cornelius Hansjakob <cha@massiveart.com>
+ * @version 1.0
+ */
+
+/* ----------------
+Basics */
+
+html, body {
+  font-family:arial, sans-serif;
+  font-style:normal;
+  font-size:12px;
+  line-height:16px;
+  color:#333;
+}
+
+/* -----------------
+Colors */
+
+.white {
+  color:#fff;
+}
+
+.black {
+  color:#000;
+}
+
+.gray {
+  color:#ccc;
+}
+
+.lightgray {
+  color:#e4e4e4;
+}
+
+.gray666 {
+  color:#666;
+}
+
+/* -----------------
+Weight */
+
+.normal {
+  font-weight:normal;
+}
+
+.bold {
+  font-weight:bold;
+}
+
+.bolder {
+  font-wegiht:bolder;
+}
+
+.lighter {
+  font-weight:lighter;
+}
+
+
+/* -----------------
+Style */
+
+.italic{
+	font-style: italic;
+}
+
+/* -----------------
+Sizes */
+
+.small {
+  font-size:11px;
+}
+
+.smaller {
+  font-size:10px;
+}
+
+.big {
+  font-size:14px;
+}
+
+.bigger {
+  font-size:16px;
+}
+
+/* ----------------
+Links */
+
+a {
+  color:#754480;
+  text-decoration:none;
+}
+
+a:hover {
+  color:#754480;
+  text-decoration:underline;
+}
+
+#usercontent a {
+  color:#999;
+  text-decoration:none;
+}
+
+#usercontent a:hover {
+  color:#999;
+  text-decoration:underline;
+}
+
+/* ----------------
+Login / Logout */
+ 
+.submitbuttongraysmall {
+  color:#666;
+  font-size:11px;
+  text-decoration:none;
+}
+
+/* ----------------
+User Information */
+
+.headerusername {
+  font-weight:bold;
+}
+
+.headerdepartement {
+  font-size:11px;
+}
+
+/* ----------------
+Navigation Top */
+
+.navtoplink_on {
+  font-size:14px;
+  color:#000;
+}
+
+.navtoplink {
+  font-size:14px;
+  color:#fff;
+}
+
+#navtopbreadcrumb {
+  color:#fff;
+  font-size:14px;
+}
+
+#divNaviLeftMain {
+  color:#754480;
+  font-size:14px;
+  font-weight:bold;
+}
+
+#divNaviLeftMain .menutitle,
+#divNaviLeftMain .portalmenutitle {
+  color:#754480;
+  font-size:12px;
+  font-weight:normal;
+}
+
+#divNaviLeftMain .selected .menutitle a,
+#divNaviLeftMain .selected .menutitle a:hover,
+#divNaviLeftMain .selected .portalmenutitle a,
+#divNaviLeftMain .selected .portalmenutitle a:hover {
+  color:#000;
+  text-decoration:none;
+}
+
+#divNaviLeftMain .hover {
+  color:#000;
+  font-size:14px;
+  font-weight:bold;  
+}
+
+#divNaviLeftMain .selected {
+  color:#000;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.navlevelinner .hover {
+  color: #000;
+}
+
+.navlevelinner .selected {
+  color:#000; 
+}
+
+.navlevelinner .levelmenu {
+  color:#fff;
+  font-size:42px;
+  font-weight:bold;
+}
+
+/* -----------------
+Forms */
+
+.formtitle {
+  color:#fff;
+  font-weight:bold;
+  font-size:28px;
+}
+
+.formsubtitle {
+  color:#fff;
+  font-weight:bold;
+  font-size:22px;
+}
+
+.editboxtitle {
+  color:#754480;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.editbox-closed .editboxtitle {
+  color:#754480;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.field .fieldtitle {
+  font-weight:bold;
+  color:#666;
+}
+
+.field .description {
+  font-weight:normal;
+  color:#999;
+}
+
+.field .errors {
+  font-weight:bold;
+  color:#cc0000;
+}
+
+.field input {
+  font-size:14px;
+  color:#000;
+}
+
+.field select {
+  font-size:12px;
+  height:21px;
+}
+
+.field input.keyfield {
+  font-size:20px;
+  color:#000;
+  font-weight:bold;
+}
+
+.field textarea {
+  font-family: arial, sans-serif;
+  font-size:14px;
+  color:#000;
+}
+
+.mediacontainer input {
+  font-size:14px;
+  color:#000;
+  border:1px solid #ccc;
+}
+
+.mediacontainer textarea {
+  font-family: arial, sans-serif;
+  font-size:14px;
+  color:#ccc;
+}
+
+.mediacontainer textarea.textarea {
+  color:#000; 
+}
+
+.pagepreviewcontainer a, 
+.pagepreviewcontainer a:hover,
+.pagebackcontainer a,
+.pagebackcontainer a:hover{
+  color:#fff;
+  text-decoration:none;
+}
+
+/* Medialist */
+
+.mediaeditmenu,
+.buttoneditmenu,
+.buttoneditmenu2,
+.buttoneditmenu3 {
+  color:#fff;
+}
+
+
+/* -----------------
+Widget Functions */
+
+.widgetcontentmain {
+  color:#666;
+  font-size:12px;
+}
+
+.widgetcontentmain select.important {
+  font-family: arial, sans-serif;
+  font-weight:bold;
+  font-size:14px;
+  color:#000;
+}
+
+.widgetcontentmain select {
+  font-family: arial, sans-serif;
+  font-size:12px;
+  color:#000;
+}
+
+.widgetcontentmain td {
+  color:#000;
+}
+
+.widgetcontentmain .tdImportant {
+  color:#666;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.widgetcontentmain .tdNormal {
+  color:#666;
+  font-weight:normal;
+  font-size:12px; 
+}
+
+.button25centerOff div {
+  color:#fff;
+}
+
+.button25centerOn div {
+  color:#000;
+}
+
+.button17centerOff div {
+  color:#fff;
+  font-size:10px;
+}
+
+.widgetcontentmain #divPublishDateNew input,
+.widgetcontentmain #divPublishDateNew select {
+  font-size:12px;
+}
+
+.alertsavesucces,
+.alertsaveerror,
+.alertdeletesucces {
+  font-weight:bold;
+  font-size:14px;
+}
+
+/* --- Overlay --- */
+
+.oltitle {
+  font-size:21px;
+  font-weight:bold;
+  color:#fff;
+}
+

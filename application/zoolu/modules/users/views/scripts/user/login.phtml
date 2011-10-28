@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title><?php echo $this->translate->_('Login'); ?></title>
+    
+    <link href="/zoolu-statics/css/core_main.css" rel="stylesheet" type="text/css" />
+    <link href="/zoolu-statics/css/core_font.css" rel="stylesheet" type="text/css" />
+    <link href="/zoolu-statics/css/login.css" rel="stylesheet" type="text/css" />
+    
+    <script src="/zoolu-statics/js_incs/prototype/prototype.js" language="javascript" type="text/javascript"></script>
+    <script src="/zoolu-statics/js_incs/script.aculous/scriptaculous.js?load=effects" language="javascript" type="text/javascript"></script>
+    
+	</head>
+
+  <body>
+		<!-- Main Wrapper -->
+    <div id="mainwrapper">
+             
+      <div id="divLogo" style="position: absolute; z-index:400;">
+        <img src="/zoolu-statics/images/login/maske.png" width="220" height="300"/> 
+      </div>      
+      
+      <div id="divLanguageVersions">
+        &nbsp;
+      </div>
+      
+      <div id="divMainLoginContainer">
+        <div id="divLogin">
+          <h1 style="margin: 0px;"><?php echo $this->translate->_('Login'); ?></h1>
+          
+          <?php if(!empty($this->strErrMessage)) :?>
+	          <div class="mainerrormsg">
+	            <span class="missing"><?php echo $this->escape($this->strErrMessage);?></span>
+	          </div>
+	        <?php endif; ?>
+          
+          <div class="gray" style="width: 300px;"></div>
+          <div class="spacer">&nbsp;</div>
+          <form accept-charset="utf-8" method="post">
+            <div class="editwrapper">
+              <div class="editformelement">
+                <span class="editformheadline"><?php echo $this->translate->_('Username'); ?></span><br />
+                <input type="text" value="" name="username" id="username" />
+                <?php if(!empty($this->strErrUsername)) :?>
+			            <div class="mainerrormsg">
+			              <span class="missing"><?php echo $this->escape($this->strErrUsername);?></span>
+			            </div>
+			          <?php endif; ?>                
+              </div>
+              <div class="editformelement">
+                <span class="editformheadline"><?php echo $this->translate->_('Password'); ?></span><br />
+                <input type="password" value="" name="password" id="password" />
+                <?php if(!empty($this->strErrPassword)) :?>
+                  <div class="mainerrormsg">
+                    <span class="missing"><?php echo $this->escape($this->strErrPassword);?></span>
+                  </div>
+                <?php endif; ?>
+                <div style="padding:5px 8px 0 0; text-align: right;">
+                  <!--<a href="#" onclick="new Effect.Move('divMainLoginContainer', {x: -375, y: 0, mode: 'relative'});  return false;"><?php echo $this->translate->_('Password_forgotten'); ?></a>-->
+                </div>
+              </div>            
+              <hr />
+              <div>                
+                <div style="float:right"><input class="submitbuttongraysmall" type="submit" value="Anmelden"/></div>
+                <div class="checkboxcontainer">
+                  <!--<label><input name="RememberMe" id="loginRememberMe" type="checkbox" value="true"/> Erinnere dich an mich.</label>-->
+                </div>
+                <div class="clearer"></div>
+              </div>
+              <div class="clearer"></div>
+            </div>
+          </form>
+        </div>
+        <div id="divPwdForgotten">
+          <div id="divPasswordForgotten">
+            <h1 style="margin: 0px;"><?php echo $this->translate->_('Password_forgotten'); ?></h1>
+                      
+            <!--<p class="gray"><?php //echo($core->guiTexts->getText('Password_forgotten_Info1')); ?></p>
+            <p class="gray"><?php //echo(sprintf($core->guiTexts->getText('Password_forgotten_Info2'), '<a href="mailto:support@getzcope.com">', '</a>')); ?></p>          
+            <div class="spacer">&nbsp;</div>
+            <form accept-charset="utf-8" method="post" onsubmit="myLogin.passwordForgotten(); return false;">
+              <div class="editwrapper">
+                <div class="editformelement" style="width: 340px;">
+                  <span class="editformheadline" id="loginEMailHeadline"><?php //echo($core->guiTexts->getText('EMail')); ?></span><br />
+                  <input type="text" value="" name="EMail" id="loginEMail" />    
+                  <div style="padding:5px 0 0 0; display:none;" id="loginEMailMsg"></div>         
+                </div>                       
+                <hr />
+                <div style="text-align:right;">                
+                  <div class="buttonsmall" id="passwordForgottenButton" style="padding:0px 0px 0px 0px; float:right;">
+                    <button class="inputbuttongraysmall" onclick="myLogin.passwordForgotten(); return false;" type="button">
+                      <?php //echo($core->guiTexts->getText('Send'));?>
+                    </button>
+                  </div>
+                  <div style="padding:5px 10px 0px 0px; float:right"><a href="#" onclick="new Effect.Move('divMainLoginContainer', { x: 375, y: 0, mode: 'relative' }); return false;"><?php //echo($core->guiTexts->getText('Cancel')); ?></a></div>
+                  <div class="clearer"></div>
+                </div>
+                <div class="clearer"></div>
+              </div>
+            </form>
+          </div>          
+          <div id="divEmailSent" style="display: none;">            
+            <h1 style="margin: 0px;"><?php //echo($core->guiTexts->getText('Email_sent')); ?></h1>
+            <p class="gray"><?php //echo($core->guiTexts->getText('Email_sent_Info1')); ?></p>            
+            <p class="gray"><?php //echo($core->guiTexts->getText('Email_sent_Info2')); ?></p>
+            <p class="gray"><?php //echo(sprintf($core->guiTexts->getText('Email_sent_Info3'), '<a href="mailto:support@getzcope.com">', '</a>')); ?></p>
+            <p class="gray">&nbsp;</p>
+            <hr />
+            <div style="text-align:right;">
+              <div style="padding:5px 10px 0px 0px; float:right"><a href="#" onclick="new Effect.Move('divMainLoginContainer', { x: 375, y: 0, mode: 'relative' }); return false;"><?php //echo($core->guiTexts->getText('Back_to_login')); ?></a></div>                
+              <div class="clearer"></div>
+            </div>
+            -->
+          </div>          
+        </div>
+        <div class="clearer"></div>
+      </div>
+      
+    </div>
+    <!-- END Main Wrapper -->
+
+		
+  </body>
+</html>

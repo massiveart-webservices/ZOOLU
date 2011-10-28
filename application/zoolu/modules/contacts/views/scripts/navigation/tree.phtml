@@ -1,0 +1,76 @@
+<?php
+
+  require_once (dirname(__FILE__).'/../../helpers/NavigationHelper.php');
+  $objHelper = new NavigationHelper();
+
+?>
+    <?php if($this->rootLevelId > 0 && $this->rootLevelGroupId > 0): ?>
+    <script type="text/javascript">//<![CDATA[      
+      var rootLevelId = <?php echo $this->rootLevelId; ?>;
+      var rootLevelGroupId = <?php echo $this->rootLevelGroupId; ?>;
+    //]]>
+    </script>
+    <?php endif; ?>
+
+    <!-- navigation main -->
+    <div id="navigation-main">
+
+      <!-- navigation left -->
+      <div id="navilefttop">
+        <img width="5" height="5" src="/zoolu-statics/images/main/bg_corner_top_left_white.png"/>
+      </div>
+      <div id="divNaviLeft">
+        <div id="divNaviLeftInner">
+          <!-- main navigatin -->
+          <div id="divNaviLeftMain" style="padding:0 0 0 5px;">
+            <?php echo $objHelper->getMainNavigation($this->rootLevelNavigation, $this->rootLevelId, 'tree'); ?>
+          </div>
+        </div>
+      </div>
+      <div id="navileftbottom">
+        <img width="5" height="5" src="/zoolu-statics/images/main/bg_corner_bottom_left_white.png"/>
+      </div>
+
+      <!-- navigation center -->
+      <div id="divNaviCenter">
+        <!-- navigation output container -->
+        <div id="divNaviCenterInner">
+        </div>
+      </div>
+
+      <!-- navigation right -->
+      <div id="navirighttop">
+        <img width="5" height="5" src="/zoolu-statics/images/main/bg_corner_top_right_white.png"/>
+      </div>
+      <div id="divNaviRight">
+        <div id="divNaviRightInner">
+          <div id="divFolderRapper" style="display: none;">
+            <img width="98" height="68" src="/zoolu-statics/images/icons/icon_folder_large.png"/>
+            <div class="spacer1"></div>
+            <div class="box230top"><img width="230" height="4" src="/zoolu-statics/images/main/bg_box_230_top.png"/></div>
+            <div id="divFolderInfo">
+              <div id="divFolderTitle"><a href="#" class="big bold" onclick="myNavigation.getEditFormMainFolder(); return false;" id="aFolderTitle"></a></div>
+              <div class="linegray"></div>
+              <div id="divFolderActions">
+                <div id="divFolderChangeParent">
+                  <div class="icon_folder"></div>
+                  <div><a href="#" onclick="myFolder.getCurrentFolderParentChooser(); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a></div>
+                </div>
+                <div class="clear"></div>
+                <div id="divFolderChangeParent">
+                  <div class="icon_list"></div>
+                  <div><a href="#" onclick="myFolder.getFolderContentList(); return false;"><?php echo $this->translate->_('Load_content_as_list'); ?></a></div>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <div class="box230bottom"><img width="230" height="4" src="/zoolu-statics/images/main/bg_box_230_bottom.png"/></div>
+          </div>
+        </div>
+      </div>
+      <div id="navirightbottom">
+        <img width="5" height="5" src="/zoolu-statics/images/main/bg_corner_bottom_right_white.png"/>
+      </div>
+
+      <div class="clear"></div>
+    </div> <!-- END navigation main -->

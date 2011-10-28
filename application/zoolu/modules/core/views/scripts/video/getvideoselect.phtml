@@ -1,0 +1,58 @@
+<?php
+require_once (dirname(__FILE__).'/../../helpers/VideoHelper.php');
+$objHelper = new VideoHelper();
+
+// TODO: style-Definitionen noch nicht im stylesheet
+?>
+
+<span class="fieldtitle">Video wählen</span>
+<br />
+<div id="divVideoSelect" class="divVideoSelect"	style="margin: 2px 0 0 0; overflow-y: scroll; height: 200px; border: 1px solid #666; width: 100%;">
+<?php echo $objHelper->getVideoSelect($this->elements, $this->value, $this->elementId, $this->videoTypeId); ?>
+</div>
+
+<div id="divVideoChannelDisplay">
+  <div id="divVideoChannelUser_<?php echo $this->elementId; ?>"	style="display: none;">
+ 
+    <?php  if(count($this->channelUsers) > 0):  ?>
+    <div class="field-3">
+      <label class="fieldtitle" for="<?php echo $this->elementId; ?>User">Benutzer</label><br />
+      <select id="<?php echo $this->elementId; ?>User" name="<?php echo $this->elementId; ?>User" class="select videoUserSelect">
+  	   <option value="publicAccess">Public</option>
+  	   <?php 
+  	   foreach($this->channelUsers as $channelUser){
+  	    $strSelected = ($this->channelUserId == $channelUser['id']) ? ' selected="selected"' : '';
+  	    echo '<option value="'.$channelUser['id'].'"'.$strSelected.'>'.$channelUser['name'].'</option>';
+  	   }
+  	   ?>
+      </select>
+    </div>
+   	<?php endif;?>
+   	<div style="width:40%; float:left;">
+      <label class="fieldtitle"  for="<?php echo $this->elementId; ?>Search">Video suchen</label><br />
+      <input type="text" class="videoSearchInp" id="<?php echo $this->elementId; ?>Search" name="<?php echo $this->elementId; ?>Search" />
+     <!--  <input type="button" id="<?php echo $this->elementId; ?>SearchButton" value="suchen" />
+     -->
+      <div id="<?php echo $this->elementId; ?>SearchButton" style="float:left; padding-left:5px; cursor:pointer">
+       <div class="button25leftOn"></div>
+       <div class="button25centerOn">
+         <div>Suchen</div>
+       </div>
+       <div class="button25rightOn"></div>
+       <div class="clear"></div>
+     </div>
+            
+      <?php echo '<span id="'.$this->elementId.'SearchReset" class="videoSearchReset">reset</a>';?>
+      
+    </div>   
+  </div>
+</div>
+
+<script type="text/javascript" language="javascript">//<![CDATA[
+  $('div_<?php echo $this->elementId; ?>_users').update($('divVideoChannelUser_<?php echo $this->elementId; ?>').innerHTML);
+  $('divVideoChannelUser_<?php echo $this->elementId; ?>').remove();
+  myForm.initVideoChannelUserObserver('<?php echo $this->elementId; ?>');
+  myForm.initVideoSearch('<?php echo $this->elementId; ?>');
+  myForm.initVideoResetSearchObserver('<?php echo $this->elementId; ?>');
+//]]>
+</script>

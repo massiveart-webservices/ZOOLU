@@ -1,0 +1,7 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/ListHelper.php');
+  $objHelper = new ListHelper();
+?>
+<div>
+  <?php echo $objHelper->getSearchResultList($this->searchResult, $this->searchValue); ?>
+</div>

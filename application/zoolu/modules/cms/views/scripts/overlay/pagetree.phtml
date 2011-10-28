@@ -1,0 +1,11 @@
+<?php
+  require_once (dirname(__FILE__).'/../../helpers/OverlayHelper.php');
+  $objHelper = new OverlayHelper();
+?>
+
+<div class="oltitle"><?php echo $this->overlaytitle; ?></div>
+<div class="spacer1"></div>
+<div class="olnavigationwrapper2">
+  <?php echo $objHelper->getPageTree($this->elements, $this->itemAction, $this->pageIds); ?>
+</div>
+<div class="spacer1 clear"></div>

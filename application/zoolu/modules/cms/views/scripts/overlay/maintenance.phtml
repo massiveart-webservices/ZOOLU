@@ -1,0 +1,47 @@
+<?php  
+  // TODO : language based maintenance
+  /**
+   * only quick and dirty solution without language
+   */
+  $arrValues = array();
+  if(is_object($this->return) && count($this->return) > 0){
+    foreach($this->return as $objMaintenance){      
+      $arrValues = array('isMaintenance'         => $objMaintenance->isMaintenance,
+                         'maintenance_startdate' => $objMaintenance->maintenance_startdate,
+                         'maintenance_enddate'   => $objMaintenance->maintenance_enddate,
+                         'maintenance_url'       => $objMaintenance->maintenance_url);    
+    }  
+  }
+?> 
+<form id="maintenanceForm" name="maintenanceForm" onsubmit="return false;">
+  <div class="olfield">
+    <div class="gray666 bold"><?php echo $this->translate->_('Maintenance_activation'); ?></div>
+    <input type="radio" id="isMaintenance_yes" name="isMaintenance" value="1"<?php echo ((array_key_exists('isMaintenance', $arrValues) && $arrValues['isMaintenance'] == '1') ? ' checked="checked"' : ''); ?>/> <label for="isMaintenance_yes"><?php echo $this->translate->_('Yes'); ?></label><br/>
+    <input type="radio" id="isMaintenance_no" name="isMaintenance" value="0"<?php echo ((count($arrValues) == 0 || (array_key_exists('isMaintenance', $arrValues) && $arrValues['isMaintenance'] == '0')) ? ' checked="checked"' : ''); ?>/> <label for="isMaintenance_no"><?php echo $this->translate->_('No'); ?></label>                    
+  </div>
+  <div class="clear"></div>
+  <div class="olfield">
+    <strong class="gray666 bold">Server time:</strong> <span><?php echo date('m/d/Y - H:i:s - \G\M\T O');?></span>
+  </div>
+  <div class="clear"></div>
+  <div class="field-6">
+    <div class="field">
+      <label class="gray666 bold" for="maintenance_startdate"><?php echo $this->translate->_('Startdate_eg', false); ?></label><br/>
+      <input type="text" id="maintenance_startdate" name="maintenance_startdate" value="<?php echo ((array_key_exists('maintenance_startdate', $arrValues) && $arrValues['maintenance_startdate'] != '') ? $arrValues['maintenance_startdate'] : ''); ?>"/>  
+    </div>                                     
+  </div>                  
+  <div class="field-6">
+    <div class="field">
+      <label class="gray666 bold" for="maintenance_enddate"><?php echo $this->translate->_('Enddate_eg', false); ?></label><br/>
+      <input type="text" id="maintenance_enddate" name="maintenance_enddate" value="<?php echo ((array_key_exists('maintenance_enddate', $arrValues) && $arrValues['maintenance_enddate'] != '') ? $arrValues['maintenance_enddate'] : ''); ?>"/> 
+    </div>                                      
+  </div>
+  <div class="clear"></div>                  
+  <div class="field-12">
+    <div class="field">
+      <label class="gray666 bold" for="maintenance_url"><?php echo $this->translate->_('Url_eg'); ?></label><br/>
+      <input type="text" id="maintenance_url" name="maintenance_url" value="<?php echo ((array_key_exists('maintenance_url', $arrValues) && $arrValues['maintenance_url'] != '') ? $arrValues['maintenance_url'] : ''); ?>"/>                      
+    </div>                                       
+  </div>
+  <div class="clear"></div>
+</form>
