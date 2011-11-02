@@ -2116,10 +2116,7 @@ class Model_Folders {
     
     $objData = $this->objRootLevelUrlTable->fetchAll($objSelect);
     
-    $arrShopRootLevelIds = $this->core->config->shop->root_level_ids->id->toArray();    
-    if($intEnvironment == $this->core->sysConfig->environments->production && in_array($objData->current()->idRootLevels, $arrShopRootLevelIds)) {
-      return 'https://'.$objData->current()->url;  
-    }else if(count($objData) == 1){
+    if(count($objData) == 1){
       return 'http://'.$objData->current()->url; 
     }else{
       return '';
