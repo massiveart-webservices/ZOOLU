@@ -89,10 +89,10 @@ class NavigationHelper {
             <div class="portalmenulink">
               <div class="portalcontenticon"></div>
               <div class="portalmenutitle">';
-            /*if($objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops){
+            if(!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops){
               $strOutput .= '            		
               	<div class="portaledit" onclick="myNavigation.loadMaintenanceOverlay('.$objNavigation->getItemId().'); return false;"></div>';  
-            }*/
+            }
             //$strOutput .= '
             //  	<a href="#" onclick="myNavigation.selectPortal('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().'); return false;">'.(($objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) ?  $this->core->translate->_('Shop') : $this->core->translate->_('Web_content')).'</a>';
             $strUrlAddon = '';
@@ -100,15 +100,15 @@ class NavigationHelper {
               $strUrlAddon .= ', \''.$objNavigation->getUrl().'\'';
             }
             $strOutput .= '
-                <a href="#" onclick="myNavigation.selectRootLevel('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().$strUrlAddon.'); return false;">'.$this->core->translate->_('Web_content').'</a>';
-            /*if($objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops){ 
+                <a href="#" onclick="myNavigation.selectRootLevel('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().$strUrlAddon.'); return false;">'.((!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) ?  $this->core->translate->_('Shop') : $this->core->translate->_('Web_content')).'</a>';
+            if(!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops){ 
               $strSpanAddon = '';
               if(!in_array($objNavigation->getItemId(), $arrRootLevelMaintenances)){
                 $strSpanAddon = ' style="display:none;"';    
               }  
               $strOutput .= '
                 	<span id="spanMaintenanceStatus_'.$objNavigation->getItemId().'" class="red"'.$strSpanAddon.'>Offline</span>';
-            }*/          
+            }          
             $strOutput .= '
               </div>
               <input type="hidden" value="'.$objNavigation->getLanguageId().'" id="rootLevelLanguageId'.$objNavigation->getItemId().'"/>
