@@ -98,7 +98,7 @@
         <host>localhost</host>
         <username>zoolu-default</username>
         <password>zoolu</password>
-        <dbname>zo-zoolu</dbname>
+        <dbname>zo-dynforms</dbname>
       </params>
     </database>
     
@@ -974,6 +974,11 @@
         <all>66</all>
       </depth>
     </filter>
+    <display>
+      <one_column>650</one_column>
+      <two_column>651</two_column>
+    </display>
+    
     
     <!-- STATUS -->
     <status>

@@ -1202,6 +1202,31 @@ class Page {
       $this->core->logger->err($exc);
     }
   }
+
+  /**
+   * getFormFields
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @return array
+   * @version 1.0
+   */
+  public function getFormFields(){
+    $objMyMultiRegion = $this->getRegion(100); //100 is the form_field-Region
+    $arrFields = array();
+    
+    foreach($objMyMultiRegion->RegionInstanceIds() as $intRegionInstanceId){
+      $objField = new stdClass;
+      $objField->title = $objMyMultiRegion->getField('title')->getInstanceValue($intRegionInstanceId);
+      $objField->type = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('field_type')->getInstanceValue($intRegionInstanceId))->current();
+      $objField->mandatory = $objMyMultiRegion->getField('mandatory')->getInstanceValue($intRegionInstanceId);
+      $objField->description = $objMyMultiRegion->getField('description')->getInstanceValue($intRegionInstanceId);
+      $objField->validation = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('field_type')->getInstanceValue($intRegionInstanceId))->current();
+      $objField->display = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('display')->getInstanceValue($intRegionInstanceId))->current();
+      
+      $arrFields[] = $objField;
+    }
+    
+    return $arrFields;
+  }
   
   /**
    * getFilesForDownloadCenter

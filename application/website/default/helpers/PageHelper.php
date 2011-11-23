@@ -1613,7 +1613,7 @@ class PageHelper {
     return $strReturn;  
   }
   
-/**
+  /**
    * getForm
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @return string
@@ -1763,6 +1763,166 @@ class PageHelper {
           <input type="hidden" id="sender_mail" name="sender_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_mail')).'"/>
           <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
           <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
+        </form>';  
+    }
+    
+    return $strReturn;
+  }
+
+/**
+   * getForm
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @return string
+   */
+  public function getDynForm($strFormId, $intRootLevelId, $intPageId, $arrAddonFields){
+    $strReturn = '';
+    $strFields = '';
+    $blnHasFileUpload = false;
+    
+    $arrFormFields = $this->objPage->getFormFields();
+    
+    if(count($arrFormFields) > 0){
+      
+      $counter = 0;
+      foreach($arrFormFields as $objField){
+        
+        $strMandatory = '';
+        $strMandatoryCssClass = '';
+        if($objField->mandatory){
+          $strMandatory = ' *';
+          $strMandatoryCssClass = 'class="mandatory"';
+        }
+        
+        $strClass = 'field-1';
+        if($objField->display->id == $this->core->sysConfig->display->two_column){
+          $strClass = 'field-2';
+        }
+        
+        $strFields .= '    
+            <div class="'.$strClass.'">
+              <label id="lbl_'.$objField->type->code.'" for="'.$objField->type->code.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+ 
+        switch($objField->type->code){
+          case 'salutation' :
+            $strFields .= '              
+              <select id="'.$objField->type->code.'" name="'.$objField->type->code.'" size="1"'.$strMandatoryCssClass.'>
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>
+                <option value="'.$this->objTranslate->_('Mr.').'">'.$this->objTranslate->_('Mr.').'</option>
+                <option value="'.$this->objTranslate->_('Ms.').'">'.$this->objTranslate->_('Ms.').'</option>
+              </select>';
+            break;
+            
+          case 'type' :
+            $strFields .= '              
+              <select id="'.$objField->type->code.'" name="'.$objField->type->code.'" size="1"'.$strMandatoryCssClass.'>
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
+              </select>';
+            break;
+            
+          case 'country' :
+            $strFields .= '
+              <select id="'.$objField->type->code.'" name="'.$objField->type->code.'" size="1"'.$strMandatoryCssClass.'>
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
+              </select>';
+            // '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC').'
+            break;
+            
+          case 'message' :
+            $strFields .= '
+              <textarea id="'.$objField->type->code.'" name="'.$objField->type->code.'"></textarea>';
+            break;
+            
+          case 'attachment' :
+            $blnHasFileUpload = true;
+            $strFields .= '
+              <input type="file" id="'.$objField->type->code.'" name="'.$objField->type->code.'"/>';
+            break;
+            
+          case 'recaptcha_response_field' :             
+            $objRecaptchaService = new ReCaptchaService($this->core->sysConfig->recaptcha->keys->public, $this->core->sysConfig->recaptcha->keys->private);
+            $objRecaptchaService->setOption('theme', 'custom');
+            $objRecaptchaService->setOption('lang', strtolower($this->core->strLanguageCode));
+            $objRecaptchaService->setOption('custom_theme_widget', 'recaptcha_widget');
+
+            $strFields .= '
+              <div id="recaptcha_widget" style="display:none;">
+                <div id="recaptcha_image"></div>                
+                <div class="recaptchaOpts">
+                  <a id="recaptcha_reload_btn" href="javascript:Recaptcha.reload();" title="'.$this->getTranslate()->_('Get_a_new_challenge').'">
+                    <img width="25" height="18" alt="'.$this->getTranslate()->_('Get_a_new_challenge').'" id="recaptcha_reload" src="http://www.google.com/recaptcha/api/img/clean/refresh.png"/>
+                  </a>
+                  <a class="recaptcha_only_if_image" id="recaptcha_switch_audio_btn" href="javascript:Recaptcha.switch_type(\'audio\');" title="'.$this->getTranslate()->_('Get_an_audio_challenge').'">
+                    <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_an_audio_challenge').'" id="recaptcha_switch_audio" src="http://www.google.com/recaptcha/api/img/clean/audio.png"/>
+                  </a>
+                  <a class="recaptcha_only_if_audio" id="recaptcha_switch_img_btn" href="javascript:Recaptcha.switch_type(\'image\');" title="'.$this->getTranslate()->_('Get_a_visual_challenge').'">
+                    <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_a_visual_challenge').'" id="recaptcha_switch_img" src="http://www.google.com/recaptcha/api/img/clean/text.png"/>
+                  </a> 
+                  <a id="recaptcha_whatsthis_btn" href="javascript:Recaptcha.showhelp()" title="'.$this->getTranslate()->_('Help').'">
+                    <img width="25" height="16" id="recaptcha_whatsthis" src="http://www.google.com/recaptcha/api/img/clean/help.png" alt="'.$this->getTranslate()->_('Help').'"/>
+                  </a>
+                </div>
+                <div class="clear"></div>
+                <input type="text" name="recaptcha_response_field" id="recaptcha_response_field"'.$strMandatoryCssClass.'/>
+              </div>';
+            
+            $objReCaptchaAdapter = new Zend_Captcha_ReCaptcha();
+            $objReCaptchaAdapter->setService($objRecaptchaService); 
+            
+            $strFields .= $objReCaptchaAdapter->render();
+            break;
+            
+          default :
+            $strClass = '';
+            $strClassCode = '';
+            $strClassMandatory = '';
+            if($objField->type->code){
+              $strClassCode = 'val_'.$objField->type->code;
+            }
+            if($objField->mandatory){
+              $strClassMandatory = 'mandatory';
+            }
+            if($strClassCode != '' && $strClassMandatory != ''){
+              $strClass = 'class="'.$strClassMandatory.' '.$strClassCode.'"';
+            }else{
+              $strClass = 'class="'.$strClassMandatory.$strClassCode.'"';
+            }
+            $strFields .= '
+              <input type="text" '.$strClass.' id="'.$objField->type->code.'" name="'.$objField->type->code.'" value=""'.$strClass.'/>';             
+            break;
+        }
+        
+        $strFields .= '
+           </div>';
+        
+        $counter++;
+      }
+      
+      $strReturn .= '
+        <form id="'.$strFormId.'" name="'.$strFormId.'"  action="/zoolu-website/datareceiver" method="post" onsubmit="return false;"'.(($blnHasFileUpload) ? ' enctype="multipart/form-data"' : '').'>
+          '.$strFields.'
+          <div class="fieldLeft required">
+            <span>'.$this->objTranslate->_('Fields_with_*_are_mandatory').'</span>  
+          </div>          
+          <div class="fieldRight buttonContainer">
+            <div class="buttonBox" onclick="myDefault.submitForm(\''.$strFormId.'\');">
+              <div class="left">&nbsp;</div>
+              <div class="center">'.$this->objTranslate->_('Send').'</div>
+              <div class="right">&nbsp;</div>
+              <div class="clear"></div>
+            </div>
+          </div>
+          <div class="clear"></div>
+          <div class="legalNotes"><input type="checkbox" id="checkLegalnotes" name="checkLegalnotes"> <label for="checkLegalnotes">'.$this->objTranslate->_('LegalNotes', false).'</label></div>
+          <input type="hidden" id="idRootLevels" name="idRootLevels" value="'.$intRootLevelId.'"/>
+          <input type="hidden" id="idPage" name="idPage" value="'.$intPageId.'"/>
+          <input type="hidden" id="redirectUrl" name="redirectUrl" value="http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'"/>
+          <input type="hidden" id="subject" name="subject" value="'.$this->objPage->getFieldValue('subject').'"/>
+          <input type="hidden" id="sender_name" name="sender_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_name')).'"/>
+          <input type="hidden" id="sender_mail" name="sender_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_mail')).'"/>
+          <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
+          <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
+          
+          <button onclick="myDefault.submitForm(\'contactForm\')">Absenden</button>
         </form>';  
     }
     
