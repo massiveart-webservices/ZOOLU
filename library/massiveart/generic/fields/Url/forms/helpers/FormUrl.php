@@ -110,13 +110,17 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement {
                   <div id="'.$this->view->escape($id).'_UrlHistory" class="urlTop" onclick="myForm.toggleUrlHistory(\''.$this->view->escape($id).'\')"><div class="urlTopTitle">'.$core->translate->_('Url_history').'</div></div>
                   <div id="'.$this->view->escape($id).'_ToggleUrlHistory" class="urlHistoryContainer" style="display:none"></div>'; 
       }else{
-        $strUrlShown = '/'.$core->strZooluLanguageCode.'/';
         
         $strOutput .= '<div class="urlwrapper" style="display:none">
-                    <input type="hidden" value="'.$strUrlShown.'" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" '.$endTag.'
+                    <input type="hidden" value="" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" '.$endTag.'
                     <input type="hidden" value="" id="'.$this->view->escape($id).'_EditableUrl" name="'.$this->view->escape($name).'_EditableUrl" '.$endTag.'
-                    <input type="hidden" value="'.$strUrlShown.'" id="'.$this->view->escape($id).'_ShownUrl" name="'.$this->view->escape($name).'_ShownUrl" '.$endTag .'
+                    <input type="hidden" value="" id="'.$this->view->escape($id).'_ShownUrl" name="'.$this->view->escape($name).'_ShownUrl" '.$endTag .'
                     </div>
+                    <script type="text/javascript">
+                      var lang = $$("#selectLanguageId option[selected]")[0].innerHTML.toLowerCase();
+                      $("'.$this->view->escape($id).'").value = "/"+lang+"/";
+                      $("'.$this->view->escape($id).'_ShownUrl").value = "/"+lang+"/";
+                    </script>
         ';
       }
     }
