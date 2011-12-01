@@ -103,7 +103,7 @@ class Properties_OverlayController extends AuthControllerAction {
     $strFileIds = $objRequest->getParam('fileIds');
 
     $strTmpFileIds = trim($strFileIds, '[]');
-    $this->arrFileIds = split('\]\[', $strTmpFileIds);
+    $this->arrFileIds = explode('][', $strTmpFileIds);
     
     /**
      * get files
@@ -128,7 +128,7 @@ class Properties_OverlayController extends AuthControllerAction {
     $strFileIds = $objRequest->getParam('fileIds');
 
     $strTmpFileIds = trim($strFileIds, '[]');
-    $this->arrFileIds = split('\]\[', $strTmpFileIds);
+    $this->arrFileIds = explode('][', $strTmpFileIds);
     
     /**
      * get files

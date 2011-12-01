@@ -178,7 +178,7 @@ class Model_Contacts {
         $arrContactIds = $mixedContactIds;
       }else if(isset($mixedContactIds) && $mixedContactIds != ''){
 	      $strTmpContactIds = trim($mixedContactIds, '[]');
-	      $arrContactIds = split('\]\[', $strTmpContactIds);
+	      $arrContactIds = explode('][', $strTmpContactIds);
       }
       
       $objSelect = $this->objContactsTable->select();   

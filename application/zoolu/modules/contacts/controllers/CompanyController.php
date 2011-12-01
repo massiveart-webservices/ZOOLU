@@ -366,7 +366,7 @@ class Contacts_CompanyController extends AuthControllerAction {
       if($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
         $strTmpUserIds = trim($this->objRequest->getParam('values'), '[]');
         $arrCompaniesIds = array();
-        $arrCompaniesIds = split('\]\[', $strTmpUserIds);
+        $arrCompaniesIds = explode('][', $strTmpUserIds);
         
         if(count($arrCompaniesIds) > 1){         
           $this->getModelCompanies()->deleteCompanies($arrCompaniesIds); 

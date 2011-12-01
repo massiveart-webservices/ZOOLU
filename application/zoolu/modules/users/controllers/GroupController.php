@@ -350,7 +350,7 @@ class Users_GroupController extends AuthControllerAction {
         if(isset($arrFormData['Region_Permission_Instances'])){
           $strRegionInstanceIds = trim($arrFormData['Region_Permission_Instances'], '[]');
           $arrRegionInstanceIds = array();
-          $arrRegionInstanceIds = split('\]\[', $strRegionInstanceIds);
+          $arrRegionInstanceIds = explode('][', $strRegionInstanceIds);
 
           /**
            * go through permissions

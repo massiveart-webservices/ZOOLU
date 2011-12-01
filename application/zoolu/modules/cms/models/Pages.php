@@ -415,7 +415,7 @@ class Model_Pages {
                      'created'     => date('Y-m-d H:i:s'));
 
     $strTmpLinkedPageIds = trim($strLinkedPageIds, '[]');
-    $arrLinkedPageIds = split('\]\[', $strTmpLinkedPageIds);
+    $arrLinkedPageIds = explode('][', $strTmpLinkedPageIds);
 
     if(count($arrLinkedPageIds) > 0){
       foreach($arrLinkedPageIds as $sortPosition => $strLinkedPageId){
@@ -448,7 +448,7 @@ class Model_Pages {
                      'created'     => date('Y-m-d H:i:s'));
 
     $strTmpCollectedPageIds = trim($strCollectedPageIds, '[]');
-    $arrCollectedPageIds = split('\]\[', $strTmpCollectedPageIds);
+    $arrCollectedPageIds = explode('][', $strTmpCollectedPageIds);
 
     if(count($arrCollectedPageIds) > 0){
       foreach($arrCollectedPageIds as $sortPosition => $strCollectedPageId){
@@ -1609,7 +1609,7 @@ class Model_Pages {
       $this->objPageContactsTable->delete($strWhere);
 
       $strContactIds = trim($strContactIds, '[]');
-      $arrContactIds = split('\]\[', $strContactIds);
+      $arrContactIds = explode('][', $strContactIds);
 
       $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
@@ -1652,7 +1652,7 @@ class Model_Pages {
       $this->objPageGroupsTable->delete($strWhere);
   
       $strGroupIds = trim($strGroupIds, '[]');
-      $arrGroupIds = split('\]\[', $strGroupIds);
+      $arrGroupIds = explode('][', $strGroupIds);
   
       $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
   

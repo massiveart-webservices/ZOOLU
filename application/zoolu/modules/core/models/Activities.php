@@ -326,7 +326,7 @@ class Model_Activities {
     $arrData['idActivityUserStatus'] = $this->core->sysConfig->activity_user_status->not_read; 
     
     $strTmpUserIds = trim($strUserIds, '[]');
-    $arrUserIds = split('\]\[', $strTmpUserIds);
+    $arrUserIds = explode('][', $strTmpUserIds);
 
     if(count($arrUserIds) > 0){
       foreach($arrUserIds as $key => $intUserId){

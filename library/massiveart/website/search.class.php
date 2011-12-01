@@ -26,6 +26,8 @@ class Search {
   const FIELD_TYPE_BINARY = 4;
   const FIELD_TYPE_TEXT = 5;
   const FIELD_TYPE_UNSTORED = 6;
+  const FIELD_TYPE_SUMMARY_INDEXED = 7;
+  const ZO_NODE_SUMMARY = 'zo_node_summary';
 
   protected $strSearchValue;
   protected $intLimitSearch;
@@ -85,11 +87,11 @@ class Search {
     }else{
       $arrSearchValue = explode(' ',  $this->strSearchValue);
       foreach($arrSearchValue as $strSearchValue){
-        $strQuery .= '+('.$strSearchValue.' OR ';
+        $strQuery .= '+('.Search::ZO_NODE_SUMMARY.':'.$strSearchValue.' OR ';
         $strSearchValue = preg_replace('/([^\pL\s\d])/u', '?', $strSearchValue);
-        $strQuery .= $strSearchValue.'* OR ';
+        $strQuery .= Search::ZO_NODE_SUMMARY.':'.$strSearchValue.'* OR ';
         $strSearchValue = str_replace('?', '', $strSearchValue);
-        $strQuery .= $strSearchValue.'~)';
+        $strQuery .= Search::ZO_NODE_SUMMARY.':'.$strSearchValue.'~)';
       }
     }
     

@@ -372,7 +372,7 @@ class Contacts_MemberController extends AuthControllerAction {
       if($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
         $strTmpUserIds = trim($this->objRequest->getParam('values'), '[]');
         $arrMemberIds = array();
-        $arrMemberIds = split('\]\[', $strTmpUserIds);
+        $arrMemberIds = explode('][', $strTmpUserIds);
         
         if(count($arrMemberIds) > 1){         
           $this->getModelMembers()->deleteMembers($arrMemberIds); 

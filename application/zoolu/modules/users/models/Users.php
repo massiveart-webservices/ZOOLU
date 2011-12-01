@@ -405,7 +405,7 @@ class Model_Users {
         $arrGroupIds = $mixedGroupIds;
       }else if(isset($mixedGroupIds) && $mixedGroupIds != ''){
         $strTmpGroupIds = trim($mixedGroupIds, '[]');
-        $arrGroupIds = split('\]\[', $strTmpGroupIds);
+        $arrGroupIds = explode('][', $strTmpGroupIds);
       }
   
       $objSelect = $this->objGroupTable->select();

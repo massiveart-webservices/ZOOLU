@@ -243,7 +243,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface {
 
         $strTmpFileIds = trim($objField->getValue(), '[]');
         $arrFileIds = array();
-        $arrFileIds = split('\]\[', $strTmpFileIds);
+        $arrFileIds = explode('][', $strTmpFileIds);
 
         if(count($arrFileIds) > 0){
           foreach($arrFileIds as $intSortPosition => $intFileId){
@@ -579,7 +579,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface {
 
         $strTmpFileIds = trim($objField->getValue(), '[]');
         $arrFileIds = array();
-        $arrFileIds = split('\]\[', $strTmpFileIds);
+        $arrFileIds = explode('][', $strTmpFileIds);
 
         if(count($arrFileIds) > 0){
           foreach($arrFileIds as $intSortPosition => $intFileId){
@@ -1475,7 +1475,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface {
       foreach($this->setup->FieldNames() as $strField => $intFieldType){
         $objField = $this->setup->getField($strField);
         if(is_object($objField) && $objField->idSearchFieldTypes != Search::FIELD_TYPE_NONE){
-          $this->indexFieldNow($objField, $strField, $intFieldType, $objField->getValue(), $objDoc);
+          $this->addToNodeSummary($this->indexFieldNow($objField, $strField, $intFieldType, $objField->getValue(), $objDoc));
         }
       }
       
@@ -1489,12 +1489,14 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface {
             foreach($objRegion->FieldNames() as $strField => $intFieldType){
               $objField = $objRegion->getField($strField);
               if(is_object($objField) && $objField->idSearchFieldTypes != Search::FIELD_TYPE_NONE){
-                $this->indexFieldNow($objField, $objField->name.'_'.$intRegionPosition, $intFieldType, $objField->getInstanceValue($intRegionInstanceId), $objDoc);
+                $this->addToNodeSummary($this->indexFieldNow($objField, $objField->name.'_'.$intRegionPosition, $intFieldType, $objField->getInstanceValue($intRegionInstanceId), $objDoc));
               }
             }        
           }
         }
       }
+      
+      $this->indexNodeSummaryNow($objDoc);
       
       // Add document to the index.
       $this->objIndex->addDocument($objDoc);
@@ -1507,19 +1509,38 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface {
   }
   
   /**
+   * addToNodeSummary
+   * @param string value
+   * @author Raphael Stocker <rst@massiveart.com>
+   */
+  final protected function addToNodeSummary($value) {
+    $this->strNodeSummary .= ' '.$value;
+  }
+  
+  /**
+   * indexNodeSummaryNow
+   * @param string value
+   * @author Raphael Stocker <rst@massiveart.com>
+   */
+  final protected function indexNodeSummaryNow($objDoc) {
+    $objDoc->addField(Zend_Search_Lucene_Field::unStored(Search::ZO_NODE_SUMMARY, $this->strNodeSummary, $this->core->sysConfig->encoding->default));
+  }
+  
+  /**
    * indexFieldNow
    * @param GenericElementField $objField
    * @param string $strField
    * @param integer $intFieldType
    * @param string|array|object $mixedFieldValue
    * @param Zend_Search_Lucene_Document $objDoc
-   * @return void
+   * @return string
    * @author Thomas Schedler <tsh@massiveart.com>
    */
   final protected function indexFieldNow($objField, $strField, $intFieldType, $mixedFieldValue, Zend_Search_Lucene_Document &$objDoc){
     try{
       $strValue = '';
-      $strValueIds = '';  
+      $strValueIds = '';
+      $blnReturnValue = false;  
       if($objField->typeId == GenericSetup::FIELD_TYPE_ID_TAG){
         $mixedValue = $mixedFieldValue;
         if(is_object($mixedValue) || is_array($mixedValue)){
@@ -1591,6 +1612,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface {
         $this->core->logger->debug($strField.': '.$strValue);
         switch ($objField->idSearchFieldTypes){
           case Search::FIELD_TYPE_KEYWORD:
+            $blnReturnValue = true;
             $objDoc->addField(Zend_Search_Lucene_Field::keyword($strField, $strValue, $this->core->sysConfig->encoding->default));
             break;
           case Search::FIELD_TYPE_UNINDEXED:
@@ -1600,13 +1622,20 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface {
             $objDoc->addField(Zend_Search_Lucene_Field::binary($strField, $strValue, $this->core->sysConfig->encoding->default));
             break;
           case Search::FIELD_TYPE_TEXT:
+            $blnReturnValue = true;
             $objDoc->addField(Zend_Search_Lucene_Field::text($strField, $strValue, $this->core->sysConfig->encoding->default));
             break;
           case Search::FIELD_TYPE_UNSTORED:
-            $objDoc->addField(Zend_Search_Lucene_Field::unStored($strField, strip_tags($strValue), $this->core->sysConfig->encoding->default));
+            $blnReturnValue = true;
+            break;
+          case Search::FIELD_TYPE_SUMMARY_INDEXED:
+            $blnReturnValue = true;
+            $objDoc->addField(Zend_Search_Lucene_Field::unIndexed($strField, $strValue, $this->core->sysConfig->encoding->default));
             break;
         }
       }
+      
+      return $blnReturnValue ? $strValue : ''; 
     }catch (Exception $exc) {
       $this->core->logger->err($exc);
     }
