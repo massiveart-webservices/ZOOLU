@@ -402,7 +402,7 @@ class phMagick{
 	 */
 	function fromString($text = '', phMagickTextObject $format = null){
 
-	    if(is_null($format)) $format = &new phMagickTextObject();
+	  if(is_null($format)) $format = new phMagickTextObject();
 
 		$cmd  = $this->getBinary('convert');
 

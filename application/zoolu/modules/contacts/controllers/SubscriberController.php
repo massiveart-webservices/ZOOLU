@@ -867,7 +867,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
       if($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
         $strTmpUserIds = trim($this->objRequest->getParam('values'), '[]');
         $arrSubscriberIds = array();
-        $arrSubscriberIds = split('\]\[', $strTmpUserIds);
+        $arrSubscriberIds = explode('][', $strTmpUserIds);
         
         foreach($arrSubscriberIds as $intSubscriberId){
           $objSubscribers = $this->getModelSubscribers()->load($intSubscriberId);
@@ -917,7 +917,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
       if($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
         $strTmpUserIds = trim($this->objRequest->getParam('values'), '[]');
         $arrSubscriberIds = array();
-        $arrSubscriberIds = split('\]\[', $strTmpUserIds);
+        $arrSubscriberIds = explode('][', $strTmpUserIds);
         
         foreach($arrSubscriberIds as $intSubscriberId){
           $objSubscribers = $this->getModelSubscribers()->load($intSubscriberId);

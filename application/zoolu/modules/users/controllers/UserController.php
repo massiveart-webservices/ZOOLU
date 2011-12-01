@@ -420,7 +420,7 @@ class Users_UserController extends Zend_Controller_Action {
       if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
         $strTmpUserIds = trim($this->getRequest()->getParam('values'), '[]');
         $arrUserIds = array();
-        $arrUserIds = split('\]\[', $strTmpUserIds);
+        $arrUserIds = explode('][', $strTmpUserIds);
         
       	if(count($arrUserIds) > 1){      	  
       		$this->getModelUsers()->deleteUsers($arrUserIds);	

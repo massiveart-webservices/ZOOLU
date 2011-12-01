@@ -95,7 +95,7 @@ class GenericDataHelper_Tag extends GenericDataHelperAbstract  {
       }
     }elseif(is_string($this->objElement->getValue())){
       
-      $this->arrNewTags = split(',', $this->objElement->getValue());
+      $this->arrNewTags = explode(',', $this->objElement->getValue());
   
       /**
        * get tag ids

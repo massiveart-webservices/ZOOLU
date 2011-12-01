@@ -340,7 +340,7 @@ class File {
         $arrUploadedFileIds = $arrFileData;    
       }else{
         $strTmpUploadedFileIds = trim($this->arrFileDatas['FileIds'], '[]');
-        $arrUploadedFileIds = split('\]\[', $strTmpUploadedFileIds);  
+        $arrUploadedFileIds = explode('][', $strTmpUploadedFileIds);  
       }
 
       if(count($arrUploadedFileIds) > 0){
@@ -402,7 +402,7 @@ class File {
 
       $strTmpEditFileIds = trim($this->arrFileDatas['FileIds'], '[]');
       $arrEditFileIds = array();
-      $arrEditFileIds = split('\]\[', $strTmpEditFileIds);
+      $arrEditFileIds = explode('][', $strTmpEditFileIds);
 
       if(count($arrEditFileIds) > 0){
         foreach($arrEditFileIds as $intEditFileId){

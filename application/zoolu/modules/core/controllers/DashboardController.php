@@ -405,7 +405,7 @@ class Core_DashboardController extends AuthControllerAction {
       $strUserIds = $this->objRequest->getParam('userIds');
       if($strUserIds != ''){
         $strTmpUserIds = trim($strUserIds, '[]');
-        $arrSelectedIds = split('\]\[', $strTmpUserIds);  
+        $arrSelectedIds = explode('][', $strTmpUserIds);  
       }
       
       $objUsers = $this->getModelUsers()->loadUsers();      
@@ -433,7 +433,7 @@ class Core_DashboardController extends AuthControllerAction {
       $strRelationIds = $this->objRequest->getParam('relationIds');
       if($strRelationIds != ''){
         $strTmpRelationIds = trim($strRelationIds, '[]');
-        $arrSelectedIds = split('\]\[', $strTmpRelationIds);  
+        $arrSelectedIds = explode('][', $strTmpRelationIds);  
       }
       
       $objModules = $this->getModelModules()->getModules();      

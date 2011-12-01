@@ -663,7 +663,7 @@ class Newsletters_NewsletterController extends AuthControllerAction {
       if($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
         $strTmpNewsletterIds = trim($this->objRequest->getParam('values'), '[]');
         $arrNewsletterIds = array();
-        $arrNewsletterIds = split('\]\[', $strTmpNewsletterIds);
+        $arrNewsletterIds = explode('][', $strTmpNewsletterIds);
         
         foreach($arrNewsletterIds as $intNewsletterId){
           $objNewsletters = $this->getModelNewsletters()->load($intNewsletterId);

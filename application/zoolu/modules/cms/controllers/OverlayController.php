@@ -215,7 +215,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $strPageIds = $objRequest->getParam('itemIds');
 
     $strTmpPageIds = trim($strPageIds, '[]');
-    $arrPageIds = split('\]\[', $strTmpPageIds);
+    $arrPageIds = explode('][', $strTmpPageIds);
 
 
     $this->loadPageTreeForPortal($intPortalId, $strWhere);
@@ -238,7 +238,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $strFileIds = $objRequest->getParam('fileIds');
 
     $strTmpFileIds = trim($strFileIds, '[]');
-    $this->arrFileIds = split('\]\[', $strTmpFileIds);
+    $this->arrFileIds = explode('][', $strTmpFileIds);
 
     /**
      * get files
@@ -263,7 +263,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $strFileIds = $objRequest->getParam('fileIds');
 
     $strTmpFileIds = trim($strFileIds, '[]');
-    $this->arrFileIds = split('\]\[', $strTmpFileIds);
+    $this->arrFileIds = explode('][', $strTmpFileIds);
 
     /**
      * get files
@@ -306,7 +306,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $strFileIds = $objRequest->getParam('fileIds');
 
     $strTmpFileIds = trim($strFileIds, '[]');
-    $this->arrFileIds = split('\]\[', $strTmpFileIds);
+    $this->arrFileIds = explode('][', $strTmpFileIds);
 
     /**
      * get contacts

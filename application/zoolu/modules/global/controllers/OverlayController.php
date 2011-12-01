@@ -78,7 +78,7 @@ class Global_OverlayController extends AuthControllerAction {
     $strElementIds = $objRequest->getParam('itemIds');
 
     $strTmpElementIds = trim($strElementIds, '[]');
-    $arrElementIds = split('\]\[', $strTmpElementIds);
+    $arrElementIds = explode('][', $strTmpElementIds);
 
 
     $this->loadGlobalTreeForRootLevel($intRootLevelId, $intRootLevelGroupId);

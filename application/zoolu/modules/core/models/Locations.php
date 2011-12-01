@@ -230,7 +230,7 @@ class Model_Locations {
         $arrLocationIds = $mixedLocationIds;
       }else if(isset($mixedLocationIds) && $mixedLocationIds != ''){
 	      $strTmpLocationIds = trim($mixedLocationIds, '[]');
-	      $arrLocationIds = split('\]\[', $strTmpLocationIds);
+	      $arrLocationIds = explode('][', $strTmpLocationIds);
       }
       
       $objSelect = $this->objLocationsTable->select();   

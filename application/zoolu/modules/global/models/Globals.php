@@ -1214,7 +1214,7 @@ class Model_Globals {
       $this->objGlobalContactsTable->delete($strWhere);
 
       $strContactIds = trim($strContactIds, '[]');
-      $arrContactIds = split('\]\[', $strContactIds);
+      $arrContactIds = explode('][', $strContactIds);
 
       $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
@@ -1254,7 +1254,7 @@ class Model_Globals {
                      'created'     => date('Y-m-d H:i:s'));
 
     $strTmpLinkedGlobalIds = trim($strLinkedGlobalIds, '[]');
-    $arrLinkedGlobalIds = split('\]\[', $strTmpLinkedGlobalIds);
+    $arrLinkedGlobalIds = explode('][', $strTmpLinkedGlobalIds);
 
     if(count($arrLinkedGlobalIds) > 0){
       foreach($arrLinkedGlobalIds as $sortPosition => $strLinkedGlobalId){

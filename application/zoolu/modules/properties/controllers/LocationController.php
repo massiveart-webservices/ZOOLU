@@ -297,7 +297,7 @@ class Properties_LocationController extends AuthControllerAction {
       if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
         $strTmpUserIds = trim($this->getRequest()->getParam('values'), '[]');
         $arrUserIds = array();
-        $arrUserIds = split('\]\[', $strTmpUserIds);
+        $arrUserIds = explode('][', $strTmpUserIds);
         
         if(count($arrUserIds) > 1){         
           $this->getModelLocations()->deleteLocations($arrUserIds); 

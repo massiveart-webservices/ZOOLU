@@ -561,7 +561,7 @@ class Model_Files {
 	  	
 	  	$strTmpFileIds = trim($strFileIds, '[]');
 	    $arrFileIds = array();
-	    $arrFileIds = split('\]\[', $strTmpFileIds);
+	    $arrFileIds = explode('][', $strTmpFileIds);
 	    
 	    $strWhere = '';
 	    $intCounter = 0;
@@ -604,7 +604,7 @@ class Model_Files {
       
       $strTmpFileIds = trim($strFileIds, '[]');
       $arrFileIds = array();
-      $arrFileIds = split('\]\[', $strTmpFileIds);
+      $arrFileIds = explode('][', $strTmpFileIds);
       
       $strWhere = '';
       $intCounter = 0;
