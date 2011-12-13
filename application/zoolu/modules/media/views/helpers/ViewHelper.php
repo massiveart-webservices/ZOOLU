@@ -613,6 +613,7 @@ class ViewHelper {
       
       $strOutput .= '
                        </div>
+                       <div class="clear"></div>
                      </div>';
     }
     return $strOutput;

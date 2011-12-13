@@ -397,6 +397,7 @@ input[disabled]{
 
 .mediainfos .mediasingleupload {
   margin:0;
+  padding: 0;
 }
 
 .mediasingleupload input {
