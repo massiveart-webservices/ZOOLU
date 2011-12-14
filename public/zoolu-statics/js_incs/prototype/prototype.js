@@ -4677,7 +4677,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   function pollDoScroll() {
     try { document.documentElement.doScroll('left'); }
     catch(e) {
-      timer = pollDoScroll.defer();
+      timer = pollDoScroll.delay(0.01);
       return;
     }
     fireContentLoadedEvent();
@@ -4688,7 +4688,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   } else {
     document.observe('readystatechange', checkReadyState);
     if (window == top)
-      timer = pollDoScroll.defer();
+      timer = pollDoScroll.delay(0.01);
   }
 
   Event.observe(window, 'load', fireContentLoadedEvent);
