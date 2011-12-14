@@ -720,6 +720,7 @@ Massiveart.Overlay = Class.create({
       if($('overlayMaintenanceWrapper')) $('overlayMaintenanceWrapper').hide();
       if($('overlayUserSettingsWrapper')) $('overlayUserSettingsWrapper').hide();
       if($('overlaySendToDashbaordWrapper')) $('overlaySendToDashbaordWrapper').hide();
+      if($('overlayMediaWrapperUpload')) $('overlayMediaWrapperUpload').innerHTML = '';
       //this.lastFolderId = null;
       this.overlayCounter = 0;
     }
