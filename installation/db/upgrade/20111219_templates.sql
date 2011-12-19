@@ -1,0 +1,1 @@
+ALTER TABLE `templates` ADD `renderScript` VARCHAR( 64 ) NOT NULL DEFAULT 'master.php' AFTER `cacheLifetime` ;

@@ -172,7 +172,7 @@ class Model_Globals {
     $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
     $objSelect->joinLeft(array('ucr' => 'users'), 'ucr.id = globalProperties.creator', array('creator' => 'CONCAT(ucr.fname, \' \', ucr.sname)'));
     $objSelect->join('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'));
-    $objSelect->join('templates', 'templates.id = globalProperties.idTemplates', array('filename', 'cacheLifetime'));
+    $objSelect->join('templates', 'templates.id = globalProperties.idTemplates', array('filename', 'cacheLifetime', 'renderScript'));
     $objSelect->where('globals.globalId = ?', $strGlobalId)
               ->where('globals.version = ?', $intVersion);
     
@@ -272,7 +272,7 @@ class Model_Globals {
       $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
       $objSelect->joinLeft(array('ucr' => 'users'), 'ucr.id = globalProperties.creator', array('creator' => 'CONCAT(ucr.fname, \' \', ucr.sname)'));
       $objSelect->join('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'));
-      $objSelect->join('templates', 'templates.id = globalProperties.idTemplates', array('filename', 'cacheLifetime'));
+      $objSelect->join('templates', 'templates.id = globalProperties.idTemplates', array('filename', 'cacheLifetime', 'renderScript'));
       $objSelect->where('lP.idParent = ?', $intParentId)
                 ->where('lP.idParentTypes = ?', $this->core->sysConfig->parent_types->folder);
       
@@ -286,7 +286,7 @@ class Model_Globals {
       $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
       $objSelect->joinLeft(array('ucr' => 'users'), 'ucr.id = globalProperties.creator', array('creator' => 'CONCAT(ucr.fname, \' \', ucr.sname)'));
       $objSelect->join('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'));
-      $objSelect->join('templates', 'templates.id = globalProperties.idTemplates', array('filename', 'cacheLifetime'));
+      $objSelect->join('templates', 'templates.id = globalProperties.idTemplates', array('filename', 'cacheLifetime', 'renderScript'));
       $objSelect->where('idParent = ?', $intParentId)
                 ->where('idParentTypes = ?', $this->core->sysConfig->parent_types->folder);
       

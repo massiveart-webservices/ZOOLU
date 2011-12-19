@@ -214,7 +214,7 @@ class Model_Pages {
     $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = pageProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
     $objSelect->joinLeft(array('ucr' => 'users'), 'ucr.id = pageProperties.creator', array('creator' => 'CONCAT(ucr.fname, \' \', ucr.sname)'));
     $objSelect->join('genericForms', 'genericForms.id = pageProperties.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'));
-    $objSelect->join('templates', 'templates.id = pageProperties.idTemplates', array('filename', 'cacheLifetime'));
+    $objSelect->join('templates', 'templates.id = pageProperties.idTemplates', array('filename', 'cacheLifetime', 'renderScript'));
     $objSelect->where('pages.pageId = ?', $strPageId);
     $objSelect->where('pages.version = ?', $intPageVersion);
 

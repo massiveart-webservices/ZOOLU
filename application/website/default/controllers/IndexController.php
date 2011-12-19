@@ -374,14 +374,17 @@ class IndexController extends Zend_Controller_Action {
           $objNavigation->setPage($this->objPage); 
         } 
         
-        /**
-         * update default cache lifetime
-         */
+        // update default cache lifetime
         if($this->objPage->getTemplateCacheLifetime() > 0){
           $this->objCache->setOption('lifetime', $this->objPage->getTemplateCacheLifetime());
         }else{
           // deactivate caching
           $this->blnCachingStart = false;
+        }
+        
+        // update default render script
+        if($this->objPage->getTemplateRenderScript() != ''){
+          $this->strRenderScript = $this->objPage->getTemplateRenderScript();
         }
         
         /**

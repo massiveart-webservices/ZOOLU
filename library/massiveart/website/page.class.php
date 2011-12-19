@@ -211,6 +211,7 @@ class Page {
   protected $strTemplateFile;
   protected $intTemplateId;
   protected $intTemplateCacheLifetime;
+  protected $strTemplateRenderScript;
 
   protected $strPublisherName;
   protected $strChangeUserName;
@@ -261,6 +262,7 @@ class Page {
         $this->setTemplateFile($objPage->filename);
         $this->setTemplateId($objPage->idTemplates);
         $this->setTemplateCacheLifetime($objPage->cacheLifetime);
+        $this->setTemplateRenderScript($objPage->renderScript);
         $this->setPublisherName($objPage->publisher);
         $this->setPublishDate($objPage->published);
         $this->setCreatorName($objPage->creator);
@@ -2269,6 +2271,22 @@ class Page {
    */
   public function getTemplateCacheLifetime(){
     return $this->intTemplateCacheLifetime;
+  }
+  
+  /**
+   * setTemplateRenderScript
+   * @param stirng $strTemplateRenderScript
+   */
+  public function setTemplateRenderScript($strTemplateRenderScript){
+    $this->strTemplateRenderScript = $strTemplateRenderScript;
+  }
+  
+  /**
+   * getTemplateRenderScript
+   * @return string $strTemplateRenderScript
+   */
+  public function getTemplateRenderScript(){
+    return $this->strTemplateRenderScript;
   }
 
   /**
