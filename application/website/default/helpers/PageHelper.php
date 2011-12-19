@@ -123,16 +123,67 @@ class PageHelper {
    */
   public function getTitle($strTag, $blnTitleFallback){
     $strReturn = '';
+    $strTitle = '';
     
     if($this->objPage->getFieldValue('articletitle') != ''){
-      if($strTag != '') $strReturn .= '<'.$strTag.'>';
-      $strReturn .= htmlentities($this->objPage->getFieldValue('articletitle'), ENT_COMPAT, $this->core->sysConfig->encoding->default);
-      if($strTag != '') $strReturn .= '</'.$strTag.'>';
+      $strTitle = $this->objPage->getFieldValue('articletitle');
     }
     else if($this->objPage->getFieldValue('title') != '' && $blnTitleFallback){
+      $strTitle = $this->objPage->getFieldValue('title');
+    }
+    
+    if($strTitle != ''){
       if($strTag != '') $strReturn .= '<'.$strTag.'>';
-      $strReturn .= htmlentities($this->objPage->getFieldValue('title'), ENT_COMPAT, $this->core->sysConfig->encoding->default);
+      $strReturn .= htmlentities($strTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default);
       if($strTag != '') $strReturn .= '</'.$strTag.'>';
+    }
+    
+    return $strReturn;
+  }
+  
+    /**
+   * getTitle
+   * @param string $strTag
+   * @param boolean $blnTitleFallback
+   * @return string $strReturn
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  public function getMetaTitle($strTag, $blnTitleFallback){
+    $strReturn = '';
+    $strTitle = '';
+    
+    if($this->objPage->getFieldValue('seo_title')){
+      $strTitle = $this->objPage->getFieldValue('seo_title');
+    }
+    else if($this->objPage->getFieldValue('articletitle') != ''){
+      $strTitle = $this->objPage->getFieldValue('articletitle');
+    }
+    else if($this->objPage->getFieldValue('title') != '' && $blnTitleFallback){
+      $strTitle = $this->objPage->getFieldValue('title');
+    }
+    
+    if($strTitle != ''){
+      if($strTag != '') $strReturn .= '<'.$strTag.'>';
+      $strReturn .= htmlentities($strTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default);
+      if($strTag != '') $strReturn .= '</'.$strTag.'>';
+    }
+    
+    return $strReturn;
+  }
+  
+  /**
+   * getCanonicalTag
+   * @return string $strReturn
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function getCanonicalTag(){
+    $strReturn = '';
+    $strCanonicalTag = $this->objPage->getFieldValue('seo_canonical');
+    
+    if($strCanonicalTag){
+      $strReturn = '<link rel="canonical" href="'.$strCanonicalTag.'" />';
     }
     return $strReturn;
   }
@@ -235,16 +286,20 @@ class PageHelper {
    * @version 1.0
    */
   public function getMetaKeywords(){
-    $objPageTags = $this->objPage->getTagsValues('page_tags');
-  
     $strReturn = '';
-    $strKeywords = '';
-    if(count($objPageTags) > 0){
-      $strReturn .= '<meta name="keywords" content="';
-      foreach($objPageTags as $objTag){
-        $strKeywords .= htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).', ';
+    $strMetaKeywords = $this->objPage->getFieldValue('seo_keywords');
+    
+    if($strMetaKeywords == ''){
+      $objPageTags = $this->objPage->getTagsValues('page_tags');
+    
+      if(count($objPageTags) > 0){
+        foreach($objPageTags as $objTag){
+          $strMetaKeywords .= htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).', ';
+        }
       }
-      $strReturn .= trim($strKeywords, ', ').'"/>';
+    }
+    if($strMetaKeywords != ''){
+      $strReturn .= '<meta name="keywords" content="'.trim($strMetaKeywords, ', ').'"/>';
     }
     return $strReturn;
   }
@@ -257,8 +312,12 @@ class PageHelper {
    */
   public function getMetaDescription(){
     $strReturn = '';
-    if($this->objPage->getFieldValue('shortdescription') != ''){
-      $strReturn .= '<meta name="description" content="'.htmlentities($this->objPage->getFieldValue('shortdescription'), ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/>';
+    $strMetaDescription = $this->objPage->getFieldValue('seo_description');
+    if($strMetaDescription == ''){
+      $strMetaDescription .= $this->objPage->getFieldValue('shortdescription');
+    }
+    if($strMetaDescription != ''){
+      $strReturn = '<meta name="description" content="'.htmlentities($strMetaDescription, ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/>';
     }
     return $strReturn;  
   }

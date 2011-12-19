@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title><?php get_title(); ?></title>
+  <title><?php get_meta_title(); ?></title>
   <?php get_meta_description(); ?>
   <?php get_meta_keywords(); ?>
+  <?php get_canonical_tag(); ?>
 
   <!-- SCREEN CSS -->
   <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/min/b=website/themes/default&amp;f=css/reset.css,css/screen.css,lightbox/css/lightbox.css" />

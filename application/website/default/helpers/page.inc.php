@@ -139,6 +139,26 @@ function get_title($strTag = '', $blnTitleFallback = true){
 }
 
 /**
+ * get_meta_title
+ * @param string $strTag
+ * @param boolean $blnTitleFallback
+ * @author Cornelius Hansjakob <cha@massiveart.com>
+ * @version 1.0
+ */
+function get_meta_title($strTag = '', $blnTitleFallback = true){
+  echo getPageHelperObject()->getMetaTitle($strTag, $blnTitleFallback);
+}
+
+/**
+ * get_canonical_tag
+ * @author Daniel Rotter <daniel.rotter@massiveart.com>
+ * @version 1.0
+ */
+function get_canonical_tag(){
+  echo getPageHelperObject()->getCanonicalTag();
+}
+
+/**
  * get_parent_title
  * @param string $strTag
  * @param boolean $blnTitleFallback
