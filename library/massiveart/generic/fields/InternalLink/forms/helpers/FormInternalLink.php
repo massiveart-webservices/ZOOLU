@@ -55,7 +55,7 @@ class Form_Helper_FormInternalLink extends Zend_View_Helper_FormElement {
    * @param Form_Element_InternalLink $element     
    * @version 1.0
    */
-  public function formInternalLink($name, $value = null, $attribs = null, $options = null, Form_Element_InternalLink &$element){
+  public function formInternalLink($name, $value = null, $attribs = null, $options = null, Form_Element_InternalLink $element){
     $info = $this->_getInfo($name, $value, $attribs);
     $core = Zend_Registry::get('Core');
     extract($info); // name, value, attribs, options, listsep, disable
