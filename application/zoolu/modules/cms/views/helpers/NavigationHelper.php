@@ -75,7 +75,6 @@ class NavigationHelper {
           
         $strOutput .= '
       <div class="portalcontainer">
-        <div id="portal'.$objNavigationTree->getItemId().'top" class="portaltop"><img src="/zoolu-statics/images/main/bg_box_230_top.png" width="230" height="4"/></div>
         <div id="portal'.$objNavigationTree->getItemId().'" class="portal" onclick="myNavigation.selectPortal('.$objNavigationTree->getItemId().'); myNavigation.loadDashboard(); return false;">
           <div class="portalicon"></div>
           <div id="divRootLevelTitle_'.$objNavigationTree->getItemId().'" class="portaltitle">'.htmlentities($objNavigationTree->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
@@ -142,7 +141,6 @@ class NavigationHelper {
           </div>-->
           <div class="clear"></div>
         </div>
-        <div id="portal'.$objNavigationTree->getItemId().'bottom" class="portalbottom"><img src="/zoolu-statics/images/main/bg_box_230_bottom.png" width="230" height="4"/></div>
         <div class="clear"></div>
       </div>';
     
