@@ -29,9 +29,12 @@ Basics */
 }
 
 #navigation-left {
-  width:260px;
+  width:240px;
   position:relative;
   height:100%;  
+  margin-left:10px;
+  border-radius:5px;
+  -moz-border-radius:5px;
 }
 
 /* ----------------
@@ -129,6 +132,7 @@ Navigation Top */
   right:10px;
   background-color:#754480;
   height:40px;
+  padding-right:5px;
   border-top-right-radius:5px;
   border-bottom-right-radius:5px;
   -moz-border-radius-topright:5px;
@@ -207,14 +211,20 @@ Navigation Main */
   position:absolute;
   z-index:20;
   top:10px;
-  bottom:15px;
-  left:10px;
+  bottom:10px;
   width:250px;
+  border-top-left-radius:5px;
+  -moz-border-radius-topleft:5px;
+  border-top-right-radius:5px;
+  -moz-border-radius-topright:5px;
+  border-bottom-right-radius:5px;
+  -moz-border-radius-bottomright:5px;
 }
 
 #divNaviLeft2 {
   width:240px;
-  top:5px;
+  top:0;
+  padding-top:5px;
 }
 
 #divNaviCenter {
@@ -223,8 +233,8 @@ Navigation Main */
   z-index:10;
   top:0;
   bottom:0px;
-  left:260px;
-  right:270px;
+  left:250px;
+  right:260px;
   border-top:10px solid #e4e4e4;
   border-bottom:10px solid #e4e4e4;
 }
@@ -235,7 +245,7 @@ Navigation Main */
   z-index:20;
   top:10px;
   bottom:15px;
-  right:10px;
+  right:0;
   width:260px;
 }
 
