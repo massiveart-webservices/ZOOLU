@@ -126,8 +126,6 @@ class DashboardHelper {
         
         $strReturn .= '
         	<div id="activity_'.$objRow->id.'" class="section'.(($blnIsChecked) ? ' checked' : '').'">
-            <div class="cornertl"></div>
-            <div class="cornertr"></div>
             <div id="activityStatus_'.$objRow->id.'" class="activityStatus">';
         if($blnShowCheckbox){
           $strReturn .= '
@@ -201,8 +199,6 @@ class DashboardHelper {
               </div>
             </div>
             <div class="clear"></div>
-            <div class="cornerbl"></div>
-            <div class="cornerbr"></div>
           </div>';
         
         $strJs .= '
