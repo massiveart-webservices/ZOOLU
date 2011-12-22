@@ -723,13 +723,13 @@ Massiveart.Form = Class.create({
         $('editbox'+elementId).addClassName('editbox');
       }
       
-      if($('cornerbl'+elementId).hasClassName('cornerbl')){
-        $('cornerbl'+elementId).removeClassName('cornerbl');
-        $('cornerbl'+elementId).addClassName('cornerbl-closed');
-      }else{
-        $('cornerbl'+elementId).removeClassName('cornerbl-closed');
-        $('cornerbl'+elementId).addClassName('cornerbl');
-      }
+//      if($('cornerbl'+elementId).hasClassName('cornerbl')){
+//        $('cornerbl'+elementId).removeClassName('cornerbl');
+//        $('cornerbl'+elementId).addClassName('cornerbl-closed');
+//      }else{
+//        $('cornerbl'+elementId).removeClassName('cornerbl-closed');
+//        $('cornerbl'+elementId).addClassName('cornerbl');
+//      }
 
       if($('editbox'+elementId).hasClassName('configbox')){
         $('editbox'+elementId).removeClassName('configbox');

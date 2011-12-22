@@ -181,29 +181,18 @@ Edit Mask */
   left:100px;
 }
 
-.pagepreviewleft,
-.pagepreviewright,
-.pagebackleft,
-.pagebackright {
-  background:url(/zoolu-statics/images/main/bg_page_preview_left.png) no-repeat 0 0; 
-  width:5px; 
-  height:20px; 
-  float:left;
-}
-
-.pagepreviewright,
-.pagebackright{
-  background:url(/zoolu-statics/images/main/bg_page_preview_right.png) no-repeat 0 0;
-  margin:0 1px 0 0;
-}
-
 .pagepreviewcenter,
 .pagebackcenter {
   background-color:#754480; 
   height:19px; 
   float:left; 
-  padding:1px 5px 0 0;
+  padding:1px 10px 0 5px;
+  margin-right:1px;
   cursor:pointer;
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  -moz-border-radius-bottomright:5px;
+  -moz-border-radius-bottomleft:5px;
 }
 
 .pagepreviewcenter img,
@@ -242,10 +231,16 @@ Edit Mask */
   overflow: hidden; 
   margin-bottom:20px; 
   margin-right:10px;
+  border-radius:4px;
+  -moz-border-radius:4px;
 }
 
 .editbox-closed {  
   background-color: #e4e4e4;
+}
+
+.editbox-closed .cornertl {
+  height:24px;
 }
 
 .configbox {  
@@ -254,7 +249,12 @@ Edit Mask */
 
 .configbox-closed {
   background-color:#aaa;
-} 
+}
+
+.configbox .editboxfields,
+.configbox-closed .editboxfields {
+  background-color:#e4e4e4;
+}
 
 .editboxtitlecontainer {  
   height:20px;
@@ -1339,7 +1339,6 @@ Pointers */
 Corners */
 
 .cornertl {
-  background-image: url(/zoolu-statics/images/main/content_inner_corners_tl.png);
   background-color:#754480;
   background-repeat:no-repeat;
   width: 10px;
