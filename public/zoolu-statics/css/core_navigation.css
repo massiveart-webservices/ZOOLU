@@ -418,7 +418,10 @@ Navigtion left */
   height:26px;
   width:230px;
   overflow:hidden;
-  cursor:pointer;   
+  cursor:pointer; 
+  padding:4px 0;  
+  border-radius:4px;
+  -moz-border-radius:4px;
 }
 
 .naviitem .itemtitle {
@@ -430,13 +433,6 @@ Navigtion left */
   width:180px;
   overflow:hidden;
    
-}
-
-.portalcontainer .portaltop,
-.portalcontainer .portalbottom {
-  width:230px;
-  height:4px;
-  margin-left:5px;
 }
 
 .portal {
@@ -468,14 +464,14 @@ Navigtion left */
 }
 
 .portal .portalicon,
-.portal .imageicon,
-.portal .documenticon,
-.portal .videoicon,
-.portal .categoryicon,
+.naviitem .imageicon,
+.naviitem .documenticon,
+.naviitem .videoicon,
+.naviitem .categoryicon,
 .portal .usericon,
 .portal .locationicon,
-.portal .labelicon,
-.portal .sysinternicon,
+.naviitem .labelicon,
+.naviitem .sysinternicon,
 .naviitem .usericon,
 .naviitem .locationicon,
 .naviitem .groupicon,
@@ -493,19 +489,19 @@ Navigtion left */
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -188px;
 }
 
-.portal .imageicon {
+.naviitem .imageicon {
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -21px;
 }
 
-.portal .documenticon {
+.naviitem .documenticon {
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -63px;
 }
 
-.portal .videoicon {
+.naviitem .videoicon {
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -314px;
 }
 
-.portal .categoryicon {
+.naviitem .categoryicon {
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -105px;
 }
 
@@ -521,11 +517,11 @@ Navigtion left */
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -356px;
 }
 
-.portal .labelicon {
+.naviitem .labelicon {
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -272px;
 }
 
-.portal .sysinternicon {
+.naviitem .sysinternicon {
   background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -210px;
 }
 

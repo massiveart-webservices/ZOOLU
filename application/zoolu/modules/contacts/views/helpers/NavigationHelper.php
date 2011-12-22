@@ -119,7 +119,6 @@ class NavigationHelper {
             
             $strOutput .= '
               <div class="naviitemcontainer">
-                <div id="naviitem'.$objNavigation->getId().'top" class="top'.$strSelected.'"><img src="/zoolu-statics/images/main/bg_box_230_top.png" width="230" height="4"/></div>
                 <div id="naviitem'.$objNavigation->getId().'" class="naviitem'.$strSelected.'" onclick="'.$strJsClickFunc.'">
                   <div class="'.$strRootLevelIconCss.'"></div>
                   <div id="divRootLevelTitle_'.$objNavigation->getId().'" class="itemtitle">';
@@ -137,7 +136,7 @@ class NavigationHelper {
             if($objNavigation->getTypeId() ==  $this->core->sysConfig->root_level_types->subscribers){
               $strOutput .= '<div class="menu" id="naviitem'.$objNavigation->getId().'menu" style="display:none;"></div>';
             }
-            $strOutput .= '<div id="naviitem'.$objNavigation->getId().'bottom" class="bottom'.$strSelected.'"><img src="/zoolu-statics/images/main/bg_box_230_bottom.png" width="230" height="4"/></div>
+            $strOutput .= '
                 <div class="clear"></div>
           	</div>';
           }
@@ -207,7 +206,6 @@ class NavigationHelper {
         if($strSubNavi != ''){
           $strOutput .= '
           <div class="naviitemcontainer">
-            <div id="naviitem'.$objNavigationTree->getId().'top" class="top'.$strSubNaviSelected.'"><img src="/zoolu-statics/images/main/bg_box_230_top.png" width="230" height="4"/></div>
             <div id="naviitem'.$objNavigationTree->getId().'" class="naviitem'.$strSubNaviSelected.'" onclick="myNavigation.selectRootLevel('.$objNavigationTree->getId().', '.$objNavigationTree->getTypeId().', \'\', false, \''.$strViewType.'\'); return false;">
               <div class="usericon"></div>
               <div id="divRootLevelTitle_'.$objNavigationTree->getId().'" class="itemtitle">'.htmlentities($objNavigationTree->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
@@ -219,7 +217,6 @@ class NavigationHelper {
             <div id="naviitem'.$objNavigationTree->getId().'menu" class="menu"'.$strDisplaySubNavi.'>
             '.$strSubNavi.'
             </div>
-            <div id="naviitem'.$objNavigationTree->getId().'bottom" class="bottom'.$strSubNaviSelected.'"><img src="/zoolu-statics/images/main/bg_box_230_bottom.png" width="230" height="4"/></div>
             <div class="clear"></div>
           </div>';
         }        

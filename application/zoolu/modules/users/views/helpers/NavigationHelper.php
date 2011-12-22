@@ -90,13 +90,11 @@ class NavigationHelper {
        */
       $strOutput .= '
             <div class="naviitemcontainer">
-              <div id="naviitem'.$objRow->id.'top" class="top"><img height="4" width="230" src="/zoolu-statics/images/main/bg_box_230_top.png"/></div>
               <div id="naviitem'.$objRow->id.'" class="naviitem" onclick="myNavigation.getModuleRootLevelList('.$objRow->id.', \''.$strRootLevelType.'\'); return false;">
                 <div class="'.$strRootLevelType.'icon"></div>
                 <div class="itemtitle">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
                  <div class="clear"></div>
               </div>
-              <div id="naviitem'.$objRow->id.'bottom" class="bottom"><img height="4" width="230" src="/zoolu-statics/images/main/bg_box_230_bottom.png"/></div>
             </div>';
     }
 
