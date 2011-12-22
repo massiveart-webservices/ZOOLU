@@ -861,7 +861,10 @@ Massiveart.Navigation = Class.create({
         $('levelmenu'+currLevel).hide();
         $('addmenu'+currLevel).fade({duration: 0.2});
         myCore.removeBusyClass('divWidgetMetaInfos');
-        myCore.removeBusyClass(this.genFormContainer);    
+        myCore.removeBusyClass(this.genFormContainer);   
+        
+        $('title').focus();
+        
       }.bind(this)
     });
     
@@ -907,7 +910,10 @@ Massiveart.Navigation = Class.create({
         $('levelmenu'+currLevel).hide();
         $('addmenu'+currLevel).fade({duration: 0.5});
         myCore.removeBusyClass('divWidgetMetaInfos');
-        myCore.removeBusyClass(this.genFormContainer);              
+        myCore.removeBusyClass(this.genFormContainer);    
+        
+        $('title').focus();
+        
       }.bind(this)
     });
         
