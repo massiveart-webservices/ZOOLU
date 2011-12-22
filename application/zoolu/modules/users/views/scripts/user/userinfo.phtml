@@ -1,7 +1,4 @@
       <div id="userwrapper">
-        <div class="usercorner">
-          <img width="240" height="4" src="/zoolu-statics/images/main/bg_smallsidebox_top.png"/>
-        </div>
         <div id="usercontent">
           <div id="usercontenticon">
             <?php if(isset($this->user->image) && $this->user->image != '') :?>
@@ -15,9 +12,6 @@
             <div class="headerdepartement"><a href="#" onclick="myOverlay.loadUserSettings(<?php echo $this->user->id; ?>); return false;"><?php echo $this->translate->_('My_Settings'); ?>,</a> <a href="/zoolu/users/user/logout"><?php echo $this->translate->_('Logout'); ?></a></div>            
           </div>
           <div class="clear"></div>
-        </div>
-        <div class="usercorner">
-          <img width="240" height="4" src="/zoolu-statics/images/main/bg_smallsidebox_bottom.png"/>
         </div>
         <div class="clear"></div>
       </div>

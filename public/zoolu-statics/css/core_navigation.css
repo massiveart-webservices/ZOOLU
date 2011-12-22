@@ -75,31 +75,14 @@ User Information */
 	margin: 0 0 0 5px;
 }
 
-.usercorner {
-	background-color: #e4e4e4;
-  width:240px;
-  height:4px;
-	line-height:4px;
-	margin:0;
-	padding:0;
-	overflow:hidden;
-}
-
-.usercorner img {
-  padding:0;
-  margin:0;
-  border:0;
-  display:block;
-  height:4px;
-  width:240px;
-}
-
 #usercontent {
 	background-color: #e4e4e4;
 	width: 220px;
-	padding: 0 10px 0 10px;
+	padding: 4px 10px 4px 10px;
 	margin:0;
 	height:32px;
+	border-radius:4px;
+	-moz-border-radius:4px;
 }
 
 #usercontenticon {
@@ -135,22 +118,17 @@ Navigation Top */
   left:260px;
 }
 
-#navtopright {
-  background-color:#754480;
-  position:absolute;
-  top:37px;
-  width:5px;
-  height:40px;
-  right:10px;
-}
-
 #navtopwrapper {
   position:absolute;
   top:37px;
   left:302px; /* 265px */
-  right:15px;
+  right:10px;
   background-color:#754480;
   height:40px;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  -moz-border-radius-topright:5px;
+  -moz-border-radius-bottomright:5px;
 }
 
 #navtopinner {
