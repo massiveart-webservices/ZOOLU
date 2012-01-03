@@ -998,39 +998,74 @@ Massiveart.Form = Class.create({
    */
   initTexteditor: function(elementId){
     if($(elementId)){
+      
+// ---------------------------------------- NEW ----------------------------------------      
       tinyMCE.init({
         // General options
-        //mode : "specific_textareas",
-        //editor_selector : "texteditor",
         mode : "exact",
-        elements : elementId,            
+        elements : elementId,
         theme : "advanced",
-        skin : "zoolu",
-        debug : false,
         width : "100%",
-        height : "150px",
+        height : "240", 
+        debug : false,
         valid_elements : '*[*]',
-     
-        // plugins
-        plugins : "safari,table,advimage,advlink,media,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,inlinepopups",
-                    
-        // Theme options
+        custom_shortcuts : false,
+        language : myCore.languageCode,
         
-        theme_advanced_buttons1 : "bold,italic,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,sub,sup,|,link,unlink,anchor,|,fullscreen,code",
+        plugins : "lists,pagebreak,style,layer,table,advlink,inlinepopups,insertdatetime,media,paste,fullscreen,noneditable,visualchars,xhtmlxtras,wordcount,advlist",
+        
+        // Theme options        
+        theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,outdent,indent,blockquote,|,justifyleft,justifycenter,justifyright,|,sub,sup,|,link,unlink,anchor",
         theme_advanced_buttons2 : "formatselect,|,tablecontrols",
-        theme_advanced_buttons3 : "",
-        theme_advanced_buttons4 : "",                
+        theme_advanced_buttons3 : "cut,copy,paste,pasteword,|,removeformat,charmap,|,fullscreen,code",
+        theme_advanced_buttons4 : "",
         theme_advanced_toolbar_location : "top",
         theme_advanced_toolbar_align : "left",
         theme_advanced_statusbar_location : "bottom",
         theme_advanced_resizing : true,
         theme_advanced_resize_horizontal : false,
-          
-        content_css: "/website/themes/" + this.theme + "/css/screen.css",
+    
+        // Example content CSS (should be your site CSS)
+        content_css : "/website/themes/" + this.theme + "/css/screen.css",
         
         relative_urls : false,
         convert_urls : false
       });
+      
+// ---------------------------------------- OLD ----------------------------------------
+//      tinyMCE.init({
+//        // General options
+//        //mode : "specific_textareas",
+//        //editor_selector : "texteditor",
+//        mode : "exact",
+//        elements : elementId,            
+//        theme : "advanced",
+//        skin : "zoolu",
+//        debug : false,
+//        width : "100%",
+//        height : "150px",
+//        valid_elements : '*[*]',
+//     
+//        // plugins
+//        plugins : "safari,table,advimage,advlink,media,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,inlinepopups",
+//                    
+//        // Theme options
+//        
+//        theme_advanced_buttons1 : "bold,italic,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,sub,sup,|,link,unlink,anchor,|,fullscreen,code",
+//        theme_advanced_buttons2 : "formatselect,|,tablecontrols",
+//        theme_advanced_buttons3 : "",
+//        theme_advanced_buttons4 : "",                
+//        theme_advanced_toolbar_location : "top",
+//        theme_advanced_toolbar_align : "left",
+//        theme_advanced_statusbar_location : "bottom",
+//        theme_advanced_resizing : true,
+//        theme_advanced_resize_horizontal : false,
+//          
+//        content_css: "/website/themes/" + this.theme + "/css/screen.css",
+//        
+//        relative_urls : false,
+//        convert_urls : false
+//      });
     }
   },
   
