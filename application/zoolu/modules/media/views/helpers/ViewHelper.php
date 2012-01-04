@@ -188,7 +188,7 @@ class ViewHelper {
   	$this->core->logger->debug('media->views->helpers->ViewHelper->getListHead()');
   	
   	$strOutput = '<tr>
-          <th class="topcornerleft"></th>
+          <th class="topcornerleft"><div>&nbsp;</div></th>
           <th class="topcheckbox"><input id="listSelectAll" type="checkbox" name="listSelectAll" /></th>
           <th class="topicon"></th>
           <th class="toptitle'.(('alternativTitle' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'alternativTitle\''.(('alternativTitle' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
@@ -209,7 +209,7 @@ class ViewHelper {
           <th class="topcreated'.(('created' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'created\''.(('created' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
             <div'.(('created' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').'>'.$this->core->translate->_('uploaded').'</div>
           </th>
-          <th class="topcornerright"></th>
+          <th class="topcornerright"><div>&nbsp;</div></th>
         </tr>';
   	return $strOutput;
   }

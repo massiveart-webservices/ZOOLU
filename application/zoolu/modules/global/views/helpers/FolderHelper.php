@@ -144,7 +144,7 @@ class FolderHelper {
      */
     $strThead .= '<thead>
                      <tr>
-                       <th class="topcornerleft"></th>
+                       <th class="topcornerleft"><div>&nbsp;</div></th>
                        <th class="topcheckbox"></th>
                        <th class="topicon"></th>
                        <th class="topsortposition'.(('sortposition' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'sortposition\''.(('sortposition' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
@@ -159,7 +159,7 @@ class FolderHelper {
                        <th class="topchanged'.(('changed' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'changed\''.(('changed' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
                          <div'.(('changed' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').'>'.$this->core->translate->_('changed').'</div>
                        </th>
-                       <th class="topcornerright"></th>
+                       <th class="topcornerright"><div>&nbsp;</div></th>
                      </tr>
                    </thead>';
 

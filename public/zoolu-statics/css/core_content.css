@@ -827,6 +827,10 @@ Function Widget */
   padding:0;
 }
 
+#content2 .widgetfunctions {
+  background-color:#fff;
+}
+
 .widget224content {
   width:270px;
   overflow: hidden;
@@ -836,6 +840,17 @@ Function Widget */
   background-color:#999; /*#754480;*/
   height:40px;
   padding:0;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  -moz-border-radius-topright:5px;
+  -moz-border-radius-topleft:5px;
+}
+
+.widget224content .widgetcontenttop {
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+  -moz-border-radius-topright:0;
+  -moz-border-radius-topleft:0;  
 }
 
 #widgetcontentlefttop {

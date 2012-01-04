@@ -113,16 +113,27 @@ Content List View */
 }
 
 /* --- top --- */
-.topcornerleft {
-  background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_left_top.png) no-repeat 0 0;
-  height:26px;
+.topcornerleft, .topcornerright {
+  height:20px;
   width:11px;
 }
 
-.topcornerright {
-  background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_right_top.png) no-repeat 0 0;
-  height:26px;
-  width:11px;
+.topcornerleft div {
+  background-color:#e4e4e4;
+  border-top:1px solid #fff;
+  border-left:1px solid #fff;
+  height:21px;
+  border-top-left-radius:5px;
+  -moz-border-radius-topleft:5px;
+}
+
+.topcornerright div {
+  background-color:#e4e4e4;
+  border-top:1px solid #fff;
+  border-right:1px solid #fff;
+  height:21px;
+  border-top-right-radius:5px;
+  -moz-border-radius-topright:5px;
 }
 
 .topcheckbox {
@@ -327,35 +338,24 @@ Content List View */
 /* --- footer --- */
 .listfooter {
   position:relative;
-  height:36px;
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 bottom;
+  height:35px;  
   width:98%;  
 }
 
-.listfootercornerleft {
-  background:url(/zoolu-statics/images/main/list_corner_left_bottom.png) no-repeat 0 bottom;
-  position:absolute;
-  top:0;
-  left:0;
-  width:11px;
-  height:36px;
-}
-
-.listfootercornerright {
-  background:url(/zoolu-statics/images/main/list_corner_right_bottom.png) no-repeat 0 bottom;
+.listfootercontent {
+  background-color:#e4e4e4;
   position:absolute;
   top:0;
   right:0;
-  width:11px;
-  height:36px;
-}
-
-.listfootercontent {
-  position:absolute;
-  top:8px;
-  right:11px;
-  height:28px;
-  left:11px;    
+  height:26px;
+  left:0;
+  padding:8px 0 0 0;
+  border:1px solid #fff;
+  border-top:0;
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  -moz-border-radius-bottomright:5px;
+  -moz-border-radius-bottomleft:5px;    
 }
 
 .listentriescount {

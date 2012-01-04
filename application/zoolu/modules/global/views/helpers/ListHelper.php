@@ -77,7 +77,7 @@ class ListHelper {
       if($intCounter == 1){
         $strThead .= '
             <tr>
-              <th class="topcornerleft"></th>
+              <th class="topcornerleft"><div>&nbsp;</div></th>
               <th class="topcheckbox"><input type="checkbox" class="listSelectAll" name="listSelectAll" id="listSelectAll"/></th>';
       }
 
@@ -120,7 +120,7 @@ class ListHelper {
 
       if($intCounter == 1){
         $strThead .= '
-              <th class="topcornerright"></th>
+              <th class="topcornerright"><div>&nbsp;</div></th>
             </tr>';
       }
 
