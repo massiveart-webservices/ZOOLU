@@ -5,7 +5,6 @@
  * @version 1.0
  */
 
-
 /* ----------------
 Override Navigation Main 
 
@@ -36,21 +35,21 @@ Override Navigation Main
 Override Content Basics */
 
 .contentview {
-  position:absolute;
-  top:40px;
-  bottom:0;
-  left:10px;
-  right:0;
-  overflow:hidden;
-  overflow-y:scroll;
-  padding-right:40px;
-  padding: 10px 0 0 0;
-  z-index:140;
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    left: 10px;
+    right: 0;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-right: 40px;
+    padding: 10px 0 0 0;
+    z-index: 140;
 }
 
 /* only IE7 */
-*:first-child+html .contentedit { 
-  padding-right:50px;
+*:first-child+html .contentedit {
+    padding-right: 50px;
 }
 
 /* ----------------
@@ -58,226 +57,229 @@ Media Main Toolbar */
 
 /* --- media view types - thumb, list --- */
 #mediaviewtypes {
-  position:absolute; 
-  top:8px; 
-  right:0; 
-  width:66px;
-  padding:0;
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 66px;
+    padding: 0;
 }
 
 /* --- media slider --- */
 #mediaslider {
-  position:absolute; 
-  top:10px; 
-  right:76px; 
-  height:20px;
-  width:200px;
+    position: absolute;
+    top: 10px;
+    right: 76px;
+    height: 20px;
+    width: 200px;
 }
 
 #mediaslider .slidermediasmall {
-  position:absolute;
-  background:url(/zoolu-statics/images/slider/icon_media_small.png) no-repeat center center;
-  width:9px;
-  height:20px;
-  top:0;
-  left:0;
+    position: absolute;
+    background: url(/zoolu-statics/images/slider/icon_media_small.png) no-repeat center center;
+    width: 9px;
+    height: 20px;
+    top: 0;
+    left: 0;
 }
 
 #mediaslider .slidermediabig {
-  position:absolute;
-  background:url(/zoolu-statics/images/slider/icon_media_big.png) no-repeat center center;
-  width:17px;
-  height:20px;
-  top:0;
-  left:170px;
+    position: absolute;
+    background: url(/zoolu-statics/images/slider/icon_media_big.png) no-repeat center center;
+    width: 17px;
+    height: 20px;
+    top: 0;
+    left: 170px;
 }
 
 #mediaslider .slidertrack {
-  background:url(/zoolu-statics/images/slider/bg_slider_track.png) no-repeat left center; 
+    background: url(/zoolu-statics/images/slider/bg_slider_track.png) no-repeat left center;
 }
 
 #mediaslider .slidertrack img {
-  height:19px;
-  width:19px;
-  cursor:w-resize;
+    height: 19px;
+    width: 19px;
+    cursor: w-resize;
 }
 
 /* --- media search --- */
 #mediaSearchContainer {
-  position:absolute;
-  right:76px;
+    position: absolute;
+    right: 76px;
 }
 
 /* --- media buttons --- */
 #mediabuttons {
-  position:absolute; 
-  top:0; 
-  left:0;
-  width:300px;
-  height:40px;
-  z-index:200;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 40px;
+    z-index: 200;
 }
 
 #mediabuttons .buttonsdivider {
-  /*background: url(/zoolu-statics/images/main/divider_purple_light.gif) no-repeat 0 center;*/
-  width:10px;
-  height:40px;
-  float:left;
-  padding:0;
+    /*background: url(/zoolu-statics/images/main/divider_purple_light.gif) no-repeat 0 center;*/
+    width: 10px;
+    height: 40px;
+    float: left;
+    padding: 0;
 }
 
 #buttonmedianew {
-  float:left; 
-  cursor:pointer;
-  margin:7px 10px 0 0;
-  display:inline;
+    float: left;
+    cursor: pointer;
+    margin: 7px 10px 0 0;
+    display: inline;
 }
 
 #buttonmediaedit {
-  float:left; 
-  cursor:pointer;
-  margin:7px 10px 0 0;
-  display:inline;
+    float: left;
+    cursor: pointer;
+    margin: 7px 10px 0 0;
+    display: inline;
 }
 
 .mediaeditmenu {
-  position:absolute; 
-  z-index:300; 
-  width:143px; 
-  top:27px; 
-  left:122px;
+    position: absolute;
+    z-index: 300;
+    width: 143px;
+    top: 27px;
+    left: 122px;
 }
 
 .mediaeditmenuinner {
-  padding:10px;
-  width:121px;
-  border-left:1px solid #000;
-  border-right:1px solid #000;
-  background-color:#774580;
+    padding: 10px;
+    width: 121px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    background-color: #774580;
 }
 
 .mediaeditlink {
-  cursor:pointer;
-  height:20px;
+    cursor: pointer;
+    height: 20px;
 }
 
 /* ----------------
 Media Content Thumb */
 
 .contenthead {
-	height:40px;
-	background-color:#999; /*#754480;*/
-	padding:0px;
-	position:relative;
-	z-index:150;
+    height: 40px;
+    background-color: #999; /*#754480;*/
+    padding: 0px;
+    position: relative;
+    z-index: 150;
 }
 
-.thumbcontainer{
-	float:left; 
-	margin:0 30px 30px 0; 
-	position:relative;
+.thumbcontainer {
+    float: left;
+    margin: 0 30px 30px 0;
+    position: relative;
+    border: 5px solid #e4e4e4;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 .thumbimgcontainer {
-  cursor:pointer; 
-  margin:0 auto 0 auto;
+    cursor: pointer;
+    margin: 0 auto 0 auto;
 }
 
 .thumbshadowright {
-  background: url('/zoolu-statics/images/main/shadow_right.png') repeat-y; 
-  width:5px;
+    background: url('/zoolu-statics/images/main/shadow_right.png') repeat-y;
+    width: 5px;
 }
 
 .thumbshadowbottom {
-  background: url('/zoolu-statics/images/main/shadow_bottom.png') repeat-x; 
-  height:5px; 
-  font-size:0; 
-  line-height:0;
+    background: url('/zoolu-statics/images/main/shadow_bottom.png') repeat-x;
+    height: 5px;
+    font-size: 0;
+    line-height: 0;
 }
 
 .thumbshadowcorner {
-  background: url('/zoolu-statics/images/main/shadow_corner_b_r.png') no-repeat; 
-  height:5px; 
-  font-size:0; 
-  line-height:0;
+    background: url('/zoolu-statics/images/main/shadow_corner_b_r.png') no-repeat;
+    height: 5px;
+    font-size: 0;
+    line-height: 0;
 }
 
-.thumb{
-	display:block; 
-	/*border:1px solid #545454;*/
+.thumb {
+    display: block;
+    /*border:1px solid #545454;*/
 }
 
 #divThumbViewContainer .hover {
-  background-color:#e4e4e4;
+    background-color: #e4e4e4;
 }
 
 #divThumbViewContainer .selected {
-  background-color:#e4e4e4;
+    background-color: #e4e4e4;
 }
 
 /* ----------------
 SWFUpload */
 
 .swfupload {
-  width:113px;
-  height:25px;
-  margin:10px 0 10px 0;
-  float:left;
+    width: 113px;
+    height: 25px;
+    margin: 10px 0 10px 0;
+    float: left;
 }
 
 #overlayUpload #btnCancel {
-  display:none;
-  width:113px;
-  height:25px;
-  margin:10px 0 10px 0;
-  float:right;	  
+    display: none;
+    width: 113px;
+    height: 25px;
+    margin: 10px 0 10px 0;
+    float: right;
 }
 
 #overlayUpload #divStatus {
-  height:25px;
-  margin:15px 0 10px 0;
-  float:right;
+    height: 25px;
+    margin: 15px 0 10px 0;
+    float: right;
 }
 
 /* --- Form Styles --- */
 
 div.fieldset {
-  border:  1px solid #afe14c;
-  margin: 10px 0;
-  padding: 20px 10px;
+    border: 1px solid #afe14c;
+    margin: 10px 0;
+    padding: 20px 10px;
 }
 
 div.fieldset span.legend {
-  position: relative;
-  background-color: #FFF;
-  padding: 3px;
-  top: -30px;
-  font: 700 14px Arial, Helvetica, sans-serif;
-  color: #754480;
+    position: relative;
+    background-color: #FFF;
+    padding: 3px;
+    top: -30px;
+    font: 700 14px Arial, Helvetica, sans-serif;
+    color: #754480;
 }
 
 div.flash {
-  width: 375px;
-  margin: 10px 5px;
-  border-color: #754480;
+    width: 375px;
+    margin: 10px 5px;
+    border-color: #754480;
 
-  -moz-border-radius-topleft : 5px;
-  -webkit-border-top-left-radius : 5px;
-  -moz-border-radius-topright : 5px;
-  -webkit-border-top-right-radius : 5px;
-  -moz-border-radius-bottomleft : 5px;
-  -webkit-border-bottom-left-radius : 5px;
-  -moz-border-radius-bottomright : 5px;
-  -webkit-border-bottom-right-radius : 5px;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-bottom-right-radius: 5px;
 }
 
 /* FF 2 Fix */
-input[disabled]{ 
-	border: 1px solid #ccc;
-} 
+input[disabled] {
+    border: 1px solid #ccc;
+}
 
-#btnSubmit { 
-  margin: 0 0 0 155px ; 
+#btnSubmit {
+    margin: 0 0 0 155px;
 }
 
 /* --- Table Styles --- */
@@ -288,217 +290,217 @@ input[disabled]{
 }*/
 
 .mediawrapper {
-  background-color: #e4e4e4;
-  overflow: hidden;
-  overflow-y:scroll;
-  height:200px;
+    background-color: #e4e4e4;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 200px;
 }
 
-.busy.mediawrapper div, .busy.mediawrapper span{
-  visibility:hidden;
+.busy.mediawrapper div, .busy.mediawrapper span {
+    visibility: hidden;
 }
 
 .mediacontainer {
-  padding:10px;
+    padding: 10px;
 }
 
 .mediaicon {
-  padding:0 10px 0 0;
-  float:left;
+    padding: 0 10px 0 0;
+    float: left;
 }
 
 .mediainfos {
-  float:left;
+    float: left;
 }
 
 .mediainfotitle {
-  padding:0 0 10px 0;
+    padding: 0 0 10px 0;
 }
 
 .mediainfodescription {
-  padding:0 0 10px 0; 
+    padding: 0 0 10px 0;
 }
 
 .mediainfotags {
-   
+
 }
 
 .mediafield {
-  padding: 0 0 10px 0;
+    padding: 0 0 10px 0;
 }
 
 .mediainfolanguagespecific {
-  border-top:1px solid #ccc;
-  padding:5px 0 8px 0;  
+    border-top: 1px solid #ccc;
+    padding: 5px 0 8px 0;
 }
 
-.mediainfolanguagespecific .field{
-  padding:0;
+.mediainfolanguagespecific .field {
+    padding: 0;
 }
 
 .mediacontainer input {
-  width:345px;
-  border:1px solid #ccc;
+    width: 345px;
+    border: 1px solid #ccc;
 }
 
 .mediacontainer textarea {
-  width:345px;
-  height:50px;
-  border:1px solid #ccc;
+    width: 345px;
+    height: 50px;
+    border: 1px solid #ccc;
 }
 
 .mediacontainer .field {
-  margin:5px 0 0 0;
+    margin: 5px 0 0 0;
 }
 
 .mediacontainer .field input.radio,
 .mediacontainer .field input.checkbox,
 .mediacontainer .field input.multiCheckbox,
 .mediacontainer .field input.multiCheckboxTree {
-  width:26px;
-} 
+    width: 26px;
+}
 
 .overlaycontentwrapper .buttoncancel,
 .overlaycontentwrapper2 .buttoncancel {
-  padding:15px 0 0 0;
-  margin:0 10px 0 0;
-  float:left;
-  cursor:pointer;
+    padding: 15px 0 0 0;
+    margin: 0 10px 0 0;
+    float: left;
+    cursor: pointer;
 }
 
 .overlaycontentwrapper #buttoneditsave,
 .overlaycontentwrapper #btnSingleEditSubmit,
 .overlaycontentwrapper2 #buttoneditsave,
 .overlaycontentwrapper2 #btnSingleEditSubmit {
-  padding:10px 0 0 0;
-  float:right;
-  cursor:pointer;
+    padding: 10px 0 0 0;
+    float: right;
+    cursor: pointer;
 }
 
 .mediasizes {
-  padding:0 10px 0 0;
-  width:128px;
-  float:left;
+    padding: 0 10px 0 0;
+    width: 128px;
+    float: left;
 }
 
 .mediasizes select {
-  width: 128px;
+    width: 128px;
 }
 
 .mediaicon select {
-  width: 120px;
-  margin: 10px 0 0 6px;
+    width: 120px;
+    margin: 10px 0 0 6px;
 }
 
 .mediasingleupload {
-  margin:0 0 0 138px;
-  padding:0 10px 0 0;
+    margin: 0 0 0 138px;
+    padding: 0 10px 0 0;
 }
 
 .mediainfos .mediasingleupload {
-  margin:0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .mediasingleupload input {
-  width:222px;
+    width: 222px;
 }
 
 .mediasingleupload .swfupload {
-  float:right;
-  margin:-2px 0 0 0;
+    float: right;
+    margin: -2px 0 0 0;
 }
 
 /* Message */
 
 .message {
-  margin: 1em 0;
-  padding: 10px 20px;
-  border: solid 1px #FFDD99;
-  background-color: #FFFFCC;
-  overflow: hidden;
+    margin: 1em 0;
+    padding: 10px 20px;
+    border: solid 1px #FFDD99;
+    background-color: #FFFFCC;
+    overflow: hidden;
 }
+
 /* Error */
 
 .red {
-  border: solid 1px #B50000;
-  background-color: #FFEBEB;
+    border: solid 1px #B50000;
+    background-color: #FFEBEB;
 }
 
 /* Current */
 
 .green {
-  border: solid 1px #DDF0DD;
-  background-color: #EBFFEB;
+    border: solid 1px #DDF0DD;
+    background-color: #EBFFEB;
 }
 
 /* Complete */
 
 .blue {
-  border: solid 1px #CEE2F2;
-  background-color: #F0F5FF;
+    border: solid 1px #CEE2F2;
+    background-color: #F0F5FF;
 }
 
 .progressName {
-  font-size: 8pt;
-  font-weight: 700;
-  color: #555;
-  width: 323px;
-  height: 14px;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
+    font-size: 8pt;
+    font-weight: 700;
+    color: #555;
+    width: 323px;
+    height: 14px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .progressBarInProgress,
 .progressBarComplete,
 .progressBarError {
-  font-size: 0;
-  width: 0%;
-  height: 2px;
-  background-color: #754480;
-  margin-top: 2px;
+    font-size: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #754480;
+    margin-top: 2px;
 }
 
 .progressBarComplete {
-  width: 100%;
-  background-color: green;
-  visibility: hidden;
+    width: 100%;
+    background-color: green;
+    visibility: hidden;
 }
 
 .progressBarError {
-  width: 100%;
-  background-color: red;
-  visibility: hidden;
+    width: 100%;
+    background-color: red;
+    visibility: hidden;
 }
 
 .progressBarStatus {
-  margin-top: 2px;
-  width: 337px;
-  font-size: 7pt;
-  font-family: Arial;
-  text-align: left;
-  white-space: nowrap;
+    margin-top: 2px;
+    width: 337px;
+    font-size: 7pt;
+    font-family: Arial;
+    text-align: left;
+    white-space: nowrap;
 }
 
 a.progressCancel {
-  font-size: 0;
-  display: block;
-  height: 14px;
-  width: 14px;
-  background-image: url(/zoolu-statics/images/main/cancelbutton.gif);
-  background-repeat: no-repeat;
-  background-position: -14px 0px;
-  float: right;
+    font-size: 0;
+    display: block;
+    height: 14px;
+    width: 14px;
+    background-image: url(/zoolu-statics/images/main/cancelbutton.gif);
+    background-repeat: no-repeat;
+    background-position: -14px 0px;
+    float: right;
 }
 
 a.progressCancel:hover {
-  background-position: 0px 0px;
+    background-position: 0px 0px;
 }
-
 
 /* --- SWFUpload Object Styles --- */
 .swfupload {
-  vertical-align: top;
+    vertical-align: top;
 }
 
