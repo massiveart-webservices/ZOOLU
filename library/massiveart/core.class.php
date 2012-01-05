@@ -43,331 +43,354 @@
  * @subpackage Core
  */
 
-class Core {
-
-  /**
-   * object instance
-   */
-  private static $instance = null;
-
-  /**
-	 * @var Zend_Db_Adapter_Abstract
-	 */
-  public $dbh;
-
-  /**
-	 * @var Zend_Log
-	 */
-  public $logger;
-
-  /**
-	 * @var Zend_Config_Xml
-	 */
-  public $sysConfig;
-  public $zooConfig;
-  public $config;
-
-  /**
-   * @var HtmlTranslate
-   */
-  public $translate;
-  
-  /**
-   * @var Zend_Session_Namespace
-   */
-  public $objCoreSession;
-  
-  /**
-   * @var Zend_Cache_Core
-   */
-  private $objTmpCache;
-  
-  /**
-   * @var integer
-   */
-  public $intLanguageId;
-
-  /**
-   * @var string
-   */
-  public $strLanguageCode;
-  
-  /**
-   * @var integer
-   */
-  public $intZooluLanguageId;
-
-  /**
-   * @var string
-   */
-  public $strZooluLanguageCode;  
-  
-  /**
-   * @var boolean
-   */
-  public $blnIsDefaultLanguage = false;
-  
-  /**
-   * Constructor
-   */
-  protected function __construct($blnWithDbh = true, Zend_Config_Xml &$sysConfig, Zend_Config_Xml &$zooConfig, Zend_Config_Xml &$config){
-    /**
-     * set sys config object
-     */
-    $this->sysConfig = $sysConfig;
+class Core
+{
 
     /**
-     * set modules config object
+     * object instance
      */
-    $this->zooConfig = $zooConfig;
+    private static $instance = null;
 
     /**
-     * set website config object
+     * @var Zend_Db_Adapter_Abstract
      */
-    $this->config = $config;
+    public $dbh;
 
     /**
-     * initialize Zend_Log
+     * @var Zend_Log
      */
-    $this->logger = new Zend_Log();
-    
+    public $logger;
+
     /**
-     * initialize Zend_Session_Namespace
+     * @var Zend_Config_Xml
      */
-    $this->objCoreSession = new Zend_Session_Namespace('Core');
-    
+    public $sysConfig;
+    public $zooConfig;
+    public $config;
+
     /**
-     * create logfile extension for file writer
+     * @var HtmlTranslate
      */
-    $strLogFileExtension = '';
-    if($this->sysConfig->logger->priority > Zend_Log::ERR){
-      if(isset($_SESSION["sesUserName"]) && isset($_SERVER['REMOTE_ADDR'])){
-        $strLogFileExtension = '_'.$_SESSION["sesUserName"].'_'.$_SERVER['REMOTE_ADDR'];
-      }else
-      if(isset($_SERVER['REMOTE_ADDR'])){
-        $strLogFileExtension = '_'.$_SERVER['REMOTE_ADDR'];
-      }else{
-        $strLogFileExtension = '_local';
-      }
+    public $translate;
+
+    /**
+     * @var Zend_Session_Namespace
+     */
+    public $objCoreSession;
+
+    /**
+     * @var Zend_Cache_Core
+     */
+    private $objTmpCache;
+
+    /**
+     * @var integer
+     */
+    public $intLanguageId;
+
+    /**
+     * @var string
+     */
+    public $strLanguageCode;
+
+    /**
+     * @var integer
+     */
+    public $intZooluLanguageId;
+
+    /**
+     * @var string
+     */
+    public $strZooluLanguageCode;
+
+    /**
+     * @var boolean
+     */
+    public $blnIsDefaultLanguage = false;
+
+    /**
+     * Constructor
+     */
+    protected function __construct($blnWithDbh = true, Zend_Config_Xml &$sysConfig, Zend_Config_Xml &$zooConfig, Zend_Config_Xml &$config)
+    {
+        // set sys config object
+        $this->sysConfig = $sysConfig;
+
+        // set modules config object
+        $this->zooConfig = $zooConfig;
+
+        // set website config object
+        $this->config = $config;
+
+        // initialize zf log
+        $this->logger = new Zend_Log();
+
+        // initialize fz session namespace
+        $this->objCoreSession = new Zend_Session_Namespace('Core');
+
+        // create logfile extension for file writer
+        $strLogFileExtension = '';
+        if ($this->sysConfig->logger->priority > Zend_Log::ERR) {
+            if (isset($_SESSION["sesUserName"]) && isset($_SERVER['REMOTE_ADDR'])) {
+                $strLogFileExtension = '_' . $_SESSION["sesUserName"] . '_' . $_SERVER['REMOTE_ADDR'];
+            } else
+                if (isset($_SERVER['REMOTE_ADDR'])) {
+                    $strLogFileExtension = '_' . $_SERVER['REMOTE_ADDR'];
+                } else {
+                    $strLogFileExtension = '_local';
+                }
+        }
+
+        // create log file writer
+        $writer = new Zend_Log_Writer_Stream(GLOBAL_ROOT_PATH . $this->sysConfig->logger->path . 'log_' . date('Ymd') . $strLogFileExtension . '.log');
+        $this->logger->addWriter($writer);
+
+        // set log priority
+        $filter = new Zend_Log_Filter_Priority((int) $this->sysConfig->logger->priority);
+        $this->logger->addFilter($filter);
+
+        // get language and set translate object
+        $this->logger->info('get language from ... ');
+        if (isset($_GET['language'])) {
+
+            $this->logger->info('GET');
+            $this->strLanguageCode = trim($_GET['language'], '/');
+            foreach ($this->config->languages->language->toArray() as $arrLanguage) {
+                if (array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($this->strLanguageCode)) {
+                    $this->intLanguageId = $arrLanguage['id'];
+                    break;
+                }
+            }
+
+            // fallback if ther is no language id
+            if ($this->intLanguageId == null) {
+                if (isset($this->objCoreSession->languageId)) {
+                    $this->logger->info('SESSION');
+                    $this->intLanguageId = $this->objCoreSession->languageId;
+                    $this->strLanguageCode = $this->objCoreSession->languageCode;
+                } else {
+                    $this->logger->info('DEFAULT');
+                    $this->blnIsDefaultLanguage = true;
+                    $this->intLanguageId = $this->sysConfig->languages->default->id;
+                    $this->strLanguageCode = $this->sysConfig->languages->default->code;
+                }
+            }
+
+        } elseif (isset($_SERVER['REQUEST_URI']) && preg_match('/^\/[a-zA-Z\-]{2,5}\//', $_SERVER['REQUEST_URI'])) {
+
+            $this->logger->info('URI');
+
+            preg_match('/^\/[a-zA-Z\-]{2,5}\//', $_SERVER['REQUEST_URI'], $arrMatches);
+            $this->strLanguageCode = trim($arrMatches[0], '/');
+            foreach ($this->config->languages->language->toArray() as $arrLanguage) {
+                if (array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($this->strLanguageCode)) {
+                    $this->intLanguageId = $arrLanguage['id'];
+                    break;
+                }
+            }
+
+            // fallback if ther is no language id
+            if ($this->intLanguageId == null) {
+                if (isset($this->objCoreSession->languageId)) {
+                    $this->logger->info('SESSION');
+                    $this->intLanguageId = $this->objCoreSession->languageId;
+                    $this->strLanguageCode = $this->objCoreSession->languageCode;
+                } else {
+                    $this->logger->info('DEFAULT');
+                    $this->blnIsDefaultLanguage = true;
+                    $this->intLanguageId = $this->sysConfig->languages->default->id;
+                    $this->strLanguageCode = $this->sysConfig->languages->default->code;
+                }
+            }
+
+        } elseif (isset($_SERVER['REQUEST_URI']) && preg_match('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', $_SERVER['REQUEST_URI'])) {
+
+            $this->logger->info('URI with segment');
+
+            preg_match('/^(\/[a-zA-Z]{1})(\/[a-zA-Z\-]{2,5}\/)/', $_SERVER['REQUEST_URI'], $arrMatches);
+            $this->strLanguageCode = trim($arrMatches[2], '/');
+            foreach ($this->config->languages->language->toArray() as $arrLanguage) {
+                if (array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($this->strLanguageCode)) {
+                    $this->intLanguageId = $arrLanguage['id'];
+                    break;
+                }
+            }
+
+            // fallback if ther is no language id
+            if ($this->intLanguageId == null) {
+                if (isset($this->objCoreSession->languageId)) {
+                    $this->logger->info('SESSION');
+                    $this->intLanguageId = $this->objCoreSession->languageId;
+                    $this->strLanguageCode = $this->objCoreSession->languageCode;
+                } else {
+                    $this->logger->info('DEFAULT');
+                    $this->blnIsDefaultLanguage = true;
+                    $this->intLanguageId = $this->sysConfig->languages->default->id;
+                    $this->strLanguageCode = $this->sysConfig->languages->default->code;
+                }
+            }
+
+        } elseif (isset($this->objCoreSession->languageId)) {
+            $this->logger->info('SESSION');
+            $this->intLanguageId = $this->objCoreSession->languageId;
+            $this->strLanguageCode = $this->objCoreSession->languageCode;
+        } else {
+            $this->logger->info('DEFAULT');
+            $this->blnIsDefaultLanguage = true;
+            $this->intLanguageId = $this->sysConfig->languages->default->id;
+            $this->strLanguageCode = $this->sysConfig->languages->default->code;
+        }
+
+        // set up zoolu translate obj
+        $this->intZooluLanguageId = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageId : $this->intLanguageId;
+        $this->strZooluLanguageCode = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageCode : $this->strLanguageCode;
+
+        if (file_exists(GLOBAL_ROOT_PATH . 'application/zoolu/language/zoolu-' . $this->strZooluLanguageCode . '.mo')) {
+            $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/zoolu/language/zoolu-' . $this->strZooluLanguageCode . '.mo');
+        } else {
+            $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/zoolu/language/zoolu-' . $this->zooConfig->languages->default->code . '.mo');
+        }
+
+        // update session language
+        $this->updateSessionLanguage();
+
+        if ($blnWithDbh == true) {
+            /**
+             * initialize the ZEND DB Connection
+             * do lazy connection binding, so db connection will be established on first use with dbh->getConnection()
+             */
+            try {
+
+                $pdoParams = array(
+                    PDO::ATTR_ERRMODE                  => PDO::ERRMODE_EXCEPTION,
+                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                );
+
+                $dbhParameters = array(
+                    'host'             => $this->sysConfig->database->params->host,
+                    'username'         => $this->sysConfig->database->params->username,
+                    'password'         => $this->sysConfig->database->params->password,
+                    'dbname'           => $this->sysConfig->database->params->dbname,
+                    'driver_options'   => $pdoParams
+                );
+
+                $this->dbh = Zend_Db::factory($this->sysConfig->database->adapter, $dbhParameters);
+
+                if ($this->sysConfig->logger->priority == Zend_Log::DEBUG) $this->dbh->getProfiler()->setEnabled(true);
+
+                $this->dbh->getConnection();
+
+                $this->dbh->exec('SET CHARACTER SET ' . $this->sysConfig->encoding->db);
+
+                Zend_Db_Table::setDefaultAdapter($this->dbh);
+
+                /**
+                 * using a default metadata cache for all table objects
+                 *
+                 * set up the cache
+                 */
+                $arrFrontendOptions = array(
+                    'automatic_serialization' => true
+                );
+
+                /**
+                 * memcache server configuration
+                 */
+                $arrServer = array(
+                    'host'       => Zend_Cache_Backend_Memcached::DEFAULT_HOST,
+                    'port'       => Zend_Cache_Backend_Memcached::DEFAULT_PORT,
+                    'persistent' => Zend_Cache_Backend_Memcached::DEFAULT_PERSISTENT
+                );
+
+                $arrBackendOptions = array(
+                    'cache_dir' => GLOBAL_ROOT_PATH . $this->sysConfig->path->cache->tables // Directory where to put the cache files
+                    //'server' => $arrServer
+                );
+
+                $objCache = Zend_Cache::factory('Core',
+                    'File', //Memcached
+                    $arrFrontendOptions,
+                    $arrBackendOptions);
+
+                /**
+                 * set the cache to be used with all table objects
+                 */
+                Zend_Db_Table_Abstract::setDefaultMetadataCache($objCache);
+
+            } catch (Zend_Db_Adapter_Exception $exc) {
+                $this->logger->err($exc);
+                header('Location: http://' . $this->sysConfig->hostname);
+                die();
+            } catch (Zend_Exception $exc) {
+                $this->logger->err($exc);
+                header('Location: http://' . $this->sysConfig->hostname);
+                die();
+            }
+        }
+    }
+
+    private function __clone() { }
+
+    /**
+     * updateSessionLanguage
+     * @return void
+     */
+    public function updateSessionLanguage()
+    {
+        if ($this->objCoreSession instanceof Zend_Session_Abstract) {
+            // update session language now
+            $this->objCoreSession->languageId = $this->intLanguageId;
+            $this->objCoreSession->languageCode = $this->strLanguageCode;
+        }
     }
 
     /**
-     * create log file writer
+     * TmpCache
+     * @return Zend_Cache_Core
      */
-    $writer = new Zend_Log_Writer_Stream(GLOBAL_ROOT_PATH.$this->sysConfig->logger->path.'log_'.date('Ymd').$strLogFileExtension.'.log');
-    $this->logger->addWriter($writer);
-
-    /**
-     * set log priority
-     */
-    $filter = new Zend_Log_Filter_Priority((int) $this->sysConfig->logger->priority);
-    $this->logger->addFilter($filter);
-    
-    /**
-     * get language and set translate object
-     */
-    $this->logger->info('get language from ... ');
-    if(isset($_GET['language'])){
-      $this->logger->info('GET');
-      $this->strLanguageCode = trim($_GET['language'], '/');
-      foreach($this->config->languages->language->toArray() as $arrLanguage){
-        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($this->strLanguageCode)){
-          $this->intLanguageId = $arrLanguage['id'];
-          break;
+    public function TmpCache()
+    {
+        if ($this->objTmpCache === null) {
+            $this->initTmpCache();
         }
-      }
-      if($this->intLanguageId == null){
-        if(isset($this->objCoreSession->languageId)){
-          $this->logger->info('SESSION');
-          $this->intLanguageId = $this->objCoreSession->languageId;
-          $this->strLanguageCode = $this->objCoreSession->languageCode;
-        }else{
-          $this->logger->info('DEFAULT');
-          $this->blnIsDefaultLanguage = true;
-          $this->intLanguageId = $this->sysConfig->languages->default->id;
-          $this->strLanguageCode = $this->sysConfig->languages->default->code;  
-        }
-      }
-    }else if(isset($_SERVER['REQUEST_URI']) && preg_match('/^\/[a-zA-Z\-]{2,5}\//', $_SERVER['REQUEST_URI'])){
-      $this->logger->info('URI');
-      preg_match('/^\/[a-zA-Z\-]{2,5}\//', $_SERVER['REQUEST_URI'], $arrMatches);
-      $this->strLanguageCode = trim($arrMatches[0], '/');
-      foreach($this->config->languages->language->toArray() as $arrLanguage){
-        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($this->strLanguageCode)){
-          $this->intLanguageId = $arrLanguage['id'];
-          break;
-        }
-      }
-      if($this->intLanguageId == null){
-        if(isset($this->objCoreSession->languageId)){
-          $this->logger->info('SESSION');
-          $this->intLanguageId = $this->objCoreSession->languageId;
-          $this->strLanguageCode = $this->objCoreSession->languageCode;
-        }else{
-          $this->logger->info('DEFAULT');
-          $this->blnIsDefaultLanguage = true;
-          $this->intLanguageId = $this->sysConfig->languages->default->id;
-          $this->strLanguageCode = $this->sysConfig->languages->default->code;  
-        }
-      }
-    }else if(isset($this->objCoreSession->languageId)){
-      $this->logger->info('SESSION');
-      $this->intLanguageId = $this->objCoreSession->languageId;
-      $this->strLanguageCode = $this->objCoreSession->languageCode;
-    }else{
-      $this->logger->info('DEFAULT');
-      $this->blnIsDefaultLanguage = true;
-      $this->intLanguageId = $this->sysConfig->languages->default->id;
-      $this->strLanguageCode = $this->sysConfig->languages->default->code;
-    }    
-        
-    /**
-     * set up zoolu translate obj
-     */
-    $this->intZooluLanguageId = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageId : $this->intLanguageId;
-    $this->strZooluLanguageCode = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageCode : $this->strLanguageCode;
-    
-    if(file_exists(GLOBAL_ROOT_PATH.'application/zoolu/language/zoolu-'.$this->strZooluLanguageCode.'.mo')){
-      $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH.'application/zoolu/language/zoolu-'.$this->strZooluLanguageCode.'.mo');  
-    }else{
-      $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH.'application/zoolu/language/zoolu-'.$this->zooConfig->languages->default->code.'.mo');
+        return $this->objTmpCache;
     }
-    
-    // update session language
-    $this->updateSessionLanguage();
 
-    if($blnWithDbh == true){
-      /**
-       * initialize the ZEND DB Connection
-       * do lazy connection binding, so db connection will be established on first use with dbh->getConnection()
-       */
-      try {
-
-        $pdoParams = array(
-          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-          PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
-        );
-
-      	$dbhParameters = array(
-          'host'             => $this->sysConfig->database->params->host,
-    			'username'         => $this->sysConfig->database->params->username,
-    			'password'         => $this->sysConfig->database->params->password,
-    			'dbname'           => $this->sysConfig->database->params->dbname,
-      		'driver_options'   => $pdoParams
-    		);
-
-       	$this->dbh = Zend_Db::factory($this->sysConfig->database->adapter, $dbhParameters);
-
-       	if($this->sysConfig->logger->priority == Zend_Log::DEBUG) $this->dbh->getProfiler()->setEnabled(true);
-
-       	$this->dbh->getConnection();
-
-       	$this->dbh->exec('SET CHARACTER SET '.$this->sysConfig->encoding->db);
-       	
-       	Zend_Db_Table::setDefaultAdapter($this->dbh);
-
-       	/**
-       	 * using a default metadata cache for all table objects
-       	 *
-       	 * set up the cache
-       	 */
+    /**
+     * initTmpCache
+     * @return void
+     */
+    private function initTmpCache()
+    {
+        /**
+         * set up the cache
+         */
         $arrFrontendOptions = array(
-          'automatic_serialization' => true
+            'automatic_serialization' => true,
+            'lifetime'                => 604860,
         );
 
-        /**
-         * memcache server configuration
-         */
-        $arrServer = array(
-          'host' => Zend_Cache_Backend_Memcached::DEFAULT_HOST,
-          'port' => Zend_Cache_Backend_Memcached::DEFAULT_PORT,
-          'persistent' => Zend_Cache_Backend_Memcached::DEFAULT_PERSISTENT
+        $arrBackendOptions = array(
+            'cache_dir' => GLOBAL_ROOT_PATH . $this->sysConfig->path->cache->tmp
         );
 
-        $arrBackendOptions  = array(
-          'cache_dir' => GLOBAL_ROOT_PATH.$this->sysConfig->path->cache->tables // Directory where to put the cache files
-          //'server' => $arrServer
-        );
-
-        $objCache = Zend_Cache::factory('Core',
-                                        'File',//Memcached
-                                        $arrFrontendOptions,
-                                        $arrBackendOptions);
-
-        /**
-         * set the cache to be used with all table objects
-         */
-        Zend_Db_Table_Abstract::setDefaultMetadataCache($objCache);
-
-      } catch (Zend_Db_Adapter_Exception $exc) {
-        $this->logger->err($exc);
-        header ('Location: http://'.$this->sysConfig->hostname);
-        die();
-      } catch (Zend_Exception $exc) {
-        $this->logger->err($exc);
-        header ('Location: http://'.$this->sysConfig->hostname);
-        die();
-      }
+        $this->objTmpCache = Zend_Cache::factory('Core',
+            'File',
+            $arrFrontendOptions,
+            $arrBackendOptions);
     }
-  }
 
-  private function __clone(){}
-  
-  /**
-   * updateSessionLanguage
-   * @return void
-   */
-  public function updateSessionLanguage(){
-    if($this->objCoreSession instanceof Zend_Session_Abstract){
-      // update session language now
-      $this->objCoreSession->languageId = $this->intLanguageId;
-      $this->objCoreSession->languageCode = $this->strLanguageCode;
-    }
-  }
-  
-  /**
-   * TmpCache
-   * @return Zend_Cache_Core
-   */
-  public function TmpCache(){
-    if($this->objTmpCache === null){
-      $this->initTmpCache();
-    }
-    return $this->objTmpCache;
-  }
-  
-  /**
-   * initTmpCache
-   * @return void
-   */
-  private function initTmpCache(){
     /**
-     * set up the cache
+     * getInstance
+     * @return object instance of the class
      */
-    $arrFrontendOptions = array(
-      'automatic_serialization' => true,
-      'lifetime' => 604860,
-    );
-
-    $arrBackendOptions  = array(
-      'cache_dir' => GLOBAL_ROOT_PATH.$this->sysConfig->path->cache->tmp
-    );
-
-    $this->objTmpCache = Zend_Cache::factory('Core',
-                                             'File',
-                                             $arrFrontendOptions,
-                                             $arrBackendOptions);  
-  }
-
-  /**
-   * getInstance
-   * @return object instance of the class
-   */
-  public static function getInstance($blnWithDbh = true, Zend_Config_Xml &$sysConfig, Zend_Config_Xml &$zooConfig, Zend_Config_Xml &$config){
-    if(self::$instance == null){
-      self::$instance = new Core($blnWithDbh, $sysConfig, $zooConfig, $config);
+    public static function getInstance($blnWithDbh = true, Zend_Config_Xml &$sysConfig, Zend_Config_Xml &$zooConfig, Zend_Config_Xml &$config)
+    {
+        if (self::$instance == null) {
+            self::$instance = new Core($blnWithDbh, $sysConfig, $zooConfig, $config);
+        }
+        return self::$instance;
     }
-    return self::$instance;
-  }
 }
+
 ?>

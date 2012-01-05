@@ -332,7 +332,7 @@ class Model_Folders {
      * WHERE rootLevelUrls.url = ?
      */
     $objSelect->from('rootLevelUrls', array('id', 'url', 'idRootLevels', 'idLanguages', 'analyticsKey', 'mapsKey'));
-    $objSelect->join('rootLevels', 'rootLevels.id = rootLevelUrls.idRootLevels', array('idRootLevelGroups', 'isSecure'));
+    $objSelect->join('rootLevels', 'rootLevels.id = rootLevelUrls.idRootLevels', array('idRootLevelGroups', 'isSecure', 'hasSegments'));
     $objSelect->join('languages', 'languages.id = rootLevelUrls.idLanguages', array('languageCode'));
     $objSelect->joinLeft('rootLevelTitles', 'rootLevelTitles.idRootLevels = rootLevels.id AND rootLevelTitles.idLanguages = '.$this->intLanguageId, array('title'));
     $objSelect->joinLeft(array('rLTDefault' => 'rootLevelTitles'), 'rLTDefault.idRootLevels = rootLevels.id AND rLTDefault.idLanguages = rootLevelUrls.idLanguages', array('defaultTitle' => 'title'));
