@@ -7,19 +7,13 @@
                   <?php if (isset($this->previous)): ?>
                   <div class="listback">
                     <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->previous; ?>);">
-                      <div class="buttonleft"></div>
-                      <div class="buttoncenter"><?php echo $core->translate->_('previous'); ?></div>
-                      <div class="buttonright"></div>
-                      <div class="clear"></div>
+                      <?php echo $core->translate->_('previous'); ?>
                     </div>
                   </div>
                   <?php else: ?>
                   <div class="listback">
                     <div class="listfooterbutton">
-                      <div class="buttonleft"></div>
-                      <div class="buttoncenter"><?php echo $core->translate->_('previous'); ?></div>
-                      <div class="buttonright"></div>
-                      <div class="clear"></div>
+                      <?php echo $core->translate->_('previous'); ?>
                     </div>
                   </div>
                   <?php endif; ?>
@@ -37,19 +31,13 @@
                   <?php if (isset($this->next)): ?>
                   <div class="listnext">
                     <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->next; ?>);">
-                      <div class="buttonleft"></div>
-                      <div class="buttoncenter"><?php echo $core->translate->_('next'); ?></div>
-                      <div class="buttonright"></div>
-                      <div class="clear"></div>
+                      <?php echo $core->translate->_('next'); ?>
                     </div>
                   </div>
                   <?php else: ?>
                   <div class="listnext">
                     <div class="listfooterbutton">
-                      <div class="buttonleft"></div>
-                      <div class="buttoncenter"><?php echo $core->translate->_('next'); ?></div>
-                      <div class="buttonright"></div>
-                      <div class="clear"></div>
+                      <?php echo $core->translate->_('next'); ?>
                     </div>
                   </div>
                   <?php endif; ?>
