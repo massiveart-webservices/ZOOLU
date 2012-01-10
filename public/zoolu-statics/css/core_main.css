@@ -122,7 +122,7 @@ Content List View */
     background-color: #e4e4e4;
     border-top: 1px solid #fff;
     border-left: 1px solid #fff;
-    height: 21px;
+    height: 25px;
     border-top-left-radius: 5px;
     -moz-border-radius-topleft: 5px;
 }
@@ -131,7 +131,7 @@ Content List View */
     background-color: #e4e4e4;
     border-top: 1px solid #fff;
     border-right: 1px solid #fff;
-    height: 21px;
+    height: 25px;
     border-top-right-radius: 5px;
     -moz-border-radius-topright: 5px;
 }

@@ -385,9 +385,9 @@ Massiveart.Navigation = Class.create({
    * @param integer parentLevel, string elType, integer itemId
    */
   selectNavigationItem: function(parentLevel, elType, itemId, showList){
-    clearTimeout(this.listTimeOut);
+    //clearTimeout(this.listTimeOut);
     
-    if(typeof(showList) == 'undefined') showList = true;
+    //if(typeof(showList) == 'undefined') showList = true;
     $(this.genFormContainer).hide();
     $(this.genFormSaveContainer).hide();
     if($(this.genTableListContainer)) $(this.genTableListContainer).hide();
@@ -468,8 +468,8 @@ Massiveart.Navigation = Class.create({
           // check if tree has to load          
           if(this.arrTreeToLoad != null){
             //Clear old automatic List timeout
-            clearTimeout(this.listTimeOut);
-            showList = false;
+            //clearTimeout(this.listTimeOut);
+            //showList = false;
             if(this.arrTreeToLoad.length > 1){
               this.arrTreeToLoad.splice(0, 1);
               if($('divNavigationTitle_folder'+this.arrTreeToLoad.first())) $('divNavigationTitle_folder'+this.arrTreeToLoad.first()).onclick();
@@ -490,7 +490,7 @@ Massiveart.Navigation = Class.create({
             this.blnLoadStartpage = false;
           }
           //Set Timeout for automatic list display
-          else if(showList) this.listTimeOut = setTimeout(function(){myFolder.getFolderContentList()}, this.constListTimeOut);
+          //else if(showList) this.listTimeOut = setTimeout(function(){myFolder.getFolderContentList()}, this.constListTimeOut);
         }.bind(this)
       });
     }
