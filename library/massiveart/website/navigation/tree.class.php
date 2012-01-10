@@ -227,7 +227,6 @@ class NavigationTree extends NavigationItem implements Iterator, Countable {
     $this->sort();
     current($this->arrOrder);
     $strKey = key($this->arrOrder);
-
     if(isset($this->arrItems[$strKey])){
       return $this->arrItems[$strKey];
     }elseif (isset($this->arrTrees[$strKey])){

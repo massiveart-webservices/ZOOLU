@@ -202,6 +202,20 @@ class Navigation {
 
             $intTreeId = $objNavigationItem->idFolder;
 
+          }elseif($objNavigationItem->idParentTypes == $this->core->sysConfig->parent_types->rootlevel && $objNavigationItem->isStartPage == 0){
+            /**
+             * Add Rootlevel pages
+             */
+            $objItem = new NavigationItem();
+            $objItem->setTitle($objNavigationItem->title);
+            $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+            $objItem->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
+            $objItem->setId($objNavigationItem->idPage);
+            $objItem->setTypeId($objNavigationItem->idPageTypes);
+            $objItem->setParentId($objNavigationItem->idFolder);
+            $objItem->setItemId($objNavigationItem->pageId);
+            $objItem->setOrder($objNavigationItem->pageOrder);
+            $objNavigationTree->addItem($objItem, 'item_'.$objItem->getId());
           }else{
             if($intTreeId != $objNavigationItem->idFolder){
 
@@ -280,7 +294,7 @@ class Navigation {
       if(isset($objTree) && is_object($objTree) && $objTree instanceof NavigationTree){
         $objNavigationTree->addToParentTree($objTree, 'tree_'.$objTree->getId());
       }
-
+      
       $this->objMainNavigation = $objNavigationTree;
     }catch (Exception $exc) {
       $this->core->logger->err($exc);

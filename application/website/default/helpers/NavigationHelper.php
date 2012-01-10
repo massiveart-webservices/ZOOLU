@@ -87,7 +87,7 @@ class NavigationHelper {
     $strMainNavigation = '';
     $strHomeLink = '';
         
-    $this->objNavigation->loadMainNavigation();
+    $this->objNavigation->loadNavigation();
     
     $strPageId = '';  
     if(is_object($this->objNavigation->Page())){
@@ -103,37 +103,27 @@ class NavigationHelper {
     }else if($mixedElementProperties != ''){
       $strElementProperties = ' class="'.$mixedElementProperties.'"';
     }
-    
     if(count($this->objNavigation->MainNavigation()) > 0){    
       foreach($this->objNavigation->MainNavigation() as $objNavigationItem){
-        
         $strSelectedItem = '';
         $strSelectedImg = 'off';
-        if($strPageId == $objNavigationItem->pageId){
+        if($strPageId == $objNavigationItem->getItemId()){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
-        }else if($strFolderId == $objNavigationItem->folderId){
+        }else if($strFolderId == $objNavigationItem->getItemId()){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
         }
         
-        $strImgFileTitle = strtolower($objNavigationItem->url);
+        $strImgFileTitle = strtolower($objNavigationItem->getUrl());
         if(strpos($strImgFileTitle, '/') > -1){
           $strImgFileTitle = substr($strImgFileTitle, 0, strpos($strImgFileTitle, '/'));    
         }
         
-        if($objNavigationItem->isStartPage == 1 && $blnWithHomeLink == true){
-          if($blnImageNavigation){
-            $strHomeLink = '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url.'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/navigation/home_'.$strSelectedImg.'.gif" alt="'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/></a></'.$strElement.'>';
-          }else{
-            $strHomeLink = '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url.'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'>'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></'.$strElement.'>';
-          }
+        if($blnImageNavigation){
+          $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$objNavigationItem->getUrl().'"'.(($objNavigationItem->getTarget() != '') ? ' target="'.$objNavigationItem->getTarget().'"' : '').$strSelectedItem.'><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/navigation/'.$strImgFileTitle.'_'.$strSelectedImg.'.gif" alt="'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/></a></'.$strElement.'>';
         }else{
-          if($blnImageNavigation){
-            $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url.'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/navigation/'.$strImgFileTitle.'_'.$strSelectedImg.'.gif" alt="'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/></a></'.$strElement.'>';
-          }else{
-            $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url.'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'>'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></'.$strElement.'>';
-          }
+          $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$objNavigationItem->getUrl().'"'.(($objNavigationItem->getTarget() != '') ? ' target="'.$objNavigationItem->getTarget().'"' : '').$strSelectedItem.'>'.htmlentities($objNavigationItem->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></'.$strElement.'>';
         }
       }
     }
