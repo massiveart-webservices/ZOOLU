@@ -226,18 +226,18 @@ class DatareceiverController extends Zend_Controller_Action {
   private function sendMail($blnSpecialForm = false){
     $this->core->logger->debug('website->controllers->DatareceiverController->sendMail()');
     $mail = new Zend_Mail('utf-8');
+    
+    $transport = null;
+    if(!empty($this->core->config->mail->params->host)){
+      //config for SMTP with auth
+      $config = array('auth'     => 'login',
+                      'username' => $this->core->config->mail->params->username,
+                      'password' => $this->core->config->mail->params->password);
+      
+      // smtp
+      $transport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $config);  
+    }
 
-    /**
-     * config for SMTP with auth
-     */
-    $config = array('auth'     => 'login',
-                    'username' => $this->core->config->mail->params->username,
-                    'password' => $this->core->config->mail->params->password);
-
-    /**
-     * SMTP
-     */
-    $transport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $config);
     $strHtmlBody = '';
 
     if(count($this->arrFormData) > 0){
@@ -262,7 +262,7 @@ class DatareceiverController extends Zend_Controller_Action {
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
               <tr>
                 <td>
-                  '.(!$blnSpecialForm ? $this->getEmailBody() : $this->getEmailBodySpecialForm()).'
+                  '.(!$blnSpecialForm ? $this->getEmailBody($this->arrFormData['blnDynForm'] == 'true') : $this->getEmailBodySpecialForm()).'
                 </td>
               </tr>
             </table>
@@ -306,23 +306,40 @@ class DatareceiverController extends Zend_Controller_Action {
     /**
      * set TO address
      */
-    if(array_key_exists('email', $this->arrFormData)){
-      if(array_key_exists('fname', $this->arrFormData)) $this->strUserFName = $this->arrFormData['fname'];
-      if(array_key_exists('sname', $this->arrFormData)) $this->strUserSName = $this->arrFormData['sname'];
-      $this->strUserMail = $this->arrFormData['email'];
+    if($this->arrFormData['blnDynForm'] == 'true'){
+      foreach($this->arrFormData as $key => $value){
+        if(preg_match('/_type$/', $key)){
+          if($value == 'email'){
+            $index = str_replace('_type', '', $key);
+            $this->strUserMail = $this->arrFormData[$index];
+          }elseif($value == 'fname'){
+            $index = str_replace('_type', '', $key);
+            $this->strUserFName = $this->arrFormData[$index];
+          }elseif($value == 'sname'){
+            $index = str_replace('_type', '', $key);
+            $this->strUserSName = $this->arrFormData[$index];
+          }
+        }
+      }
+    }else{
+      if(array_key_exists('email', $this->arrFormData)){
+        if(array_key_exists('fname', $this->arrFormData)) $this->strUserFName = $this->arrFormData['fname'];
+        if(array_key_exists('sname', $this->arrFormData)) $this->strUserSName = $this->arrFormData['sname'];
+        $this->strUserMail = $this->arrFormData['email'];
+      }
     }
-
+    
     if(count($this->arrMailRecipients) > 0){
-      //foreach($this->arrMailRecipients as $arrRecipient){
-    	$mail->clearRecipients();
-    	$mail->addTo($this->arrMailRecipients['Email'], $this->arrMailRecipients['Name']);
-	    /**
-	     * send mail if mail body is not empty
-	     */
-	    if($strHtmlBody != ''){
-	      $mail->send($transport);		      		      
-	    }	
-      //}
+      $mail->clearRecipients();
+      $mail->addTo($this->arrMailRecipients['Email'], $this->arrMailRecipients['Name']);
+      //set header for sending mail
+      $mail->addHeader('Sender', $this->core->config->mail->params->username);
+      /**
+       * send mail if mail body is not empty
+       */
+      if($strHtmlBody != ''){
+        $mail->send($transport);		 
+      }	
       if($this->core->config->mail->actions->sendmail->confirmation == 'true'){
         $this->sendConfirmationMail();  
       }	
@@ -333,19 +350,24 @@ class DatareceiverController extends Zend_Controller_Action {
    * getEmailBody
    * @return string
    */
-  private function getEmailBody(){
+  private function getEmailBody($blnDynForm = false){
     $strHtmlBody = '';
       foreach($this->arrFormData as $key => $value){
         if($value != ''){
-       	  if($key == 'idRootLevels' || $key == 'idPage' || $key == 'subject'){
-       	    // do nothing
+       	  if($key == 'idRootLevels' || $key == 'idPage' || $key == 'subject' || $key == 'blnDynForm' || preg_match('/type$/', $key)){
+       	    //Do nothing
        	  }else if($key == 'country' && array_key_exists('country', $this->arrFormDataReplacer)){
             $strHtmlBody .= '
                   <strong>'.$this->arrFormFields[$key].':</strong> '.$this->arrFormDataReplacer['country'].'<br/>';
 
        	  }else{
-            $strHtmlBody .= '
+       	    if($blnDynForm){
+       	      $arrKey = explode('_', $key);
+       	      $strHtmlBody .= '<strong>'.$arrKey[0].':</strong>'.$value.'<br />';
+       	    }else{
+              $strHtmlBody .= '
                   <strong>'.$this->arrFormFields[$key].':</strong> '.$value.'<br/>';
+            }
           }
         }
       }
@@ -373,17 +395,16 @@ class DatareceiverController extends Zend_Controller_Action {
       
     $mail = new Zend_Mail('utf-8');
     
-    /**
-     * config for SMTP with auth
-     */
-    $config = array('auth'     => 'login',
-                    'username' => $this->core->config->mail->params->username,
-                    'password' => $this->core->config->mail->params->password);
-    
-    /**
-     * SMTP
-     */
-    $transport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $config);
+    $transport = null;
+    if(!empty($this->core->config->mail->params->host)){
+      //config for SMTP with auth
+      $config = array('auth'     => 'login',
+                      'username' => $this->core->config->mail->params->username,
+                      'password' => $this->core->config->mail->params->password);
+      
+      // smtp
+      $transport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $config);  
+    }
     
     $strHtmlBody = '';
     
@@ -415,6 +436,11 @@ class DatareceiverController extends Zend_Controller_Action {
                          <h2>Sehr geehrte(r) '.$this->strUserFName.' '.$this->strUserSName.'</h2>                         
                        </td>
                     </tr>
+                    <tr>
+                      <td>
+                        Vielen Dank für Ihre Teilnahme
+                      </td>
+                    </tr>
                  </table>
               </td>
            </tr>
@@ -428,21 +454,26 @@ class DatareceiverController extends Zend_Controller_Action {
      */
     $mail->setSubject($this->strMailSubject);
     /**
+     * set default FROM address
+     */
+    $mail->setFrom($this->strSenderMail, $this->strSenderName);
+    /**
      * set html body
      */
     $mail->setBodyHtml($strHtmlBody);
     /**
      * set default FROM address
      */
-    $mail->setFrom($this->strSenderMail, $this->strSenderName);
-      
     if($this->strUserMail != ''){
       $mail->clearRecipients();
       $mail->addTo($this->strUserMail, $this->strUserFName.' '.$this->strUserSName);
+      //set header for sending mail
+      $mail->addHeader('Sender', $this->core->config->mail->params->username);
       /**
        * send mail if mail body is not empty
        */
       if($strHtmlBody != ''){
+        $this->core->logger->debug('Send Confirmation Mail!');
         $mail->send($transport);
       }
     }
@@ -466,23 +497,43 @@ class DatareceiverController extends Zend_Controller_Action {
         }
       	
       	$arrTableData = array();
-	      foreach($this->arrFormData as $key => $value){
-	        if($value != ''){
-	          if($value == 'on'){
-	            $arrTableData[$key] = 1;
-                  }else if(is_array($value)){
-                    $arrTableData[$key] = implode(';', $value);
-	          }else{
-	            $arrTableData[$key] = $value;  
-	          }
-	        }       
-	      }
-	      if($this->strAttachmentFile != ''){
-	        $arrTableData['attachment'] = $this->strAttachmentFile;   
-	      }    
+        $arrFormData = $this->arrFormData;
+        //Delete unneeded files
+        unset($arrFormData['receiver_mail']);
+        unset($arrFormData['receiver_name']);
+        unset($arrFormData['sender_mail']);
+        unset($arrFormData['sender_name']);
+        unset($arrFormData['subject']);
+        unset($arrFormData['redirectUrl']);
+        unset($arrFormData['blnDynForm']);
+        
+        $arrTableData['idPages'] = $arrFormData['idPage'];
+        $arrTableData['idRootLevels'] = $arrFormData['idRootLevels'];
+        $arrTableData['content'] = $this->convertFormData($arrFormData);
+
 	      $objGenTable->insert($arrTableData);
       }
     }
+  }
+
+  /**
+   * convertFormData
+   * @return array
+   * @version 1.0
+   */
+  private function convertFormData($arrFormData){
+    $arrValues = array();
+    foreach($arrFormData as $key => $value){
+      if($key == 'idRootLevels' || $key == 'idPage' || preg_match('/test$/', $key)){
+        //Do nothing
+      }else{
+        $key = explode('_', $key);
+        $key = $key[0];
+        $arrValues[$key] = $value;
+      }
+    }
+    
+    return json_encode($arrValues);
   }
   
   /**

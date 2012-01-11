@@ -7,7 +7,7 @@
   <?php get_meta_keywords(); ?>
 
   <!-- SCREEN CSS -->
-  <link type="text/css" rel="stylesheet" href="<? get_static_component_domain() ?>/min/b=website/themes/default&amp;f=css/reset.css,css/screen.css,lightbox/css/lightbox.css" />
+  <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/min/b=website/themes/default&amp;f=css/reset.css,css/screen.css,lightbox/css/lightbox.css" />
   
   <%template_css%>
   <%plugin_css%>
@@ -16,9 +16,9 @@
   <link rel="stylesheet" type="text/css" media="screen" href="<? get_static_component_domain() ?>/website/themes/default/css/modus.css"></link>
   <?php endif; ?>
 
-  <link rel="shortcut icon" href="<? get_static_component_domain() ?>/website/themes/default/favicon.ico" type="image/x-icon"></link>
+  <link rel="shortcut icon" href="<?php get_static_component_domain() ?>/website/themes/default/favicon.ico" type="image/x-icon"></link>
   
-  <script type="text/javascript" src="<? get_static_component_domain() ?>/min/b=website/themes/default&amp;f=js_incs/prototype/prototype.js,js_incs/script.aculous/builder.js,js_incs/script.aculous/effects.js,js_incs/script.aculous/controls.js,js_incs/script.aculous/fader.js,lightbox/js/lightbox.js,js_incs/default.js,flowplayer/flowplayer-3.2.2.min.js"></script>
+  <script type="text/javascript" src="<?php get_static_component_domain() ?>/min/b=website/themes/default&amp;f=js_incs/prototype/prototype.js,js_incs/script.aculous/builder.js,js_incs/script.aculous/effects.js,js_incs/script.aculous/controls.js,js_incs/script.aculous/fader.js,lightbox/js/lightbox.js,js_incs/default.js,flowplayer/flowplayer-3.2.2.min.js"></script>
   <%plugin_js%>
   <%template_js%>
 </head>

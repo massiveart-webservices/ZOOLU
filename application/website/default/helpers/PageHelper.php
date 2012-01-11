@@ -1769,7 +1769,7 @@ class PageHelper {
     return $strReturn;
   }
 
-/**
+  /**
    * getForm
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @return string
@@ -1786,6 +1786,8 @@ class PageHelper {
       $counter = 0;
       foreach($arrFormFields as $objField){
         
+        $strFieldId = htmlentities($objField->title.'_'.uniqid(), ENT_COMPAT, 'UTF-8');
+        
         $strMandatory = '';
         $strMandatoryCssClass = '';
         if($objField->mandatory){
@@ -1800,12 +1802,13 @@ class PageHelper {
         
         $strFields .= '    
             <div class="'.$strClass.'">
-              <label id="lbl_'.$objField->type->code.'" for="'.$objField->type->code.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+              <input type="hidden" id="'.$strFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">
+              <label id="lbl_'.$strFieldId.'" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
  
         switch($objField->type->code){
           case 'salutation' :
             $strFields .= '              
-              <select id="'.$objField->type->code.'" name="'.$objField->type->code.'" size="1"'.$strMandatoryCssClass.'>
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
                 <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>
                 <option value="'.$this->objTranslate->_('Mr.').'">'.$this->objTranslate->_('Mr.').'</option>
                 <option value="'.$this->objTranslate->_('Ms.').'">'.$this->objTranslate->_('Ms.').'</option>
@@ -1814,14 +1817,14 @@ class PageHelper {
             
           case 'type' :
             $strFields .= '              
-              <select id="'.$objField->type->code.'" name="'.$objField->type->code.'" size="1"'.$strMandatoryCssClass.'>
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
                 <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
               </select>';
             break;
             
           case 'country' :
             $strFields .= '
-              <select id="'.$objField->type->code.'" name="'.$objField->type->code.'" size="1"'.$strMandatoryCssClass.'>
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
                 <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
               </select>';
             // '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC').'
@@ -1829,13 +1832,13 @@ class PageHelper {
             
           case 'message' :
             $strFields .= '
-              <textarea id="'.$objField->type->code.'" name="'.$objField->type->code.'"></textarea>';
+              <textarea id="'.$strFieldId.'" name="'.$strFieldId.'"></textarea>';
             break;
             
           case 'attachment' :
             $blnHasFileUpload = true;
             $strFields .= '
-              <input type="file" id="'.$objField->type->code.'" name="'.$objField->type->code.'"/>';
+              <input type="file" id="'.$strFieldId.'" name="'.$strFieldId.'"/>';
             break;
             
           case 'recaptcha_response_field' :             
@@ -1871,6 +1874,37 @@ class PageHelper {
             $strFields .= $objReCaptchaAdapter->render();
             break;
             
+          case 'select':
+            $strFields .= '
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+              	<option value="">'.$this->objTranslate->_('Please_choose', false).'</option>';
+            
+            foreach($objField->options as $strOption){
+              $strFields .= '
+              	<option value="'.$strOption.'">'.$strOption.'</option>';
+            }
+                
+            $strFields .= '
+              </select>';
+            break;
+            
+          case 'radio':
+            $i=1;
+            foreach($objField->options as $strOption){
+              $strFields .= '
+                        	<input name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
+            }
+            break;
+            
+          case 'checkbox':
+            $i=1;
+            foreach($objField->options as $strOption){
+              
+              $strFields .= '
+                                  	<input name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
+            }
+            break;
+            
           default :
             $strClass = '';
             $strClassCode = '';
@@ -1887,7 +1921,7 @@ class PageHelper {
               $strClass = 'class="'.$strClassMandatory.$strClassCode.'"';
             }
             $strFields .= '
-              <input type="text" '.$strClass.' id="'.$objField->type->code.'" name="'.$objField->type->code.'" value=""'.$strClass.'/>';             
+              <input type="text" '.$strClass.' id="'.$strFieldId.'" name="'.$strFieldId.'" value=""'.$strClass.'/>';             
             break;
         }
         
@@ -1921,6 +1955,7 @@ class PageHelper {
           <input type="hidden" id="sender_mail" name="sender_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_mail')).'"/>
           <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
           <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
+          <input type="hidden" id="blnDynForm" name="blnDynForm" value="true" />
           
           <button onclick="myDefault.submitForm(\'contactForm\')">Absenden</button>
         </form>';  

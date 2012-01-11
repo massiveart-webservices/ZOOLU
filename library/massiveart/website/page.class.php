@@ -1221,6 +1221,7 @@ class Page {
       $objField->description = $objMyMultiRegion->getField('description')->getInstanceValue($intRegionInstanceId);
       $objField->validation = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('field_type')->getInstanceValue($intRegionInstanceId))->current();
       $objField->display = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('display')->getInstanceValue($intRegionInstanceId))->current();
+      $objField->options = preg_split( '/\r\n|\r|\n/', $objMyMultiRegion->getField('options')->getInstanceValue($intRegionInstanceId));
       
       $arrFields[] = $objField;
     }

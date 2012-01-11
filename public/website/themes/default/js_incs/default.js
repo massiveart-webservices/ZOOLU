@@ -75,7 +75,27 @@ Default = Class.create({
    * validateInput
    */
   validateInput: function(element, baseValue) {
-    if(($(element) && $F(element).blank()) || $F(element) == baseValue){
+    //Radio buttons and checkboxes
+    if($(element).type == 'radio' || $(element).type == 'checkbox'){
+      var elementname = $(element).name;
+      var form = $('contactForm'); //TODO Load correct form
+      //checks if there is any item checked
+      if(typeof(form.getInputs($(element).type,elementname).find(function(radio){return radio.checked})) == 'undefined'){
+        //checkboxes have [] at the end of the name, but labels not
+        if($(element).type == 'checkbox'){
+          elementname = elementname.substr(0,elementname.length - 2);
+        }
+        if($('lbl_'+elementname)) $('lbl_'+elementname).addClassName('missing');
+        this.retValue = false;
+      }else{
+        if($(element).type == 'checkbox'){
+          elementname = elementname.substr(0,elementname.length - 2);
+        }
+        if($('lbl_'+elementname)) $('lbl_'+elementname).removeClassName('missing');
+      }
+    }
+    //Everything else
+    else if(($(element) && $F(element).blank()) || $F(element) == baseValue){
       if($('lbl_'+element)) $('lbl_'+element).addClassName('missing');
       this.retValue = false;
     }else{
