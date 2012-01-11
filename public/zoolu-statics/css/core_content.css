@@ -1410,7 +1410,7 @@ Overlay Inner */
 .olnavigationwrapper, .olnavigationwrapper2 {
     position: relative;
     background-color: #fff;
-    height: 200px;;
+    height: 200px;
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -1635,20 +1635,6 @@ Overlay Inner */
 
 /* --- overlay content contacts --- */
 
-.olcontacttopleft {
-    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_left_top.png) no-repeat scroll 0 0;
-    height: 26px;
-    width: 11px;
-    float: left;
-}
-
-.olcontacttopright {
-    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_right_top.png) no-repeat scroll right 0;
-    height: 26px;
-    width: 11px;
-    float: left;
-}
-
 .olcontacttopitemicon {
     background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
     height: 26px;
@@ -1658,10 +1644,17 @@ Overlay Inner */
     float: left;
 }
 
-.olcontacttopitemtitle {
-    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
+.olcontacttop {
+    background-color:#e4e4e4;
+    border-top:1px #fff solid;
+    border-left:1px #fff solid;
+    border-right:1px #fff solid;
+    border-top-left-radius:11px;
+    border-top-right-radius:11px;
+    -moz-border-radius-topleft:11px;
+    -moz-border-radius-topright:11px;
     height: 20px;
-    padding: 6px 10px 0 0;
+    padding: 5px 20px 0 10px;
     text-align: left;
     float: left;
     width: 339px;
@@ -1714,25 +1707,20 @@ Overlay Inner */
     width: auto;
 }
 
-.olcontactbottomleft {
-    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_left_bottom.png) no-repeat scroll 0 bottom;
-    height: 26px;
-    width: 11px;
+.olcontactbottom {
+    background-color:#e4e4e4;
+    border-bottom:1px #fff solid;
+    border-left:1px #fff solid;
+    border-right:1px #fff solid;
+    border-bottom-left-radius:11px;
+    border-bottom-right-radius:11px;
+    -moz-border-radius-bottomleft:11px;
+    -moz-border-radius-bottomright:11px;
+    height: 20px;
+    padding: 5px 20px 0 10px;
+    text-align: left;
     float: left;
-}
-
-.olcontactbottomright {
-    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_right_bottom.png) no-repeat scroll right bottom;
-    height: 26px;
-    width: 11px;
-    float: left;
-}
-
-.olcontactbottomcenter {
-    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 bottom;
-    height: 26px;
-    width: 391px;
-    float: left;
+    width: 339px;
 }
 
 /*-----------------
@@ -2233,6 +2221,7 @@ Dashboard Overlay */
 }
 
 .dbrd-content {
+    background-color:transparent;
     overflow: hidden;
 }
 

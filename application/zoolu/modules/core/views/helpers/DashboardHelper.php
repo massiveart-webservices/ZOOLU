@@ -740,10 +740,7 @@ class DashboardHelper
              */
             $strReturn .= '
                 <div class="olcontacttop">
-                    <div class="olcontacttopleft"></div>
-                    <div class="olcontacttopitemtitle bold">' . $this->objTranslate->_('Name') . '</div>
-                    <div class="olcontacttopright"></div>
-                    <div class="clear"></div>
+                    ' . $this->objTranslate->_('Name') . '
                 </div>
                 <div class="olcontactitemcontainer">';
 
@@ -775,10 +772,6 @@ class DashboardHelper
                     <div class="clear"></div>
                 </div>
                 <div class="olcontactbottom">
-                    <div class="olcontactbottomleft"></div>
-                    <div class="olcontactbottomcenter"></div>
-                    <div class="olcontactbottomright"></div>
-                    <div class="clear"></div>
                 </div>';
         }
 
@@ -806,10 +799,7 @@ class DashboardHelper
                 <div id="olModules">
                     <div id="olModules_title" style="display:none;">' . $strOverlayTitle . '</div>
                     <div class="olcontacttop">
-                        <div class="olcontacttopleft"></div>
-                        <div class="olcontacttopitemtitle bold">' . $this->objTranslate->_('Name') . '</div>
-                        <div class="olcontacttopright"></div>
-                        <div class="clear"></div>
+                        ' . $this->objTranslate->_('Name') . '
                     </div>
                     <div class="olcontactitemcontainer">';
 
@@ -834,10 +824,6 @@ class DashboardHelper
                         <div class="clear"></div>
                     </div>
                     <div class="olcontactbottom">
-                        <div class="olcontactbottomleft"></div>
-                        <div class="olcontactbottomcenter"></div>
-                        <div class="olcontactbottomright"></div>
-                        <div class="clear"></div>
                     </div>
                 </div>';
         }
