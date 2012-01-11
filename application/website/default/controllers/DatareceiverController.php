@@ -354,6 +354,10 @@ class DatareceiverController extends Zend_Controller_Action {
     $strHtmlBody = '';
       foreach($this->arrFormData as $key => $value){
         if($value != ''){
+          if(is_array($value)){
+            $value = implode(', ', $value);
+            $value = substr($value, 0, strlen($value));
+          }
        	  if($key == 'idRootLevels' || $key == 'idPage' || $key == 'subject' || $key == 'blnDynForm' || preg_match('/type$/', $key)){
        	    //Do nothing
        	  }else if($key == 'country' && array_key_exists('country', $this->arrFormDataReplacer)){
