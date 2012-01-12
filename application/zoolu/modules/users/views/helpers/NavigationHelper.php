@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.users.views.helpers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -90,13 +90,11 @@ class NavigationHelper {
        */
       $strOutput .= '
             <div class="naviitemcontainer">
-              <div id="naviitem'.$objRow->id.'top" class="top"><img height="4" width="230" src="/zoolu-statics/images/main/bg_box_230_top.png"/></div>
               <div id="naviitem'.$objRow->id.'" class="naviitem" onclick="myNavigation.getModuleRootLevelList('.$objRow->id.', \''.$strRootLevelType.'\'); return false;">
                 <div class="'.$strRootLevelType.'icon"></div>
                 <div class="itemtitle">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
                  <div class="clear"></div>
               </div>
-              <div id="naviitem'.$objRow->id.'bottom" class="bottom"><img height="4" width="230" src="/zoolu-statics/images/main/bg_box_230_bottom.png"/></div>
             </div>';
     }
 

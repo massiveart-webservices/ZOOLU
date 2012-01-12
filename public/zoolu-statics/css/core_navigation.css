@@ -9,663 +9,656 @@
 Basics */
 
 #navigation-top {
-  position:relative;
-  height:77px;
-  width:100%;
+    position: relative;
+    height: 77px;
+    width: 100%;
 }
 
 #top {
-	height:17px;
-	padding:10px 0 0 0;
+    height: 17px;
+    padding: 10px 0 0 0;
 }
 
 #navigation-main {
-  position:relative;
-  height:100%;
+    position: relative;
+    height: 100%;
+    background-color: #e4e4e4;
+    margin: 0 10px 0 10px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 #navigation-left {
-  width:260px;
-  position:relative;
-  height:100%;  
+    width: 240px;
+    position: relative;
+    height: 100%;
+    margin-left: 10px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 /* ----------------
 Logo & FAQ */
 
 .toplogo {
-  float:left;
-  height:17px;
-  padding:0 5px 0 10px; 
+    float: left;
+    height: 17px;
+    padding: 0 5px 0 10px;
 }
 
 .toplogo img {
-  border:0;
+    border: 0;
 }
 
 .topright {
-  float:right;
-  margin:0;
-  padding:0 10px 0 0;  
+    float: right;
+    margin: 0;
+    padding: 0 10px 0 0;
 }
 
 .faqtitle {
-	float:left;
-	margin:0;
-	padding:2px 5px 0 0;
+    float: left;
+    margin: 0;
+    padding: 2px 5px 0 0;
 }
 
 .faqicon {
-  float:left;
+    float: left;
 }
 
 /* ----------------
 User Information */
 
 #userwrapper {
-	position:absolute;
-	top:37px;
-	left:10px;
-	width:240px;
-	height:40px;
+    position: absolute;
+    top: 37px;
+    left: 10px;
+    width: 240px;
+    height: 40px;
 }
 
 #usercontentuser {
-	float: left;
-	margin: 0 0 0 5px;
-}
-
-.usercorner {
-	background-color: #e4e4e4;
-  width:240px;
-  height:4px;
-	line-height:4px;
-	margin:0;
-	padding:0;
-	overflow:hidden;
-}
-
-.usercorner img {
-  padding:0;
-  margin:0;
-  border:0;
-  display:block;
-  height:4px;
-  width:240px;
+    float: left;
+    margin: 0 0 0 5px;
 }
 
 #usercontent {
-	background-color: #e4e4e4;
-	width: 220px;
-	padding: 0 10px 0 10px;
-	margin:0;
-	height:32px;
+    background-color: #e4e4e4;
+    width: 220px;
+    padding: 4px 10px 4px 10px;
+    margin: 0;
+    height: 32px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
 #usercontenticon {
-	float: left;
-	padding-top:3px;
+    float: left;
+    padding-top: 3px;
 }
 
 #usercontenticon img {
-	border: solid 1px #fff;
-	display:block;
-	margin:0;
-	padding:0;
+    border: solid 1px #fff;
+    display: block;
+    margin: 0;
+    padding: 0;
 }
 
 /* ----------------
 Navigation Top */
 
 #navtopleft {
-  background-color:#754480;
-  position:absolute;
-  top:37px;
-  width:5px;
-  height:40px;
-  left:260px;
+    background-color: #754480;
+    position: absolute;
+    top: 37px;
+    width: 5px;
+    height: 40px;
+    left: 260px;
 }
 
 #navtopleftclient {
-  background-color:#754480;
-  position:absolute;
-  top:37px;
-  width:42px;
-  height:40px;
-  left:260px;
-}
-
-#navtopright {
-  background-color:#754480;
-  position:absolute;
-  top:37px;
-  width:5px;
-  height:40px;
-  right:10px;
+    background-color: #754480;
+    position: absolute;
+    top: 37px;
+    width: 42px;
+    height: 40px;
+    left: 260px;
 }
 
 #navtopwrapper {
-  position:absolute;
-  top:37px;
-  left:302px; /* 265px */
-  right:15px;
-  background-color:#754480;
-  height:40px;
+    position: absolute;
+    top: 37px;
+    left: 302px; /* 265px */
+    right: 10px;
+    background-color: #754480;
+    height: 40px;
+    padding-right: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 5px;
 }
 
 #navtopinner {
-  padding-top:5px;
-  padding-left:20px;
-  height:40px;
+    padding-top: 5px;
+    padding-left: 20px;
+    height: 40px;
 }
 
 #navtopbreadcrumb {
-  padding-top:10px;
-  padding-left:14px;
-  height:30px;
+    padding-top: 10px;
+    padding-left: 14px;
+    height: 30px;
 }
 
 .navtop {
-  float:left;
-  margin-right:10px;
+    float: left;
+    margin-right: 10px;
 }
 
 .navtopinnerright {
-  float:right;
-  margin-right:10px;
-  margin-left:10px;
+    float: right;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .navtopcorner {
-  width:5px;
-  height:30px;
-	line-height:0;
-	overflow:hidden;
-	float:left;
+    width: 5px;
+    height: 30px;
+    line-height: 0;
+    overflow: hidden;
+    float: left;
 }
 
 .navtopcorner_on {
-  width:5px;
-  height:30px;
-  line-height:0;
-  overflow:hidden;
-  float:left;
-  background-color:#ffd300;
+    width: 5px;
+    height: 30px;
+    line-height: 0;
+    overflow: hidden;
+    float: left;
+    background-color: #ffd300;
 }
 
 .navtopcorner img {
-  display:block;
-  height:30px;
-  width:5px;
+    display: block;
+    height: 30px;
+    width: 5px;
 }
 
 .navtoplink {
-  height:23px;
-	padding: 7px 10px 0 10px;
-	text-align:center;
-	float:left;
+    height: 23px;
+    padding: 7px 10px 0 10px;
+    text-align: center;
+    float: left;
 }
 
 .navtoplink_on {
-  background-color: #ffd300;
-  height:23px;
-	padding: 7px 10px 0 10px;
-	text-align:center;
-	float:left;
-	-moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;	
+    background-color: #ffd300;
+    height: 23px;
+    padding: 7px 10px 0 10px;
+    text-align: center;
+    float: left;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
 
 /* ----------------
 Navigation Main */
 
 #divNaviLeft, #divNaviLeft2 {
-  background-color:#e4e4e4;
-  position:absolute;
-  z-index:20;
-  top:10px;
-  bottom:15px;
-  left:10px;
-  width:250px;
+    background-color: #e4e4e4;
+    position: absolute;
+    z-index: 20;
+    top: 10px;
+    bottom: 10px;
+    width: 250px;
+    border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
 }
 
 #divNaviLeft2 {
-  width:240px;
-  top:5px;
+    width: 240px;
+    top: 0;
+    padding-top: 5px;
 }
 
 #divNaviCenter {
-  background-color:#fff;
-  position:absolute;
-  z-index:10;
-  top:0;
-  bottom:0px;
-  left:260px;
-  right:270px;
-  border-top:10px solid #e4e4e4;
-  border-bottom:10px solid #e4e4e4;
+    background-color: #fff;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    bottom: 0px;
+    left: 250px;
+    right: 260px;
+    border-top: 10px solid #e4e4e4;
+    border-bottom: 10px solid #e4e4e4;
 }
 
 #divNaviRight {
-  background-color:#e4e4e4;
-  position:absolute;
-  z-index:20;
-  top:10px;
-  bottom:15px;
-  right:10px;
-  width:260px;
+    background-color: #e4e4e4;
+    position: absolute;
+    z-index: 20;
+    top: 10px;
+    bottom: 15px;
+    right: 0;
+    width: 260px;
 }
 
 /* ----------------
 Inner */
 
 #divNaviLeftInner {
-  position:relative;
-  height:100%;
-  overflow:hidden;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
 }
 
 #divNaviCenterInner {
-  position:relative;
-  height:100%;
-  overflow-y:hidden;
-  overflow-x:scroll;
+    position: relative;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: scroll;
 }
 
 #divNaviRightInner {
-  position:relative;
-  height:100%;
-  overflow:hidden;
-}
-
-.box230top, .box230bottom {
-  background-color:#fff; width: 230px; margin:0 auto 0 auto;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
 }
 
 #divNaviRightInner div#divFolderRapper,
 #divNaviRightInner div#divPageRapper,
 #divNaviRightInner div#divElementRapper {
-  text-align: center;
-  padding:10px 0 0 0;
+    text-align: center;
+    padding: 10px 0 0 0;
 }
 
 #divNaviRightInner div#divFolderRapper div.linegray,
 #divNaviRightInner div#divPageRapper div.linegray,
 #divNaviRightInner div#divElementRapper div.linegray {
-  border-bottom:1px solid #e4e4e4;
-  font-size:0;
-  height:0;
-  line-height:0;
-  margin:0 10px 5px 10px;
-  padding:5px 0 0 0;
-  background-color: #fff;
+    border-bottom: 1px solid #e4e4e4;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    margin: 0 10px 5px 10px;
+    padding: 5px 0 0 0;
+    background-color: #fff;
 }
 
 #divNaviRightInner div#divFolderRapper div#divFolderInfo,
 #divNaviRightInner div#divPageRapper div#divPageInfo,
 #divNaviRightInner div#divElementRapper div#divElementInfo {
-  background-color:#fff; 
-  width: 230px; 
-  margin:0 auto 0 auto;
-  padding:5px 0 5px 0;
-  overflow: hidden;
+    background-color: #fff;
+    width: 230px;
+    margin: 0 auto 0 auto;
+    padding: 9px 0 9px 0;
+    overflow: hidden;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
 #divNaviRightInner div#divFolderRapper div#divFolderInfo div#divFolderActions,
 #divNaviRightInner div#divPageRapper div#divPageInfo div#divPageActions,
 #divNaviRightInner div#divElementRapper div#divElementInfo div#divElementActions {
-  text-align:left;  
-  margin:0 10px 0 10px;
+    text-align: left;
+    margin: 0 10px 0 10px;
 }
 
 #divNaviRightInner div#divFolderRapper div#divFolderInfo div#divFolderActions div.icon_folder,
 #divNaviRightInner div#divPageRapper div#divPageInfo div#divPageActions div.icon_folder,
 #divNaviRightInner div#divElementRapper div#divElementInfo div#divElementActions div.icon_folder {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 2px -238px;
-  width: 25px;
-  height: 16px;
-  float: left;
-  margin: 0 0 5px 0;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 2px -238px;
+    width: 25px;
+    height: 16px;
+    float: left;
+    margin: 0 0 5px 0;
 }
 
 #divNaviRightInner div#divFolderRapper div#divFolderInfo div#divFolderActions div.icon_list {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 2px -34px;
-  width: 25px;
-  height: 16px;
-  float: left;  
-  margin: 0 0 5px 0;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 2px -34px;
+    width: 25px;
+    height: 16px;
+    float: left;
+    margin: 0 0 5px 0;
 }
 
 /* ----------------
 Navigtion left */
 
 #navilefttop, #navilefttop2 {
-  position:absolute;
-  left:10px;
-  top:0;
-  bottom:auto;
-  background-color:#e4e4e4;
-  width:250px;
-  height:10px;
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: auto;
+    background-color: #e4e4e4;
+    width: 250px;
+    height: 10px;
 }
 
 #navilefttop2 {
-  width:235px;
-  height:5px;
+    width: 235px;
+    height: 5px;
 }
 
 #navilefttop img, #navilefttop2 img {
-  display:block;
-  width:5px;
-  height:5px;
+    display: block;
+    width: 5px;
+    height: 5px;
 }
 
 #navileftbottom, #navileftbottom2 {
-  position:absolute;
-  left:10px;
-  bottom:0px;
-  top:auto;
-  width:250px;
-  height:10px;
-  background-color:#e4e4e4;
+    position: absolute;
+    left: 10px;
+    bottom: 0px;
+    top: auto;
+    width: 250px;
+    height: 10px;
+    background-color: #e4e4e4;
 }
 
 #navileftbottom2 {
-  width:235px;
-  height:5px;
-  bottom:10px;
+    width: 235px;
+    height: 5px;
+    bottom: 10px;
 }
 
 #navileftbottom img, #navileftbottom2 img {
-  display:block;
-  width:5px;
-  height:5px;
-  padding-top:5px;
+    display: block;
+    width: 5px;
+    height: 5px;
+    padding-top: 5px;
 }
 
 #divNaviLeft #divNaviLeftMain {
-  position:absolute;
-  z-index:20;
-  bottom:0;
-  left:0;
-  top:0;
-  width:100%;
-  overflow-y: auto;
-  overflow-x:hidden;
+    position: absolute;
+    z-index: 20;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .naviitemcontainer .menu {
-  margin-left:5px;
-  width:230px;
-  background-color:#fff;
-  padding:5px 0 5px 0;
+    margin-left: 5px;
+    width: 230px;
+    background-color: #fff;
+    padding: 5px 0 5px 0;
 }
 
 .naviitemcontainer .menulink {
-  padding:0 0 5px 0;
+    padding: 0 0 5px 0;
 }
 
 .naviitemcontainer .menutitle {
-  height:16px;
-  padding-right:0;
-  padding-top:3px;
-  padding-left:10px;
-  float:left;
-  width:150px;
-  overflow:hidden;
+    height: 16px;
+    padding-right: 0;
+    padding-top: 3px;
+    padding-left: 10px;
+    float: left;
+    width: 150px;
+    overflow: hidden;
 }
 
 .naviitemcontainer .top,
 .naviitemcontainer .bottom {
-  width:230px;
-  height:4px;
-  margin-left:5px;
+    width: 230px;
+    height: 4px;
+    margin-left: 5px;
 }
 
 .naviitem {
-  margin-left:5px;
-  height:26px;
-  width:230px;
-  overflow:hidden;
-  cursor:pointer;   
+    margin-left: 5px;
+    height: 26px;
+    width: 230px;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 4px 0;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
 .naviitem .itemtitle {
-  height:23px;
-  padding-right:0;
-  padding-top:3px;
-  padding-left:10px;
-  float:left;
-  width:180px;
-  overflow:hidden;
-   
-}
+    height: 23px;
+    padding-right: 0;
+    padding-top: 3px;
+    padding-left: 10px;
+    float: left;
+    width: 180px;
+    overflow: hidden;
 
-.portalcontainer .portaltop,
-.portalcontainer .portalbottom {
-  width:230px;
-  height:4px;
-  margin-left:5px;
 }
 
 .portal {
-  margin-left:5px;
-  height:26px;
-  width:230px;
-  overflow:hidden;
-  cursor:pointer;   
+    margin-left: 5px;
+    height: 26px;
+    width: 230px;
+    overflow: hidden;
+    cursor: pointer;
+    padding-top: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-topright: 4px;
 }
 
 .portalmenu {
-  margin-left:5px;
-  width:230px;
-  background-color:#fff;
-  padding:5px 0 5px 0;
+    margin-left: 5px;
+    width: 230px;
+    background-color: #fff;
+    padding: 5px 0 10px 0;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    -moz-border-radius-bottomright: 4px;
 }
 
 .portalmenulink {
-  padding:0 0 5px 0;
+    padding: 0 0 5px 0;
 }
 
 .portal .portalicon,
-.portal .imageicon,
-.portal .documenticon,
-.portal .videoicon,
-.portal .categoryicon,
+.naviitem .imageicon,
+.naviitem .documenticon,
+.naviitem .videoicon,
+.naviitem .categoryicon,
 .portal .usericon,
 .portal .locationicon,
-.portal .labelicon,
-.portal .sysinternicon,
+.naviitem .labelicon,
+.naviitem .sysinternicon,
 .naviitem .usericon,
 .naviitem .locationicon,
 .naviitem .groupicon,
 .naviitem .resourceicon,
 .naviitem .producticon {
-  margin-top:0;
-  margin-left:4px;  
-  width:21px;
-  height:21px;
-  float:left;
+    margin-top: 0;
+    margin-left: 4px;
+    width: 21px;
+    height: 21px;
+    float: left;
 }
 
 .portal .portalicon,
 .naviitem .producticon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -188px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -188px;
 }
 
-.portal .imageicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -21px;
+.naviitem .imageicon {
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -21px;
 }
 
-.portal .documenticon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -63px;
+.naviitem .documenticon {
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -63px;
 }
 
-.portal .videoicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -314px;
+.naviitem .videoicon {
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -314px;
 }
 
-.portal .categoryicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -105px;
+.naviitem .categoryicon {
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -105px;
 }
 
 .portal .usericon,
 .naviitem .usericon,
 .naviitem .groupicon,
 .naviitem .resourceicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -147px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -147px;
 }
 
 .portal .locationicon,
 .naviitem .locationicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -356px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -356px;
 }
 
-.portal .labelicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -272px;
+.naviitem .labelicon {
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -272px;
 }
 
-.portal .sysinternicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -210px;
+.naviitem .sysinternicon {
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -210px;
 }
 
 .selected .portalicon,
-.selected .producticon  {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -167px;
+.selected .producticon {
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -167px;
 }
 
 .selected .imageicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% 0;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% 0;
 }
 
 .selected .documenticon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -42px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -42px;
 }
 
 .selected .videoicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -293px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -293px;
 }
 
 .selected .categoryicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -84px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -84px;
 }
 
 .selected .usericon,
 .selected .usericon,
 .selected .groupicon,
 .selected .resourceicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -126px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -126px;
 }
 
 .selected .locationicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -335px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -335px;
 }
 
-
 .selected .labelicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -251px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -251px;
 }
 
 .selected .sysinternicon {
-  background:transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -231px;
+    background: transparent url(/zoolu-statics/images/icons/icons_main.png) no-repeat 50% -231px;
 }
 
 .portal .portaltitle {
-  height:23px;
-  padding-right:0;
-  padding-top:3px;
-  padding-left:10px;
-  float:left;
-  width:180px;
-  overflow:hidden;
-   
+    height: 23px;
+    padding-right: 0;
+    padding-top: 3px;
+    padding-left: 10px;
+    float: left;
+    width: 180px;
+    overflow: hidden;
 }
 
 .portalcontenticon,
 .portalwidgetsicon,
 .portalsettingsicon,
 .portalnoicon {
-  margin-top:3px;
-  margin-left:35px;  
-  width:20px;
-  height:16px;
-  float:left;
+    margin-top: 3px;
+    margin-left: 35px;
+    width: 20px;
+    height: 16px;
+    float: left;
 }
 
 .portalcontenticon {
-  background:transparent url(/zoolu-statics/images/icons/icon_menu_content.png) no-repeat 0 0;  
+    background: transparent url(/zoolu-statics/images/icons/icon_menu_content.png) no-repeat 0 0;
 }
 
 .selected .portalcontenticon {
-  background:transparent url(/zoolu-statics/images/icons/icon_menu_content.png) no-repeat 0 -32px;  
+    background: transparent url(/zoolu-statics/images/icons/icon_menu_content.png) no-repeat 0 -32px;
 }
 
 .portalwidgetsicon {
-  background:transparent url(/zoolu-statics/images/icons/icon_menu_widgets.png) no-repeat 0 0;
+    background: transparent url(/zoolu-statics/images/icons/icon_menu_widgets.png) no-repeat 0 0;
 }
 
 .portalsettingsicon {
-  background:transparent url(/zoolu-statics/images/icons/icon_menu_settings.png) no-repeat 0 0;
+    background: transparent url(/zoolu-statics/images/icons/icon_menu_settings.png) no-repeat 0 0;
 }
 
 .portalmenu .portalmenutitle {
-  height:16px;
-  padding-right:0;
-  padding-top:3px;
-  padding-left:10px;
-  float:left;
-  width:150px;
-  overflow:hidden;
+    height: 16px;
+    padding-right: 0;
+    padding-top: 3px;
+    padding-left: 10px;
+    float: left;
+    width: 150px;
+    overflow: hidden;
 }
 
 .portalmenutitle .red {
-  background-color:#ff0000;
-  font-size:10px;
-  text-transform:uppercase;
-  color:#fff;
-  padding:1px 2px 1px 2px;
-  line-height:15px;
-  font-weight:bold;  
+    background-color: #ff0000;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 1px 2px 1px 2px;
+    line-height: 15px;
+    font-weight: bold;
 }
 
 .portalmenutitle .portaledit {
-  
+
 }
 
 .portalmenulink:hover .portaledit {
-  background:transparent url(/zoolu-statics/images/icons/icon_edit.png) no-repeat 0 0;
-  cursor:pointer;
-  float:right;
-  height:12px;
-  width:12px;
-  margin-top:3px;
+    background: transparent url(/zoolu-statics/images/icons/icon_edit.png) no-repeat 0 0;
+    cursor: pointer;
+    float: right;
+    height: 12px;
+    width: 12px;
+    margin-top: 3px;
 }
 
 #divNaviLeftMain .hover {
-  cursor:pointer;
+    cursor: pointer;
 }
 
 #divNaviLeftMain .selected {
-  background-color:#fff;
-  cursor:pointer;
+    background-color: #fff;
+    cursor: pointer;
 }
 
 .naviitemcontainer:hover .selected .gear {
-  background:transparent url(/zoolu-statics/images/icons/icon_edit.png) no-repeat 0 0;
-  cursor:pointer;
-  float:right;
-  height:12px;
-  width:12px;
-  margin-top:3px;
+    background: transparent url(/zoolu-statics/images/icons/icon_edit.png) no-repeat 0 0;
+    cursor: pointer;
+    float: right;
+    height: 12px;
+    width: 12px;
+    margin-top: 3px;
 }
 
 /* overwrite css classes ext */
 
 .x-toolbar {
-  background:none;
-  border:0;
-  padding:0;
+    background: none;
+    border: 0;
+    padding: 0;
 }
 
 .x-toolbar td,
@@ -674,170 +667,170 @@ Navigtion left */
 .x-toolbar div,
 .x-toolbar select,
 .x-toolbar label {
-  font-family: arial, helvetica, sans-serif;
-  font-size:12px;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
 }
 
 .x-btn {
-  cursor:pointer;
-  font-family: arial, helvetica, sans-serif;
-  font-size:12px;
-  padding:0;
+    cursor: pointer;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    padding: 0;
 }
 
 .x-toolbar button {
-  color:#fff;
+    color: #fff;
 }
 
 .x-toolbar .x-btn-over button {
-  color:#fff;
+    color: #fff;
 }
 
 .x-btn-left {
-  background:none;
-  width:0;
-  height:0;
+    background: none;
+    width: 0;
+    height: 0;
 }
 
 .x-btn-right {
-  background:none;
-  width:0;
-  height:0;
+    background: none;
+    width: 0;
+    height: 0;
 }
 
 .x-btn-left i, .x-btn-right i {
-  display:block;
-  font-size:1px;
-  line-height:1px;
-  overflow:hidden;
-  width:0;
+    display: block;
+    font-size: 1px;
+    line-height: 1px;
+    overflow: hidden;
+    width: 0;
 }
 
 .x-btn-with-menu .x-btn-center em {
-  background:transparent url(/js_incs/ext.js/resources/zoolu-statics/images/default/toolbar/btn-arrow.gif) no-repeat scroll left 0;
-  display:block;
-  padding-right:0;
-  width:15px;
-  height:15px;
+    background: transparent url(/js_incs/ext.js/resources/zoolu-statics/images/default/toolbar/btn-arrow.gif) no-repeat scroll left 0;
+    display: block;
+    padding-right: 0;
+    width: 15px;
+    height: 15px;
 }
 
 .x-toolbar .x-btn-with-menu .x-btn-center em {
-  padding-right:0;
+    padding-right: 0;
 }
 
 /* ----------------
 Navigtion right */
 
 #navirighttop, #navirighttop2 {
-  background-color:#e4e4e4;
-  position:absolute;
-  right:10px;
-  top:0;
-  width:260px;
-  height:10px;
+    background-color: #e4e4e4;
+    position: absolute;
+    right: 10px;
+    top: 0;
+    width: 260px;
+    height: 10px;
 }
 
-#navirighttop2{
-  width:5px;
-  height:5px;
+#navirighttop2 {
+    width: 5px;
+    height: 5px;
 }
 
 #navirightbottom, #navirightbottom2 {
-  background-color:#e4e4e4;
-  position:absolute;
-  right:10px;
-  bottom:0px;
-  z-index:30;
-  width:260px;
-  height:10px;
+    background-color: #e4e4e4;
+    position: absolute;
+    right: 10px;
+    bottom: 0px;
+    z-index: 30;
+    width: 260px;
+    height: 10px;
 }
 
-#navirightbottom2{
-  bottom:10px;
-  width:5px;
-  height:5px;
+#navirightbottom2 {
+    bottom: 10px;
+    width: 5px;
+    height: 5px;
 }
 
 #navirighttop img,
 #navirightbottom img,
 navirightbottom2 img {
-  display:block;
-  width:5px;
-  height:5px;
-  float:right;
+    display: block;
+    width: 5px;
+    height: 5px;
+    float: right;
 }
 
 #navirightbottom img {
-  padding-top:5px;
+    padding-top: 5px;
 }
 
 /* ----------------
 Navigtion center */
 
 .startpage {
-  position:relative;
-  padding-right:15px;
-  padding-top:2px;
-  height:20px;
+    position: relative;
+    padding-right: 15px;
+    padding-top: 2px;
+    height: 20px;
 }
 
 .page,
 .global,
 div.navlevelinner .contact {
-  position:relative;
-  padding-right:15px;
-  padding-top:2px;
-  height:20px;
+    position: relative;
+    padding-right: 15px;
+    padding-top: 2px;
+    height: 20px;
 }
 
-.folder, 
+.folder,
 .category,
 .unit {
-  background:transparent url(/zoolu-statics/images/icons/arrows.png) no-repeat right 0;
-  position:relative;
-  padding-right:15px;
-  padding-top:2px;
-  height:20px;
+    background: transparent url(/zoolu-statics/images/icons/arrows.png) no-repeat right 0;
+    position: relative;
+    padding-right: 15px;
+    padding-top: 2px;
+    height: 20px;
 }
 
 .icon {
-  float:left;
-  height:15px;
-  width:16px;
-  margin-left:10px;
-  margin-right:5px;
+    float: left;
+    height: 15px;
+    width: 16px;
+    margin-left: 10px;
+    margin-right: 5px;
 }
 
 .title {
-  cursor:pointer;
-  overflow:hidden;
-  white-space: nowrap;
-  padding:0 0 4px 0;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0 0 4px 0;
 }
 
 .title:after {
-  content: '.';
-  clear:left;
-  visibility:hidden;
+    content: '.';
+    clear: left;
+    visibility: hidden;
 }
 
 .navsortpos {
-  float:left;
-  width:20px;
+    float: left;
+    width: 20px;
 }
 
 .iptsortpos {
-  width:20px;
-  border:0;
-  background:none;
-  cursor:default;
-  color:#999;
-  font-family:arial;
+    width: 20px;
+    border: 0;
+    background: none;
+    cursor: default;
+    color: #999;
+    font-family: arial;
 }
 
 .navsortpos .sortactive {
-  cursor:text;
-  color:#000;
+    cursor: text;
+    color: #000;
 }
 
 /* ----------------
@@ -845,211 +838,211 @@ Icons */
 
 .img_startpage_on,
 .img_start_on {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -136px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -136px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_startpage_off,
 .img_start_off {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -153px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -153px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_folder_on, .img_unit {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -255px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -255px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_folder_off {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -238px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -238px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .selected .img_folder_on,
 .selected .img_unit,
 .pselected .img_folder_on,
 .img_folder_on_open {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -221px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -221px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .selected .img_folder_off,
 .pselected .img_folder_off {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -204px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -204px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_category_on,
-.img_category_off{
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -119px;
-  position:relative;
-  width:16px;
-  height:16px;
+.img_category_off {
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -119px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_label_on,
-.img_label_off{
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -322px;
-  position:relative;
-  width:16px;
-  height:16px;
+.img_label_off {
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -322px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_sysintern_on,
-.img_sysintern_off{
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -288px;
-  position:relative;
-  width:16px;
-  height:16px;
+.img_sysintern_off {
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -288px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_page_on,
 .img_global_on {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -187px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -187px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_page_off,
 .img_global_off {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -170px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -170px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 .img_contact {
-  background:transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -85px;
-  position:relative;
-  width:16px;
-  height:16px;
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -85px;
+    position: relative;
+    width: 16px;
+    height: 16px;
 }
 
 /* ----------------
 Navigtion levels */
 
 .navlevel {
-  position:absolute;
-  top:0;
-  right:auto;
-  bottom:0;
-  width:200px;
-  border-right:1px solid #666;
-  padding-top:5px;
+    position: absolute;
+    top: 0;
+    right: auto;
+    bottom: 0;
+    width: 200px;
+    border-right: 1px solid #666;
+    padding-top: 5px;
 }
 
 .navlevelinner {
-  position:relative;
-  overflow-y:auto;
-  overflow-x:hidden;
-  height:100%;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
 }
 
 .navlevelinner .hover {
-  background-color:#e4e4e4;
-  cursor:pointer;
+    background-color: #e4e4e4;
+    cursor: pointer;
 }
 
 .navlevelinner .active {
-  background-color:#e4e4e4;
-  cursor:pointer;
+    background-color: #e4e4e4;
+    cursor: pointer;
 }
 
 .navlevelinner .pselected {
-  background-color:#e4e4e4;
-  cursor:pointer;
+    background-color: #e4e4e4;
+    cursor: pointer;
 }
 
 .navlevelinner .selected {
-  background-color:#ffd300;
-  cursor:pointer;
+    background-color: #ffd300;
+    cursor: pointer;
 }
 
 .navlevelinner .linegray {
-  height:0;
-  line-height:0;
-  font-size:0;
-  border-bottom:1px solid #e4e4e4;
-  padding:5px 0 0 0;
-  margin:0 2px 5px 2px;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    border-bottom: 1px solid #e4e4e4;
+    padding: 5px 0 0 0;
+    margin: 0 2px 5px 2px;
 }
 
 .levelmenu {
-  position:absolute;
-  z-index:100;
-  left:0;
-  bottom:0;
-  width:19px;
-  height:18px;
-  background:transparent url(/zoolu-statics/images/icons/bg_add_icon.png) no-repeat top left;
-  padding:2px 0 0 1px;
-  overflow:hidden;
-  cursor:pointer; 
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    bottom: 0;
+    width: 19px;
+    height: 18px;
+    background: transparent url(/zoolu-statics/images/icons/bg_add_icon.png) no-repeat top left;
+    padding: 2px 0 0 1px;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .addmenuhover {
-  background:transparent url(/zoolu-statics/images/icons/bg_add_icon.png) no-repeat bottom left;
+    background: transparent url(/zoolu-statics/images/icons/bg_add_icon.png) no-repeat bottom left;
 }
 
 .addmenu {
-  position:absolute;
-  z-index:110;
-  bottom:0;
-  left:0;
-  width:150px;
-  overflow:hidden; 
+    position: absolute;
+    z-index: 110;
+    bottom: 0;
+    left: 0;
+    width: 150px;
+    overflow: hidden;
 }
 
 .addmenutopleft {
-  float:left;
-  height:5px;
-  width:145px;
-  background-color:#754480;
+    float: left;
+    height: 5px;
+    width: 145px;
+    background-color: #754480;
 }
 
 .addmenutopright {
-  float:left;
-  width:5px;
-  height:5px;
-  background:transparent url(/zoolu-statics/images/main/corner_addmenue_top_right.png) no-repeat top right;
+    float: left;
+    width: 5px;
+    height: 5px;
+    background: transparent url(/zoolu-statics/images/main/corner_addmenue_top_right.png) no-repeat top right;
 }
 
 .addmenucontent {
-  width:150px;
-  background-color:#754480;
-  padding:0 0 5px 0;
+    width: 150px;
+    background-color: #754480;
+    padding: 0 0 5px 0;
 }
 
 .addmenucontent .addmenuelement {
-  height:18px;
-  padding:0 0 2px 0;
+    height: 18px;
+    padding: 0 0 2px 0;
 }
 
 .addmenucontent .icon {
-  width:16px;
-  height:16px;
-  border:0;
-  float:left;
-  cursor:pointer;  
+    width: 16px;
+    height: 16px;
+    border: 0;
+    float: left;
+    cursor: pointer;
 }
 
 .addmenuelement div {
-  float:left;
-  padding:2px 0 0 0;
-  cursor:pointer;
+    float: left;
+    padding: 2px 0 0 0;
+    cursor: pointer;
 }
 
 

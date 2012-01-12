@@ -1,13 +1,9 @@
         <div class="pagepreviewcontainer">
 					<?php if($this->globalurl != ''): ?>
-          <div class="pagepreviewleft"></div>
           <div class="pagepreviewcenter white small"><a href="<?php echo $this->globalurl; ?>" target="_blank"><img src="/zoolu-statics/images/icons/icon_page_preview.png"/><?php echo $this->translate->_('Test_page'); ?></a></div>
-          <div class="pagepreviewright"></div>
           <?php if(is_array($this->addonurls)): ?>
           <?php foreach($this->addonurls as $addonUrl): ?>
-          <div class="pagepreviewleft"></div>
           <div class="pagepreviewcenter white small"><a href="<?php echo $addonUrl['url']; ?>" target="_blank"><img src="/zoolu-statics/images/icons/icon_page_preview.png"/><?php echo $addonUrl['title']; ?></a></div>
-          <div class="pagepreviewright"></div>
           <?php endforeach; ?>
           <?php endif; ?>
 					<?php endif; ?>

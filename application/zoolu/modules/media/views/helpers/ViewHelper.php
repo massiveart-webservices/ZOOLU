@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.core.media.controllers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -100,35 +100,18 @@ class ViewHelper {
 	        /**
 	         * image output
 	         */
-	        $strOutput .= '<div id="divThumbContainerImg'.$objRow->id.'" class="thumbcontainer" style="height:'.($intSliderValue + 10).'px; width:'.($intSliderValue + 10).'px;">
+	        $strOutput .= '<div id="divThumbContainerImg'.$objRow->id.'" class="thumbcontainer" style="height:'.($intSliderValue).'px; width:'.($intSliderValue).'px;">
 	                        <table>
 	                          <tr>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_top_left.png" width="5" height="5"/></td>
-	                            <td height="5" style="background-color:#e4e4e4;font-size:0;line-height:0;">&nbsp;</td>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_top_right.png" width="5" height="5"/></td>
-	                          </tr>
-	                          <tr>
-	                            <td width="5" style="background-color:#e4e4e4;">&nbsp;</td>
 	                            <td id="tdThumbImg'.$objRow->id.'" fileid="'.$objRow->id.'" class="tdthumbcontainer" valign="middle" align="center" style="width:'.$intSliderValue.'px; height:'.$intSliderValue.'px;">
 	                              <div id="divThumbPosImg'.$objRow->id.'" class="thumbimgcontainer" style="'.$strDivThumbPosImgStyle.$strStyleOutput.'" ondblclick="myMedia.getSingleFileEditForm('.$objRow->id.','.$intDisplayLanuage.');">
 	                                <table>
 	                                  <tr>
 	                                    <td><img id="Img'.$objRow->id.'" src="'.sprintf($this->core->sysConfig->media->paths->thumb, $objRow->path).$objRow->filename.'?v='.$objRow->version.'" style="'.$strStyleOutput.'" class="thumb" startWidth="'.$strStartWidth.'"/></td>
-	                                    <!--<td class="thumbshadowright">&nbsp;</td>-->
 	                                  </tr>
-	                                  <!--<tr>
-	                                    <td class="thumbshadowbottom">&nbsp;</td>
-	                                    <td class="thumbshadowcorner">&nbsp;</td>
-	                                  </tr>-->
 	                                </table>
 	                              </div>
 	                            </td>
-	                            <td width="5" style="background-color:#e4e4e4;">&nbsp;</td>
-	                          </tr>
-	                          <tr>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_bttm_left.png" width="5" height="5"/></td>
-	                            <td height="5" style="background-color:#e4e4e4;font-size:0;line-height:0;">&nbsp;</td>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_bttm_right.png" width="5" height="5"/></td>
 	                          </tr>
 	                        </table>                                   
 	                      </div>';
@@ -141,32 +124,15 @@ class ViewHelper {
 	        $strOutput .= '<div id="divThumbContainerDoc'.$objRow->id.'" class="thumbcontainer" style="height:'.($intSliderValue + 10).'px; width:'.($intSliderValue + 10).'px;">
 	                        <table>
 	                          <tr>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_top_left.png" width="5" height="5"/></td>
-	                            <td height="5" style="background-color:#e4e4e4;font-size:0;line-height:0;">&nbsp;</td>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_top_right.png" width="5" height="5"/></td>
-	                          </tr>
-	                          <tr>
-	                            <td width="5" style="background-color:#e4e4e4;">&nbsp;</td>
 	                            <td id="tdThumbDoc'.$objRow->id.'" fileid="'.$objRow->id.'" class="tdthumbcontainer" valign="middle" align="center" style="width:'.$intSliderValue.'px; height:'.$intSliderValue.'px;">
 	                              <div id="divThumbPosDoc'.$objRow->id.'" class="thumbimgcontainer" style="'.$strDivThumbPosImgStyle.'width:'.$strStartWidth.'px;" ondblclick="myMedia.getSingleFileEditForm('.$objRow->id.','.$intDisplayLanuage.');">
 	                                <table>
 	                                  <tr>
 	                                    <td><img id="Doc'.$objRow->id.'" src="'.$this->getDocIcon($objRow->extension, 32).'" style="width:'.$strStartWidth.'px;" class="thumb" startWidth="'.$strStartWidth.'"/></td>
-	                                    <!--<td class="thumbshadowright">&nbsp;</td>-->
 	                                  </tr>
-	                                  <!--<tr>
-	                                    <td class="thumbshadowbottom">&nbsp;</td>
-	                                    <td class="thumbshadowcorner">&nbsp;</td>
-	                                  </tr>-->
 	                                </table>
 	                              </div>
 	                            </td>
-	                            <td width="5" style="background-color:#e4e4e4;">&nbsp;</td>
-	                          </tr>
-	                          <tr>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_bttm_left.png" width="5" height="5"/></td>
-	                            <td height="5" style="background-color:#e4e4e4;font-size:0;line-height:0;">&nbsp;</td>
-	                            <td width="5" height="5" style="font-size:0;line-height:0;"><img src="/zoolu-statics/images/main/corner_thumbhov_bttm_right.png" width="5" height="5"/></td>
 	                          </tr>
 	                        </table>                                   
 	                      </div>';
@@ -187,8 +153,9 @@ class ViewHelper {
   public function getListHead($strOrderColumn, $strOrderSort) {
   	$this->core->logger->debug('media->views->helpers->ViewHelper->getListHead()');
   	
-  	$strOutput = '<tr>
-          <th class="topcornerleft"></th>
+  	$strOutput = '
+  	    <tr>
+          <th class="topcornerleft"><div>&nbsp;</div></th>
           <th class="topcheckbox"><input id="listSelectAll" type="checkbox" name="listSelectAll" /></th>
           <th class="topicon"></th>
           <th class="toptitle'.(('alternativTitle' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'alternativTitle\''.(('alternativTitle' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
@@ -209,7 +176,7 @@ class ViewHelper {
           <th class="topcreated'.(('created' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'created\''.(('created' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
             <div'.(('created' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').'>'.$this->core->translate->_('uploaded').'</div>
           </th>
-          <th class="topcornerright"></th>
+          <th class="topcornerright"><div>&nbsp;</div></th>
         </tr>';
   	return $strOutput;
   }
@@ -271,16 +238,17 @@ class ViewHelper {
 	      /**
 	       * list row entry
 	       */
-	      $strOutput .= '<tr id="Row'.$objRow->id.'" class="listrow" fileid="'.$objRow->id.'">
-	                      <td colspan="2" class="rowcheckbox"><input type="checkbox" id="listSelect'.$objRow->id.'" name="listSelect'.$objRow->id.'" value="'.$objRow->id.'" class="listSelectRow"/></td>
-	                      <td class="rowicon"><img width="32" height="32" src="'.$strFileIconSrc.'" alt="'.htmlentities($objRow->description, ENT_COMPAT, $this->core->sysConfig->encoding->default).'" ondblclick="myMedia.getSingleFileEditForm('.$objRow->id.','.$intDisplayLanuage.');"/></td>
-	                      <td class="rowtitle">'.htmlentities((($objRow->title == '' && (isset($objRow->alternativTitle) || isset($objRow->fallbackTitle))) ? ((isset($objRow->alternativTitle) && $objRow->alternativTitle != '') ? $objRow->alternativTitle : $objRow->fallbackTitle) : $objRow->title), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</td>
-	                      <td class="rowtags">'.$objRow->tags.'</td>
-	                      <td class="rowlanguages">'.$objRow->languages.'</td>
-	                      <td class="rowlanguagespecific">'.($objRow->isLanguageSpecific ? $this->core->translate->_('yes') : $this->core->translate->_('no')).'</td>
-	                      <td class="rowauthor">'.$objRow->creator.'</td>
-	                      <td colspan="2" class="rowcreated">'.$created->format('d.m.y, H:i').'</td>
-	                    </tr>';
+	      $strOutput .= '
+	            <tr id="Row'.$objRow->id.'" class="listrow" fileid="'.$objRow->id.'">
+                  <td colspan="2" class="rowcheckbox"><input type="checkbox" id="listSelect'.$objRow->id.'" name="listSelect'.$objRow->id.'" value="'.$objRow->id.'" class="listSelectRow"/></td>
+                  <td class="rowicon"><img width="32" height="32" src="'.$strFileIconSrc.'" alt="'.htmlentities($objRow->description, ENT_COMPAT, $this->core->sysConfig->encoding->default).'" ondblclick="myMedia.getSingleFileEditForm('.$objRow->id.','.$intDisplayLanuage.');"/></td>
+                  <td class="rowtitle">'.htmlentities((($objRow->title == '' && (isset($objRow->alternativTitle) || isset($objRow->fallbackTitle))) ? ((isset($objRow->alternativTitle) && $objRow->alternativTitle != '') ? $objRow->alternativTitle : $objRow->fallbackTitle) : $objRow->title), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</td>
+                  <td class="rowtags">'.$objRow->tags.'</td>
+                  <td class="rowlanguages">'.$objRow->languages.'</td>
+                  <td class="rowlanguagespecific">'.($objRow->isLanguageSpecific ? $this->core->translate->_('yes') : $this->core->translate->_('no')).'</td>
+                  <td class="rowauthor">'.$objRow->creator.'</td>
+                  <td colspan="2" class="rowcreated">'.$created->format('d.m.y, H:i').'</td>
+                </tr>';
 	    } 
     }
     

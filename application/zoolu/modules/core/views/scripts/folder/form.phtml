@@ -1,8 +1,6 @@
 				<?php if($this->backLink): ?>
 				<div class="pagepreviewcontainer">
-          <div class="pagebackleft"></div>
           <div class="pagebackcenter white small"><a onclick="myNavigation.selectNavigationItem(<?php echo $this->currLevel - 1; ?>, 'folder', <?php echo $this->parentFolderId; ?>, false); myFolder.getFolderContentList(); return false;" target="_blank"><img src="/zoolu-statics/images/icons/icon_page_preview.png"/><?php echo $this->translate->_('Back'); ?></a></div>
-          <div class="pagebackright"></div>
           <div class="clear"></div>
 				</div>
 				<? endif; ?>

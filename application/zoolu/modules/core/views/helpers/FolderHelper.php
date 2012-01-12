@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.core.views.helpers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -292,7 +292,7 @@ class FolderHelper {
      */
     $strThead .= '<thead>
                      <tr>
-                       <th class="topcornerleft"></th>
+                       <th class="topcornerleft"><div>&nbsp;</div></th>
                        <th class="topcheckbox"></th>
                        <th class="topicon"></th>
                        <th class="topsortposition'.(('sortposition' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'sortposition\''.(('sortposition' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
@@ -307,7 +307,7 @@ class FolderHelper {
                        <th class="topchanged'.(('changed' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'changed\''.(('changed' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
                          <div'.(('changed' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').'>'.$this->core->translate->_('changed').'</div>
                        </th>
-                       <th class="topcornerright"></th>
+                       <th class="topcornerright"><div>&nbsp;</div></th>
                      </tr>
                    </thead>';
 

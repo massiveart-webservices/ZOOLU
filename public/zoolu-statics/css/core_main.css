@@ -5,148 +5,159 @@
  * @version 1.0
  */
 
-
 /* ----------------
 Reset */
 @import url(reset.css);
-
 
 /* ----------------
 Main Structure */
 
 html, body {
-  overflow:hidden;
+    overflow: hidden;
 }
 
 body {
-  background-color:#fff;
+    background-color: #fff;
 }
 
 #north {
-  position:relative;
+    position: relative;
 }
 
 #east {
-  position:relative;
+    position: relative;
 }
 
 #center {
-  position:relative;
+    position: relative;
 }
 
 #navigation {
-  position:relative;
-  height:100%;
+    position: relative;
+    height: 100%;
 }
 
 #content {
-  position:absolute;
-  top:0;
-  left:0;
-  bottom:0;
-  right:0;
-  z-index:30;
-  background-color:#c6c6c6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 30;
+    background-color: #c6c6c6;
 }
 
 #content2 {
-  position:absolute;
-  top:0;
-  left:0;
-  bottom:0;
-  right:0;
-  z-index:30;
-  margin:0 10px 10px 0;
-  background-color:#c6c6c6; /*E4E4E4;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 30;
+    margin: 0 10px 10px 0;
+    background-color: #c6c6c6; /*E4E4E4;*/
 }
 
 #widgets {
-  position:absolute;
-  top:0;
-  left:0;
-  bottom:10px;
-  right:10px; z-index:30;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 10px;
+    right: 10px;
+    z-index: 30;
 }
 
 /* ----------------
 Basics */
 
 .clear {
-  height:0;
-  line-height:0;
-  font-size:0;
-  clear:both;
-  visibility:hidden;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
 }
 
-.x-layout-split { /* overwrite ext css */
-  height:10px;
+.x-layout-split {
+    /* overwrite ext css */
+    height: 10px;
 }
 
 .spacer1 {
-  height:10px;
+    height: 10px;
 }
 
 .spacer2 {
-  height:20px;
+    height: 20px;
 }
 
 .cursorhand {
-  cursor:pointer;
+    cursor: pointer;
 }
 
 /* ----------------
 Content List View */
 
 .tablelist {
-  width:98%;
+    width: 98%;
 }
 
 #genTableListContainer .tablelist {
-  margin-left:1%;
-  margin-top:20px;
+    margin-left: 1%;
+    margin-top: 20px;
 }
 
 #genTableListContainer .listfooter {
-  margin-left:1%;
-  margin-bottom:20px;
+    margin-left: 1%;
+    margin-bottom: 20px;
 }
 
 /* --- top --- */
-.topcornerleft {
-  background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_left_top.png) no-repeat 0 0;
-  height:26px;
-  width:11px;
+.topcornerleft, .topcornerright {
+    height: 20px;
+    width: 11px;
 }
 
-.topcornerright {
-  background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_right_top.png) no-repeat 0 0;
-  height:26px;
-  width:11px;
+.topcornerleft div {
+    background-color: #e4e4e4;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    height: 25px;
+    border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+}
+
+.topcornerright div {
+    background-color: #e4e4e4;
+    border-top: 1px solid #fff;
+    border-right: 1px solid #fff;
+    height: 25px;
+    border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
 }
 
 .topcheckbox {
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  width:30px;
-  height:26px;
-  padding:0;
-  text-align:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    width: 30px;
+    height: 26px;
+    padding: 0;
+    text-align: left;
 }
 
 .topposition {
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  width:50px;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    width: 50px;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .topicon, .topsortposition {
-  width:20px;
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    width: 20px;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .toptitle,
@@ -163,105 +174,105 @@ Content List View */
 .topcountry,
 .topsubscribed,
 .topdirty {
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .topauthor,
 .topeditor,
 .topcreator {
-  width:160px;
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    width: 160px;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .topcreated {
-  width:140px;
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    width: 140px;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .topchanged {
-  width:140px;
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    width: 140px;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .toplastLogin {
-  width:140px;
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    width: 140px;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .topstatus,
 .topcompanyStatus {
-  width:70px;
-  background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
-  height:26px;
-  padding:0 11px 0 11px;
-  text-align:left;
+    width: 70px;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
+    height: 26px;
+    padding: 0 11px 0 11px;
+    text-align: left;
 }
 
 .topcompanyStatus {
-  width:100px;
+    width: 100px;
 }
 
 .toplanguagespecific {
-  width:100px;
+    width: 100px;
 }
 
 .toplanguages {
-  width:200px;
+    width: 200px;
 }
 
 .tablelist th div {
-  cursor:pointer;
-  padding:2px 0 2px 0;
+    cursor: pointer;
+    padding: 2px 0 2px 0;
 }
 
 .tablelist th.sort {
-  background-color:#ccc;
-  border-left:1px solid #fff;
-  border-right:1px solid #fff;
-  padding:0 10px 0 10px;
+    background-color: #ccc;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    padding: 0 10px 0 10px;
 }
 
 .tablelist .asc {
-  background:url(/zoolu-statics/images/icons/list_pointer_down.png) no-repeat 100% 50%;
+    background: url(/zoolu-statics/images/icons/list_pointer_down.png) no-repeat 100% 50%;
 }
 
 .tablelist .desc {
-  background:url(/zoolu-statics/images/icons/list_pointer_up.png) no-repeat 100% 50%;
+    background: url(/zoolu-statics/images/icons/list_pointer_up.png) no-repeat 100% 50%;
 }
 
 /* --- rows --- */
 .rowcheckbox {
-  width:30px;
-  background: url(/zoolu-statics/images/main/pixel_white.gif) repeat-y 0 0;
-  height:30px;
-  padding:0 0 0 11px;
+    width: 30px;
+    background: url(/zoolu-statics/images/main/pixel_white.gif) repeat-y 0 0;
+    height: 30px;
+    padding: 0 0 0 11px;
 }
 
 .rowposition {
-  width:50px;
-  height:30px;
-  padding:0 11px 0 11px;
+    width: 50px;
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowicon, .rowsortpos {
-  width:20px;
-  height:30px;
-  padding:0 11px 0 11px;
+    width: 20px;
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowtitle,
@@ -273,509 +284,488 @@ Content List View */
 .rowcompany,
 .rowcountry,
 .rowtags {
-  height:30px;
-  padding:0 11px 0 11px; 
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowauthor,
 .roweditor,
 .rowcreator {
-  width:160px;
-  height:30px;
-  padding:0 11px 0 11px;
+    width: 160px;
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowcreated {
-  width:140px;
-  height:30px;
-  padding:0 11px 0 11px;
+    width: 140px;
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowchanged {
-  width:140px;
-  height:30px;
-  padding:0 11px 0 11px;
+    width: 140px;
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowlastLogin {
-  width:140px;
-  height:30px;
-  padding:0 11px 0 11px;
+    width: 140px;
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowstatus,
 .rowcompanyStatus {
-  width:70px;
-  height:30px;
-  padding:0 11px 0 11px;
+    width: 70px;
+    height: 30px;
+    padding: 0 11px 0 11px;
 }
 
 .rowcompanyStatus {
-  width:100px;
+    width: 100px;
 }
 
 .rowlanguagespecific {
-  padding:0 11px;
-  width:100px;
+    padding: 0 11px;
+    width: 100px;
 }
 
 .rowlanguages {
-  padding:0 11px;
-  width:200px;
+    padding: 0 11px;
+    width: 200px;
 }
 
 /* --- footer --- */
 .listfooter {
-  position:relative;
-  height:36px;
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 bottom;
-  width:98%;  
-}
-
-.listfootercornerleft {
-  background:url(/zoolu-statics/images/main/list_corner_left_bottom.png) no-repeat 0 bottom;
-  position:absolute;
-  top:0;
-  left:0;
-  width:11px;
-  height:36px;
-}
-
-.listfootercornerright {
-  background:url(/zoolu-statics/images/main/list_corner_right_bottom.png) no-repeat 0 bottom;
-  position:absolute;
-  top:0;
-  right:0;
-  width:11px;
-  height:36px;
+    position: relative;
+    height: 35px;
+    width: 98%;
 }
 
 .listfootercontent {
-  position:absolute;
-  top:8px;
-  right:11px;
-  height:28px;
-  left:11px;    
+    background-color: #e4e4e4;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 26px;
+    left: 0;
+    padding: 8px 0 0 0;
+    border: 1px solid #fff;
+    border-top: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
 }
 
 .listentriescount {
-  float:left;
-  width:100px;
+    float: left;
+    width: 100px;
 }
 
 .listentriespage {
-  float:right;
-  width:220px;
+    float: right;
+    width: 220px;
 }
 
 .listpagination {
-  float:right;
-  width:260px;
+    float: right;
+    width: 260px;
 }
 
 .listpagination .listjumptopage {
-  float:left;
-  width:100px;
+    float: left;
+    width: 100px;
 }
-	
+
 .listpagination .listback {
-  float:left;
-  width:80px;
+    float: left;
+    width: 80px;
 }
 
 .listpagination .listnext {
-  float:left;
-  width:80px;
+    float: left;
+    width: 80px;
 }
 
 .listpagination .listfooterbutton {
-  height:20px;
+    height: 20px;
 }
 
-.listfooterbutton .buttonleft {
-  background:#ccc url(/zoolu-statics/images/main/list_footer_button.png) no-repeat 0 0;
-  height:20px;
-  width:5px;
-  float:left; 
-}
-
-.listfooterbutton .buttoncenter {
-  height:19px;
-  background-color:#ccc;
-  float:left;
-  cursor:pointer;
-  padding:1px 5px 0 5px;
-  color:#754480;
-}
-
-.listfooterbutton .buttonright {
-  background:#ccc url(/zoolu-statics/images/main/list_footer_button.png) no-repeat -5px 0;
-  height:20px;
-  width:5px;
-  float:left;
+.listfooterbutton {
+    height: 19px;
+    background-color: #ccc;
+    float: left;
+    cursor: pointer;
+    padding: 1px 5px 0 5px;
+    margin: 0 5px 0 5px;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    color: #754480;
 }
 
 .tablelist .listrow td {
-  background-color:#fff;
-  border-top:1px solid #e4e4e4;
-  /*border-right:1px solid #fff;*/
+    background-color: #fff;
+    border-top: 1px solid #e4e4e4;
+    /*border-right:1px solid #fff;*/
 }
 
 .tablelist .hover td {
-  background-color:#e4e4e4;
+    background-color: #e4e4e4;
 }
 
 .tablelist .selected td {
-  background-color:#ccc;
-  
+    background-color: #ccc;
+
 }
 
 /* ----------------
 Screen Overlay */
 
 .overlaytrans {
-  position:absolute;
-  overflow:hidden;
-  z-index:800;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+    position: absolute;
+    overflow: hidden;
+    z-index: 800;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .overlayblack75 {
-  position: absolute;
-  overflow:hidden;
-  z-index:801;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background: url('/zoolu-statics/images/main/trans_black75.png') repeat;
+    position: absolute;
+    overflow: hidden;
+    z-index: 801;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/zoolu-statics/images/main/trans_black75.png') repeat;
 }
 
 .overlaycontentwrapper, .overlaycontentwrapper2 {
-  position:absolute;
-  z-index:810;
-  width:460px;
+    position: absolute;
+    z-index: 810;
+    width: 460px;
 }
 
 #overlayFilterWrapper {
-  width:700px;
+    width: 700px;
 }
 
 .overlaycontentwrapper2 {
-  z-index:820;
+    z-index: 820;
 }
 
 #overlaySingleEdit {
-  width:560px;
+    width: 560px;
 }
 
 #overlayUserSettingsWrapper {
-  width:560px;
+    width: 560px;
 }
 
 /* --- overlay header --- */
 
 td.headercenter {
-  background-color:#e4e4e4;
-  height:15px;
-  cursor:move;
+    background-color: #e4e4e4;
+    height: 15px;
+    cursor: move;
 }
 
 td.headercenter .headerclose {
-  background:url(/zoolu-statics/images/icons/icon_close.png) no-repeat 0 0;
-  float:right;
-  height:15px;
-  width:11px;
-  cursor:pointer; 
+    background: url(/zoolu-statics/images/icons/icon_close.png) no-repeat 0 0;
+    float: right;
+    height: 15px;
+    width: 11px;
+    cursor: pointer;
 }
 
 /* --- overlay content --- */
 
 td.contentcenter {
-  background-color:#ccc;
-  height:100%;
-  padding:5px;
+    background-color: #ccc;
+    height: 100%;
+    padding: 5px;
 }
 
 td.contentcenter .oltitle {
-  padding:5px 0 0 0; 
+    padding: 5px 0 0 0;
 }
 
-td.contentcenter #overlayButtons {  
-  padding:20px 0 0 0;  
+td.contentcenter #overlayButtons {
+    padding: 20px 0 0 0;
 }
 
 td.contentcenter #overlayNewsletterButtons {
-  padding:20px 0 0 0;
+    padding: 20px 0 0 0;
 }
 
 td.contentcenter #buttonOk, td.contentcenter #buttonSend, td.contentcenter #buttonTestSend {
-  float:left;
-  margin:0 5px 0 0;
-  cursor:pointer;
+    float: left;
+    margin: 0 5px 0 0;
+    cursor: pointer;
 }
 
 td.contentcenter #buttonCancel {
-  float:left;
-  margin:0 0 0 5px;
-  cursor:pointer;
+    float: left;
+    margin: 0 0 0 5px;
+    cursor: pointer;
 }
 
 .overlaycontent {
-  min-height:50px;
+    min-height: 50px;
 }
 
 #overlayButtons {
-  min-height: 0;
+    min-height: 0;
 }
 
 #overlayGenContent {
-  min-height:0;
+    min-height: 0;
 }
 
 .overlaycontent p.confirmation {
-  margin-bottom:15px;
-  margin-top:20px;
+    margin-bottom: 15px;
+    margin-top: 20px;
 }
 
 .overlaycontent .importassignment,
 .overlaycontent .overlayGenInner {
-  margin-top:20px;
+    margin-top: 20px;
 }
 
 #overlayNewsletterContent {
-  overflow:auto;
+    overflow: auto;
 }
 
 #overlayNewsletterContent table.newsletterStatistics th {
-  text-align:left;
+    text-align: left;
 }
 
 #overlayNewsletterContent table.newsletterStatistics tr td {
-  border-top:1px #fff solid;
-  padding:2px 0;
+    border-top: 1px #fff solid;
+    padding: 2px 0;
 }
 
 /* --- overlay border --- */
 
 .overlaycontentwrapper table, .overlaycontentwrapper2 table {
-  height:100%;
-  width:100%;
+    height: 100%;
+    width: 100%;
 }
 
 td.cornertopleft {
-	background-image:url(/zoolu-statics/images/overlay/corner_top_left.png);
-	background-repeat:no-repeat;
-	font-size:0;
-	height:10px;
-	width:10px;
+    background-image: url(/zoolu-statics/images/overlay/corner_top_left.png);
+    background-repeat: no-repeat;
+    font-size: 0;
+    height: 10px;
+    width: 10px;
 }
 
 td.topcenter {
-  background-image:url(/zoolu-statics/images/overlay/bg_header_h.png);
-  background-repeat:repeat-x;
-  font-size:0;
-  height:10px; 
+    background-image: url(/zoolu-statics/images/overlay/bg_header_h.png);
+    background-repeat: repeat-x;
+    font-size: 0;
+    height: 10px;
 }
 
 td.cornertopright {
-  background-image:url(/zoolu-statics/images/overlay/corner_top_right.png);
-  background-repeat:no-repeat;
-  font-size:0;
-  height:10px;
-  width:10px;
+    background-image: url(/zoolu-statics/images/overlay/corner_top_right.png);
+    background-repeat: no-repeat;
+    font-size: 0;
+    height: 10px;
+    width: 10px;
 }
 
 td.cornerbottomleft {
-  background-image:url(/zoolu-statics/images/overlay/corner_bottom_left.png);
-  background-repeat:no-repeat;
-  font-size:0;
-  height:10px;
-  width:10px;
+    background-image: url(/zoolu-statics/images/overlay/corner_bottom_left.png);
+    background-repeat: no-repeat;
+    font-size: 0;
+    height: 10px;
+    width: 10px;
 }
 
 td.bottomcenter {
-  background-image:url(/zoolu-statics/images/overlay/bg_content_h.png);
-  background-repeat:repeat-x;
-  font-size:0;
-  height:10px; 
+    background-image: url(/zoolu-statics/images/overlay/bg_content_h.png);
+    background-repeat: repeat-x;
+    font-size: 0;
+    height: 10px;
 }
 
 td.cornerbottomright {
-  background-image:url(/zoolu-statics/images/overlay/corner_bottom_right.png);
-  background-repeat:no-repeat;
-  font-size:0;
-  height:10px;
-  width:10px;
+    background-image: url(/zoolu-statics/images/overlay/corner_bottom_right.png);
+    background-repeat: no-repeat;
+    font-size: 0;
+    height: 10px;
+    width: 10px;
 }
 
 td.headerleft {
-  background-image:url(/zoolu-statics/images/overlay/bg_header_v_left.png);
-  background-repeat:repeat-y;
-  font-size:0;
-  width:10px;
+    background-image: url(/zoolu-statics/images/overlay/bg_header_v_left.png);
+    background-repeat: repeat-y;
+    font-size: 0;
+    width: 10px;
 }
 
 td.headerright {
-  background-image:url(/zoolu-statics/images/overlay/bg_header_v_right.png);
-  background-repeat:repeat-y;
-  font-size:0;
-  width:10px;
+    background-image: url(/zoolu-statics/images/overlay/bg_header_v_right.png);
+    background-repeat: repeat-y;
+    font-size: 0;
+    width: 10px;
 }
 
 td.contentleft {
-  background-image:url(/zoolu-statics/images/overlay/bg_content_v_left.png);
-  background-repeat:repeat-y;
-  font-size:0;
-  width:10px;
+    background-image: url(/zoolu-statics/images/overlay/bg_content_v_left.png);
+    background-repeat: repeat-y;
+    font-size: 0;
+    width: 10px;
 }
 
 td.contentright {
-  background-image:url(/zoolu-statics/images/overlay/bg_content_v_right.png);
-  background-repeat:repeat-y;
-  font-size:0;
-  width:10px;
+    background-image: url(/zoolu-statics/images/overlay/bg_content_v_right.png);
+    background-repeat: repeat-y;
+    font-size: 0;
+    width: 10px;
 }
 
 /* --- property overlay --- */
 
 #overlayPropertyWrapper {
-  width:560px;
+    width: 560px;
 }
 
 .overlaycontentwrapper .buttoncancel {
-  padding:15px 0 0 0;
-  float:left;
-  cursor:pointer;
+    padding: 15px 0 0 0;
+    float: left;
+    cursor: pointer;
 }
 
 .overlaycontentwrapper .buttoneditsave,
 #importloader {
-  padding:10px 0 0 0;
-  float:right;
-  cursor:pointer;
+    padding: 10px 0 0 0;
+    float: right;
+    cursor: pointer;
 }
 
 #importloader {
-  cursor:auto;
-  width:102px;
-  height:30px;
+    cursor: auto;
+    width: 102px;
+    height: 30px;
 }
 
 .overlaycontentwrapper .buttondelete {
-  padding: 10px 10px 0 0;
-  float:right;
-  cursor:pointer;
+    padding: 10px 10px 0 0;
+    float: right;
+    cursor: pointer;
 }
 
 .propertywrapper {
-  background-color: #e4e4e4;
-  overflow: hidden;
-  overflow-y:scroll;
-  height:270px;
-  padding:10px 0 10px 10px;
+    background-color: #e4e4e4;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 270px;
+    padding: 10px 0 10px 10px;
 }
 
 .propertywrapper .olfield {
-  padding:0 0 20px 0;
+    padding: 0 0 20px 0;
 }
 
 .propertywrapper .field-6 input {
-  width:99%;  
+    width: 99%;
 }
 
-.busy.propertywrapper div, 
-.busy.propertywrapper span{
-  visibility:hidden;
+.busy.propertywrapper div,
+.busy.propertywrapper span {
+    visibility: hidden;
 }
 
 /* -- user settings overlay -- */
 #overlayUserSettingsWrapper .propertywrapper,
 #overlayImportWrapper .propertywrapper {
-  background-color: #ccc;
-  padding-left:0;
-  overflow: hidden;
-  overflow-y:auto;
+    background-color: #ccc;
+    padding-left: 0;
+    overflow: hidden;
+    overflow-y: auto;
 }
 
-#overlayUserSettingsWrapper .editbox, 
+#overlayUserSettingsWrapper .editbox,
 #overlayUserSettingsWrapper .editbox-closed {
-  margin-right:0;
+    margin-right: 0;
 }
 
 /* ----------------
 UI Classes */
 
 .ui-menu-overlap {
-  position: absolute;
-  background-color: #ccc;
-  padding:5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px; 
-  overflow: hidden;
-  z-index: 35;
+    position: absolute;
+    background-color: #ccc;
+    padding: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 35;
 }
 
 /* ----------------
 AJAX-Loader Classes */
-  
-  /* content */
-.busy {  
-  background-image: url(/zoolu-statics/images/main/loader_gray.gif);
-  background-repeat: no-repeat;
-  background-position: center center;
+
+/* content */
+.busy {
+    background-image: url(/zoolu-statics/images/main/loader_gray.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
-  /* navigation */
+/* navigation */
 #divNaviCenter .busy {
-  background-image: url(/zoolu-statics/images/main/loader.gif);
-  background-repeat: no-repeat;
-  background-position: center center;
+    background-image: url(/zoolu-statics/images/main/loader.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
-  /* change template */
+/* change template */
 #divAllTemplates .busy {
-  background-image: url(/zoolu-statics/images/main/loader.gif);
-  background-repeat: no-repeat;
-  background-position: center center;
+    background-image: url(/zoolu-statics/images/main/loader.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
-#divAllTemplates .busy a, #divChangeTemplate .busy img{
-  visibility:hidden;
+#divAllTemplates .busy a, #divChangeTemplate .busy img {
+    visibility: hidden;
 }
 
-  /* change meta infos */
+/* change meta infos */
 #divWidgetMetaInfos .busy {
-  background-image: url(/zoolu-statics/images/main/loader_small_gray.gif);
-  background-repeat: no-repeat;
-  background-position: center 2px;
+    background-image: url(/zoolu-statics/images/main/loader_small_gray.gif);
+    background-repeat: no-repeat;
+    background-position: center 2px;
 }
 
-#divWidgetMetaInfos .busy a, #divWidgetMetaInfos .busy select{
-  visibility:hidden;
-}
-  /* select page */
-.busy .olnavigationwrapper2{
-  background-image: url(/zoolu-statics/images/main/loader.gif);
-  background-repeat: no-repeat;
-  background-position: center center
+#divWidgetMetaInfos .busy a, #divWidgetMetaInfos .busy select {
+    visibility: hidden;
 }
 
-.busy .olnavigationwrapper2 div{
-  visibility:hidden;
+/* select page */
+.busy .olnavigationwrapper2 {
+    background-image: url(/zoolu-statics/images/main/loader.gif);
+    background-repeat: no-repeat;
+    background-position: center center
 }
 
-  /* select page */
-.busy.videoContainer{
-  background-image: url(/zoolu-statics/images/main/loader.gif);
-  background-repeat: no-repeat;
-  background-position: center center
+.busy .olnavigationwrapper2 div {
+    visibility: hidden;
 }
 
-.busy.videoContainer div, .busy.videoContainer span{
-  visibility:hidden;
+/* select page */
+.busy.videoContainer {
+    background-image: url(/zoolu-statics/images/main/loader.gif);
+    background-repeat: no-repeat;
+    background-position: center center
+}
+
+.busy.videoContainer div, .busy.videoContainer span {
+    visibility: hidden;
 }
