@@ -245,6 +245,7 @@ Overlay Pages, Globals, ... */
 }
 
 #olRootLevels {
+    background-color:#c6c6c6;
     position: absolute;
     top: 0;
     width: 430px;
