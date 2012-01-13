@@ -1649,10 +1649,10 @@ Overlay Inner */
     border-top:1px #fff solid;
     border-left:1px #fff solid;
     border-right:1px #fff solid;
-    border-top-left-radius:11px;
-    border-top-right-radius:11px;
-    -moz-border-radius-topleft:11px;
-    -moz-border-radius-topright:11px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
     height: 20px;
     padding: 5px 20px 0 10px;
     text-align: left;
@@ -1712,10 +1712,10 @@ Overlay Inner */
     border-bottom:1px #fff solid;
     border-left:1px #fff solid;
     border-right:1px #fff solid;
-    border-bottom-left-radius:11px;
-    border-bottom-right-radius:11px;
-    -moz-border-radius-bottomleft:11px;
-    -moz-border-radius-bottomright:11px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
     height: 20px;
     padding: 5px 20px 0 10px;
     text-align: left;
@@ -2225,23 +2225,20 @@ Dashboard Overlay */
     overflow: hidden;
 }
 
-.dbrd-content .olcontacttopitemtitle {
+.dbrd-content .olcontacttop {
+    font-weight:bold;
+    float:none;
     width: 398px;
 }
 
-.dbrd-content .olcontactbottomcenter {
-    width: 408px;
+.dbrd-content .olcontactbottom {
+    width: 398px;
 }
 
 .dbrd-content .olcontactitemcontainer {
-    /*overflow:hidden;
-    overflow-y:scroll;
-    height:348px;
-    width:430px;*/
-}
-
-.dbrd-content .olcontentwrapper .olcontactitemcontainer {
-    height: 188px;
+    height: 348px;
+    overflow-y:auto;
+    width:430px;
 }
 
 .dbrd-content .olcontactbottom {
