@@ -1802,8 +1802,10 @@ class PageHelper {
         
         $strFields .= '    
             <div class="'.$strClass.'">
-              <input type="hidden" id="'.$strFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">
-              <label id="lbl_'.$strFieldId.'" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+              <input type="hidden" id="'.$strFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">';
+        if($objField->type->code != 'headline'){
+          $strFields .= '<label id="lbl_'.$strFieldId.'" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+        }
  
         switch($objField->type->code){
           case 'salutation' :
@@ -1905,7 +1907,17 @@ class PageHelper {
             }
             break;
             
+          case 'headline':
+            $strFields .= '
+                      <h2>'.$objField->title.'</h2>';
+            break;
+            
+          case 'divider':
+            $strFields .= '<div style="height:25px"></div>';
+            break;
+            
           default :
+            $strValidationClass = (isset($objField->validation->code)) ? 'val_type_'.$objField->validation->code : '';
             $strClass = '';
             $strClassCode = '';
             $strClassMandatory = '';
@@ -1915,11 +1927,7 @@ class PageHelper {
             if($objField->mandatory){
               $strClassMandatory = 'mandatory';
             }
-            if($strClassCode != '' && $strClassMandatory != ''){
-              $strClass = 'class="'.$strClassMandatory.' '.$strClassCode.'"';
-            }else{
-              $strClass = 'class="'.$strClassMandatory.$strClassCode.'"';
-            }
+            $strClass = 'class="'.$strClassMandatory.' '.$strClassCode.' '.$strValidationClass.'"';
             $strFields .= '
               <input type="text" '.$strClass.' id="'.$strFieldId.'" name="'.$strFieldId.'" value=""'.$strClass.'/>';             
             break;

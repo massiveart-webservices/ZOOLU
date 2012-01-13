@@ -1219,7 +1219,7 @@ class Page {
       $objField->type = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('field_type')->getInstanceValue($intRegionInstanceId))->current();
       $objField->mandatory = $objMyMultiRegion->getField('mandatory')->getInstanceValue($intRegionInstanceId);
       $objField->description = $objMyMultiRegion->getField('description')->getInstanceValue($intRegionInstanceId);
-      $objField->validation = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('field_type')->getInstanceValue($intRegionInstanceId))->current();
+      $objField->validation = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('validation')->getInstanceValue($intRegionInstanceId))->current();
       $objField->display = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('display')->getInstanceValue($intRegionInstanceId))->current();
       $objField->options = preg_split( '/\r\n|\r|\n/', $objMyMultiRegion->getField('options')->getInstanceValue($intRegionInstanceId));
       

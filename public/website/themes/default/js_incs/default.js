@@ -32,6 +32,14 @@ Default = Class.create({
         this.validateInputEmail(element.id)
       }.bind(this));
       
+      $$('.val_type_alphabethic').each(function(element){
+        this.validateAlphabethic(element.id);
+      }.bind(this));
+      
+      $$('.val_type_numeric').each(function(element){
+        this.validateNumeric(element.id);
+      }.bind(this));
+      
       /**
        * check captcha
        */
@@ -107,7 +115,24 @@ Default = Class.create({
    * validateInputEmail
    */
   validateInputEmail: function(element){
-    var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+    this.validateFilter(/^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/, element);
+  },
+  
+  /**
+   * validateAlphabethic
+   */
+  validateAlphabethic: function(element){
+    this.validateFilter(/^[a-zA-Z äöüßÄÖÜ]+$/, element);
+  },
+  
+  validateNumeric: function(element){
+    this.validateFilter(/^\d+((.|,)\d+)?$/, element);
+  },
+  
+  /**
+   * validateFilter
+   */
+  validateFilter: function(filter, element){
     if($(element)){
       if(!filter.test($F(element))){
         if($('lbl_'+element)) $('lbl_'+element).addClassName('missing');
@@ -117,6 +142,8 @@ Default = Class.create({
       }
     }
   },
+  
+
   
   /**
    * changeTestMode

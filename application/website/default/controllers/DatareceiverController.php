@@ -356,7 +356,7 @@ class DatareceiverController extends Zend_Controller_Action {
         if($value != ''){
           if(is_array($value)){
             $value = implode(', ', $value);
-            $value = substr($value, 0, strlen($value));
+            $value = substr($value, 0, strlen($value) - 2);
           }
        	  if($key == 'idRootLevels' || $key == 'idPage' || $key == 'subject' || $key == 'blnDynForm' || preg_match('/type$/', $key)){
        	    //Do nothing
