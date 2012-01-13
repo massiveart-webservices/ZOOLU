@@ -68,8 +68,10 @@ class NavigationHelper {
   	
     foreach ($rootLevelNavigation as $objNavigationTree) {
       
-      if(count($objNavigationTree) == 1){        
+      if(count($objNavigationTree) == 1){
         foreach($objNavigationTree as $objNavigation){
+          
+          $blnSubscriber = $objNavigation->getTypeId() ==  $this->core->sysConfig->root_level_types->subscribers;
           
           /**
            * get values of the row and create output
@@ -117,9 +119,14 @@ class NavigationHelper {
               </script>';
             }      
             
+            $strMenu = '';
+            if($blnSubscriber){
+              $strMenu = ' hasmenu';
+            }
+            
             $strOutput .= '
               <div class="naviitemcontainer">
-                <div id="naviitem'.$objNavigation->getId().'" class="naviitem'.$strSelected.'" onclick="'.$strJsClickFunc.'">
+                <div id="naviitem'.$objNavigation->getId().'" class="naviitem'.$strMenu.$strSelected.'" onclick="'.$strJsClickFunc.'">
                   <div class="'.$strRootLevelIconCss.'"></div>
                   <div id="divRootLevelTitle_'.$objNavigation->getId().'" class="itemtitle">';
             if($objNavigation->getTypeId() ==  $this->core->sysConfig->root_level_types->subscribers){
@@ -133,7 +140,7 @@ class NavigationHelper {
                   <input type="hidden" value="'.$objNavigation->getLanguageId().'" id="rootLevelLanguageId'.$objNavigation->getId().'"/> 
                   <input type="hidden" value="'.$strRootLevelType.'" id="rootLevelType'.$objNavigation->getId().'"/>             
                 </div>';
-            if($objNavigation->getTypeId() ==  $this->core->sysConfig->root_level_types->subscribers){
+            if($blnSubscriber){
               $strOutput .= '<div class="menu" id="naviitem'.$objNavigation->getId().'menu" style="display:none;"></div>';
             }
             $strOutput .= '

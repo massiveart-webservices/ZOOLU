@@ -125,7 +125,7 @@ class NavigationHelper {
         if($strSubNavi != ''){
           $strOutput .= '
           <div class="naviitemcontainer">
-            <div id="naviitem'.$objNavigationTree->getId().'" class="naviitem'.$strSubNaviSelected.'" onclick="myNavigation.selectRootLevel('.$objNavigationTree->getId().', '.$objNavigationTree->getTypeId().', \'\', false, \''.$strViewType.'\'); return false;">
+            <div id="naviitem'.$objNavigationTree->getId().'" class="naviitem hasmenu'.$strSubNaviSelected.'" onclick="myNavigation.selectRootLevel('.$objNavigationTree->getId().', '.$objNavigationTree->getTypeId().', \'\', false, \''.$strViewType.'\'); return false;">
               <div class="producticon"></div>
               <div id="divRootLevelTitle_'.$objNavigationTree->getId().'" class="itemtitle">'.htmlentities($objNavigationTree->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
               <div class="clear"></div>  
