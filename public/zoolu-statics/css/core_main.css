@@ -359,6 +359,7 @@ Content List View */
 }
 
 .listentriescount {
+    margin-left: 10px;
     float: left;
     width: 100px;
 }
