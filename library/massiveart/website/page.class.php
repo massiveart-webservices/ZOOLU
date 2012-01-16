@@ -1222,6 +1222,7 @@ class Page {
       $objField->validation = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('validation')->getInstanceValue($intRegionInstanceId))->current();
       $objField->display = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('display')->getInstanceValue($intRegionInstanceId))->current();
       $objField->options = preg_split( '/\r\n|\r|\n/', $objMyMultiRegion->getField('options')->getInstanceValue($intRegionInstanceId));
+      $objField->maxlength = $objMyMultiRegion->getField('maxlength')->getInstanceValue($intRegionInstanceId);
       
       $arrFields[] = $objField;
     }

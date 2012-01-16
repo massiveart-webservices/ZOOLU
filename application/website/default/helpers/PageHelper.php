@@ -1921,15 +1921,19 @@ class PageHelper {
             $strClass = '';
             $strClassCode = '';
             $strClassMandatory = '';
+            $strMaxLength = '';
             if($objField->type->code){
               $strClassCode = 'val_'.$objField->type->code;
             }
             if($objField->mandatory){
               $strClassMandatory = 'mandatory';
             }
+            if($objField->maxlength){
+              $strMaxLength = ' maxlength="'.$objField->maxlength.'"';
+            }
             $strClass = 'class="'.$strClassMandatory.' '.$strClassCode.' '.$strValidationClass.'"';
             $strFields .= '
-              <input type="text" '.$strClass.' id="'.$strFieldId.'" name="'.$strFieldId.'" value=""'.$strClass.'/>';             
+              <input type="text" '.$strClass.' id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.' value=""'.$strClass.'/>';             
             break;
         }
         
