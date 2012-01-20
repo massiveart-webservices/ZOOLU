@@ -433,26 +433,29 @@ Massiveart.Form = Class.create({
   },
   
   /**
-   * getAddDocumentOverlay
+   * getExportDynFormOverlay
    */
-  getAddDocumentOverlay: function(areaId){    
+  getExportDynFormOverlay: function(){    
     $(this.updateOverlayContainer).innerHTML = '';
     myCore.putCenter('overlayGenContentWrapper');
+    $('overlayButtons').show();
     $('overlayGenContentWrapper').show();
-    $('overlayGenContent').setStyle({height:'100%'});
-    if($(areaId)){
-      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/document', { 
-        evalScripts: true,
-        onComplete: function(){
-          $('olContent').addClassName('oldocuments');
-          myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
-          myOverlay.overlayCounter++;
-          myCore.putOverlayCenter('overlayGenContentWrapper');
-          myOverlay.areaId = areaId;
-          myOverlay.updateViewTypeIcons();
-        } 
-      });
-    }    
+    new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/exportdynform', { 
+      evalScripts: true,
+      onComplete: function(){
+        myOverlay.overlayCounter++;
+        myCore.putOverlayCenter('overlayGenContentWrapper');
+        
+        $('buttonOk').observe('click', function(event){
+          myPage.exportDynFormEntries($F('id'), $F('from'), $F('to'), $F('headline'), $F('startdate'), $F('enddate'));
+        });
+        
+        $('buttonCancel').observe('click', function(event){
+          myOverlay.close('overlayGenContentWrapper');
+          $('overlayButtons').hide();
+        });
+      } 
+    });
   },
   
   /**

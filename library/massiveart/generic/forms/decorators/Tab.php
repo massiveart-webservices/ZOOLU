@@ -82,6 +82,7 @@ class Form_Decorator_Tab extends Zend_Form_Decorator_Fieldset {
       $strContent = '<script type="text/javscript">
         myCore.addBusyClass("div'.$name.'");
         new Ajax.Updater("div'.$name.'", "'.$strAction.'", {
+       	  evalScripts: true,
           parameters: {
             id: $F("id")
           },

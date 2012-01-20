@@ -149,6 +149,7 @@ Content List View */
   text-align:left;
 }
 
+.top,
 .toptitle,
 .topname,
 .topsname,
@@ -264,6 +265,7 @@ Content List View */
   padding:0 11px 0 11px;
 }
 
+.row,
 .rowtitle,
 .rowsname,
 .rowfname,
