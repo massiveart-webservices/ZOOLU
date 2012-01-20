@@ -1,0 +1,19 @@
+<?php
+require_once (dirname(__FILE__).'/../../helpers/PageHelper.php');
+$objHelper = new PageHelper();
+?>
+
+<?php if(count($this->entries) > 0): ?>
+<div id="buttonedit" onclick="myForm.getExportDynFormOverlay($F('id'))" style="position:absolute; top:5px; right:100px;">
+  <div class="button25leftOff"></div>
+  <div class="button25centerOff">
+    <div><?php echo $this->translate->_('Export'); ?></div>
+  </div>
+  <div class="button25rightOff"></div>
+  <div class="clear"></div>
+</div>
+<table class="tablelist">
+<?php echo $objHelper->getFormEntriesList($this->paginator); ?>
+</table>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+<?php endif; ?>
