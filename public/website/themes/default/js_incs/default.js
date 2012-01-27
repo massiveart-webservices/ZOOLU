@@ -133,7 +133,7 @@ Default = Class.create({
    * validateFilter
    */
   validateFilter: function(filter, element){
-    if($(element)){
+    if($(element) && $F(element) != ''){
       if(!filter.test($F(element))){
         if($('lbl_'+element)) $('lbl_'+element).addClassName('missing');
         this.retValue = false;

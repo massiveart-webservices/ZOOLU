@@ -1954,13 +1954,13 @@ class Model_Pages {
     if($strStartDate != '' && $strEndDate != ''){
       $strStartDate = explode('.', $strStartDate);
       $strStartDate = $strStartDate[2].'-'.$strStartDate[1].'-'.$strStartDate[0];
-      //$this->core->logger->debug($strStartDate);
       $strEndDate = explode('.', $strEndDate);
       $strEndDate = $strEndDate[2].'-'.$strEndDate[1].'-'.$strEndDate[0];
       
       $objSelect->where('created >= ?', $strStartDate);
       $objSelect->where('created <= ?', $strEndDate);
     }
+    $objSelect->order('created DESC');
     if($intFrom != 0 && $intTo != 0){
      $objSelect->limit($intTo-$intFrom+1, $intFrom - 1); 
     }

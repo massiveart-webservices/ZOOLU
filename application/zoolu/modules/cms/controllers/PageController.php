@@ -650,6 +650,9 @@ class Cms_PageController extends AuthControllerAction {
     foreach($objEntries as $objRow){
       $objEntry = json_decode($objRow->content, true);
       foreach($objEntry as $value){
+        if(is_array($value)){
+          $value = implode(',', $value);
+        }
         $strExport .= $value.';';
       }
       $strExport .= '

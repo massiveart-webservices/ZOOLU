@@ -1796,7 +1796,7 @@ class PageHelper {
         }
         
         $strClass = 'field-1';
-        if($objField->display->id == $this->core->sysConfig->display->two_column){
+        if(isset($objField->display->id) && $objField->display->id == $this->core->sysConfig->display->two_column){
           $strClass = 'field-2';
         }
         
@@ -1896,6 +1896,9 @@ class PageHelper {
               $strFields .= '
                         	<input name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
             }
+            if(isset($objField->other) && $objField->other->code == 'allowed'){
+              $strFields .= '<input name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" style="width:100px;" />';
+            }
             break;
             
           case 'checkbox':
@@ -1904,6 +1907,9 @@ class PageHelper {
               
               $strFields .= '
                                   	<input name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
+            }
+            if(isset($objField->other) && $objField->other->code == 'allowed'){
+              $strFields .= '<input name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" style="width:100px;" />';
             }
             break;
             
