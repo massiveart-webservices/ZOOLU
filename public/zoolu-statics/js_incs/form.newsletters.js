@@ -242,9 +242,8 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
         dataHeader = {
           0: myCore.translate.Date,
           1: myCore.translate.Email,
-          2: myCore.translate.Type
         };
-        columns = 3;
+        columns = 2;
         break;
       case this.constTypeBounces:
         dataHeader = {

@@ -69,7 +69,7 @@ class MailChimpList {
    * @author Thomas Schedler <tsh@massiveart.com>
    */
   public function subscribe(MailChimpMember $objMember) {
-    
+
     $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
     
     $arrMergeVars = array(

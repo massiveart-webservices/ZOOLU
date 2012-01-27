@@ -63,15 +63,6 @@ class MailChimpException extends Exception  {
   }
   
   /**
-   * Returns previous Exception
-   *
-   * @return Exception|null
-   */
-  final public function getPrevious(){
-    return $this->_previous;
-  }
-  
-  /**
    * String representation of the exception
    *
    * @return string

@@ -81,6 +81,7 @@ class ContactReplication_MailChimp implements ContactReplicationInterface  {
    */
   public function add($arrArgs) {
     //Only subscribe if the flag is set
+    $this->core->logger->debug(json_encode($arrArgs));
     if($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe){
       $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
       $objMailChimpList->subscribe(new MailChimpMember($arrArgs));

@@ -681,7 +681,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
             'Id'              => $intSubscriberId,
             'FirstName'       => $this->objForm->Setup()->getField('fname')->getValue(),
             'LastName'        => $this->objForm->Setup()->getField('sname')->getValue(),
-          	'Salutation'			=> $this->objForm->Setup()->getField('salutation')->getValue(),
+          	'Salutation'	  => $this->objForm->Setup()->getField('salutation')->getValue(),
             'Email'           => $this->objForm->Setup()->getField('email')->getValue(),
             'Subscribed'      => $this->objForm->Setup()->getField('subscribed')->getValue(),
             'InterestGroups'  => $this->getInterestGroups()
