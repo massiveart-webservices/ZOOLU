@@ -229,7 +229,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
    * @version 1.0
    */
   public function importuploadAction(){
-    $this->core->logger->debug('contacts->controllers->SubscriberController->importformAction()');
+    $this->core->logger->debug('contacts->controllers->SubscriberController->importuploadAction()');
     
     $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
     

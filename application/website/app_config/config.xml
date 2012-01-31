@@ -25,6 +25,10 @@
         <name></name>
         <address></address>
       </recipient>
+      <ma_recipient>        
+        <name>Daniel Rotter</name>
+        <address>daniel.rotter@massiveart.com</address>
+      </ma_recipient>
       <params>
         <host></host>
         <username></username>
