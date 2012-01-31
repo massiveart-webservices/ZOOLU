@@ -208,7 +208,7 @@ Massiveart.Overlay = Class.create({
          formId: $F('formId'),
          formVersion: $F('formVersion'),
          languageId: $F('languageId'),
-         languageCode: ($('languageCode')) ? $F('languageCode') : null,
+         languageCode: (($('languageCode')) ? $F('languageCode') : ''),
          rootLevelLanguageId: ($('rootLevelLanguageId'+myNavigation.rootLevelId)) ? $F('rootLevelLanguageId'+myNavigation.rootLevelId) : ''
         },      
         evalScripts: true,     
