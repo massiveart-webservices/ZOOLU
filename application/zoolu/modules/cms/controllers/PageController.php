@@ -51,6 +51,11 @@ class Cms_PageController extends AuthControllerAction {
    * @var integer
    */
   protected $intItemLanguageId;
+  
+  /**
+   * @var string
+   */
+  protected $strItemLanguageCode;
 
   /**
    * request object instance
@@ -654,6 +659,7 @@ class Cms_PageController extends AuthControllerAction {
       $objGenericData->Setup()->setElementId($this->objRequest->getParam("id"));
       $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
       $objGenericData->Setup()->setLanguageId($this->getItemLanguageId());
+      $objGenericData->Setup()->setLanguageCode($this->getItemLanguageCode());
       $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
       $objGenericData->Setup()->setModelSubPath('cms/models/');
 
@@ -1021,6 +1027,7 @@ class Cms_PageController extends AuthControllerAction {
       $objFormHandler->setFormVersion($intFormVersion);
       $objFormHandler->setActionType($intActionType);
       $objFormHandler->setLanguageId($this->getItemLanguageId($intActionType));
+      $objFormHandler->setLanguageCode($this->getItemLanguageCode());
       $objFormHandler->setFormLanguageId($this->core->intZooluLanguageId);
       $objFormHandler->setElementId($intElementId);
 
@@ -1112,6 +1119,30 @@ class Cms_PageController extends AuthControllerAction {
     }
     
     return $this->intItemLanguageId;
+  }
+  
+  /**
+   * getItemLanguageCode
+   * @return string
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0 
+   */
+  protected function getItemLanguageCode(){
+    if($this->strItemLanguageCode == null){
+      if(!$this->objRequest->getParam("languageCode")){
+        $arrLanguages = $this->core->config->languages->language->toArray();      
+        foreach($arrLanguages as $arrLanguage){     
+          if($arrLanguage['id'] == $this->getItemLanguageId()){
+            $this->strItemLanguageCode = $arrLanguage['code'];
+            break;
+          }        
+        }
+      }else{
+        $this->strItemLanguageCode = $this->objRequest->getParam("languageCode");
+      }
+    }
+    
+    return $this->strItemLanguageCode;
   }
 
   /**

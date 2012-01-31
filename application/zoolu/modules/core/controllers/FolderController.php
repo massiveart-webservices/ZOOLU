@@ -51,6 +51,11 @@ class Core_FolderController extends AuthControllerAction {
    * @var inter
    */
   protected $intItemLanguageId;
+  
+  /**
+   * @var string
+   */
+  protected $strItemLanguageCode;
 
 	/**
    * request object instance
@@ -191,6 +196,7 @@ class Core_FolderController extends AuthControllerAction {
 
         $arrArgs = array('ParentId'         => $intFolderId,
                          'LanguageId'       => $this->objRequest->getParam('languageId', $this->core->intZooluLanguageId),
+                         'LanguageCode'     => $this->objRequest->getParam('languageCode', $this->core->strZooluLanguageCode),
                          'GenericSetup'     => $this->objForm->Setup());
         if($this->objCommandChain->runCommand('addFolderStartElement', $arrArgs)){
           $this->view->assign('selectNavigationItemNow', true);
@@ -311,6 +317,7 @@ class Core_FolderController extends AuthControllerAction {
          * update the folder start element
          */
         $arrArgs = array('LanguageId'       => $this->objRequest->getParam("languageId", $this->core->intZooluLanguageId),
+                         'LanguageCode'     => $this->objRequest->getParam("languageCode", $this->core->strZooluLanguageCode),
                          'GenericSetup'     => $this->objForm->Setup());
         $this->objCommandChain->runCommand('editFolderStartElement', $arrArgs);
         
@@ -631,6 +638,7 @@ class Core_FolderController extends AuthControllerAction {
     $objFormHandler->setFormVersion($intFormVersion);
     $objFormHandler->setActionType($intActionType);
     $objFormHandler->setLanguageId($this->getItemLanguageId());
+    $objFormHandler->setLanguageCode($this->getItemLanguageCode());
     $objFormHandler->setFormLanguageId($this->core->intZooluLanguageId);
     $objFormHandler->setElementId($intElementId);
 
@@ -717,6 +725,30 @@ class Core_FolderController extends AuthControllerAction {
     }
     
     return $this->intItemLanguageId;
+  }
+  
+  /**
+   * getItemLanguageCode
+   * @return string
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0 
+   */
+  protected function getItemLanguageCode(){
+    if($this->strItemLanguageCode == null){
+      if(!$this->objRequest->getParam("languageCode")){
+        $arrLanguages = $this->core->config->languages->language->toArray();      
+        foreach($arrLanguages as $arrLanguage){     
+          if($arrLanguage['id'] == $this->getItemLanguageId()){
+            $this->strItemLanguageCode = $arrLanguage['code'];
+            break;
+          }        
+        }
+      }else{
+        $this->strItemLanguageCode = $this->objRequest->getParam("languageCode");
+      }
+    }
+    
+    return $this->strItemLanguageCode;
   }
 
   /**

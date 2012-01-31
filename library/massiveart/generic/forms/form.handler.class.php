@@ -57,6 +57,7 @@ class FormHandler {
   private $intFormLanguageId;
   private $intActionType;
   private $intLanguageId;
+  private $strLanguageCode;
   private $intElementId;
 
 	/**
@@ -102,6 +103,7 @@ class FormHandler {
       $objForm->Setup()->setFormVersion($this->intFormVersion);
       $objForm->Setup()->setActionType($this->intActionType);
       $objForm->Setup()->setLanguageId($this->intLanguageId);
+      $objForm->Setup()->setLanguageCode($this->strLanguageCode);
       $objForm->Setup()->setFormLanguageId($this->intFormLanguageId);
       $objForm->Setup()->setElementId($this->intElementId);
 
@@ -189,6 +191,22 @@ class FormHandler {
    */
   public function getLanguageId(){
     return $this->intLanguageId;
+  }
+  
+  /**
+   * setLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function setLanguageCode($strLanguageCode){
+    $this->strLanguageCode = $strLanguageCode;
+  }
+
+  /**
+   * getLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function getLanguageCode(){
+    return $this->strLanguageCode;
   }
 
   /**

@@ -125,6 +125,7 @@ class PageCommand implements CommandInterface {
         $objGenericData->Setup()->setTemplateId($intTemplateId);
         $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
         $objGenericData->Setup()->setLanguageId($arrArgs['LanguageId']);
+        $objGenericData->Setup()->setLanguageCode($arrArgs['LanguageCode']);
         $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
 
         $objGenericData->Setup()->setParentId($arrArgs['ParentId']);

@@ -208,6 +208,7 @@ Massiveart.Overlay = Class.create({
          formId: $F('formId'),
          formVersion: $F('formVersion'),
          languageId: $F('languageId'),
+         languageCode: ($('languageCode')) ? $F('languageCode') : null,
          rootLevelLanguageId: ($('rootLevelLanguageId'+myNavigation.rootLevelId)) ? $F('rootLevelLanguageId'+myNavigation.rootLevelId) : ''
         },      
         evalScripts: true,     
@@ -460,13 +461,18 @@ Massiveart.Overlay = Class.create({
     if($('languageId')){
       languageId = $F('languageId');
     }
+    var languageCode = null;
+    if($('languageCode')){
+      languageCode = $F('languageCode');
+    }
     
     var fieldname = this.areaId.substring(this.areaId.indexOf('_')+1);
     new Ajax.Updater(this.updateContainer, '/zoolu/cms/overlay/listpage', {
       parameters: {
         folderId: folderId,
         pageIds: $(fieldname).value,
-        languageId: languageId
+        languageId: languageId,
+        languageCode: languageCode
       },
       evalScripts: true,
       onComplete: function(){

@@ -95,7 +95,6 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
     try{
       $this->strType = $strType;
 
-
       $this->getModel();
       $this->getModelUrls();
 

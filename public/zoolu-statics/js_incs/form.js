@@ -159,7 +159,8 @@ Massiveart.Form = Class.create({
             id: elementId, 
             linkId: linkId,
             rootLevelId: $F('rootLevelId'),
-            languageId: $F('languageId')
+            languageId: $F('languageId'),
+            languageCode: (($('languageCode')) ? $F('languageCode') : null)
           },
           evalScripts: true,
           onComplete: function() {
@@ -232,6 +233,10 @@ Massiveart.Form = Class.create({
       if($('languageId')) {
         languageId = $F('languageId');
       }
+      var languageCode = null;
+      if($('languageCode')) {
+        languageCode = $F('languageCode');
+      }
       
       $$('#genForm .'+strType).each(function(elDiv){   
         if($(elDiv.id)){          
@@ -243,7 +248,8 @@ Massiveart.Form = Class.create({
   	            fileIds: $(fileFieldId).value,
   	            fileFieldId: fileFieldId,
   	            viewtype: strViewType,
-  	            languageId: languageId
+  	            languageId: languageId,
+  	            languageCode: languageCode
   	          },
   	          evalScripts: true,
   	          onComplete: function(){
@@ -308,6 +314,7 @@ Massiveart.Form = Class.create({
               rootLevelId: $F(fileFieldId + '_RootLevel'),
               fileFieldId: fileFieldId,
               languageId: $F('languageId'),
+              languageCode: (($('languageCode')) ? $F('languageCode') : null),
               viewtype: viewType
             },
             evalScripts: true,
@@ -554,6 +561,7 @@ Massiveart.Form = Class.create({
           rootLevelGroupId: intRootLevelGroupId,
           rootLevelGroupKey: (($('rootLevelGroupKey'+intRootLevelGroupId)) ? $F('rootLevelGroupKey'+intRootLevelGroupId) : ''),
           languageId: $F('languageId'),
+          languageCode: (($('languageCode')) ? $F('languageCode') : null),
           itemAction: itemAction,
           itemIds: $(fieldname).value,
           fieldId: $(fieldname).readAttribute('fieldid')
@@ -767,6 +775,7 @@ Massiveart.Form = Class.create({
         id: $F('id'),
         linkId: ($('linkId')) ? $F('linkId') : -1,
         languageId: $F('languageId'),
+        languageCode: ($('languageCode')) ? $F('languageCode') : null,
         currLevel: $F('currLevel'),
         rootLevelId: $F('rootLevelId'),
         rootLevelGroupId: intRootLevelGroupId,
@@ -1245,7 +1254,8 @@ Massiveart.Form = Class.create({
             id: $F('id'),
             linkId: ($('linkId') ? $F('linkId') : -1),
             moduleId: myNavigation.module,
-            languageId: $F('languageId')
+            languageId: $F('languageId'),
+            languageCode: ($('languageCode')) ? $F('languageCode') : null,
           },
           evalScripts: true,
           onComplete: function(){

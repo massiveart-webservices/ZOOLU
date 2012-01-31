@@ -178,6 +178,6 @@
           myForm.isAuthorizedToDelete(<?php echo (($this->authorizedDelete && $this->authorizedDelete == true) ? 'true' : 'false') ?>);
           myForm.isAuthorizedToUpdate(<?php echo (($this->authorizedUpdate && $this->authorizedUpdate == true) ? 'true' : 'false') ?>);
           <?php if($this->itemId): ?>myNavigation.itemId = '<?php echo $this->itemId ?>';<?php endif; ?>
-          myPage.isStartPage = <?php echo (($this->blnIsStartPage == true) ? 'true' : 'false') ?>;          
+          myPage.isStartPage = <?php echo (($this->blnIsStartPage == true) ? 'true' : 'false') ?>;         
           //]]>
         </script>

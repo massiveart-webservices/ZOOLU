@@ -207,6 +207,7 @@ class Page {
   protected $strPageLinkId;
   protected $intPageVersion;
   protected $intLanguageId;
+  protected $strLanguageCode;
   protected $strType;
   protected $strTemplateFile;
   protected $intTemplateId;
@@ -298,6 +299,7 @@ class Page {
         $this->objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
         $this->objGenericData->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
         $this->objGenericData->Setup()->setLanguageId($this->intLanguageId);
+        $this->objGenericData->Setup()->setLanguageCode($this->strLanguageCode);
         $this->objGenericData->Setup()->setParentId($this->getParentId());        
         $this->objGenericData->Setup()->setParentTypeId($this->getParentTypeId());
         $this->objGenericData->Setup()->setModelSubPath($this->getModelSubPath());
@@ -2191,6 +2193,22 @@ class Page {
    */
   public function getLanguageId(){
     return $this->intLanguageId;
+  }
+  
+  /**
+   * setLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function setLanguageCode($strLanguageCode){
+    $this->strLanguageCode = $strLanguageCode;
+  }
+
+  /**
+   * getLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function getLanguageCode(){
+    return $this->strLanguageCode;
   }
   
   /**

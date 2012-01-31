@@ -86,6 +86,7 @@ Massiveart.Global = Class.create({
                  id: $F('id'),
                  linkId: ($('linkId')) ? $F('linkId') : -1,
                  languageId: $F('languageId'),
+                 languageCode: ($('languageCode')) ? $F('languageCode') : null,
                  currLevel: $F('currLevel'),
                  rootLevelId: $F('rootLevelId'),
                  rootLevelGroupId: $F('rootLevelGroupId'),

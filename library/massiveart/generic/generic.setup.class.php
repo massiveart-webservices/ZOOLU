@@ -66,6 +66,7 @@ class GenericSetup {
 	protected $blnRegionCollapsable = true;
 
 	protected $intLanguageId;
+	protected $strLanguageCode;
 	protected $intLanguageFallbackId;
 	protected $intDestinationId;	
 	protected $blnHideInSitemap = false;
@@ -1137,6 +1138,22 @@ class GenericSetup {
 	 */
 	public function getLanguageId(){
 		return $this->intLanguageId;
+	}
+	
+  /**
+	 * setLanguageCode
+	 * @param string $strLanguageCode
+	 */
+	public function setLanguageCode($strLanguageCode){
+		$this->strLanguageCode = $strLanguageCode;
+	}
+
+	/**
+	 * getLanguageCode
+	 * @param string $strLanguageCode
+	 */
+	public function getLanguageCode(){
+		return $this->strLanguageCode;
 	}
 	
   /**

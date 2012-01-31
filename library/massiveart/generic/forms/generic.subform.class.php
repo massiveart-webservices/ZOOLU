@@ -201,6 +201,7 @@ class GenericSubForm extends Zend_Form_SubForm {
         'isCoreField' => $objField->isCoreField,
         'MultiOptions' => $arrOptions,
         'LanguageId' => $this->objGenericForm->Setup()->getLanguageId(),
+        'LanguageCode' => $this->objGenericForm->Setup()->getLanguageCode(),
         'FormLanguageId' => $this->objGenericForm->Setup()->getFormLanguageId(),
         'isEmptyField' => (($blnEmpty == true) ? 1 : 0),
         'required' =>  (($objField->isKeyField == 1) ? true : false),
