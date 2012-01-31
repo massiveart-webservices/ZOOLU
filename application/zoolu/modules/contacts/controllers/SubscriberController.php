@@ -301,6 +301,9 @@ class Contacts_SubscriberController extends AuthControllerAction {
     $this->core->logger->debug('contacts->controllers->SubscriberController->importAction()');
     $this->_helper->viewRenderer->setNoRender();
     
+    $arrErrors = array();
+    $arrWarnings = array();
+    
     $intSubscriberAdded = 0;
     $intSubscriberUpdated = 0;
     $blnEmailAddress = true;
@@ -359,78 +362,117 @@ class Contacts_SubscriberController extends AuthControllerAction {
         $arrData['idUsers'] = Zend_Auth::getInstance()->getIdentity()->id;
         $arrData['dirty'] = $this->core->sysConfig->mail_chimp->mappings->clean;
         
-        //Update Userdata
-        $blnUpdate = false; //Update an old user or insert a new one
-        if(isset($arrData['email']) && $arrData['email'] != ''){
-          $objSubscriber = $this->getModelSubscribers()->loadByEmail($arrData['email']);
-          if(count($objSubscriber) > 0){
-            $this->core->logger->warn('Subscriber '.$arrData['email'].' already exists! User will be updated.');
-            $intSubscriberId = $objSubscriber->current()->id;
-            $blnUpdate = true;
-            $this->getModelSubscribers()->getSubscriberTable()->update($arrData, $this->core->dbh->quoteInto('email = ?', $arrData['email']));
-            $intSubscriberUpdated++;
-          }else{
-            $intSubscriberId = $this->getModelSubscribers()->getSubscriberTable()->insert($arrData);
-            $intSubscriberAdded++;
+        try{
+          //Check Preconditions
+          $validator = new Zend_Validate_EmailAddress();
+          if(!$validator->isValid($arrData['email'])){
+            require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/InvalidAddressException.php');
+            throw new InvalidAddressException($arrData['email']);
           }
-          //Update Interests
-          $arrPortalDataMailChimp = array();
-          foreach($arrPortals as $intPortalId){
-            //Insert Data in database
-            $arrPortalData = array('idSubscribers' => $intSubscriberId, 'idRelation' => $intPortalId, 'idFields' => self::PORTALS_ID);
-            $objTable = $this->getModelGenericData()->getGenericTable('subscriber-'.self::SUBSCRIBER_GENERIC_FORM_ID.'-1-InstanceMultiFields');
-            $objTable->insert($arrPortalData);
-            //Create array for mailchimp
-            $objRootLevel = $this->getModelRootLevels()->loadRootLevelTitle($intPortalId, 2);
-            $arrPortalDataMailChimp[] = array('id' => $intPortalId, 'title' => $objRootLevel->current()->title);
-          }
-          $arrInterestDataMailChimp = $this->updateInterests($arrInterestGroups, $intSubscriberId, self::INTEREST_GROUPS_ID);
-          $arrFilterDataMailChimp = $this->updateInterests($arrFilter, $intSubscriberId, self::FILTER_ID);
-          if($blnUpdate){
-            //If subscriber already existed only update interestgroups
-            try{
-              $this->objCommandChain->runCommand('updated', array(
-                'Id'                => $intSubscriberId,
-                'FirstName'         => $arrData['fname'],
-                'LastName'          => $arrData['sname'],
-                'Salutation'        => $arrData['salutation'],
-                'Email'             => $arrData['email'],
-                'InterestGroups'    => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp, 'Filter' => $arrFilterDataMailChimp),
-                'Subscribed'        => $this->core->sysConfig->mail_chimp->mappings->subscribe,
-                'ReplaceInterests'  => false
-              ));
-            }catch(MailChimpException $mce){
-              if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
-                $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
+          
+          //Update Userdata
+          $blnUpdate = false; //Update an old user or insert a new one
+          if(isset($arrData['email']) && $arrData['email'] != ''){
+            $objSubscriber = $this->getModelSubscribers()->loadByEmail($arrData['email']);
+            if(count($objSubscriber) > 0){
+              //Check Preconditions
+              if($objSubscriber->current()->hardbounce == $this->core->sysConfig->mail_chimp->mappings->hardbounce){
+                require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/HardBounceException.php');
+                throw new HardBounceException($arrData['email']);
               }
-              throw $mce;
+              if($objSubscriber->current()->dirty == $this->core->sysConfig->mail_chimp->mappings->dirty){
+                require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/DirtyException.php');
+                throw new DirtyException($arrData['email']);
+              }
+              if($objSubscriber->current()->subscribed == $this->core->sysConfig->mail_chimp->mappings->unsubscribe){
+                $arrWarnings[] = $arrData['email'].' was unsubscribed!';
+              }
+              $this->core->logger->warn('Subscriber '.$arrData['email'].' already exists! User will be updated.');
+              $intSubscriberId = $objSubscriber->current()->id;
+              $blnUpdate = true;
+              $this->getModelSubscribers()->getSubscriberTable()->update($arrData, $this->core->dbh->quoteInto('email = ?', $arrData['email']));
+              $intSubscriberUpdated++;
+            }else{
+              $intSubscriberId = $this->getModelSubscribers()->getSubscriberTable()->insert($arrData);
+              $intSubscriberAdded++;
+            }
+            //Update Interests
+            $arrPortalDataMailChimp = array();
+            foreach($arrPortals as $intPortalId){
+              //Insert Data in database
+              $arrPortalData = array('idSubscribers' => $intSubscriberId, 'idRelation' => $intPortalId, 'idFields' => self::PORTALS_ID);
+              $objTable = $this->getModelGenericData()->getGenericTable('subscriber-'.self::SUBSCRIBER_GENERIC_FORM_ID.'-1-InstanceMultiFields');
+              $objTable->insert($arrPortalData);
+              //Create array for mailchimp
+              $objRootLevel = $this->getModelRootLevels()->loadRootLevelTitle($intPortalId, 2);
+              $arrPortalDataMailChimp[] = array('id' => $intPortalId, 'title' => $objRootLevel->current()->title);
+            }
+            $arrInterestDataMailChimp = $this->updateInterests($arrInterestGroups, $intSubscriberId, self::INTEREST_GROUPS_ID);
+            $arrFilterDataMailChimp = $this->updateInterests($arrFilter, $intSubscriberId, self::FILTER_ID);
+            if($blnUpdate){
+              //If subscriber already existed only update interestgroups
+              try{
+                $this->objCommandChain->runCommand('updated', array(
+                  'Id'                => $intSubscriberId,
+                  'FirstName'         => $arrData['fname'],
+                  'LastName'          => $arrData['sname'],
+                  'Salutation'        => $arrData['salutation'],
+                  'Email'             => $arrData['email'],
+                  'InterestGroups'    => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp, 'Filter' => $arrFilterDataMailChimp),
+                  'Subscribed'        => $this->core->sysConfig->mail_chimp->mappings->subscribe,
+                  'HardBounce'		=> $objSubscriber->current()->hardbounce,
+                  'ReplaceInterests'  => false
+                ));
+              }catch(MailChimpException $mce){
+                if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
+                  $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
+                }
+                throw $mce;
+              }
+            }else{
+              try{
+                $this->objCommandChain->runCommand('added', array(
+                  'Id'              => $intSubscriberId,
+                  'FirstName'       => (isset($arrData['fname'])) ? $arrData['fname'] : '',
+                  'LastName'        => (isset($arrData['sname'])) ? $arrData['sname'] : '',
+                  'Salutation'      => (isset($arrData['salutation'])) ? $arrData['salutation'] : '',
+                  'Email'           => (isset($arrData['email'])) ? $arrData['email'] : '',
+                  'Subscribed'      => $this->core->sysConfig->mail_chimp->mappings->subscribe,
+                  'InterestGroups'  => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp),
+                ));
+              }catch(MailChimpException $mce){
+                if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
+                  $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
+                }
+                throw $mce;
+              }
             }
           }else{
-            try{
-              $this->objCommandChain->runCommand('added', array(
-                'Id'              => $intSubscriberId,
-                'FirstName'       => (isset($arrData['fname'])) ? $arrData['fname'] : '',
-                'LastName'        => (isset($arrData['sname'])) ? $arrData['sname'] : '',
-                'Salutation'      => (isset($arrData['salutation'])) ? $arrData['salutation'] : '',
-                'Email'           => (isset($arrData['email'])) ? $arrData['email'] : '',
-                'Subscribed'      => $this->core->sysConfig->mail_chimp->mappings->subscribe,
-                'InterestGroups'  => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp),
-              ));
-            }catch(MailChimpException $mce){
-              if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
-                $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-              }
-              throw $mce;
-            }
+            $blnEmailAddress = false;
           }
-        }else{
-          $blnEmailAddress = false;
+        }catch(InvalidAddressException $exc){
+          $arrErrors[] = $exc->getEmail().' is not a valid E-Mail Address!';
+        }catch(HardBounceException $exc){
+          $arrErrors[] = $exc->getEmail().' is hard bounced!';
+        }catch(DirtyException $exc){
+          $arrErrors[] = $exc->getEmail().' has changed!';
         }
       }
     }
     //Delete the file in the end
     fclose($fh);
     unlink(GLOBAL_ROOT_PATH.'/uploads/subscribers/'.$strFileId);
+    
+    if(class_exists('GearmanClient') && !empty(Zend_Auth::getInstance()->getIdentity()->email)){
+      $client= new GearmanClient();
+      $client->addServer();
+      $workload = new stdClass();
+      $workload->email = Zend_Auth::getInstance()->getIdentity()->email;
+      $workload->errors = $arrErrors;
+      $workload->warnings = $arrWarnings;
+      $client->doLowBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_done', serialize($workload));
+    }
+    
     //Return a success message
     echo str_replace('%t', $intSubscriberUpdated, str_replace('%s', $intSubscriberAdded, $this->core->translate->_('Import_success_message')));
     if(!$blnEmailAddress){

@@ -66,6 +66,8 @@ class GearmanReplicationMailChimp {
   private static $job;
   private static $workload;
   
+  private static $exceptions = array();
+  
   /**
    * init
    * @author Thomas Schedler <tsh@massiveart.com>
@@ -103,10 +105,12 @@ class GearmanReplicationMailChimp {
         $client->addServer();
         $client->doHighBackground(self::$job->functionName(), serialize(self::$workload));
       }else{
-        self::sendExceptionMail($exc);
+        self::$exceptions[] = $exc;
+        //self::sendExceptionMail($exc);
       }      
     }else{
-      self::sendExceptionMail($exc);
+      self::$exceptions[] = $exc;
+      //self::sendExceptionMail($exc);
     }
   }
   
@@ -151,6 +155,8 @@ class GearmanReplicationMailChimp {
       }
       
       echo date('Y-m-d H:i:s')." INFO - added\n";
+    }catch(SubscriberException $se){
+      self::handleException($se);
     }catch(MailChimpException $mce){
       self::handleException($mce);
     }
@@ -171,6 +177,8 @@ class GearmanReplicationMailChimp {
       $objMailChimpList->update($objMember, $blnSubscribe);
       
       echo date('Y-m-d H:i:s')." INFO - updated\n";
+    }catch(SubscriberException $se){
+      self::handleException($se);
     }catch(MailChimpException $mce){
       self::handleException($mce);
     }
@@ -202,12 +210,38 @@ class GearmanReplicationMailChimp {
         
     try{
 
-      $email = $job->workload();
+      $data = unserialize($job->workload());
+      echo json_encode($data);
+      
+      $email = $data->email;
       
       $mail = new Zend_Mail('utf-8');
       
       $mail->setSubject('MailChimp Import Done');
-      $mail->setBodyHtml('Dear ZOOLU-User,<br/>your last import was successfully transferred to MailChimp.<br/>RockOn, your ZOOLU team');
+      
+      echo json_encode(self::$exceptions);
+      
+      if(count($data->errors) == 0 && count($data->warnings) == 0){
+        $mail->setBodyHtml('Dear ZOOLU-User,<br/>your last import was successfully transferred to MailChimp.<br/>RockOn, your ZOOLU team');
+      }else{
+        $strBody = 'Dear ZOOLU-User,<br/>your last import produced some errors:<br/>';
+        //Add Errors and Warnings
+        $strBody .= '<h2>Errors</h2>';
+        $strBody .= '<ul>';
+        foreach($data->errors as $error){
+          $strBody .= '<li>'.$error.'</li>';
+        }
+        $strBody .= '</ul>';
+
+        $strBody .= '<h2>Warnings</h2>';
+        $strBody .= '<ul>';
+        foreach($data->warnings as $warning){
+          $strBody .= '<li>'.$warning.'</li>';
+        }
+        $strBody .= '</ul>';
+        $strBody .= '<br/>RockOn, your ZOOLU team';
+        $mail->setBodyHtml($strBody);
+      }
       
       $mail->setFrom('noreply@zoolucms.com', 'Noreply');
       
@@ -218,6 +252,7 @@ class GearmanReplicationMailChimp {
       
       $mail->send();
     
+      self::$exceptions = array();
       echo date('Y-m-d H:i:s')." INFO - done\n";
     }catch(Exception $mce){
       self::handleException($mce);

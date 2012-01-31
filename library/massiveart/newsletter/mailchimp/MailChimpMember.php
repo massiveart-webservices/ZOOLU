@@ -89,6 +89,16 @@ class MailChimpMember {
   private $strSalutation;
   
   /**
+   * @var boolean
+   */
+  private $blnSubscribed;
+  
+  /**
+   * @var boolean
+   */
+  private $blnHardBounce;
+  
+  /**
    * MailChimp Member construct
    * @param array $arrProperties
    * @return MailChimpMember
@@ -217,6 +227,23 @@ class MailChimpMember {
    */
   public function getSubscribed(){
     return $this->intSubscribed;
+  }
+  
+  /**
+  * @return MailChimpMember
+  * @author Daniel Rotter <daniel.rotter@massiveart.com>
+  */
+  public function setHardBounce($blnHardbounce){
+    $this->blnHardBounce = $blnHardbounce;
+    return $this;
+  }
+  
+  /**
+   * @return MailChimpMember
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   */
+  public function getHardBounce(){
+    return $this->blnHardBounce;
   }
   
   /**
