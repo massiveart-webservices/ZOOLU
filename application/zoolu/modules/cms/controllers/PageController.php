@@ -634,6 +634,83 @@ class Cms_PageController extends AuthControllerAction {
       exit();
     }
   }
+  
+  public function exportdynformentriesAction(){
+    $this->core->logger->debug('cms->controllers->page->exportdynformentriesAction()');
+  
+    $this->_helper->viewRenderer->setNoRender();
+  
+    $strExport = '';
+    $objEntries = $this->getModelPages()->loadDynFormEntries($this->getRequest()->getParam('pageId'), false, $this->getRequest()->getParam('from'), $this->getRequest()->getParam('to'), $this->getRequest()->getParam('startdate'), $this->getRequest()->getParam('enddate'));
+    
+    if($this->getRequest()->getParam('headline')){
+      $objRow = json_decode($objEntries->current()->content, true);
+      foreach($objRow as $key => $value){
+        $strExport .= $key.';';
+      }
+      $strExport .= '
+';
+    }
+
+    foreach($objEntries as $objRow){
+      $objEntry = json_decode($objRow->content, true);
+      foreach($objEntry as $value){
+        if(is_array($value)){
+          $value = implode(',', $value);
+        }
+        $strExport .= $value.';';
+      }
+      $strExport .= '
+';
+    }
+  
+    // fix for IE catching or PHP bug issue
+    header("Pragma: public");
+    header("Expires: 0"); // set expiration time
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    // browser must download file from server instead of cache
+  
+    // force download dialog
+    header("Content-Type: application/force-download; charset=utf-8");
+    header("Content-Type: application/octet-stream; charset=utf-8");
+    header("Content-Type: application/csv; charset=utf-8");
+  
+    // Set filename
+    header("Content-Disposition: attachment; filename=\"formular".date('Y-m-d').".csv\"");
+  
+    /**
+     * The Content-transfer-encoding header should be binary, since the file will be read
+     * directly from the disk and the raw bytes passed to the downloading computer.
+     * The Content-length header is useful to set for downloads. The browser will be able to
+     * show a progress meter as a file downloads. The content-lenght can be determines by
+     * filesize function returns the size of a file.
+     */
+    header("Content-Transfer-Encoding: binary");
+  
+    echo $strExport;
+  }
+  
+  /**
+   * formentrieslistAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function formentrieslistAction(){
+    $this->core->logger->debug('cms->controllers->PageController->formentrieslistAction()');
+    
+    $objEntries = $this->getModelPages()->loadDynFormEntries($this->getRequest()->getParam('id'), true);
+    
+    $objAdapter = new Zend_Paginator_Adapter_DbSelect($objEntries);
+    $objPaginator = new Zend_Paginator($objAdapter);
+    $objPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
+    $objPaginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
+    $objPaginator->setView($this->view);
+    
+    $objEntries = $this->getModelPages()->loadDynFormEntries($this->getRequest()->getParam('id'), false);
+    
+    $this->view->assign('entries', $objEntries);
+    $this->view->assign('paginator', $objPaginator);
+  }
 
   /**
    * changetemplateAction

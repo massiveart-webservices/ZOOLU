@@ -125,6 +125,7 @@ class Model_Categories {
      */
     $objSelect->from('categories');
     $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = '.$intLanguageId, array('title'));
+    $objSelect->joinLeft('categoryCodes', 'categoryCodes.idCategories = categories.id AND categoryCodes.idLanguages = '.$intLanguageId, array('code'));
     $objSelect->where('categories.id = ?', $intElementId);
     
     return $this->getCategoriesTable()->fetchAll($objSelect);    
