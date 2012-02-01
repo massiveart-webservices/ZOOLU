@@ -125,5 +125,10 @@ Massiveart.Page = Class.create({
         myForm.cancleFormSaveLoader();
       }.bind(this)
     });
+  },
+  
+  exportDynFormEntries: function(idPage, from, to, headline, startdate, enddate){
+    var url = '/zoolu/cms/page/exportdynformentries?pageId='+idPage+'&from='+from+'&to='+to+'&headline='+headline+'&startdate='+startdate+'&enddate='+enddate;
+    location.href = url;
   }
 });

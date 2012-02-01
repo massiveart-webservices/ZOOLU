@@ -684,6 +684,15 @@ function get_form($strFormId = 'contactForm', $intRootLevelId = 0, $intPageId = 
 }
 
 /**
+ * get_form
+ * @return string $strHtmlOutput
+ * @author Cornelius Hansjakob <cha@massiveart.com> 
+ */
+function get_dyn_form($strFormId = 'contactForm', $intRootLevelId = 0, $intPageId = 0, $arrAddonFields = array()){
+  echo getPageHelperObject()->getDynForm($strFormId, $intRootLevelId, $intPageId, $arrAddonFields);
+}
+
+/**
  * get_form_success
  * @return string $strHtmlOutput
  * @author Cornelius Hansjakob <cha@massiveart.com> 

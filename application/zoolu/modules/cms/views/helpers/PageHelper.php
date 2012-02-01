@@ -54,6 +54,8 @@ class PageHelper {
    */
   private $objViewHelper;
   
+  const NUMBER_OF_ENTRIES = 4;
+  
   /**
    * Constructor 
    * @author Cornelius Hansjakob <cha@massiveart.com>
@@ -356,6 +358,60 @@ class PageHelper {
     }    
     return $strOutput;
     
+  }
+  
+  /**
+   * getFormEntriesList
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   */
+  public function getFormEntriesList($objRowset){
+    $strOutput = '';
+    
+    $strOutput .= '<thead>
+    		<tr>
+    		<th class="topcornerleft"><div>&nbsp;</div></th>';
+    
+    $objFirstRow = current($objRowset->getCurrentItems());
+    $objEntry = json_decode($objFirstRow['content'], true);
+    $arrKeys = array_keys($objEntry);
+    $i = 0;
+    foreach($arrKeys as $strValue){
+      if($i < self::NUMBER_OF_ENTRIES){
+        $strOutput .= '<th class="top"><div>'.$strValue.'</div></th>';
+        $i++;
+      }else{
+        break;
+      }
+    }
+    
+    $strOutput .= '
+    		<th class="top"><div>'.$this->core->translate->_('created').'</div></th>
+    		<th class="topcornerright"><div>&nbsp;</div></th>
+    	</tr>
+    </thead>';
+       
+    foreach($objRowset as $objRow){
+      $objEntry = json_decode($objRow['content'], true);
+      
+      $strOutput .= '<tr class="listrow">
+      	<td style="width:11px;"></td>';
+      $i = 0;
+      foreach($objEntry as $value){
+        if($i < self::NUMBER_OF_ENTRIES){
+          $strOutput .= '<td class="row">'.$value.'</td>';
+          $i++;
+        }else{
+          break;
+        }
+      }
+      $strOutput .= '
+      	<td>'.$objRow['created'].'</td>
+      	<td></td>
+      </tr>';
+    }
+    
+    
+    return $strOutput;
   }
 }
 

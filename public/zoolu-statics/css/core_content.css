@@ -1868,6 +1868,14 @@ video select */
     min-height: 50px;
 }
 
+.tab .tablelist {
+  width: 100%;
+}
+
+.tab ..listfooter {
+  width: 100%;
+}
+
 .tabNavContainer {
     background-color: #666;
     height: 40px;
