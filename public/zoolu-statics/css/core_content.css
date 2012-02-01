@@ -1866,7 +1866,11 @@ video select */
 }
 
 .tab .tablelist {
-  width:100%;
+  width: 100%;
+}
+
+.tab ..listfooter {
+  width: 100%;
 }
 
 .tabNavContainer {
