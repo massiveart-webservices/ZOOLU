@@ -403,6 +403,15 @@ class Cms_OverlayController extends AuthControllerAction {
       $this->view->assign('return', $objReturn); 
     }
   }
+  
+  /**
+   * exportdynformAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function exportdynformAction(){
+    
+  }
 
   /**
    * loadRootNavigation

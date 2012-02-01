@@ -1223,6 +1223,7 @@ class Page {
       $objField->display = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('display')->getInstanceValue($intRegionInstanceId))->current();
       $objField->options = preg_split( '/\r\n|\r|\n/', $objMyMultiRegion->getField('options')->getInstanceValue($intRegionInstanceId));
       $objField->maxlength = $objMyMultiRegion->getField('maxlength')->getInstanceValue($intRegionInstanceId);
+      $objField->other = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('other')->getInstanceValue($intRegionInstanceId))->current();
       
       $arrFields[] = $objField;
     }

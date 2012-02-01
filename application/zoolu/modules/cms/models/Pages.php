@@ -96,6 +96,11 @@ class Model_Pages {
   protected $objPageGroupsTable;
   
   /**
+   * @var Model_Table_PageDynForms
+   */
+  protected $objPageDynFormsTable;
+  
+  /**
    * @var Model_Table_Groups
    */
   protected $groupsTable;
@@ -1932,6 +1937,40 @@ class Model_Pages {
     
     return $this->objPageTable->fetchAll($objSelect);
   }
+  
+  /**
+   * loadDynFormEntries
+   * @param number $intElementId
+   * @param number $intLanguageId
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   */
+  public function loadDynFormEntries($intElementId, $blnReturnSelect = false, $intFrom = 0, $intTo = 0, $strStartDate = '', $strEndDate = ''){
+    $this->core->logger->debug('cms->models->Model_Pages->loadDynFormEntries('.$intElementId.')');
+    
+    $objSelect = $this->getPageDynFormTable()->select()->setIntegrityCheck(false);
+    
+    $objSelect->from('pageDynForm', array('id', 'content', 'created'))
+              ->where('idPages = ?', $intElementId);
+    if($strStartDate != '' && $strEndDate != ''){
+      $strStartDate = explode('.', $strStartDate);
+      $strStartDate = $strStartDate[2].'-'.$strStartDate[1].'-'.$strStartDate[0];
+      $strEndDate = explode('.', $strEndDate);
+      $strEndDate = $strEndDate[2].'-'.$strEndDate[1].'-'.$strEndDate[0];
+      
+      $objSelect->where('created >= ?', $strStartDate);
+      $objSelect->where('created <= ?', $strEndDate);
+    }
+    $objSelect->order('created DESC');
+    if($intFrom != 0 && $intTo != 0){
+     $objSelect->limit($intTo-$intFrom+1, $intFrom - 1); 
+    }
+    
+    if(!$blnReturnSelect){
+      return $this->getPageDynFormTable()->fetchAll($objSelect);
+    }else{
+      return $objSelect;
+    }
+  }
 
   public function loadProperties($intElementId, $intLanguageId){
     $this->core->logger->debug('cms->models->Model_Pages->countPageProperties('.$intElementId.', '.$intLanguageId.')');
@@ -2109,6 +2148,22 @@ class Model_Pages {
     }
   
     return $this->objPageGroupsTable;
+  }
+  
+  /**
+  * getPageDynFormTable
+  * @return Zend_Db_Table_Abstract
+  * @author Thomas Schedler <tsh@massiveart.com>
+  * @version 1.0
+  */
+  public function getPageDynFormTable(){
+  
+    if($this->objPageDynFormsTable === null) {
+      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'cms/models/tables/PageDynForms.php';
+      $this->objPageDynFormsTable = new Model_Table_PageDynForms();
+    }
+  
+    return $this->objPageDynFormsTable;
   }
   
   /**

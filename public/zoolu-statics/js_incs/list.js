@@ -67,6 +67,33 @@ Massiveart.List = Class.create({
   },
   
   /**
+   * getListPage
+   */
+  getListDynFormEntries: function(id, page, url){
+    if(myNavigation){      
+      
+      if(typeof(page) != 'undefined' && page > 0){ 
+        this.page = page;
+      }
+      
+      // wait
+      setTimeout(function(){ return true; }, 10);
+      
+      new Ajax.Updater(id, url, {
+        parameters: { 
+          id: $F('id'),
+          page: this.page, 
+          itemsPerPage: this.ItemsPerPage,
+        },      
+        evalScripts: true,     
+        onComplete: function(transport) {
+          
+        }.bind(this)
+      });
+    }
+  },
+  
+  /**
    * backFilter
    */
   backFilter: function(){
@@ -262,7 +289,7 @@ Massiveart.List = Class.create({
             $('buttonCancel').observe('click', function(){
               myOverlay.close();
             });
-            $('overlayButtons').show();
+            $('overlayButtons').hide();
             myCore.putCenter('overlayGenContentWrapper');
             myCore.removeBusyClass('overlayGenContent');          
           }.bind(this)

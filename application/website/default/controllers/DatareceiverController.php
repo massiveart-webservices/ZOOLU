@@ -353,12 +353,20 @@ class DatareceiverController extends Zend_Controller_Action {
   private function getEmailBody($blnDynForm = false){
     $strHtmlBody = '';
       foreach($this->arrFormData as $key => $value){
+        $arrKey = explode('_', $key);
         if($value != ''){
           if(is_array($value)){
+            //Replace other in arrays
+            if(is_array($value)){
+              $nr = array_search('other', $value);
+              if($nr !== false){
+                $value[$nr] = $this->arrFormData[$arrKey[0].'_'.$arrKey[1].'_other'];
+              }
+            }
             $value = implode(', ', $value);
-            $value = substr($value, 0, strlen($value) - 2);
+            //$value = substr($value, 0, strlen($value) - 2);
           }
-       	  if($key == 'idRootLevels' || $key == 'idPage' || $key == 'subject' || $key == 'blnDynForm' || preg_match('/type$/', $key)){
+       	  if($key == 'idRootLevels' || $key == 'idPage' || $key == 'subject' || $key == 'blnDynForm' || preg_match('/type$/', $key) || preg_match('/other$/', $key)){
        	    //Do nothing
        	  }else if($key == 'country' && array_key_exists('country', $this->arrFormDataReplacer)){
             $strHtmlBody .= '
@@ -366,7 +374,9 @@ class DatareceiverController extends Zend_Controller_Action {
 
        	  }else{
        	    if($blnDynForm){
-       	      $arrKey = explode('_', $key);
+       	      if($value == 'other'){
+       	        $value = $this->arrFormData[$arrKey[0].'_'.$arrKey[1].'_other'];
+       	      }
        	      $strHtmlBody .= '<strong>'.$arrKey[0].':</strong>'.$value.'<br />';
        	    }else{
               $strHtmlBody .= '
@@ -528,12 +538,23 @@ class DatareceiverController extends Zend_Controller_Action {
   private function convertFormData($arrFormData){
     $arrValues = array();
     foreach($arrFormData as $key => $value){
-      if($key == 'idRootLevels' || $key == 'idPage' || preg_match('/test$/', $key)){
+      if($key == 'idRootLevels' || $key == 'idPage' || preg_match('/test$/', $key) || preg_match('/other$/', $key)){
         //Do nothing
       }else{
         $key = explode('_', $key);
-        $key = $key[0];
-        $arrValues[$key] = $value;
+        $newkey = $key[0];
+        if($value == 'other'){
+          $arrValues[$newkey] = $arrFormData[$key[0].'_'.$key[1].'_other'];
+        }else{
+          $arrValues[$newkey] = $value;
+        }
+        //Replace other in arrays
+        if(is_array($value)){
+          $nr = array_search('other', $value);
+          if($nr !== false){
+            $arrValues[$newkey][$nr] = $arrFormData[$key[0].'_'.$key[1].'_other'];
+          }
+        }
       }
     }
     
