@@ -219,7 +219,16 @@ class Webhooks_ContactsController extends Zend_Controller_Action {
    */
   private function cleanedSubscriber($arrWebHookData) {
     $this->core->logger->debug('webhooks.contacts.cleanedSubscriber()');
-    // TODO
+    
+    $objSubscribers = $this->getModelSubscribers()->loadByEmail($arrWebHookData['email']);
+    
+    if(count($objSubscribers) > 0) {
+      foreach($objSubscribers as $objSubscriber){
+        $this->getModelSubscribers()->update($objSubscriber->id, array(
+              'hardbounce' => $this->core->sysConfig->mail_chimp->mappings->hardbounce,
+              'dirty' => $this->core->sysConfig->mail_chimp->mappings->dirty));
+      }
+    }
   }
   
   /**
