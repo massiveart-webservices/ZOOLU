@@ -159,7 +159,7 @@ class Model_Subscribers {
     if($blnExtendSelect) {
       $arrValues = array('id', 'salutation', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
     }else{
-      $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
+      $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'hardbounce' => 'cct.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
     }
     
     $objSelect->from(array('s' => 'subscribers'), $arrValues);
@@ -169,6 +169,8 @@ class Model_Subscribers {
     $objSelect->joinLeft(array('cst' => 'categoryTitles'), 'cst.idCategories = cs.id AND cst.idLanguages = '.$this->intLanguageId, array());
     $objSelect->joinLeft(array('cd' => 'categories'), 'cd.id = s.dirty', array());
     $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = '.$this->intLanguageId, array());
+    $objSelect->joinLeft(array('cc' => 'categories'), 'cc.id = s.hardbounce', array());
+    $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.id AND cct.idLanguages = '.$this->intLanguageId, array());
     //Apply rootLevelFilters
     if($intRootLevelFilterId != null){
       foreach($objRootLevelFilterValues as $objRootLevelFilterValue){

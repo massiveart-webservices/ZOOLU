@@ -15,6 +15,7 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
     $super();
     
     this.constRequestSendMessage = '/zoolu/newsletters/newsletter/sendmessage';
+    this.constRequestExportStatistics = '/zoolu/newsletters/newsletter/export';
     this.templateClickStatisticLine2 = new Template('<tr><td>#{0}</td><td>#{1}</td></tr>');
     this.templateClickStatisticHeader2 = new Template('<tr><th>#{0}</th><th>#{1}</th></tr>');
     this.templateClickStatisticLine3 = new Template('<tr><td>#{0}</td><td>#{1}</td><td>#{2}</td></tr>');
@@ -247,8 +248,8 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
         break;
       case this.constTypeBounces:
         dataHeader = {
-          0: myCore.translate.Date,
-          1: myCore.translate.Email
+          0: myCore.translate.Email,
+          1: myCore.translate.Status
         };
         columns = 2;
         break;
@@ -279,6 +280,10 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
     output += '</table>';
     $('overlayNewsletterContent').update(output);
     myCore.putCenter('overlayNewsletterWrapper');
+  },
+  
+  exportStatistics: function(data){
+    location.href = this.constRequestExportStatistics+'?id='+$('id').value+'&data='+data;
   },
   
   /**

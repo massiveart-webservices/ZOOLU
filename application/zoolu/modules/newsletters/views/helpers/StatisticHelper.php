@@ -198,6 +198,7 @@ class StatisticHelper {
                 <a onclick="myForm.showStatisticTable(\'unsubscribes\', \'statUnsubscribes\', false)" href="#">'.$this->core->translate->_('Unsubscribers').'</a>
               </label>
               '.$this->getPercentage($intRecipients, $objCampaign->getUnsubscribeCount()).'
+              <a onclick="myForm.exportStatistics(\'unsubscribes\')" href="#">(CSV)</a>
             </div>
           </div>
           <div class="field-4">
@@ -206,6 +207,7 @@ class StatisticHelper {
                 <a onclick="myForm.showStatisticTable(\'complaints\', \'statComplaints\', false)" href="#">'.$this->core->translate->_('Complaints').'</a>
               </label>
               '.$this->getPercentage($intRecipients, $objCampaign->getComplaintCount()).'
+              <a onclick="myForm.exportStatistics(\'complaints\')" href="#">(CSV)</a>
             </div>
           </div>
           <div class="field-4">
@@ -238,6 +240,7 @@ class StatisticHelper {
                 <a onclick="myForm.showStatisticTable(\'bounces\', \'statBounces\', false)" href="#">'.$this->core->translate->_('Bounce').'</a>
               </label>
               '.$objCampaign->getBounceCount().'
+              <a onclick="myForm.exportStatistics(\'bounces\')" href="#">(CSV)</a>
             </div>
           </div>
           <div class="field-4">

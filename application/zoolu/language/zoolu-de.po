@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-20 20:50+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Cornelius Hansjakob <cornelius.hansjakob@massiveart.com>\n"
+"Last-Translator: Daniel Rotter <daniel.rotter@massiveart.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1342,4 +1342,7 @@ msgstr "Hinzufügen"
 #: application/zoolu/modules/global/views/scripts/navigation/childnavigation.phtml:30
 msgid "New_"
 msgstr "Neu"
+
+msgid "hardbounce"
+msgstr "Hardbounce"
 
