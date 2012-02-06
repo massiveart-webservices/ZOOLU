@@ -143,8 +143,13 @@ class Contacts_SubscriberController extends AuthControllerAction {
     $strSearchValue = (($this->getRequest()->getParam('search') != '') ? $this->getRequest()->getParam('search') : '');
     $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilter', null);
     $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
+    $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
 
-    $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+    if($blnHardBounce){
+      $objSelect = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+    }else{
+      $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+    }
 
     $objAdapter = new Zend_Paginator_Adapter_DbTableSelect($objSelect);
     $objPaginator = new Zend_Paginator($objAdapter);
@@ -173,7 +178,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
     
     $this->view->assign('rootLevelFilters', $objRootLevelFilters);
   }
-  
+
   /**
    * exportlistAction
    * @author Daniel Rotter <daniel.rotter@massiveart.com>
@@ -184,8 +189,14 @@ class Contacts_SubscriberController extends AuthControllerAction {
     
     $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilterId');
     $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
+    $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
     
-    $objRowset = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, '', 'ASC', 'sname', false, true);
+    if($blnHardBounce){
+      $objRowset = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, '', 'ASC', 'sname', false, true);
+    }else{
+      $objRowset = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, '', 'ASC', 'sname', false, true);
+    }
+    
     do{
       unset($objRowset->current()->type);
       unset($objRowset->current()->genericFormId);

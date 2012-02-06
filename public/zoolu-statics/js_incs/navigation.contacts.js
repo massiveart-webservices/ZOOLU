@@ -658,6 +658,58 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
   },
   
   /**
+   * selectSubscribers
+   */
+  selectHardbounces: function(rootLevelId){
+    if(!this.actionMenu || this.actionMenu.isOpen == false) {
+      if($('importList')) $('importList').show();
+      if($('exportList')) $('exportList').show();
+        
+      if(typeof(viewType) == 'undefined'){
+        viewType = 'list';
+      }
+      
+      if(typeof(rootLevelFilter) == 'undefined'){
+        rootLevelFilter = null;
+      }
+      
+      this.rootLevelId = rootLevelId;
+      
+      $(this.genFormContainer).hide();
+      $(this.genFormFunctions).hide();
+      
+      if($('naviitem'+rootLevelId)){
+        this.makeSelected('naviitem'+rootLevelId);
+        if($(this.preSelectedNaviItem) && ('naviitem'+rootLevelId) != this.preSelectedNaviItem){ 
+          this.makeDeselected(this.preSelectedNaviItem);
+          this.makeDeselected(this.preSelectedSubNaviItem);
+        }      
+        this.preSelectedNaviItem = 'naviitem'+rootLevelId;
+      }else if($('subnaviitem'+rootLevelId)){
+        this.makeSelected('subnaviitem'+rootLevelId);
+        if($(this.preSelectedSubNaviItem) && ('subnaviitem'+rootLevelId) != this.preSelectedSubNaviItem){ 
+          this.makeDeselected(this.preSelectedSubNaviItem);
+        }
+        this.preSelectedSubNaviItem = 'subnaviitem'+rootLevelId;
+      }
+      
+      new Ajax.Updater('naviitem'+this.rootLevelId+'menu', this.constRequestSubscriberFilter, {
+        parameters: {
+          rootLevelId: this.rootLevelId
+        },
+        evalScripts: true,
+        onComplete: function(){
+          
+        }.bind(this)
+      });
+      
+      myList.sortColumn = '';
+      myList.sortOrder = '';
+      myList.getListPage(1,0,true);
+    }
+  },
+  
+  /**
    * changeViewType
    */
   changeViewType: function(rootLevelId, rootLevelGroupId, url){    

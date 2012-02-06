@@ -245,6 +245,56 @@ class Model_Subscribers {
   }
   
   /**
+  * loadByRootLevelFilter
+  * @param number $intRootLevelId
+  * @param number $intRootLevelFilterId
+  * @param string $strSearchValue
+  * @param string $strSortOrder
+  * @param string $strOrderColumn
+  * @param boolean $blnReturnSelect
+  * @return Zend_Db_Table_Select | Zend_Db_Table_Rowset
+  */
+  public function loadHardbounced($intRootLevelId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false){
+    $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByRootLevelFilter('.$intRootLevelId.')');
+  
+    $objTableFields = new Zend_Db_Table('fields');
+  
+    //Build the query
+    $objSelect = $this->getSubscriberTable()->select();
+    $objSelect->setIntegrityCheck(false);
+  
+    $arrValues = array();
+    if($blnExtendSelect) {
+      $arrValues = array('id', 'salutation', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
+    }else{
+      $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'hardbounce' => 'cct.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
+    }
+  
+    $objSelect->from(array('s' => 'subscribers'), $arrValues);
+    $objSelect->joinInner(array('gf' => 'genericForms'), 'gf.id = s.idGenericForms', array('gf.genericFormId', 'gf.version'));
+    $objSelect->joinLeft(array('u' => 'users'), 'u.id = s.idUsers', array('s.changed'));
+    $objSelect->joinLeft(array('cs' => 'categories'), 'cs.id = s.subscribed', array());
+    $objSelect->joinLeft(array('cst' => 'categoryTitles'), 'cst.idCategories = cs.id AND cst.idLanguages = '.$this->intLanguageId, array());
+    $objSelect->joinLeft(array('cd' => 'categories'), 'cd.id = s.dirty', array());
+    $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = '.$this->intLanguageId, array());
+    $objSelect->joinLeft(array('cc' => 'categories'), 'cc.id = s.hardbounce', array());
+    $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.id AND cct.idLanguages = '.$this->intLanguageId, array());
+    $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
+    $objSelect->where('s.hardbounce = ?', $this->core->sysConfig->mail_chimp->mappings->hardbounce);
+    if($strSearchValue != ''){
+      $objSelect->where('s.fname LIKE ?', '%'.$strSearchValue.'%');
+      $objSelect->orWhere('s.sname LIKE ?', '%'.$strSearchValue.'%');
+    }
+    $objSelect->order($strOrderColumn.' '.strtoupper($strSortOrder));
+    $this->core->logger->debug(strval($objSelect));
+    if($blnReturnSelect){
+      return $objSelect;
+    }else{
+      return $this->getSubscriberTable()->fetchAll($objSelect);
+    }
+  }
+  
+  /**
    * loadProperties
    * @param integer $intElementId
    * @return Zend_Db_Table_Rowset_Abstract

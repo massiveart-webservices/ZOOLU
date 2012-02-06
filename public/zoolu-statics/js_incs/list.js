@@ -18,6 +18,8 @@ Massiveart.List = Class.create({
     this.sortOrder = '';
     this.searchValue = '';
     
+    this.hardbounced = false;
+    
     if($('search')){
       $('search').observe('keypress', function(event){
         if(event.keyCode == Event.KEY_RETURN) {
@@ -30,17 +32,24 @@ Massiveart.List = Class.create({
   /**
    * getListPage
    */
-  getListPage: function(page, rootLevelFilter){
+  getListPage: function(page, rootLevelFilter, hardbounced){ //FIXME hardbounce variable only as quick & dirty solution for subscriber hard bounce list!
     if(myNavigation){      
       
       if(typeof(page) != 'undefined' && page > 0){ 
         this.page = page;
       }
       
+      if(typeof(hardbounced) == 'undefined'){
+        hardbounced = false;
+      }
+      this.hardbounced = hardbounced;
+      
       // wait
       setTimeout(function(){ return true; }, 10);
       
-      new Ajax.Updater(myNavigation.genListContainer, myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/list', {
+      var ajaxAction = myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/list';
+      
+      new Ajax.Updater(myNavigation.genListContainer, ajaxAction, {
         parameters: { 
       	  rootLevelId: myNavigation.rootLevelId,
       	  folderId: myNavigation.currItemId,
@@ -50,7 +59,8 @@ Massiveart.List = Class.create({
       	  sort: this.sortOrder,
       	  search: this.searchValue,
       	  currLevel: myNavigation.currLevel,
-      	  rootLevelFilter: rootLevelFilter
+      	  rootLevelFilter: rootLevelFilter,
+      	  hardbounced: this.hardbounced
       	},      
         evalScripts: true,     
         onComplete: function(transport) {
@@ -236,6 +246,7 @@ Massiveart.List = Class.create({
     
     var url = myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/exportlist?rootLevelId='+rootLevelId;
     if(rootLevelFilterId = '') url = url + '&rootLevelFilterId='+rootLevelFilterId;
+    else if(this.hardbounced) url = url + '&hardbounced=true';
     location.href = url;
   },
   

@@ -211,15 +211,12 @@ class GearmanReplicationMailChimp {
     try{
 
       $data = unserialize($job->workload());
-      echo json_encode($data);
       
       $email = $data->email;
       
       $mail = new Zend_Mail('utf-8');
       
       $mail->setSubject('MailChimp Import Done');
-      
-      echo json_encode(self::$exceptions);
       
       if(count($data->errors) == 0 && count($data->warnings) == 0){
         $mail->setBodyHtml('Dear ZOOLU-User,<br/>your last import was successfully transferred to MailChimp.<br/>RockOn, your ZOOLU team');
