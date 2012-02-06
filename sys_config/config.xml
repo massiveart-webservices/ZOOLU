@@ -96,8 +96,8 @@
       <adapter>Pdo_Mysql</adapter>
       <params>
         <host>localhost</host>
-        <username>zoolu-default</username>
-        <password>zoolu</password>
+        <username>zoolu</username>
+        <password>qDa51wfCVnhG#17</password>
         <dbname>zo-newsletter</dbname>
       </params>
     </database>
