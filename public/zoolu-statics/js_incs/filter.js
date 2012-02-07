@@ -90,7 +90,7 @@ Massiveart.Filter = Class.create({
   updateNavigation: function(){
     new Ajax.Updater('naviitem'+myNavigation.rootLevelId+'menu', '/zoolu/contacts/subscriber/listfilter', {
       parameters: {
-        rootLevelId: myNavigation.rootLevelId,
+        rootLevelId: myNavigation.rootLevelId
       },
       evalScripts: true,
       onComplete: function(){

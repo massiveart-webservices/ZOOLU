@@ -242,7 +242,7 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
       case this.constTypeComplaints:
         dataHeader = {
           0: myCore.translate.Date,
-          1: myCore.translate.Email,
+          1: myCore.translate.Email
         };
         columns = 2;
         break;
