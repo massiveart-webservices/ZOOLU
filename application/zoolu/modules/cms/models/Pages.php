@@ -188,7 +188,7 @@ class Model_Pages {
     $objSelect = $this->getPageTable()->select();
     $objSelect->setIntegrityCheck(false);
 
-    $objSelect->from('pages', array('id', 'pageId', 'relationId' => 'pageId', 'version', 'pageProperties.idPageTypes', 'isStartPage', 'pageProperties.showInNavigation', 'pageProperties.idDestination', 'pageProperties.hideInSitemap', 'idParent', 'idParentTypes', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.idStatus', 'pageProperties.creator'));
+    $objSelect->from('pages', array('id', 'pageId', 'relationId' => 'pageId', 'version', 'pageProperties.idPageTypes', 'isStartPage', 'pageProperties.showInNavigation', 'pageProperties.idDestination', 'pageProperties.hideInSitemap', 'pageProperties.showInWebsite', 'pageProperties.showInTablet', 'pageProperties.showInMobile', 'idParent', 'idParentTypes', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.idStatus', 'pageProperties.creator'));
     $objSelect->joinLeft('pageTitles', 'pages.pageId = pageTitles.pageId', array('title'));
     $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
     $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = pageProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
@@ -314,6 +314,9 @@ class Model_Pages {
                            'showInNavigation' => $objGenericSetup->getShowInNavigation(),
                            'idDestination'    => $objGenericSetup->getDestinationId(),
                            'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
+                           'showInWebsite'    => $objGenericSetup->getShowInWebsite(),
+                           'showInTablet'     => $objGenericSetup->getShowInTablet(),
+                           'showInMobile'     => $objGenericSetup->getShowInMobile(),
                            'idUsers'          => $intUserId,
                            'creator'          => $objGenericSetup->getCreatorId(),
                            'publisher'        => $intUserId,
@@ -352,6 +355,9 @@ class Model_Pages {
                                                                         'showInNavigation' => $objGenericSetup->getShowInNavigation(),
                                                                         'idDestination'    => $objGenericSetup->getDestinationId(),
                                                                         'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
+                                                                        'showInWebsite'	   => $objGenericSetup->getShowInWebsite(),
+                                                                        'showInTablet'	   => $objGenericSetup->getShowInTablet(),
+                                                                        'showInMobile'	   => $objGenericSetup->getShowInMobile(),
                                                                         'idUsers'          => $intUserId,
                                                                         'creator'          => $objGenericSetup->getCreatorId(),
                                                                         'idStatus'         => $objGenericSetup->getStatusId(),
@@ -674,7 +680,7 @@ class Model_Pages {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function loadItems($mixedType, $intParentId, $intCategoryId = 0, $intLabelId = 0, $intEntryNumber = 0, $intSortTypeId = 0, $intSortOrderId = 0, $intEntryDepthId = 0, $arrPageIds = array(), $blnOnlyItems = false, $blnOnlyShowInNavigation = false){
+  public function loadItems($mixedType, $intParentId, $intCategoryId = 0, $intLabelId = 0, $intEntryNumber = 0, $intSortTypeId = 0, $intSortOrderId = 0, $intEntryDepthId = 0, $arrPageIds = array(), $blnOnlyItems = false, $blnOnlyShowInNavigation = false, $blnFilterDisplayEnvironment = true){
     $this->core->logger->debug('cms->models->Model_Pages->loadItems('.$intParentId.','.$intCategoryId.','.$intLabelId.','.$intEntryNumber.','.$intSortTypeId.','.$intSortOrderId.','.$intEntryDepthId.','.$arrPageIds.')');
 
     if(!is_array($mixedType)){
@@ -746,7 +752,7 @@ class Model_Pages {
     if($intEntryNumber > 0 && $intEntryNumber != ''){
       $strSqlLimit = ' LIMIT '.$intEntryNumber;
     }
-
+    
     $strPageFilter = '';
     $strPublishedFilter = '';
     if(!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)){
@@ -754,6 +760,40 @@ class Model_Pages {
       $now = date('Y-m-d H:i:s', $timestamp);
       $strPageFilter = ' AND pageProperties.idStatus = '.$this->core->sysConfig->status->live;
       $strPublishedFilter = ' AND pageProperties.published <= \''.$now.'\'';
+    }
+    
+    $strDisplayPageFilter = ' AND ';
+    if($blnFilterDisplayEnvironment){
+      if($blnFilterDisplayEnvironment){
+        switch($this->core->strDisplayType){
+          case $this->core->sysConfig->display_type->website:
+            $strDisplayPageFilter .= 'pageProperties.showInWebsite = 1';
+            break;
+          case $this->core->sysConfig->display_type->tablet:
+            $strDisplayPageFilter .= 'pageProperties.showInTablet = 1';
+            break;
+          case $this->core->sysConfig->display_type->mobile:
+            $strDisplayPageFilter .= 'pageProperties.showInMobile = 1';
+            break;
+        }
+      }
+    }
+    
+    $strDisplayFolderFilter = ' AND ';
+    if($blnFilterDisplayEnvironment){
+      if($blnFilterDisplayEnvironment){
+        switch($this->core->strDisplayType){
+          case $this->core->sysConfig->display_type->website:
+            $strDisplayFolderFilter .= 'folderProperties.showInWebsite = 1';
+            break;
+          case $this->core->sysConfig->display_type->tablet:
+            $strDisplayFolderFilter .= 'folderProperties.showInTablet = 1';
+            break;
+          case $this->core->sysConfig->display_type->mobile:
+            $strDisplayFolderFilter .= 'folderProperties.showInMobile = 1';
+            break;
+        }
+      }
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT DISTINCT id, plId, genericFormId, version, plGenericFormId, plVersion,
@@ -763,8 +803,12 @@ class Model_Pages {
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl, 
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
                                             pageProperties.created, pageProperties.changed, pageProperties.published, folders.sortPosition, folders.sortTimestamp, pageTargets.target
-                                          FROM folders, pages
-                                            INNER JOIN pageProperties ON 
+                                          FROM folders
+                                          	INNER JOIN folderProperties ON
+                                          	  folderProperties.folderId = folders.folderId AND
+                                          	  folderProperties.version = folders.version AND
+                                          	  folderProperties.idLanguages = ?,
+                                          	pages INNER JOIN pageProperties ON 
                                               pageProperties.pageId = pages.pageId AND 
                                               pageProperties.version = pages.version AND 
                                               pageProperties.idLanguages = ?
@@ -830,6 +874,7 @@ class Model_Pages {
                                             parent.id = ? AND
                                             folders.lft BETWEEN parent.lft AND parent.rgt AND
                                             folders.idRootLevels = parent.idRootLevels
+                                            '.$strDisplayFolderFilter.'
                                             '.$strSqlPageDepth.'
                                             '.$strPageFilter.'
                                             '.$strPublishedFilter.'
@@ -905,12 +950,14 @@ class Model_Pages {
                                           WHERE pages.idParent = ? AND
                                             pages.isStartPage = 0 AND
                                             pages.idParentTypes = ?
+                                            '.$strDisplayPageFilter.'
                                             '.$strPageFilter.'
                                             '.$strPublishedFilter.'
                                             '.$strSqlCategory.'
                                             '.$strSqlLabel.'
                                             '.$strSqlPageIds.') AS tbl
                                         '.$strSqlOrderBy.$strSqlLimit, array($this->core->sysConfig->page_types->link->id,
+                                                                             $this->intLanguageId,
                                                                              $this->intLanguageId,
                                                                              $this->intLanguageId,
                                                                              $this->intLanguageId,

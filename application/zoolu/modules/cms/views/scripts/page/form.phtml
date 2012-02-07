@@ -40,8 +40,9 @@
             </tr>
             <?php if(!$this->blnIsStartPage) : ?>
             <tr>
-              <td class="tdNormal"><input type="checkbox" name="showinnavigation" id="showinnavigation"<?php ($this->showinnavigation > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('divShowInNavigationOptions')) { myForm.toggleNavigationOptions(this); } else { $('showInNavigation').value = (this.checked) ? '1' : '0'; }"/></td>
-              <td>
+              <td class="tdNormal"><?php echo $this->translate->_('show_in'); ?></td>
+              <td class="tdShow">
+                <input type="checkbox" name="showinnavigation" id="showinnavigation"<?php ($this->showinnavigation > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('divShowInNavigationOptions')) { myForm.toggleNavigationOptions(this); } else { $('showInNavigation').value = (this.checked) ? '1' : '0'; }"/>
                 <label for="showinnavigation"><?php echo $this->translate->_('show_in_navigation'); ?></label>
                 <?php if($this->blnIsRootLevelChild): ?>
                 <div id="divShowInNavigationOptions"<?php echo ($this->showinnavigation == 0) ? ' style="display:none;"' : ''; ?>>
@@ -55,8 +56,9 @@
               </td>
             </tr>
             <tr>
-              <td class="tdNormal"><input type="checkbox" name="shownonlyfordestination" id="shownonlyfordestination"<?php ($this->destinationId > 0) ? print(' checked="checked"') : ''; ?> onclick="myForm.toggleDestinationOptions(this);"/></td>
-              <td>
+              <td class="tdNormal">&nbsp;</td>
+              <td class="tdShow">
+                <input type="checkbox" name="shownonlyfordestination" id="shownonlyfordestination"<?php ($this->destinationId > 0) ? print(' checked="checked"') : ''; ?> onclick="myForm.toggleDestinationOptions(this);"/>
                 <label for="shownonlyfordestination"><?php echo $this->translate->_('show_only_for_region'); ?></label>
                 <div id="divShownOnlyForDestinationOptions"<?php echo ($this->destinationId == 0) ? ' style="display:none;"' : ''; ?>>
                   <div class="navigationoptios">
@@ -68,11 +70,35 @@
               </td>
             </tr>
             <tr>
-              <td class="tdNormal"><input type="checkbox" name="hideinsitemap" id="hideinsitemap"<?php ($this->hideInSitemap > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('hideInSitemap')) $('hideInSitemap').value = (this.checked) ? '1' : '0';"/></td>
-              <td>
+              <td class="tdNormal">&nbsp;</td>
+              <td class="tdShow">
+                <input type="checkbox" name="hideinsitemap" id="hideinsitemap"<?php ($this->hideInSitemap > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('hideInSitemap')) $('hideInSitemap').value = (this.checked) ? '1' : '0';"/>
                 <label for="hideinsitemap"><?php echo $this->translate->_('hide_in_sitemap'); ?></label>
               </td>
             </tr>
+            <?php if($this->showDisplayTypes == 'true'): ?>
+            <tr>
+              <td class="tdNormal">&nbsp;</td>
+              <td class="tdShow">
+                <input type="checkbox" name="showinwebsite" id="showinwebsite"<?php ($this->showInWebsite > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('showInWebsite')) $('showInWebsite').value = (this.checked) ? '1' : '0';"/>
+                <label for="showinwebsite"><?php echo $this->translate->_('show_in_website'); ?></label>
+              </td>
+            </tr>
+            <tr>
+              <td class="tdNormal">&nbsp;</td>
+              <td class="tdShow">
+                <input type="checkbox" name="showintablet" id="showintablet"<?php ($this->showInTablet > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('showInTablet')) $('showInTablet').value = (this.checked) ? '1' : '0';"/>
+                <label for="showintablet"><?php echo $this->translate->_('show_in_tablet'); ?></label>
+              </td>
+            </tr>
+            <tr>
+              <td class="tdNormal">&nbsp;</td>
+              <td class="tdShow">
+                <input type="checkbox" name="showinmobile" id="showinmobile"<?php ($this->showInMobile > 0) ? print(' checked="checked"') : ''; ?> onclick="if($('showInMobile')) $('showInMobile').value = (this.checked) ? '1' : '0';"/>
+                <label for="showinmobile"><?php echo $this->translate->_('show_in_mobile'); ?></label>
+              </td>
+            </tr>
+            <?php endif; ?>
             <tr>
               <td class="tdNormal">&nbsp;</td>
               <td>

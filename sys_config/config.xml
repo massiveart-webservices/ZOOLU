@@ -55,6 +55,14 @@
       <css>1.0</css>
     </version>
     
+    <!-- DISPLAY ENVIRONMENTS -->
+    <display_type>
+       <enabled>true</enabled> <!-- true/false -->
+       <website>website</website>
+       <tablet>tablet</tablet>
+       <mobile>mobile</mobile>
+    </display_type>
+    
     <!-- PATHES -->
     <path>
       <cache>
