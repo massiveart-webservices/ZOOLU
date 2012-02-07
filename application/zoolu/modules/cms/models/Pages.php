@@ -188,7 +188,7 @@ class Model_Pages {
     $objSelect = $this->getPageTable()->select();
     $objSelect->setIntegrityCheck(false);
 
-    $objSelect->from('pages', array('id', 'pageId', 'relationId' => 'pageId', 'version', 'pageProperties.idPageTypes', 'isStartPage', 'pageProperties.showInNavigation', 'pageProperties.idDestination', 'pageProperties.hideInSitemap', 'idParent', 'idParentTypes', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.idStatus', 'pageProperties.creator'));
+    $objSelect->from('pages', array('id', 'pageId', 'relationId' => 'pageId', 'version', 'pageProperties.idPageTypes', 'isStartPage', 'pageProperties.showInNavigation', 'pageProperties.idDestination', 'pageProperties.hideInSitemap', 'pageProperties.showInWebsite', 'pageProperties.showInTablet', 'pageProperties.showInMobile', 'idParent', 'idParentTypes', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.idStatus', 'pageProperties.creator'));
     $objSelect->joinLeft('pageTitles', 'pages.pageId = pageTitles.pageId', array('title'));
     $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
     $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = pageProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
@@ -314,6 +314,9 @@ class Model_Pages {
                            'showInNavigation' => $objGenericSetup->getShowInNavigation(),
                            'idDestination'    => $objGenericSetup->getDestinationId(),
                            'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
+                           'showInWebsite'    => $objGenericSetup->getShowInWebsite(),
+                           'showInTablet'     => $objGenericSetup->getShowInTablet(),
+                           'showInMobile'     => $objGenericSetup->getShowInMobile(),
                            'idUsers'          => $intUserId,
                            'creator'          => $objGenericSetup->getCreatorId(),
                            'publisher'        => $intUserId,
@@ -352,6 +355,9 @@ class Model_Pages {
                                                                         'showInNavigation' => $objGenericSetup->getShowInNavigation(),
                                                                         'idDestination'    => $objGenericSetup->getDestinationId(),
                                                                         'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
+                                                                        'showInWebsite'	   => $objGenericSetup->getShowInWebsite(),
+                                                                        'showInTablet'	   => $objGenericSetup->getShowInTablet(),
+                                                                        'showInMobile'	   => $objGenericSetup->getShowInMobile(),
                                                                         'idUsers'          => $intUserId,
                                                                         'creator'          => $objGenericSetup->getCreatorId(),
                                                                         'idStatus'         => $objGenericSetup->getStatusId(),

@@ -840,17 +840,29 @@ msgstr "Status"
 msgid "Type"
 msgstr "Type"
 
+msgid "show_in"
+msgstr "Display:"
+
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:49
 msgid "show_in_navigation"
-msgstr "show in navigation"
+msgstr "in navigation"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:64
 msgid "show_only_for_region"
-msgstr "show only for region"
+msgstr "only for region"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:77
 msgid "hide_in_sitemap"
-msgstr "hide in sitemap"
+msgstr "not in sitemap"
+
+msgid "show_in_website"
+msgstr "on website"
+
+msgid "show_in_tablet
+msgstr "on tablet"
+
+msgid "show_in_mobile"
+msgstr "on mobile"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:87
 msgid "Published"

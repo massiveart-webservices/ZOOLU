@@ -397,6 +397,9 @@ class Cms_PageController extends AuthControllerAction {
       $this->view->destinationOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT categories.id AS VALUE, categoryTitles.title  AS DISPLAY FROM categories INNER JOIN categoryTitles ON categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = '.$this->objForm->Setup()->getFormLanguageId().' WHERE categories.idParentCategory = 466 ORDER BY categoryTitles.title', $this->objForm->Setup()->getDestinationId());
       
       $this->view->hideInSitemap = $this->objForm->Setup()->getHideInSitemap();
+      $this->view->showInWebsite = $this->objForm->Setup()->getShowInWebsite();
+      $this->view->showInTablet = $this->objForm->Setup()->getShowInTablet();
+      $this->view->showInMobile = $this->objForm->Setup()->getShowInMobile();
       
       $this->view->arrPublishDate = DateTimeHelper::getDateTimeArray($this->objForm->Setup()->getPublishDate());
       $this->view->monthOptions = DateTimeHelper::getOptionsMonth(false, $this->objForm->Setup()->getPublishDate('n'));
@@ -1122,6 +1125,9 @@ class Cms_PageController extends AuthControllerAction {
       $this->objForm->Setup()->setShowInNavigation((($this->objRequest->getParam("showInNavigation") != '') ? $this->objRequest->getParam("showInNavigation") : 0));
       $this->objForm->Setup()->setDestinationId((($this->objRequest->getParam("destinationId") != '') ? $this->objRequest->getParam("destinationId") : 0));
       $this->objForm->Setup()->setHideInSitemap((($this->objRequest->getParam("hideInSitemap") != '') ? $this->objRequest->getParam("hideInSitemap") : 0));
+      $this->objForm->Setup()->setShowInWebsite((($this->objRequest->getParam("showInWebsite") != '') ? $this->objRequest->getParam("showInWebsite") : 1));
+      $this->objForm->Setup()->setShowInTablet((($this->objRequest->getParam("showInTablet") != '') ? $this->objRequest->getParam("showInTablet") : 1));
+      $this->objForm->Setup()->setShowInMobile((($this->objRequest->getParam("showInMobile") != '') ? $this->objRequest->getParam("showInMobile") : 1));
       $this->objForm->Setup()->setElementTypeId((($this->objRequest->getParam("pageTypeId") != '') ? $this->objRequest->getParam("pageTypeId") : $this->core->sysConfig->page_types->page->id));
       $this->objForm->Setup()->setParentTypeId((($this->objRequest->getParam("parentTypeId") != '') ? $this->objRequest->getParam("parentTypeId") : (($this->objRequest->getParam("parentFolderId") != '') ? $this->core->sysConfig->parent_types->folder : $this->core->sysConfig->parent_types->rootlevel)));
       $this->objForm->Setup()->setModelSubPath('cms/models/');
@@ -1163,6 +1169,9 @@ class Cms_PageController extends AuthControllerAction {
       $this->objForm->addElement('hidden', 'showInNavigation', array('value' => $this->objForm->Setup()->getShowInNavigation(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'destinationId', array('value' => $this->objForm->Setup()->getDestinationId(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'hideInSitemap', array('value' => $this->objForm->Setup()->getHideInSitemap(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInWebsite', array('value' => $this->objForm->Setup()->getShowInWebsite(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInTablet', array('value' => $this->objForm->Setup()->getShowInTablet(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInMobile', array('value' => $this->objForm->Setup()->getShowInMobile(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'parentTypeId', array('value' => $this->objForm->Setup()->getParentTypeId(), 'decorators' => array('Hidden')));
     }
   }

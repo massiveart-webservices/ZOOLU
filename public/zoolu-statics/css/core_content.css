@@ -903,6 +903,10 @@ Function Widget */
     padding: 0 0 10px;
 }
 
+.widgetcontentmain label {
+    vertical-align:top;
+}
+
 .widgetcontentmain .tdImportant {
     padding: 0 10px 0 0;
     text-align: right;
@@ -911,6 +915,10 @@ Function Widget */
 .widgetcontentmain .tdNormal {
     padding: 0 10px 0 0;
     text-align: right;
+}
+
+.widgetcontentmain .tdShow {
+    padding: 0 0 2px;
 }
 
 .widgetcontentmain .navigationoptios,

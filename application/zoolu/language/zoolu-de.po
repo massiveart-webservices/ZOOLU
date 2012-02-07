@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-01 12:05+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Cornelius Hansjakob <cornelius.hansjakob@massiveart.com>\n"
+"Last-Translator: Daniel Rotter <daniel.rotter@massiveart.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -840,17 +840,29 @@ msgstr "Status"
 msgid "Type"
 msgstr "Typ"
 
+msgid "show_in"
+msgstr "Anzeige: "
+
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:49
 msgid "show_in_navigation"
-msgstr "in Navigation anzeigen"
+msgstr "in Navigation"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:64
 msgid "show_only_for_region"
-msgstr "nur für Region anzeigen"
+msgstr "nur für Region"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:77
 msgid "hide_in_sitemap"
-msgstr "in Sitemap ausblenden"
+msgstr "nicht in Sitemap"
+
+msgid "show_in_website"
+msgstr "auf Website"
+
+msgid "show_in_tablet"
+msgstr "auf Tablet"
+
+msgid "show_in_mobile"
+msgstr "auf Mobile"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:87
 msgid "Published"
