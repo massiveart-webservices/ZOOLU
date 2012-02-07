@@ -680,7 +680,7 @@ class Model_Pages {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function loadItems($mixedType, $intParentId, $intCategoryId = 0, $intLabelId = 0, $intEntryNumber = 0, $intSortTypeId = 0, $intSortOrderId = 0, $intEntryDepthId = 0, $arrPageIds = array(), $blnOnlyItems = false, $blnOnlyShowInNavigation = false){
+  public function loadItems($mixedType, $intParentId, $intCategoryId = 0, $intLabelId = 0, $intEntryNumber = 0, $intSortTypeId = 0, $intSortOrderId = 0, $intEntryDepthId = 0, $arrPageIds = array(), $blnOnlyItems = false, $blnOnlyShowInNavigation = false, $blnFilterDisplayEnvironment = true){
     $this->core->logger->debug('cms->models->Model_Pages->loadItems('.$intParentId.','.$intCategoryId.','.$intLabelId.','.$intEntryNumber.','.$intSortTypeId.','.$intSortOrderId.','.$intEntryDepthId.','.$arrPageIds.')');
 
     if(!is_array($mixedType)){
@@ -752,7 +752,7 @@ class Model_Pages {
     if($intEntryNumber > 0 && $intEntryNumber != ''){
       $strSqlLimit = ' LIMIT '.$intEntryNumber;
     }
-
+    
     $strPageFilter = '';
     $strPublishedFilter = '';
     if(!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)){
@@ -760,6 +760,40 @@ class Model_Pages {
       $now = date('Y-m-d H:i:s', $timestamp);
       $strPageFilter = ' AND pageProperties.idStatus = '.$this->core->sysConfig->status->live;
       $strPublishedFilter = ' AND pageProperties.published <= \''.$now.'\'';
+    }
+    
+    $strDisplayPageFilter = ' AND ';
+    if($blnFilterDisplayEnvironment){
+      if($blnFilterDisplayEnvironment){
+        switch($this->core->strDisplayType){
+          case $this->core->sysConfig->display_environment->website:
+            $strDisplayPageFilter .= 'pageProperties.showInWebsite = 1';
+            break;
+          case $this->core->sysConfig->display_environment->tablet:
+            $strDisplayPageFilter .= 'pageProperties.showInTablet = 1';
+            break;
+          case $this->core->sysConfig->display_environment->mobile:
+            $strDisplayPageFilter .= 'pageProperties.showInMobile = 1';
+            break;
+        }
+      }
+    }
+    
+    $strDisplayFolderFilter = ' AND ';
+    if($blnFilterDisplayEnvironment){
+      if($blnFilterDisplayEnvironment){
+        switch($this->core->strDisplayType){
+          case $this->core->sysConfig->display_environment->website:
+            $strDisplayFolderFilter .= 'folderProperties.showInWebsite = 1';
+            break;
+          case $this->core->sysConfig->display_environment->tablet:
+            $strDisplayFolderFilter .= 'folderProperties.showInTablet = 1';
+            break;
+          case $this->core->sysConfig->display_environment->mobile:
+            $strDisplayFolderFilter .= 'folderProperties.showInMobile = 1';
+            break;
+        }
+      }
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT DISTINCT id, plId, genericFormId, version, plGenericFormId, plVersion,
@@ -769,8 +803,12 @@ class Model_Pages {
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl, 
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
                                             pageProperties.created, pageProperties.changed, pageProperties.published, folders.sortPosition, folders.sortTimestamp, pageTargets.target
-                                          FROM folders, pages
-                                            INNER JOIN pageProperties ON 
+                                          FROM folders
+                                          	INNER JOIN folderProperties ON
+                                          	  folderProperties.folderId = folders.folderId AND
+                                          	  folderProperties.version = folders.version AND
+                                          	  folderProperties.idLanguages = ?,
+                                          	pages INNER JOIN pageProperties ON 
                                               pageProperties.pageId = pages.pageId AND 
                                               pageProperties.version = pages.version AND 
                                               pageProperties.idLanguages = ?
@@ -836,6 +874,7 @@ class Model_Pages {
                                             parent.id = ? AND
                                             folders.lft BETWEEN parent.lft AND parent.rgt AND
                                             folders.idRootLevels = parent.idRootLevels
+                                            '.$strDisplayFolderFilter.'
                                             '.$strSqlPageDepth.'
                                             '.$strPageFilter.'
                                             '.$strPublishedFilter.'
@@ -911,12 +950,14 @@ class Model_Pages {
                                           WHERE pages.idParent = ? AND
                                             pages.isStartPage = 0 AND
                                             pages.idParentTypes = ?
+                                            '.$strDisplayPageFilter.'
                                             '.$strPageFilter.'
                                             '.$strPublishedFilter.'
                                             '.$strSqlCategory.'
                                             '.$strSqlLabel.'
                                             '.$strSqlPageIds.') AS tbl
                                         '.$strSqlOrderBy.$strSqlLimit, array($this->core->sysConfig->page_types->link->id,
+                                                                             $this->intLanguageId,
                                                                              $this->intLanguageId,
                                                                              $this->intLanguageId,
                                                                              $this->intLanguageId,

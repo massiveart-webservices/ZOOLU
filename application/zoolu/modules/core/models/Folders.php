@@ -101,7 +101,7 @@ class Model_Folders {
     $objSelect->setIntegrityCheck(false);    
 
     $objSelect->from('folders', array('id', 'folderId', 'relationId' => 'folderId', 'version'));
-    $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = '.$this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
+    $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = '.$this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
     $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = folderProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
     $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = folderProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
     $objSelect->where('folders.id = ?', $intElementId);
@@ -173,6 +173,9 @@ class Model_Folders {
                            'idStatus'         => $objGenericSetup->getStatusId(),
                            'isUrlFolder'      => $objGenericSetup->getUrlFolder(),
                            'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+                           'showInWebsite'	  => $objGenericSetup->getShowInWebsite(),
+                           'showInTablet'	  => $objGenericSetup->getShowInTablet(),
+                           'showInMobile'	  => $objGenericSetup->getShowInMobile(),
                            'hideInSitemap'    => $objGenericSetup->getHideInSitemap());
     $this->getFolderPropertyTable()->insert($arrProperties);
     
@@ -206,6 +209,9 @@ class Model_Folders {
                                                                           'idStatus'         => $objGenericSetup->getStatusId(),
                                                                           'isUrlFolder'      => $objGenericSetup->getUrlFolder(),
                                                                           'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+                                                                          'showInWebsite'    => $objGenericSetup->getShowInWebsite(),
+                                                                          'showInTablet'     => $objGenericSetup->getShowInTablet(),
+                                                                          'showInMobile'     => $objGenericSetup->getShowInMobile(),
                                                                           'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
                                                                           'published'        => $objGenericSetup->getPublishDate(),
                                                                           'changed'          => date('Y-m-d H:i:s')), $strWhere);
@@ -1233,7 +1239,7 @@ class Model_Folders {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function loadWebsiteRootLevelChilds($intRootLevelId, $intDepth = 1, $intDisplayOptionId = 1, $blnLoadFilter = false, $blnLoadSitemap = false){
+  public function loadWebsiteRootLevelChilds($intRootLevelId, $intDepth = 1, $intDisplayOptionId = 1, $blnLoadFilter = false, $blnLoadSitemap = false, $blnFilterDisplayEnvironment = true){
     $this->core->logger->debug('core->models->Folders->loadWebsiteRootLevelChilds('.$intRootLevelId.','.$intDepth.','.$intDisplayOptionId.')');
 
     $strFolderFilter = '';
@@ -1270,6 +1276,20 @@ class Model_Folders {
                ->joinLeft(array('genericForms'), 'genericForms.id = pageProperties.idGenericForms', array())
                ->where('folders.idRootLevels = ?', $intRootLevelId)
                ->where('folders.depth <= ?', $intDepth);
+               
+    if($blnFilterDisplayEnvironment){
+      switch($this->core->strDisplayType){
+        case $this->core->sysConfig->display_environment->website:
+          $objSelect1->where('folderProperties.showInWebsite = 1');
+          break;
+        case $this->core->sysConfig->display_environment->tablet:
+          $objSelect1->where('folderProperties.showInTablet = 1');
+          break;
+        case $this->core->sysConfig->display_environment->mobile:
+          $objSelect1->where('folderProperties.showInMobile = 1');
+          break;
+      }
+    }
                
     if($intDisplayOptionId > 0){          
       $objSelect1->where('((folderProperties.showInNavigation = ? AND folders.depth = 0) OR (folderProperties.showInNavigation = 1 AND folders.depth > 0))', $intDisplayOptionId)
@@ -1308,6 +1328,21 @@ class Model_Folders {
                ->joinLeft(array('genericForms'), 'genericForms.id = pageProperties.idGenericForms', array())
                ->where('pages.idParent = ?', $intRootLevelId)
                ->where('pages.idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel);
+               
+    if($blnFilterDisplayEnvironment){
+      switch($this->core->strDisplayType){
+        case $this->core->sysConfig->display_environment->website:
+          $objSelect2->where('pageProperties.showInWebsite = 1');
+          break;
+        case $this->core->sysConfig->display_environment->tablet:
+          $objSelect2->where('pageProperties.showInTablet = 1');
+          break;
+        case $this->core->sysConfig->display_environment->mobile:
+          $objSelect2->where('pageProperties.showInMobile = 1');
+          break;
+      }
+    }
+    
     if($intDisplayOptionId > 0){          
       $objSelect2->where('pageProperties.showInNavigation = ?', $intDisplayOptionId);
     }elseif($intDisplayOptionId != -1){

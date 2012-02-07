@@ -42,10 +42,10 @@
 
 class Core_FolderController extends AuthControllerAction {
 
-	/**
-	 * @var GenericForm
-	 */
-	protected $objForm;
+  /**
+   * @var GenericForm
+   */
+  protected $objForm;
 	
 	/**
    * @var inter
@@ -374,6 +374,9 @@ class Core_FolderController extends AuthControllerAction {
       $this->view->isurlfolder = $this->objForm->Setup()->getUrlFolder();
       $this->view->showinnavigation = $this->objForm->Setup()->getShowInNavigation();
       $this->view->hideInSitemap = $this->objForm->Setup()->getHideInSitemap();
+      $this->view->showInWebsite = $this->objForm->Setup()->getShowInWebsite();
+      $this->view->showInTablet = $this->objForm->Setup()->getShowInTablet();
+      $this->view->showInMobile = $this->objForm->Setup()->getShowInMobile();
       $this->view->folderId = $this->objForm->Setup()->getElementId();
       $this->view->version = $this->objForm->Setup()->getElementVersion();
       $this->view->publisher = $this->objForm->Setup()->getPublisherName();
@@ -656,7 +659,10 @@ class Core_FolderController extends AuthControllerAction {
     $this->objForm->Setup()->setUrlFolder((($this->objRequest->getParam('isUrlFolder') != '') ? $this->objRequest->getParam('isUrlFolder') : 1));
     $this->objForm->Setup()->setShowInNavigation((($this->objRequest->getParam('showInNavigation') != '') ? $this->objRequest->getParam('showInNavigation') : 0));
     $this->objForm->Setup()->setHideInSitemap((($this->objRequest->getParam('hideInSitemap') != '') ? $this->objRequest->getParam('hideInSitemap') : 0));
-
+    $this->objForm->Setup()->setShowInWebsite((($this->objRequest->getParam("showInWebsite") != '') ? $this->objRequest->getParam("showInWebsite") : 1));
+    $this->objForm->Setup()->setShowInTablet((($this->objRequest->getParam("showInTablet") != '') ? $this->objRequest->getParam("showInTablet") : 1));
+    $this->objForm->Setup()->setShowInMobile((($this->objRequest->getParam("showInMobile") != '') ? $this->objRequest->getParam("showInMobile") : 1));
+    
     /**
      * add currlevel hidden field
      */
@@ -693,6 +699,9 @@ class Core_FolderController extends AuthControllerAction {
       $this->objForm->addElement('hidden', 'isUrlFolder', array('value' => $this->objForm->Setup()->getUrlFolder(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'hideInSitemap', array('value' => $this->objForm->Setup()->getHideInSitemap(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'showInNavigation', array('value' => $this->objForm->Setup()->getShowInNavigation(), 'decorators' => array('Hidden'), 'ignore' => true));
+      $this->objForm->addElement('hidden', 'showInWebsite', array('value' => $this->objForm->Setup()->getShowInWebsite(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInTablet', array('value' => $this->objForm->Setup()->getShowInTablet(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInMobile', array('value' => $this->objForm->Setup()->getShowInMobile(), 'decorators' => array('Hidden')));
     }
   }
   
