@@ -1279,13 +1279,13 @@ class Model_Folders {
                
     if($blnFilterDisplayEnvironment){
       switch($this->core->strDisplayType){
-        case $this->core->sysConfig->display_environment->website:
+        case $this->core->sysConfig->display_type->website:
           $objSelect1->where('folderProperties.showInWebsite = 1');
           break;
-        case $this->core->sysConfig->display_environment->tablet:
+        case $this->core->sysConfig->display_type->tablet:
           $objSelect1->where('folderProperties.showInTablet = 1');
           break;
-        case $this->core->sysConfig->display_environment->mobile:
+        case $this->core->sysConfig->display_type->mobile:
           $objSelect1->where('folderProperties.showInMobile = 1');
           break;
       }
@@ -1331,13 +1331,13 @@ class Model_Folders {
                
     if($blnFilterDisplayEnvironment){
       switch($this->core->strDisplayType){
-        case $this->core->sysConfig->display_environment->website:
+        case $this->core->sysConfig->display_type->website:
           $objSelect2->where('pageProperties.showInWebsite = 1');
           break;
-        case $this->core->sysConfig->display_environment->tablet:
+        case $this->core->sysConfig->display_type->tablet:
           $objSelect2->where('pageProperties.showInTablet = 1');
           break;
-        case $this->core->sysConfig->display_environment->mobile:
+        case $this->core->sysConfig->display_type->mobile:
           $objSelect2->where('pageProperties.showInMobile = 1');
           break;
       }

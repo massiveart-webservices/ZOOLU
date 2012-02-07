@@ -56,11 +56,11 @@
     </version>
     
     <!-- DISPLAY ENVIRONMENTS -->
-    <display_environment>
+    <display_type>
        <website>website</website>
        <tablet>tablet</tablet>
        <mobile>mobile</mobile>
-    </display_environment>
+    </display_type>
     
     <!-- PATHES -->
     <path>
