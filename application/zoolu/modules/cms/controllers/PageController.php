@@ -147,11 +147,16 @@ class Cms_PageController extends AuthControllerAction {
 	     * get form title
 	     */
 	    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
-
+	    
 	    /**
-       * output of metainformation to hidden div
-       */
-      $this->setViewMetaInfos();
+         * output of metainformation to hidden div
+         */
+        $this->setViewMetaInfos();
+        
+        /**
+         * Set if display types are shown
+         */
+        $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
 	    $this->view->form = $this->objForm;
 
@@ -225,6 +230,11 @@ class Cms_PageController extends AuthControllerAction {
        * output of metainformation to hidden div
        */
       $this->setViewMetaInfos();
+      
+      /**
+       * Set if display types are shown
+       */
+      $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
       $this->view->form = $this->objForm;
 
@@ -277,6 +287,11 @@ class Cms_PageController extends AuthControllerAction {
 	     * output of metainformation to hidden div
 	     */
 	    $this->setViewMetaInfos();
+	    
+	    /**
+         * Set if display types are shown
+         */
+        $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
 	    $this->view->form = $this->objForm;
 
@@ -343,6 +358,11 @@ class Cms_PageController extends AuthControllerAction {
       $this->setViewMetaInfos();
 
       $this->view->form = $this->objForm;
+      
+      /**
+       * Set if display types are shown
+       */
+      $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
 	    $this->renderScript('page/form.phtml');
 	  }catch (Exception $exc) {

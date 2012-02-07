@@ -144,6 +144,11 @@ class Core_FolderController extends AuthControllerAction {
        * output of metainformation to hidden div
        */
       $this->setViewMetaInfos();
+      
+      /**
+       * Set if display types are shown
+       */
+      $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
       $this->view->form = $this->objForm;
 
@@ -217,6 +222,11 @@ class Core_FolderController extends AuthControllerAction {
      * get form title
      */
     $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+    
+    /**
+     * Set if display types are shown
+     */
+    $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
     /**
      * output of metainformation to hidden div
@@ -269,6 +279,11 @@ class Core_FolderController extends AuthControllerAction {
        * output of metainformation to hidden div
        */
       $this->setViewMetaInfos();
+      
+      /**
+       * Set if display types are shown
+       */
+      $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
       $this->view->form = $this->objForm;
 
@@ -337,6 +352,11 @@ class Core_FolderController extends AuthControllerAction {
      * output of metainformation to hidden div
      */
     $this->setViewMetaInfos();
+    
+    /**
+     * Set if display types are shown
+     */
+    $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
     $this->view->form = $this->objForm;
 

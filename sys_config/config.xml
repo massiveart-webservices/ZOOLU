@@ -57,6 +57,7 @@
     
     <!-- DISPLAY ENVIRONMENTS -->
     <display_type>
+       <enabled>true</enabled> <!-- true/false -->
        <website>website</website>
        <tablet>tablet</tablet>
        <mobile>mobile</mobile>
