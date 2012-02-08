@@ -1280,13 +1280,16 @@ class Model_Folders {
     if($blnFilterDisplayEnvironment){
       switch($this->core->strDisplayType){
         case $this->core->sysConfig->display_type->website:
-          $objSelect1->where('folderProperties.showInWebsite = 1');
+          $objSelect1->where('folderProperties.showInWebsite = 1')
+                     ->where('pageProperties.showInWebsite = 1');
           break;
         case $this->core->sysConfig->display_type->tablet:
-          $objSelect1->where('folderProperties.showInTablet = 1');
+          $objSelect1->where('folderProperties.showInTablet = 1')
+                     ->where('pageProperties.showInTablet = 1');
           break;
         case $this->core->sysConfig->display_type->mobile:
-          $objSelect1->where('folderProperties.showInMobile = 1');
+          $objSelect1->where('folderProperties.showInMobile = 1')
+                     ->where('pageProperties.showInMobile = 1');;
           break;
       }
     }

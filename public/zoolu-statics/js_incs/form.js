@@ -440,6 +440,29 @@ Massiveart.Form = Class.create({
   },
   
   /**
+   * getAddDocumentOverlay
+   */
+  getAddDocumentOverlay: function(areaId){    
+    $(this.updateOverlayContainer).innerHTML = '';
+    myCore.putCenter('overlayGenContentWrapper');
+    $('overlayGenContentWrapper').show();
+    $('overlayGenContent').setStyle({height:'100%'});
+    if($(areaId)){
+      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/document', { 
+        evalScripts: true,
+        onComplete: function(){
+          $('olContent').addClassName('oldocuments');
+          myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
+          myOverlay.overlayCounter++;
+          myCore.putOverlayCenter('overlayGenContentWrapper');
+          myOverlay.areaId = areaId;
+          myOverlay.updateViewTypeIcons();
+        } 
+      });
+    }    
+  },
+  
+  /**
    * getExportDynFormOverlay
    */
   getExportDynFormOverlay: function(){    
