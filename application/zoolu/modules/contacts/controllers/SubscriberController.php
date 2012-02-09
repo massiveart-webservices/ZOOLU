@@ -362,8 +362,8 @@ class Contacts_SubscriberController extends AuthControllerAction {
         $arrData = array();
         $arrTmpData = explode(';', $strLine);
         foreach($arrHeadlines as $intCount => $strHeadline){
-          if(array_key_exists('headline'.$intCount, $arrFields) && $arrFields['headline'.$intCount] != ''){
-            $arrData[$arrFields['headline'.$intCount]] = trimQuotes($arrTmpData[$intCount]);
+          if(($strKey = array_search('headline'.$intCount, $arrFields)) !== false){
+            $arrData[$strKey] = trimQuotes($arrTmpData[$intCount]);
           }
         }
         $arrData['subscribed'] = $this->core->sysConfig->mail_chimp->mappings->subscribe;
@@ -628,19 +628,21 @@ class Contacts_SubscriberController extends AuthControllerAction {
     $objForm->getDisplayGroup('preferences-group')->setLegend($this->core->translate->_('Import_preferences', false));
     $objForm->getDisplayGroup('preferences-group')->setDecorators(array('FormElements', 'Region'));
     
-    $arrTmpOptions = $this->core->sysConfig->subscriber->import_fields->import_field->toArray();
+    //Assignments
     $arrOptions = array();
-    foreach($arrTmpOptions as $arrOption){
-      $arrOptions[$arrOption['title']] = $arrOption['title'];
+    foreach($arrHeadlines as $intCount => $strHeadline){
+      $arrOptions['headline'.$intCount] = $strHeadline;
     }
 
-    $arrRealHeadlines = array();
-    foreach($arrHeadlines as $intCount => $strHeadline){
-      $arrRealHeadlines[] = 'headline'.$intCount;
-      $objForm->addElement('select', 'headline'.$intCount, array('label' => ($strHeadline != '') ? $strHeadline : '('.$this->core->translate->_('Empty').')', 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => false, 'MultiOptions' => array_merge(array('' => ''), $arrOptions)));
-      foreach($arrTmpOptions as $arrTmpOption){
+    $arrTmpOptions = $this->core->sysConfig->subscriber->import_fields->import_field->toArray();
+    
+    $arrAssignment = array();
+    foreach($arrTmpOptions as $arrTmpOption){
+      $arrAssignment[] = $arrTmpOption['title'];
+      $objForm->addElement('select', $arrTmpOption['title'], array('label' => ($arrTmpOption['title'] != '') ? $arrTmpOption['title'] : '('.$this->core->translate->_('Empty').')', 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => false, 'MultiOptions' => array_merge(array('' => ''), $arrOptions)));
+      foreach($arrHeadlines as $intCount => $strHeadline){
         if(array_search($strHeadline, $arrTmpOption['defaults']['default']) !== FALSE){
-          $objForm->setDefault('headline'.$intCount, $arrTmpOption['title']);
+          $objForm->setDefault($arrTmpOption['title'], 'headline'.$intCount);
           break;
         }
       }
@@ -648,7 +650,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
     
     $objForm->addElement('checkbox', 'import_header', array('label' => $this->core->translate->_('Import_header'), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'checkbox', 'required' => false));
     
-    $objForm->addDisplayGroup(array_merge(array('import_header'), $arrRealHeadlines), 'assignment-group');
+    $objForm->addDisplayGroup(array_merge(array('import_header'), $arrAssignment), 'assignment-group');
     $objForm->getDisplayGroup('assignment-group')->setLegend($this->core->translate->_('Import_assignment', false));
     $objForm->getDisplayGroup('assignment-group')->setDecorators(array('FormElements', 'Region'));
     
