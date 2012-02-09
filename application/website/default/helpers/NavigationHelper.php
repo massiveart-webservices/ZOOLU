@@ -87,7 +87,7 @@ class NavigationHelper {
     $strMainNavigation = '';
     $strHomeLink = '';
         
-    $this->objNavigation->loadNavigation();
+    $this->objNavigation->loadMainNavigation();
     
     $strPageId = '';  
     if(is_object($this->objNavigation->Page())){
@@ -107,15 +107,15 @@ class NavigationHelper {
       foreach($this->objNavigation->MainNavigation() as $objNavigationItem){
         $strSelectedItem = '';
         $strSelectedImg = 'off';
-        if($strPageId == $objNavigationItem->getItemId()){
+        if($strPageId == $objNavigationItem->pageId){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
-        }else if($strFolderId == $objNavigationItem->getItemId()){
+        }else if($strFolderId == $objNavigationItem->folderId){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
         }
         
-        $strImgFileTitle = strtolower($objNavigationItem->getUrl());
+        $strImgFileTitle = strtolower($objNavigationItem->url);
         if(strpos($strImgFileTitle, '/') > -1){
           $strImgFileTitle = substr($strImgFileTitle, 0, strpos($strImgFileTitle, '/'));    
         }

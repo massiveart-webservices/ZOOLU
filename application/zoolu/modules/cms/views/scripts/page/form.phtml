@@ -88,7 +88,7 @@
                 <td class="tdNormal">&nbsp;</td>
                 <td class="tdShow">
                     <input type="checkbox" name="shownonlyforsegment" id="shownonlyforsegment"<?php ($this->segmentId > 0) ? print(' checked="checked"') : ''; ?> onclick="myForm.toggleSegmentOptions(this);"/>
-                    <label for="shownonlyforsegment"><?php echo $this->translate->_('nur für Saison anzeigen'); ?></label>
+                    <label for="shownonlyforsegment"><?php echo $this->translate->_('show_only_for_segment'); ?></label>
 
                     <div id="divShownOnlyForSegmentOptions"<?php echo ($this->segmentId == 0) ? ' style="display:none;"' : ''; ?>>
                         <div class="navigationoptios">
