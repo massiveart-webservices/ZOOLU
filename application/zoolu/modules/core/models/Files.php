@@ -108,9 +108,9 @@ class Model_Files {
 	    $objSelect->joinLeft('fileAttributes', 'fileAttributes.idFiles = files.id', array('xDim', 'yDim'));
 	    $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->intLanguageId, array('title', 'description', 'idLanguages'));
 	    $objSelect->joinLeft(array('fileTitleLanguages' => 'fileTitles'), 'fileTitleLanguages.idFiles = files.id', array());
-	    $objSelect->joinLeft('languages', 'fileTitleLanguages.idLanguages = languages.id', array('languages' => new Zend_Db_Expr('GROUP_CONCAT(languages.languageCode SEPARATOR \', \')')));
+	    $objSelect->joinLeft('languages', 'fileTitleLanguages.idLanguages = languages.id', array('languages' => new Zend_Db_Expr('GROUP_CONCAT(DISTINCT languages.languageCode SEPARATOR \', \')')));
       $objSelect->joinLeft('tagFiles', 'tagFiles.fileId = files.id AND tagFiles.idLanguages = '.$this->intLanguageId, array());
-      $objSelect->joinLeft('tags', 'tags.id = tagFiles.idTags', array('tags' => new Zend_Db_Expr('GROUP_CONCAT(tags.title SEPARATOR \', \')')));
+      $objSelect->joinLeft('tags', 'tags.id = tagFiles.idTags', array('tags' => new Zend_Db_Expr('GROUP_CONCAT(DISTINCT tags.title SEPARATOR \', \')')));
 	    
       if($blnAddLanguageSpecificFilter == false){
         $objSelect->joinLeft('fileTitles AS alternativFileTitles', 'alternativFileTitles.idFiles = files.id AND alternativFileTitles.isDisplayTitle = 1', array('alternativTitle' => 'title', 'alternativDescription' => 'description', 'alternativLanguageId' => 'idLanguages'));
