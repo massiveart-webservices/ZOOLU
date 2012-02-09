@@ -87,7 +87,7 @@ class NavigationHelper {
     $strMainNavigation = '';
     $strHomeLink = '';
         
-    $this->objNavigation->loadNavigation();
+    $this->objNavigation->loadMainNavigation();
     
     $strPageId = '';  
     if(is_object($this->objNavigation->Page())){
@@ -107,23 +107,31 @@ class NavigationHelper {
       foreach($this->objNavigation->MainNavigation() as $objNavigationItem){
         $strSelectedItem = '';
         $strSelectedImg = 'off';
-        if($strPageId == $objNavigationItem->getItemId()){
+        if($strPageId == $objNavigationItem->pageId){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
-        }else if($strFolderId == $objNavigationItem->getItemId()){
+        }else if($strFolderId == $objNavigationItem->folderId){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
         }
         
-        $strImgFileTitle = strtolower($objNavigationItem->getUrl());
+        $strImgFileTitle = strtolower($objNavigationItem->url);
         if(strpos($strImgFileTitle, '/') > -1){
           $strImgFileTitle = substr($strImgFileTitle, 0, strpos($strImgFileTitle, '/'));    
         }
         
-        if($blnImageNavigation){
-          $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$objNavigationItem->getUrl().'"'.(($objNavigationItem->getTarget() != '') ? ' target="'.$objNavigationItem->getTarget().'"' : '').$strSelectedItem.'><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/navigation/'.$strImgFileTitle.'_'.$strSelectedImg.'.gif" alt="'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/></a></'.$strElement.'>';
+        if($objNavigationItem->isStartPage == 1 && $blnWithHomeLink == true){
+          if($blnImageNavigation){
+            $strHomeLink = '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$this->objNavigation->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url).'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/navigation/home_'.$strSelectedImg.'.gif" alt="'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/></a></'.$strElement.'>';
+          }else{
+            $strHomeLink = '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$this->objNavigation->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url).'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'>'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></'.$strElement.'>';
+          }
         }else{
-          $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$objNavigationItem->getUrl().'"'.(($objNavigationItem->getTarget() != '') ? ' target="'.$objNavigationItem->getTarget().'"' : '').$strSelectedItem.'>'.htmlentities($objNavigationItem->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></'.$strElement.'>';
+          if($blnImageNavigation){
+            $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$this->objNavigation->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url).'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/navigation/'.$strImgFileTitle.'_'.$strSelectedImg.'.gif" alt="'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'"/></a></'.$strElement.'>';
+          }else{
+            $strMainNavigation  .= '<'.$strElement.$strElementProperties.$strSelectedItem.'><a href="'.$this->objNavigation->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url).'"'.(($objNavigationItem->target != '') ? ' target="'.$objNavigationItem->target.'"' : '').$strSelectedItem.'>'.htmlentities($objNavigationItem->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></'.$strElement.'>';
+          }
         }
       }
     }

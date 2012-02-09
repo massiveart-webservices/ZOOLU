@@ -58,17 +58,18 @@ class GenericSetup {
   protected $intFormTypeId;
   protected $strFormType;
   protected $intFormLanguageId;
-  
+
   protected $intRegionId;
   protected $strRegionTitle;
   protected $intRegionCols;
   protected $intRegionPosition;
   protected $blnRegionCollapsable = true;
-  
+
   protected $intLanguageId;
   protected $strLanguageCode;
   protected $intLanguageFallbackId;
-  protected $intDestinationId;	
+  protected $intDestinationId;
+  protected $intSegmentId;
   protected $blnHideInSitemap = false;
   protected $blnShowInWebsite = true;
   protected $blnShowInTablet = true;
@@ -76,12 +77,12 @@ class GenericSetup {
   protected $intElementId;
   protected $intElementVersion = null;
   protected $intElementLinkId;
-  
+
   protected $intParentId;
   protected $intParentTypeId;
   protected $intRootLevelId;
   protected $intRootLevelTypeId;
-  protected $intRootLevelGroupId;	
+  protected $intRootLevelGroupId;
   protected $intElementTypeId;
   protected $blnIsStartElement;
   protected $intShowInNavigation = 0;
@@ -809,6 +810,7 @@ class GenericSetup {
 			$this->setShowInNavigation((isset($objCurrElement->showInNavigation) ? $objCurrElement->showInNavigation : 0));
 			$this->setLanguageFallbackId((isset($objCurrElement->idLanguageFallbacks) ? $objCurrElement->idLanguageFallbacks : 0));
 			$this->setDestinationId((isset($objCurrElement->idDestination) ? $objCurrElement->idDestination : 0));
+            $this->setSegmentId((isset($objCurrElement->idSegments) ? $objCurrElement->idSegments : 0));
 			$this->setHideInSitemap((isset($objCurrElement->hideInSitemap) ? $objCurrElement->hideInSitemap : false));
 			$this->setShowInWebsite((isset($objCurrElement->showInWebsite) ? $objCurrElement->showInWebsite : true));
 			$this->setShowInTablet((isset($objCurrElement->showInTablet) ? $objCurrElement->showInTablet : true));
@@ -1192,6 +1194,22 @@ class GenericSetup {
    */
   public function getDestinationId(){
     return $this->intDestinationId;
+  }
+
+  /**
+   * setSegmentId
+   * @param integer $intSegmentId
+   */
+  public function setSegmentId($intSegmentId){
+    $this->intSegmentId = $intSegmentId;
+  }
+
+  /**
+   * getSegmentId
+   * @param integer $intSegmentId
+   */
+  public function getSegmentId(){
+    return $this->intSegmentId;
   }
   
   /**

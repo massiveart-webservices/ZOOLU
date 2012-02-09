@@ -42,7 +42,8 @@
 
 class Model_Folders {
 
-	private $intLanguageId;
+  private $intLanguageId;
+  private $intSegmentId;
 
   /**
    * @var Model_Table_Folders
@@ -338,7 +339,7 @@ class Model_Folders {
      * WHERE rootLevelUrls.url = ?
      */
     $objSelect->from('rootLevelUrls', array('id', 'url', 'idRootLevels', 'idLanguages', 'analyticsKey', 'mapsKey'));
-    $objSelect->join('rootLevels', 'rootLevels.id = rootLevelUrls.idRootLevels', array('idRootLevelGroups', 'isSecure'));
+    $objSelect->join('rootLevels', 'rootLevels.id = rootLevelUrls.idRootLevels', array('idRootLevelGroups', 'isSecure', 'hasSegments'));
     $objSelect->join('languages', 'languages.id = rootLevelUrls.idLanguages', array('languageCode'));
     $objSelect->joinLeft('rootLevelTitles', 'rootLevelTitles.idRootLevels = rootLevels.id AND rootLevelTitles.idLanguages = '.$this->intLanguageId, array('title'));
     $objSelect->joinLeft(array('rLTDefault' => 'rootLevelTitles'), 'rLTDefault.idRootLevels = rootLevels.id AND rLTDefault.idLanguages = rootLevelUrls.idLanguages', array('defaultTitle' => 'title'));
@@ -511,6 +512,10 @@ class Model_Folders {
       $strPageFilter = 'AND pageProperties.idStatus = '.$this->core->sysConfig->status->live;
     }
 
+    if(!empty($this->intSegmentId)){
+      $strPageFilter .= ' AND (pages.idSegments = 0 OR pages.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
+    }
+
     $sqlStmt = $this->core->dbh->query('SELECT id, title, idStatus, url, pageId, folderId, sortPosition, sortTimestamp, isStartPage, (SELECT languageCode FROM languages WHERE id = ?) AS languageCode, target
                                         FROM (SELECT DISTINCT folders.id, folderTitles.title, folderProperties.idStatus,
                                                               IF(pageProperties.idPageTypes = ?,
@@ -614,6 +619,10 @@ class Model_Folders {
     if(!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)){
       $strFolderFilter = 'AND folderProperties.idStatus = '.$this->core->sysConfig->status->live;
       $strPageFilter = 'AND pageProperties.idStatus = '.$this->core->sysConfig->status->live;
+    }
+
+    if(!empty($this->intSegmentId)){
+      $strPageFilter .= ' AND (pages.idSegments = 0 OR pages.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT folders.id AS idFolder, folders.folderId, folders.idParentFolder as parentId, folderTitles.title AS folderTitle, folderProperties.idStatus AS folderStatus, folders.depth, folders.sortPosition as folderOrder,
@@ -1350,7 +1359,11 @@ class Model_Folders {
       $objSelect2->where('pageProperties.showInNavigation = ?', $intDisplayOptionId);
     }elseif($intDisplayOptionId != -1){
       $objSelect2->where('pageProperties.showInNavigation > 0');
-    } 
+    }
+
+    if(!empty($this->intSegmentId)){
+        $objSelect2->where('pages.idSegments = 0 OR pages.idSegments = ?',$this->intSegmentId);
+    }
 
     if($blnLoadSitemap){
       $objSelect2->where('pageProperties.hideInSitemap = 0');  
@@ -2276,6 +2289,22 @@ class Model_Folders {
    */
   public function getLanguageId(){
     return $this->intLanguageId;
+  }
+
+  /**
+   * setSegmentId
+   * @param integer $intSegmentId
+   */
+  public function setSegmentId($intSegmentId){
+    $this->intSegmentId = $intSegmentId;
+  }
+
+  /**
+   * getSegmentId
+   * @param integer $intSegmentId
+   */
+  public function getSegmentId(){
+    return $this->intSegmentId;
   }
 }
 

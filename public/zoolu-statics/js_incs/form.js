@@ -1640,6 +1640,19 @@ Massiveart.Form = Class.create({
       $('destinationId').value = 0;
     }
   },
+
+  /**
+   * toggleSegmentOptions
+   */
+  toggleSegmentOptions: function(checkBox){
+    if($('divShownOnlyForSegmentOptions') && checkBox.checked){
+      Effect.SlideDown('divShownOnlyForSegmentOptions', {duration: 0.5});
+      $('segmentId').value = $F('shownonlyforsegmentoption');
+    }else{
+      Effect.SlideUp('divShownOnlyForSegmentOptions', {duration: 0.5});
+      $('segmentId').value = 0;
+    }
+  },
   
   /**
    * toggleLanguageFallbackOptions

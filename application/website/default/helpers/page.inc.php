@@ -159,6 +159,15 @@ function get_canonical_tag(){
 }
 
 /**
+ * get_canonical_tag_for_segmentation
+ * @author Thomas Schedler <tsh@massiveart.com>
+ * @version 1.0
+ */
+function get_canonical_tag_for_segmentation(){
+  echo getPageHelperObject()->getCanonicalTagForSegmentation();
+}
+
+/**
  * get_parent_title
  * @param string $strTag
  * @param boolean $blnTitleFallback

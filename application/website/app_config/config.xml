@@ -1,157 +1,185 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configdata>
-  
-  <!--
-  ***********************************************************
-  * config for online evnironment                           *
-  ***********************************************************
-  -->
-  <production>
 
-    <domains>
-      <static>
-        <!-- http://developer.yahoo.com/performance/rules.html#split -->
-        <components></components>
-      </static>
-    </domains>    
-    
-    <!-- mailer -->
-    <mail>
-      <from>        
-        <name></name>
-        <address></address>
-      </from>
-      <recipient>        
-        <name></name>
-        <address></address>
-      </recipient>
-      <params>
-        <host></host>
-        <username>websitemail@zoolucms.com</username>
-        <password></password>
-      </params>
-      <actions>
-        <sendmail>
-          <client>true</client>
-          <confirmation>true</confirmation>
-        </sendmail>
-        <database>true</database>
-      </actions>
-      <database>pageDynForm</database>
-    </mail>
-    
-    <rss>
-      <dirtysubscribers>
-        <username></username>
-        <password></password>
-      </dirtysubscribers>
-    </rss>
+    <!--
+    ***********************************************************
+    * config for online evnironment                           *
+    ***********************************************************
+    -->
+    <production>
 
-    <!-- languages -->
-    <languages>
-      <language>
-        <id>1</id>
-        <code>de</code>
-      </language>
-      <language>
-        <id>2</id>
-        <code>en</code>
-      </language>      
-      <alternative>
-        <id>1</id>
-        <code>de</code>
-      </alternative>
-    </languages>
-    
-    <!-- table: categories / idRootCategory=27, idCategoryTypes=2 -->
-    <viewtypes>
-      <col1>
-        <id>28</id>
-        <matchcode>col-1</matchcode>
-      </col1>
-      <col1_img>
-        <id>29</id>
-        <matchcode>col-1-img</matchcode>
-      </col1_img>
-      <col2>
-        <id>30</id>
-        <matchcode>col-2</matchcode>
-      </col2>
-      <col2_img>
-        <id>31</id>
-        <matchcode>col-2-img</matchcode>
-      </col2_img>
-      <list>
-        <id>35</id>
-        <matchcode>list</matchcode>
-      </list>
-      <list_img>
-        <id>36</id>
-        <matchcode>list-img</matchcode>
-      </list_img>      
-    </viewtypes>
-    
-    <!-- table: categories / idRootCategory=42, idCategoryTypes=2 -->
-    <viewoptions>
-      <similar_pages>
-        <id>43</id>
-        <matchcode>similar_pages</matchcode>
-      </similar_pages> 
-    </viewoptions>
-    
-    <!-- table: categories / idRootCategory=55, idCategoryTypes=2 -->
-    <contactoptions>
-      <big_contact>
-        <id>56</id>
-        <matchcode>big_contact</matchcode>
-      </big_contact> 
-    </contactoptions>
-    
-    <!-- table: categories / idRootCategory=49, idCategoryTypes=2 -->
-    <eventstatus>
-      <open>
-        <id>50</id>
-      </open>
-      <rest>
-        <id>51</id>
-      </rest>
-      <full>
-        <id>52</id>
-      </full> 
-    </eventstatus>
-    
-    <!-- encrypt/decrypt -->
-    <crypt>
-      <key></key>
-    </crypt>
+        <domains>
+            <static>
+                <!-- http://developer.yahoo.com/performance/rules.html#split -->
+                <components></components>
+            </static>
+        </domains>
 
-  </production>
-  
-  <!--
-  ***********************************************************
-  * config for staging evnironment                          *
-  ***********************************************************
-  -->
-  <staging extends="production">
-    
-  </staging>
-  
-  <!--
-  ***********************************************************
-  * config for testing evnironment                          *
-  ***********************************************************
-  -->
-  <testing extends="staging">
-    
-  </testing>
-  
-  <!--
-  ***********************************************************
-  * config for development evnironment                      *
-  ***********************************************************
-  -->
-  <development extends="testing">
-  
-  </development>
-  
+        <!-- mailer -->
+        <mail>
+            <from>
+                <name></name>
+                <address></address>
+            </from>
+            <recipient>
+                <name></name>
+                <address></address>
+            </recipient>
+            <params>
+                <host></host>
+                <username></username>
+                <password></password>
+            </params>
+            <actions>
+                <sendmail>
+                    <client>false</client>
+                    <confirmation>false</confirmation>
+                </sendmail>
+                <database>false</database>
+            </actions>
+            <database>pageRegistrations</database>
+        </mail>
+
+        <rss>
+            <dirtysubscribers>
+                <username></username>
+                <password></password>
+            </dirtysubscribers>
+        </rss>
+
+        <!-- languages -->
+        <languages>
+            <language>
+                <id>1</id>
+                <code>de</code>
+            </language>
+            <language>
+                <id>2</id>
+                <code>en</code>
+            </language>
+            <alternative>
+                <id>1</id>
+                <code>de</code>
+            </alternative>
+        </languages>
+
+        <!-- portals / languages / segments  -->
+        <portals>
+            <portal>
+                <id>1</id>
+                <language>
+                    <id>1</id>
+                    <code>de</code>
+                    <default>true</default>
+                </language>
+                <language>
+                    <id>2</id>
+                    <code>en</code>
+                    <default>false</default>
+                </language>
+                <segment> <!-- summer -->
+                    <id>1</id>
+                    <code>s</code>
+                    <default>false</default>
+                </segment>
+                <segment> <!-- winter -->
+                    <id>2</id>
+                    <code>w</code>
+                    <default>true</default>
+                </segment>
+            </portal>
+        </portals>
+
+
+        <!-- table: categories / idRootCategory=27, idCategoryTypes=2 -->
+        <viewtypes>
+            <col1>
+                <id>28</id>
+                <matchcode>col-1</matchcode>
+            </col1>
+            <col1_img>
+                <id>29</id>
+                <matchcode>col-1-img</matchcode>
+            </col1_img>
+            <col2>
+                <id>30</id>
+                <matchcode>col-2</matchcode>
+            </col2>
+            <col2_img>
+                <id>31</id>
+                <matchcode>col-2-img</matchcode>
+            </col2_img>
+            <list>
+                <id>35</id>
+                <matchcode>list</matchcode>
+            </list>
+            <list_img>
+                <id>36</id>
+                <matchcode>list-img</matchcode>
+            </list_img>
+        </viewtypes>
+
+        <!-- table: categories / idRootCategory=42, idCategoryTypes=2 -->
+        <viewoptions>
+            <similar_pages>
+                <id>43</id>
+                <matchcode>similar_pages</matchcode>
+            </similar_pages>
+        </viewoptions>
+
+        <!-- table: categories / idRootCategory=55, idCategoryTypes=2 -->
+        <contactoptions>
+            <big_contact>
+                <id>56</id>
+                <matchcode>big_contact</matchcode>
+            </big_contact>
+        </contactoptions>
+
+        <!-- table: categories / idRootCategory=49, idCategoryTypes=2 -->
+        <eventstatus>
+            <open>
+                <id>50</id>
+            </open>
+            <rest>
+                <id>51</id>
+            </rest>
+            <full>
+                <id>52</id>
+            </full>
+        </eventstatus>
+
+        <!-- encrypt/decrypt -->
+        <crypt>
+            <key></key>
+        </crypt>
+
+    </production>
+
+    <!--
+    ***********************************************************
+    * config for staging evnironment                          *
+    ***********************************************************
+    -->
+    <staging extends="production">
+
+    </staging>
+
+    <!--
+    ***********************************************************
+    * config for testing evnironment                          *
+    ***********************************************************
+    -->
+    <testing extends="staging">
+
+    </testing>
+
+    <!--
+    ***********************************************************
+    * config for development evnironment                      *
+    ***********************************************************
+    -->
+    <development extends="testing">
+
+    </development>
+
 </configdata>
