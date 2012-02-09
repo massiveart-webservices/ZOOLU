@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.core.properties.views.helpers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -96,14 +96,12 @@ class NavigationHelper {
             break;			
     	}
     	
-      $strOutput .= '<div class="portalcontainer">
-        <div id="portal'.$row->id.'top" class="portaltop"><img src="/zoolu-statics/images/main/bg_box_230_top.png" width="230" height="4"/></div>
-        <div id="portal'.$row->id.'" class="portal" onclick="'.$strJsClickFunc.'return false;">
+      $strOutput .= '<div class="naviitemcontainer">
+        <div id="portal'.$row->id.'" class="naviitem" onclick="'.$strJsClickFunc.'return false;">
           <div class="'.$strRootLevelIconCss.'"></div>
-          <div id="divRootLevelTitle_'.$row->id.'" class="portaltitle">'.htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+          <div id="divRootLevelTitle_'.$row->id.'" class="itemtitle">'.htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
           <div class="clear"></div>
         </div>
-        <div id="portal'.$row->id.'bottom" class="portalbottom"><img src="/zoolu-statics/images/main/bg_box_230_bottom.png" width="230" height="4"/></div>
         <div class="clear"></div>
       </div>';
     }

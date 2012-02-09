@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.generic.forms
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -57,6 +57,7 @@ class FormHandler {
   private $intFormLanguageId;
   private $intActionType;
   private $intLanguageId;
+  private $strLanguageCode;
   private $intElementId;
 
 	/**
@@ -102,6 +103,7 @@ class FormHandler {
       $objForm->Setup()->setFormVersion($this->intFormVersion);
       $objForm->Setup()->setActionType($this->intActionType);
       $objForm->Setup()->setLanguageId($this->intLanguageId);
+      $objForm->Setup()->setLanguageCode($this->strLanguageCode);
       $objForm->Setup()->setFormLanguageId($this->intFormLanguageId);
       $objForm->Setup()->setElementId($this->intElementId);
 
@@ -189,6 +191,22 @@ class FormHandler {
    */
   public function getLanguageId(){
     return $this->intLanguageId;
+  }
+  
+  /**
+   * setLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function setLanguageCode($strLanguageCode){
+    $this->strLanguageCode = $strLanguageCode;
+  }
+
+  /**
+   * getLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function getLanguageCode(){
+    return $this->strLanguageCode;
   }
 
   /**

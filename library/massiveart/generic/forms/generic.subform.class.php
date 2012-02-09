@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.generic.forms
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -201,6 +201,7 @@ class GenericSubForm extends Zend_Form_SubForm {
         'isCoreField' => $objField->isCoreField,
         'MultiOptions' => $arrOptions,
         'LanguageId' => $this->objGenericForm->Setup()->getLanguageId(),
+        'LanguageCode' => $this->objGenericForm->Setup()->getLanguageCode(),
         'FormLanguageId' => $this->objGenericForm->Setup()->getFormLanguageId(),
         'isEmptyField' => (($blnEmpty == true) ? 1 : 0),
         'required' =>  (($objField->isKeyField == 1) ? true : false),

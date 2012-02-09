@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.global.controllers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -659,6 +659,7 @@ class Global_ElementController extends AuthControllerAction {
       $objGenericData->Setup()->setParentId($this->objRequest->getParam("parentFolderId"));
       $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
       $objGenericData->Setup()->setLanguageId($this->getItemLanguageId());
+      $objGenericData->Setup()->setLanguageCode($this->getItemLanguageCode());
       $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
       $objGenericData->Setup()->setModelSubPath('global/models/');
 
@@ -1071,6 +1072,30 @@ class Global_ElementController extends AuthControllerAction {
     }
     
     return $this->intItemLanguageId;
+  }
+  
+  /**
+   * getItemLanguageCode
+   * @return string
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0 
+   */
+  protected function getItemLanguageCode(){
+    if($this->strItemLanguageCode == null){
+      if(!$this->objRequest->getParam("languageCode")){
+        $arrLanguages = $this->core->config->languages->language->toArray();      
+        foreach($arrLanguages as $arrLanguage){     
+          if($arrLanguage['id'] == $this->getItemLanguageId()){
+            $this->strItemLanguageCode = $arrLanguage['code'];
+            break;
+          }        
+        }
+      }else{
+        $this->strItemLanguageCode = $this->objRequest->getParam("languageCode");
+      }
+    }
+    
+    return $this->strItemLanguageCode;
   }
 
   /**

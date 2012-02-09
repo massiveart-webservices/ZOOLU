@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.core.media.views.helpers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -92,15 +92,13 @@ class NavigationHelper {
         /**
          * get values of the row and create output
          */ 
-        $strOutput .= '<div class="portalcontainer">
-          <div id="portal'.$objRow->id.'top" class="portaltop"><img src="/zoolu-statics/images/main/bg_box_230_top.png" width="230" height="4"/></div>
-          <div id="portal'.$objRow->id.'" class="portal" onclick="myNavigation.selectMediaType('.$objRow->id.', \''.$strViewType.'\'); myNavigation.loadDashboard(); return false;">
+        $strOutput .= '<div class="naviitemcontainer">
+          <div id="portal'.$objRow->id.'" class="naviitem" onclick="myNavigation.selectMediaType('.$objRow->id.', \''.$strViewType.'\'); myNavigation.loadDashboard(); return false;">
             <div class="'.$strRootLevelIconCss.'"></div>
-            <div id="divRootLevelTitle_'.$objRow->id.'" class="portaltitle">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+            <div id="divRootLevelTitle_'.$objRow->id.'" class="itemtitle">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
             <input type="hidden" value="'.$strRootLevelType.'" id="rootLevelType'.$objRow->id.'"/>
             <div class="clear"></div>
           </div>
-          <div id="portal'.$objRow->id.'bottom" class="portalbottom"><img src="/zoolu-statics/images/main/bg_box_230_bottom.png" width="230" height="4"/></div>
           <div class="clear"></div>
         </div>';
       }

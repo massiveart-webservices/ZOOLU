@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.cms.controllers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -51,6 +51,11 @@ class Cms_PageController extends AuthControllerAction {
    * @var integer
    */
   protected $intItemLanguageId;
+  
+  /**
+   * @var string
+   */
+  protected $strItemLanguageCode;
 
   /**
    * request object instance
@@ -142,11 +147,16 @@ class Cms_PageController extends AuthControllerAction {
 	     * get form title
 	     */
 	    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
-
+	    
 	    /**
-       * output of metainformation to hidden div
-       */
-      $this->setViewMetaInfos();
+         * output of metainformation to hidden div
+         */
+        $this->setViewMetaInfos();
+        
+        /**
+         * Set if display types are shown
+         */
+        $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
 	    $this->view->form = $this->objForm;
 
@@ -220,6 +230,11 @@ class Cms_PageController extends AuthControllerAction {
        * output of metainformation to hidden div
        */
       $this->setViewMetaInfos();
+      
+      /**
+       * Set if display types are shown
+       */
+      $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
       $this->view->form = $this->objForm;
 
@@ -272,6 +287,11 @@ class Cms_PageController extends AuthControllerAction {
 	     * output of metainformation to hidden div
 	     */
 	    $this->setViewMetaInfos();
+	    
+	    /**
+         * Set if display types are shown
+         */
+        $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
 	    $this->view->form = $this->objForm;
 
@@ -338,6 +358,11 @@ class Cms_PageController extends AuthControllerAction {
       $this->setViewMetaInfos();
 
       $this->view->form = $this->objForm;
+      
+      /**
+       * Set if display types are shown
+       */
+      $this->view->showDisplayTypes = $this->core->sysConfig->display_type->enabled;
 
 	    $this->renderScript('page/form.phtml');
 	  }catch (Exception $exc) {
@@ -395,6 +420,9 @@ class Cms_PageController extends AuthControllerAction {
       $this->view->segmentOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT segments.id AS VALUE, segmentTitles.title AS DISPLAY FROM segments INNER JOIN rootLevelSegments ON rootLevelSegments.idSegments = segments.id INNER JOIN rootLevels ON rootLevels.id = rootLevelSegments.idRootLevels AND rootLevels.hasSegments = 1 INNER JOIN segmentTitles ON segmentTitles.idSegments = segments.id AND segmentTitles.idLanguages = '.$this->objForm->Setup()->getFormLanguageId().' WHERE rootLevelSegments.idRootLevels = '.$this->objForm->Setup()->getRootLevelId().' ORDER BY segmentTitles.title', $this->objForm->Setup()->getSegmentId());
 
       $this->view->hideInSitemap = $this->objForm->Setup()->getHideInSitemap();
+      $this->view->showInWebsite = $this->objForm->Setup()->getShowInWebsite();
+      $this->view->showInTablet = $this->objForm->Setup()->getShowInTablet();
+      $this->view->showInMobile = $this->objForm->Setup()->getShowInMobile();
       
       $this->view->arrPublishDate = DateTimeHelper::getDateTimeArray($this->objForm->Setup()->getPublishDate());
       $this->view->monthOptions = DateTimeHelper::getOptionsMonth(false, $this->objForm->Setup()->getPublishDate('n'));
@@ -632,6 +660,83 @@ class Cms_PageController extends AuthControllerAction {
       exit();
     }
   }
+  
+  public function exportdynformentriesAction(){
+    $this->core->logger->debug('cms->controllers->page->exportdynformentriesAction()');
+  
+    $this->_helper->viewRenderer->setNoRender();
+  
+    $strExport = '';
+    $objEntries = $this->getModelPages()->loadDynFormEntries($this->getRequest()->getParam('pageId'), false, $this->getRequest()->getParam('from'), $this->getRequest()->getParam('to'), $this->getRequest()->getParam('startdate'), $this->getRequest()->getParam('enddate'));
+    
+    if($this->getRequest()->getParam('headline')){
+      $objRow = json_decode($objEntries->current()->content, true);
+      foreach($objRow as $key => $value){
+        $strExport .= $key.';';
+      }
+      $strExport .= '
+';
+    }
+
+    foreach($objEntries as $objRow){
+      $objEntry = json_decode($objRow->content, true);
+      foreach($objEntry as $value){
+        if(is_array($value)){
+          $value = implode(',', $value);
+        }
+        $strExport .= $value.';';
+      }
+      $strExport .= '
+';
+    }
+  
+    // fix for IE catching or PHP bug issue
+    header("Pragma: public");
+    header("Expires: 0"); // set expiration time
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    // browser must download file from server instead of cache
+  
+    // force download dialog
+    header("Content-Type: application/force-download; charset=utf-8");
+    header("Content-Type: application/octet-stream; charset=utf-8");
+    header("Content-Type: application/csv; charset=utf-8");
+  
+    // Set filename
+    header("Content-Disposition: attachment; filename=\"formular".date('Y-m-d').".csv\"");
+  
+    /**
+     * The Content-transfer-encoding header should be binary, since the file will be read
+     * directly from the disk and the raw bytes passed to the downloading computer.
+     * The Content-length header is useful to set for downloads. The browser will be able to
+     * show a progress meter as a file downloads. The content-lenght can be determines by
+     * filesize function returns the size of a file.
+     */
+    header("Content-Transfer-Encoding: binary");
+  
+    echo $strExport;
+  }
+  
+  /**
+   * formentrieslistAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function formentrieslistAction(){
+    $this->core->logger->debug('cms->controllers->PageController->formentrieslistAction()');
+    
+    $objEntries = $this->getModelPages()->loadDynFormEntries($this->getRequest()->getParam('id'), true);
+    
+    $objAdapter = new Zend_Paginator_Adapter_DbSelect($objEntries);
+    $objPaginator = new Zend_Paginator($objAdapter);
+    $objPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
+    $objPaginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
+    $objPaginator->setView($this->view);
+    
+    $objEntries = $this->getModelPages()->loadDynFormEntries($this->getRequest()->getParam('id'), false);
+    
+    $this->view->assign('entries', $objEntries);
+    $this->view->assign('paginator', $objPaginator);
+  }
 
   /**
    * changetemplateAction
@@ -657,6 +762,7 @@ class Cms_PageController extends AuthControllerAction {
       $objGenericData->Setup()->setElementId($this->objRequest->getParam("id"));
       $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
       $objGenericData->Setup()->setLanguageId($this->getItemLanguageId());
+      $objGenericData->Setup()->setLanguageCode($this->getItemLanguageCode());
       $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
       $objGenericData->Setup()->setModelSubPath('cms/models/');
 
@@ -1024,6 +1130,7 @@ class Cms_PageController extends AuthControllerAction {
       $objFormHandler->setFormVersion($intFormVersion);
       $objFormHandler->setActionType($intActionType);
       $objFormHandler->setLanguageId($this->getItemLanguageId($intActionType));
+      $objFormHandler->setLanguageCode($this->getItemLanguageCode());
       $objFormHandler->setFormLanguageId($this->core->intZooluLanguageId);
       $objFormHandler->setElementId($intElementId);
 
@@ -1042,6 +1149,9 @@ class Cms_PageController extends AuthControllerAction {
       $this->objForm->Setup()->setDestinationId((($this->objRequest->getParam("destinationId") != '') ? $this->objRequest->getParam("destinationId") : 0));
       $this->objForm->Setup()->setSegmentId((($this->objRequest->getParam("segmentId") != '') ? $this->objRequest->getParam("segmentId") : 0));
       $this->objForm->Setup()->setHideInSitemap((($this->objRequest->getParam("hideInSitemap") != '') ? $this->objRequest->getParam("hideInSitemap") : 0));
+      $this->objForm->Setup()->setShowInWebsite((($this->objRequest->getParam("showInWebsite") != '') ? $this->objRequest->getParam("showInWebsite") : 1));
+      $this->objForm->Setup()->setShowInTablet((($this->objRequest->getParam("showInTablet") != '') ? $this->objRequest->getParam("showInTablet") : 1));
+      $this->objForm->Setup()->setShowInMobile((($this->objRequest->getParam("showInMobile") != '') ? $this->objRequest->getParam("showInMobile") : 1));
       $this->objForm->Setup()->setElementTypeId((($this->objRequest->getParam("pageTypeId") != '') ? $this->objRequest->getParam("pageTypeId") : $this->core->sysConfig->page_types->page->id));
       $this->objForm->Setup()->setParentTypeId((($this->objRequest->getParam("parentTypeId") != '') ? $this->objRequest->getParam("parentTypeId") : (($this->objRequest->getParam("parentFolderId") != '') ? $this->core->sysConfig->parent_types->folder : $this->core->sysConfig->parent_types->rootlevel)));
       $this->objForm->Setup()->setModelSubPath('cms/models/');
@@ -1084,6 +1194,9 @@ class Cms_PageController extends AuthControllerAction {
       $this->objForm->addElement('hidden', 'destinationId', array('value' => $this->objForm->Setup()->getDestinationId(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'segmentId', array('value' => $this->objForm->Setup()->getSegmentId(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'hideInSitemap', array('value' => $this->objForm->Setup()->getHideInSitemap(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInWebsite', array('value' => $this->objForm->Setup()->getShowInWebsite(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInTablet', array('value' => $this->objForm->Setup()->getShowInTablet(), 'decorators' => array('Hidden')));
+      $this->objForm->addElement('hidden', 'showInMobile', array('value' => $this->objForm->Setup()->getShowInMobile(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'parentTypeId', array('value' => $this->objForm->Setup()->getParentTypeId(), 'decorators' => array('Hidden')));
     }
   }
@@ -1117,6 +1230,30 @@ class Cms_PageController extends AuthControllerAction {
     }
     
     return $this->intItemLanguageId;
+  }
+  
+  /**
+   * getItemLanguageCode
+   * @return string
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0 
+   */
+  protected function getItemLanguageCode(){
+    if($this->strItemLanguageCode == null){
+      if(!$this->objRequest->getParam("languageCode")){
+        $arrLanguages = $this->core->config->languages->language->toArray();      
+        foreach($arrLanguages as $arrLanguage){     
+          if($arrLanguage['id'] == $this->getItemLanguageId()){
+            $this->strItemLanguageCode = $arrLanguage['code'];
+            break;
+          }        
+        }
+      }else{
+        $this->strItemLanguageCode = $this->objRequest->getParam("languageCode");
+      }
+    }
+    
+    return $this->strItemLanguageCode;
   }
 
   /**

@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.generic.fields.Url.forms.helpers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -111,17 +111,14 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement {
                   <div id="'.$this->view->escape($id).'_ToggleUrlHistory" class="urlHistoryContainer" style="display:none"></div>'; 
       }else{
         
-        $strOutput .= '<div class="urlwrapper" style="display:none">
-                    <input type="hidden" value="" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" '.$endTag.'
+        $strTmpLanguageCode = ((array_key_exists('LanguageCode', $attribs)) ? $attribs['LanguageCode'] : $core->sysConfig->languages->default->code);
+        
+        $strOutput .= '
+                  <div class="urlwrapper" style="display:none">
+                    <input type="hidden" value="'.$strTmpLanguageCode.'" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" '.$endTag.'
                     <input type="hidden" value="" id="'.$this->view->escape($id).'_EditableUrl" name="'.$this->view->escape($name).'_EditableUrl" '.$endTag.'
-                    <input type="hidden" value="" id="'.$this->view->escape($id).'_ShownUrl" name="'.$this->view->escape($name).'_ShownUrl" '.$endTag .'
-                    </div>
-                    <script type="text/javascript">
-                      var lang = $$("#selectLanguageId option[selected]")[0].innerHTML.toLowerCase();
-                      $("'.$this->view->escape($id).'").value = "/"+lang+"/";
-                      $("'.$this->view->escape($id).'_ShownUrl").value = "/"+lang+"/";
-                    </script>
-        ';
+                    <input type="hidden" value="'.$strTmpLanguageCode.'" id="'.$this->view->escape($id).'_ShownUrl" name="'.$this->view->escape($name).'_ShownUrl" '.$endTag .'
+                  </div>';
       }
     }
     return $strOutput;

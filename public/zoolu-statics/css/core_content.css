@@ -5,88 +5,89 @@
  * @version 1.0
  */
 
-
 /* ----------------
 Basics */
 
 .contentedit {
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:10px;
-  right:271px;
-  overflow:hidden;
-  overflow-y:scroll;
-  padding-right:40px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    right: 271px;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-right: 40px;
 }
 
 .contentedit2 {
-  position:absolute;
-  top:40px;
-  bottom:0;
-  left:10px;
-  right:0;
-  overflow:hidden;
-  overflow-y:scroll;  
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    left: 10px;
+    right: 0;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .contentedit3 {
-  position:absolute;
-  top:40px;
-  bottom:0;
-  right:0;
-  left:0;
-  overflow:hidden;
-  overflow-y:scroll;
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 /* only IE7 */
-*:first-child+html .contentedit { 
-  padding-right:50px;
+*:first-child+html .contentedit {
+    padding-right: 50px;
 }
 
 .contentfunction {
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:270px;
-  right:0;
-  background-color:#e4e4e4;
-  border-left:1px solid #666;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 270px;
+    right: 0;
+    background-color: #e4e4e4;
+    border-left: 1px solid #666;
+    overflow-x:hidden;
+    overflow-y:auto;
 }
 
 .itemremovethumb {
-  background:url(/zoolu-statics/images/icons/icon_remove.png) no-repeat 0 0;
-  position:absolute; 
-  bottom:0; 
-  left:0; 
-  width:20px; 
-  height:20px;
-  cursor:pointer; 
+    background: url(/zoolu-statics/images/icons/icon_remove.png) no-repeat 0 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 
 .itemremovelist, .itemremovelist2 {
-  background:url(/zoolu-statics/images/icons/icon_close.png) no-repeat 0 0;
-  width:11px; 
-  height:11px;
-  cursor:pointer;
-  float:left;
-  margin:11px 10px 0 0;
-  display:inline;  
+    background: url(/zoolu-statics/images/icons/icon_close.png) no-repeat 0 0;
+    width: 11px;
+    height: 11px;
+    cursor: pointer;
+    float: left;
+    margin: 11px 10px 0 0;
+    display: inline;
 }
 
 .itemremovelist2 {
-  margin:3px 0 0 10px;    
+    margin: 3px 0 0 10px;
 }
 
 .itemadd {
-  background:url(/zoolu-statics/images/icons/icon_add_2.png) no-repeat 0 0;
-  position:absolute; 
-  bottom:0; 
-  left:0; 
-  width:20px; 
-  height:20px;
-  cursor:pointer; 
+    background: url(/zoolu-statics/images/icons/icon_add_2.png) no-repeat 0 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 
 /* ----------------
@@ -94,38 +95,38 @@ Boxes Grid */
 
 .box-full,
 .box-12 {
-  width:100%;
-  clear:both;
+    width: 100%;
+    clear: both;
 }
 
 .box-half,
 .box-6 {
-  width:50%;
-  float:left;
+    width: 50%;
+    float: left;
 }
 
 .box-threequarter,
 .box-9 {
-  width:75%;
-  float:left;
+    width: 75%;
+    float: left;
 }
 
 .box-quarter,
 .box-3 {
-  width:25%;
-  float:left;
+    width: 25%;
+    float: left;
 }
 
 .box-twothirds,
 .box-8 {
-  width:66.67%;
-  float:left;
+    width: 66.67%;
+    float: left;
 }
 
 .box-third,
 .box-4 {
-  width:33.33%;
-  float:left;
+    width: 33.33%;
+    float: left;
 }
 
 /* ----------------
@@ -133,342 +134,342 @@ Fields Grid */
 
 .field-full,
 .field-12 {
-  width:100%;
-  clear:both;
+    width: 100%;
+    clear: both;
 }
 
 .field-half,
 .field-6 {
-  width:49.9%;
-  float:left;
+    width: 49.9%;
+    float: left;
 }
 
 .field-threequarter,
 .field-9 {
-  width:75%;
-  float:left;
+    width: 75%;
+    float: left;
 }
 
 .field-quarter,
 .field-3 {
-  width:25%;
-  float:left;
+    width: 25%;
+    float: left;
 }
 
 .field-twothirds,
 .field-8 {
-  width:66.67%;
-  float:left;
+    width: 66.67%;
+    float: left;
 }
 
 .field-third,
 .field-4 {
-  width:33.33%;
-  float:left;
+    width: 33.33%;
+    float: left;
 }
 
 /* ----------------
 Edit Mask */
 
 .pagepreviewcontainer, .pagebackcontainer {
-  position:absolute; 
-  top:0; 
-  left:0;
-  z-index:300;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 300;
 }
 
 .pagebackcontainer {
-  left:100px;
-}
-
-.pagepreviewleft,
-.pagepreviewright,
-.pagebackleft,
-.pagebackright {
-  background:url(/zoolu-statics/images/main/bg_page_preview_left.png) no-repeat 0 0; 
-  width:5px; 
-  height:20px; 
-  float:left;
-}
-
-.pagepreviewright,
-.pagebackright{
-  background:url(/zoolu-statics/images/main/bg_page_preview_right.png) no-repeat 0 0;
-  margin:0 1px 0 0;
+    left: 100px;
 }
 
 .pagepreviewcenter,
 .pagebackcenter {
-  background-color:#754480; 
-  height:19px; 
-  float:left; 
-  padding:1px 5px 0 0;
-  cursor:pointer;
+    background-color: #754480;
+    height: 19px;
+    float: left;
+    padding: 1px 10px 0 5px;
+    margin-right: 1px;
+    cursor: pointer;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
 }
 
 .pagepreviewcenter img,
 .pagebackcenter img {
-  margin:0 5px 4px 0; 
-  vertical-align:bottom;
+    margin: 0 5px 4px 0;
+    vertical-align: bottom;
 }
 
-.languagecontainer{
-  position:absolute; 
-  top:10px; 
-  right:40px; 
-  z-index:300;
+.languagecontainer {
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    z-index: 300;
 }
 
-.overlaycontent .languagecontainer{
-  position:relative; 
-  top:5px; 
-  right:0;
+.overlaycontent .languagecontainer {
+    position: relative;
+    top: 5px;
+    right: 0;
 }
 
 .formtitle,
 .formsubtitle {
-  padding-top:30px;
-  padding-bottom:20px;
-  padding-left:20px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    padding-left: 20px;
 }
 
 .formsubtitle {
-  padding-left:10px;
+    padding-left: 10px;
 }
 
 .editbox,
-.editbox-closed {  
-  background-color: #fff;
-  overflow: hidden; 
-  margin-bottom:20px; 
-  margin-right:10px;
+.editbox-closed {
+    background-color: #fff;
+    overflow: hidden;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
-.editbox-closed {  
-  background-color: #e4e4e4;
+.editbox-closed {
+    background-color: #e4e4e4;
 }
 
-.configbox {  
-  background-color: #e4e4e4;
+.editbox-closed .cornertl {
+    height: 24px;
+}
+
+.configbox {
+    background-color: #e4e4e4;
 }
 
 .configbox-closed {
-  background-color:#aaa;
-} 
+    background-color: #aaa;
+}
 
-.editboxtitlecontainer {  
-  height:20px;
-  background-color:#e4e4e4;
+.configbox .editboxfields,
+.configbox-closed .editboxfields {
+    background-color: #e4e4e4;
+}
+
+.editboxtitlecontainer {
+    height: 20px;
+    background-color: #e4e4e4;
 }
 
 .configbox .editboxtitlecontainer,
-.configbox-closed .editboxtitlecontainer {  
-  background-color:#aaa;
+.configbox-closed .editboxtitlecontainer {
+    background-color: #aaa;
 }
 
-.editbox .editboxtitle {  
-  padding-top:2px;
-  padding-left:10px;
-  float:left;
-  width:43%;
-  overflow:hidden; 
+.editbox .editboxtitle {
+    padding-top: 2px;
+    padding-left: 10px;
+    float: left;
+    width: 43%;
+    overflow: hidden;
 }
 
 .editbox-closed .editboxtitle {
-  padding-left:10px;
-  padding-top:4px;
-  float:left;
-  width:43%;
-  overflow:hidden;
+    padding-left: 10px;
+    padding-top: 4px;
+    float: left;
+    width: 43%;
+    overflow: hidden;
 }
 
-.absoluteright .editbox .editboxtitle, 
+.absoluteright .editbox .editboxtitle,
 .absoluteright .editbox-closed .editboxtitle {
-  width:auto;
+    width: auto;
 }
 
 /* only IE7 */
-*:first-child+html .editboxtitle { 
-  padding-left:10px;
+*:first-child+html .editboxtitle {
+    padding-left: 10px;
 }
 
-.editboxfields {  
-  padding:20px 0 0 20px;   
+.editboxfields {
+    padding: 20px 0 0 20px;
 }
 
 .editboxdrag {
-  background: url(/zoolu-statics/images/buttons/grid_sort_list.png) no-repeat 0 0;
-  cursor:move;
-  float:left;
-  width:49px;
-  height:10px;
-  margin:5px 0 0 0;
+    background: url(/zoolu-statics/images/buttons/grid_sort_list.png) no-repeat 0 0;
+    cursor: move;
+    float: left;
+    width: 49px;
+    height: 10px;
+    margin: 5px 0 0 0;
 }
 
 .editbox-closed .editboxdrag {
-  margin:7px 0 0 0;
+    margin: 7px 0 0 0;
 }
 
 .editboxmultiplycontainer {
-  float:right;
-  padding:2px 10px 0 0;
+    float: right;
+    padding: 2px 10px 0 0;
 }
 
 .editbox-closed .editboxmultiplycontainer {
-  padding:4px 10px 0 0;
-} 
+    padding: 4px 10px 0 0;
+}
 
 .editboxmultiplyminus {
-  background: url(/zoolu-statics/images/buttons/button_list_remove.png) no-repeat 0 0;
-  float:left;
-  width:17px;
-  height:16px;
-  margin:0 5px 0 0;
-  cursor:pointer;
+    background: url(/zoolu-statics/images/buttons/button_list_remove.png) no-repeat 0 0;
+    float: left;
+    width: 17px;
+    height: 16px;
+    margin: 0 5px 0 0;
+    cursor: pointer;
 }
 
 .editboxmultiplyplus {
-  background: url(/zoolu-statics/images/buttons/button_list_add.png) no-repeat 0 0;
-  float:left;
-  width:17px;
-  height:16px;
-  cursor:pointer;  
+    background: url(/zoolu-statics/images/buttons/button_list_add.png) no-repeat 0 0;
+    float: left;
+    width: 17px;
+    height: 16px;
+    cursor: pointer;
 }
 
 .regiontitlecopy {
-  overflow:hidden;
-  white-space: nowrap;
-  padding:0 10px 0 0;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0 10px 0 0;
 }
 
 .field {
-  margin-right:22px;
-  padding-bottom:20px;
+    margin-right: 22px;
+    padding-bottom: 20px;
 }
 
 .field .fieldtitle {
-    
+
 }
 
 .field .description {
-  
+
 }
 
 .field .errors {
-  
+
 }
 
 .field .filtererror {
-  margin-left:5px;
+    margin-left: 5px;
 }
 
 .field input {
-  margin:2px 0 1px 0;
-  width:99%; 
+    margin: 2px 0 1px 0;
+    width: 99%;
 }
 
 .field textarea {
-  margin:2px 0 2px 0;
-  width:99%;
-  height:70px;  
+    margin: 2px 0 2px 0;
+    width: 99%;
+    height: 70px;
 }
 
 .field input.radio,
 .field input.multiCheckbox,
 .field input.multiCheckboxTree {
-  width:30px;
-  height:15px;
-  margin:0;
-  vertical-align:middle;
+    width: 30px;
+    height: 15px;
+    margin: 0;
+    vertical-align: middle;
 }
 
 .field select.multiselect,
 .field select.select,
 .field select.selectTree,
 .field select.videoSelect {
-  width:100%;
-  margin:2px 0 2px 0;
-  padding:1px 0 1px 0;
+    width: 100%;
+    margin: 2px 0 2px 0;
+    padding: 1px 0 1px 0;
 }
 
 .field .fieldoverflowcontainer {
-  border:1px solid #ccc; 
-  border-right:0; 
-  overflow:hidden; 
-  overflow-y:scroll; 
-  height:150px; 
-  margin:2px 0 0 0; 
-  padding:5px 0 5px 5px;
+    border: 1px solid #ccc;
+    border-right: 0;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 150px;
+    margin: 2px 0 0 0;
+    padding: 5px 0 5px 5px;
 }
 
 .filterwrapper .field select.filterselect:first-child {
-  margin-left:0;
-  width:150px;
+    margin-left: 0;
+    width: 150px;
 }
 
 .filterwrapper .field select.filterselect {
-  margin:2px 5px 2px 5px;
-  padding:1px 2px 1px 2px;
-  float:left;
+    margin: 2px 5px 2px 5px;
+    padding: 1px 2px 1px 2px;
+    float: left;
 }
 
 .filterwrapper .field .operator {
-  width:70px;
+    width: 70px;
 }
 
 .filterwrapper .field select.filterselect[multiple] {
-  height:100px;
-  width:300px;
+    height: 100px;
+    width: 300px;
 }
 
 /* ----------------
 Region Positions */
 
 .absoluteright {
-  position:absolute;
-  top:50px;
-  right:30px;
+    position: absolute;
+    top: 50px;
+    right: 30px;
 }
 
 .contentedit2 .absoluteright {
-  right:0px;
+    right: 0px;
 }
 
 /* only IE7 */
 *:first-child+html .absoluteright {
-  position:absolute;
-  top:50px;
-  right:22px;
+    position: absolute;
+    top: 50px;
+    right: 22px;
 }
 
 .absoluteleft {
-  position:absolute;
-  top:30px;
-  left:10px;
+    position: absolute;
+    top: 30px;
+    left: 10px;
 }
 
 .multiregionline {
-  background: url(/zoolu-statics/images/main/bg_line_dashed.png) repeat-x 0 50%;
-  height:20px;
-  margin-right:10px;
-  margin-bottom:20px;
+    background: url(/zoolu-statics/images/main/bg_line_dashed.png) repeat-x 0 50%;
+    height: 20px;
+    margin-right: 10px;
+    margin-bottom: 20px;
 }
 
 .multiregiontop {
-  background-color: #c6c6c6;
-  height:20px;
-  width:130px;
-  text-align:center;
-  margin:0 auto 0 auto;
+    background-color: #c6c6c6;
+    height: 20px;
+    width: 130px;
+    text-align: center;
+    margin: 0 auto 0 auto;
 }
 
 /* ----------------
 Template Chooser Element */
 
 .templateChooser {
-  position:absolute;
-  top:0;
-  right:0;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 #divTemplateChooser {
@@ -476,236 +477,236 @@ Template Chooser Element */
 }
 
 #divCurrTemplate {
-  padding:2px 0 5px 0;
+    padding: 2px 0 5px 0;
 }
 
 #divCurrTemplate img {
-  border:0;
-  display:block;
+    border: 0;
+    display: block;
 }
 
 #divDescTemplate {
-  width:159px;
-  text-align:center;
+    width: 159px;
+    text-align: center;
 }
 
 #divChangeTemplate {
-  width:159px;
-  padding:2px 0 0 0;
-  text-align:center;
+    width: 159px;
+    padding: 2px 0 0 0;
+    text-align: center;
 }
 
 #divAllTemplates {
-  padding:0;
-  width:159px;
+    padding: 0;
+    width: 159px;
 }
 
 .tmpElement {
-  padding:0 0 10px 0;  
+    padding: 0 0 10px 0;
 }
 
 .tmpElement img {
-  border:0;
-  display:block;
+    border: 0;
+    display: block;
 }
 
 /* ----------------
 Media Chooser Element */
 
 .mediawrapper {
-  width:100%; 
+    width: 100%;
 }
 
 .mediawrapper div {
-   
+
 }
 
 .mediawrapper .mediatop {
-  text-align:right;
-  background-color:#e4e4e4;
-  height:16px;
-  /*margin:2px 0 0 0;*/
-  padding:2px 0 0 0;
-  border:1px solid #e4e4e4;
+    text-align: right;
+    background-color: #e4e4e4;
+    height: 16px;
+    /*margin:2px 0 0 0;*/
+    padding: 2px 0 0 0;
+    border: 1px solid #e4e4e4;
 }
 
 .mediawrapper .mediatop img {
-  border:0;
-  vertical-align:middle;
-  margin:0 5px 0 2px;
-  cursor:pointer;
+    border: 0;
+    vertical-align: middle;
+    margin: 0 5px 0 2px;
+    cursor: pointer;
 }
 
 .mediawrapper .mediabottom {
-  background-color:#e4e4e4;
-  padding:2px;
-  border:1px solid #ccc;
-  border-top:0px;
+    background-color: #e4e4e4;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-top: 0px;
 }
 
 .mediawrapper .mediabottom select {
-  width:100%;
+    width: 100%;
 }
 
 .mediawrapper .mediabottom .mediaposition {
-  width:42px; 
-  float:right;
+    width: 42px;
+    float: right;
 }
 
 .mediawrapper .mediabottom .mediaposition .item {
-  width:12px; 
-  height:12px; 
-  margin:1px; 
-  padding:0;
-  float:left;
+    width: 12px;
+    height: 12px;
+    margin: 1px;
+    padding: 0;
+    float: left;
 }
 
 .mediawrapper .mediabottom .mediaposition .active {
-  cursor:pointer;
+    cursor: pointer;
 }
 
 .mediawrapper .mediabottom .mediasize {
-  width:60%; 
-  float:left; 
-  padding:12px 10px 0 0;
+    width: 60%;
+    float: left;
+    padding: 12px 10px 0 0;
 }
 
 .mediawrapper .media {
-  border:1px solid #ccc;
-  background-color:#fff;
-  min-height:100px;
-  padding:2px 10px 10px 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    min-height: 100px;
+    padding: 2px 10px 10px 10px;
 }
 
 .mediaitem {
-  float:left;
-  width:100px;
-  height:100px;
-  margin:0 20px 20px 0;
-  cursor:move;
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 0 20px 20px 0;
+    cursor: move;
 }
 
 .mediaitem table {
-  width:100%;
-  height:100%;
+    width: 100%;
+    height: 100%;
 }
 
 .mediaitem td {
-  width:100px;
-  height:100px;
-  vertical-align:bottom;
-  text-align:center;
+    width: 100px;
+    height: 100px;
+    vertical-align: bottom;
+    text-align: center;
 }
 
 .mediaitem td img {
-  display:block;
+    display: block;
 }
 
 /* ----------------
 Document Chooser Element */
 
 .docwrapper {
-  width:100%; 
+    width: 100%;
 }
 
 .docwrapper div {
-   
+
 }
 
 .docwrapper .doctop {
-  text-align:right;
-  background-color:#e4e4e4;
-  height:16px;
-  margin:2px 0 0 0;
-  padding:2px 0 0 0;
-  border:1px solid #e4e4e4;
+    text-align: right;
+    background-color: #e4e4e4;
+    height: 16px;
+    margin: 2px 0 0 0;
+    padding: 2px 0 0 0;
+    border: 1px solid #e4e4e4;
 }
 
 .docwrapper .doctop img {
-  border:0;
-  vertical-align:middle;
-  margin:0 5px 0 2px;
-  cursor:pointer;
+    border: 0;
+    vertical-align: middle;
+    margin: 0 5px 0 2px;
+    cursor: pointer;
 }
 
 .docwrapper .document,
 .docwrapper .documentFilter {
-  border:1px solid #ccc;
-  min-height:50px;
-  padding:2px 0 10px 0;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    padding: 2px 0 10px 0;
 }
 
 .docitem, .fileitem, .contactitem {
-  margin:0 0 0 10px;
-  border-bottom:1px solid #e4e4e4;
-  cursor:move;
+    margin: 0 0 0 10px;
+    border-bottom: 1px solid #e4e4e4;
+    cursor: move;
 }
 
 .documentFilter .docitem,
 .documentFilter .fileitem,
 .documentFilter .contactitem {
-  cursor:default;
+    cursor: default;
 }
 
 .documentFilter .docitem .itemremovelist,
 .documentFilter .fileitem .itemremovelist,
 .documentFilter .contactitem .itemremovelist {
-  display:none;
+    display: none;
 }
 
 /* ----------------
 Video Chooser Element */
 
 .vidwrapper {
-  width:100%; 
+    width: 100%;
 }
 
 .vidwrapper div {
-   
+
 }
 
 .vidwrapper .top {
-  text-align:right;
-  background-color:#e4e4e4;
-  height:16px;
-  margin:2px 0 0 0;
-  padding:2px 0 0 0;
-  border:1px solid #e4e4e4;
+    text-align: right;
+    background-color: #e4e4e4;
+    height: 16px;
+    margin: 2px 0 0 0;
+    padding: 2px 0 0 0;
+    border: 1px solid #e4e4e4;
 }
 
 .vidwrapper .top img {
-  border:0;
-  vertical-align:middle;
-  margin:0 5px 0 2px;
-  cursor:pointer;
+    border: 0;
+    vertical-align: middle;
+    margin: 0 5px 0 2px;
+    cursor: pointer;
 }
 
 .vidwrapper .video,
 .vidwrapper .videoFilter {
-  border:1px solid #ccc;
-  min-height:50px;
-  padding:2px 0 10px 0;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    padding: 2px 0 10px 0;
 }
 
 .viditem {
-  margin:0 0 0 10px;
-  border-bottom:1px solid #e4e4e4;
-  cursor:move;
+    margin: 0 0 0 10px;
+    border-bottom: 1px solid #e4e4e4;
+    cursor: move;
 }
 
-.videoFilter .viditem{
-  cursor:default;
+.videoFilter .viditem {
+    cursor: default;
 }
 
-.videoFilter .viditem .itemremovelist{
-  display:none;
+.videoFilter .viditem .itemremovelist {
+    display: none;
 }
 
 /* ----------------
 Internal Links Chooser Element */
 
 .internallinkswrapper {
-  width:100%; 
+    width: 100%;
 }
 
 .internallinkswrapper div {
@@ -713,265 +714,288 @@ Internal Links Chooser Element */
 }
 
 .internallinkswrapper .top {
-  text-align:right;
-  background-color:#e4e4e4;
-  height:16px;
-  margin:2px 0 0 0;
-  padding:2px 0 0 0;
-  border:1px solid #e4e4e4;
+    text-align: right;
+    background-color: #e4e4e4;
+    height: 16px;
+    margin: 2px 0 0 0;
+    padding: 2px 0 0 0;
+    border: 1px solid #e4e4e4;
 }
 
 .internallinkswrapper .top img {
-  border:0;
-  vertical-align:middle;
-  margin:0 5px 0 2px;
-  cursor:pointer;
+    border: 0;
+    vertical-align: middle;
+    margin: 0 5px 0 2px;
+    cursor: pointer;
 }
 
 .internallinkswrapper .internalLinks,
 .internallinkswrapper .collapsableInternalLinks {
-  border:1px solid #ccc;
-  min-height:50px;
-  padding:2px 0 10px 0;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    padding: 2px 0 10px 0;
 }
 
 .elementitem {
-  margin:0 0 0 10px;
-  padding:4px 0 4px 0;
-  border-bottom:1px solid #e4e4e4;
-  cursor:move;
+    margin: 0 0 0 10px;
+    padding: 4px 0 4px 0;
+    border-bottom: 1px solid #e4e4e4;
+    cursor: move;
 }
 
 /* ----------------
 Collection Chooser Element */
 
 .collectionwrapper {
-  width:100%; 
+    width: 100%;
 }
 
 .collectionwrapper div {
-   
+
 }
 
 .collectionwrapper .top {
-  text-align:right;
-  background-color:#e4e4e4;
-  height:16px;
-  margin:2px 0 0 0;
-  padding:2px 0 0 0;
-  border:1px solid #e4e4e4;
+    text-align: right;
+    background-color: #e4e4e4;
+    height: 16px;
+    margin: 2px 0 0 0;
+    padding: 2px 0 0 0;
+    border: 1px solid #e4e4e4;
 }
 
 .collectionwrapper .top img {
-  border:0;
-  vertical-align:middle;
-  margin:0 5px 0 2px;
-  cursor:pointer;
+    border: 0;
+    vertical-align: middle;
+    margin: 0 5px 0 2px;
+    cursor: pointer;
 }
 
 .collectionwrapper .collection {
-  border:1px solid #ccc;
-  min-height:50px;
-  padding:2px 0 10px 0;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    padding: 2px 0 10px 0;
 }
 
 /* ----------------
 Contact Chooser Element */
 
 .conwrapper {
-  width:100%; 
+    width: 100%;
 }
 
 .conwrapper div {
-   
+
 }
 
 .conwrapper .contop {
-  text-align:right;
-  background-color:#e4e4e4;
-  height:16px;
-  margin:2px 0 0 0;
-  padding:2px 0 0 0;
-  border:1px solid #e4e4e4;
+    text-align: right;
+    background-color: #e4e4e4;
+    height: 16px;
+    margin: 2px 0 0 0;
+    padding: 2px 0 0 0;
+    border: 1px solid #e4e4e4;
 }
 
 .conwrapper .contop img {
-  border:0;
-  vertical-align:middle;
-  margin:0 5px 0 2px;
-  cursor:pointer;
+    border: 0;
+    vertical-align: middle;
+    margin: 0 5px 0 2px;
+    cursor: pointer;
 }
 
 .conwrapper .contact, .conwrapper .group {
-  border:1px solid #ccc;
-  min-height:50px;
-  padding:2px 0 10px 0;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    padding: 2px 0 10px 0;
 }
 
 .conitem {
-  margin:0 0 0 10px;
-  border-bottom:1px solid #e4e4e4;
+    margin: 0 0 0 10px;
+    border-bottom: 1px solid #e4e4e4;
 }
 
 /* ----------------
 Linked Page */
 
-.linkedpage{
-  margin:10px 0 0 0;
+.linkedpage {
+    margin: 10px 0 0 0;
 }
 
 /* ----------------
 Function Widget */
 
 .widgetfunctions {
-  padding:0;
+    padding: 0;
+}
+
+#content2 .widgetfunctions {
+    background-color: #fff;
 }
 
 .widget224content {
-  width:270px;
-  overflow: hidden;
+    width: 270px;
+    overflow: hidden;
 }
 
 .widgetcontenttop {
-  background-color:#999; /*#754480;*/
-  height:40px;
-  padding:0;
+    background-color: #999; /*#754480;*/
+    height: 40px;
+    padding: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-topleft: 5px;
+}
+
+.widget224content .widgetcontenttop {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    -moz-border-radius-topright: 0;
+    -moz-border-radius-topleft: 0;
 }
 
 #widgetcontentlefttop {
-  position:absolute;
-  left:0;
-  top:0;
-  bottom:auto;
-  background-color:#999;
-  width:5px;
-  height:10px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: auto;
+    background-color: #999;
+    width: 5px;
+    height: 10px;
 }
 
 #widgetcontentrighttop {
-  position:absolute;
-  right:0;
-  top:0;
-  bottom:auto;
-  background-color:#999;
-  width:5px;
-  height:10px;
-  font-size:0;
-  line-height:0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: auto;
+    background-color: #999;
+    width: 5px;
+    height: 10px;
+    font-size: 0;
+    line-height: 0;
 }
 
-#widgetcontentlefttop img, 
+#widgetcontentlefttop img,
 #widgetcontentrightttop img {
-  display:block;
-  width:5px;
-  height:5px;
+    display: block;
+    width: 5px;
+    height: 5px;
 }
 
 .widgetcontentmain {
-  padding:10px;
-  min-height:50px;
+    padding: 10px;
+    min-height: 50px;
 }
 
 .widgetcontentmain select.important {
-  width:147px;
+    width: 147px;
 }
 
 .widgetcontentmain select {
-  width:147px;
+    width: 147px;
 }
 
 .widgetcontentmain table {
-  width:100%;
+    width: 100%;
 }
 
 .widgetcontentmain td {
-  vertical-align:top;
-  padding:0 0 10px;
+    vertical-align: top;
+    padding: 0 0 10px;
+}
+
+.widgetcontentmain label {
+    vertical-align:top;
 }
 
 .widgetcontentmain .tdImportant {
-  padding:0 10px 0 0;
-  text-align:right;
+    padding: 0 10px 0 0;
+    text-align: right;
 }
 
 .widgetcontentmain .tdNormal {
-  padding:0 10px 0 0;
-  text-align:right;
+    padding: 0 10px 0 0;
+    text-align: right;
 }
 
-.widgetcontentmain .navigationoptios, 
+.widgetcontentmain .tdShow {
+    padding: 0 0 2px;
+}
+
+.widgetcontentmain .navigationoptios,
 .widgetcontentmain .fallbackoptions {
-  padding:5px 0 0 0; 
+    padding: 5px 0 0 0;
 }
 
 .widgetcontentmain .publishdate {
-  float:left;
-  padding-right:10px;
+    float: left;
+    padding-right: 10px;
 }
 
 .widgetcontentmain .iconcalendar {
-  vertical-align:middle;
-  float:left;
-  cursor:pointer;
+    vertical-align: middle;
+    float: left;
+    cursor: pointer;
 }
 
 .widgetcontentmain .currversion {
-  float:left;
-  width:30px;
-  overflow:hidden;
+    float: left;
+    width: 30px;
+    overflow: hidden;
 }
 
 .widgetcontentmain #divPublishDateNew {
-  
+
 }
 
 .widgetcontentmain #divPublishDateNew .divpublishnewdateinner {
-  padding:5px 0 0 0; 
+    padding: 5px 0 0 0;
 }
 
 .widgetcontentmain #divPublishDateNew .divpublishnewdatetop,
 .widgetcontentmain #divPublishDateNew .divpublishnewdatebottom {
-  width:147px;
-  height:4px;
-  background-color:#fff;
+    width: 147px;
+    height: 4px;
+    background-color: #fff;
 }
 
 .widgetcontentmain #divPublishDateNew div.newdate {
-  padding:2px 0 5px 5px;
-  background-color:#fff;
-  width:142px;
+    padding: 2px 0 5px 5px;
+    background-color: #fff;
+    width: 142px;
 }
 
 .widgetcontentmain #divPublishDateNew div.newtime {
-  padding:0 0 2px 5px;
-  background-color:#fff;
-  width:142px;
+    padding: 0 0 2px 5px;
+    background-color: #fff;
+    width: 142px;
 }
 
 .widgetcontentmain #divPublishDateNew div.newtime div.newtimeinner {
-  float:left;
+    float: left;
 }
 
 .widgetcontentmain #divPublishDateNew input {
-  width:2em;
-  padding:1px;
-  border: 1px solid #ccc;
+    width: 2em;
+    padding: 1px;
+    border: 1px solid #ccc;
 }
 
 .widgetcontentmain #divPublishDateNew input.year {
-  width:3em;
+    width: 3em;
 }
 
 .widgetcontentmain #divPublishDateNew select {
-  width:50px;
-  padding:0;
-  border: 1px solid #ccc;
+    width: 50px;
+    padding: 0;
+    border: 1px solid #ccc;
 }
 
 .widgetcontentmain #divPublishDateNew #buttonassume {
-  float:left;
-  cursor:pointer;
-  padding:0 0 0 5px;
+    float: left;
+    cursor: pointer;
+    padding: 0 0 0 5px;
 }
 
 /* ----------------
@@ -980,415 +1004,413 @@ Buttons: Save, Delete */
 #buttonsave,
 #buttonnew,
 #buttontest {
-  float:left;
-  cursor:pointer;
-  margin:7px 0 0 10px;
-  display:inline;
+    float: left;
+    cursor: pointer;
+    margin: 7px 0 0 10px;
+    display: inline;
 }
 
 #buttondelete,
 #buttonsend,
 #buttontestsend {
-  float:right;
-  cursor:pointer;
-  margin:7px 10px 0 0;
-  display:inline;
+    float: right;
+    cursor: pointer;
+    margin: 7px 10px 0 0;
+    display: inline;
 }
 
-#buttonedit{
-  float:left;
-  cursor:pointer;
-  margin:7px 0 0 10px;
-  display:inline;
+#buttonedit {
+    float: left;
+    cursor: pointer;
+    margin: 7px 0 0 10px;
+    display: inline;
 }
 
-#buttonprint{
-  float:right;
-  cursor:pointer;
-  margin:7px 10px 0 0;
-  display:inline;
+#buttonprint {
+    float: right;
+    cursor: pointer;
+    margin: 7px 10px 0 0;
+    display: inline;
 }
 
 #buttonnewversion {
-  float:left;
-  cursor:pointer;
-  margin:0 0 0 0;
-  display:inline;
+    float: left;
+    cursor: pointer;
+    margin: 0 0 0 0;
+    display: inline;
 }
 
 #backlink {
-  float:left;
-  margin:12px 0 0 10px;
-  display:inline;
+    float: left;
+    margin: 12px 0 0 10px;
+    display: inline;
 }
 
 #sendDataLink {
-  float:left;
-  margin:12px 0 0 10px;
-  display:inline;
+    float: left;
+    margin: 12px 0 0 10px;
+    display: inline;
 }
 
 .buttonedittop {
-  background: transparent url(/zoolu-statics/images/buttons/button_purple_top.png) no-repeat 0 0;
-  height:5px;
-  width:143px;
+    background: transparent url(/zoolu-statics/images/buttons/button_purple_top.png) no-repeat 0 0;
+    height: 5px;
+    width: 143px;
 }
 
 .buttoneditbottom {
-  background: transparent url(/zoolu-statics/images/buttons/button_purple_bottom.png) no-repeat 0 0;
-  height:5px;
-  width:143px;
+    background: transparent url(/zoolu-statics/images/buttons/button_purple_bottom.png) no-repeat 0 0;
+    height: 5px;
+    width: 143px;
 }
 
 .buttoneditmenu,
 .buttoneditmenu2,
 .buttoneditmenu3 {
-  position:absolute; 
-  z-index:300; 
-  width:143px; 
-  top:27px; 
-  left:122px;
+    position: absolute;
+    z-index: 300;
+    width: 143px;
+    top: 27px;
+    left: 122px;
 }
 
-.buttoneditmenu2{
-  left:10px;
+.buttoneditmenu2 {
+    left: 10px;
 }
 
-.buttoneditmenu3{
-  left:auto;
-  right:122px;
+.buttoneditmenu3 {
+    left: auto;
+    right: 122px;
 }
 
 .buttoneditmenuinner {
-  padding:10px;
-  width:121px;
-  border-left:1px solid #000;
-  border-right:1px solid #000;
-  background-color:#774580;
+    padding: 10px;
+    width: 121px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    background-color: #774580;
 }
 
 .buttoneditlink {
-  cursor:pointer;
-  height:20px;
+    cursor: pointer;
+    height: 20px;
 }
 
 .buttoneditmiddle {
-  background:#774580 url(/zoolu-statics/images/icons/pointer_dark_opened.png) no-repeat 123px 4px;
-  border-left:1px solid #000;
-  border-right:1px solid #000;
-  width:131px;
-  height:15px;
-  line-height:15px;
-  padding:0 0 0 10px;  
+    background: #774580 url(/zoolu-statics/images/icons/pointer_dark_opened.png) no-repeat 123px 4px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    width: 131px;
+    height: 15px;
+    line-height: 15px;
+    padding: 0 0 0 10px;
 }
 
 .button17leftOff {
-  background: url(/zoolu-statics/images/buttons/button_purple_left_small.png) no-repeat;
-  width: 5px !important;
-  height: 17px;
-  float:left;
+    background: url(/zoolu-statics/images/buttons/button_purple_left_small.png) no-repeat;
+    width: 5px !important;
+    height: 17px;
+    float: left;
 }
 
 .button17rightOff {
-  background: url(/zoolu-statics/images/buttons/button_purple_right_small.png) no-repeat;
-  width: 5px !important;
-  height: 17px;
-  float:left;
+    background: url(/zoolu-statics/images/buttons/button_purple_right_small.png) no-repeat;
+    width: 5px !important;
+    height: 17px;
+    float: left;
 }
 
 .button17centerOff {
-  background: url(/zoolu-statics/images/buttons/button_purple_center_small.png) repeat-x;
-  height:17px;
-  float:left;
-  padding:0 2px 0 2px;
+    background: url(/zoolu-statics/images/buttons/button_purple_center_small.png) repeat-x;
+    height: 17px;
+    float: left;
+    padding: 0 2px 0 2px;
 }
 
 .button25leftOff {
-  background: url(/zoolu-statics/images/buttons/button_purple_left.png) no-repeat;
-  width: 6px !important;
-  height: 25px;
-  float:left;
+    background: url(/zoolu-statics/images/buttons/button_purple_left.png) no-repeat;
+    width: 6px !important;
+    height: 25px;
+    float: left;
 }
 
 .button25leftOn {
-  background: url(/zoolu-statics/images/buttons/button_yellow_left.png) no-repeat;
-  width: 6px !important;
-  height: 25px;
-  float:left;
+    background: url(/zoolu-statics/images/buttons/button_yellow_left.png) no-repeat;
+    width: 6px !important;
+    height: 25px;
+    float: left;
 }
 
 .button25rightOff {
-  background: url(/zoolu-statics/images/buttons/button_purple_right.png) no-repeat;
-  width: 6px !important;
-  height: 25px;
-  float:left;
+    background: url(/zoolu-statics/images/buttons/button_purple_right.png) no-repeat;
+    width: 6px !important;
+    height: 25px;
+    float: left;
 }
 
 .button25rightOn {
-  background: url(/zoolu-statics/images/buttons/button_yellow_right.png) no-repeat;
-  width: 6px !important;
-  height: 25px;
-  float:left;
+    background: url(/zoolu-statics/images/buttons/button_yellow_right.png) no-repeat;
+    width: 6px !important;
+    height: 25px;
+    float: left;
 }
 
 .button25centerOff {
-  background: url(/zoolu-statics/images/buttons/button_purple_center.png) repeat-x;
-  height:25px;
-  float:left;
-  width:90px;
+    background: url(/zoolu-statics/images/buttons/button_purple_center.png) repeat-x;
+    height: 25px;
+    float: left;
+    width: 90px;
 }
 
 .button25centerOn {
-  background: url(/zoolu-statics/images/buttons/button_yellow_center.png) repeat-x;
-  height:25px;
-  float:left;
-  width:90px;
+    background: url(/zoolu-statics/images/buttons/button_yellow_center.png) repeat-x;
+    height: 25px;
+    float: left;
+    width: 90px;
 }
 
 .button25centerOff img.iconsave,
 .button25centerOn img.iconsave {
-  vertical-align:middle;
-  margin:6px 0 0 2px;
-  padding-right:10px;
-  float:left;
+    vertical-align: middle;
+    margin: 6px 0 0 2px;
+    padding-right: 10px;
+    float: left;
 }
 
 .button25centerOff img.icondelete,
 .button25centerOn img.icondelete {
-  vertical-align:middle;
-  margin:4px 0 0 2px;
-  padding-right:10px;
-  float:left;
+    vertical-align: middle;
+    margin: 4px 0 0 2px;
+    padding-right: 10px;
+    float: left;
 }
 
 .button25centerOff div,
 .button25centerOn div {
-  float:left;
-  padding-top:5px;
+    float: left;
+    padding-top: 5px;
 }
 
 .button17centerOff img {
-  vertical-align:middle;
-  margin:4px 0 0 2px;
-  padding-right:5px;
-  float:left;
+    vertical-align: middle;
+    margin: 4px 0 0 2px;
+    padding-right: 5px;
+    float: left;
 }
 
 .button17centerOff div {
-  float:left;
-  padding-top:0;
+    float: left;
+    padding-top: 0;
 }
 
 /* ----------------
 Search */
 
 .searchContainer {
-  float:right;
+    float: right;
 }
 
 #buttonsearch {
-  float:left;
-  cursor:pointer;
-  margin:7px 10px 0 0;
-  display:inline;
+    float: left;
+    cursor: pointer;
+    margin: 7px 10px 0 0;
+    display: inline;
 }
 
 .searchContainer .searchInput {
-  width:180px; 
-  margin:8px 10px 0 0;
-  float:left;
+    width: 180px;
+    margin: 8px 10px 0 0;
+    float: left;
 }
 
 .bttnSearchReset {
-  cursor:pointer;
-  margin:32px 0 0 10px;
-  float:left;
+    cursor: pointer;
+    margin: 32px 0 0 10px;
+    float: left;
 }
 
 .searchtitle {
-  float:left;
+    float: left;
 }
 
 .groupSearchContainer {
-  margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
 .groupSearchContainer .searchbutton {
-  margin-left:10px;
-  margin-right:10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .bttnGroupSearchReset {
-  cursor:pointer;
-  display:inline;
+    cursor: pointer;
+    display: inline;
 }
 
 .groupSearchContainer #groupSearch {
-  float:left;
+    float: left;
 }
 
 .groupSearchContainer .searchbutton {
-  cursor:pointer;
-  float:left;
+    cursor: pointer;
+    float: left;
 }
 
 /* ------------------
 Filter */
 
 .multiplyOptions {
-  padding:4px 0 0 0;
+    padding: 4px 0 0 0;
 }
 
 .multiplyOptions .minus {
-  background: url(/zoolu-statics/images/buttons/button_list_remove.png) no-repeat 0 0;
-  float:left;
-  width:17px;
-  height:16px;
-  margin:0 0 0 5px;
-  cursor:pointer;
+    background: url(/zoolu-statics/images/buttons/button_list_remove.png) no-repeat 0 0;
+    float: left;
+    width: 17px;
+    height: 16px;
+    margin: 0 0 0 5px;
+    cursor: pointer;
 }
 
 .multiplyOptions .plus {
-  background: url(/zoolu-statics/images/buttons/button_list_add.png) no-repeat 0 0;
-  float:left;
-  width:17px;
-  height:16px;
-  cursor:pointer;  
+    background: url(/zoolu-statics/images/buttons/button_list_add.png) no-repeat 0 0;
+    float: left;
+    width: 17px;
+    height: 16px;
+    cursor: pointer;
 }
 
 /* ----------------
 Save Message & Loader */
 
 .alertsave {
-  position:absolute;
-  left:0;
-  top:0;
-  height:40px;
-  width:100%;
-  background-color:#999;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 40px;
+    width: 100%;
+    background-color: #999;
 }
 
 .alertsave .alertsaveloader {
-  width:100px;
-  margin:0 auto 0 auto;
-  padding:10px 0 0 0;
-  cursor:pointer;
+    width: 100px;
+    margin: 0 auto 0 auto;
+    padding: 10px 0 0 0;
+    cursor: pointer;
 }
 
 .alertsave .alertsaveloader img {
-  vertical-align:middle;
-  margin:0 10px 3px 0;
+    vertical-align: middle;
+    margin: 0 10px 3px 0;
 }
 
 .alertsavesucces {
-  position:absolute;
-  left:0;
-  top:0;
-  height:30px;
-  width:100%;
-  background-color:#ffd300;
-  padding:10px 0 0 0;
-  text-align:center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 30px;
+    width: 100%;
+    background-color: #ffd300;
+    padding: 10px 0 0 0;
+    text-align: center;
 }
 
 .alertsaveerror {
-  position:absolute;
-  left:0;
-  top:0;
-  height:30px;
-  width:100%;
-  background-color:#CC0000;
-  padding:10px 0 0 0;
-  text-align:center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 30px;
+    width: 100%;
+    background-color: #CC0000;
+    padding: 10px 0 0 0;
+    text-align: center;
 }
 
 .alertdeletesucces {
-  position:absolute;
-  left:0;
-  top:0;
-  height:30px;
-  width:100%;
-  background-color:#ffd300;
-  padding:10px 0 0 0;
-  text-align:center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 30px;
+    width: 100%;
+    background-color: #ffd300;
+    padding: 10px 0 0 0;
+    text-align: center;
 }
-
 
 /* ----------------
 Pointers */
 
 .pointerwhite {
-  background-repeat:no-repeat;
-  background-position:center center;
-  height:20px;
-  width:10px;
-  font-size:0;
-  cursor:pointer;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 20px;
+    width: 10px;
+    font-size: 0;
+    cursor: pointer;
 }
 
 .opened {
-  background-image:url(/zoolu-statics/images/icons/pointer_white_opened.png);
+    background-image: url(/zoolu-statics/images/icons/pointer_white_opened.png);
 }
 
 .closed {
-  background-image:url(/zoolu-statics/images/icons/pointer_white_closed.png);
-  margin-top:1px;
+    background-image: url(/zoolu-statics/images/icons/pointer_white_closed.png);
+    margin-top: 1px;
 }
 
 /* ----------------
 Corners */
 
 .cornertl {
-  background-image: url(/zoolu-statics/images/main/content_inner_corners_tl.png);
-  background-color:#754480;
-  background-repeat:no-repeat;
-  width: 10px;
-  height: 20px;
-  float: left;
-  font-size: 0;
+    background-color: #754480;
+    background-repeat: no-repeat;
+    width: 10px;
+    height: 20px;
+    float: left;
+    font-size: 0;
 }
 
 .cornertr {
-  background-image: url(/zoolu-statics/images/main/content_inner_corners_tr.png);
-  background-color:#e4e4e4;
-  background-repeat:no-repeat;
-  width: 4px;
-  height: 20px;
-  float: right;
-  font-size: 0;
+    background-image: url(/zoolu-statics/images/main/content_inner_corners_tr.png);
+    background-color: #e4e4e4;
+    background-repeat: no-repeat;
+    width: 4px;
+    height: 20px;
+    float: right;
+    font-size: 0;
 }
 
 .configbox .cornertr,
 .configbox-closed .cornertr {
-  background-color:#aaa;
-} 
+    background-color: #aaa;
+}
 
 .cornerbl {
-  background-image: url(/zoolu-statics/images/main/content_inner_corners.png);
-  background-position: 0px 4px;
-  width: 4px;
-  height: 4px;
-  float: left;
-  font-size: 0;
+    background-image: url(/zoolu-statics/images/main/content_inner_corners.png);
+    background-position: 0px 4px;
+    width: 4px;
+    height: 4px;
+    float: left;
+    font-size: 0;
 }
 
 .cornerbr {
-  background-image: url(/zoolu-statics/images/main/content_inner_corners.png);
-  background-position: 4px 4px;
-  width: 4px;
-  height: 4px;
-  float: right;
-  font-size: 0;
+    background-image: url(/zoolu-statics/images/main/content_inner_corners.png);
+    background-position: 4px 4px;
+    width: 4px;
+    height: 4px;
+    float: right;
+    font-size: 0;
 }
 
 .cornerbl-closed {
-  background-image: url(/zoolu-statics/images/main/content_inner_corners_bl.png);
-  background-color:#754480;
-  background-repeat:no-repeat;
-  width: 10px;
-  height: 4px;
-  float: left;
-  font-size: 0;
+    background-image: url(/zoolu-statics/images/main/content_inner_corners_bl.png);
+    background-color: #754480;
+    background-repeat: no-repeat;
+    width: 10px;
+    height: 4px;
+    float: left;
+    font-size: 0;
 }
 
 /* ----------------
@@ -1396,414 +1418,405 @@ Overlay Inner */
 
 /* --- overlay navigation --- */
 .olnavigationwrapper, .olnavigationwrapper2 {
-  position:relative;
-  background-color:#fff;
-  height:200px;;
-  overflow:hidden;
-  overflow-y:scroll;
+    position: relative;
+    background-color: #fff;
+    height: 200px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
-.olnavigationwrapper2{
-  height:400px;
+.olnavigationwrapper2 {
+    height: 400px;
 }
 
 .olnavigationwrapper .selected {
-  background-color:#FFD300;
+    background-color: #FFD300;
 }
 
-.olnavigationwrapper .olnavrootitem, 
-.olnavigationwrapper2 .olnavrootitem  {
-  padding:5px 0 0 0;
-  cursor:default;
+.olnavigationwrapper .olnavrootitem,
+.olnavigationwrapper2 .olnavrootitem {
+    padding: 5px 0 0 0;
+    cursor: default;
 }
 
 #olnavitemAll.olnavrootitem {
-  padding-left:10px;
-  padding-bottom:5px;
-  border-bottom: 1px solid #E4E4E4;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #E4E4E4;
 }
 
 #olnavitemAll .filterTitle {
-  cursor:pointer; 
-  float:left; 
+    cursor: pointer;
+    float: left;
 }
 
 .olnavigationwrapper .olnavchilditem {
-  padding:5px 0 0 22px;
-  cursor:default;
+    padding: 5px 0 0 22px;
+    cursor: default;
 }
 
 /* --- overlay content --- */
 
 #overlayGenContent {
-  position:relative;
+    position: relative;
 }
 
-.olnavigationwrapper ul li{
-  padding:2px 5px 2px 5px;
+.olnavigationwrapper ul li {
+    padding: 2px 5px 2px 5px;
 }
 
-.olnavigationwrapper ul li.modulus0{
-  background-color:#efefef;
+.olnavigationwrapper ul li.modulus0 {
+    background-color: #efefef;
 }
 
-.olnavigationwrapper ul li.modulus1{
-  background-color:#fff;
+.olnavigationwrapper ul li.modulus1 {
+    background-color: #fff;
 }
 
 .olcontentwrapper, .olcontentwrappertab {
-  background-color:#ccc;
-  overflow:hidden;
-  overflow-y:scroll;
-  padding:0;
+    background-color: #ccc;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 0;
 }
 
 .oldocuments {
-  width:430px;
-  position:absolute;
-  top:277px;
-  bottom:0px;
+    width: 430px;
+    position: absolute;
+    top: 277px;
+    bottom: 0px;
 }
 
-.olgroups, .olcontacts{
-  height:200px;
+.olgroups, .olcontacts {
+    height: 200px;
 }
 
 .olcontentwrappertab {
-  margin:35px 0 0 0;
-  height:200px;
+    margin: 35px 0 0 0;
+    height: 200px;
 }
 
 /* --- overlay content media / images --- */
 
 .olmediacontainer {
-  background-color:#e4e4e4;
-  padding:20px 0 0 20px;
+    background-color: #e4e4e4;
+    padding: 20px 0 0 20px;
 }
 
 .olmediaitem {
-  float:left;
-  width:100px;
-  height:100px;
-  margin:0 20px 20px 0;
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 0 20px 20px 0;
 }
 
 .olmediaitem table {
-  width:100%;
-  height:100%;
+    width: 100%;
+    height: 100%;
 }
 
 .olmediaitem td {
-  width:100px;
-  height:100px;
-  vertical-align:bottom;
-  text-align:center;
+    width: 100px;
+    height: 100px;
+    vertical-align: bottom;
+    text-align: center;
 }
 
 .olmediaitem td img {
-	cursor:pointer;
+    cursor: pointer;
 }
 
 /* --- overlay content files --- */
 
 .olfiletopleft,
 .olpagetopleft {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_left_top.png) no-repeat scroll 0 0;
-  height:26px;
-  width:11px;
-  float:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_left_top.png) no-repeat scroll 0 0;
+    height: 26px;
+    width: 11px;
+    float: left;
 }
 
 .olfiletopright,
 .olpagetopright {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_right_top.png) no-repeat scroll right 0;
-  height:26px;
-  width:11px;
-  float:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_right_top.png) no-repeat scroll right 0;
+    height: 26px;
+    width: 11px;
+    float: left;
 }
 
 .olfiletopitemicon {
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
-  height:26px;
-  padding:0 10px 0 0;
-  text-align:left;
-  width:32px;
-  float:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
+    height: 26px;
+    padding: 0 10px 0 0;
+    text-align: left;
+    width: 32px;
+    float: left;
 }
 
 .olfiletopitemtitle,
 .olpagetopitemtitle {
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
-  height:20px;
-  padding:6px 10px 0 0;
-  text-align:left;
-  float:left;
-  width:339px;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
+    height: 20px;
+    padding: 6px 10px 0 0;
+    text-align: left;
+    float: left;
+    width: 339px;
 }
 
 .olpagetopitemtitle {
-  width:381px;
+    width: 381px;
 }
 
 .olfileitemcontainer,
 .olpageitemcontainer {
-  background-color:#fff;
+    background-color: #fff;
 }
 
 .olpageitemcontainer {
-  width:413px;
+    width: 413px;
 }
 
 .olfileitemcontainer {
-  min-height:148px;
+    min-height: 148px;
 }
 
 .olfileitem,
 .olpageitem {
-  border-bottom:1px solid #e4e4e4;
-  cursor:pointer;
+    border-bottom: 1px solid #e4e4e4;
+    cursor: pointer;
 }
 
 .olpageicon {
-  margin-top:9px;
+    margin-top: 9px;
 }
 
 .olfileleft, .olpageleft,
-.olfileright, .olpageright{
-  margin-top:1px;
-  height:32px;
-  width:11px;
-  float:left;
+.olfileright, .olpageright {
+    margin-top: 1px;
+    height: 32px;
+    width: 11px;
+    float: left;
 }
 
 .olfileitemicon {
-  margin-top:1px;
-  height:32px;
-  padding:0px 10px 0 0;
-  text-align:left;
-  width:32px;
-  float:left;
+    margin-top: 1px;
+    height: 32px;
+    padding: 0px 10px 0 0;
+    text-align: left;
+    width: 32px;
+    float: left;
 }
 
 .olfileitemtitle,
 .olpageitemtitle {
-  margin-top:1px;
-  height:23px;
-  padding:9px 10px 0 0;
-  text-align:left;
-  float:left;
-  width:339px;
-  white-space:nowrap;
-  overflow:hidden;
+    margin-top: 1px;
+    height: 23px;
+    padding: 9px 10px 0 0;
+    text-align: left;
+    float: left;
+    width: 339px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .olfilebottomleft,
 .olpagebottomleft {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_left_bottom.png) no-repeat scroll 0 bottom;
-  height:26px;
-  width:11px;
-  float:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_left_bottom.png) no-repeat scroll 0 bottom;
+    height: 26px;
+    width: 11px;
+    float: left;
 }
 
 .olfilebottomright,
 .olpagebottomright {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_right_bottom.png) no-repeat scroll right bottom;
-  height:26px;
-  width:11px;
-  float:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/list_corner_right_bottom.png) no-repeat scroll right bottom;
+    height: 26px;
+    width: 11px;
+    float: left;
 }
 
 .olfilebottomcenter,
 .olpagebottomcenter {
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 bottom;
-  height:26px;
-  width:391px;
-  float:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 bottom;
+    height: 26px;
+    width: 391px;
+    float: left;
 }
 
 /* --- overlay content contacts --- */
 
-.olcontacttopleft {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_left_top.png) no-repeat scroll 0 0;
-  height:26px;
-  width:11px;
-  float:left;
-}
-
-.olcontacttopright {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_right_top.png) no-repeat scroll right 0;
-  height:26px;
-  width:11px;
-  float:left;
-}
-
 .olcontacttopitemicon {
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
-  height:26px;
-  padding:0 10px 0 0;
-  text-align:left;
-  width:32px;
-  float:left;
+    background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
+    height: 26px;
+    padding: 0 10px 0 0;
+    text-align: left;
+    width: 32px;
+    float: left;
 }
 
-.olcontacttopitemtitle {
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 0;
-  height:20px;
-  padding:6px 10px 0 0;
-  text-align:left;
-  float:left;
-  width:339px;
+.olcontacttop {
+    background-color:#e4e4e4;
+    border-top:1px #fff solid;
+    border-left:1px #fff solid;
+    border-right:1px #fff solid;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    height: 20px;
+    padding: 5px 20px 0 10px;
+    text-align: left;
+    float: left;
+    width: 339px;
 }
 
 .olcontactitemcontainer {
-  min-height:148px;
-  background-color:#fff;
-  width:413px;
+    min-height: 148px;
+    background-color: #fff;
+    width: 413px;
 }
 
 .olcontactitem {
-  border-bottom:1px solid #e4e4e4;
-  cursor:pointer;
+    border-bottom: 1px solid #e4e4e4;
+    cursor: pointer;
 }
 
 .olcontactleft,
 .olcontactright {
-  margin-top:1px;
-  height:32px;
-  width:11px;
-  float:left;
+    margin-top: 1px;
+    height: 32px;
+    width: 11px;
+    float: left;
 }
 
 .olcontactitemicon {
-  margin-top:1px;
-  height:32px;
-  padding:0px 10px 0 0;
-  text-align:left;
-  width:32px;
-  float:left;
+    margin-top: 1px;
+    height: 32px;
+    padding: 0px 10px 0 0;
+    text-align: left;
+    width: 32px;
+    float: left;
 }
 
 .olcontactitemtitle {
-  margin-top:1px;
-  height:23px;
-  padding:9px 10px 0 0;
-  text-align:left;
-  float:left;
-  width:339px;
-  white-space:nowrap;
-  overflow:hidden;
+    margin-top: 1px;
+    height: 23px;
+    padding: 9px 10px 0 0;
+    text-align: left;
+    float: left;
+    width: 339px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .absoluteright .olcontactitemicon {
-  display:none;
+    display: none;
 }
 
 .absoluteright .olcontactitemtitle {
-  width:auto;  
+    width: auto;
 }
 
-.olcontactbottomleft {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_left_bottom.png) no-repeat scroll 0 bottom;
-  height:26px;
-  width:11px;
-  float:left;
-}
-
-.olcontactbottomright {
-  background:#e4e4e4 url(/zoolu-statics/images/main/list_corner_right_bottom.png) no-repeat scroll right bottom;
-  height:26px;
-  width:11px;
-  float:left;
-}
-
-.olcontactbottomcenter {
-  background:#e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x scroll 0 bottom;
-  height:26px;
-  width:391px;
-  float:left;
+.olcontactbottom {
+    background-color:#e4e4e4;
+    border-bottom:1px #fff solid;
+    border-left:1px #fff solid;
+    border-right:1px #fff solid;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    height: 20px;
+    padding: 5px 20px 0 10px;
+    text-align: left;
+    float: left;
+    width: 339px;
 }
 
 /*-----------------
  * importPreview
  */
 #importPreview {
-  overflow:auto;
-  height:100%;
+    overflow: auto;
+    height: 100%;
 }
 
 #importPreview table tr td {
-  padding:5px;
-  white-space:nowrap;
+    padding: 5px;
+    white-space: nowrap;
 }
 
 /* ----------------
 video select */
 
-.videoSelect{
-  width:80%;
+.videoSelect {
+    width: 80%;
 }
-.selectedVideo{
-	border:1px solid #999;
-	height:75px; overflow:hidden;  
+
+.selectedVideo {
+    border: 1px solid #999;
+    height: 75px;
+    overflow: hidden;
 }
 
 .buttonUnselectVideo {
-	cursor: pointer;
-	position: relative;
-	float: right;
-	padding-right: 5px;
-	padding-top: 20px;
+    cursor: pointer;
+    position: relative;
+    float: right;
+    padding-right: 5px;
+    padding-top: 20px;
 }
 
 .buttonSelectVideo {
-	cursor: pointer;
-	float: right;
-  margin-top:20px;
-  margin-right:5px;
+    cursor: pointer;
+    float: right;
+    margin-top: 20px;
+    margin-right: 5px;
 }
 
-.videoItem{
-  border-bottom:1px solid #999; 
-  height:75px; overflow:hidden;	
+.videoItem {
+    border-bottom: 1px solid #999;
+    height: 75px;
+    overflow: hidden;
 }
 
-.videoItem.bg1{
-	background-color:#fff;
+.videoItem.bg1 {
+    background-color: #fff;
 }
 
-.videoItem.bg2{
-  background-color:#e4e4e4;
+.videoItem.bg2 {
+    background-color: #e4e4e4;
 }
 
-.videoThumb{
-  float:left; 
-  margin:0 10px 0 0;
+.videoThumb {
+    float: left;
+    margin: 0 10px 0 0;
 }
 
-.videoInfos{
-  padding:5px 0 0 10px; 
- }
-
-.videoItem.selected{
-  background-color:#ffd300;
+.videoInfos {
+    padding: 5px 0 0 10px;
 }
 
-.videoSearchReset{
-  margin-left:5px;
+.videoItem.selected {
+    background-color: #ffd300;
 }
 
-.videoUserSelect{
-  width:80%;
+.videoSearchReset {
+    margin-left: 5px;
 }
 
-.videoSearchInp{
-  float:left;
-  width:50%;
+.videoUserSelect {
+    width: 80%;
 }
 
-.videoSearchReset:hover{
-	text-decoration:underline;
-	cursor:pointer;
+.videoSearchInp {
+    float: left;
+    width: 50%;
+}
+
+.videoSearchReset:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 /* @start, Url definition */
@@ -1813,48 +1826,48 @@ video select */
 }
 
 .urlTop {
-  background-color:#E4E4E4;
-  border:1px solid #E4E4E4;
-  height:16px;
-  margin:2px 0 0;
-  padding:2px 0 0;
-  padding-right:5px;
-  text-align:right;
-  cursor:pointer;
+    background-color: #E4E4E4;
+    border: 1px solid #E4E4E4;
+    height: 16px;
+    margin: 2px 0 0;
+    padding: 2px 0 0;
+    padding-right: 5px;
+    text-align: right;
+    cursor: pointer;
 }
 
 .urlTopTitle {
-  color:#754480;
+    color: #754480;
 }
 
 .urlHistoryContainer {
-  padding-top:4px;
-  padding-bottom:8px;
-  background-color:#fff;
-  border:1px solid #ccc;
-  overflow:hidden;
-  min-height:32px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    min-height: 32px;
 }
 
 .urlHistoryEntry {
-  margin-left:10px;
-  padding-top:4px;
-  padding-bottom:4px;
-  border-bottom:1px solid #E4E4E4;
+    margin-left: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #E4E4E4;
 }
 
 .itemRemoveUrl {
-  float:left;
-  margin-left:10px;
-  margin-right:5px;
+    float: left;
+    margin-left: 10px;
+    margin-right: 5px;
 }
 
 .urlHistoryName {
-  padding-left:4px;
-  width:90%;
-  position:relative;
-  float:left;
-  white-space: nowrap;
+    padding-left: 4px;
+    width: 90%;
+    position: relative;
+    float: left;
+    white-space: nowrap;
 }
 
 /* @end, Url definition */
@@ -1862,104 +1875,126 @@ video select */
 /* @start, tab definition */
 
 .tab {
-  min-height:50px;
+    min-height: 50px;
+}
+
+.tab .tablelist {
+  width: 100%;
+}
+
+.tab .listfooter {
+  width: 100%;
 }
 
 .tabNavContainer {
-  background-color:#666;
-  height:40px;
-  margin:0px;
-  padding:0 0 0 180px;
-  position:absolute;
-  top:0;
-  left:0;
-  width: 100%;   
+    background-color: #666;
+    height: 40px;
+    margin: 0px;
+    padding: 0 0 0 180px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
-.overlaycontent .tabNavContainer{
-  position:absolute;
-  top:-5px;
-  left:-10px;
-  padding:0 0 0 15px;
-  width:435px;
-} 
+
+.overlaycontent .tabNavContainer {
+    position: absolute;
+    top: -5px;
+    left: -10px;
+    padding: 0 0 0 15px;
+    width: 435px;
+}
+
 .tabNavContainer ul {
-  position: absolute;
-  top: 10px;
-  clear: both;
-  height: 30px;
+    position: absolute;
+    top: 10px;
+    clear: both;
+    height: 30px;
 }
+
 .tabNavContainer li {
-  float: left;
-  margin: 0 -3px 0 -6px;
-  cursor: pointer;
+    float: left;
+    margin: 0 -3px 0 -6px;
+    cursor: pointer;
 }
+
 .tabNavContainer li:hover,
 .tabNavContainer .selected {
-  margin: 0 -3px 0 -2px;
+    margin: 0 -3px 0 -2px;
 }
+
 .tabNavContainer li .start {
-  float: left;
-  height: 30px;
-  width: 11px;
-  background: url(/zoolu-statics/images/navigation/tab_left_off.png) no-repeat 0 0;
-  position: relative;
-  z-index: 10;
-  padding: 0px;
+    float: left;
+    height: 30px;
+    width: 11px;
+    background: url(/zoolu-statics/images/navigation/tab_left_off.png) no-repeat 0 0;
+    position: relative;
+    z-index: 10;
+    padding: 0px;
 }
-.tabNavContainer li .end  {
-  float: left;
-  height: 30px;
-  width: 11px;
-  background: url(/zoolu-statics/images/navigation/tab_right_off.png) no-repeat 0 0;
+
+.tabNavContainer li .end {
+    float: left;
+    height: 30px;
+    width: 11px;
+    background: url(/zoolu-statics/images/navigation/tab_right_off.png) no-repeat 0 0;
 }
-.tabNavContainer li .middle  {
-  float: left;
-  height: 19px; /* 30px - padding */
-  padding: 11px 10px 0 10px;
-  position: relative;
-  background: url(/zoolu-statics/images/navigation/tab_middle_off.png) repeat-x 0 0;  
+
+.tabNavContainer li .middle {
+    float: left;
+    height: 19px; /* 30px - padding */
+    padding: 11px 10px 0 10px;
+    position: relative;
+    background: url(/zoolu-statics/images/navigation/tab_middle_off.png) repeat-x 0 0;
 }
+
 .tabNavContainer li:hover .start,
-.tabNavContainer .selected .start {  
-  background: url(/zoolu-statics/images/navigation/tab_left_on.png) repeat-x 0 0;
-  float: left;
-  height: 30px;
-  width: 11px;
-  margin: 0 0 0 -4px;
+.tabNavContainer .selected .start {
+    background: url(/zoolu-statics/images/navigation/tab_left_on.png) repeat-x 0 0;
+    float: left;
+    height: 30px;
+    width: 11px;
+    margin: 0 0 0 -4px;
 }
+
 .tabNavContainer li:hover .end,
-.tabNavContainer .selected .end {  
-  background: url(/zoolu-statics/images/navigation/tab_right_on.png) repeat-x 0 0;
-  float: left;
-  height: 30px;
-  width: 11px;
-  position: relative;
-  z-index: 20;
+.tabNavContainer .selected .end {
+    background: url(/zoolu-statics/images/navigation/tab_right_on.png) repeat-x 0 0;
+    float: left;
+    height: 30px;
+    width: 11px;
+    position: relative;
+    z-index: 20;
 }
+
 .tabNavContainer li:hover .middle a,
 .tabNavContainer .selected .middle a {
-  color: #000;
+    color: #000;
 }
+
 .tabNavContainer li:hover .middle,
-.tabNavContainer .selected .middle { 
-  background: #666 url(/zoolu-statics/images/navigation/tab_middle_on.png) repeat-x 0 0;
-  float: left;
-  height: 19px; /* 30px - padding */
-  padding: 11px 10px 0 10px;
-  color: #fff;  
+.tabNavContainer .selected .middle {
+    background: #666 url(/zoolu-statics/images/navigation/tab_middle_on.png) repeat-x 0 0;
+    float: left;
+    height: 19px; /* 30px - padding */
+    padding: 11px 10px 0 10px;
+    color: #fff;
 }
+
 .tabNavContainer li .middle a {
-  color: #fff;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 12px;
 }
+
 .tabNavContainer li .middle a:hover {
-  color: #000;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 12px;  
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 12px;
 }
+
 /* @end, Navigation Definition */
 
 /* ----------------
@@ -1969,66 +2004,66 @@ Media Toolbar */
 
 .contenthead,
 .overlaycontent .contenthead {
-  height:46px;
-  background-color:#999; /*#754480;*/
-  padding:0px;
-  position:relative;
+    height: 46px;
+    background-color: #999; /*#754480;*/
+    padding: 0px;
+    position: relative;
 }
 
 .olsearch {
-  padding:0 0 0 10px;
-  float:left;
+    padding: 0 0 0 10px;
+    float: left;
 }
 
 .olsearch input {
-  float: left;
-  margin: 8px 10px 0 0;
-  width: 140px;
+    float: left;
+    margin: 8px 10px 0 0;
+    width: 140px;
 }
 
 .olsearch #buttonsearch img.iconsearch {
-  width:14px;
-  float: left;
-  margin: 4px 0 0 2px;
-  padding-right:10px;
-  vertical-align: middle;
+    width: 14px;
+    float: left;
+    margin: 4px 0 0 2px;
+    padding-right: 10px;
+    vertical-align: middle;
 }
 
 .olfilter {
-  float:left;
-  padding:0 0 0 10px;
-  width:220px;
+    float: left;
+    padding: 0 0 0 10px;
+    width: 220px;
 }
 
 .olfilter .filter {
-  padding:5px 0 0 0;
+    padding: 5px 0 0 0;
 }
 
 .olfilter ol {
-  margin:0;
-  padding:0;
-  font-size:12px;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
 }
 
 .olfilter ol li.input-text {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  list-style-type: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    list-style-type: none;
 }
 
 .olfilter ul.holder {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  height: auto;
-  margin: 0;
-  overflow: hidden;
-  padding: 4px 5px 0;
-  width: 200px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    height: auto;
+    margin: 0;
+    overflow: hidden;
+    padding: 4px 5px 0;
+    width: 200px;
 }
 
 .contenthead .olfilter ul.holder {
-  height:30px !important;
-  overflow-y:auto;
+    height: 30px !important;
+    overflow-y: auto;
 }
 
 .olfilter ul.holder li {
@@ -2046,201 +2081,199 @@ Media Toolbar */
 }
 
 .olfilter ol li.input-text input {
-  padding: 5px 5px 6px;
+    padding: 5px 5px 6px;
 }
 
 .olfilter .autocompleter {
-  display: none;
-  position: absolute;
-  width: 212px;
-  z-index:900;
+    display: none;
+    position: absolute;
+    width: 212px;
+    z-index: 900;
 }
 
 .olfilter .autocompleter .default {
-  margin: 0;
-  padding: 5px;
-  background-color: #e4e4e4;
+    margin: 0;
+    padding: 5px;
+    background-color: #e4e4e4;
 }
 
 .olfilter .autocompleter ul {
-  margin: 0;
+    margin: 0;
 }
 
 .olfilter .autocompleter ul li {
-  border: 1px solid #ccc;
-  cursor: pointer;
-  font-size: 11px;
-  list-style-type: none;
-  margin: 0;
-  padding: 3px 10px 4px;
-  z-index: 1000;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 11px;
+    list-style-type: none;
+    margin: 0;
+    padding: 3px 10px 4px;
+    z-index: 1000;
 }
 
 #mediaviewtypes,
 .overlaycontent #mediaviewtypes {
-  float:right;
-  width:66px;
-  padding:12px 0 0 0;
-  top:0;
-  position:relative;
+    float: right;
+    width: 66px;
+    padding: 12px 0 0 0;
+    top: 0;
+    position: relative;
 }
 
 #mediaviewtypes .iconlistview_on,
 #mediaviewtypes .iconlistview {
-  background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat 0 -23px;
-  width:23px;
-  height:23px;
-  float:left;
-  cursor:default;
+    background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat 0 -23px;
+    width: 23px;
+    height: 23px;
+    float: left;
+    cursor: default;
 }
 
 #mediaviewtypes .iconlistview_on {
-  background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat -23px -23px;
-  cursor:pointer;
+    background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat -23px -23px;
+    cursor: pointer;
 }
 
 #mediaviewtypes .iconthumbview_on,
 #mediaviewtypes .iconthumbview {
-  background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat 0 0;
-  width:23px;
-  height:23px;
-  float:left;
-  margin-right:10px;
-  cursor:default;
+    background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat 0 0;
+    width: 23px;
+    height: 23px;
+    float: left;
+    margin-right: 10px;
+    cursor: default;
 }
 
 #mediaviewtypes .iconthumbview_on {
-  background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat -23px 0;
-  cursor:pointer;
+    background: url(/zoolu-statics/images/icons/icon_media_view.png) no-repeat -23px 0;
+    cursor: pointer;
 }
 
 /* ----------------
 Media Toolbar */
 
-#statistics .info table{
-  width:100%;
+#statistics .info table {
+    width: 100%;
 }
 
 #statistics .info table tr td.title {
-  width:15%;
+    width: 15%;
 }
 
 #statistics .info table tr td.value {
-  width:35%;
+    width: 35%;
 }
 
 /* ------------------
 User settings Overlay */
 
 #overlayUserSettingsContent .mediawrapper {
-  background-color: #e4e4e4;
-  overflow: hidden;
-  height:auto;
+    background-color: #e4e4e4;
+    overflow: hidden;
+    height: auto;
 }
 
 /* ------------------
 Dashboard Overlay */
 
-#overlaySendToDashboardContent .cornertl, 
-#overlaySendToDashboardContent .cornertr, 
-#overlaySendToDashboardContent .cornerbl, 
+#overlaySendToDashboardContent .cornertl,
+#overlaySendToDashboardContent .cornertr,
+#overlaySendToDashboardContent .cornerbl,
 #overlaySendToDashboardContent .cornerbr {
-  background-image: url("/zoolu-statics/images/main/content_inner_corners.png");
+    background-image: url("/zoolu-statics/images/main/content_inner_corners.png");
 }
 
 #overlaySendToDashboardContent .cornertl {
-  background-color:#fff;
-  background-position: 0 0;
-  float: left;
-  font-size: 0;
-  height: 4px;
-  width: 4px;
+    background-color: #fff;
+    background-position: 0 0;
+    float: left;
+    font-size: 0;
+    height: 4px;
+    width: 4px;
 }
 
 #overlaySendToDashboardContent .cornertr {
-  background-color:#fff;
-  background-position: -4px 0;
-  float: right;
-  font-size: 0;
-  height: 4px;
-  width: 4px;
+    background-color: #fff;
+    background-position: -4px 0;
+    float: right;
+    font-size: 0;
+    height: 4px;
+    width: 4px;
 }
 
 #overlaySendToDashboardContent.olnavigationwrapper2 {
-  background-color:#CCCCCC;
-  overflow:hidden;
+    background-color: #CCCCCC;
+    overflow: hidden;
 }
 
 #overlaySendToDashboardContent .editbox {
-  margin:0;
+    margin: 0;
 }
 
 #overlaySendToDashboardContent .editboxfields {
-  height:375px;
-  overflow:hidden;
-  overflow-y:auto;
+    height: 375px;
+    overflow: hidden;
+    overflow-y: auto;
 }
 
 #overlaySendToDashboardContent .contactitem {
-  margin:0;
-  cursor:default;
+    margin: 0;
+    cursor: default;
 }
 
 #overlaySendToDashboardContent .contactitem .olcontactitemtitle {
-  width:285px;
-  padding-right:0;
-  height:auto;
-  padding-bottom:5px;
-  white-space: normal;
+    width: 285px;
+    padding-right: 0;
+    height: auto;
+    padding-bottom: 5px;
+    white-space: normal;
 }
 
 #overlaySendToDashboardContent .contactitem .olcontactright {
-  display:none;
+    display: none;
 }
 
 #overlaySendToDashboardContent .olcontactitemtitle span {
-  font-size:11px;
-  color:#ccc;
+    font-size: 11px;
+    color: #ccc;
 }
 
 .dbrd-content {
-  overflow:hidden;
+    background-color:transparent;
+    overflow: hidden;
 }
 
-.dbrd-content .olcontacttopitemtitle {
-  width:398px;
-}
-
-.dbrd-content .olcontactbottomcenter {
-  width:408px;
-}
-
-.dbrd-content .olcontactitemcontainer {
-  /*overflow:hidden;
-  overflow-y:scroll;
-  height:348px;
-  width:430px;*/
-}
-
-.dbrd-content .olcontentwrapper .olcontactitemcontainer {
-  height:188px;
+.dbrd-content .olcontacttop {
+    font-weight:bold;
+    float:none;
+    width: 398px;
 }
 
 .dbrd-content .olcontactbottom {
-  position:absolute;
-  bottom:0;
-  left:0;
-  z-index:50;
+    width: 398px;
+}
+
+.dbrd-content .olcontactitemcontainer {
+    height: 348px;
+    overflow-y:auto;
+    width:430px;
+}
+
+.dbrd-content .olcontactbottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
 }
 
 .dbrd-content .noMail {
-  color:#ccc;
+    color: #ccc;
 }
 
 .editbox label.missing {
-  color:#cc0000;
+    color: #cc0000;
 }
 
 .editbox input.missing {
-  border:2px solid #cc0000;
+    border: 2px solid #cc0000;
 }

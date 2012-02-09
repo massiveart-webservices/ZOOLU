@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.generic.formsre
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -302,6 +302,7 @@ class GenericForm extends Zend_Form {
 			$this->addElement('hidden', 'formType', array('value' => $this->setup->getFormType(), 'decorators' => array('Hidden')));
 			$this->addElement('hidden', 'templateId', array('value' => $this->setup->getTemplateId(), 'decorators' => array('Hidden')));
 			$this->addElement('hidden', 'languageId', array('value' => $this->setup->getLanguageId(), 'decorators' => array('Hidden')));
+			$this->addElement('hidden', 'languageCode', array('value' => $this->setup->getLanguageCode(), 'decorators' => array('Hidden')));
 
 			$arrRegionTitles = array();
 
@@ -537,6 +538,7 @@ class GenericForm extends Zend_Form {
         'isCoreField' => $objField->isCoreField,
         'MultiOptions' => $arrOptions,
         'LanguageId' => $this->setup->getLanguageId(),
+        'LanguageCode' => $this->setup->getLanguageCode(),
         'FormLanguageId' => $this->objGenericForm->Setup()->getFormLanguageId(),
         'isEmptyField' => (($blnEmpty == true) ? 1 : 0),
         'required' =>  (($objField->isKeyField == 1) ? true : false),

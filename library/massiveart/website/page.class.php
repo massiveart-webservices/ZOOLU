@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.website
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -42,7 +42,6 @@
  * @package massiveart.website
  * @subpackage Page
  */
-
 class Page {
 
   /**
@@ -207,6 +206,7 @@ class Page {
   protected $strPageLinkId;
   protected $intPageVersion;
   protected $intLanguageId;
+  protected $strLanguageCode;
   protected $blnHasSegments;
   protected $intSegmentId;
   protected $strSegmentCode;
@@ -301,6 +301,7 @@ class Page {
         $this->objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
         $this->objGenericData->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
         $this->objGenericData->Setup()->setLanguageId($this->intLanguageId);
+        $this->objGenericData->Setup()->setLanguageCode($this->strLanguageCode);
         $this->objGenericData->Setup()->setParentId($this->getParentId());        
         $this->objGenericData->Setup()->setParentTypeId($this->getParentTypeId());
         $this->objGenericData->Setup()->setModelSubPath($this->getModelSubPath());
@@ -1026,14 +1027,14 @@ class Page {
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
    */
-  public function getOverviewPages($intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages = false, $blnOnlyShowInNavigation = false){
+  public function getOverviewPages($intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages = false, $blnOnlyShowInNavigation = false, $blnFilterDisplayEnvironment = true){
     try{
       $this->getModel();
 
       if($this->intNavParentId !== null && $this->intNavParentId > 0){
-        $objPages = $this->objModel->loadItems((($this->ParentPage() instanceof Page) ? array('id' => $this->ParentPage()->getTypeId(), 'key' => $this->ParentPage()->getType()) : array('id' => $this->intTypeId, 'key' => $this->strType)), $this->intNavParentId, $intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages, $blnOnlyShowInNavigation);  
+        $objPages = $this->objModel->loadItems((($this->ParentPage() instanceof Page) ? array('id' => $this->ParentPage()->getTypeId(), 'key' => $this->ParentPage()->getType()) : array('id' => $this->intTypeId, 'key' => $this->strType)), $this->intNavParentId, $intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages, $blnOnlyShowInNavigation, $blnFilterDisplayEnvironment);  
       }else{     
-        $objPages = $this->objModel->loadItems(array('id' => $this->intTypeId, 'key' => $this->strType), $this->intParentId, $intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages, $blnOnlyShowInNavigation);
+        $objPages = $this->objModel->loadItems(array('id' => $this->intTypeId, 'key' => $this->strType), $this->intParentId, $intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages, $blnOnlyShowInNavigation, $blnFilterDisplayEnvironment);
       }
       
       return $objPages;
@@ -1206,6 +1207,34 @@ class Page {
     }catch (Exception $exc) {
       $this->core->logger->err($exc);
     }
+  }
+
+  /**
+   * getFormFields
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @return array
+   * @version 1.0
+   */
+  public function getFormFields(){
+    $objMyMultiRegion = $this->getRegion(100); //100 is the form_field-Region
+    $arrFields = array();
+    
+    foreach($objMyMultiRegion->RegionInstanceIds() as $intRegionInstanceId){
+      $objField = new stdClass;
+      $objField->title = $objMyMultiRegion->getField('title')->getInstanceValue($intRegionInstanceId);
+      $objField->type = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('field_type')->getInstanceValue($intRegionInstanceId))->current();
+      $objField->mandatory = $objMyMultiRegion->getField('mandatory')->getInstanceValue($intRegionInstanceId);
+      $objField->description = $objMyMultiRegion->getField('description')->getInstanceValue($intRegionInstanceId);
+      $objField->validation = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('validation')->getInstanceValue($intRegionInstanceId))->current();
+      $objField->display = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('display')->getInstanceValue($intRegionInstanceId))->current();
+      $objField->options = preg_split( '/\r\n|\r|\n/', $objMyMultiRegion->getField('options')->getInstanceValue($intRegionInstanceId));
+      $objField->maxlength = $objMyMultiRegion->getField('maxlength')->getInstanceValue($intRegionInstanceId);
+      $objField->other = $this->getModelCategories()->loadCategory($objMyMultiRegion->getField('other')->getInstanceValue($intRegionInstanceId))->current();
+      
+      $arrFields[] = $objField;
+    }
+    
+    return $arrFields;
   }
   
   /**
@@ -1843,7 +1872,7 @@ class Page {
   
   /**
    * getModel
-   * @return Model_Pages
+   * @return Model_Pages|Model_Globals
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
    */
@@ -2283,6 +2312,22 @@ class Page {
     return $this->strSegmentCode;
   }
 
+  /**
+   * setLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function setLanguageCode($strLanguageCode){
+    $this->strLanguageCode = $strLanguageCode;
+  }
+
+  /**
+   * getLanguageCode
+   * @param string $strLanguageCode
+   */
+  public function getLanguageCode(){
+    return $this->strLanguageCode;
+  }
+  
   /**
    * setType
    * @param string $strType

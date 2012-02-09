@@ -817,11 +817,17 @@ Massiveart.Dashboard = Class.create({
           languageId = $F('languageId');
         }
         
+        var languageCode = null;
+        if($('languageCode')) {
+          languageCode = $F('languageCode');
+        }
+        
         new Ajax.Updater('olsubnav'+folderId, '/zoolu/core/dashboard/overlay-childnavigation', {
           parameters: { 
             folderId: folderId, 
             viewtype: viewtype,
             languageId: languageId,
+            languageCode: languageCode,
             contenttype: contenttype,
             rootLevelTypeId: rootLevelTypeId,
             rootLevelGroupId: rootLevelGroupId
@@ -855,6 +861,10 @@ Massiveart.Dashboard = Class.create({
     if($('languageId')){
       languageId = $F('languageId');
     }
+    var languageCode = null;
+    if($('languageCode')){
+      languageCode = $F('languageCode');
+    }
     
     var fieldname = 'dbrd-'+this.areaId.substring(this.areaId.indexOf('_')+1);
     new Ajax.Updater(this.folderUpdateContainer, '/zoolu/core/dashboard/overlay-list', {
@@ -862,6 +872,7 @@ Massiveart.Dashboard = Class.create({
         folderId: folderId,
         relation: $(fieldname).value,
         languageId: languageId,
+        languageCode: languageCode,
         contenttype: contenttype,
         rootLevelTypeId: rootLevelTypeId,
         rootLevelGroupId: rootLevelGroupId
@@ -1075,8 +1086,6 @@ Massiveart.Dashboard = Class.create({
       }else{
         addToField += '}';
       }
-      
-      console.log(addToField);
       
       if(addToField.isJSON()){
         if($(fieldId).value.indexOf(addToField) == -1){

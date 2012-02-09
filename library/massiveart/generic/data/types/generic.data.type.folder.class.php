@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.generic.data.types
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -68,7 +68,7 @@ class GenericDataTypeFolder extends GenericDataTypeAbstract {
 			 * add|edit|... core and instance data
 			 */
       switch($this->setup->getActionType()){
-				case $this->core->sysConfig->generic->actions->add :
+        case $this->core->sysConfig->generic->actions->add :
 				  
           $objFolder = $this->objModelFolders->add($this->setup);
 
@@ -81,7 +81,7 @@ class GenericDataTypeFolder extends GenericDataTypeAbstract {
           $this->insertMultiplyRegionData('folder', array('Id' => $objFolder->folderId, 'Version' => $objFolder->version));
           break;
           
-				case $this->core->sysConfig->generic->actions->edit :
+            case $this->core->sysConfig->generic->actions->edit :
       
           $objFolder = $this->objModelFolders->load($this->setup->getElementId());
           
@@ -96,8 +96,8 @@ class GenericDataTypeFolder extends GenericDataTypeAbstract {
             $this->updateInstanceData('folder', array('Id' => $objFolder->folderId, 'Version' => $objFolder->version));
             $this->updateMultiplyRegionData('folder', array('Id' => $objFolder->folderId, 'Version' => $objFolder->version));
           }
-					break;
-			}
+				break;
+		}
 
 
 			return $this->setup->getElementId();

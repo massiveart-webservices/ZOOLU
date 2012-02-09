@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.cms.views
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -53,6 +53,8 @@ class PageHelper {
    * @var ViewHelper
    */
   private $objViewHelper;
+  
+  const NUMBER_OF_ENTRIES = 4;
   
   /**
    * Constructor 
@@ -356,6 +358,60 @@ class PageHelper {
     }    
     return $strOutput;
     
+  }
+  
+  /**
+   * getFormEntriesList
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   */
+  public function getFormEntriesList($objRowset){
+    $strOutput = '';
+    
+    $strOutput .= '<thead>
+    		<tr>
+    		<th class="topcornerleft"><div>&nbsp;</div></th>';
+    
+    $objFirstRow = current($objRowset->getCurrentItems());
+    $objEntry = json_decode($objFirstRow['content'], true);
+    $arrKeys = array_keys($objEntry);
+    $i = 0;
+    foreach($arrKeys as $strValue){
+      if($i < self::NUMBER_OF_ENTRIES){
+        $strOutput .= '<th class="top"><div>'.$strValue.'</div></th>';
+        $i++;
+      }else{
+        break;
+      }
+    }
+    
+    $strOutput .= '
+    		<th class="top"><div>'.$this->core->translate->_('created').'</div></th>
+    		<th class="topcornerright"><div>&nbsp;</div></th>
+    	</tr>
+    </thead>';
+       
+    foreach($objRowset as $objRow){
+      $objEntry = json_decode($objRow['content'], true);
+      
+      $strOutput .= '<tr class="listrow">
+      	<td style="width:11px;"></td>';
+      $i = 0;
+      foreach($objEntry as $value){
+        if($i < self::NUMBER_OF_ENTRIES){
+          $strOutput .= '<td class="row">'.$value.'</td>';
+          $i++;
+        }else{
+          break;
+        }
+      }
+      $strOutput .= '
+      	<td>'.$objRow['created'].'</td>
+      	<td></td>
+      </tr>';
+    }
+    
+    
+    return $strOutput;
   }
 }
 

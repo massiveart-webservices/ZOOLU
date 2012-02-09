@@ -55,6 +55,14 @@
       <css>1.0</css>
     </version>
     
+    <!-- DISPLAY ENVIRONMENTS -->
+    <display_type>
+       <enabled>true</enabled> <!-- true/false -->
+       <website>website</website>
+       <tablet>tablet</tablet>
+       <mobile>mobile</mobile>
+    </display_type>
+    
     <!-- PATHES -->
     <path>
       <cache>
@@ -974,6 +982,11 @@
         <all>66</all>
       </depth>
     </filter>
+    <display>
+      <one_column>650</one_column>
+      <two_column>651</two_column>
+    </display>
+    
     
     <!-- STATUS -->
     <status>

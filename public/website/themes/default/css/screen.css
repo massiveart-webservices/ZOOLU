@@ -639,6 +639,31 @@ a:hover {
   color:#000;
 }
 
+.formContainer .field-1 {
+  clear:both;
+  margin-bottom:5px;
+}
+
+.formContainer .field-1 input,
+.formContainer .field-1 select,
+.formContainer .field-1 textarea {
+  width:520px;
+}
+
+.formContainer .field-2 {
+  float:left;
+  height:50px;
+  margin-bottom:10px;
+  width:265px;
+}
+
+.formContainer .field-2 input,
+.formContainer .field-2 select,
+.formContainer .field-2 textarea {
+  margin-right:10px;
+  width:255px;
+}
+
 .formContainer .fieldLeft {
   float:left;
   width: 280px; 

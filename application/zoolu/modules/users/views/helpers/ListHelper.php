@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.users.views.helpers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -77,7 +77,7 @@ class ListHelper {
       if($intCounter == 1){
         $strThead .= '
             <tr>
-              <th class="topcornerleft"></th>
+              <th class="topcornerleft"><div>&nbsp;</div></th>
               <th class="topcheckbox"><input type="checkbox" class="listSelectAll" name="listSelectAll" id="listSelectAll"/></th>';
       }
 
@@ -115,7 +115,7 @@ class ListHelper {
 
       if($intCounter == 1){
         $strThead .= '
-              <th class="topcornerright"></th>
+              <th class="topcornerright"><div>&nbsp;</div></th>
             </tr>';
       }
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.generic.forms.decorators
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -100,13 +100,9 @@ class Form_Decorator_Region extends Zend_Form_Decorator_Fieldset {
     }
 
     $strEditboxClass = 'editbox';
-    $strCornerBlClass = 'cornerbl';
     if($objElement->getAttrib('style') != ''){
       $strEditboxClass = $strEditboxClass.'-closed';
-    	$strCornerBlClass = $strCornerBlClass.'-closed';
     }
-
-
 
     $strOutput = '';
     if($blnIsMultiply == true && $intRegionCounter == 1){
@@ -133,7 +129,6 @@ class Form_Decorator_Region extends Zend_Form_Decorator_Fieldset {
     }
     $strOutput .= '></div>
             </div>
-            <div class="cornertr"></div>
             <div class="editboxtitlecontainer">
               <div class="editboxtitle';
     if($objElement->getAttrib('collapsable')){
@@ -166,8 +161,6 @@ class Form_Decorator_Region extends Zend_Form_Decorator_Fieldset {
     $strOutput .=    $content;
     $strOutput .= '  <div class="clear"></div>
             </div>
-            <div id="cornerbl'.$strId.'" class="'.$strCornerBlClass.'"></div>
-            <div id="cornerbr'.$strId.'" class="cornerbr"></div>
           </div>
         </div>';
 

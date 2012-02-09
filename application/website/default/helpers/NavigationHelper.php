@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.cms.views
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -87,7 +87,7 @@ class NavigationHelper {
     $strMainNavigation = '';
     $strHomeLink = '';
         
-    $this->objNavigation->loadMainNavigation();
+    $this->objNavigation->loadNavigation();
     
     $strPageId = '';  
     if(is_object($this->objNavigation->Page())){
@@ -103,21 +103,19 @@ class NavigationHelper {
     }else if($mixedElementProperties != ''){
       $strElementProperties = ' class="'.$mixedElementProperties.'"';
     }
-    
     if(count($this->objNavigation->MainNavigation()) > 0){    
       foreach($this->objNavigation->MainNavigation() as $objNavigationItem){
-        
         $strSelectedItem = '';
         $strSelectedImg = 'off';
-        if($strPageId == $objNavigationItem->pageId){
+        if($strPageId == $objNavigationItem->getItemId()){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
-        }else if($strFolderId == $objNavigationItem->folderId){
+        }else if($strFolderId == $objNavigationItem->getItemId()){
           $strSelectedItem = ' class="'.$strSelectedClass.'"';
           $strSelectedImg = 'on';
         }
         
-        $strImgFileTitle = strtolower($objNavigationItem->url);
+        $strImgFileTitle = strtolower($objNavigationItem->getUrl());
         if(strpos($strImgFileTitle, '/') > -1){
           $strImgFileTitle = substr($strImgFileTitle, 0, strpos($strImgFileTitle, '/'));    
         }

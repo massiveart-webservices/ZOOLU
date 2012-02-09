@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.command
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -132,6 +132,7 @@ class GlobalCommand implements CommandInterface {
         $objGenericData->Setup()->setTemplateId($intTemplateId);
         $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
         $objGenericData->Setup()->setLanguageId($arrArgs['LanguageId']);
+        $objGenericData->Setup()->setLanguageCode($arrArgs['LanguageCode']);
         $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
 
         $objGenericData->Setup()->setParentId($arrArgs['ParentId']);

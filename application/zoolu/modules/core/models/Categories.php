@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.core.models
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -125,6 +125,7 @@ class Model_Categories {
      */
     $objSelect->from('categories');
     $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = '.$intLanguageId, array('title'));
+    $objSelect->joinLeft('categoryCodes', 'categoryCodes.idCategories = categories.id AND categoryCodes.idLanguages = '.$intLanguageId, array('code'));
     $objSelect->where('categories.id = ?', $intElementId);
     
     return $this->getCategoriesTable()->fetchAll($objSelect);    

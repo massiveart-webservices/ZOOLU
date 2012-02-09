@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.website
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -205,6 +205,20 @@ class Navigation {
 
             $intTreeId = $objNavigationItem->idFolder;
 
+          }elseif($objNavigationItem->idParentTypes == $this->core->sysConfig->parent_types->rootlevel && $objNavigationItem->isStartPage == 0){
+            /**
+             * Add Rootlevel pages
+             */
+            $objItem = new NavigationItem();
+            $objItem->setTitle($objNavigationItem->title);
+            $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+            $objItem->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
+            $objItem->setId($objNavigationItem->idPage);
+            $objItem->setTypeId($objNavigationItem->idPageTypes);
+            $objItem->setParentId($objNavigationItem->idFolder);
+            $objItem->setItemId($objNavigationItem->pageId);
+            $objItem->setOrder($objNavigationItem->pageOrder);
+            $objNavigationTree->addItem($objItem, 'item_'.$objItem->getId());
           }else{
             if($intTreeId != $objNavigationItem->idFolder){
 
@@ -283,7 +297,7 @@ class Navigation {
       if(isset($objTree) && is_object($objTree) && $objTree instanceof NavigationTree){
         $objNavigationTree->addToParentTree($objTree, 'tree_'.$objTree->getId());
       }
-
+      
       $this->objMainNavigation = $objNavigationTree;
     }catch (Exception $exc) {
       $this->core->logger->err($exc);

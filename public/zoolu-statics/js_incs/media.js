@@ -78,7 +78,7 @@ Massiveart.Media = Class.create({
         if(el.hasClassName('tdthumbcontainer')){
           myCore.toggleItemSelected(el.id);
         }else{         
-          myCore.toggleItemSelected(el.up('.tdthumbcontainer').id);         
+          myCore.toggleItemSelected(el.up('.tdfthumbcontainer').id);
         }              
       }.bind(this));                 
     }.bind(this));    
@@ -89,7 +89,7 @@ Massiveart.Media = Class.create({
    */
   scaleThumbs: function(scaleValue){
     //console.debug(scaleValue);
-    
+
     var scaleThumbs = document.getElementsByClassName('thumb');
     currSliderValue = scaleValue;
     
@@ -99,8 +99,8 @@ Massiveart.Media = Class.create({
       
       $('divThumbPos'+scaleThumbs[i].id).style.width = newWidth+'px';                                                  
       
-      $('divThumbContainer'+scaleThumbs[i].id).setStyle({width: ((100 * scaleValue / 100) + 10)+'px',
-                                                         height: ((100 * scaleValue / 100) + 10)+'px'});
+      $('divThumbContainer'+scaleThumbs[i].id).setStyle({width: ((100 * scaleValue / 100))+'px',
+                                                         height: ((100 * scaleValue / 100))+'px'});
       
       $('tdThumb'+scaleThumbs[i].id).setStyle({width: (100 * scaleValue / 100)+'px',
                                                height: (100 * scaleValue / 100)+'px'});

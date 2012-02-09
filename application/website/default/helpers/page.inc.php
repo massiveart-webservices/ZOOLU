@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.website.default.helpers
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -690,6 +690,15 @@ function get_iframe($strQueryString = '', $strWidth = '580px', $strHeight = '800
  */
 function get_form($strFormId = 'contactForm', $intRootLevelId = 0, $intPageId = 0, $arrAddonFields = array()){
   echo getPageHelperObject()->getForm($strFormId, $intRootLevelId, $intPageId, $arrAddonFields);
+}
+
+/**
+ * get_form
+ * @return string $strHtmlOutput
+ * @author Cornelius Hansjakob <cha@massiveart.com> 
+ */
+function get_dyn_form($strFormId = 'contactForm', $intRootLevelId = 0, $intPageId = 0, $arrAddonFields = array()){
+  echo getPageHelperObject()->getDynForm($strFormId, $intRootLevelId, $intPageId, $arrAddonFields);
 }
 
 /**

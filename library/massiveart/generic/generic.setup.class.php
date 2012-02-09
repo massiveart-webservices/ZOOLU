@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    library.massiveart.generic
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -66,10 +66,14 @@ class GenericSetup {
   protected $blnRegionCollapsable = true;
 
   protected $intLanguageId;
+  protected $strLanguageCode;
   protected $intLanguageFallbackId;
   protected $intDestinationId;
   protected $intSegmentId;
   protected $blnHideInSitemap = false;
+  protected $blnShowInWebsite = true;
+  protected $blnShowInTablet = true;
+  protected $blnShowInMobile = true;
   protected $intElementId;
   protected $intElementVersion = null;
   protected $intElementLinkId;
@@ -808,6 +812,9 @@ class GenericSetup {
 			$this->setDestinationId((isset($objCurrElement->idDestination) ? $objCurrElement->idDestination : 0));
             $this->setSegmentId((isset($objCurrElement->idSegments) ? $objCurrElement->idSegments : 0));
 			$this->setHideInSitemap((isset($objCurrElement->hideInSitemap) ? $objCurrElement->hideInSitemap : false));
+			$this->setShowInWebsite((isset($objCurrElement->showInWebsite) ? $objCurrElement->showInWebsite : true));
+			$this->setShowInTablet((isset($objCurrElement->showInTablet) ? $objCurrElement->showInTablet : true));
+			$this->setShowInMobile((isset($objCurrElement->showInMobile) ? $objCurrElement->showInMobile : true));
 			$this->setElementVersion((isset($objCurrElement->version) ? $objCurrElement->version : 0));
 			$this->setStatusId((isset($objCurrElement->idStatus) ? $objCurrElement->idStatus : 0));
 		}
@@ -1142,6 +1149,22 @@ class GenericSetup {
 	}
 	
   /**
+	 * setLanguageCode
+	 * @param string $strLanguageCode
+	 */
+	public function setLanguageCode($strLanguageCode){
+		$this->strLanguageCode = $strLanguageCode;
+	}
+
+	/**
+	 * getLanguageCode
+	 * @param string $strLanguageCode
+	 */
+	public function getLanguageCode(){
+		return $this->strLanguageCode;
+	}
+	
+  /**
    * setLanguageFallbackId
    * @param integer $intLanguageFallbackId
    */
@@ -1218,6 +1241,102 @@ class GenericSetup {
       }
     }else{
       return $this->blnHideInSitemap;
+    }
+  }
+  
+  /**
+   * setShowInWebsite
+   * @param boolean $blnShowInWebsite
+   */
+  public function setShowInWebsite($blnShowInWebsite, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnShowInWebsite === true || $blnShowInWebsite === 'true' || $blnShowInWebsite == 1){
+        $this->blnShowInWebsite = true;
+      }else{
+        $this->blnShowInWebsite = false;
+      }  
+    }else{
+      $this->blnShowInWebsite = $blnShowInWebsite;
+    }
+  }
+
+  /**
+   * getShowInWebsite
+   * @return boolean $blnShowInWebsite
+   */
+  public function getShowInWebsite($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnShowInWebsite == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnShowInWebsite;
+    }
+  }
+  
+  /**
+   * setShowInTablet
+   * @param boolean $blnShowInTablet
+   */
+  public function setShowInTablet($blnShowInTablet, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnShowInTablet === true || $blnShowInTablet === 'true' || $blnShowInTablet == 1){
+        $this->blnShowInTablet = true;
+      }else{
+        $this->blnShowInTablet = false;
+      }  
+    }else{
+      $this->blnShowInTablet = $blnShowInTablet;
+    }
+  }
+
+  /**
+   * getShowInTablet
+   * @return boolean $blnShowInTablet
+   */
+  public function getShowInTablet($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnShowInTablet == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnShowInTablet;
+    }
+  }
+  
+  /**
+   * setShowInMobile
+   * @param boolean $blnShowInMobile
+   */
+  public function setShowInMobile($blnShowInMobile, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnShowInMobile === true || $blnShowInMobile === 'true' || $blnShowInMobile == 1){
+        $this->blnShowInMobile = true;
+      }else{
+        $this->blnShowInMobile = false;
+      }  
+    }else{
+      $this->blnShowInMobile = $blnShowInMobile;
+    }
+  }
+
+  /**
+   * getShowInMobile
+   * @return boolean $blnShowInTablet
+   */
+  public function getShowInMobile($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnShowInMobile == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnShowInMobile;
     }
   }
   

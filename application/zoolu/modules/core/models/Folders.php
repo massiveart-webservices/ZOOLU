@@ -1,7 +1,7 @@
 <?php
 /**
  * ZOOLU - Content Management System
- * Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  *
  * LICENSE
  *
@@ -25,7 +25,7 @@
  *
  * @category   ZOOLU
  * @package    application.zoolu.modules.core.models
- * @copyright  Copyright (c) 2008-2009 HID GmbH (http://www.hid.ag)
+ * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
@@ -102,7 +102,7 @@ class Model_Folders {
     $objSelect->setIntegrityCheck(false);    
 
     $objSelect->from('folders', array('id', 'folderId', 'relationId' => 'folderId', 'version'));
-    $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = '.$this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
+    $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = '.$this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
     $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = folderProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
     $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = folderProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
     $objSelect->where('folders.id = ?', $intElementId);
@@ -174,6 +174,9 @@ class Model_Folders {
                            'idStatus'         => $objGenericSetup->getStatusId(),
                            'isUrlFolder'      => $objGenericSetup->getUrlFolder(),
                            'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+                           'showInWebsite'	  => $objGenericSetup->getShowInWebsite(),
+                           'showInTablet'	  => $objGenericSetup->getShowInTablet(),
+                           'showInMobile'	  => $objGenericSetup->getShowInMobile(),
                            'hideInSitemap'    => $objGenericSetup->getHideInSitemap());
     $this->getFolderPropertyTable()->insert($arrProperties);
     
@@ -207,6 +210,9 @@ class Model_Folders {
                                                                           'idStatus'         => $objGenericSetup->getStatusId(),
                                                                           'isUrlFolder'      => $objGenericSetup->getUrlFolder(),
                                                                           'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+                                                                          'showInWebsite'    => $objGenericSetup->getShowInWebsite(),
+                                                                          'showInTablet'     => $objGenericSetup->getShowInTablet(),
+                                                                          'showInMobile'     => $objGenericSetup->getShowInMobile(),
                                                                           'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
                                                                           'published'        => $objGenericSetup->getPublishDate(),
                                                                           'changed'          => date('Y-m-d H:i:s')), $strWhere);
@@ -1242,7 +1248,7 @@ class Model_Folders {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function loadWebsiteRootLevelChilds($intRootLevelId, $intDepth = 1, $intDisplayOptionId = 1, $blnLoadFilter = false, $blnLoadSitemap = false){
+  public function loadWebsiteRootLevelChilds($intRootLevelId, $intDepth = 1, $intDisplayOptionId = 1, $blnLoadFilter = false, $blnLoadSitemap = false, $blnFilterDisplayEnvironment = true){
     $this->core->logger->debug('core->models->Folders->loadWebsiteRootLevelChilds('.$intRootLevelId.','.$intDepth.','.$intDisplayOptionId.')');
 
     $strFolderFilter = '';
@@ -1256,8 +1262,8 @@ class Model_Folders {
     $objSelect1->setIntegrityCheck(false);
     
     $objSelect1->from('folders', array('idFolder' => 'id', 'folderId', 'folderTitle' => 'folderTitles.title', 'depth', 'folderOrder' => 'sortPosition', 'parentId' => new Zend_Db_Expr('IF(folders.idParentFolder = 0, pages.idParent, folders.idParentFolder)'),
-                                       'idPage' => 'pages.id', 'pages.pageId', 'pages.isStartPage', 'pageOrder' => 'pages.sortPosition', 'url' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plUrls.url, urls.url)'), 'external' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plExternals.external, pageExternals.external)'), 'target' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTargets.target, pageTargets.target)'), 'title' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTitle.title, pageTitles.title)'),
-                                       'pageProperties.idPageTypes', 'pageProperties.changed', 'languages.languageCode', 'rootLevels.idRootLevelGroups', 'folders.lft', 'folders.sortPosition', 'folders.sortTimestamp'))
+                                       'idPage' => 'pages.id', 'pageId' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', pl.pageId, pages.pageId)'), 'pages.isStartPage', 'pageOrder' => 'pages.sortPosition', 'url' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plUrls.url, urls.url)'), 'external' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plExternals.external, pageExternals.external)'), 'target' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTargets.target, pageTargets.target)'), 'title' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTitle.title, pageTitles.title)'),
+                                       'pageProperties.idPageTypes', 'pageProperties.changed', 'languages.languageCode', 'rootLevels.idRootLevelGroups', 'folders.lft', 'folders.sortPosition', 'folders.sortTimestamp', 'pages.idParentTypes', 'genericFormId' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plGenericForms.genericFormId, genericForms.genericFormId)')))
                ->join('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).$strFolderFilter, array())
                ->join('rootLevels', 'folders.idRootLevels = rootLevels.id', array())
                ->join('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = folderProperties.idLanguages', array())
@@ -1275,8 +1281,27 @@ class Model_Folders {
                ->joinLeft(array('plUrls' => 'urls'), 'plUrls.relationId = pl.pageId AND plUrls.version = pl.version AND plUrls.idUrlTypes = '.$this->core->sysConfig->url_types->page.' AND plUrls.idLanguages = plProperties.idLanguages AND plUrls.isMain = 1', array())
                ->joinLeft(array('plExternals' => 'pageExternals'), 'plExternals.pageId = pl.pageId AND plExternals.version = pl.version AND plExternals.idLanguages = plProperties.idLanguages', array())
                ->joinLeft(array('plTargets' => 'pageTargets'), 'plTargets.pageId = pl.pageId AND plTargets.version = pl.version AND plTargets.idLanguages = plProperties.idLanguages', array())
+               ->joinLeft(array('plGenericForms' => 'genericForms'), 'plGenericForms.id = plProperties.idGenericForms', array())
+               ->joinLeft(array('genericForms'), 'genericForms.id = pageProperties.idGenericForms', array())
                ->where('folders.idRootLevels = ?', $intRootLevelId)
                ->where('folders.depth <= ?', $intDepth);
+               
+    if($blnFilterDisplayEnvironment){
+      switch($this->core->strDisplayType){
+        case $this->core->sysConfig->display_type->website:
+          $objSelect1->where('folderProperties.showInWebsite = 1')
+                     ->where('pageProperties.showInWebsite = 1');
+          break;
+        case $this->core->sysConfig->display_type->tablet:
+          $objSelect1->where('folderProperties.showInTablet = 1')
+                     ->where('pageProperties.showInTablet = 1');
+          break;
+        case $this->core->sysConfig->display_type->mobile:
+          $objSelect1->where('folderProperties.showInMobile = 1')
+                     ->where('pageProperties.showInMobile = 1');;
+          break;
+      }
+    }
                
     if($intDisplayOptionId > 0){          
       $objSelect1->where('((folderProperties.showInNavigation = ? AND folders.depth = 0) OR (folderProperties.showInNavigation = 1 AND folders.depth > 0))', $intDisplayOptionId)
@@ -1295,8 +1320,8 @@ class Model_Folders {
     $objSelect2->setIntegrityCheck(false);
     
     $objSelect2->from('pages', array('idFolder' => new Zend_Db_Expr('-1'), 'folderId' => new Zend_Db_Expr('""'), 'folderTitle' => new Zend_Db_Expr('""'), 'depth'  => new Zend_Db_Expr('0'), 'folderOrder' => new Zend_Db_Expr('-1'), 'parentId' => 'pages.idParent',
-                                     'idPage' => 'pages.id', 'pages.pageId', 'pages.isStartPage', 'pageOrder' => 'pages.sortPosition', 'url' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plUrls.url, urls.url)'), 'external' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plExternals.external, pageExternals.external)'), 'target' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTargets.target, pageTargets.target)'), 'title' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTitle.title, pageTitles.title)'),
-                                     'pageProperties.idPageTypes', 'pageProperties.changed', 'languages.languageCode', 'rootLevels.idRootLevelGroups', 'lft' => new Zend_Db_Expr('0'), 'pages.sortPosition', 'pages.sortTimestamp'))
+                                     'idPage' => 'pages.id', 'pageId' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', pl.pageId, pages.pageId)'), 'pages.isStartPage', 'pageOrder' => 'pages.sortPosition', 'url' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plUrls.url, urls.url)'), 'external' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plExternals.external, pageExternals.external)'), 'target' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTargets.target, pageTargets.target)'), 'title' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plTitle.title, pageTitles.title)'),
+                                     'pageProperties.idPageTypes', 'pageProperties.changed', 'languages.languageCode', 'rootLevels.idRootLevelGroups', 'lft' => new Zend_Db_Expr('0'), 'pages.sortPosition', 'pages.sortTimestamp', 'pages.idParentTypes', 'genericFormId' => new Zend_Db_Expr('IF(pageProperties.idPageTypes = '.$this->core->sysConfig->page_types->link->id.', plGenericForms.genericFormId, genericForms.genericFormId)')))
                ->join('rootLevels', 'pages.idParent = rootLevels.id', array())
                ->join('pageProperties', 'pageProperties.pageId = pages.pageId AND  pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).$strPageFilter, array())
                ->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = pageProperties.idLanguages', array())
@@ -1311,8 +1336,25 @@ class Model_Folders {
                ->joinLeft(array('plUrls' => 'urls'), 'plUrls.relationId = pl.pageId AND plUrls.version = pl.version AND plUrls.idUrlTypes = '.$this->core->sysConfig->url_types->page.' AND plUrls.idLanguages = plProperties.idLanguages AND plUrls.isMain = 1', array())
                ->joinLeft(array('plExternals' => 'pageExternals'), 'plExternals.pageId = pl.pageId AND plExternals.version = pl.version AND plExternals.idLanguages = plProperties.idLanguages', array())
                ->joinLeft(array('plTargets' => 'pageTargets'), 'plTargets.pageId = pl.pageId AND plTargets.version = pl.version AND plTargets.idLanguages = plProperties.idLanguages', array())
+               ->joinLeft(array('plGenericForms' => 'genericForms'), 'plGenericForms.id = plProperties.idGenericForms', array())
+               ->joinLeft(array('genericForms'), 'genericForms.id = pageProperties.idGenericForms', array())
                ->where('pages.idParent = ?', $intRootLevelId)
                ->where('pages.idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel);
+               
+    if($blnFilterDisplayEnvironment){
+      switch($this->core->strDisplayType){
+        case $this->core->sysConfig->display_type->website:
+          $objSelect2->where('pageProperties.showInWebsite = 1');
+          break;
+        case $this->core->sysConfig->display_type->tablet:
+          $objSelect2->where('pageProperties.showInTablet = 1');
+          break;
+        case $this->core->sysConfig->display_type->mobile:
+          $objSelect2->where('pageProperties.showInMobile = 1');
+          break;
+      }
+    }
+    
     if($intDisplayOptionId > 0){          
       $objSelect2->where('pageProperties.showInNavigation = ?', $intDisplayOptionId);
     }elseif($intDisplayOptionId != -1){
