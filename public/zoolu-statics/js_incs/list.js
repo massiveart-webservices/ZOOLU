@@ -343,6 +343,7 @@ Massiveart.List = Class.create({
         myCore.removeBusyClass('overlayGenContent');
         myCore.calcMaxOverlayHeight('overlayGenContent', true, true);
         myCore.calcMaxOverlayWidth('overlayGenContentWrapper', true);
+        myCore.calcMaxOverlayHeight('importPreview', true, true);
         myCore.calcMaxOverlayWidth('importPreview', true, 30);
         myOverlay.overlayCounter++;
         myCore.putOverlayCenter('overlayGenContentWrapper');
