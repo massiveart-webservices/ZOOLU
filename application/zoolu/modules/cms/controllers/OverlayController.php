@@ -133,8 +133,8 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('overlaytitle', $this->core->translate->_('Assign_internal_links'));
     $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
     $this->view->assign('contenttype', 'page');
+    $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
     $this->renderScript('overlay/overlay.phtml');
-    
   }
   
   /**
@@ -342,6 +342,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('intFolderId', $this->intFolderId);
     $this->view->assign('viewtype', $viewtype);
     $this->view->assign('contenttype', $contenttype);
+    $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
   }
 
   /**

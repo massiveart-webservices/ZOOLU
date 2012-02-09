@@ -216,7 +216,6 @@ Massiveart.Overlay = Class.create({
           $('overlayGenContentWrapper').hide(); 
           $('overlayBlack75').hide();                
           myCore.removeBusyClass('overlayGenContent'); 
-          $('overlayGenContentWrapper').setStyle({width: '410px'});     
         }.bind(this)
       });
     }
@@ -315,7 +314,7 @@ Massiveart.Overlay = Class.create({
    * getNavItem
    * @param integer folderId, integer viewtype
    */
-  getNavItem: function(folderId, viewtype, contenttype){
+  getNavItem: function(folderId, viewtype, contenttype, selectOne){
     this.resetNavItems();
     
     $('olnavitemtitle'+folderId).addClassName('selected');
@@ -325,7 +324,7 @@ Massiveart.Overlay = Class.create({
       // if mediaFilter is active
       if($('mediaFilter_Folders')){
         $('mediaFilter_Folders').value = folderId;
-        this.loadFileFilterContent(viewtype, contenttype);
+        this.loadFileFilterContent(viewtype, contenttype, selectOne);
       }else{
         if(typeof(contenttype) == 'undefined'){
           this.getMediaFolderContent(folderId, viewtype);
@@ -351,14 +350,15 @@ Massiveart.Overlay = Class.create({
             folderId: folderId, 
             viewtype: viewtype,
             languageId: languageId,
-            contenttype: contenttype
+            contenttype: contenttype,
+            selectOne: selectOne
           },      
           evalScripts: true,     
           onComplete: function() {
             // if mediaFilter is active
             if($('mediaFilter_Folders')){
               $('mediaFilter_Folders').value = folderId;
-              this.loadFileFilterContent(viewtype, contenttype);
+              this.loadFileFilterContent(viewtype, contenttype, selectOne);
             }else{
               if(typeof(contenttype) == 'undefined'){
                this.getMediaFolderContent(folderId, viewtype);
@@ -506,7 +506,7 @@ Massiveart.Overlay = Class.create({
    * loadFileFilterContent
    * @param integer viewType
    */
-  loadFileFilterContent: function(viewType, contenttype){
+  loadFileFilterContent: function(viewType, contenttype, selectOne){
     if($('olContent')){
       if($('mediaFilter_Tags') && $('mediaFilter_Folders') && $('mediaFilter_RootLevel')){    
         $('olContent').update('');
@@ -531,10 +531,20 @@ Massiveart.Overlay = Class.create({
         }else if(contenttype == 'page'){
           strAjaxAction = '/zoolu/cms/page/getfilteredpages';
         }
-        var fieldname = this.areaId.substring(this.areaId.indexOf('_')+1);
         
-        new Ajax.Updater('olContent', strAjaxAction, {
-          parameters: {
+        if(selectOne){
+          params = {
+              tagIds: $F('mediaFilter_Tags'),
+              folderIds: $F('mediaFilter_Folders'),
+              rootLevelId: $F('mediaFilter_RootLevel'),
+              languageId: languageId,
+              viewtype: viewType,
+              isOverlay: true,
+              selectOne: selectOne
+            }
+        }else{
+          var fieldname = this.areaId.substring(this.areaId.indexOf('_')+1);
+          params = {
             tagIds: $F('mediaFilter_Tags'),
             folderIds: $F('mediaFilter_Folders'),
             rootLevelId: $F('mediaFilter_RootLevel'),
@@ -543,7 +553,11 @@ Massiveart.Overlay = Class.create({
             languageId: languageId,
             viewtype: viewType,
             isOverlay: true
-          },
+          }
+        }
+        
+        new Ajax.Updater('olContent', strAjaxAction, {
+          parameters: params,
           evalScripts: true,
           onComplete: function(){
             myCore.removeBusyClass('olContent');

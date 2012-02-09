@@ -526,6 +526,7 @@ class Cms_PageController extends AuthControllerAction {
       $this->view->assign('viewtype', $this->objRequest->getParam('viewtype'));
       $this->view->assign('isOverlay', (bool) $this->objRequest->getParam('isOverlay', false));
       $this->view->assign('pageIds', $arrCurrFileIds);
+      $this->view->assign('selectOne', $this->objRequest->getParam('selectOne'));
 
       if($intRootLevelId > 0 || $arrFolderIds[0] > 0){
         /**

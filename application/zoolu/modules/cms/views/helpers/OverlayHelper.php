@@ -70,7 +70,7 @@ class OverlayHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getNavigationElements($rowset, $viewtype, $intFolderId = 0, $intRootLevelId = 0, $intRootLevelTypeId = 0, $strContentType = null)
+    public function getNavigationElements($rowset, $viewtype, $intFolderId = 0, $intRootLevelId = 0, $intRootLevelTypeId = 0, $strContentType = null, $blnSelectOne = 'false')
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getNavigationElements()');
 
@@ -111,7 +111,7 @@ class OverlayHelper
                 if ($intFolderId == 0) {
                     $strOutput .= '
                         <div id="olnavitem' . $row->id . '" class="olnavrootitem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . '); return false;" style="position:relative;">
+                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', '.$blnSelectOne.'); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>
@@ -119,7 +119,7 @@ class OverlayHelper
                 } else {
                     $strOutput .= '
                         <div id="olnavitem' . $row->id . '" class="olnavchilditem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . '); return false;" style="position:relative;">
+                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', '.$blnSelectOne.'); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>
@@ -388,7 +388,7 @@ class OverlayHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getListPage($rowset, $arrPageIds)
+    public function getListPage($rowset, $arrPageIds, $blnSelectOne = false)
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getListPage()');
 
@@ -418,8 +418,14 @@ class OverlayHelper
                     $strHidden = ' style="display:none;"';
                 }
 
+                if($blnSelectOne){
+                  $strAction = 'myOverlay.selectPage('.$row->id.', \''.$row->pageId.'\'); return false;';
+                }else{
+                  $strAction = 'myOverlay.addPageToListArea('.$row->id.', \''.$row->pageId.'\'); return false;';
+                }
+                
                 $strOutput .= '
-                    <div class="olpageitem" id="olItem' . $row->pageId . '" onclick="myOverlay.addPageToListArea(' . $row->id . ', \'' . $row->pageId . '\'); return false;"' . $strHidden . '>
+                    <div class="olpageitem" id="olItem' . $row->pageId . '" onclick="'.$strAction.'"' . $strHidden . '>
                         <div class="olpageleft"></div>
                         <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
                         <div class="icon olpageicon img_' . (($row->isStartPage == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>

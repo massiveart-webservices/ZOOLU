@@ -682,26 +682,50 @@ Massiveart.Form = Class.create({
   /**
    * getLinkedPageOverlay
    */
-  getLinkedPageOverlay: function(fieldId){  
+  getLinkedPageOverlay: function(fieldId){
     $(this.updateOverlayContainer).innerHTML = '';
-    $('overlayGenContentWrapper').setStyle({width: '560px'});
-
     myCore.putCenter('overlayGenContentWrapper');
-    $('overlayGenContentWrapper').show();    
-    if($(fieldId)){
-      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/pagetree', { 
-        parameters: {
-          portalId: myNavigation.rootLevelId, 
-          portalLanguageId: (($('rootLevelLanguageId'+myNavigation.rootLevelId)) ? $F('rootLevelLanguageId'+myNavigation.rootLevelId) : '')
-        },
-        evalScripts: true,
-        onComplete: function(){
-          myCore.putOverlayCenter('overlayGenContentWrapper');
-          myOverlay.fieldId = fieldId;
-        } 
-      });
-    }  
+    $('overlayGenContentWrapper').show();
+    $('overlayGenContent').setStyle({height:'100%'});
+    myOverlay.fieldId = fieldId;
+    new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/internallink', { 
+      parameters: {
+        rootLevelId: myNavigation.rootLevelId,
+        selectOne: true
+      },
+      evalScripts: true,
+      onComplete: function(){
+        $('olContent').addClassName('oldocuments');
+        myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
+        myCore.putOverlayCenter('overlayGenContentWrapper');
+        myOverlay.updateViewTypeIcons();
+      } 
+    });
   },
+  
+//  /**
+//   * getLinkedPageOverlay
+//   */
+//  getLinkedPageOverlay: function(fieldId){  
+//    $(this.updateOverlayContainer).innerHTML = '';
+//    $('overlayGenContentWrapper').setStyle({width: '560px'});
+//
+//    myCore.putCenter('overlayGenContentWrapper');
+//    $('overlayGenContentWrapper').show();    
+//    if($(fieldId)){
+//      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/pagetree', { 
+//        parameters: {
+//          portalId: myNavigation.rootLevelId, 
+//          portalLanguageId: (($('rootLevelLanguageId'+myNavigation.rootLevelId)) ? $F('rootLevelLanguageId'+myNavigation.rootLevelId) : '')
+//        },
+//        evalScripts: true,
+//        onComplete: function(){
+//          myCore.putOverlayCenter('overlayGenContentWrapper');
+//          myOverlay.fieldId = fieldId;
+//        } 
+//      });
+//    }  
+//  },
   
   /**
    * removeItem
