@@ -110,6 +110,9 @@ class Navigation {
   protected $intRootFolderId = 0;
   protected $strRootFolderId = '';
   protected $intLanguageId;
+  protected $blnHasSegments;
+  protected $intSegmentId;
+  protected $strSegmentCode;
 
   /**
    * Constructor
@@ -142,7 +145,7 @@ class Navigation {
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
    */
-  public function loadNavigation($intDepth = 1){
+  public function loadNavigation($intDepth = 1, $blnLoadFilter = false){
     try{
       $this->getModelFolders();
 
@@ -173,7 +176,7 @@ class Navigation {
             $objTree->setTypeId($objNavigationItem->idPageTypes);
             $objTree->setItemId($objNavigationItem->folderId);
             $objTree->setOrder($objNavigationItem->folderOrder);
-            $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+            $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
             $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
             $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
@@ -218,7 +221,7 @@ class Navigation {
               $objTree->setParentId($objNavigationItem->parentId);
               $objTree->setItemId($objNavigationItem->folderId);
               $objTree->setOrder($objNavigationItem->folderOrder);
-              $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+              $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
               $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
               $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
@@ -251,12 +254,12 @@ class Navigation {
 
             if($objNavigationItem->pageId != null){
               if($objNavigationItem->isStartPage == 1 && isset($objTree)){
-                $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+                $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
                 $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
               }else{
                 $objItem = new NavigationItem();
                 $objItem->setTitle($objNavigationItem->title);
-                $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+                $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
                 $objItem->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
                 $objItem->setId($objNavigationItem->idPage);
                 $objItem->setTypeId($objNavigationItem->idPageTypes);
@@ -328,7 +331,7 @@ class Navigation {
             $objTree->setTypeId($objNavigationItem->idPageTypes);
             $objTree->setItemId($objNavigationItem->folderId);
             $objTree->setOrder($objNavigationItem->folderOrder);
-            $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+            $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
             $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
             $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
@@ -374,7 +377,7 @@ class Navigation {
               $objTree->setParentId($objNavigationItem->parentId);
               $objTree->setItemId($objNavigationItem->folderId);
               $objTree->setOrder($objNavigationItem->folderOrder);
-              $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+              $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
               $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
               
               $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
@@ -405,12 +408,12 @@ class Navigation {
 
             if($objNavigationItem->pageId != null){
               if($objNavigationItem->isStartPage == 1 && isset($objTree)){
-                $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+                $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
                 $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
               }else{
                 $objItem = new NavigationItem();
                 $objItem->setTitle($objNavigationItem->title);
-                $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+                $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
                 $objItem->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
                 $objItem->setId($objNavigationItem->idPage);
                 $objItem->setTypeId($objNavigationItem->idPageTypes);
@@ -545,12 +548,12 @@ class Navigation {
           if($this->intRootFolderId == $objSubNavigationItem->idFolder){
             if($objSubNavigationItem->isStartPage == 1){
               $objNavigationTree->setTitle($objSubNavigationItem->folderTitle);
-              $objNavigationTree->setUrl('/'.strtolower($objSubNavigationItem->languageCode).'/'.$objSubNavigationItem->url);
+              $objNavigationTree->setUrl($this->getUrlFor($objSubNavigationItem->languageCode, $objSubNavigationItem->url));
             }else{
               if($objSubNavigationItem->pageId != null){
                 $objItem = new NavigationItem();
                 $objItem->setTitle($objSubNavigationItem->pageTitle);
-                $objItem->setUrl('/'.strtolower($objSubNavigationItem->languageCode).'/'.$objSubNavigationItem->url);
+                $objItem->setUrl($this->getUrlFor($objSubNavigationItem->languageCode, $objSubNavigationItem->url));
                 $objItem->setId($objSubNavigationItem->idPage);
                 $objItem->setParentId($objSubNavigationItem->idFolder);
                 $objItem->setOrder($objSubNavigationItem->pageOrder);
@@ -579,12 +582,12 @@ class Navigation {
 
             if($objSubNavigationItem->pageId != null){
               if($objSubNavigationItem->isStartPage == 1){
-                $objTree->setUrl('/'.strtolower($objSubNavigationItem->languageCode).'/'.$objSubNavigationItem->url);
+                $objTree->setUrl($this->getUrlFor($objSubNavigationItem->languageCode, $objSubNavigationItem->url));
                 //$objTree->setItemId($objSubNavigationItem->pageId);
               }else{
                 $objItem = new NavigationItem();
                 $objItem->setTitle($objSubNavigationItem->pageTitle);
-                $objItem->setUrl('/'.strtolower($objSubNavigationItem->languageCode).'/'.$objSubNavigationItem->url);
+                $objItem->setUrl($this->getUrlFor($objSubNavigationItem->languageCode, $objSubNavigationItem->url));
                 $objItem->setId($objSubNavigationItem->idPage);
                 $objItem->setParentId($objSubNavigationItem->idFolder);
                 $objItem->setOrder($objSubNavigationItem->pageOrder);
@@ -647,7 +650,7 @@ class Navigation {
               $objTree->setTypeId($objNavigationItem->idPageTypes);
               $objTree->setItemId($objNavigationItem->folderId);
               $objTree->setOrder($objNavigationItem->folderOrder);
-              $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+              $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
               $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
               $objTree->setChanged($objNavigationItem->changed);
   
@@ -694,7 +697,7 @@ class Navigation {
                 $objTree->setParentId($objNavigationItem->parentId);
                 $objTree->setItemId($objNavigationItem->folderId);
                 $objTree->setOrder($objNavigationItem->folderOrder);
-                $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+                $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
                 $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
                 $objTree->setChanged($objNavigationItem->changed);
                 
@@ -726,12 +729,12 @@ class Navigation {
   
               if($objNavigationItem->pageId != null){
                 if($objNavigationItem->isStartPage == 1 && isset($objTree)){
-                  $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+                  $objTree->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
                   $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
                 }else{
                   $objItem = new NavigationItem();
                   $objItem->setTitle($objNavigationItem->title);
-                  $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : '/'.strtolower($objNavigationItem->languageCode).'/'.$objNavigationItem->url);
+                  $objItem->setUrl(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->external : $this->getUrlFor($objNavigationItem->languageCode, $objNavigationItem->url));
                   $objItem->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
                   $objItem->setId($objNavigationItem->idPage);
                   $objItem->setTypeId($objNavigationItem->idPageTypes);
@@ -865,6 +868,26 @@ class Navigation {
   }
 
   /**
+   * getUrlFor
+   * @param string $strLanguageCode
+   * @param string $strItemUrl
+   * @param null|string $strSegmentCode
+   * @return string
+   */
+  public function getUrlFor($strLanguageCode, $strItemUrl, $strSegmentCode = null){
+
+    if(!empty($strSegmentCode)){
+      return '/'.strtolower($strSegmentCode).'/'.strtolower($strLanguageCode).'/'.$strItemUrl;
+    }else if($this->blnHasSegments){
+      return '/'.$this->strSegmentCode.'/'.strtolower($strLanguageCode).'/'.$strItemUrl;
+    } else {
+      return '/'.strtolower($strLanguageCode).'/'.$strItemUrl;
+    }
+
+    return '/';
+  }
+
+  /**
    * getModelFolders
    * @return Model_Folders
    * @author Thomas Schedler <tsh@massiveart.com>
@@ -880,6 +903,9 @@ class Navigation {
       require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
       $this->objModelFolders = new Model_Folders();
       $this->objModelFolders->setLanguageId($this->intLanguageId);
+      if($this->blnHasSegments){
+        $this->objModelFolders->setSegmentId($this->intSegmentId);
+      }
     }
 
     return $this->objModelFolders;
@@ -939,6 +965,70 @@ class Navigation {
    */
   public function getLanguageId(){
     return $this->intLanguageId;
+  }
+
+  /**
+   * setHasSegments
+   * @param boolean $blnHasSegments
+   */
+  public function setHasSegments($blnHasSegments, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnHasSegments === true || $blnHasSegments === 'true' || $blnHasSegments == 1){
+        $this->blnHasSegments = true;
+      }else{
+        $this->blnHasSegments = false;
+      }
+    }else{
+      $this->blnHasSegments = $blnHasSegments;
+    }
+  }
+
+  /**
+   * getHasSegments
+   * @return boolean $blnHasSegments
+   */
+  public function getHasSegments($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnHasSegments == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnHasSegments;
+    }
+  }
+    
+  /**
+   * setSegmentId
+   * @param integer $intSegmentId
+   */
+  public function setSegmentId($intSegmentId){
+    $this->intSegmentId = $intSegmentId;
+  }
+
+  /**
+   * getSegmentId
+   * @param integer $intSegmentId
+   */
+  public function getSegmentId(){
+    return $this->intSegmentId;
+  }
+
+  /**
+   * setSegmentCode
+   * @param string $strSegmentCode
+   */
+  public function setSegmentCode($strSegmentCode){
+    $this->strSegmentCode = $strSegmentCode;
+  }
+
+  /**
+   * getSegmentCode
+   * @param string $strSegmentCode
+   */
+  public function getSegmentCode(){
+    return $this->strSegmentCode;
   }
 }
 ?>

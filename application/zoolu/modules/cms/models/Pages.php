@@ -43,6 +43,7 @@
 class Model_Pages {
 
   private $intLanguageId;
+  private $intSegmentId;
 
   /**
    * @var Model_Folders
@@ -183,7 +184,7 @@ class Model_Pages {
     $objSelect = $this->getPageTable()->select();
     $objSelect->setIntegrityCheck(false);
 
-    $objSelect->from('pages', array('id', 'pageId', 'relationId' => 'pageId', 'version', 'pageProperties.idPageTypes', 'isStartPage', 'pageProperties.showInNavigation', 'pageProperties.idDestination', 'pageProperties.hideInSitemap', 'idParent', 'idParentTypes', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.idStatus', 'pageProperties.creator'));
+    $objSelect->from('pages', array('id', 'pageId', 'relationId' => 'pageId', 'version', 'pageProperties.idPageTypes', 'isStartPage', 'pageProperties.showInNavigation', 'pageProperties.idDestination', 'pageProperties.hideInSitemap', 'idParent', 'idParentTypes', 'idSegments', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.idStatus', 'pageProperties.creator'));
     $objSelect->joinLeft('pageTitles', 'pages.pageId = pageTitles.pageId', array('title'));
     $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
     $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = pageProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
@@ -208,7 +209,7 @@ class Model_Pages {
     $objSelect = $this->getPageTable()->select();
     $objSelect->setIntegrityCheck(false);
 
-    $objSelect->from('pages', array('id', 'relationId' => 'pageId', 'pageId', 'version', 'pageProperties.idTemplates', 'pageProperties.idStatus', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.created', 'pageProperties.idPageTypes', 'isStartElement' => 'isStartPage', 'pageProperties.showInNavigation', 'idParent', 'idParentTypes'));
+    $objSelect->from('pages', array('id', 'relationId' => 'pageId', 'pageId', 'version', 'pageProperties.idTemplates', 'pageProperties.idStatus', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.created', 'pageProperties.idPageTypes', 'isStartElement' => 'isStartPage', 'pageProperties.showInNavigation', 'idSegments', 'idParent', 'idParentTypes'));
     $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
     $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = pageProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
     $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = pageProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
@@ -234,7 +235,7 @@ class Model_Pages {
     $objSelect = $this->getPageTable()->select();
     $objSelect->setIntegrityCheck(false);
 
-    $objSelect->from('pages', array('pageProperties.idGenericForms', 'pageProperties.idTemplates', 'pageProperties.idPageTypes', 'pageProperties.showInNavigation'));
+    $objSelect->from('pages', array('pageProperties.idGenericForms', 'pageProperties.idTemplates', 'pageProperties.idPageTypes', 'pageProperties.showInNavigation', 'idSegments'));
     $objSelect->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
     $objSelect->join('genericForms', 'genericForms.id = pageProperties.idGenericForms', array('genericFormId'));
     $objSelect->where('pages.id = ?', $intElementId);
@@ -293,6 +294,7 @@ class Model_Pages {
                          'sortTimestamp'    => date('Y-m-d H:i:s'),
                          'pageId'           => $objPage->pageId,
                          'version'          => $objPage->version,
+                         'idSegments'       => $objGenericSetup->getSegmentId(),
                          'creator'          => $objGenericSetup->getCreatorId(),
                          'created'          => date('Y-m-d H:i:s'));
     $objPage->id = $this->getPageTable()->insert($arrMainData);
@@ -335,8 +337,9 @@ class Model_Pages {
     $strWhere = $this->getPageTable()->getAdapter()->quoteInto('pageId = ?', $objPage->pageId);
     $strWhere .= $this->getPageTable()->getAdapter()->quoteInto(' AND version = ?', $objPage->version);
 
-    $this->getPageTable()->update(array('idUsers'  => $intUserId,
-                                        'changed'  => date('Y-m-d H:i:s')), $strWhere);
+    $this->getPageTable()->update(array('idSegments'    => $objGenericSetup->getSegmentId(),
+                                        'idUsers'       => $intUserId,
+                                        'changed'       => date('Y-m-d H:i:s')), $strWhere);
     /**
      * update language specific page properties
      */
@@ -365,7 +368,7 @@ class Model_Pages {
                              'idPageTypes'      => $objGenericSetup->getElementTypeId(),
                              'showInNavigation' => $objGenericSetup->getShowInNavigation(),
                              'idDestination'    => $objGenericSetup->getDestinationId(),
-      											 'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
+                             'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
                              'idUsers'          => $intUserId,
                              'creator'          => $objGenericSetup->getCreatorId(),
                              'publisher'        => $intUserId,
@@ -749,6 +752,10 @@ class Model_Pages {
       $now = date('Y-m-d H:i:s', $timestamp);
       $strPageFilter = ' AND pageProperties.idStatus = '.$this->core->sysConfig->status->live;
       $strPublishedFilter = ' AND pageProperties.published <= \''.$now.'\'';
+    }
+
+    if(!empty($this->intSegmentId)){
+      $strPageFilter .= ' AND (pages.idSegments = 0 OR pages.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT DISTINCT id, plId, genericFormId, version, plGenericFormId, plVersion,
@@ -2154,6 +2161,23 @@ class Model_Pages {
   public function getLanguageId(){
     return $this->intLanguageId;
   }
+
+  /**
+   * setSegmentId
+   * @param integer $intSegmentId
+   */
+  public function setSegmentId($intSegmentId){
+    $this->intSegmentId = $intSegmentId;
+  }
+
+  /**
+   * getSegmentId
+   * @param integer $intSegmentId
+   */
+  public function getSegmentId(){
+    return $this->intSegmentId;
+  }
+
 }
 
 ?>

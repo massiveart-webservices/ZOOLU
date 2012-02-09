@@ -207,6 +207,9 @@ class Page {
   protected $strPageLinkId;
   protected $intPageVersion;
   protected $intLanguageId;
+  protected $blnHasSegments;
+  protected $intSegmentId;
+  protected $strSegmentCode;
   protected $strType;
   protected $strTemplateFile;
   protected $intTemplateId;
@@ -443,7 +446,7 @@ class Page {
             $objEntry->title = $objGlobalPageParent->title;
             $objEntry->pageId = $objGlobalPageParent->pageId;
             $objEntry->rootLevelId = ((int) $objGlobalPageParent->idRootLevels > 0) ? $objGlobalPageParent->idRootLevels : $objGlobalPageParent->idParent;
-            $objEntry->url = '/'.strtolower($objGlobalPageParent->languageCode).'/'.$objGlobalPageParent->url;
+            $objEntry->url = $this->getUrlFor($objGlobalPageParent->languageCode, $objGlobalPageParent->url);
             $objEntry->created = $objGlobalPageParent->created;
             $objEntry->published = $objGlobalPageParent->published;
             
@@ -876,7 +879,7 @@ class Page {
                 if(isset($objEntryData->idPageTypes) &&  $objEntryData->idPageTypes == $this->core->sysConfig->page_types->link->id){
                   $objEntry->setEntryId($objEntryData->plId);
                   $objEntry->title = $objEntryData->title;
-                  $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->plUrl;
+                  $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->plUrl);
                   
                   if(isset($objEntryData->idLanguageFallbacks) && $objEntryData->idLanguageFallbacks > 0){
                     if(isset($objEntryData->fallbackTitle) && $objEntryData->fallbackTitle != '')  $objEntry->title = $objEntryData->fallbackTitle;  
@@ -894,7 +897,7 @@ class Page {
                      ($this->objParentPage->getTypeId() == $this->core->sysConfig->page_types->product_tree->id || $this->objParentPage->getTypeId() == $this->core->sysConfig->page_types->press_area->id || $this->objParentPage->getTypeId() == $this->core->sysConfig->page_types->courses->id || $this->objParentPage->getTypeId() == $this->core->sysConfig->page_types->events->id)){
                     $objEntry->url = $this->objParentPage->getFieldValue('url').$objEntryData->url;  
                   }else{
-                    $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;  
+                    $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
                   }   
 
                   if(isset($objEntryData->idLanguageFallbacks) && $objEntryData->idLanguageFallbacks > 0){
@@ -1062,7 +1065,7 @@ class Page {
           $objEntry = new PageEntry();
           $objEntry->setEntryId($objEntryData->id);
           $objEntry->title = $objEntryData->title;
-          $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;
+          $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
 
           $this->arrGenForms[$objEntryData->genericFormId.'-'.$objEntryData->genericFormVersion][] = $objEntryData->id;
 
@@ -1127,7 +1130,7 @@ class Page {
 
                 $objEntry->setEntryId($objEntryData->idPage);
                 $objEntry->title = $objEntryData->title;
-                $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;
+                $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
                 $objEntry->created = $objEntryData->pageCreated;
                 $objEntry->published = $objEntryData->pagePublished;
                 $objEntry->destinationId = $objEntryData->idDestination;
@@ -1163,7 +1166,7 @@ class Page {
 
                 $objEntry->setEntryId($objEntryData->idPage);
                 $objEntry->title = $objEntryData->title;
-                $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;
+                $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
                 $objEntry->created = $objEntryData->pageCreated;
                 $objEntry->published = $objEntryData->pagePublished;
                 $objEntry->rootTitle = $objEntryData->rootTitle;
@@ -1271,7 +1274,7 @@ class Page {
           $objUrlData = $this->getModelUrls()->loadUrl($objGlobaEntyPoint->relationId, $objGlobaEntyPoint->version, $this->core->sysConfig->url_types->page);
           if(count($objUrlData) > 0){
             $objUrl = $objUrlData->current();
-            $strBaseUrl = '/'.strtolower($objUrl->languageCode).'/'.$objUrl->url;
+            $strBaseUrl = $this->getUrlFor($objUrl->languageCode, $objUrl->url);
           }
         }
       }
@@ -1285,7 +1288,7 @@ class Page {
           if($strBaseUrl != ''){
             $objEntry->url = $strBaseUrl.$objEntryData->url;  
           }else{
-            $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;  
+            $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
           }
 
           if(isset($objEntryData->idLanguageFallbacks) && $objEntryData->idLanguageFallbacks > 0){
@@ -1368,7 +1371,7 @@ class Page {
               $objUrlData = $this->getModelUrls()->loadUrl($objGlobaEntyPoint->relationId, $objGlobaEntyPoint->version, $this->core->sysConfig->url_types->page);
               if(count($objUrlData) > 0){
                 $objUrl = $objUrlData->current();
-                $strBaseUrl = '/'.strtolower($objUrl->languageCode).'/'.$objUrl->url;
+                $strBaseUrl = $this->getUrlFor($objUrl->languageCode, $objUrl->url);
               }
             }
           }
@@ -1382,7 +1385,7 @@ class Page {
               if($strBaseUrl != ''){
                 $objEntry->url = $strBaseUrl.$objEntryData->url;  
               }else{
-                $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;  
+                $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
               }
           
               if(isset($objEntryData->idLanguageFallbacks) && $objEntryData->idLanguageFallbacks > 0){
@@ -1458,7 +1461,7 @@ class Page {
           $objEntry = new PageEntry();
           $objEntry->setEntryId($objEntryData->idPage);
           $objEntry->title = $objEntryData->title;
-          $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;
+          $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
           $objEntry->showInNavigation = $objEntryData->showInNavigation;
           
           $this->arrGenForms[$objEntryData->genericFormId.'-'.$objEntryData->version][] = $objEntryData->idPage;
@@ -1620,7 +1623,7 @@ class Page {
           $objEntry = new PageEntry();
           $objEntry->setEntryId($objEntryData->id);
           $objEntry->title = $objEntryData->title;
-          $objEntry->url = '/'.strtolower($objEntryData->languageCode).'/'.$objEntryData->url;
+          $objEntry->url = $this->getUrlFor($objEntryData->languageCode, $objEntryData->url);
           $objEntry->datetime = $objEntryData->datetime;
 
           $this->arrGenForms[$objEntryData->genericFormId.'-'.$objEntryData->version][] = $objEntryData->id;
@@ -1817,6 +1820,26 @@ class Page {
       }
     }
   }
+
+  /**
+   * getUrlFor
+   * @param string $strLanguageCode
+   * @param string $strItemUrl
+   * @param null|string $strSegmentCode
+   * @return string
+   */
+  public function getUrlFor($strLanguageCode, $strItemUrl, $strSegmentCode = null){
+
+    if(!empty($strSegmentCode)){
+      return '/'.strtolower($strSegmentCode).'/'.strtolower($strLanguageCode).'/'.$strItemUrl;
+    }else if($this->blnHasSegments){
+      return '/'.$this->strSegmentCode.'/'.strtolower($strLanguageCode).'/'.$strItemUrl;
+    } else {
+      return '/'.strtolower($strLanguageCode).'/'.$strItemUrl;
+    }
+
+    return '/';
+  }
   
   /**
    * getModel
@@ -1837,6 +1860,9 @@ class Page {
         $strModel = 'Model_'.((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s');
         $this->objModel = new $strModel();
         $this->objModel->setLanguageId($this->intLanguageId);
+        if($this->blnHasSegments){
+          $this->objModel->setSegmentId($this->intSegmentId);
+        }
       }else{
         throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "'.$this->strType.'"');
       }
@@ -2192,7 +2218,71 @@ class Page {
   public function getLanguageId(){
     return $this->intLanguageId;
   }
-  
+
+  /**
+   * setHasSegments
+   * @param boolean $blnHasSegments
+   */
+  public function setHasSegments($blnHasSegments, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnHasSegments === true || $blnHasSegments === 'true' || $blnHasSegments == 1){
+        $this->blnHasSegments = true;
+      }else{
+        $this->blnHasSegments = false;
+      }
+    }else{
+      $this->blnHasSegments = $blnHasSegments;
+    }
+  }
+
+  /**
+   * getHasSegments
+   * @return boolean $blnHasSegments
+   */
+  public function getHasSegments($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnHasSegments == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnHasSegments;
+    }
+  }
+
+  /**
+   * setSegmentId
+   * @param integer $intSegmentId
+   */
+  public function setSegmentId($intSegmentId){
+    $this->intSegmentId = $intSegmentId;
+  }
+
+  /**
+   * getSegmentId
+   * @param integer $intSegmentId
+   */
+  public function getSegmentId(){
+    return $this->intSegmentId;
+  }
+
+  /**
+   * setSegmentCode
+   * @param string $strSegmentCode
+   */
+  public function setSegmentCode($strSegmentCode){
+    $this->strSegmentCode = $strSegmentCode;
+  }
+
+  /**
+   * getSegmentCode
+   * @param string $strSegmentCode
+   */
+  public function getSegmentCode(){
+    return $this->strSegmentCode;
+  }
+
   /**
    * setType
    * @param string $strType

@@ -80,12 +80,12 @@
                 <segment> <!-- summer -->
                     <id>1</id>
                     <code>s</code>
-                    <default>true</default>
+                    <default>false</default>
                 </segment>
                 <segment> <!-- winter -->
                     <id>2</id>
                     <code>w</code>
-                    <default>false</default>
+                    <default>true</default>
                 </segment>
             </portal>
         </portals>

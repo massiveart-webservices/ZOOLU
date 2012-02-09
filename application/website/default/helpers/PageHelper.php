@@ -141,8 +141,8 @@ class PageHelper {
     return $strReturn;
   }
   
-    /**
-   * getTitle
+  /**
+   * getMetaTitle
    * @param string $strTag
    * @param boolean $blnTitleFallback
    * @return string $strReturn
@@ -186,6 +186,55 @@ class PageHelper {
       $strReturn = '<link rel="canonical" href="'.$strCanonicalTag.'" />';
     }
     return $strReturn;
+  }
+
+  /**
+   * getCanonicalTagForSegmentation
+   * @return string $strReturn
+   * @author Thomas Schedler <tsh@massiveart.com>
+   * @version 1.0
+   */
+  public function getCanonicalTagForSegmentation(){
+    if($this->objPage->getField('url')){
+      $strSegmentCode = null;
+
+      $arrPortals = $this->core->config->portals->toArray();
+
+      if(array_key_exists('id', $arrPortals['portal'])){
+        $arrPortals = array($arrPortals['portal']);
+      }else{
+        $arrPortals = $arrPortals['portal'];
+      }
+
+      foreach($arrPortals as $arrPortal){
+        if($arrPortal['id'] == $this->objPage->getRootLevelId()){
+          if(array_key_exists('id', $arrPortal['segment'])){
+            $arrSegments = array($arrPortal['segment']);
+          }else{
+            $arrSegments = $arrPortal['segment'];
+          }
+
+          $arrDefaultSegment = null;
+          foreach($arrSegments as $arrSegment){
+            if (array_key_exists('id', $arrSegment) && intval($arrSegment['id']) === intval(strtolower($this->objPage->GenericData()->Setup()->getSegmentId()))) {
+              $strSegmentCode = $arrSegment['code'];
+              break;
+            }
+
+            if(array_key_exists('default', $arrSegment) && $arrSegment['default'] === 'true'){
+              $arrDefaultSegment = $arrSegment;
+            }
+          }
+
+          if(empty($strSegmentCode) && !empty($arrDefaultSegment)){
+            $strSegmentCode = $arrDefaultSegment['code'];
+          }
+        }
+      }
+
+      return '<link rel="canonical" href="'.$this->objPage->getUrlFor($this->core->strLanguageCode, $this->objPage->getField('url')->url, $strSegmentCode).'" />';
+    }
+    return '';
   }
   
   /**

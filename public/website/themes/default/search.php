@@ -41,7 +41,11 @@
 	        <h1><?php echo $this->translate->_('Search'); ?></h1>
 	        <?php
 	          require_once (GLOBAL_ROOT_PATH.'application/website/default/views/helpers/SearchHelper.php');
-	          $objHelper = new SearchHelper();  
+	          $objHelper = new SearchHelper();
+              if($this->hasSegments){
+                $objHelper->setSegmentId($this->segmentId);
+                $objHelper->setSegmentCode($this->segmentCode);
+              }
 	          echo $objHelper->getSearchList($this->objHits, $this->strSearchValue, $this->translate);
 	        ?>
         </div>

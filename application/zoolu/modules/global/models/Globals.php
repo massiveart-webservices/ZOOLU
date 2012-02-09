@@ -43,6 +43,7 @@
 class Model_Globals {
 
   private $intLanguageId;
+  private $intSegmentId;
   
   /**
    * @var Model_Folders
@@ -1708,6 +1709,22 @@ class Model_Globals {
    */
   public function getLanguageId(){
     return $this->intLanguageId;
+  }
+
+  /**
+   * setSegmentId
+   * @param integer $intSegmentId
+   */
+  public function setSegmentId($intSegmentId){
+    $this->intSegmentId = $intSegmentId;
+  }
+
+  /**
+   * getSegmentId
+   * @param integer $intSegmentId
+   */
+  public function getSegmentId(){
+    return $this->intSegmentId;
   }
 }
 

@@ -295,6 +295,11 @@ class IndexController extends Zend_Controller_Action
             $objNavigation->setRootLevelId($this->objTheme->idRootLevels);
             $objNavigation->setLanguageId($this->intLanguageId);
 
+            // set navigation segmentation properties
+            $objNavigation->setHasSegments($this->objTheme->hasSegments);
+            $objNavigation->setSegmentId($this->intSegmentId);
+            $objNavigation->setSegmentCode($this->strSegmentCode);
+
             if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php')) {
                 require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php');
                 $strNavigationHelper = ucfirst($this->objTheme->path) . '_NavigationHelper';
@@ -343,6 +348,11 @@ class IndexController extends Zend_Controller_Action
                 $this->objPage->setPageId($objUrlData->relationId);
                 $this->objPage->setPageVersion($objUrlData->version);
                 $this->objPage->setLanguageId($objUrlData->idLanguages);
+
+                // set navigation segmentation properties
+                $this->objPage->setHasSegments($this->objTheme->hasSegments);
+                $this->objPage->setSegmentId($this->intSegmentId);
+                $this->objPage->setSegmentCode($this->strSegmentCode);
 
                 switch ($objUrlData->idUrlTypes) {
                     case $this->core->sysConfig->url_types->page:
@@ -461,7 +471,12 @@ class IndexController extends Zend_Controller_Action
                 if ($this->blnSearch == true) {
                     $this->_forward('index', 'Search', null, array(
                                                                   'rootLevelId'  => $this->objPage->getRootLevelId(),
-                                                                  'theme'        => $this->objTheme->path
+                                                                  'theme'        => $this->objTheme->path,
+                                                                  'segmentation' => array(
+                                                                    'id'           => $this->intSegmentId,
+                                                                    'code'         => $this->strSegmentCode,
+                                                                    'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
+                                                                  )
                                                              ));
                 }
                 // forward to RssController
