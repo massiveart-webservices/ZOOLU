@@ -69,7 +69,7 @@ class GenericSetup {
   protected $strLanguageCode;
   protected $intLanguageFallbackId;
   protected $intDestinationId;
-  protected $intSegmentId;
+  protected $intSegmentId = 0;
   protected $blnHideInSitemap = false;
   protected $blnShowInWebsite = true;
   protected $blnShowInTablet = true;
