@@ -492,6 +492,7 @@ class IndexController extends Zend_Controller_Action
                     $this->view->template = $this->objPage->getTemplateFile();
                     $this->view->publisher = $this->objPage->getPublisherName();
                     $this->view->publishdate = $this->objPage->getPublishDate();
+                    $this->view->segmentCode = $this->objPage->getSegmentCode();
 
                     $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
                     $this->renderScript($this->strRenderScript);

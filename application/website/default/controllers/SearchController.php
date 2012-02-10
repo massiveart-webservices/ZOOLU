@@ -124,6 +124,8 @@ class SearchController extends Zend_Controller_Action {
       $strSearchValue = $request->getParam('search');
       $this->intLanguageId = $request->getParam('languageId');
       $this->strLanguageCode = $request->getParam('languageCode', $this->core->strLanguageCode);
+      $this->intSegmentId = intval($request->getParam('segmentId'));
+      $this->strSegmentCode = $request->getParam('segmentCode');
       $intRootLevelId = $request->getParam('rootLevelId');
       
       /**
@@ -144,6 +146,8 @@ class SearchController extends Zend_Controller_Action {
       $objSearch->setLimitLiveSearch(5);
       
       $this->view->objHits = $objSearch->livesearch();
+      $this->view->segmentId = $this->intSegmentId;
+      $this->view->segmentCode = $this->strSegmentCode;
     }
   }
 }
