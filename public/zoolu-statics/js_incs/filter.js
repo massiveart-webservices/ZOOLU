@@ -65,6 +65,11 @@ Massiveart.Filter = Class.create({
     });
     
     $('lineInstances').value = $('lineInstances').value + '['+lineId+']';
+    if(arrLines.length >= 5){
+      $$('div.plus').each(function(element){
+        element.hide();
+      });
+    }
   },
   
   /**
@@ -81,6 +86,12 @@ Massiveart.Filter = Class.create({
       }
       
       $('line_'+lineId).remove();
+      
+      if(arrLines.length < 5){
+        $$('div.plus').each(function(element){
+          element.show();
+        });
+      }
     }
   },
   
