@@ -1310,6 +1310,10 @@ class Model_Folders {
       $objSelect1->where('folderProperties.showInNavigation > 0')
                  ->where('pageProperties.showInNavigation > 0');
     }
+
+    if(!empty($this->intSegmentId)){
+      $objSelect1->where('pages.idSegments = 0 OR pages.idSegments = ?',$this->intSegmentId);
+    }
     
     if($blnLoadSitemap){
       $objSelect1->where('folderProperties.hideInSitemap = 0')
@@ -1362,7 +1366,7 @@ class Model_Folders {
     }
 
     if(!empty($this->intSegmentId)){
-        $objSelect2->where('pages.idSegments = 0 OR pages.idSegments = ?',$this->intSegmentId);
+      $objSelect2->where('pages.idSegments = 0 OR pages.idSegments = ?',$this->intSegmentId);
     }
 
     if($blnLoadSitemap){
