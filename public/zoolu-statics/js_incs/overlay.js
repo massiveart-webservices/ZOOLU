@@ -434,7 +434,7 @@ Massiveart.Overlay = Class.create({
       if($('languageId')) {
         languageId = $F('languageId');
       }
-      
+
       var fieldname = this.areaId.substring(this.areaId.indexOf('_')+1);
       new Ajax.Updater(this.updateContainer, strAjaxAction, {
        parameters: { 
@@ -526,7 +526,7 @@ Massiveart.Overlay = Class.create({
         }
                   
         var strAjaxAction;
-        if(typeof(contenttype) == 'undefined'){
+        if(typeof(contenttype) == 'undefined' || contenttype == ''){
           strAjaxAction = '/zoolu/cms/page/getfilteredfiles';
         }else if(contenttype == 'page'){
           strAjaxAction = '/zoolu/cms/page/getfilteredpages';
@@ -555,7 +555,7 @@ Massiveart.Overlay = Class.create({
             isOverlay: true
           }
         }
-        
+
         new Ajax.Updater('olContent', strAjaxAction, {
           parameters: params,
           evalScripts: true,

@@ -76,10 +76,10 @@ class OverlayHelper
 
         $strOutput = '';
 
-        $strType = '';
-        if ($strContentType != null) {
+//        $strType = '';
+//        if ($strContentType != null) {
             $strType = ', \'' . $strContentType . '\'';
-        }
+//        }
 
         if ($intRootLevelTypeId > 0 && $intRootLevelId > 0 && $intFolderId == 0) {
             $strRootTitle = '';
