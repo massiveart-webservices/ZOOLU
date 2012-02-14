@@ -120,6 +120,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('rootLevelType', $this->core->sysConfig->root_level_types->documents);
     $this->view->assign('overlaytitle', $this->core->translate->_('Assign_documents'));
     $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+    $this->view->assign('selectOne', 'false');
     $this->renderScript('overlay/overlay.phtml');
   }
     
@@ -149,6 +150,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('rootLevelType', $this->core->sysConfig->root_level_types->videos);
     $this->view->assign('overlaytitle',  $this->core->translate->_('Assign_videos'));
     $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+    $this->view->assign('selectOne', 'false');
     $this->renderScript('overlay/overlay.phtml');
   }
 
