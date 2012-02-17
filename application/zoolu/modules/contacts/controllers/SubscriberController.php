@@ -375,12 +375,26 @@ class Contacts_SubscriberController extends AuthControllerAction {
         
         try{
           //Check Preconditions
+          
+          //Valid Email Address?
           $validator = new Zend_Validate_EmailAddress();
           if(!$validator->isValid($arrData['email'])){
             require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/InvalidAddressException.php');
             throw new InvalidAddressException($arrData['email']);
           }
-          
+          //Does the host exist?
+          $arrMail = explode('@', $arrData['email']);
+          if(!checkdnsrr($arrMail[1])){
+            require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/HostNotFoundException.php');
+            throw new HostNotFoundException($arrData['email']);
+          }
+          //FIXME Doesn't work: Does the email-address exist?
+/*          require_once(GLOBAL_ROOT_PATH.'library/smtpvalidate/smtpvalidate.class.php');
+          $objSmtpValidate = new SMTP_validateEmail();
+          if(!$objSmtpValidate->validate(array($arrData['email']))){
+              throw new AddressNotFoundException($arrData['email']);
+          }
+*/          
           //Update Userdata
           $blnUpdate = false; //Update an old user or insert a new one
           if(isset($arrData['email']) && $arrData['email'] != ''){
@@ -467,6 +481,8 @@ class Contacts_SubscriberController extends AuthControllerAction {
           $arrErrors[] = $exc->getEmail().' is hard bounced!';
         }catch(DirtyException $exc){
           $arrErrors[] = $exc->getEmail().' has changed!';
+        }catch(HostNotFoundException $exc){
+            $arrErrors[] = $exc->getEmail().' has a non-exsistent Domain-Part!';
         }
       }
     }
