@@ -101,7 +101,7 @@ class Form_Validator_UniqueUrl extends Form_Validator_Abstract {
     //Load data
     $objItemData;
     $strType;
-    $intElementId = ($this->Setup()->getElementLinkId()) ? $this->Setup()->getElementLinkId() : $this->Setup()->getElementId();
+    $intElementId = ($this->Setup()->getElementLinkId() && $this->Setup()->getElementLinkId() != -1) ? $this->Setup()->getElementLinkId() : $this->Setup()->getElementId();
     if($intElementId){
       switch($this->Setup()->getFormTypeId()) {
         case $this->core->sysConfig->form->types->page:
