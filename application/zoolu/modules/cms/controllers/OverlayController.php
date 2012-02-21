@@ -139,6 +139,41 @@ class Cms_OverlayController extends AuthControllerAction {
   }
   
   /**
+   * sitemaplinkAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function sitemaplinkAction(){
+      $this->core->logger->debug('cms->controllers->OverlayController->sitemaplinkAction()');
+      $this->loadRootNavigation($this->core->sysConfig->modules->cms, $this->core->sysConfig->root_level_types->portals, $this->getRequest()->getParam('rootLevelId'));
+      $this->view->assign('overlaytitle', $this->core->translate->_('Assign_sitemaplink'));
+  }
+  
+  /**
+   * sitemapchildnavigationAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function sitemapchildnavigationAction(){
+    $this->core->logger->debug('cms->controllers->OverlayController->sitemapchildnavigationAction()');
+
+    $this->getModelFolders();
+
+    $objRequest = $this->getRequest();
+    $this->intFolderId = $objRequest->getParam("folderId");
+    $strGenFormId = $objRequest->getParam('genericFormId');
+    $intGenFormVersion = $objRequest->getParam('genericFormVersion', 1);
+
+    /**
+     * get childfolders
+     */
+    $objChildelements = $this->objModelFolders->loadChildFoldersForSitemap($this->intFolderId, $strGenFormId, $intGenFormVersion); //TODO Also load linked global folders
+    
+    $this->view->assign('elements', $objChildelements);
+    $this->view->assign('intFolderId', $this->intFolderId);
+  }
+  
+  /**
    * videoAction
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
@@ -292,6 +327,22 @@ class Cms_OverlayController extends AuthControllerAction {
     
     $this->view->assign('pages', $objPages);
     $this->view->assign('pageIds', $arrPageIds);
+  }
+  
+  /**
+   * listsitemapAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function listsitemapAction(){
+      $this->core->logger->debug('cms->controllers->OverlayController->listsitemapAction()');
+      
+      $intFolderId = $this->getRequest()->getParam('folderId');
+      $intLanguageId = $this->getRequest()->getParam('languageId');
+      
+      $objElements = $this->getModelFolders()->loadChildElements($intFolderId);
+      
+      $this->view->assign('elements', $objElements);
   }
 
   /**

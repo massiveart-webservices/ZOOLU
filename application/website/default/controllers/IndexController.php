@@ -257,10 +257,11 @@ class IndexController extends Zend_Controller_Action
         $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
 
         if (!isset($objUrl->url) || count($objUrl->url) == 0) {
-            $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
-            if (isset($objUrl->url) && count($objUrl->url) > 0) {
-                $this->setLanguage($objUrl->url->current()->idLanguages);
-            }
+          $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
+          $this->core->logger->debug($objUrl);
+          if (isset($objUrl->url) && count($objUrl->url) > 0) {
+            $this->setLanguage($objUrl->url->current()->idLanguages);
+          }
         }
 
         // set translate

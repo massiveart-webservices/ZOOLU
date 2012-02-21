@@ -100,9 +100,22 @@ class Model_Urls {
               ->where('urls.isLandingPage = ?', (int)$blnLandingPage)
               ->where('urls.idParent IS NULL');
     
-    $this->core->logger->debug(strval($objSelect));
-
     return $this->objUrlTable->fetchAll($objSelect);
+  }
+  
+  /**
+   * loadUrlById
+   * @param integer $intUrlId
+   */
+  public function loadUrlById($intUrlId){
+    $this->core->logger->debug('core->models->Model_Urls->loadUrl('.$intUrlId.')');
+    
+    $objSelect = $this->getUrlTable()->select()->setIntegrityCheck(false);
+    
+    $objSelect->from('urls')
+              ->where('urls.id = ?', $intUrlId);
+    
+    return $this->objUrlTable->fetchRow($objSelect);
   }
   
   /**
@@ -141,6 +154,62 @@ class Model_Urls {
               ->where('urls.idParent IS NULL');
     
     return $this->core->dbh->query($objSelect->assemble())->fetchAll(Zend_Db::FETCH_OBJ|Zend_Db::FETCH_GROUP);
+  }
+  
+  /**
+   * Loads all the URLs for a specific RootLevel
+   * @param integer $intRootLevelId
+   * @param string $strUrl
+   * @return stdClass
+   * @author Thomas Schedler <tsh@massiveart.com>
+   * @version 1.0
+   */
+  public function loadUrlsByRootLevelForSitemapList($intRootLevelId, $blnLandingPage = false, $blnReturnSelect = false){
+    $this->core->logger->debug('core->models->Model_Urls->loadByUrl('.$intRootLevelId.', '.$blnLandingPage.')');
+    
+    $objFolderPageSelect = $this->core->dbh->select();
+    $objFolderPageSelect->from('urls', array('id', 'pageTitles.title', 'url', 'created', 'changed'));
+    $objFolderPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
+    $objFolderPageSelect->join('folders', 'folders.id = pages.idParent', array());
+    $objFolderPageSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = '.$this->intLanguageId, array());
+	$objFolderPageSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page);
+    $objFolderPageSelect->where('urls.isLandingPage = ?', (int)$blnLandingPage);
+    
+    $objRootLevelPageSelect = $this->core->dbh->select();
+    $objRootLevelPageSelect->from('urls', array('id', 'pageTitles.title', 'url', 'created', 'changed'));
+    $objRootLevelPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array());
+    $objRootLevelPageSelect->join('rootLevels', ' rootLevels.id = pages.idParent', array());
+    $objRootLevelPageSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = '.$this->intLanguageId, array());
+	$objRootLevelPageSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page);
+    $objRootLevelPageSelect->where('urls.isLandingPage = ?', $blnLandingPage);
+					                 
+    $objGlobalSelect = $this->core->dbh->select();
+    $objGlobalSelect->from('urls', array('id', 'globalTitles.title', 'url', 'created', 'changed'));
+    $objGlobalSelect->join('globals', 'globals.globalId = urls.relationId AND globals.version = urls.version', array());
+    $objGlobalSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = urls.idLanguages', array());
+    $objGlobalSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->intLanguageId, array());
+    $objGlobalSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global);
+    $objGlobalSelect->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
+    $objGlobalSelect->where('urls.isLandingPage = ?', $blnLandingPage);
+	  
+    $objGlobalLinksSelect = $this->core->dbh->select();
+    $objGlobalLinksSelect->from('urls', array('id', 'globalTitles.title', 'url', 'created', 'changed'));
+    $objGlobalLinksSelect->join(array('lG' => 'globals'), 'lG.globalId = urls.relationId AND lG.version = urls.version', array());
+    $objGlobalLinksSelect->join('globalLinks', 'globalLinks.idGlobals = lG.id', array());
+    $objGlobalLinksSelect->join('globals', 'globals.globalId = globalLinks.globalId', array());
+    $objGlobalLinksSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->intLanguageId, array());
+    $objGlobalLinksSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global);
+    $objGlobalLinksSelect->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
+    $objGlobalLinksSelect->where('urls.isLandingPage = ?', $blnLandingPage);
+    
+    $objSelect = $this->getUrlTable()->select()
+                                     ->union(array($objFolderPageSelect, $objRootLevelPageSelect, $objGlobalSelect, $objGlobalLinksSelect));
+    
+    if($blnReturnSelect){
+      return $objSelect;
+    }else{
+      return $this->objUrlTable->fetchAll($objSelect);
+    }
   }
   
   /**
@@ -436,6 +505,60 @@ class Model_Urls {
       $strSelect = new Zend_Db_Expr($objSubSelect);
       return $this->getUrlTable()->delete('relationId IN ('.$strSelect.')');
     }
+  }
+  
+  /**
+   * Adds a new URL to the system
+   * @param The data of the URL $arrData
+   * @return int The id of the added row in the database
+   */
+  public function addUrl($arrData){
+      try{
+          $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+          $arrData['idUsers'] = $intUserId;
+          $arrData['creator'] = $intUserId;
+          $arrData['created'] = date('Y-m-d H:i:s');
+          $arrData['changed'] = date('Y-m-d H:i:s');
+          
+          $this->getUrlTable()->insert($arrData);
+          
+          return $this->getUrlTable()->getAdapter()->lastInsertId();
+      }catch(Exception $exc){
+          $this->core->logger->err($exc);
+      }
+  }
+  
+  /**
+   * Updates the url with the given id to the given data
+   * @param int $intUrlId The id of the url to edit
+   * @param array $arrData The data to write
+   * @return int The number of affected rows
+   */
+  public function editUrl($intUrlId, $arrData){
+      $this->core->logger->debug('core->models->Model_Urls->editUrl('.$intUrlId.', '.$arrData.')');
+      
+      try{
+          $strWhere = $this->getUrlTable()->getAdapter()->quoteInto('id = ?', $intUrlId);
+    
+          $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+          $arrData['idUsers'] = $intUserId;
+          $arrData['changed'] = date('Y-m-d H:i:s');
+          
+          return $this->getUrlTable()->update($arrData, $strWhere);
+      }catch(Exception $exc){
+          $this->core->logger->err($exc);
+      }
+  }
+  
+  public function deleteUrl($intUrlId){
+      $this->core->logger->debug('core->models->Model_Urls->deleteUrl('.$intUrlId.')');
+      
+      try{
+          $strWhere = $this->getUrlTable()->getAdapter()->quoteInto('id = ?', $intUrlId);
+          $this->getUrlTable()->delete($strWhere);
+      }catch(Exception $exc){
+          $this->core->logger->err($exc);
+      }
   }
   
   /**

@@ -228,6 +228,7 @@ class GenericSetup {
   const FIELD_TYPE_COLLAPSABLEINTERNALLINKS = 'collapsableInternalLinks';
   const FIELD_TYPE_COLLECTION = 'collection';
   const FIELD_TYPE_URL = 'url';
+  const FIELD_TYPE_SITEMAPLINK = 'sitemapLink';
 
 	/*
    * FieldTypeGroups

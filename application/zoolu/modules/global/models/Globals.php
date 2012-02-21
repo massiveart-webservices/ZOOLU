@@ -91,6 +91,11 @@ class Model_Globals {
   protected $objGlobalContactsTable;
   
   /**
+   * @var Model_Globals
+   */
+  protected $objModelGlobals;
+  
+  /**
    * @var Core
    */
   private $core;
@@ -124,6 +129,70 @@ class Model_Globals {
     $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
     $objSelect->where('globals.id = ?', $intElementId);
     
+    return $this->getGlobalTable()->fetchAll($objSelect);
+  }
+  
+  /**
+   * loadByGlobalId
+   * @param string $strGlobalId
+   */
+  public function loadByGlobalId($strGlobalId){
+    $this->core->logger->debug('global->models->Model_Globals->load('.$strGlobalId.')');
+
+    $objSelect = $this->getGlobalTable()->select();
+    $objSelect->setIntegrityCheck(false);
+
+    $objSelect->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'version', 'isStartGlobal', 'idParent', 'idParentTypes', 'globalProperties.idGlobalTypes', 'globalProperties.showInNavigation', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.idStatus', 'globalProperties.creator'));
+    $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
+    $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = globalProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
+    $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
+    $objSelect->where('globals.globalId = ?', $strGlobalId);
+    
+    return $this->getGlobalTable()->fetchAll($objSelect);
+  }
+  
+  /**
+   * loadByGlobalId
+   * @param string $strGlobalId
+   */
+  public function loadLinkByGlobalId($strGlobalId){
+    $this->core->logger->debug('global->models->Model_Globals->load('.$strGlobalId.')');
+
+    $objSelect = $this->getGlobalTable()->select();
+    $objSelect->setIntegrityCheck(false);
+
+    $objSelect->from(array('origin' => 'globals'), array('globals.id', 'globals.globalId', 'relationId' => 'globals.globalId', 'globals.version', 'globals.isStartGlobal', 'globals.idParent', 'globals.idParentTypes', 'globalProperties.idGlobalTypes', 'globalProperties.showInNavigation', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.idStatus', 'globalProperties.creator'));
+    $objSelect->joinLeft('globalLinks', 'globalLinks.globalId = origin.globalId', array());
+    $objSelect->joinLeft('globals', 'globalLinks.idGlobals = globals.id', array());
+    $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
+    $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = globalProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
+    $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
+    $objSelect->where('origin.globalId = ?', $strGlobalId);
+    
+    return $this->getGlobalTable()->fetchAll($objSelect);
+  }
+  
+  /**
+   * loadLinkGlobal
+   * @param integer $intElementId
+   * @return Zend_Db_Table_Rowset_Abstract
+   * @author Thomas Schedler <tsh@massiveart.com>
+   * @version 1.0
+   */
+  public function loadLinkGlobal($intElementId){
+    $this->core->logger->debug('cms->models->Model_Globals->loadLinkGlobal('.$intElementId.')');
+
+    $objSelect = $this->getGlobalTable()->select();
+    $objSelect->setIntegrityCheck(false);
+
+    $objSelect->from(array('origin' => 'globals'), array('originId' => 'id'));
+    $objSelect->join('globalLinks', 'globalLinks.idGlobals = origin.id', array());
+    $objSelect->join('globals', 'globals.globalId = globalLinks.globalId', array('id', 'globalId', 'version'));
+    $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->intLanguageId, array('title'));
+    $objSelect->joinleft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = '.$this->core->sysConfig->url_types->global.' AND urls.idLanguages = '.$this->intLanguageId.' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
+    $objSelect->joinleft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
+    $objSelect->where('origin.id = ?', $intElementId);
+
     return $this->getGlobalTable()->fetchAll($objSelect);
   }
   

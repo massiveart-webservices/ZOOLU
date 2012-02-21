@@ -65,7 +65,7 @@
           <div id="divFormDeleteSucces" class="alertdeletesucces" style="display:none;"><?php echo $this->translate->_('Deleted'); ?>!</div>
 
           <div id="genListFunctions" style="display:none;">
-            <!-- new button 
+            <!-- new button -->
             <div id="buttonnew" onclick="myNavigation.getAddForm();">
               <div class="button25leftOn"></div>
               <div class="button25centerOn">
@@ -74,7 +74,7 @@
               </div>
               <div class="button25rightOn"></div>
               <div class="clear"></div>
-            </div> -->
+            </div>
 
             <!-- edit menu -->
             <div id="buttonedit" onclick="return false;">
@@ -84,7 +84,7 @@
               <div class="clear"></div>
             </div>
 
-            <div id="buttonEditMenu" class="buttoneditmenu2" style="display:none;">
+            <div id="buttonEditMenu" class="buttoneditmenu" style="display:none;">
               <div class="buttoneditmenuinner">
                 <div class="buttoneditlink" onclick="myList.deleteListItem(); return false;"><?php echo $this->translate->_('Delete'); ?></div>
                 <div class="clear"></div>
@@ -141,6 +141,8 @@
       <div id="genFormContainer" class="contentedit2" style="display:none;"></div>
 
       <div id="genTableListContainer" class="contentedit2" style="display:none;"></div>
+      
+      <div id="genListContainer" class="contentedit2" style="display:none;"></div>
 
       <div id="genTmpContainer" style="display:none;"></div>
       
@@ -377,8 +379,8 @@
           Copy_language_override: '<?php echo $this->translate->_('Copy_language_override'); ?>'
         };
         
-        myNavigation = new Massiveart.Navigation.Cms();
-        myForm = new Massiveart.Form();
+        myNavigation = new Massiveart.Navigation.Landingpages();
+        myForm = new Massiveart.Form.Landingpages();
         myPage = new Massiveart.Page();
         myFolder = new Massiveart.Folder();
         myOverlay = new Massiveart.Overlay();

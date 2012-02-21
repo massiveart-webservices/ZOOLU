@@ -222,6 +222,34 @@ Massiveart.Overlay = Class.create({
   },
   
   /**
+   * selectPage
+   */
+  selectSitemapPage: function(type, elementId, idElement){
+    myCore.addBusyClass('overlayGenContent');
+    if('sitemapLink_'+this.fieldId){
+      idParent = null;
+      if(type == 'global'){
+        idParent = $('olnavitem13').up('.type_page').id.substr(9);
+      }
+      new Ajax.Updater('sitemapLink_'+this.fieldId, '/zoolu/core/landingpage/sitemapfield', { //FIXME URL should not be hardcoded
+        parameters: {
+          fieldId: this.fieldId,
+          type: type,
+          elementId: elementId,
+          idElement: idElement,
+          idParent: idParent
+        },
+        evalScripts: true,     
+        onComplete: function() {  
+          $('overlayGenContentWrapper').hide(); 
+          $('overlayBlack75').hide();
+          myCore.removeBusyClass('overlayGenContent'); 
+        }.bind(this)
+      });
+    }
+  },
+  
+  /**
    * addPageToListArea
    * @param integer idPage
    * @param string itemId
@@ -374,6 +402,47 @@ Massiveart.Overlay = Class.create({
   },
   
   /**
+   * getSiteMapNavItem
+   */
+  getSiteMapNavItem: function(folderId, genericFormId, genericFormVersion){
+    this.resetNavItems();
+    
+    $('olnavitemtitle'+folderId).addClassName('selected');
+    
+    if($('olsubnav'+folderId)){
+      this.toggleSubNavItem(folderId);      
+      this.getSiteMapContent(folderId);
+    }else{
+      if(folderId != ''){
+        var subNavContainer = '<div id="olsubnav'+folderId+'" class="olsubnav" style="display:none;"></div>'; 
+        new Insertion.Bottom('olnavitem'+folderId, subNavContainer);
+        
+        var blnVisible = this.toggleSubNavItem(folderId);
+        myCore.addBusyClass('olsubnav'+folderId);
+        
+        var languageId = null;
+        if($('languageId')) {
+          languageId = $F('languageId');
+        }
+        
+        new Ajax.Updater('olsubnav'+folderId, '/zoolu/cms/overlay/sitemapchildnavigation', {
+          parameters: { 
+            folderId: folderId, 
+            languageId: languageId,
+            genericFormId: genericFormId,
+            genericFormVersion: genericFormVersion
+          },      
+          evalScripts: true,     
+          onComplete: function() {
+            this.getSiteMapContent(folderId);
+            myCore.removeBusyClass('olsubnav'+folderId);
+          }.bind(this)
+        });
+      } 
+    }
+  },
+  
+  /**
    * getContactNavItem
    * @param integer unitId
    */
@@ -448,6 +517,32 @@ Massiveart.Overlay = Class.create({
        }.bind(this)
      });
     }
+  },
+  
+  /**
+   * getSiteMapContent
+   */
+  getSiteMapContent: function(folderId){
+    if(folderId != ''){
+      $(this.updateContainer).innerHTML = '';
+      myCore.addBusyClass(this.updateContainer);
+      
+      var languageId = null;
+      if($('languageId')){
+        languageId = $F('languageId');
+      }
+    }
+    
+    new Ajax.Updater(this.updateContainer, '/zoolu/cms/overlay/listsitemap', {
+      parameters: {
+        folderId: folderId,
+        languageId: languageId
+      },
+      evalScripts: true,
+      onComplete: function(){
+        myCore.removeBusyClass(this.updateContainer);
+      }.bind(this)
+    });
   },
   
   /**
@@ -582,7 +677,7 @@ Massiveart.Overlay = Class.create({
       if($('olnavitem'+itemId)){
 	      if($('olnavitem'+itemId).down('.icon').hasClassName('img_folder_on_open')){
 	        $('olnavitem'+itemId).down('.icon').removeClassName('img_folder_on_open');	    
-	        return false;    
+	        return false;
 	      }else{
           $('olnavitem'+itemId).down('.icon').addClassName('img_folder_on_open');
           return true;

@@ -199,6 +199,26 @@ class Model_Pages {
     return $this->getPageTable()->fetchAll($objSelect);
   }
   
+  /**
+   * loadByPageId
+   * @param string $strPageId
+   */
+  public function loadByPageId($strPageId){
+      $this->core->logger->debug('cms->models->Model_Pages->loadByPageId('.$strPageId.')');
+      
+      $objSelect = $this->getPageTable()->select();
+      $objSelect->setIntegrityCheck(false);
+  
+      $objSelect->from('pages', array('id', 'pageId', 'relationId' => 'pageId', 'version', 'pageProperties.idPageTypes', 'isStartPage', 'pageProperties.showInNavigation', 'pageProperties.idDestination', 'pageProperties.hideInSitemap', 'pageProperties.showInWebsite', 'pageProperties.showInTablet', 'pageProperties.showInMobile', 'idParent', 'idParentTypes', 'idSegments', 'pageProperties.published', 'pageProperties.changed', 'pageProperties.idStatus', 'pageProperties.creator'));
+      $objSelect->joinLeft('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('title'));
+      $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
+      $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = pageProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
+      $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = pageProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
+      $objSelect->where('pages.pageId = ?', $strPageId);
+  
+      return $this->getPageTable()->fetchAll($objSelect);
+  }
+  
 
   /**
    * loadByIdAndVersion

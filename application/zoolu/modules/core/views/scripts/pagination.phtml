@@ -52,14 +52,16 @@
                   </div>
                   <div class="clear"></div>
                   <script type="text/javascript">
-                    $('paginationControl').observe('change', function() {
-                        myList.getListPage(this.options[this.selectedIndex].value);
-                    });
-      
-                    $('paginationItemsPerPage').observe('change', function() {
-                      myList.ItemsPerPage = this.options[this.selectedIndex].value;
-                      myList.getListPage($('paginationControl').options[$('paginationControl').selectedIndex].value);
-                    });
+                    if($('paginationControl')){
+                        $('paginationControl').observe('change', function() {
+                            myList.getListPage(this.options[this.selectedIndex].value);
+                        });
+          
+                        $('paginationItemsPerPage').observe('change', function() {
+                          myList.ItemsPerPage = this.options[this.selectedIndex].value;
+                          myList.getListPage($('paginationControl').options[$('paginationControl').selectedIndex].value);
+                        });
+                    }
                   </script>
                 </div>
               </div>
