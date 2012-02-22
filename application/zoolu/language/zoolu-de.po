@@ -1423,6 +1423,48 @@ msgstr "Landingpage editieren"
 msgid "New_Landingpage"
 msgstr "Neue Landingpage"
 
+msgid "targetpage"
+msgstr "Zielseite"
+
+msgid "url"
+msgstr "Landingpage URL"
+
+msgid "targetlanguage"
+msgstr "Sprache der Zielseite"
+
+msgid "redirect"
+msgstr "Weiterleitung"
+
+msgid "changeUser"
+msgstr "Letzte Änderung von"
+
+msgid "General_information_landingpage"
+msgstr "Informationen zur Konfiguration eine Landing Page"
+
+msgid "Landingpage_url"
+msgstr "Landing Page URL"
+
+msgid "Landingpage_link"
+msgstr "Darzustellende Inhaltsseite"
+
+msgid "Landingpage_language"
+msgstr "Sprache, die in der die gewählte Inhaltsseite angezeigt werden soll"
+
+msgid "Landingpage_redirect"
+msgstr "Landing Page soll als URL sichtbar bleiben und nicht auf Zielseite umleiten. (Achtung: Gefahr für 'Duplikate Content')"
+
+msgid "Assign_sitemaplink"
+msgstr "Gewünschte Inhaltsseite wählen"
+
+msgid "Pagetitle"
+msgstr "Seitentitel"
+
+msgid "active"
+msgstr "aktiviert"
+
+msgid "deactivated"
+msgstr "deaktiviert"
+
 #~ msgid "Publish"
 #~ msgstr "Sicherheit"
 

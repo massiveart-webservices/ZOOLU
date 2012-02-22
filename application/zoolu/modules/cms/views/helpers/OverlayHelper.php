@@ -509,7 +509,7 @@ class OverlayHelper
         $strOutputTop = '
             <div>
                 <div class="olpagetopleft"></div>
-                <div class="olpagetopitemtitle bold">Titel</div>
+                <div class="olpagetopitemtitle bold">'.$this->core->translate->_('Pagetitle').'</div>
                 <div class="olpagetopright"></div>
                 <div class="clear"></div>
             </div>';

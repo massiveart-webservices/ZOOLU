@@ -1423,6 +1423,42 @@ msgstr "Edit Landingpage"
 msgid "New_Landingpage"
 msgstr "New Landingpage"
 
+msgid "targetpage"
+msgstr "Target page"
+
+msgid "url"
+msgstr "Landingpage URL"
+
+msgid "targetlanguage"
+msgstr "Target page language"
+
+msgid "redirect"
+msgstr "active redirect"
+
+msgid "changeUser"
+msgstr "Last change of"
+
+msgid "General_information_landingpage"
+msgstr "General information for configure a landing page"
+
+msgid "Landingpage_url"
+msgstr "Landing Page URL"
+
+msgid "Landingpage_link"
+msgstr "Contentpage to display"
+
+msgid "Landingpage_language"
+msgstr "Language, in which the chosen content page should be displayed"
+
+msgid "Landingpage_redirect"
+msgstr "Landing Page soll als URL sichtbar bleiben und nicht auf Zielseite umleiten. (Achtung: Gefahr für 'Duplikate Content')"
+
+msgid "Assign_sitemaplink"
+msgstr "Choose content page"
+
+msgid "Pagetitle"
+msgstr "Pagetitle"
+
 #~ msgid "Publish"
 #~ msgstr "Publish"
 

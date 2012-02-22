@@ -258,18 +258,17 @@ class IndexController extends Zend_Controller_Action
 
         if (!isset($objUrl->url) || count($objUrl->url) == 0) {
           $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
-          $this->core->logger->debug($objUrl);
           if (isset($objUrl->url) && count($objUrl->url) > 0) {
             $this->setLanguage($objUrl->url->current()->idLanguages);
           }
         }
-
+        
         // set translate
         $this->setTranslate();
-
+        
         // init page cache
         $this->initPageCache($strUrl);
-
+        
         /**
          * check if "q" param is in the url for the search
          */
@@ -284,7 +283,7 @@ class IndexController extends Zend_Controller_Action
             ($this->core->sysConfig->cache->page == 'true' && isset($_SESSION['sesTestMode']))
         ) {
 
-            $this->getModelUrls();
+            $this->getModelUrls(true);
             $this->getModelPages();
 
             if (file_exists(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php')) {
@@ -1080,13 +1079,14 @@ class IndexController extends Zend_Controller_Action
 
     /**
      * getModelUrls
+     * @param $blnForceNewInstance Forces a new instantiation of the model
      * @return Model_Urls
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    protected function getModelUrls()
+    protected function getModelUrls($blnForceNewInstance = false)
     {
-        if (null === $this->objModelUrls) {
+        if (null === $this->objModelUrls || $blnForceNewInstance) {
             /**
              * autoload only handles "library" compoennts.
              * Since this is an application model, we need to require it

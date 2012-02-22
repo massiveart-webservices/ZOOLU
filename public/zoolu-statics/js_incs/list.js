@@ -164,8 +164,8 @@ Massiveart.List = Class.create({
       }      
   	});    
   	if(arrEntries.size() > 0){
-  	  myCore.deleteAlertSingleMessage = myCore.translate['Delete_subscriber'];
-      myCore.deleteAlertMultiMessage = myCore.translate['Delete_subscribers'];
+  	  myCore.deleteAlertSingleMessage = myCore.translate['Delete_'];
+      myCore.deleteAlertMultiMessage = myCore.translate['Delete_'];
       myCore.showDeleteAlertMessage(arrEntries.size());
       $('buttonOk').observe('click', function(event){
         new Ajax.Updater(myNavigation.genListContainer, myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/listdelete', {

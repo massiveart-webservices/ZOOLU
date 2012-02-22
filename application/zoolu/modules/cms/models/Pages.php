@@ -1372,7 +1372,7 @@ class Model_Pages {
    * @author Dominik Mößlang <dmo@massiveart.com>
    * @version 1.0
    */
-  public function loadUrlHistory($intPageId, $intLanguageId){
+  public function loadUrlHistory($intPageId, $intLanguageId, $blnLandingPages = false){
     $this->core->logger->debug('cms->models->Model_Pages->loadPageUrlHistory('.$intPageId.', '.$intLanguageId.')');
 
     $objSelect = $this->getPageTable()->select();
@@ -1381,7 +1381,8 @@ class Model_Pages {
     $objSelect->from($this->objPageTable, array('pageId', 'relationId' => 'pageId', 'version', 'isStartpage'))
               ->join('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = '.$this->core->sysConfig->url_types->page.' AND urls.idLanguages = '.$intLanguageId.' AND urls.isMain = 0 AND urls.idParent IS NULL', array('id', 'url'))
               ->join('languages', 'languages.id = urls.idLanguages', array('languageCode'))
-              ->where('pages.id = ?', $intPageId);
+              ->where('pages.id = ?', $intPageId)
+              ->where('urls.isLandingPage = ?', (int) $blnLandingPages);
 
     return $this->objPageTable->fetchAll($objSelect);
   }

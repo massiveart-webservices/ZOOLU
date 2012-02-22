@@ -128,14 +128,14 @@ class Core_LandingpageController extends AuthControllerAction {
     foreach($sqlStmt as $arrSql){
       $arrLanguageOptions[$arrSql['id']] = $arrSql['title'];
     }
+
+    $this->objForm->addElement('text', 'url', array('label' => $this->core->translate->_('Landingpage_url', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text', 'required' => true));
+    $this->objForm->addElement('sitemapLink', 'link', array('label' => $this->core->translate->_('Landingpage_link', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'text'));
+    $this->objForm->addElement('select', 'idLanguages', array('label' => $this->core->translate->_('Landingpage_language', false), 'decorators' => array('Input'), 'columns' => 4, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrLanguageOptions));
+    $this->objForm->addElement('checkbox', 'isMain', array('decorators' => array('Input'), 'columns' => 6, 'class' => 'checkbox', 'label' => $this->core->translate->_('Landingpage_redirect', false)));
     
-    $this->objForm->addElement('sitemapLink', 'link', array('label' => $this->core->translate->_('Link', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'text'));
-    $this->objForm->addElement('text', 'url', array('label' => $this->core->translate->_('URL', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text', 'required' => true));
-    $this->objForm->addElement('select', 'idLanguages', array('label' => $this->core->translate->_('language', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrLanguageOptions));
-    $this->objForm->addElement('checkbox', 'isMain', array('decorators' => array('Input'), 'columns' => 12, 'class' => 'checkbox', 'required' => true, 'label' => 'Weiterleitung deaktivieren'));
-    
-    $this->objForm->addDisplayGroup(array('link', 'isMain', 'url', 'idLanguages'), 'main-group');
-    $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information', false));
+    $this->objForm->addDisplayGroup(array('url', 'link', 'isMain', 'idLanguages'), 'main-group');
+    $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information_landingpage', false));
     $this->objForm->getDisplayGroup('main-group')->setDecorators(array('FormElements', 'Region'));
   }
   
@@ -323,6 +323,24 @@ class Core_LandingpageController extends AuthControllerAction {
           }
           $this->_forward('list', 'landingpage', 'core');
           $this->view->assign('blnShowFormAlert', true);
+      }catch(Exception $exc){
+          $this->core->logger->err($exc);
+      }
+  }
+  
+  public function listdeleteAction()
+  {
+      $this->core->logger->debug('core->controllers->LandingpageController->listdeleteAction()');
+      
+      try{
+          $strLandingpages = $this->getRequest()->getParam('values', null);
+          if($strLandingpages != null){
+              $arrLandingpageIds = explode('][', trim($strLandingpages, '[]'));
+              foreach($arrLandingpageIds as $intLandingpageId){
+                  $this->getModelUrls()->deleteUrl($intLandingpageId);
+              }
+          }
+          $this->_forward('list', 'landingpage', 'core');
       }catch(Exception $exc){
           $this->core->logger->err($exc);
       }

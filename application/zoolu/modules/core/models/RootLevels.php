@@ -363,6 +363,30 @@ class Model_RootLevels {
     
     return $this->getRootLevelTable()->fetchAll($objSelect);
   }
+  
+  /**
+   * Loads the URL from a given rootlevel with the given language
+   * @param integer $intRootLevelId
+   * @param integer $intLanguageId
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function loadRootLevelUrl($intRootLevelId, $intLanguageId){
+      $this->core->logger->debug('core->models->Model_RootLevels->loadRootLevelUrl('.$intRootLevelId.')');
+      
+      $objSelect = $this->getRootLevelTable()->select()->setIntegrityCheck(false);
+    
+      $strAppEnv = APPLICATION_ENV;
+      $intEnvironment = $this->core->sysConfig->environments->$strAppEnv;
+      
+      $objSelect->from('rootLevelUrls', array('url'))
+                ->where('rootLevelUrls.isMain = 1')
+                ->where('rootLevelUrls.idEnvironments = ?', $intEnvironment)
+                ->where('rootLevelUrls.idRootLevels = ?', $intRootLevelId)
+                ->where('rootLevelUrls.idLanguages = ?', $intLanguageId);
+                
+      return $this->getRootLevelTable()->fetchRow($objSelect);
+  }
 
   /**
    * getRootLevelTable
