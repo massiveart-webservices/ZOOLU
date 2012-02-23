@@ -1414,7 +1414,8 @@ class Model_Folders {
               ->join(array('parent' => 'folders'), 'parent.id = '.$this->core->dbh->quote($intParentId, Zend_Db::INT_TYPE), array())
               ->join('folderProperties', 'folderProperties.folderId = folders.folderId AND 
                                           folderProperties.version = folders.version AND
-                                          folderProperties.idLanguages = '.$this->intLanguageId, array('folderStatus' => 'idStatus'))
+                                          folderProperties.idLanguages = '.$this->intLanguageId
+                                          .' '.$strFolderFilter,array('folderStatus' => 'idStatus'))
               ->join('folderTitles', 'folderTitles.folderId = folders.folderId AND
                                       folderTitles.version = folders.version AND
                                       folderTitles.idLanguages = '.$this->intLanguageId, array('folderTitle' => 'title'))
@@ -1431,10 +1432,16 @@ class Model_Folders {
                 ->joinLeft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = '.$this->core->sysConfig->url_types->global.' AND urls.idLanguages = '.$this->intLanguageId.' AND urls.isMain = 1', array('url'));
       
     }
+    
+    $strShowInNavigation = ' AND globalProperties.showInNavigation = 1';
+    if (array_key_exists('IgnoreShowInNavigation', $arrFilterOptions) && $arrFilterOptions['IgnoreShowInNavigation'] === true) {
+      $strShowInNavigation = ' ';
+    }
+    
     $objSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId AND 
                                           globalProperties.version = globals.version AND
-                                          globalProperties.idLanguages = '.$this->intLanguageId.' AND
-                                          globalProperties.showInNavigation = 1', array('globalStatus' => 'idStatus', 'idGlobalTypes', 'idLanguageFallbacks', 'changed'))              
+                                          globalProperties.idLanguages = '.$this->intLanguageId.
+                                          ' '.$strShowInNavigation.' '.$strGlobalFilter, array('globalStatus' => 'idStatus', 'idGlobalTypes', 'idLanguageFallbacks', 'changed', 'published'))              
               ->join('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version'))
               ->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->intLanguageId, array('globalTitle' => 'title'))
               ->joinLeft(array('fallbackTitles' => 'globalTitles'), 'fallbackTitles.globalId = globals.globalId AND fallbackTitles.version = globals.version AND fallbackTitles.idLanguages = globalProperties.idLanguageFallbacks', array('fallbackTitle' => 'title'))
