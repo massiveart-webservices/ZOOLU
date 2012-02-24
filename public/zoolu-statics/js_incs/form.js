@@ -658,7 +658,7 @@ Massiveart.Form = Class.create({
       evalScripts: true,
       onComplete: function(){
         myOverlay.overlayCounter++;
-        $('olContent').addClassName('oldocuments');
+        $('olContent').addClassName('ollandingpage');
         myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
         myCore.putOverlayCenter('overlayGenContentWrapper');
         myOverlay.fieldId = fieldId;

@@ -371,7 +371,7 @@ class Model_RootLevels {
    * @author Daniel Rotter <daniel.rotter@massiveart.com>
    * @version 1.0
    */
-  public function loadRootLevelUrl($intRootLevelId, $intLanguageId){
+  public function loadRootLevelUrl($intRootLevelId){
       $this->core->logger->debug('core->models->Model_RootLevels->loadRootLevelUrl('.$intRootLevelId.')');
       
       $objSelect = $this->getRootLevelTable()->select()->setIntegrityCheck(false);
@@ -382,8 +382,7 @@ class Model_RootLevels {
       $objSelect->from('rootLevelUrls', array('url'))
                 ->where('rootLevelUrls.isMain = 1')
                 ->where('rootLevelUrls.idEnvironments = ?', $intEnvironment)
-                ->where('rootLevelUrls.idRootLevels = ?', $intRootLevelId)
-                ->where('rootLevelUrls.idLanguages = ?', $intLanguageId);
+                ->where('rootLevelUrls.idRootLevels = ?', $intRootLevelId);
                 
       return $this->getRootLevelTable()->fetchRow($objSelect);
   }

@@ -367,13 +367,19 @@ class Model_Urls {
    * @param string $strUrl
    * @param integere $intRootLevelId
    */
-  public function loadUrlByUrlAndRootLevel($strUrl, $intRootLevelId)
+  public function loadUrlByUrlAndRootLevel($strUrl, $intRootLevelId, $blnLandingPage = false)
   {
-      $this->core->logger->debug('core->models->Model_Urls->loadUrlByUrlAndRootLevel('.$strUrl.', '.$intRootLevelId.')');
+      $this->core->logger->debug('core->models->Model_Urls->loadUrlByUrlAndRootLevel('.$strUrl.', '.$intRootLevelId.', '.$blnLandingPage.')');
       
       $objPageSelect = $this->getUrlTable()->select()->setIntegrityCheck(false);
       $objPageSelect->from('urls', array('id'))
-                    ->where('urls.url = ?', $strUrl);
+                    ->joinLeft('pages', 'pages.pageId = urls.relationId', array())
+                    ->joinLeft(array('pageFolders' => 'folders'), 'pageFolders.id = pages.idParent', array())
+                    ->joinLeft('globals', 'globals.globalId = urls.relationId', array())
+                    ->joinLeft(array('globalFolders' => 'folders'), 'globalFolders.id = globals.idParent', array())
+                    ->where('urls.url = ?', $strUrl)
+                    ->where('urls.isLandingPage = ?', (int) $blnLandingPage)
+                    ->where('pageFolders.idRootLevels = '.$intRootLevelId.' OR globalFolders.idRootLevels = '.$intRootLevelId);
                     
       return $this->getUrlTable()->fetchAll($objPageSelect);
   }

@@ -403,6 +403,8 @@
         ?>
         if(!Prototype.Browser.IE) myNavigation.initModuleCMS(<?php echo $intRootLevelId; ?>);
 
+        myNavigation.getRootLevelList();
+
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
       });
     //]]>

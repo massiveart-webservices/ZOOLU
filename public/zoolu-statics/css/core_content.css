@@ -1487,6 +1487,13 @@ Overlay Inner */
     bottom: 0px;
 }
 
+.ollandingpage {
+    width: 430px;
+    position: absolute;
+    top: 242px;
+    bottom: 0px;
+}
+
 .olgroups, .olcontacts {
     height: 200px;
 }

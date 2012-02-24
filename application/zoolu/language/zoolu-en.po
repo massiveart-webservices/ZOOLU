@@ -1444,6 +1444,9 @@ msgstr "General information for configure a landing page"
 msgid "Landingpage_url"
 msgstr "Landing Page URL"
 
+msgid "Landingpage_url_desc"
+msgstr "(relative path e.g. for URL: www.mysite.com/myTargetURL only myTargetURL)"
+
 msgid "Landingpage_link"
 msgstr "Contentpage to display"
 
@@ -1451,7 +1454,10 @@ msgid "Landingpage_language"
 msgstr "Language, in which the chosen content page should be displayed"
 
 msgid "Landingpage_redirect"
-msgstr "Landing Page soll als URL sichtbar bleiben und nicht auf Zielseite umleiten. (Achtung: Gefahr für 'Duplikate Content')"
+msgstr "Landing Page should be visible as URL and not be redirected."
+
+msgid "Landingpage_redirect_desc"
+msgstr "(Attention: Danger of 'Duplicate Content')"
 
 msgid "Assign_sitemaplink"
 msgstr "Choose content page"

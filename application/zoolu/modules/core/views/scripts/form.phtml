@@ -1,3 +1,13 @@
+       <?php if ($this->url != '') : ?>
+        <div class="pagepreviewcontainer">
+            <div class="pagepreviewleft"></div>
+            <div class="pagepreviewcenter white small">
+                <a href="<?php echo $this->url; ?>" target="_blank"><img src="/zoolu-statics/images/icons/icon_page_preview.png"/><?php echo $this->translate->_('Test_page'); ?></a>
+            </div>
+            <div class="pagepreviewright"></div>
+            <div class="clear"></div>
+        </div>
+        <?php endif; ?>
         <?php echo (($this->formTitle != '') ? '<div class="formtitle">'.$this->formTitle.'</div>' : ''); ?>
         <?php echo $this->form; ?>
 				<div class="clear"></div>
