@@ -376,7 +376,8 @@ Edit Mask */
 
 .field input.radio,
 .field input.multiCheckbox,
-.field input.multiCheckboxTree {
+.field input.multiCheckboxTree,
+.field input.checkbox {
     width: 30px;
     height: 15px;
     margin: 0;

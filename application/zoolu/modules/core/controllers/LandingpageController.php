@@ -119,7 +119,7 @@ class Core_LandingpageController extends AuthControllerAction {
     $this->objForm->setAttrib('id', 'genForm');
     $this->objForm->setAttrib('onsubmit', 'return false;');
     $this->objForm->addELement('hidden', 'rootLevelId', array('decorators' => array('Hidden'), 'value' => $this->getRequest()->getParam('rootLevelId')));
-    $this->objForm->addElement('hidden', 'languageId', array('decorators' => array('Hidden'), 'value' => $this->core->intLanguageId));
+    $this->objForm->addElement('hidden', 'languageId', array('decorators' => array('Hidden'), 'value' => $this->core->intZooluLanguageId));
     $this->objForm->addElement('hidden', 'id', array('decorators' => array('Hidden')));
     $this->objForm->addElement('hidden', 'relationId', array('decorators' => array('Hidden')));
     $this->objForm->addElement('hidden', 'version', array('decorators' => array('Hidden'), 'value' => 1)); //TODO Version should not be hardcoded
