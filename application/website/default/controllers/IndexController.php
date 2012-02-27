@@ -260,13 +260,17 @@ class IndexController extends Zend_Controller_Action
 
         //Load URL now, because language is alredy needed
         if($this->blnUrlWithLanguage){
+            //Load stadard url if there is a language
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
         }else{
+            //Load landingpage if there is no language in the url
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
             if (!isset($objUrl->url) || count($objUrl->url) == 0) {
+                //If there is no landingpage, try normal page with default language 
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
             }
             if (isset($objUrl->url) && count($objUrl->url) > 0) {
+                //Needed for landingpage: change language for redirect
                 $this->setLanguage($objUrl->url->current()->idLanguages);
             }
         }
