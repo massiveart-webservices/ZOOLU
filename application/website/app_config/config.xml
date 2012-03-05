@@ -26,8 +26,8 @@
         <address></address>
       </recipient>
       <ma_recipient>        
-        <name>Daniel Rotter</name>
-        <address>daniel.rotter@massiveart.com</address>
+        <name></name>
+        <address></address>
       </ma_recipient>
       <params>
         <host></host>
@@ -66,6 +66,33 @@
         <code>de</code>
       </alternative>
     </languages>
+    
+    <!-- portals / languages / segments  -->
+    <portals>
+      <portal>
+        <id>1</id>
+        <language>
+          <id>1</id>
+          <code>de</code>
+          <default>true</default>
+        </language>
+        <language>
+          <id>2</id>
+          <code>en</code>
+          <default>false</default>
+        </language>
+        <segment> <!-- summer -->
+          <id>1</id>
+          <code>s</code>
+          <default>false</default>
+        </segment>
+        <segment> <!-- winter -->
+          <id>2</id>
+          <code>w</code>
+          <default>true</default>
+        </segment>
+      </portal>
+    </portals>
     
     <!-- table: categories / idRootCategory=27, idCategoryTypes=2 -->
     <viewtypes>

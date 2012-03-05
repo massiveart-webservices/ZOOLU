@@ -325,7 +325,7 @@ class Users_UserController extends Zend_Controller_Action {
           $this->getModelUsers()->updateUserGroups($intUserId, $arrUserGroups);          
           
           if($blnWithGroups){
-            $this->_forward('list', 'user', 'users');            
+            $this->_forward('list', 'user', 'users');
             $this->view->assign('blnShowFormAlert', true);
           }else{
             /**

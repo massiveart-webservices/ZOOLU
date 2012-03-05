@@ -14,7 +14,6 @@
           var unsubscribe = $('subscribed-633');
           if(subscribe){
             if(subscribe.checked){
-              console.log('check');
               unsubscribe.observe('change', function(){
                 if(unsubscribe.checked){
                   myForm.blnWarn = true;

@@ -141,8 +141,8 @@ class PageHelper {
     return $strReturn;
   }
   
-    /**
-   * getTitle
+  /**
+   * getMetaTitle
    * @param string $strTag
    * @param boolean $blnTitleFallback
    * @return string $strReturn
@@ -186,6 +186,55 @@ class PageHelper {
       $strReturn = '<link rel="canonical" href="'.$strCanonicalTag.'" />';
     }
     return $strReturn;
+  }
+
+  /**
+   * getCanonicalTagForSegmentation
+   * @return string $strReturn
+   * @author Thomas Schedler <tsh@massiveart.com>
+   * @version 1.0
+   */
+  public function getCanonicalTagForSegmentation(){
+    if($this->objPage->getField('url')){
+      $strSegmentCode = null;
+
+      $arrPortals = $this->core->config->portals->toArray();
+
+      if(array_key_exists('id', $arrPortals['portal'])){
+        $arrPortals = array($arrPortals['portal']);
+      }else{
+        $arrPortals = $arrPortals['portal'];
+      }
+
+      foreach($arrPortals as $arrPortal){
+        if($arrPortal['id'] == $this->objPage->getRootLevelId()){
+          if(array_key_exists('id', $arrPortal['segment'])){
+            $arrSegments = array($arrPortal['segment']);
+          }else{
+            $arrSegments = $arrPortal['segment'];
+          }
+
+          $arrDefaultSegment = null;
+          foreach($arrSegments as $arrSegment){
+            if (array_key_exists('id', $arrSegment) && intval($arrSegment['id']) === intval(strtolower($this->objPage->GenericData()->Setup()->getSegmentId()))) {
+              $strSegmentCode = $arrSegment['code'];
+              break;
+            }
+
+            if(array_key_exists('default', $arrSegment) && $arrSegment['default'] === 'true'){
+              $arrDefaultSegment = $arrSegment;
+            }
+          }
+
+          if(empty($strSegmentCode) && !empty($arrDefaultSegment)){
+            $strSegmentCode = $arrDefaultSegment['code'];
+          }
+        }
+      }
+
+      return '<link rel="canonical" href="'.$this->objPage->getUrlFor($this->core->strLanguageCode, $this->objPage->getField('url')->url, $strSegmentCode).'" />';
+    }
+    return '';
   }
   
   /**
@@ -1672,7 +1721,7 @@ class PageHelper {
     return $strReturn;  
   }
   
-/**
+  /**
    * getForm
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @return string
@@ -1822,6 +1871,219 @@ class PageHelper {
           <input type="hidden" id="sender_mail" name="sender_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_mail')).'"/>
           <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
           <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
+        </form>';  
+    }
+    
+    return $strReturn;
+  }
+
+  /**
+   * getForm
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @return string
+   */
+  public function getDynForm($strFormId, $intRootLevelId, $intPageId, $arrAddonFields){
+    $strReturn = '';
+    $strFields = '';
+    $blnHasFileUpload = false;
+    
+    $arrFormFields = $this->objPage->getFormFields();
+    
+    if(count($arrFormFields) > 0){
+      
+      $counter = 0;
+      foreach($arrFormFields as $objField){
+        
+        $strFieldId = htmlentities($objField->title.'_'.uniqid(), ENT_COMPAT, 'UTF-8');
+        
+        $strMandatory = '';
+        $strMandatoryCssClass = '';
+        if($objField->mandatory){
+          $strMandatory = ' *';
+          $strMandatoryCssClass = 'class="mandatory"';
+        }
+        
+        $strClass = 'field-1';
+        if(isset($objField->display->id) && $objField->display->id == $this->core->sysConfig->display->two_column){
+          $strClass = 'field-2';
+        }
+        
+        $strFields .= '    
+            <div class="'.$strClass.'">
+              <input type="hidden" id="'.$strFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">';
+        if($objField->type->code != 'headline'){
+          $strFields .= '<label id="lbl_'.$strFieldId.'" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+        }
+ 
+        switch($objField->type->code){
+          case 'salutation' :
+            $strFields .= '              
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>
+                <option value="'.$this->objTranslate->_('Mr.').'">'.$this->objTranslate->_('Mr.').'</option>
+                <option value="'.$this->objTranslate->_('Ms.').'">'.$this->objTranslate->_('Ms.').'</option>
+              </select>';
+            break;
+            
+          case 'type' :
+            $strFields .= '              
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
+              </select>';
+            break;
+            
+          case 'country' :
+            $strFields .= '
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
+              </select>';
+            // '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC').'
+            break;
+            
+          case 'message' :
+            $strFields .= '
+              <textarea id="'.$strFieldId.'" name="'.$strFieldId.'"></textarea>';
+            break;
+            
+          case 'attachment' :
+            $blnHasFileUpload = true;
+            $strFields .= '
+              <input type="file" id="'.$strFieldId.'" name="'.$strFieldId.'"/>';
+            break;
+            
+          case 'recaptcha_response_field' :             
+            $objRecaptchaService = new ReCaptchaService($this->core->sysConfig->recaptcha->keys->public, $this->core->sysConfig->recaptcha->keys->private);
+            $objRecaptchaService->setOption('theme', 'custom');
+            $objRecaptchaService->setOption('lang', strtolower($this->core->strLanguageCode));
+            $objRecaptchaService->setOption('custom_theme_widget', 'recaptcha_widget');
+
+            $strFields .= '
+              <div id="recaptcha_widget" style="display:none;">
+                <div id="recaptcha_image"></div>                
+                <div class="recaptchaOpts">
+                  <a id="recaptcha_reload_btn" href="javascript:Recaptcha.reload();" title="'.$this->getTranslate()->_('Get_a_new_challenge').'">
+                    <img width="25" height="18" alt="'.$this->getTranslate()->_('Get_a_new_challenge').'" id="recaptcha_reload" src="http://www.google.com/recaptcha/api/img/clean/refresh.png"/>
+                  </a>
+                  <a class="recaptcha_only_if_image" id="recaptcha_switch_audio_btn" href="javascript:Recaptcha.switch_type(\'audio\');" title="'.$this->getTranslate()->_('Get_an_audio_challenge').'">
+                    <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_an_audio_challenge').'" id="recaptcha_switch_audio" src="http://www.google.com/recaptcha/api/img/clean/audio.png"/>
+                  </a>
+                  <a class="recaptcha_only_if_audio" id="recaptcha_switch_img_btn" href="javascript:Recaptcha.switch_type(\'image\');" title="'.$this->getTranslate()->_('Get_a_visual_challenge').'">
+                    <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_a_visual_challenge').'" id="recaptcha_switch_img" src="http://www.google.com/recaptcha/api/img/clean/text.png"/>
+                  </a> 
+                  <a id="recaptcha_whatsthis_btn" href="javascript:Recaptcha.showhelp()" title="'.$this->getTranslate()->_('Help').'">
+                    <img width="25" height="16" id="recaptcha_whatsthis" src="http://www.google.com/recaptcha/api/img/clean/help.png" alt="'.$this->getTranslate()->_('Help').'"/>
+                  </a>
+                </div>
+                <div class="clear"></div>
+                <input type="text" name="recaptcha_response_field" id="recaptcha_response_field"'.$strMandatoryCssClass.'/>
+              </div>';
+            
+            $objReCaptchaAdapter = new Zend_Captcha_ReCaptcha();
+            $objReCaptchaAdapter->setService($objRecaptchaService); 
+            
+            $strFields .= $objReCaptchaAdapter->render();
+            break;
+            
+          case 'select':
+            $strFields .= '
+              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+              	<option value="">'.$this->objTranslate->_('Please_choose', false).'</option>';
+            
+            foreach($objField->options as $strOption){
+              $strFields .= '
+              	<option value="'.$strOption.'">'.$strOption.'</option>';
+            }
+                
+            $strFields .= '
+              </select>';
+            break;
+            
+          case 'radio':
+            $i=1;
+            foreach($objField->options as $strOption){
+              $strFields .= '
+                        	<input name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
+            }
+            if(isset($objField->other) && $objField->other->code == 'allowed'){
+              $strFields .= '<input name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" style="width:100px;" />';
+            }
+            break;
+            
+          case 'checkbox':
+            $i=1;
+            foreach($objField->options as $strOption){
+              
+              $strFields .= '
+                                  	<input name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
+            }
+            if(isset($objField->other) && $objField->other->code == 'allowed'){
+              $strFields .= '<input name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" style="width:100px;" />';
+            }
+            break;
+            
+          case 'headline':
+            $strFields .= '
+                      <h2>'.$objField->title.'</h2>';
+            break;
+            
+          case 'divider':
+            $strFields .= '<div style="height:25px"></div>';
+            break;
+            
+          default :
+            $strValidationClass = (isset($objField->validation->code)) ? 'val_type_'.$objField->validation->code : '';
+            $strClass = '';
+            $strClassCode = '';
+            $strClassMandatory = '';
+            $strMaxLength = '';
+            if($objField->type->code){
+              $strClassCode = 'val_'.$objField->type->code;
+            }
+            if($objField->mandatory){
+              $strClassMandatory = 'mandatory';
+            }
+            if($objField->maxlength){
+              $strMaxLength = ' maxlength="'.$objField->maxlength.'"';
+            }
+            $strClass = 'class="'.$strClassMandatory.' '.$strClassCode.' '.$strValidationClass.'"';
+            $strFields .= '
+              <input type="text" '.$strClass.' id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.' value=""'.$strClass.'/>';             
+            break;
+        }
+        
+        $strFields .= '
+           </div>';
+        
+        $counter++;
+      }
+      
+      $strReturn .= '
+        <form id="'.$strFormId.'" name="'.$strFormId.'"  action="/zoolu-website/datareceiver" method="post" onsubmit="return false;"'.(($blnHasFileUpload) ? ' enctype="multipart/form-data"' : '').'>
+          '.$strFields.'
+          <div class="fieldLeft required">
+            <span>'.$this->objTranslate->_('Fields_with_*_are_mandatory').'</span>  
+          </div>          
+          <div class="fieldRight buttonContainer">
+            <div class="buttonBox" onclick="myDefault.submitForm(\''.$strFormId.'\');">
+              <div class="left">&nbsp;</div>
+              <div class="center">'.$this->objTranslate->_('Send').'</div>
+              <div class="right">&nbsp;</div>
+              <div class="clear"></div>
+            </div>
+          </div>
+          <div class="clear"></div>
+          <div class="legalNotes"><input type="checkbox" id="checkLegalnotes" name="checkLegalnotes"> <label for="checkLegalnotes">'.$this->objTranslate->_('LegalNotes', false).'</label></div>
+          <input type="hidden" id="idRootLevels" name="idRootLevels" value="'.$intRootLevelId.'"/>
+          <input type="hidden" id="idPage" name="idPage" value="'.$intPageId.'"/>
+          <input type="hidden" id="redirectUrl" name="redirectUrl" value="http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'"/>
+          <input type="hidden" id="subject" name="subject" value="'.$this->objPage->getFieldValue('subject').'"/>
+          <input type="hidden" id="sender_name" name="sender_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_name')).'"/>
+          <input type="hidden" id="sender_mail" name="sender_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_mail')).'"/>
+          <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
+          <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
+          <input type="hidden" id="blnDynForm" name="blnDynForm" value="true" />
+          
+          <button onclick="myDefault.submitForm(\'contactForm\')">Absenden</button>
         </form>';  
     }
     

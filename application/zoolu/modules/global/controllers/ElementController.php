@@ -659,6 +659,7 @@ class Global_ElementController extends AuthControllerAction {
       $objGenericData->Setup()->setParentId($this->objRequest->getParam("parentFolderId"));
       $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
       $objGenericData->Setup()->setLanguageId($this->getItemLanguageId());
+      $objGenericData->Setup()->setLanguageCode($this->getItemLanguageCode());
       $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
       $objGenericData->Setup()->setModelSubPath('global/models/');
 
@@ -1071,6 +1072,30 @@ class Global_ElementController extends AuthControllerAction {
     }
     
     return $this->intItemLanguageId;
+  }
+  
+  /**
+   * getItemLanguageCode
+   * @return string
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0 
+   */
+  protected function getItemLanguageCode(){
+    if($this->strItemLanguageCode == null){
+      if(!$this->objRequest->getParam("languageCode")){
+        $arrLanguages = $this->core->config->languages->language->toArray();      
+        foreach($arrLanguages as $arrLanguage){     
+          if($arrLanguage['id'] == $this->getItemLanguageId()){
+            $this->strItemLanguageCode = $arrLanguage['code'];
+            break;
+          }        
+        }
+      }else{
+        $this->strItemLanguageCode = $this->objRequest->getParam("languageCode");
+      }
+    }
+    
+    return $this->strItemLanguageCode;
   }
 
   /**

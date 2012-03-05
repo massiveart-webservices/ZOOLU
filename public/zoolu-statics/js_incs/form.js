@@ -159,7 +159,8 @@ Massiveart.Form = Class.create({
             id: elementId, 
             linkId: linkId,
             rootLevelId: $F('rootLevelId'),
-            languageId: $F('languageId')
+            languageId: $F('languageId'),
+            languageCode: (($('languageCode')) ? $F('languageCode') : '')
           },
           evalScripts: true,
           onComplete: function() {
@@ -232,6 +233,10 @@ Massiveart.Form = Class.create({
       if($('languageId')) {
         languageId = $F('languageId');
       }
+      var languageCode = null;
+      if($('languageCode')) {
+        languageCode = $F('languageCode');
+      }
       
       $$('#genForm .'+strType).each(function(elDiv){   
         if($(elDiv.id)){          
@@ -243,7 +248,8 @@ Massiveart.Form = Class.create({
   	            fileIds: $(fileFieldId).value,
   	            fileFieldId: fileFieldId,
   	            viewtype: strViewType,
-  	            languageId: languageId
+  	            languageId: languageId,
+  	            languageCode: languageCode
   	          },
   	          evalScripts: true,
   	          onComplete: function(){
@@ -308,6 +314,7 @@ Massiveart.Form = Class.create({
               rootLevelId: $F(fileFieldId + '_RootLevel'),
               fileFieldId: fileFieldId,
               languageId: $F('languageId'),
+              languageCode: (($('languageCode')) ? $F('languageCode') : ''),
               viewtype: viewType
             },
             evalScripts: true,
@@ -456,6 +463,32 @@ Massiveart.Form = Class.create({
   },
   
   /**
+   * getExportDynFormOverlay
+   */
+  getExportDynFormOverlay: function(){    
+    $(this.updateOverlayContainer).innerHTML = '';
+    myCore.putCenter('overlayGenContentWrapper');
+    $('overlayButtons').show();
+    $('overlayGenContentWrapper').show();
+    new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/exportdynform', { 
+      evalScripts: true,
+      onComplete: function(){
+        myOverlay.overlayCounter++;
+        myCore.putOverlayCenter('overlayGenContentWrapper');
+        
+        $('buttonOk').observe('click', function(event){
+          myPage.exportDynFormEntries($F('id'), $F('from'), $F('to'), $F('headline'), $F('startdate'), $F('enddate'));
+        });
+        
+        $('buttonCancel').observe('click', function(event){
+          myOverlay.close('overlayGenContentWrapper');
+          $('overlayButtons').hide();
+        });
+      } 
+    });
+  },
+  
+  /**
    * getAddInternalLinksOverlay
    */
   getAddInternalLinksOverlay: function(areaId){
@@ -554,6 +587,7 @@ Massiveart.Form = Class.create({
           rootLevelGroupId: intRootLevelGroupId,
           rootLevelGroupKey: (($('rootLevelGroupKey'+intRootLevelGroupId)) ? $F('rootLevelGroupKey'+intRootLevelGroupId) : ''),
           languageId: $F('languageId'),
+          languageCode: (($('languageCode')) ? $F('languageCode') : ''),
           itemAction: itemAction,
           itemIds: $(fieldname).value,
           fieldId: $(fieldname).readAttribute('fieldid')
@@ -610,6 +644,29 @@ Massiveart.Form = Class.create({
   },
   
   /**
+   * getAddSitemapLinkOverlay
+   */
+  getAddSitemapLinkOverlay: function(fieldId){
+    $(this.updateOverlayContainer).innerHTML = '';
+    myCore.putCenter('overlayGenContentWrapper');
+    $('overlayGenContentWrapper').show();
+    $('overlayGenContent').setStyle({height:'100%'});
+    new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/sitemaplink', { 
+      parameters: {
+        rootLevelId: $F('rootLevelId')
+      },
+      evalScripts: true,
+      onComplete: function(){
+        myOverlay.overlayCounter++;
+        $('olContent').addClassName('ollandingpage');
+        myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
+        myCore.putOverlayCenter('overlayGenContentWrapper');
+        myOverlay.fieldId = fieldId;
+      } 
+    });
+  },
+  
+  /**
    * searchGroupEnter
    */
   searchGroupEnter: function(event, fieldname){
@@ -648,26 +705,50 @@ Massiveart.Form = Class.create({
   /**
    * getLinkedPageOverlay
    */
-  getLinkedPageOverlay: function(fieldId){  
+  getLinkedPageOverlay: function(fieldId){
     $(this.updateOverlayContainer).innerHTML = '';
-    $('overlayGenContentWrapper').setStyle({width: '560px'});
-
     myCore.putCenter('overlayGenContentWrapper');
-    $('overlayGenContentWrapper').show();    
-    if($(fieldId)){
-      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/pagetree', { 
-        parameters: {
-          portalId: myNavigation.rootLevelId, 
-          portalLanguageId: (($('rootLevelLanguageId'+myNavigation.rootLevelId)) ? $F('rootLevelLanguageId'+myNavigation.rootLevelId) : '')
-        },
-        evalScripts: true,
-        onComplete: function(){
-          myCore.putOverlayCenter('overlayGenContentWrapper');
-          myOverlay.fieldId = fieldId;
-        } 
-      });
-    }  
+    $('overlayGenContentWrapper').show();
+    $('overlayGenContent').setStyle({height:'100%'});
+    myOverlay.fieldId = fieldId;
+    new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/internallink', { 
+      parameters: {
+        rootLevelId: myNavigation.rootLevelId,
+        selectOne: true
+      },
+      evalScripts: true,
+      onComplete: function(){
+        $('olContent').addClassName('oldocuments');
+        myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
+        myCore.putOverlayCenter('overlayGenContentWrapper');
+        myOverlay.updateViewTypeIcons();
+      } 
+    });
   },
+  
+//  /**
+//   * getLinkedPageOverlay
+//   */
+//  getLinkedPageOverlay: function(fieldId){  
+//    $(this.updateOverlayContainer).innerHTML = '';
+//    $('overlayGenContentWrapper').setStyle({width: '560px'});
+//
+//    myCore.putCenter('overlayGenContentWrapper');
+//    $('overlayGenContentWrapper').show();    
+//    if($(fieldId)){
+//      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/pagetree', { 
+//        parameters: {
+//          portalId: myNavigation.rootLevelId, 
+//          portalLanguageId: (($('rootLevelLanguageId'+myNavigation.rootLevelId)) ? $F('rootLevelLanguageId'+myNavigation.rootLevelId) : '')
+//        },
+//        evalScripts: true,
+//        onComplete: function(){
+//          myCore.putOverlayCenter('overlayGenContentWrapper');
+//          myOverlay.fieldId = fieldId;
+//        } 
+//      });
+//    }  
+//  },
   
   /**
    * removeItem
@@ -767,11 +848,12 @@ Massiveart.Form = Class.create({
         id: $F('id'),
         linkId: ($('linkId')) ? $F('linkId') : -1,
         languageId: $F('languageId'),
+        languageCode: (($('languageCode')) ? $F('languageCode') : ''),
         currLevel: $F('currLevel'),
         rootLevelId: $F('rootLevelId'),
         rootLevelGroupId: intRootLevelGroupId,
-        rootLevelGroupKey: ($('rootLevelGroupKey'+intRootLevelGroupId)) ? $F('rootLevelGroupKey'+intRootLevelGroupId) : '',
-        parentFolderId: ($('parentFolderId')) ? $F('parentFolderId') : -1,
+        rootLevelGroupKey: (($('rootLevelGroupKey'+intRootLevelGroupId)) ? $F('rootLevelGroupKey'+intRootLevelGroupId) : ''),
+        parentFolderId: (($('parentFolderId')) ? $F('parentFolderId') : -1),
         elementType: $('elementType') ? $F('elementType') : '', 
         elementTypeId:($('elementTypeId')) ? $F('elementTypeId') : null,
         pageTypeId:($('pageTypeId')) ? $F('pageTypeId') : null,
@@ -1245,7 +1327,8 @@ Massiveart.Form = Class.create({
             id: $F('id'),
             linkId: ($('linkId') ? $F('linkId') : -1),
             moduleId: myNavigation.module,
-            languageId: $F('languageId')
+            languageId: $F('languageId'),
+            languageCode: (($('languageCode')) ? $F('languageCode') : '')
           },
           evalScripts: true,
           onComplete: function(){
@@ -1578,6 +1661,19 @@ Massiveart.Form = Class.create({
     }else{
       Effect.SlideUp('divShownOnlyForDestinationOptions', {duration: 0.5});
       $('destinationId').value = 0;
+    }
+  },
+
+  /**
+   * toggleSegmentOptions
+   */
+  toggleSegmentOptions: function(checkBox){
+    if($('divShownOnlyForSegmentOptions') && checkBox.checked){
+      Effect.SlideDown('divShownOnlyForSegmentOptions', {duration: 0.5});
+      $('segmentId').value = $F('shownonlyforsegmentoption');
+    }else{
+      Effect.SlideUp('divShownOnlyForSegmentOptions', {duration: 0.5});
+      $('segmentId').value = 0;
     }
   },
   

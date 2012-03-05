@@ -159,6 +159,15 @@ function get_canonical_tag(){
 }
 
 /**
+ * get_canonical_tag_for_segmentation
+ * @author Thomas Schedler <tsh@massiveart.com>
+ * @version 1.0
+ */
+function get_canonical_tag_for_segmentation(){
+  echo getPageHelperObject()->getCanonicalTagForSegmentation();
+}
+
+/**
  * get_parent_title
  * @param string $strTag
  * @param boolean $blnTitleFallback
@@ -681,6 +690,15 @@ function get_iframe($strQueryString = '', $strWidth = '580px', $strHeight = '800
  */
 function get_form($strFormId = 'contactForm', $intRootLevelId = 0, $intPageId = 0, $arrAddonFields = array()){
   echo getPageHelperObject()->getForm($strFormId, $intRootLevelId, $intPageId, $arrAddonFields);
+}
+
+/**
+ * get_form
+ * @return string $strHtmlOutput
+ * @author Cornelius Hansjakob <cha@massiveart.com> 
+ */
+function get_dyn_form($strFormId = 'contactForm', $intRootLevelId = 0, $intPageId = 0, $arrAddonFields = array()){
+  echo getPageHelperObject()->getDynForm($strFormId, $intRootLevelId, $intPageId, $arrAddonFields);
 }
 
 /**

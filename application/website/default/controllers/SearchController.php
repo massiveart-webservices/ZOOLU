@@ -31,6 +31,21 @@ class SearchController extends Zend_Controller_Action {
    * @var HtmlTranslate
    */
   private $translate;
+
+  /**
+   * @var boolean
+   */
+  private $blnHasSegments;
+
+  /**
+   * @var integer
+   */
+  private $intSegmentId;
+
+  /**
+   * @var string
+   */
+  private $strSegmentCode;
    
   /**
    * init index controller and get core obj
@@ -50,7 +65,12 @@ class SearchController extends Zend_Controller_Action {
     $request = $this->getRequest();
     $strSearchValue = $request->getParam('q');
     $intRootLevelId = $request->getParam('rootLevelId');
-    
+    $arrSegmentationInfos = $request->getParam('segmentation');
+
+    $this->blnHasSegments = (array_key_exists('hasSegments', $arrSegmentationInfos)) ? $arrSegmentationInfos['hasSegments'] : false;
+    $this->intSegmentId = (array_key_exists('id', $arrSegmentationInfos)) ? $arrSegmentationInfos['id'] : null;
+    $this->strSegmentCode = (array_key_exists('code', $arrSegmentationInfos)) ? $arrSegmentationInfos['code'] : null;
+
     $this->intLanguageId = $this->core->intLanguageId;
     $this->strLanguageCode = $this->core->strLanguageCode;
     
@@ -82,6 +102,9 @@ class SearchController extends Zend_Controller_Action {
     $this->view->strSearchValue = $strSearchValue;
     $this->view->languageCode = $this->strLanguageCode;
     $this->view->rootLevelId = $intRootLevelId;
+    $this->view->hasSegments = $this->blnHasSegments;
+    $this->view->segmentId = $this->intSegmentId;
+    $this->view->segmentCode = $this->strSegmentCode;
     
     $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$request->getParam('theme').'/');
     $this->renderScript('search.php');
@@ -101,6 +124,8 @@ class SearchController extends Zend_Controller_Action {
       $strSearchValue = $request->getParam('search');
       $this->intLanguageId = $request->getParam('languageId');
       $this->strLanguageCode = $request->getParam('languageCode', $this->core->strLanguageCode);
+      $this->intSegmentId = intval($request->getParam('segmentId'));
+      $this->strSegmentCode = $request->getParam('segmentCode');
       $intRootLevelId = $request->getParam('rootLevelId');
       
       /**
@@ -121,6 +146,8 @@ class SearchController extends Zend_Controller_Action {
       $objSearch->setLimitLiveSearch(5);
       
       $this->view->objHits = $objSearch->livesearch();
+      $this->view->segmentId = $this->intSegmentId;
+      $this->view->segmentCode = $this->strSegmentCode;
     }
   }
 }

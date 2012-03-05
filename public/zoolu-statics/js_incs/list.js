@@ -77,6 +77,33 @@ Massiveart.List = Class.create({
   },
   
   /**
+   * getListPage
+   */
+  getListDynFormEntries: function(id, page, url){
+    if(myNavigation){      
+      
+      if(typeof(page) != 'undefined' && page > 0){ 
+        this.page = page;
+      }
+      
+      // wait
+      setTimeout(function(){ return true; }, 10);
+      
+      new Ajax.Updater(id, url, {
+        parameters: { 
+          id: $F('id'),
+          page: this.page, 
+          itemsPerPage: this.ItemsPerPage,
+        },      
+        evalScripts: true,     
+        onComplete: function(transport) {
+          
+        }.bind(this)
+      });
+    }
+  },
+  
+  /**
    * backFilter
    */
   backFilter: function(){
@@ -147,8 +174,8 @@ Massiveart.List = Class.create({
       }      
   	});    
   	if(arrEntries.size() > 0){
-  	  myCore.deleteAlertSingleMessage = myCore.translate['Delete_subscriber'];
-      myCore.deleteAlertMultiMessage = myCore.translate['Delete_subscribers'];
+  	  myCore.deleteAlertSingleMessage = myCore.translate['Delete_'];
+      myCore.deleteAlertMultiMessage = myCore.translate['Delete_'];
       myCore.showDeleteAlertMessage(arrEntries.size());
       $('buttonOk').observe('click', function(event){
         new Ajax.Updater(myNavigation.genListContainer, myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/listdelete', {
@@ -273,7 +300,7 @@ Massiveart.List = Class.create({
             $('buttonCancel').observe('click', function(){
               myOverlay.close();
             });
-            $('overlayButtons').show();
+            $('overlayButtons').hide();
             myCore.putCenter('overlayGenContentWrapper');
             myCore.removeBusyClass('overlayGenContent');          
           }.bind(this)

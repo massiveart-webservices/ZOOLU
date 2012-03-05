@@ -5,7 +5,8 @@
   <title><?php get_meta_title(); ?></title>
   <?php get_meta_description(); ?>
   <?php get_meta_keywords(); ?>
-  <?php get_canonical_tag(); ?>
+  <?php // get_canonical_tag(); ?>
+  <?php // get_canonical_tag_for_segmentation(); - if segmentation is used, enable canonical tag ?>
 
   <!-- SCREEN CSS -->
   <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/min/b=website/themes/default&amp;f=css/reset.css,css/screen.css,lightbox/css/lightbox.css" />

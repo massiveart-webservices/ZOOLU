@@ -52,6 +52,8 @@ Basics */
     right: 0;
     background-color: #e4e4e4;
     border-left: 1px solid #666;
+    overflow-x:hidden;
+    overflow-y:auto;
 }
 
 .itemremovethumb {
@@ -374,7 +376,8 @@ Edit Mask */
 
 .field input.radio,
 .field input.multiCheckbox,
-.field input.multiCheckboxTree {
+.field input.multiCheckboxTree,
+.field input.checkbox {
     width: 30px;
     height: 15px;
     margin: 0;
@@ -903,6 +906,10 @@ Function Widget */
     padding: 0 0 10px;
 }
 
+.widgetcontentmain label {
+    vertical-align:top;
+}
+
 .widgetcontentmain .tdImportant {
     padding: 0 10px 0 0;
     text-align: right;
@@ -911,6 +918,10 @@ Function Widget */
 .widgetcontentmain .tdNormal {
     padding: 0 10px 0 0;
     text-align: right;
+}
+
+.widgetcontentmain .tdShow {
+    padding: 0 0 2px;
 }
 
 .widgetcontentmain .navigationoptios,
@@ -1477,6 +1488,13 @@ Overlay Inner */
     bottom: 0px;
 }
 
+.ollandingpage {
+    width: 430px;
+    position: absolute;
+    top: 242px;
+    bottom: 0px;
+}
+
 .olgroups, .olcontacts {
     height: 200px;
 }
@@ -1866,6 +1884,14 @@ video select */
 
 .tab {
     min-height: 50px;
+}
+
+.tab .tablelist {
+  width: 100%;
+}
+
+.tab .listfooter {
+  width: 100%;
 }
 
 .tabNavContainer {

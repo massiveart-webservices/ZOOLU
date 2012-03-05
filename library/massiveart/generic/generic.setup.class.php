@@ -49,35 +49,40 @@ require_once(dirname(__FILE__).'/elements/generic.element.field.class.php');
 
 class GenericSetup {
 
-	protected $intGenFormId;
-	protected $intActionType;
-	protected $strFormId;
-	protected $intTemplateId;
-	protected $intFormVersion = null;
-	protected $strFormTitle;
-	protected $intFormTypeId;
-	protected $strFormType;
-	protected $intFormLanguageId;
+  protected $intGenFormId;
+  protected $intActionType;
+  protected $strFormId;
+  protected $intTemplateId;
+  protected $intFormVersion = null;
+  protected $strFormTitle;
+  protected $intFormTypeId;
+  protected $strFormType;
+  protected $intFormLanguageId;
 
-	protected $intRegionId;
-	protected $strRegionTitle;
-	protected $intRegionCols;
-	protected $intRegionPosition;
-	protected $blnRegionCollapsable = true;
+  protected $intRegionId;
+  protected $strRegionTitle;
+  protected $intRegionCols;
+  protected $intRegionPosition;
+  protected $blnRegionCollapsable = true;
 
-	protected $intLanguageId;
-	protected $intLanguageFallbackId;
-	protected $intDestinationId;	
-	protected $blnHideInSitemap = false;
-	protected $intElementId;
-	protected $intElementVersion = null;
-	protected $intElementLinkId;
+  protected $intLanguageId;
+  protected $strLanguageCode;
+  protected $intLanguageFallbackId;
+  protected $intDestinationId;
+  protected $intSegmentId = 0;
+  protected $blnHideInSitemap = false;
+  protected $blnShowInWebsite = true;
+  protected $blnShowInTablet = true;
+  protected $blnShowInMobile = true;
+  protected $intElementId;
+  protected $intElementVersion = null;
+  protected $intElementLinkId;
 
-	protected $intParentId;
-	protected $intParentTypeId;
-	protected $intRootLevelId;
-	protected $intRootLevelTypeId;
-	protected $intRootLevelGroupId;	
+  protected $intParentId;
+  protected $intParentTypeId;
+  protected $intRootLevelId;
+  protected $intRootLevelTypeId;
+  protected $intRootLevelGroupId;
   protected $intElementTypeId;
   protected $blnIsStartElement;
   protected $intShowInNavigation = 0;
@@ -223,6 +228,7 @@ class GenericSetup {
   const FIELD_TYPE_COLLAPSABLEINTERNALLINKS = 'collapsableInternalLinks';
   const FIELD_TYPE_COLLECTION = 'collection';
   const FIELD_TYPE_URL = 'url';
+  const FIELD_TYPE_SITEMAPLINK = 'sitemapLink';
 
 	/*
    * FieldTypeGroups
@@ -805,7 +811,11 @@ class GenericSetup {
 			$this->setShowInNavigation((isset($objCurrElement->showInNavigation) ? $objCurrElement->showInNavigation : 0));
 			$this->setLanguageFallbackId((isset($objCurrElement->idLanguageFallbacks) ? $objCurrElement->idLanguageFallbacks : 0));
 			$this->setDestinationId((isset($objCurrElement->idDestination) ? $objCurrElement->idDestination : 0));
+            $this->setSegmentId((isset($objCurrElement->idSegments) ? $objCurrElement->idSegments : 0));
 			$this->setHideInSitemap((isset($objCurrElement->hideInSitemap) ? $objCurrElement->hideInSitemap : false));
+			$this->setShowInWebsite((isset($objCurrElement->showInWebsite) ? $objCurrElement->showInWebsite : true));
+			$this->setShowInTablet((isset($objCurrElement->showInTablet) ? $objCurrElement->showInTablet : true));
+			$this->setShowInMobile((isset($objCurrElement->showInMobile) ? $objCurrElement->showInMobile : true));
 			$this->setElementVersion((isset($objCurrElement->version) ? $objCurrElement->version : 0));
 			$this->setStatusId((isset($objCurrElement->idStatus) ? $objCurrElement->idStatus : 0));
 		}
@@ -1140,6 +1150,22 @@ class GenericSetup {
 	}
 	
   /**
+	 * setLanguageCode
+	 * @param string $strLanguageCode
+	 */
+	public function setLanguageCode($strLanguageCode){
+		$this->strLanguageCode = $strLanguageCode;
+	}
+
+	/**
+	 * getLanguageCode
+	 * @param string $strLanguageCode
+	 */
+	public function getLanguageCode(){
+		return $this->strLanguageCode;
+	}
+	
+  /**
    * setLanguageFallbackId
    * @param integer $intLanguageFallbackId
    */
@@ -1169,6 +1195,22 @@ class GenericSetup {
    */
   public function getDestinationId(){
     return $this->intDestinationId;
+  }
+
+  /**
+   * setSegmentId
+   * @param integer $intSegmentId
+   */
+  public function setSegmentId($intSegmentId){
+    $this->intSegmentId = $intSegmentId;
+  }
+
+  /**
+   * getSegmentId
+   * @param integer $intSegmentId
+   */
+  public function getSegmentId(){
+    return $this->intSegmentId;
   }
   
   /**
@@ -1200,6 +1242,102 @@ class GenericSetup {
       }
     }else{
       return $this->blnHideInSitemap;
+    }
+  }
+  
+  /**
+   * setShowInWebsite
+   * @param boolean $blnShowInWebsite
+   */
+  public function setShowInWebsite($blnShowInWebsite, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnShowInWebsite === true || $blnShowInWebsite === 'true' || $blnShowInWebsite == 1){
+        $this->blnShowInWebsite = true;
+      }else{
+        $this->blnShowInWebsite = false;
+      }  
+    }else{
+      $this->blnShowInWebsite = $blnShowInWebsite;
+    }
+  }
+
+  /**
+   * getShowInWebsite
+   * @return boolean $blnShowInWebsite
+   */
+  public function getShowInWebsite($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnShowInWebsite == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnShowInWebsite;
+    }
+  }
+  
+  /**
+   * setShowInTablet
+   * @param boolean $blnShowInTablet
+   */
+  public function setShowInTablet($blnShowInTablet, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnShowInTablet === true || $blnShowInTablet === 'true' || $blnShowInTablet == 1){
+        $this->blnShowInTablet = true;
+      }else{
+        $this->blnShowInTablet = false;
+      }  
+    }else{
+      $this->blnShowInTablet = $blnShowInTablet;
+    }
+  }
+
+  /**
+   * getShowInTablet
+   * @return boolean $blnShowInTablet
+   */
+  public function getShowInTablet($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnShowInTablet == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnShowInTablet;
+    }
+  }
+  
+  /**
+   * setShowInMobile
+   * @param boolean $blnShowInMobile
+   */
+  public function setShowInMobile($blnShowInMobile, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnShowInMobile === true || $blnShowInMobile === 'true' || $blnShowInMobile == 1){
+        $this->blnShowInMobile = true;
+      }else{
+        $this->blnShowInMobile = false;
+      }  
+    }else{
+      $this->blnShowInMobile = $blnShowInMobile;
+    }
+  }
+
+  /**
+   * getShowInMobile
+   * @return boolean $blnShowInTablet
+   */
+  public function getShowInMobile($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnShowInMobile == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnShowInMobile;
     }
   }
   

@@ -105,6 +105,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('rootLevelType', $this->core->sysConfig->root_level_types->images);
     $this->view->assign('overlaytitle', $this->core->translate->_('Assign_medias'));
     $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->thumb);
+    $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
     $this->renderScript('overlay/overlay.phtml');
   }
 
@@ -119,6 +120,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('rootLevelType', $this->core->sysConfig->root_level_types->documents);
     $this->view->assign('overlaytitle', $this->core->translate->_('Assign_documents'));
     $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+    $this->view->assign('selectOne', 'false');
     $this->renderScript('overlay/overlay.phtml');
   }
     
@@ -133,8 +135,43 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('overlaytitle', $this->core->translate->_('Assign_internal_links'));
     $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
     $this->view->assign('contenttype', 'page');
+    $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
     $this->renderScript('overlay/overlay.phtml');
+  }
+  
+  /**
+   * sitemaplinkAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function sitemaplinkAction(){
+      $this->core->logger->debug('cms->controllers->OverlayController->sitemaplinkAction()');
+      $this->loadRootNavigation($this->core->sysConfig->modules->cms, $this->core->sysConfig->root_level_types->portals, $this->getRequest()->getParam('rootLevelId'));
+      $this->view->assign('overlaytitle', $this->core->translate->_('Assign_sitemaplink'));
+  }
+  
+  /**
+   * sitemapchildnavigationAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function sitemapchildnavigationAction(){
+    $this->core->logger->debug('cms->controllers->OverlayController->sitemapchildnavigationAction()');
+
+    $this->getModelFolders();
+
+    $objRequest = $this->getRequest();
+    $this->intFolderId = $objRequest->getParam("folderId");
+    $strGenFormId = $objRequest->getParam('genericFormId');
+    $intGenFormVersion = $objRequest->getParam('genericFormVersion', 1);
+
+    /**
+     * get childfolders
+     */
+    $objChildelements = $this->objModelFolders->loadChildFoldersForSitemap($this->intFolderId, $strGenFormId, $intGenFormVersion); //TODO Also load linked global folders
     
+    $this->view->assign('elements', $objChildelements);
+    $this->view->assign('intFolderId', $this->intFolderId);
   }
   
   /**
@@ -148,6 +185,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('rootLevelType', $this->core->sysConfig->root_level_types->videos);
     $this->view->assign('overlaytitle',  $this->core->translate->_('Assign_videos'));
     $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+    $this->view->assign('selectOne', 'false');
     $this->renderScript('overlay/overlay.phtml');
   }
 
@@ -292,6 +330,22 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('pages', $objPages);
     $this->view->assign('pageIds', $arrPageIds);
   }
+  
+  /**
+   * listsitemapAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function listsitemapAction(){
+      $this->core->logger->debug('cms->controllers->OverlayController->listsitemapAction()');
+      
+      $intFolderId = $this->getRequest()->getParam('folderId');
+      $intLanguageId = $this->getRequest()->getParam('languageId');
+      
+      $objElements = $this->getModelFolders()->loadChildElements($intFolderId);
+      
+      $this->view->assign('elements', $objElements);
+  }
 
   /**
    * contactlistAction
@@ -342,6 +396,7 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->view->assign('intFolderId', $this->intFolderId);
     $this->view->assign('viewtype', $viewtype);
     $this->view->assign('contenttype', $contenttype);
+    $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
   }
 
   /**
@@ -402,6 +457,15 @@ class Cms_OverlayController extends AuthControllerAction {
       $objReturn = $this->objModelRootLevels->loadMaintenance($this->intRootLevelId); 
       $this->view->assign('return', $objReturn); 
     }
+  }
+  
+  /**
+   * exportdynformAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function exportdynformAction(){
+    
   }
 
   /**

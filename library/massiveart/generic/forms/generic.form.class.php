@@ -302,6 +302,7 @@ class GenericForm extends Zend_Form {
 			$this->addElement('hidden', 'formType', array('value' => $this->setup->getFormType(), 'decorators' => array('Hidden')));
 			$this->addElement('hidden', 'templateId', array('value' => $this->setup->getTemplateId(), 'decorators' => array('Hidden')));
 			$this->addElement('hidden', 'languageId', array('value' => $this->setup->getLanguageId(), 'decorators' => array('Hidden')));
+			$this->addElement('hidden', 'languageCode', array('value' => $this->setup->getLanguageCode(), 'decorators' => array('Hidden')));
 
 			$arrRegionTitles = array();
 
@@ -537,6 +538,7 @@ class GenericForm extends Zend_Form {
         'isCoreField' => $objField->isCoreField,
         'MultiOptions' => $arrOptions,
         'LanguageId' => $this->setup->getLanguageId(),
+        'LanguageCode' => $this->setup->getLanguageCode(),
         'FormLanguageId' => $this->objGenericForm->Setup()->getFormLanguageId(),
         'isEmptyField' => (($blnEmpty == true) ? 1 : 0),
         'required' =>  (($objField->isKeyField == 1) ? true : false),

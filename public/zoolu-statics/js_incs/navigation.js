@@ -841,7 +841,7 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
         
-    new Ajax.Updater('genFormContainer', '/zoolu/core/folder/getaddform', {
+    new Ajax.Updater(this.genFormContainer, '/zoolu/core/folder/getaddform', {
       parameters: {
         formId: folderFormDefaultId,
         rootLevelId: this.rootLevelId,
@@ -890,33 +890,29 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
     
-    new Ajax.Updater('genFormContainer', '/zoolu/cms/page/getaddform', {
+    new Ajax.Updater(this.genFormContainer, '/zoolu/cms/page/getaddform', {
       parameters: {
         templateId: pageTemplateDefaultId,
         rootLevelId: this.rootLevelId,
-        rootLevelLanguageId: ($('rootLevelLanguageId'+this.rootLevelId)) ? $F('rootLevelLanguageId'+this.rootLevelId) : '',
+        rootLevelLanguageId: (($('rootLevelLanguageId'+this.rootLevelId)) ? $F('rootLevelLanguageId'+this.rootLevelId) : ''),
         rootLevelGroupId: this.rootLevelGroupId,
-        rootLevelGroupKey: ($('rootLevelGroupKey'+this.rootLevelGroupId)) ? $F('rootLevelGroupKey'+this.rootLevelGroupId) : '',
+        rootLevelGroupKey: (($('rootLevelGroupKey'+this.rootLevelGroupId)) ? $F('rootLevelGroupKey'+this.rootLevelGroupId) : ''),
         parentFolderId: $('navlevel'+currLevel).readAttribute('parentid'),
         currLevel: currLevel,
         pageTypeId: pageTypeDefaultId,
         elementType: this.constPage,
-        isStartPage: 0       
+        isStartPage: 0
       },      
-      evalScripts: true,     
+      evalScripts: true,
       onComplete: function() {
-        myForm.writeMetaInfos();
-        
-        $('levelmenu'+currLevel).hide();
-        $('addmenu'+currLevel).fade({duration: 0.5});
+        myForm.writeMetaInfos();        
+        if($('levelmenu'+currLevel)) $('levelmenu'+currLevel).hide();
+        if($('addmenu'+currLevel)) $('addmenu'+currLevel).fade({duration: 0.5});
         myCore.removeBusyClass('divWidgetMetaInfos');
-        myCore.removeBusyClass(this.genFormContainer);    
-        
-        $('title').focus();
-        
+        myCore.removeBusyClass(this.genFormContainer);
+        if($('title')) $('title').focus();
       }.bind(this)
     });
-        
   },
   
   /**
@@ -939,7 +935,7 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
     
-    new Ajax.Updater('genFormContainer', '/zoolu/cms/page/getaddform', {
+    new Ajax.Updater(this.genFormContainer, '/zoolu/cms/page/getaddform', {
       parameters: {
         templateId: pageTemplateDefaultId,
         rootLevelId: this.rootLevelId,
@@ -955,10 +951,11 @@ Massiveart.Navigation = Class.create({
       evalScripts: true,     
       onComplete: function() {
         myForm.writeMetaInfos();
-        $('levelmenu'+currLevel).hide();
-        $('addmenu'+currLevel).fade({duration: 0.5});
+        if($('levelmenu'+currLevel)) $('levelmenu'+currLevel).hide();
+        if($('addmenu'+currLevel)) $('addmenu'+currLevel).fade({duration: 0.5});
         myCore.removeBusyClass('divWidgetMetaInfos');
-        myCore.removeBusyClass(this.genFormContainer);              
+        myCore.removeBusyClass(this.genFormContainer);
+        if($('title')) $('title').focus();
       }.bind(this)
     }); 
   },
@@ -1050,7 +1047,7 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
     
-    new Ajax.Updater('genFormContainer', strAjaxAction, {
+    new Ajax.Updater(this.genFormContainer, strAjaxAction, {
        parameters: { 
          id: itemId,
          formId: formId,         
