@@ -376,7 +376,8 @@ Edit Mask */
 
 .field input.radio,
 .field input.multiCheckbox,
-.field input.multiCheckboxTree {
+.field input.multiCheckboxTree,
+.field input.checkbox {
     width: 30px;
     height: 15px;
     margin: 0;
@@ -1484,6 +1485,13 @@ Overlay Inner */
     width: 430px;
     position: absolute;
     top: 277px;
+    bottom: 0px;
+}
+
+.ollandingpage {
+    width: 430px;
+    position: absolute;
+    top: 242px;
     bottom: 0px;
 }
 

@@ -47,7 +47,7 @@ class Core_FolderController extends AuthControllerAction {
    */
   protected $objForm;
 	
-	/**
+  /**
    * @var inter
    */
   protected $intItemLanguageId;

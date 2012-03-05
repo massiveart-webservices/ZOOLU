@@ -111,5 +111,74 @@ Massiveart.Navigation.Cms = Class.create(Massiveart.Navigation, {
         }.bind(this)
       });
     }
-  }
+  }, 
+  
+  /**
+   * selectSubscribers
+   */
+  selectLandingPages: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType){
+    if(!this.actionMenu || this.actionMenu.isOpen == false) {
+        
+      if(typeof(viewType) == 'undefined'){
+        viewType = 'list';
+      }
+      
+      if(typeof(rootLevelFilter) == 'undefined'){
+        rootLevelFilter = null;
+      }
+      
+      if(typeof(url) != 'undefined' && url != '' && (!location.href.replace(/#/,'').endsWith(url) || viewType != 'list')){
+        location.href = url;
+      }else{
+        this.rootLevelId = rootLevelId;
+        this.rootLevelGroupId = rootLevelGroupId;
+        this.rootLevelType = rootLevelType;
+        
+        $(this.genFormContainer).hide();
+        $(this.genFormFunctions).hide();
+        
+        if($('naviitem'+rootLevelId)){
+          this.makeSelected('naviitem'+rootLevelId);
+          if($(this.preSelectedNaviItem) && ('naviitem'+rootLevelId) != this.preSelectedNaviItem){ 
+            this.makeDeselected(this.preSelectedNaviItem);
+            this.makeDeselected(this.preSelectedSubNaviItem);
+          }      
+          this.preSelectedNaviItem = 'naviitem'+rootLevelId;
+        }else if($('subnaviitem'+rootLevelId)){
+          this.makeSelected('subnaviitem'+rootLevelId);
+          if($(this.preSelectedSubNaviItem) && ('subnaviitem'+rootLevelId) != this.preSelectedSubNaviItem){ 
+            this.makeDeselected(this.preSelectedSubNaviItem);
+          }
+          this.preSelectedSubNaviItem = 'subnaviitem'+rootLevelId;
+        }
+        
+        myList.sortColumn = '';
+        myList.sortOrder = '';
+        myList.getListPage();
+      }
+    }
+  },
+  
+  /**
+   * getAddForm
+   */
+  getAddForm: function(){
+    
+    $(this.genListContainer).hide();
+    $(this.genListFunctions).hide();
+    
+    if($('buttondelete')) $('buttondelete').hide();
+    
+    myCore.resetTinyMCE(true);
+    
+    new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + this.rootLevelType + '/addform', {
+      parameters: { rootLevelId: this.rootLevelId },      
+      evalScripts: true,     
+      onComplete: function() {        
+        $(this.genFormContainer).show();
+        $(this.genFormFunctions).show();
+        $(this.genFormContainer).scrollTo($('widgetfunctions'));        
+      }.bind(this)
+    });
+  },
 });

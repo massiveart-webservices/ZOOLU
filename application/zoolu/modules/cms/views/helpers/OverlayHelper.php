@@ -133,6 +133,42 @@ class OverlayHelper
          */
         return $strOutput;
     }
+    
+    /**
+     * Lists the given folders on the first level
+     * @param Zend_Db_Table_Rowset $rowset
+     */
+    public function getSitemapNavigationElements($rowset)
+    {
+        $this->core->logger->debug('cms->views->helpers->OverlayHelper->getSitemapNavigationElements()');
+        
+
+        $strOutput = '';
+
+        if (count($rowset) > 0) {
+            foreach ($rowset as $row) {
+                $strType = '';
+                if(!isset($row->type)){
+                    $strType .= 'type_page';
+                }else{
+                    $strType = 'type_'.$row->type;
+                }
+                
+                $strOutput .= '
+                    <div id="olnavitem' . $row->id . '" class="olnavchilditem '.$strType.'">
+                        <div style="position:relative;" onclick="myOverlay.getSiteMapNavItem(' . $row->id . ', \''.$row->genericFormId.'\', '.$row->version.')">
+                            <div class="icon img_folder_on"></div>
+                            <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
+                        </div>
+                     </div>';
+            }
+        }
+
+        /**
+         * return html output
+         */
+        return $strOutput;
+    }
 
     /**
      * getContactNavigationElements
@@ -429,6 +465,71 @@ class OverlayHelper
                         <div class="olpageleft"></div>
                         <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
                         <div class="icon olpageicon img_' . (($row->isStartPage == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+                        <div class="olpageitemtitle">' . htmlentities((($row->title == '' && (isset($row->alternativeTitle))) ? ((isset($row->alternativeTitle) && $row->alternativeTitle != '') ? $row->alternativTitle : $row->fallbackTitle) : $row->title), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
+                        <div class="olpageright"></div>
+                        <div class="clear"></div>
+                    </div>';
+            }
+            $strOutput .= '
+                    <div class="clear"></div>
+                </div>';
+        }
+
+        /**
+         * list footer
+         */
+        $strOutputBottom = '
+            <div>
+                <div class="olpagebottomleft"></div>
+                <div class="olpagebottomcenter"></div>
+                <div class="olpagebottomright"></div>
+                <div class="clear"></div>
+            </div>';
+
+        /**
+         * return html output
+         */
+        return $strOutputTop . $strOutput . $strOutputBottom . '<div class="clear"></div>';
+    }
+    
+    /**
+     * getListView
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getListSitemap($rowset)
+    {
+        $this->core->logger->debug('cms->views->helpers->OverlayHelper->getListSitemap()');
+
+        $this->objViewHelper = new ViewHelper();
+
+        /**
+         * create header of list output
+         */
+        $strOutputTop = '
+            <div>
+                <div class="olpagetopleft"></div>
+                <div class="olpagetopitemtitle bold">'.$this->core->translate->_('Pagetitle').'</div>
+                <div class="olpagetopright"></div>
+                <div class="clear"></div>
+            </div>';
+
+        /**
+         * output of list rows (elements)
+         */
+        $strOutput = '';
+        if (count($rowset) > 0) {
+            $strOutput .= '
+            <div class="olpageitemcontainer">';
+            foreach ($rowset as $row) {
+
+                $strAction = 'myOverlay.selectSitemapPage(\''.$row->type.'\', \''.$row->relationId.'\', '.$row->id.'); return false;';
+                
+                $strOutput .= '
+                    <div class="olpageitem" id="olItem' . $row->relationId . '" onclick="'.$strAction.'">
+                        <div class="olpageleft"></div>
+                        <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
+                        <div class="icon olpageicon img_' . (($row->isStartElement == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
                         <div class="olpageitemtitle">' . htmlentities((($row->title == '' && (isset($row->alternativeTitle))) ? ((isset($row->alternativeTitle) && $row->alternativeTitle != '') ? $row->alternativTitle : $row->fallbackTitle) : $row->title), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
                         <div class="olpageright"></div>
                         <div class="clear"></div>

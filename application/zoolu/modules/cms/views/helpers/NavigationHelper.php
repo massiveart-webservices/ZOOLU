@@ -119,7 +119,7 @@ class NavigationHelper {
                 <div class="portalmenulink">
                   <div class="portalcontenticon"></div>
                   <div class="portalmenutitle">
-                    <a href="#" onclick="myNavigation.selectRootLevel('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().', \'/zoolu/cms/index/list\'); return false;">'.$this->core->translate->_('Landing_pages').'</a>
+                    <a href="#" onclick="myNavigation.selectLandingPages('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().', \'/zoolu/cms/index/list\', \'list\', \'landingpage\'); return false;">'.$this->core->translate->_('Landing_pages').'</a>
                   </div>
                   <input type="hidden" id="rootLevelLanguageId1" value="1">
                   <div class="clear"></div>

@@ -51,7 +51,7 @@ class Form_Helper_FormCollection extends Zend_View_Helper_FormElement {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function formCollection($name, $value = null, $attribs = null, $options = null, Form_Element_Collection &$element){
+  public function formCollection($name, $value = null, $attribs = null, $options = null, Form_Element_Collection $element){
     $info = $this->_getInfo($name, $value, $attribs);
     $core = Zend_Registry::get('Core');
     extract($info); // name, value, attribs, options, listsep, disable

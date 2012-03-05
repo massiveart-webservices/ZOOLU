@@ -38,10 +38,10 @@
  * @subpackage PluginLoader
  */
 class PluginLoader extends Zend_Loader_PluginLoader{
-	const TYPE_FORM_HELPER = 'helper';
-	const TYPE_FORM_ELEMENT = 'element';
-	const TYPE_FORM_DECORATOR = 'decorator';
-  const TYPE_FORM_VALIDATOR = 'validator';
+    const TYPE_FORM_HELPER = 'helper';
+    const TYPE_FORM_ELEMENT = 'element';
+    const TYPE_FORM_DECORATOR = 'decorator';
+    const TYPE_FORM_VALIDATOR = 'validator';
 
 	/**
 	 *
@@ -63,7 +63,8 @@ class PluginLoader extends Zend_Loader_PluginLoader{
 	                           'Media', 'MultiCheckboxTree', 'SelectTree', 'Tab',
 	                           'TabContainer', 'Tag', 'Template', 'Texteditor',
 	                           'TextDisplay', 'Url', 'InternalLinks', 'Collection', 
-                             'DocumentFilter', 'Video', 'CollapsableInternalLinks', 'LandingPageUrl');
+                          	   'DocumentFilter', 'Video', 'CollapsableInternalLinks', 'LandingPageUrl',
+	                           'SitemapLink');
 
 	/**
 	 * Returns the internal PluginLoader

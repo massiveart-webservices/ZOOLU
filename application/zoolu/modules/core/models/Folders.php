@@ -79,6 +79,8 @@ class Model_Folders {
    * @var Core
    */
   private $core;
+  
+  private $GLOBAL_ENTRY_GENFORMS = array('DEFAULT_PRODUCT_TREE');
 
   /**
    * Constructor
@@ -781,6 +783,41 @@ class Model_Folders {
 																	      ORDER BY sortPosition ASC, sortTimestamp $strSortTimestampOrderType, id ASC", array($this->intLanguageId, $this->intLanguageId, $intFolderId, $this->intLanguageId, $this->intLanguageId, $this->intLanguageId, $intFolderId, $this->core->sysConfig->parent_types->folder));
 
     return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
+  }
+  
+  /**
+   * Loads all the pages and globals from the given folder
+   * @param integer $intFolderId
+   * @return Zend_Db_Table_Rowset_Abstract
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function loadChildElements($intFolderId){
+      $this->core->logger->debug('core->models->Folders->loadChildElements('.$intFolderId.')');
+      
+      $objPageSelect = $this->getFolderTable()->select()->setIntegrityCheck(false);
+      $objPageSelect->from('folders', array())
+                    ->join('pages', 'pages.idParent = folders.id AND idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('id', 'relationId' => 'pageId', 'isStartElement' => 'isStartPage', 'type' => new Zend_Db_Expr('"page"')))
+                    ->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.idLanguages = '.$this->intLanguageId.' AND pageProperties.version = pages.version', array('idStatus'))
+                    ->joinLeft('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = '.$this->intLanguageId, array('title'))
+                    ->joinLeft(array('alternativeTitle' => 'pageTitles'), 'alternativeTitle.pageId = pages.pageId AND alternativeTitle.idLanguages = '.$this->intLanguageId, array('alternativeTitle' => 'title'))
+                    ->joinLeft(array('fallbackTitle' => 'pageTitles'), 'fallbackTitle.pageId = pages.pageId AND fallbackTitle.idLanguages = 0', array('fallbackTitle' => 'title'))
+                    ->where('folders.id = ?', $intFolderId);
+                
+      $objGlobalSelect = $this->getFolderTable()->select()->setIntegrityCheck(false);
+      $objGlobalSelect->from('folders', array())
+                      ->join('globals', 'globals.idParent = folders.id AND globals.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('id', 'relationId' => 'globalId', 'isStartElement' => 'isStartGlobal', 'type' => new Zend_Db_Expr('"global"')))
+                      ->join('globalLinks', 'globalLinks.idGlobals = globals.id', array())
+                      ->join(array('gL' => 'globals'), 'gL.globalId = globalLinks.globalId', array())
+                      ->join('globalProperties', 'globalProperties.globalId = gL.globalId AND globalProperties.idLanguages = '.$this->intLanguageId.' AND globalProperties.version = gL.version', array('idStatus'))
+                      ->joinLeft('globalTitles', 'globalTitles.globalId = gL.globalId AND globalTitles.version = gL.version AND globalTitles.idLanguages = '.$this->intLanguageId, array('title'))
+                      ->joinLeft(array('alternativeTitle' => 'globalTitles'), 'alternativeTitle.globalId = gL.globalId AND alternativeTitle.idLanguages = '.$this->intLanguageId, array('alternativeTitle' => 'title'))
+                      ->joinLeft(array('fallbackTitle' => 'globalTitles'), 'fallbackTitle.globalId = gL.globalId AND fallbackTitle.idLanguages = 0', array('fallbackTitle' => 'title'))
+                      ->where('folders.id = ?', $intFolderId);
+                      
+      $objSelect = $this->getFolderTable()->select()->setIntegrityCheck(false)->union(array($objPageSelect, $objGlobalSelect));
+      
+      return $this->getFolderTable()->fetchAll($objSelect);
   }
   
   /**
@@ -1799,6 +1836,58 @@ class Model_Folders {
     $objSelect->join('genericForms', 'genericForms.id = folderProperties.idGenericForms', array('genericFormId', 'version'));
     $objSelect->where('folders.idParentFolder = ?', $intFolderId);
 
+    return $this->getFolderTable()->fetchAll($objSelect);
+  }
+  
+  
+  /**
+   * Load all the child folder (cms and global) for the sitemaplink fieldtype
+   * @param integer $intFolderId
+   * @param string $strGenFormId
+   * @param integer $intGenFormVersion
+   */
+  public function loadChildFoldersForSitemap($intFolderId, $strGenFormId, $intGenFormVersion){
+    $this->core->logger->debug('core->models->Folders->loadChildFoldersForSitemap('.$intFolderId.', '.$strGenFormId.', '.$intGenFormVersion.')');
+
+    $objCmsSelect = $this->getFolderTable()->select();
+    $objCmsSelect->setIntegrityCheck(false);
+
+    $objCmsSelect->from('folders', array('folders.id', 'folderProperties.idGenericForms', 'folderTitles.title', 'startpageGenForms.genericFormId', 'startpageGenForms.version', 'type' => new Zend_Db_Expr('"page"')));
+    $objCmsSelect->join('folderProperties', 'folderProperties.folderId = folders.folderId AND 
+                                          folderProperties.version = folders.version AND
+                                          folderProperties.idLanguages = '.$this->intLanguageId, array());
+    $objCmsSelect->join('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = '.$this->intLanguageId, array());
+    $objCmsSelect->join(array('startpages' => 'pages'), 'startpages.idParent = folders.id AND startpages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
+    $objCmsSelect->join('pageProperties', 'pageProperties.pageId = startpages.pageId AND pageProperties.version = startpages.version AND pageProperties.idLanguages = '.$this->intLanguageId, array());
+    $objCmsSelect->join(array('startpageGenForms' => 'genericForms'), 'startpageGenForms.id = pageProperties.idGenericForms', array());
+    $objCmsSelect->where('startpages.isStartPage = ?', 1);
+    $objCmsSelect->where('folders.idParentFolder = ?', $intFolderId);
+    
+    $objSelect = null;
+    
+    if(array_search($strGenFormId, $this->GLOBAL_ENTRY_GENFORMS) !== false){
+        $objGlobalSelect = $this->getFolderTable()->select();
+        $objGlobalSelect->setIntegrityCheck(false);
+        
+        $objGlobalSelect->from(array('pageInstances' => 'page-'.$strGenFormId.'-'.$intGenFormVersion.'-Instances'), array('folders.id', 'folderProperties.idGenericForms', 'folderTitles.title', 'genericForms.genericFormId', 'genericForms.version', 'type' => new Zend_Db_Expr('"global"')));
+        $objGlobalSelect->join('pages', 'pages.pageId = pageInstances.pageId', array());
+        $objGlobalSelect->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = '.$this->intLanguageId, array());
+        $objGlobalSelect->join('folders', 'folders.id = pageInstances.entry_point', array());
+        $objGlobalSelect->join('folderProperties', 'folderProperties.folderId = folders.folderId AND 
+                                              folderProperties.version = folders.version AND
+                                              folderProperties.idLanguages = '.$this->intLanguageId, array());
+        $objGlobalSelect->join('genericForms', 'genericForms.id = folderProperties.idGenericForms', array());
+        $objGlobalSelect->join('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = '.$this->intLanguageId, array());
+        $objGlobalSelect->where('pages.idParent = ?', $intFolderId);
+        $objGlobalSelect->where('pages.idParentTypes = ?', $this->core->sysConfig->parent_types->folder);
+        
+        $this->core->logger->debug(strval($objGlobalSelect));
+        
+        $objSelect = $this->getFolderTable()->select()->union(array($objCmsSelect, $objGlobalSelect));
+    }else{
+        $objSelect = $objCmsSelect;
+    }
+    
     return $this->getFolderTable()->fetchAll($objSelect);
   }
 

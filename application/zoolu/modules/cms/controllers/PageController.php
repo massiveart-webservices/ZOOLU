@@ -97,7 +97,7 @@ class Cms_PageController extends AuthControllerAction {
    * @var Model_Users
    */
   protected $objModelUsers;
-
+  
   /**
    * init
    * @author Thomas Schedler <tsh@massiveart.com>
