@@ -191,7 +191,7 @@ class Core_LandingpageController extends AuthControllerAction {
    * @version 1.0
    */
   public function addformAction(){
-    $this->core->logger->debug('core->controllers->LandingpageController->getaddformAction()');
+    $this->core->logger->debug('core->controllers->LandingpageController->addformAction()');
     try{
 
       $this->initForm();
