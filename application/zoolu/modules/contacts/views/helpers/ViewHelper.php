@@ -161,12 +161,20 @@ class ViewHelper {
     $strOutput = '';
     $strRootLevelType = '';
     
+    $strOutput.= '
+      		  <div class="menulink">
+                <div class="menutitle portalnoicon">
+                	<a onclick="myNavigation.selectHardbounces('.$objRootLevelFilters->current()->idRootLevels.')" href="#">'.htmlentities($this->core->translate->_('Hardbounces'), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>  
+                </div>
+                <div class="clear"></div>
+              </div>';
+    
     foreach($objRootLevelFilters as $objRootLevelFilter){
       if($objRootLevelFilter->idRootLevelTypes = $this->core->sysConfig->root_level_types->subscribers){
         $strRootLevelType = 'subscriber';
       }
       $strOutput.= '
-      				<div id="subnaviitem'.$objRootLevelFilter->id.'" class="menulink">
+      		  <div id="subnaviitem'.$objRootLevelFilter->id.'" class="menulink">
                 <div class="menutitle portalnoicon">
                 	<a id="subnaviitem'.$objRootLevelFilter->id.'_link" onclick="myNavigation.selectSubscribers('.$objRootLevelFilter->idRootLevels.', '.$objRootLevelFilter->idRootLevelGroups.', \'\', \'list\', \''.$strRootLevelType.'\', '.$objRootLevelFilter->id.')" href="#">'.htmlentities($objRootLevelFilter->filtertitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>  
                 </div>

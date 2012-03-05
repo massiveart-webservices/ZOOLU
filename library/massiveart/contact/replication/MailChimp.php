@@ -82,8 +82,17 @@ class ContactReplication_MailChimp implements ContactReplicationInterface  {
   public function add($arrArgs) {
     //Only subscribe if the flag is set
     if($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe){
-      $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-      $objMailChimpList->subscribe(new MailChimpMember($arrArgs));
+      if(class_exists('GearmanClient')){
+        $client= new GearmanClient();
+        $client->addServer();
+        $workload = new stdClass();
+        $workload->args = $arrArgs;
+        $workload->retry = 3;
+        $client->doBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_add', serialize($workload));
+      }else{
+        $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+        $objMailChimpList->subscribe(new MailChimpMember($arrArgs));
+      }
     }
   }
   
@@ -92,9 +101,19 @@ class ContactReplication_MailChimp implements ContactReplicationInterface  {
    * @author Thomas Schedler <tsh@massiveart.com>
    */
   public function update($arrArgs) {
-    $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-    $blnSubscribe = ($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe);
-    $objMailChimpList->update(new MailChimpMember($arrArgs), $blnSubscribe);
+    if(class_exists('GearmanClient')){
+      $client= new GearmanClient();
+      $client->addServer();
+      $workload = new stdClass();
+      $workload->args = $arrArgs;
+      $workload->retry = 3;
+      $client->doBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_update', serialize($workload));
+    }else{
+      $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);    
+      $blnSubscribe = ($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe);
+      $objMember = new MailChimpMember($arrArgs);
+      $objMailChimpList->update($objMember, $blnSubscribe);
+    }
   }
   
   /**
@@ -102,8 +121,17 @@ class ContactReplication_MailChimp implements ContactReplicationInterface  {
    * @author Thomas Schedler <tsh@massiveart.com>
    */
   public function delete($arrArgs) {
-    $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-    $objMailChimpList->unsubscribe(new MailChimpMember($arrArgs), true);
+    if(class_exists('GearmanClient')){
+      $client= new GearmanClient();
+      $client->addServer();
+      $workload = new stdClass();
+      $workload->args = $arrArgs;
+      $workload->retry = 3;
+      $client->doBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_delete', serialize($workload));
+    }else{
+      $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+      $objMailChimpList->unsubscribe(new MailChimpMember($arrArgs), true);
+    }
   }
   
 }

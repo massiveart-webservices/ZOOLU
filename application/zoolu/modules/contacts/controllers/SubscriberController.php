@@ -143,8 +143,13 @@ class Contacts_SubscriberController extends AuthControllerAction {
     $strSearchValue = (($this->getRequest()->getParam('search') != '') ? $this->getRequest()->getParam('search') : '');
     $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilter', null);
     $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
+    $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
 
-    $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+    if($blnHardBounce){
+      $objSelect = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+    }else{
+      $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+    }
 
     $objAdapter = new Zend_Paginator_Adapter_DbTableSelect($objSelect);
     $objPaginator = new Zend_Paginator($objAdapter);
@@ -173,7 +178,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
     
     $this->view->assign('rootLevelFilters', $objRootLevelFilters);
   }
-  
+
   /**
    * exportlistAction
    * @author Daniel Rotter <daniel.rotter@massiveart.com>
@@ -184,8 +189,14 @@ class Contacts_SubscriberController extends AuthControllerAction {
     
     $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilterId');
     $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
+    $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
     
-    $objRowset = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, '', 'ASC', 'sname', false, true);
+    if($blnHardBounce){
+      $objRowset = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, '', 'ASC', 'sname', false, true);
+    }else{
+      $objRowset = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, '', 'ASC', 'sname', false, true);
+    }
+    
     do{
       unset($objRowset->current()->type);
       unset($objRowset->current()->genericFormId);
@@ -229,7 +240,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
    * @version 1.0
    */
   public function importuploadAction(){
-    $this->core->logger->debug('contacts->controllers->SubscriberController->importformAction()');
+    $this->core->logger->debug('contacts->controllers->SubscriberController->importuploadAction()');
     
     $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
     
@@ -301,6 +312,9 @@ class Contacts_SubscriberController extends AuthControllerAction {
     $this->core->logger->debug('contacts->controllers->SubscriberController->importAction()');
     $this->_helper->viewRenderer->setNoRender();
     
+    $arrErrors = array();
+    $arrWarnings = array();
+    
     $intSubscriberAdded = 0;
     $intSubscriberUpdated = 0;
     $blnEmailAddress = true;
@@ -348,8 +362,8 @@ class Contacts_SubscriberController extends AuthControllerAction {
         $arrData = array();
         $arrTmpData = explode(';', $strLine);
         foreach($arrHeadlines as $intCount => $strHeadline){
-          if(array_key_exists('headline'.$intCount, $arrFields) && $arrFields['headline'.$intCount] != ''){
-            $arrData[$arrFields['headline'.$intCount]] = trimQuotes($arrTmpData[$intCount]);
+          if(($strKey = array_search('headline'.$intCount, $arrFields)) !== false){
+            $arrData[$strKey] = trimQuotes($arrTmpData[$intCount]);
           }
         }
         $arrData['subscribed'] = $this->core->sysConfig->mail_chimp->mappings->subscribe;
@@ -359,78 +373,133 @@ class Contacts_SubscriberController extends AuthControllerAction {
         $arrData['idUsers'] = Zend_Auth::getInstance()->getIdentity()->id;
         $arrData['dirty'] = $this->core->sysConfig->mail_chimp->mappings->clean;
         
-        //Update Userdata
-        $blnUpdate = false; //Update an old user or insert a new one
-        if(isset($arrData['email']) && $arrData['email'] != ''){
-          $objSubscriber = $this->getModelSubscribers()->loadByEmail($arrData['email']);
-          if(count($objSubscriber) > 0){
-            $this->core->logger->warn('Subscriber '.$arrData['email'].' already exists! User will be updated.');
-            $intSubscriberId = $objSubscriber->current()->id;
-            $blnUpdate = true;
-            $this->getModelSubscribers()->getSubscriberTable()->update($arrData, $this->core->dbh->quoteInto('email = ?', $arrData['email']));
-            $intSubscriberUpdated++;
-          }else{
-            $intSubscriberId = $this->getModelSubscribers()->getSubscriberTable()->insert($arrData);
-            $intSubscriberAdded++;
+        try{
+          //Check Preconditions
+          
+          //Valid Email Address?
+          $validator = new Zend_Validate_EmailAddress();
+          if(!$validator->isValid($arrData['email'])){
+            require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/InvalidAddressException.php');
+            throw new InvalidAddressException($arrData['email']);
           }
-          //Update Interests
-          $arrPortalDataMailChimp = array();
-          foreach($arrPortals as $intPortalId){
-            //Insert Data in database
-            $arrPortalData = array('idSubscribers' => $intSubscriberId, 'idRelation' => $intPortalId, 'idFields' => self::PORTALS_ID);
-            $objTable = $this->getModelGenericData()->getGenericTable('subscriber-'.self::SUBSCRIBER_GENERIC_FORM_ID.'-1-InstanceMultiFields');
-            $objTable->insert($arrPortalData);
-            //Create array for mailchimp
-            $objRootLevel = $this->getModelRootLevels()->loadRootLevelTitle($intPortalId, 2);
-            $arrPortalDataMailChimp[] = array('id' => $intPortalId, 'title' => $objRootLevel->current()->title);
+          //Does the host exist?
+          $arrMail = explode('@', $arrData['email']);
+          if(!checkdnsrr($arrMail[1])){
+            require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/HostNotFoundException.php');
+            throw new HostNotFoundException($arrData['email']);
           }
-          $arrInterestDataMailChimp = $this->updateInterests($arrInterestGroups, $intSubscriberId, self::INTEREST_GROUPS_ID);
-          $arrFilterDataMailChimp = $this->updateInterests($arrFilter, $intSubscriberId, self::FILTER_ID);
-          if($blnUpdate){
-            //If subscriber already existed only update interestgroups
-            try{
-              $this->objCommandChain->runCommand('updated', array(
-                'Id'                => $intSubscriberId,
-                'FirstName'         => $arrData['fname'],
-                'LastName'          => $arrData['sname'],
-                'Salutation'        => $arrData['salutation'],
-                'Email'             => $arrData['email'],
-                'InterestGroups'    => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp, 'Filter' => $arrFilterDataMailChimp),
-                'Subscribed'        => $this->core->sysConfig->mail_chimp->mappings->subscribe,
-                'ReplaceInterests'  => false
-              ));
-            }catch(MailChimpException $mce){
-              if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
-                $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
+          //FIXME Doesn't work: Does the email-address exist?
+/*          require_once(GLOBAL_ROOT_PATH.'library/smtpvalidate/smtpvalidate.class.php');
+          $objSmtpValidate = new SMTP_validateEmail();
+          if(!$objSmtpValidate->validate(array($arrData['email']))){
+              throw new AddressNotFoundException($arrData['email']);
+          }
+*/          
+          //Update Userdata
+          $blnUpdate = false; //Update an old user or insert a new one
+          if(isset($arrData['email']) && $arrData['email'] != ''){
+            $objSubscriber = $this->getModelSubscribers()->loadByEmail($arrData['email']);
+            if(count($objSubscriber) > 0){
+              //Check Preconditions
+              if($objSubscriber->current()->hardbounce == $this->core->sysConfig->mail_chimp->mappings->hardbounce){
+                require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/HardBounceException.php');
+                throw new HardBounceException($arrData['email']);
               }
-              throw $mce;
+              if($objSubscriber->current()->dirty == $this->core->sysConfig->mail_chimp->mappings->dirty){
+                require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/DirtyException.php');
+                throw new DirtyException($arrData['email']);
+              }
+              if($objSubscriber->current()->subscribed == $this->core->sysConfig->mail_chimp->mappings->unsubscribe){
+                $arrWarnings[] = $arrData['email'].' was unsubscribed!';
+              }
+              $this->core->logger->warn('Subscriber '.$arrData['email'].' already exists! User will be updated.');
+              $intSubscriberId = $objSubscriber->current()->id;
+              $blnUpdate = true;
+              $this->getModelSubscribers()->getSubscriberTable()->update($arrData, $this->core->dbh->quoteInto('email = ?', $arrData['email']));
+              $intSubscriberUpdated++;
+            }else{
+              $intSubscriberId = $this->getModelSubscribers()->getSubscriberTable()->insert($arrData);
+              $intSubscriberAdded++;
+            }
+            //Update Interests
+            $arrPortalDataMailChimp = array();
+            foreach($arrPortals as $intPortalId){
+              //Insert Data in database
+              $arrPortalData = array('idSubscribers' => $intSubscriberId, 'idRelation' => $intPortalId, 'idFields' => self::PORTALS_ID);
+              $objTable = $this->getModelGenericData()->getGenericTable('subscriber-'.self::SUBSCRIBER_GENERIC_FORM_ID.'-1-InstanceMultiFields');
+              $objTable->insert($arrPortalData);
+              //Create array for mailchimp
+              $objRootLevel = $this->getModelRootLevels()->loadRootLevelTitle($intPortalId, 2);
+              $arrPortalDataMailChimp[] = array('id' => $intPortalId, 'title' => $objRootLevel->current()->title);
+            }
+            $arrInterestDataMailChimp = $this->updateInterests($arrInterestGroups, $intSubscriberId, self::INTEREST_GROUPS_ID);
+            $arrFilterDataMailChimp = $this->updateInterests($arrFilter, $intSubscriberId, self::FILTER_ID);
+            if($blnUpdate){
+              //If subscriber already existed only update interestgroups
+              try{
+                $this->objCommandChain->runCommand('updated', array(
+                  'Id'                => $intSubscriberId,
+                  'FirstName'         => $arrData['fname'],
+                  'LastName'          => $arrData['sname'],
+                  'Salutation'        => $arrData['salutation'],
+                  'Email'             => $arrData['email'],
+                  'InterestGroups'    => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp, 'Filter' => $arrFilterDataMailChimp),
+                  'Subscribed'        => $this->core->sysConfig->mail_chimp->mappings->subscribe,
+                  'HardBounce'		=> $objSubscriber->current()->hardbounce,
+                  'ReplaceInterests'  => false
+                ));
+              }catch(MailChimpException $mce){
+                if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
+                  $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
+                }
+                throw $mce;
+              }
+            }else{
+              try{
+                $this->objCommandChain->runCommand('added', array(
+                  'Id'              => $intSubscriberId,
+                  'FirstName'       => (isset($arrData['fname'])) ? $arrData['fname'] : '',
+                  'LastName'        => (isset($arrData['sname'])) ? $arrData['sname'] : '',
+                  'Salutation'      => (isset($arrData['salutation'])) ? $arrData['salutation'] : '',
+                  'Email'           => (isset($arrData['email'])) ? $arrData['email'] : '',
+                  'Subscribed'      => $this->core->sysConfig->mail_chimp->mappings->subscribe,
+                  'InterestGroups'  => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp),
+                ));
+              }catch(MailChimpException $mce){
+                if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
+                  $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
+                }
+                throw $mce;
+              }
             }
           }else{
-            try{
-              $this->objCommandChain->runCommand('added', array(
-                'Id'              => $intSubscriberId,
-                'FirstName'       => (isset($arrData['fname'])) ? $arrData['fname'] : '',
-                'LastName'        => (isset($arrData['sname'])) ? $arrData['sname'] : '',
-                'Salutation'      => (isset($arrData['salutation'])) ? $arrData['salutation'] : '',
-                'Email'           => (isset($arrData['email'])) ? $arrData['email'] : '',
-                'Subscribed'      => $this->core->sysConfig->mail_chimp->mappings->subscribe,
-                'InterestGroups'  => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp),
-              ));
-            }catch(MailChimpException $mce){
-              if($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT){
-                $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-              }
-              throw $mce;
-            }
+            $blnEmailAddress = false;
           }
-        }else{
-          $blnEmailAddress = false;
+        }catch(InvalidAddressException $exc){
+          $arrErrors[] = $exc->getEmail().' is not a valid E-Mail Address!';
+        }catch(HardBounceException $exc){
+          $arrErrors[] = $exc->getEmail().' is hard bounced!';
+        }catch(DirtyException $exc){
+          $arrErrors[] = $exc->getEmail().' has changed!';
+        }catch(HostNotFoundException $exc){
+            $arrErrors[] = $exc->getEmail().' has a non-exsistent Domain-Part!';
         }
       }
     }
     //Delete the file in the end
     fclose($fh);
     unlink(GLOBAL_ROOT_PATH.'/uploads/subscribers/'.$strFileId);
+    
+    if(class_exists('GearmanClient') && !empty(Zend_Auth::getInstance()->getIdentity()->email)){
+      $client= new GearmanClient();
+      $client->addServer();
+      $workload = new stdClass();
+      $workload->email = Zend_Auth::getInstance()->getIdentity()->email;
+      $workload->errors = $arrErrors;
+      $workload->warnings = $arrWarnings;
+      $client->doLowBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_done', serialize($workload));
+    }
+    
     //Return a success message
     echo str_replace('%t', $intSubscriberUpdated, str_replace('%s', $intSubscriberAdded, $this->core->translate->_('Import_success_message')));
     if(!$blnEmailAddress){
@@ -575,19 +644,21 @@ class Contacts_SubscriberController extends AuthControllerAction {
     $objForm->getDisplayGroup('preferences-group')->setLegend($this->core->translate->_('Import_preferences', false));
     $objForm->getDisplayGroup('preferences-group')->setDecorators(array('FormElements', 'Region'));
     
-    $arrTmpOptions = $this->core->sysConfig->subscriber->import_fields->import_field->toArray();
+    //Assignments
     $arrOptions = array();
-    foreach($arrTmpOptions as $arrOption){
-      $arrOptions[$arrOption['title']] = $arrOption['title'];
+    foreach($arrHeadlines as $intCount => $strHeadline){
+      $arrOptions['headline'.$intCount] = $strHeadline;
     }
 
-    $arrRealHeadlines = array();
-    foreach($arrHeadlines as $intCount => $strHeadline){
-      $arrRealHeadlines[] = 'headline'.$intCount;
-      $objForm->addElement('select', 'headline'.$intCount, array('label' => ($strHeadline != '') ? $strHeadline : '('.$this->core->translate->_('Empty').')', 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => false, 'MultiOptions' => array_merge(array('' => ''), $arrOptions)));
-      foreach($arrTmpOptions as $arrTmpOption){
+    $arrTmpOptions = $this->core->sysConfig->subscriber->import_fields->import_field->toArray();
+    
+    $arrAssignment = array();
+    foreach($arrTmpOptions as $arrTmpOption){
+      $arrAssignment[] = $arrTmpOption['title'];
+      $objForm->addElement('select', $arrTmpOption['title'], array('label' => ($arrTmpOption['title'] != '') ? $arrTmpOption['title'] : '('.$this->core->translate->_('Empty').')', 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => false, 'MultiOptions' => array_merge(array('' => ''), $arrOptions)));
+      foreach($arrHeadlines as $intCount => $strHeadline){
         if(array_search($strHeadline, $arrTmpOption['defaults']['default']) !== FALSE){
-          $objForm->setDefault('headline'.$intCount, $arrTmpOption['title']);
+          $objForm->setDefault($arrTmpOption['title'], 'headline'.$intCount);
           break;
         }
       }
@@ -595,7 +666,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
     
     $objForm->addElement('checkbox', 'import_header', array('label' => $this->core->translate->_('Import_header'), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'checkbox', 'required' => false));
     
-    $objForm->addDisplayGroup(array_merge(array('import_header'), $arrRealHeadlines), 'assignment-group');
+    $objForm->addDisplayGroup(array_merge(array('import_header'), $arrAssignment), 'assignment-group');
     $objForm->getDisplayGroup('assignment-group')->setLegend($this->core->translate->_('Import_assignment', false));
     $objForm->getDisplayGroup('assignment-group')->setDecorators(array('FormElements', 'Region'));
     
@@ -681,7 +752,7 @@ class Contacts_SubscriberController extends AuthControllerAction {
             'Id'              => $intSubscriberId,
             'FirstName'       => $this->objForm->Setup()->getField('fname')->getValue(),
             'LastName'        => $this->objForm->Setup()->getField('sname')->getValue(),
-          	'Salutation'			=> $this->objForm->Setup()->getField('salutation')->getValue(),
+          	'Salutation'	  => $this->objForm->Setup()->getField('salutation')->getValue(),
             'Email'           => $this->objForm->Setup()->getField('email')->getValue(),
             'Subscribed'      => $this->objForm->Setup()->getField('subscribed')->getValue(),
             'InterestGroups'  => $this->getInterestGroups()

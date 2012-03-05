@@ -75,6 +75,8 @@ class MailChimpCampaign {
   private $arrUnsubscribes;
   private $arrComplaints;
   private $arrBounces;
+  private $arrBouncesHard;
+  private $arrBouncesSoft;
   private $arrCountries;
   private $arrMembers;
   
@@ -237,7 +239,12 @@ class MailChimpCampaign {
    * @return array
    */
   public function getBounces(){
-    return $this->arrBounces['data'];
+    $arrReturn = array_merge($this->arrBouncesHard['data'], $this->arrBouncesSoft['data']);
+    for($i = 0; $i < count($arrReturn); $i++){
+      unset($arrReturn[$i]['absplit_group']);
+      unset($arrReturn[$i]['tz_group']);
+    }
+    return $arrReturn;
   }
   
   /**
@@ -418,6 +425,18 @@ class MailChimpCampaign {
     }
     
     $this->arrBounces = $objMailChimpApi->campaignBounceMessages($this->strCampaignId);
+    if($objMailChimpApi->errorCode){
+      require_once(dirname(__FILE__).'/MailChimpException.php');
+      throw new MailChimpException("\n\tUnable to load click statistics!\n\tCode=".$objMailChimpApi->errorCode."\n\tMsg=".$objMailChimpApi->errorMessage."\n");
+    }
+    
+    $this->arrBouncesHard = $objMailChimpApi->campaignMembers($this->strCampaignId, 'hard');
+    if($objMailChimpApi->errorCode){
+      require_once(dirname(__FILE__).'/MailChimpException.php');
+      throw new MailChimpException("\n\tUnable to load click statistics!\n\tCode=".$objMailChimpApi->errorCode."\n\tMsg=".$objMailChimpApi->errorMessage."\n");
+    }
+    
+    $this->arrBouncesSoft = $objMailChimpApi->campaignMembers($this->strCampaignId, 'soft');
     if($objMailChimpApi->errorCode){
       require_once(dirname(__FILE__).'/MailChimpException.php');
       throw new MailChimpException("\n\tUnable to load click statistics!\n\tCode=".$objMailChimpApi->errorCode."\n\tMsg=".$objMailChimpApi->errorMessage."\n");

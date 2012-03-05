@@ -2,19 +2,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-09 16:58+0100\n"
+"POT-Creation-Date: 2012-03-05 16:34+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Daniel Rotter <daniel.rotter@massiveart.com>\n"
+"Last-Translator: Cornelius Hansjakob <cornelius.hansjakob@massiveart.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: AUSTRIA\n"
-"X-Poedit-Basepath: /Volumes/massive-brunello/websites/segment.zoolu.area51.at/\n"
+"X-Poedit-Basepath: /Volumes/massive-brunello/websites/newsletter.zoolu.area51.at/\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: application/zoolu\n"
-"X-Poedit-SearchPath-1: public/zoolu\n"
+"X-Poedit-SearchPath-1: public/zoolu-statics\n"
 "X-Poedit-SearchPath-2: library/massiveart\n"
 
 #: application/zoolu/language/addon-language-keys.php:38
@@ -151,7 +151,7 @@ msgid "Assign_medias"
 msgstr "Medien zuweisen"
 
 #: application/zoolu/modules/properties/controllers/OverlayController.php:88
-#: application/zoolu/modules/cms/controllers/OverlayController.php:120
+#: application/zoolu/modules/cms/controllers/OverlayController.php:121
 msgid "Assign_documents"
 msgstr "Dokumente zuweisen"
 
@@ -169,23 +169,27 @@ msgstr "Es wurden keine Ergebnisse für \"%s\" gefunden."
 msgid "Reset"
 msgstr "Reset"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:133
+#: application/zoolu/modules/cms/controllers/OverlayController.php:135
 msgid "Assign_internal_links"
 msgstr "Interne Links zuweisen"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:149
+#: application/zoolu/modules/cms/controllers/OverlayController.php:150
+msgid "Assign_sitemaplink"
+msgstr "Gewünschte Inhaltsseite wählen"
+
+#: application/zoolu/modules/cms/controllers/OverlayController.php:186
 msgid "Assign_videos"
 msgstr "Videos zuweisen"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:164
+#: application/zoolu/modules/cms/controllers/OverlayController.php:202
 msgid "Assign_contacts"
 msgstr "Kontakte zuweisen"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:183
+#: application/zoolu/modules/cms/controllers/OverlayController.php:221
 msgid "Assign_groups"
 msgstr "Rollen zuweisen"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:222
+#: application/zoolu/modules/cms/controllers/OverlayController.php:260
 msgid "Select_page"
 msgstr "Seite wählen"
 
@@ -229,15 +233,19 @@ msgstr "Alle"
 msgid "Only_with_filter"
 msgstr "nur mit Filter"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:151
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:187
 msgid "Conatcts"
 msgstr "Kontakte"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:615
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:512
+msgid "Pagetitle"
+msgstr "Seitentitel"
+
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:722
 msgid "Search_tags"
 msgstr "Tags suchen"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:657
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:764
 msgid "Search"
 msgstr "Suchen"
 
@@ -384,39 +392,39 @@ msgstr "Klicks"
 msgid "Unsubscribers"
 msgstr "Abmeldungen"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:206
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:207
 msgid "Complaints"
 msgstr "Beschwerden"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:214
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:216
 msgid "Delivered_to"
 msgstr "Zugestellt"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:222
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:224
 msgid "Unique_opens"
 msgstr "Eindeutige Leser"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:230
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:232
 msgid "Opens_total"
 msgstr "Gelesen"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:238
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:240
 msgid "Bounce"
 msgstr "Bounce Messages"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:246
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:249
 msgid "Total_clicks"
 msgstr "Klicks"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:254
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:257
 msgid "Forward"
 msgstr "Weiterleitungen"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:262
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:265
 msgid "Forward_Opens"
 msgstr "Gelesene Weiterleitungen"
 
-#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:289
+#: application/zoolu/modules/newsletters/views/helpers/StatisticHelper.php:292
 msgid "Country_statistics"
 msgstr "Länderstatistiken"
 
@@ -425,43 +433,43 @@ msgstr "Länderstatistiken"
 msgid "No_search_result"
 msgstr "Ihre Suche nach \"%s\" ergab leider keinen Treffer."
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:435
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:504
 msgid "Import_success_message"
 msgstr "%s Kontakte hinzugefügt, %t Kontakte geändert"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:438
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:507
 msgid "Missing_email"
 msgstr "<strong>Es wurden keine Kontakte importiert, da keine E-Mail Adresse zugewiesen wurde!</strong>"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:548
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:617
 msgid "Encoding"
 msgstr "Verschlüsselung"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:556
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:625
 msgid "Import_portals"
 msgstr "Portal"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:563
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:632
 msgid "Import_interest_groups"
 msgstr "Interessensgruppe"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:571
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:640
 msgid "Filter"
 msgstr "Filter"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:575
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:644
 msgid "Import_preferences"
 msgstr "Einstellungen"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:587
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:658
 msgid "Empty"
 msgstr "Leer"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:596
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:667
 msgid "Import_header"
 msgstr "Erste Zeile importieren"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:599
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:670
 #: application/zoolu/modules/contacts/views/helpers/ImportHelper.php:62
 msgid "Import_assignment"
 msgstr "Zuweisungen"
@@ -478,7 +486,11 @@ msgstr "Import"
 msgid "No_entries_available"
 msgstr "Es sind keine weiteren Einträge vorhanden"
 
-#: application/zoolu/modules/contacts/views/helpers/ViewHelper.php:189
+#: application/zoolu/modules/contacts/views/helpers/ViewHelper.php:167
+msgid "Hardbounces"
+msgstr "Hardbounces"
+
+#: application/zoolu/modules/contacts/views/helpers/ViewHelper.php:197
 msgid "Edit_filter"
 msgstr "Filter editieren"
 
@@ -615,6 +627,57 @@ msgstr "Inhalt wählen"
 msgid "Select_folder"
 msgstr "Ordner wählen"
 
+#: application/zoolu/modules/core/controllers/LandingpageController.php:137
+msgid "Landingpage_url"
+msgstr "Landing Page URL"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:137
+msgid "Landingpage_url_desc"
+msgstr "(relativer Pfad z.B. für Wunsch URL: www.meineseite.com/meineZielURL nur meineZielURL eingeben)"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:138
+msgid "Landingpage_link"
+msgstr "Darzustellende Inhaltsseite"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:139
+msgid "Landingpage_language"
+msgstr "Sprache"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:139
+msgid "Landingpage_language_desc"
+msgstr "in der die gewählte Inhaltsseite angezeigt werden soll"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:140
+msgid "Landingpage_redirect"
+msgstr "Landing Page soll als URL sichtbar bleiben und nicht auf Zielseite umleiten."
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:140
+msgid "Landingpage_redirect_desc"
+msgstr "(Achtung: Gefahr für 'Duplikate Content')"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:143
+msgid "Contentpage"
+msgstr "Inhaltsseite"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:147
+msgid "General_information_landingpage"
+msgstr "Informationen zur Konfiguration einer Landing Page"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:175
+#: application/zoolu/modules/core/controllers/LandingpageController.php:422
+msgid "Link"
+msgstr "Link"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:201
+#: application/zoolu/modules/core/controllers/LandingpageController.php:244
+msgid "New_Landingpage"
+msgstr "Neue Landingpage"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:285
+#: application/zoolu/modules/core/controllers/LandingpageController.php:334
+msgid "Edit_Landingpage"
+msgstr "Landingpage editieren"
+
 #: application/zoolu/modules/core/views/helpers/DashboardHelper.php:136
 msgid "Checked"
 msgstr "Erledigt"
@@ -701,6 +764,25 @@ msgstr "Jahr"
 msgid "time_difference"
 msgstr "vor %d %s"
 
+#: application/zoolu/modules/core/models/Urls.php:171
+#: application/zoolu/modules/core/models/Urls.php:181
+#: application/zoolu/modules/core/models/Urls.php:191
+#: application/zoolu/modules/core/models/Urls.php:202
+msgid "deactivated"
+msgstr "deaktiviert"
+
+#: application/zoolu/modules/core/models/Urls.php:171
+#: application/zoolu/modules/core/models/Urls.php:181
+#: application/zoolu/modules/core/models/Urls.php:191
+#: application/zoolu/modules/core/models/Urls.php:202
+msgid "active"
+msgstr "aktiviert"
+
+#: library/massiveart/generic/forms/validators/LandingPageUrl.php:88
+#: library/massiveart/generic/forms/validators/UniqueLandingPageUrl.php:128
+msgid "Err_existing_landingpageurl"
+msgstr "Die gewählte URL existiert bereits!"
+
 #: library/massiveart/generic/forms/validators/UniqueUrl.php:141
 msgid "Err_existing_url"
 msgstr "Die gewählte URL existiert bereits! Ein Vorschlag wurde eingefügt."
@@ -709,13 +791,7 @@ msgstr "Die gewählte URL existiert bereits! Ein Vorschlag wurde eingefügt."
 msgid "err_no_unique_url"
 msgstr "Die vorgeschlagene URL ist nicht eindeutig."
 
-#: library/massiveart/generic/forms/validators/UniqueLandingPageUrl.php:128
-msgid "Err_existing_landingpageurl"
-msgstr "Die gewählte URL existiert bereits!"
-
 #: library/massiveart/generic/fields/InternalLinks/forms/helpers/FormInternalLinks.php:96
-#: library/massiveart/generic/fields/CollapsableInternalLinks/forms/helpers/FormCollapsableInternalLinks.php:99
-#: library/massiveart/generic/fields/CollapsableInternalLinks/forms/helpers/FormCollapsableInternalLinks.php:111
 msgid "Add_internal_links"
 msgstr "Interne Links hinzufügen"
 
@@ -975,10 +1051,6 @@ msgstr "Details"
 msgid "Click"
 msgstr "Klicks"
 
-#: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:142
-msgid "Link"
-msgstr "Link"
-
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:143
 msgid "Clicks"
 msgstr "Klicks"
@@ -1195,7 +1267,7 @@ msgstr "Gelöscht"
 #: application/zoolu/layouts/newsletters-list.phtml:281
 #: application/zoolu/layouts/users.phtml:234
 #: application/zoolu/layouts/contacts-list.phtml:310
-#: application/zoolu/layouts/cms-list.phtml:289
+#: application/zoolu/layouts/cms-list.phtml:291
 msgid "Ok"
 msgstr "Ok"
 
@@ -1209,7 +1281,7 @@ msgstr "Ok"
 #: application/zoolu/layouts/newsletters-list.phtml:379
 #: application/zoolu/layouts/users.phtml:284
 #: application/zoolu/layouts/contacts-list.phtml:427
-#: application/zoolu/layouts/cms-list.phtml:374
+#: application/zoolu/layouts/cms-list.phtml:376
 msgid "Delete_"
 msgstr "Löschen?"
 
@@ -1217,7 +1289,7 @@ msgstr "Löschen?"
 #: application/zoolu/layouts/cms.phtml:387
 #: application/zoolu/layouts/media.phtml:512
 #: application/zoolu/layouts/global-tree.phtml:335
-#: application/zoolu/layouts/cms-list.phtml:375
+#: application/zoolu/layouts/cms-list.phtml:377
 msgid "Delete_folder"
 msgstr "Wollen Sie diesen Ordner löschen?"
 
@@ -1227,7 +1299,7 @@ msgid "Global"
 msgstr "Global"
 
 #: application/zoolu/layouts/cms.phtml:139
-#: application/zoolu/layouts/cms-list.phtml:179
+#: application/zoolu/layouts/cms-list.phtml:181
 msgid "Maintenance_properties"
 msgstr "Maintenance Einstellungen"
 
@@ -1239,18 +1311,18 @@ msgid "New_message"
 msgstr "Neue Nachricht"
 
 #: application/zoolu/layouts/cms.phtml:388
-#: application/zoolu/layouts/cms-list.phtml:376
+#: application/zoolu/layouts/cms-list.phtml:378
 msgid "Delete_page"
 msgstr "Wollen Sie diese Seite löschen?"
 
 #: application/zoolu/layouts/cms.phtml:389
 #: application/zoolu/layouts/global-tree.phtml:340
-#: application/zoolu/layouts/cms-list.phtml:377
+#: application/zoolu/layouts/cms-list.phtml:379
 msgid "Copy_language_override"
 msgstr "Wollen Sie die bereits bestehenden Daten überschreiben?"
 
 #: application/zoolu/layouts/cms.phtml:402
-#: application/zoolu/layouts/cms-list.phtml:389
+#: application/zoolu/layouts/cms-list.phtml:391
 msgid "Portals"
 msgstr "Portale"
 
@@ -1417,65 +1489,20 @@ msgstr "Wollen Sie diesen Filter wirklich löschen?"
 msgid "Error_filter"
 msgstr "Folgender Filter ist nicht gültig!"
 
-msgid "Edit_Landingpage"
-msgstr "Landingpage editieren"
+#~ msgid "targetpage"
+#~ msgstr "Zielseite"
 
-msgid "New_Landingpage"
-msgstr "Neue Landingpage"
+#~ msgid "url"
+#~ msgstr "Landingpage URL"
 
-msgid "targetpage"
-msgstr "Zielseite"
+#~ msgid "targetlanguage"
+#~ msgstr "Sprache der Zielseite"
 
-msgid "url"
-msgstr "Landingpage URL"
+#~ msgid "redirect"
+#~ msgstr "Weiterleitung"
 
-msgid "targetlanguage"
-msgstr "Sprache der Zielseite"
-
-msgid "redirect"
-msgstr "Weiterleitung"
-
-msgid "changeUser"
-msgstr "Letzte Änderung von"
-
-msgid "General_information_landingpage"
-msgstr "Informationen zur Konfiguration einer Landing Page"
-
-msgid "Landingpage_url"
-msgstr "Landing Page URL"
-
-msgid "Landingpage_url_desc"
-msgstr "(relativer Pfad z.B. für Wunsch URL: www.meineseite.com/meineZielURL nur meineZielURL eingeben)"
-
-msgid "Landingpage_link"
-msgstr "Darzustellende Inhaltsseite"
-
-msgid "Contentpage"
-msgstr "Inhaltsseite"
-
-msgid "Landingpage_language"
-msgstr "Sprache"
-
-msgid "Landingpage_language_desc"
-msgstr "in der die gewählte Inhaltsseite angezeigt werden soll"
-
-msgid "Landingpage_redirect"
-msgstr "Landing Page soll als URL sichtbar bleiben und nicht auf Zielseite umleiten."
-
-msgid "Landingpage_redirect_desc"
-msgstr "(Achtung: Gefahr für 'Duplikate Content')"
-
-msgid "Assign_sitemaplink"
-msgstr "Gewünschte Inhaltsseite wählen"
-
-msgid "Pagetitle"
-msgstr "Seitentitel"
-
-msgid "active"
-msgstr "aktiviert"
-
-msgid "deactivated"
-msgstr "deaktiviert"
+#~ msgid "changeUser"
+#~ msgstr "Letzte Änderung von"
 
 #~ msgid "Publish"
 #~ msgstr "Sicherheit"

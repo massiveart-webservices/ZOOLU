@@ -354,6 +354,74 @@ class Newsletters_NewsletterController extends AuthControllerAction {
     $this->view->assign('sortOrder', $strSortOrder);
     $this->view->assign('searchValue', $strSearchValue);
   }
+  
+  /**
+   * exportAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function exportAction(){
+    $this->core->logger->debug('newsletters->controllers->NewsletterController->exportAction()');
+    
+    $strNewsletterId = $this->getRequest()->getParam('id');
+    $strData= $this->getRequest()->getParam('data');
+    $strExport = '';
+    
+    $objNewsletterData = $this->getModelNewsletters()->load($strNewsletterId);
+    if(count($objNewsletterData) > 0){
+      $objNewsletterDb = $objNewsletterData->current();
+      $objNewsletter = $this->buildCampaign($objNewsletterDb);
+      $objNewsletter->loadStatistics();
+      
+      switch($strData){
+        case 'unsubscribes':
+          $arrData = $objNewsletter->getUnsubscribes();
+          break;
+        case 'complaints':
+          $arrData = $objNewsletter->getComplaints();
+          break;
+        case 'bounces':
+          $arrData = $objNewsletter->getBounces();
+          break;
+      }
+      
+      if(count($arrData) > 0){
+        $strExport = implode(';', array_keys($arrData[0])).'
+';
+        foreach($arrData as $arrRow){
+          $strExport .= implode(';', $arrRow).'
+';
+        }
+      }
+      
+      $this->_helper->viewRenderer->setNoRender();
+      
+      // fix for IE catching or PHP bug issue
+      header("Pragma: public");
+      header("Expires: 0"); // set expiration time
+      header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+      // browser must download file from server instead of cache
+      
+      // force download dialog
+      header("Content-Type: application/force-download; charset=utf-8");
+      header("Content-Type: application/octet-stream; charset=utf-8");
+      header("Content-Type: application/csv; charset=utf-8");
+      
+      // Set filename
+      header("Content-Disposition: attachment; filename=\"newsletter".$strNewsletterId."-Statistics.csv\"");
+      
+      /**
+       * The Content-transfer-encoding header should be binary, since the file will be read
+       * directly from the disk and the raw bytes passed to the downloading computer.
+       * The Content-length header is useful to set for downloads. The browser will be able to
+       * show a progress meter as a file downloads. The content-lenght can be determines by
+       * filesize function returns the size of a file.
+       */
+      header("Content-Transfer-Encoding: binary");
+      
+      echo $strExport;
+    }
+  }
 
   /**
    * addformAction

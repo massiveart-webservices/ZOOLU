@@ -31,48 +31,39 @@
  */
 
 /**
- * MailChimpException
+ * SubscriberException
  *
  *
  * Version history (please keep backward compatible):
- * 1.0, 2011-06-09: Thomas Schedler
+ * 1.0, 2012-01-31: Daniel Rotter
  *
- * @author Thomas Schedler <tsh@massiveart.com>
+ * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  * @package massiveart.contact.replication.MailChimp
  * @subpackage MailChimpException
  */
-class MailChimpException extends Exception  {
-  
-	/**
-   * @var null|Exception
-   */
-  private $_previous = null;
+class SubscriberException extends Exception {
   
   /**
-   * Construct the exception
-   *
-   * @param  string $msg
-   * @param  int $code
-   * @param  Exception $previous
-   * @return void
+   * The email of the subscriber, which has thrown this exception
+   * @var string
    */
-  public function __construct($msg = '', $code = 0, Exception $previous = null){
+  private $_email;
+  
+  /**
+   * @param string $email
+   * @param string $msg
+   * @param number $code
+   */
+  public function __construct($email, $msg = '', $code = 0){
+    $this->_email = $email;
     parent::__construct($msg, (int) $code);
-    $this->_previous = $previous;
   }
   
   /**
-   * String representation of the exception
-   *
    * @return string
    */
-  public function __toString(){
-    if(null !== ($e = $this->getPrevious())) {
-      return $e->__toString() 
-          . "\n\nNext " 
-          . parent::__toString();
-    }
-    return parent::__toString();
+  public function getEmail(){
+    return $this->_email;
   }
 }

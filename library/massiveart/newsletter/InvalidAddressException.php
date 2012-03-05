@@ -30,49 +30,28 @@
  * @version    $Id: version.php
  */
 
+require_once(dirname(__FILE__).'/SubscriberException.php');
+
 /**
- * MailChimpException
+ * InvalidAddressException
  *
  *
  * Version history (please keep backward compatible):
- * 1.0, 2011-06-09: Thomas Schedler
+ * 1.0, 2012-01-31: Daniel Rotter
  *
- * @author Thomas Schedler <tsh@massiveart.com>
+ * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  * @package massiveart.contact.replication.MailChimp
  * @subpackage MailChimpException
  */
-class MailChimpException extends Exception  {
-  
-	/**
-   * @var null|Exception
-   */
-  private $_previous = null;
+class InvalidAddressException extends SubscriberException  {
   
   /**
-   * Construct the exception
-   *
-   * @param  string $msg
-   * @param  int $code
-   * @param  Exception $previous
-   * @return void
+   * @param string $email
+   * @param string $msg
+   * @param number $code
    */
-  public function __construct($msg = '', $code = 0, Exception $previous = null){
-    parent::__construct($msg, (int) $code);
-    $this->_previous = $previous;
-  }
-  
-  /**
-   * String representation of the exception
-   *
-   * @return string
-   */
-  public function __toString(){
-    if(null !== ($e = $this->getPrevious())) {
-      return $e->__toString() 
-          . "\n\nNext " 
-          . parent::__toString();
-    }
-    return parent::__toString();
+  public function __construct($email){
+    parent::__construct($email, '', 0);
   }
 }

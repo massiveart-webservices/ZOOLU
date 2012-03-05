@@ -49,6 +49,7 @@ class MailChimpList {
   const API_ERROR_CODE_MEMBER_ALREADY_SUBSCRIBED = 214;
   const API_ERROR_CODE_MEMBER_DOES_NOT_BELONG_TO_LIST = 215;
   const API_ERROR_CODE_MEMBER_NOT_EXIST = 232;
+  const API_ERROR_CODE_TIMEOUT = -98;
   
   /**
    * @var MailChimpConfig
@@ -56,11 +57,17 @@ class MailChimpList {
   private $objConfig;
   
   /**
+   * @var Core
+   */
+  private $core;
+  
+  /**
    * Constructor
    * @author Thomas Schedler <tsh@massiveart.com>
    */
   public function __construct(MailChimpConfig $objConfig = null){
     $this->objConfig = $objConfig;
+    $this->core = Zend_Registry::get('Core');
   }
   
   /**
@@ -93,7 +100,7 @@ class MailChimpList {
    * @param $objMember
    * @author Thomas Schedler <tsh@massiveart.com>
    */
-  public function update(MailChimpMember $objMember, $blnSubscribed = true) {
+  public function update(MailChimpMember $objMember, $blnSubscribed) {
     
     $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
     

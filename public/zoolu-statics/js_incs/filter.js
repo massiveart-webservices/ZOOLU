@@ -65,6 +65,11 @@ Massiveart.Filter = Class.create({
     });
     
     $('lineInstances').value = $('lineInstances').value + '['+lineId+']';
+    if(arrLines.length >= 5){
+      $$('div.plus').each(function(element){
+        element.hide();
+      });
+    }
   },
   
   /**
@@ -81,6 +86,12 @@ Massiveart.Filter = Class.create({
       }
       
       $('line_'+lineId).remove();
+      
+      if(arrLines.length < 5){
+        $$('div.plus').each(function(element){
+          element.show();
+        });
+      }
     }
   },
   
@@ -90,7 +101,7 @@ Massiveart.Filter = Class.create({
   updateNavigation: function(){
     new Ajax.Updater('naviitem'+myNavigation.rootLevelId+'menu', '/zoolu/contacts/subscriber/listfilter', {
       parameters: {
-        rootLevelId: myNavigation.rootLevelId,
+        rootLevelId: myNavigation.rootLevelId
       },
       evalScripts: true,
       onComplete: function(){

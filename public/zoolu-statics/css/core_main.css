@@ -179,7 +179,8 @@ Content List View */
 .topusername,
 .topcountry,
 .topsubscribed,
-.topdirty {
+.topdirty,
+.tophardbounce {
     background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
     height: 26px;
     padding: 0 11px 0 11px;
