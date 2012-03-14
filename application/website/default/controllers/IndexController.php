@@ -485,9 +485,9 @@ class IndexController extends Zend_Controller_Action
                                                                   'rootLevelId'  => $this->objPage->getRootLevelId(),
                                                                   'theme'        => $this->objTheme->path,
                                                                   'segmentation' => array(
-                                                                    'id'           => $this->intSegmentId,
-                                                                    'code'         => $this->strSegmentCode,
-                                                                    'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
+                                                                      'id'           => $this->intSegmentId,
+                                                                      'code'         => $this->strSegmentCode,
+                                                                      'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
                                                                   )
                                                              ));
                 }
@@ -976,7 +976,14 @@ class IndexController extends Zend_Controller_Action
      */
     private function initPageCache($strUrl)
     {
-        $this->strCacheId = 'page_' . $this->objTheme->idRootLevels . '_' . strtolower(str_replace('-', '_', $this->strLanguageCode)) . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
+        $this->strCacheId = 'page_' . $this->objTheme->idRootLevels;
+
+        // add segment to page cache key
+        if($this->objTheme->hasSegments == 1){
+            $this->strCacheId .= '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $this->strSegmentCode);
+        }
+
+        $this->strCacheId .= '_' . strtolower(str_replace('-', '_', $this->strLanguageCode)) . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
 
         $arrFrontendOptions = array(
             'lifetime'                => 604800, // cache lifetime (in seconds), if set to null, the cache is valid forever.
