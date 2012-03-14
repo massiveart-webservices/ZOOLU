@@ -198,11 +198,11 @@ class GenericDataTypePage extends GenericDataTypeAbstract {
                                         $arrFrontendOptions,
                                         $arrBackendOptions);
 
-        $strCacheId = 'page_'.$this->Setup()->getRootLevelId().'_'.strtolower(str_replace('-', '_', $strUrlLanguageCode)).'_'.preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
-
-        $objCache->remove($strCacheId);
-
-        $objCache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('StartPage', 'PageType_'.$this->core->sysConfig->page_types->overview->id));
+        $objCache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
+          'StartPage',
+          'PageType_'.$this->core->sysConfig->page_types->overview->id,
+          'PageId_'.$objPage->pageId.'_'.$this->setup->getLanguageId())
+        );
       }
       return $this->setup->getElementId();
     }catch (Exception $exc) {
