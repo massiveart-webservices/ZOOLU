@@ -1154,8 +1154,13 @@ class PageHelper {
         if($strDescription != ''){
           $strReturn .= '<p>'.$strDescription.'</p>';
         }
+        
+        $strReadMoreText = $this->objTranslate->_('more_information');
+          if ($this->objPageEntry->read_more_text != '') {
+          $strReadMoreText = $this->objPageEntry->read_more_text;
+        }
         $strReturn .= '
-            <a href="'.$objPageEntry->url.'">Weiter lesen...</a>
+            <a href="'.$objPageEntry->url.'">'$strReadMoreText'</a>
             <div class="clear"></div>
           </div>';
       }
