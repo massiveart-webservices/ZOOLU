@@ -1160,7 +1160,7 @@ class PageHelper {
           $strReadMoreText = $this->objPageEntry->read_more_text;
         }
         $strReturn .= '
-            <a href="'.$objPageEntry->url.'">'$strReadMoreText'</a>
+            <a href="'.$objPageEntry->url.'">'.$strReadMoreText.'</a>
             <div class="clear"></div>
           </div>';
       }
