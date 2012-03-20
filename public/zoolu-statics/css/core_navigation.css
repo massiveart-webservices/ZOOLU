@@ -62,6 +62,13 @@ Logo & FAQ */
     padding: 2px 5px 0 0;
 }
 
+.openWebsite {
+  float: left;
+  margin: 0;
+  padding: 2px 5px 0 0;
+  font-weight: bold;
+}
+
 .faqicon {
     float: left;
 }
@@ -128,15 +135,13 @@ Navigation Top */
 #navtopwrapper {
     position: absolute;
     top: 37px;
-    left: 302px; /* 265px */
+    left: 260px; /* 265px */
     right: 10px;
     background-color: #754480;
     height: 40px;
     padding-right: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-bottomright: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px; 
 }
 
 #navtopinner {

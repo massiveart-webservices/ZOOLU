@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 16:35+0100\n"
+"POT-Creation-Date: 2012-03-20 11:13+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Cornelius Hansjakob <cornelius.hansjakob@massiveart.com>\n"
+"Last-Translator: Raphael Stocker <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Language: English\n"
 "X-Poedit-Country: AUSTRIA\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /Volumes/massive-brunello/websites/newsletter.zoolu.area51.at/\n"
+"X-Poedit-Basepath: /Volumes/massive-brunello/websites/zoolu.area51.at/\n"
 "X-Poedit-SearchPath-0: application/zoolu\n"
 "X-Poedit-SearchPath-1: public/zoolu-statics\n"
 "X-Poedit-SearchPath-2: library/massiveart\n"
@@ -1140,9 +1140,13 @@ msgid "Password"
 msgstr "Password"
 
 #: application/zoolu/modules/users/views/scripts/user/login.phtml:60
-#: application/zoolu/modules/users/views/scripts/user/login.phtml:77
+#: application/zoolu/modules/users/views/scripts/user/login.phtml:78
 msgid "Password_forgotten"
 msgstr "Password forgotten?"
+
+#: application/zoolu/modules/users/views/scripts/user/login.phtml:65
+msgid "Back_to_website"
+msgstr "Back to website"
 
 #: application/zoolu/modules/global/views/scripts/navigation/childnavigation.phtml:14
 #: application/zoolu/modules/global/views/scripts/navigation/rootnavigation.phtml:23
@@ -1197,185 +1201,198 @@ msgstr "Add contents"
 #: application/zoolu/layouts/properties.phtml:28
 #: application/zoolu/layouts/newsletters-list.phtml:28
 #: application/zoolu/layouts/users.phtml:27
-#: application/zoolu/layouts/contacts-list.phtml:28
 #: application/zoolu/layouts/cms-list.phtml:28
+msgid "Open_website"
+msgstr "Open website"
+
+#: application/zoolu/layouts/global-list.phtml:29
+#: application/zoolu/layouts/cms.phtml:29
+#: application/zoolu/layouts/media.phtml:29
+#: application/zoolu/layouts/index.phtml:27
+#: application/zoolu/layouts/contacts-tree.phtml:29
+#: application/zoolu/layouts/global-tree.phtml:29
+#: application/zoolu/layouts/properties.phtml:29
+#: application/zoolu/layouts/newsletters-list.phtml:29
+#: application/zoolu/layouts/users.phtml:28
+#: application/zoolu/layouts/contacts-list.phtml:28
+#: application/zoolu/layouts/cms-list.phtml:29
 msgid "Report_bugs"
 msgstr "Report a bug"
 
-#: application/zoolu/layouts/global-list.phtml:28
-#: application/zoolu/layouts/cms.phtml:28
-#: application/zoolu/layouts/media.phtml:28
-#: application/zoolu/layouts/index.phtml:26
-#: application/zoolu/layouts/contacts-tree.phtml:28
-#: application/zoolu/layouts/global-tree.phtml:28
-#: application/zoolu/layouts/properties.phtml:28
-#: application/zoolu/layouts/newsletters-list.phtml:28
-#: application/zoolu/layouts/users.phtml:27
+#: application/zoolu/layouts/global-list.phtml:29
+#: application/zoolu/layouts/cms.phtml:29
+#: application/zoolu/layouts/media.phtml:29
+#: application/zoolu/layouts/index.phtml:27
+#: application/zoolu/layouts/contacts-tree.phtml:29
+#: application/zoolu/layouts/global-tree.phtml:29
+#: application/zoolu/layouts/properties.phtml:29
+#: application/zoolu/layouts/newsletters-list.phtml:29
+#: application/zoolu/layouts/users.phtml:28
 #: application/zoolu/layouts/contacts-list.phtml:28
-#: application/zoolu/layouts/cms-list.phtml:28
+#: application/zoolu/layouts/cms-list.phtml:29
 msgid "Help_and_FAQ"
 msgstr "Help & FAQ"
 
-#: application/zoolu/layouts/global-list.phtml:63
-#: application/zoolu/layouts/cms.phtml:74
-#: application/zoolu/layouts/media.phtml:78
-#: application/zoolu/layouts/contacts-tree.phtml:127
-#: application/zoolu/layouts/global-tree.phtml:74
-#: application/zoolu/layouts/properties.phtml:133
-#: application/zoolu/layouts/newsletters-list.phtml:63
-#: application/zoolu/layouts/users.phtml:62
+#: application/zoolu/layouts/global-list.phtml:60
+#: application/zoolu/layouts/cms.phtml:71
+#: application/zoolu/layouts/media.phtml:75
+#: application/zoolu/layouts/contacts-tree.phtml:124
+#: application/zoolu/layouts/global-tree.phtml:71
+#: application/zoolu/layouts/properties.phtml:130
+#: application/zoolu/layouts/newsletters-list.phtml:60
+#: application/zoolu/layouts/users.phtml:59
 #: application/zoolu/layouts/contacts-list.phtml:63
-#: application/zoolu/layouts/cms-list.phtml:63
+#: application/zoolu/layouts/cms-list.phtml:60
 msgid "Saved"
 msgstr "Saved"
 
-#: application/zoolu/layouts/global-list.phtml:64
-#: application/zoolu/layouts/cms.phtml:75
-#: application/zoolu/layouts/media.phtml:79
-#: application/zoolu/layouts/contacts-tree.phtml:128
-#: application/zoolu/layouts/global-tree.phtml:75
-#: application/zoolu/layouts/properties.phtml:134
-#: application/zoolu/layouts/newsletters-list.phtml:64
-#: application/zoolu/layouts/users.phtml:63
+#: application/zoolu/layouts/global-list.phtml:61
+#: application/zoolu/layouts/cms.phtml:72
+#: application/zoolu/layouts/media.phtml:76
+#: application/zoolu/layouts/contacts-tree.phtml:125
+#: application/zoolu/layouts/global-tree.phtml:72
+#: application/zoolu/layouts/properties.phtml:131
+#: application/zoolu/layouts/newsletters-list.phtml:61
+#: application/zoolu/layouts/users.phtml:60
 #: application/zoolu/layouts/contacts-list.phtml:64
-#: application/zoolu/layouts/cms-list.phtml:64
+#: application/zoolu/layouts/cms-list.phtml:61
 msgid "Can_not_Save"
 msgstr "Can not save"
 
-#: application/zoolu/layouts/global-list.phtml:65
-#: application/zoolu/layouts/cms.phtml:76
-#: application/zoolu/layouts/media.phtml:80
-#: application/zoolu/layouts/contacts-tree.phtml:129
-#: application/zoolu/layouts/global-tree.phtml:76
-#: application/zoolu/layouts/properties.phtml:135
-#: application/zoolu/layouts/newsletters-list.phtml:65
-#: application/zoolu/layouts/users.phtml:64
+#: application/zoolu/layouts/global-list.phtml:62
+#: application/zoolu/layouts/cms.phtml:73
+#: application/zoolu/layouts/media.phtml:77
+#: application/zoolu/layouts/contacts-tree.phtml:126
+#: application/zoolu/layouts/global-tree.phtml:73
+#: application/zoolu/layouts/properties.phtml:132
+#: application/zoolu/layouts/newsletters-list.phtml:62
+#: application/zoolu/layouts/users.phtml:61
 #: application/zoolu/layouts/contacts-list.phtml:65
-#: application/zoolu/layouts/cms-list.phtml:65
+#: application/zoolu/layouts/cms-list.phtml:62
 msgid "Deleted"
 msgstr "Deleted"
 
-#: application/zoolu/layouts/global-list.phtml:235
-#: application/zoolu/layouts/cms.phtml:301
-#: application/zoolu/layouts/media.phtml:334
-#: application/zoolu/layouts/media.phtml:455
-#: application/zoolu/layouts/index.phtml:194
-#: application/zoolu/layouts/index.phtml:251
-#: application/zoolu/layouts/contacts-tree.phtml:251
-#: application/zoolu/layouts/global-tree.phtml:249
-#: application/zoolu/layouts/properties.phtml:257
-#: application/zoolu/layouts/newsletters-list.phtml:281
-#: application/zoolu/layouts/users.phtml:234
+#: application/zoolu/layouts/global-list.phtml:232
+#: application/zoolu/layouts/cms.phtml:298
+#: application/zoolu/layouts/media.phtml:331
+#: application/zoolu/layouts/media.phtml:452
+#: application/zoolu/layouts/index.phtml:185
+#: application/zoolu/layouts/index.phtml:242
+#: application/zoolu/layouts/contacts-tree.phtml:248
+#: application/zoolu/layouts/global-tree.phtml:246
+#: application/zoolu/layouts/properties.phtml:254
+#: application/zoolu/layouts/newsletters-list.phtml:278
+#: application/zoolu/layouts/users.phtml:231
 #: application/zoolu/layouts/contacts-list.phtml:310
-#: application/zoolu/layouts/cms-list.phtml:291
+#: application/zoolu/layouts/cms-list.phtml:288
 msgid "Ok"
 msgstr "Ok"
 
-#: application/zoolu/layouts/global-list.phtml:284
-#: application/zoolu/layouts/cms.phtml:386
-#: application/zoolu/layouts/media.phtml:511
-#: application/zoolu/layouts/index.phtml:298
-#: application/zoolu/layouts/contacts-tree.phtml:308
-#: application/zoolu/layouts/global-tree.phtml:334
-#: application/zoolu/layouts/properties.phtml:306
-#: application/zoolu/layouts/newsletters-list.phtml:379
-#: application/zoolu/layouts/users.phtml:284
+#: application/zoolu/layouts/global-list.phtml:281
+#: application/zoolu/layouts/cms.phtml:383
+#: application/zoolu/layouts/media.phtml:508
+#: application/zoolu/layouts/index.phtml:289
+#: application/zoolu/layouts/contacts-tree.phtml:305
+#: application/zoolu/layouts/global-tree.phtml:331
+#: application/zoolu/layouts/properties.phtml:303
+#: application/zoolu/layouts/newsletters-list.phtml:376
+#: application/zoolu/layouts/users.phtml:281
 #: application/zoolu/layouts/contacts-list.phtml:427
-#: application/zoolu/layouts/cms-list.phtml:376
+#: application/zoolu/layouts/cms-list.phtml:373
 msgid "Delete_"
 msgstr "Delete?"
 
-#: application/zoolu/layouts/global-list.phtml:285
-#: application/zoolu/layouts/cms.phtml:387
-#: application/zoolu/layouts/media.phtml:512
-#: application/zoolu/layouts/global-tree.phtml:335
-#: application/zoolu/layouts/cms-list.phtml:377
+#: application/zoolu/layouts/global-list.phtml:282
+#: application/zoolu/layouts/cms.phtml:384
+#: application/zoolu/layouts/media.phtml:509
+#: application/zoolu/layouts/global-tree.phtml:332
+#: application/zoolu/layouts/cms-list.phtml:374
 msgid "Delete_folder"
 msgstr "Do you want to delete this folder?"
 
-#: application/zoolu/layouts/global-list.phtml:296
-#: application/zoolu/layouts/global-tree.phtml:354
+#: application/zoolu/layouts/global-list.phtml:293
+#: application/zoolu/layouts/global-tree.phtml:351
 msgid "Global"
 msgstr "Global"
 
-#: application/zoolu/layouts/cms.phtml:139
-#: application/zoolu/layouts/cms-list.phtml:181
+#: application/zoolu/layouts/cms.phtml:136
+#: application/zoolu/layouts/cms-list.phtml:178
 msgid "Maintenance_properties"
 msgstr "Maintenance properties"
 
-#: application/zoolu/layouts/cms.phtml:243
-#: application/zoolu/layouts/media.phtml:276
-#: application/zoolu/layouts/index.phtml:59
-#: application/zoolu/layouts/global-tree.phtml:191
+#: application/zoolu/layouts/cms.phtml:240
+#: application/zoolu/layouts/media.phtml:273
+#: application/zoolu/layouts/index.phtml:50
+#: application/zoolu/layouts/global-tree.phtml:188
 msgid "New_message"
 msgstr "New message"
 
-#: application/zoolu/layouts/cms.phtml:388
-#: application/zoolu/layouts/cms-list.phtml:378
+#: application/zoolu/layouts/cms.phtml:385
+#: application/zoolu/layouts/cms-list.phtml:375
 msgid "Delete_page"
 msgstr "Do you want to delete this page?"
 
-#: application/zoolu/layouts/cms.phtml:389
-#: application/zoolu/layouts/global-tree.phtml:340
-#: application/zoolu/layouts/cms-list.phtml:379
+#: application/zoolu/layouts/cms.phtml:386
+#: application/zoolu/layouts/global-tree.phtml:337
+#: application/zoolu/layouts/cms-list.phtml:376
 msgid "Copy_language_override"
 msgstr "Would you like to override the existing data?"
 
-#: application/zoolu/layouts/cms.phtml:402
-#: application/zoolu/layouts/cms-list.phtml:391
+#: application/zoolu/layouts/cms.phtml:399
+#: application/zoolu/layouts/cms-list.phtml:388
 msgid "Portals"
 msgstr "Portals"
 
-#: application/zoolu/layouts/media.phtml:127
-#: application/zoolu/layouts/contacts-tree.phtml:64
-#: application/zoolu/layouts/properties.phtml:70
-#: application/zoolu/layouts/newsletters-list.phtml:73
-#: application/zoolu/layouts/users.phtml:72
+#: application/zoolu/layouts/media.phtml:124
+#: application/zoolu/layouts/contacts-tree.phtml:61
+#: application/zoolu/layouts/properties.phtml:67
+#: application/zoolu/layouts/newsletters-list.phtml:70
+#: application/zoolu/layouts/users.phtml:69
 #: application/zoolu/layouts/contacts-list.phtml:73
 msgid "New"
 msgstr "New"
 
-#: application/zoolu/layouts/media.phtml:142
+#: application/zoolu/layouts/media.phtml:139
 msgid "Open"
 msgstr "Open"
 
-#: application/zoolu/layouts/media.phtml:143
+#: application/zoolu/layouts/media.phtml:140
 msgid "Move"
 msgstr "Move"
 
-#: application/zoolu/layouts/media.phtml:385
+#: application/zoolu/layouts/media.phtml:382
 msgid "Upload_your_media"
 msgstr "Upload your media"
 
-#: application/zoolu/layouts/media.phtml:508
+#: application/zoolu/layouts/media.phtml:505
 msgid "All_files"
 msgstr "All files"
 
-#: application/zoolu/layouts/media.phtml:513
+#: application/zoolu/layouts/media.phtml:510
 msgid "Delete_image"
 msgstr "Do you want to delete this image?"
 
-#: application/zoolu/layouts/media.phtml:514
+#: application/zoolu/layouts/media.phtml:511
 msgid "Delete_images"
 msgstr "Do you want to delete these %i images?"
 
-#: application/zoolu/layouts/media.phtml:515
+#: application/zoolu/layouts/media.phtml:512
 msgid "Delete_document"
 msgstr "Do you want to delete this document?"
 
-#: application/zoolu/layouts/media.phtml:516
+#: application/zoolu/layouts/media.phtml:513
 msgid "Delete_documents"
 msgstr "Do you want to delete these %i documents?"
 
-#: application/zoolu/layouts/media.phtml:517
+#: application/zoolu/layouts/media.phtml:514
 msgid "Delete_video"
 msgstr "Do you want to delete this video?"
 
-#: application/zoolu/layouts/media.phtml:518
+#: application/zoolu/layouts/media.phtml:515
 msgid "Delete_videos"
 msgstr "Do you want to delete these %i videos?"
 
-#: application/zoolu/layouts/media.phtml:533
+#: application/zoolu/layouts/media.phtml:530
 msgid "Media"
 msgstr "Media"
 
@@ -1383,73 +1400,73 @@ msgstr "Media"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: application/zoolu/layouts/index.phtml:84
+#: application/zoolu/layouts/index.phtml:75
 msgid "All_messages"
 msgstr "All messages"
 
-#: application/zoolu/layouts/index.phtml:89
+#: application/zoolu/layouts/index.phtml:80
 msgid "My_Messages"
 msgstr "My messages"
 
-#: application/zoolu/layouts/index.phtml:94
+#: application/zoolu/layouts/index.phtml:85
 msgid "Completed_tasks"
 msgstr "Completed tasks"
 
-#: application/zoolu/layouts/index.phtml:297
+#: application/zoolu/layouts/index.phtml:288
 msgid "Delete_Activity"
 msgstr "Do you want to delete this message/task?"
 
-#: application/zoolu/layouts/contacts-tree.phtml:309
-#: application/zoolu/layouts/properties.phtml:308
+#: application/zoolu/layouts/contacts-tree.phtml:306
+#: application/zoolu/layouts/properties.phtml:305
 msgid "Delete_unit"
 msgstr "Do you want to delete this group?"
 
-#: application/zoolu/layouts/contacts-tree.phtml:311
-#: application/zoolu/layouts/properties.phtml:310
+#: application/zoolu/layouts/contacts-tree.phtml:308
+#: application/zoolu/layouts/properties.phtml:307
 msgid "Delete_contact"
 msgstr "Do you want to delete this contact?"
 
-#: application/zoolu/layouts/global-tree.phtml:337
+#: application/zoolu/layouts/global-tree.phtml:334
 msgid "Delete_press"
 msgstr "Do you want to delete this press release?"
 
-#: application/zoolu/layouts/global-tree.phtml:338
+#: application/zoolu/layouts/global-tree.phtml:335
 msgid "Delete_course"
 msgstr "Do you want to delete this course?"
 
-#: application/zoolu/layouts/global-tree.phtml:339
+#: application/zoolu/layouts/global-tree.phtml:336
 msgid "Delete_event"
 msgstr "Do you want to delete this event?"
 
-#: application/zoolu/layouts/properties.phtml:307
+#: application/zoolu/layouts/properties.phtml:304
 msgid "Delete_category"
 msgstr "Do you want to delete this category?"
 
-#: application/zoolu/layouts/newsletters-list.phtml:144
+#: application/zoolu/layouts/newsletters-list.phtml:141
 msgid "Print"
 msgstr "Print"
 
-#: application/zoolu/layouts/newsletters-list.phtml:151
+#: application/zoolu/layouts/newsletters-list.phtml:148
 msgid "Overview"
 msgstr "Overview"
 
-#: application/zoolu/layouts/newsletters-list.phtml:152
+#: application/zoolu/layouts/newsletters-list.phtml:149
 msgid "Detail"
 msgstr "Detail"
 
-#: application/zoolu/layouts/newsletters-list.phtml:164
+#: application/zoolu/layouts/newsletters-list.phtml:161
 msgid "TestSend"
 msgstr "Test Send"
 
-#: application/zoolu/layouts/newsletters-list.phtml:331
+#: application/zoolu/layouts/newsletters-list.phtml:328
 msgid "Newsletter_statistic"
 msgstr "Newsletter statistics"
 
-#: application/zoolu/layouts/newsletters-list.phtml:380
+#: application/zoolu/layouts/newsletters-list.phtml:377
 msgid "Delete_newsletter"
 msgstr "Do you want to delete this newsletter?"
 
-#: application/zoolu/layouts/users.phtml:287
+#: application/zoolu/layouts/users.phtml:284
 msgid "User_administration"
 msgstr "User Administration"
 

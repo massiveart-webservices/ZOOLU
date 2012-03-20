@@ -16,6 +16,10 @@ body {
 /* ----------------
 Modus Container */
 
+.headerContainer {
+  padding: 40px 0 0 0;
+} 
+
 .divModusContainer {
   position:fixed; 
   z-index:80; 
@@ -73,5 +77,44 @@ Modus Container */
   font-weight:bold;
 }
 
+.divModusCache {
+  float:right; 
+  padding:10px 20px 0 0;
+  font-weight:bold;
+  cursor:pointer;
+}
 
+.button25leftOn {
+  background: url(/zoolu-statics/images/buttons/button_yellow_left.png) no-repeat;
+  width: 6px !important;  
+  height: 25px;
+  float:left;
+}
+
+.button25rightOn {
+  background: url(/zoolu-statics/images/buttons/button_yellow_right.png) no-repeat;
+  width: 6px !important;
+  height: 25px;
+  float:left;
+}
+
+.button25centerOn {
+  background: url(/zoolu-statics/images/buttons/button_yellow_center.png) repeat-x;
+  height:25px;
+  float:left;
+}
+
+.button25centerOn div {
+  padding-top:4px;
+}
+
+.divModusCache .busy {  
+  background-image: url(/zoolu-statics/images/main/loader_small_purple.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.divModusCache .busy div {  
+  visibility: hidden;
+} 
  

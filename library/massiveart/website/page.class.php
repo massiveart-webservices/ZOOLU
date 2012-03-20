@@ -1796,6 +1796,7 @@ class Page {
               $objPageEntry = $this->arrContainer[$intContainerId]->getPageEntry('entry_'.$objPageRow->id);
               $objPageEntry->datetime = (isset($objPageRow->datetime)) ? strtotime($objPageRow->datetime) : '';
               $objPageEntry->shortdescription = (isset($objPageRow->shortdescription)) ? $objPageRow->shortdescription : '';
+              $objPageEntry->read_more_text = (isset($objPageRow->read_more_text)) ? $objPageRow->read_more_text : '';
               $objPageEntry->description = (isset($objPageRow->description)) ? $objPageRow->description : '';
               $objPageEntry->slogan = (isset($objPageRow->slogan)) ? $objPageRow->slogan : '';              
               $objPageEntry->filename = (isset($objPageRow->filename)) ? $objPageRow->filename : '';
