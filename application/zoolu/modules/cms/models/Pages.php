@@ -1058,13 +1058,16 @@ class Model_Pages {
       $strSqlInstanceFields = '';
       if(strpos($strGenForm, $this->core->sysConfig->form->ids->pages->overview) !== false){
         $strSqlInstanceFields = ' `page-'.$strGenForm.'-Instances`.shortdescription,
+                                  `page-'.$strGenForm.'-Instances`.read_more_text,
                                   `page-'.$strGenForm.'-Instances`.description,';
       }else if(strpos($strGenForm, $this->core->sysConfig->form->ids->events->default.'-1') !== false){ // FIXME : genform-version (e.g. DEFAULT_EVENT-1)
         $strSqlInstanceFields = ' `page-'.$strGenForm.'-Instances`.shortdescription,
                                   `page-'.$strGenForm.'-Instances`.description,
+                                  `page-'.$strGenForm.'-Instances`.read_more_text,
                                   `page-'.$strGenForm.'-Instances`.event_status,';
       }else{
         $strSqlInstanceFields = ' `page-'.$strGenForm.'-Instances`.shortdescription,
+                                  `page-'.$strGenForm.'-Instances`.read_more_text,
                                   `page-'.$strGenForm.'-Instances`.description,';
       }
 

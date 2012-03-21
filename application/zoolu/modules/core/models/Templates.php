@@ -168,8 +168,8 @@ class Model_Templates {
    * @return Zend_Db_Table_Rowset
    * @version 1.0
    */
-  public function loadActiveTemplates($blnIsStartElement = false, $intElementTypeId, $intParentTypeId, $intFormTypeId){
-    $this->core->logger->debug('core->models->Model_Templates->loadActiveTemplates('.var_export($blnIsStartElement, true).', '.$intElementTypeId.', '.$intParentTypeId.', '.$intFormTypeId.')');
+  public function loadActiveTemplates($blnIsStartElement = false, $intElementTypeId, $intParentTypeId, $intFormTypeId, $intRootLevelId){
+    $this->core->logger->debug('core->models->Model_Templates->loadActiveTemplates('.var_export($blnIsStartElement, true).', '.$intElementTypeId.', '.$intParentTypeId.', '.$intFormTypeId.', '.$intRootLevelId.')');
 
     $objSelect = $this->getTemplateTable()->select();
     $objSelect->setIntegrityCheck(false);
@@ -180,9 +180,11 @@ class Model_Templates {
                                         'filename',
                                         'thumbnail'));
     $objSelect->join('templateTypes', 'templateTypes.idTemplates = templates.id', array());
+    $objSelect->join('rootLevelTemplates', 'rootLevelTemplates.idTemplates = templates.id', array());
     $objSelect->join('types', 'types.id = templateTypes.idTypes', array());
     $objSelect->joinLeft('templateTitles', 'templateTitles.idTemplates = templates.id AND templateTitles.idLanguages = '.$this->intLanguageId, array('title'));
     $objSelect->where('templates.active = ?', 1);
+    $objSelect->where('rootLevelTemplates.idRootLevels = ?', $intRootLevelId);
     $objSelect->order('templateTitles.title');
     
     switch ($intFormTypeId){

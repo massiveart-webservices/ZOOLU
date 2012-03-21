@@ -290,6 +290,7 @@ class GenericForm extends Zend_Form {
 	 */
 	public function prepareForm(){
 		$this->core->logger->debug('massiveart->generic->forms->GenericForm->prepareForm()');
+		
 		try{
 
 			/**
@@ -385,12 +386,13 @@ class GenericForm extends Zend_Form {
               }
   
     			  }else{
+    			  	
     			    /**
                * go through fields of the region
                */
               foreach ($objRegion->getFields() as $objField) {
       			    $objSubForm->addField($objField, $objRegion->getRegionId());
-  
+                
                 /**
                  * add field to region
                  */
@@ -464,7 +466,7 @@ class GenericForm extends Zend_Form {
             }
     			}
   			}
-
+        
         $this->addSubForm($objSubForm, self::SUB_FROM_ID_PREFIX.$objSubForm->getId());
       }
 		}catch (Exception $exc) {
@@ -565,6 +567,7 @@ class GenericForm extends Zend_Form {
         $this->getElement($objField->name.$strNameExtension)->intFormTypeId = $this->objGenericForm->Setup()->getFormTypeId();
         $this->getElement($objField->name.$strNameExtension)->intElementTypeId = $this->objGenericForm->Setup()->getElementTypeId();
         $this->getElement($objField->name.$strNameExtension)->intParentTypeId = $this->objGenericForm->Setup()->getParentTypeId();
+        $this->getElement($objField->name.$strNameExtension)->intRootLevelId = $this->objGenericForm->Setup()->getRootLevelId();
       }
 
 	  }catch (Exception $exc) {

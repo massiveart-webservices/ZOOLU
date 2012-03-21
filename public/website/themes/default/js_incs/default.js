@@ -176,6 +176,20 @@ Default = Class.create({
       $(busyElement).removeClassName('busy');
       if(blnDisplay) $(busyElement).hide();
     }
-  }
-  
+  },
+
+  /**
+   * expireCache
+   */
+  expireCache: function(elId){
+    this.addBusyClass(elId, false);
+    new Ajax.Request('/zoolu-website/content/expire-cache', {
+      method: 'get',
+      evalScripts: true,
+      onComplete: function(transport) {
+        this.removeBusyClass(elId, false);
+        window.location.href = window.location.href;
+      }.bind(this)
+    });
+  } 
 });

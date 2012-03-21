@@ -1154,8 +1154,13 @@ class PageHelper {
         if($strDescription != ''){
           $strReturn .= '<p>'.$strDescription.'</p>';
         }
+        
+        $strReadMoreText = $this->objTranslate->_('more_information');
+          if ($this->objPageEntry->read_more_text != '') {
+          $strReadMoreText = $this->objPageEntry->read_more_text;
+        }
         $strReturn .= '
-            <a href="'.$objPageEntry->url.'">Weiter lesen...</a>
+            <a href="'.$objPageEntry->url.'">'.$strReadMoreText.'</a>
             <div class="clear"></div>
           </div>';
       }
@@ -1303,9 +1308,15 @@ class PageHelper {
                        <img alt="'.$this->objPageEntry->filetitle.'" title="'.$this->objPageEntry->filetitle.'" src="'.$this->core->config->domains->static->components.$this->core->sysConfig->media->paths->imgbase.$this->objPageEntry->filepath.$strImageFolder.'/'.$this->objPageEntry->filename.'?v='.$this->objPageEntry->fileversion.'"/>
                      </div>';
                   }
+                  
+                  $strReadMoreText = $this->objTranslate->_('more_information');
+                  if ($this->objPageEntry->read_more_text != '') {
+                    $strReadMoreText = $this->objPageEntry->read_more_text;
+                  }
+                  
                   $strTopPostHtmlOutput .= '
                       '.(($this->objPageEntry->shortdescription != '') ? '<p>'.htmlentities($this->objPageEntry->shortdescription, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</p>' : $this->objPageEntry->description).'
-                      <a href="'.$this->objPageEntry->url.'"'.(($this->objPageEntry->target !== false) ? ' target="'.$this->objPageEntry->target.'"' : '').'>Weiter lesen...</a>
+                      <a href="'.$this->objPageEntry->url.'"'.(($this->objPageEntry->target !== false) ? ' target="'.$this->objPageEntry->target.'"' : '').'>'.$strReadMoreText.'</a>
                     </div>';
   
                 }else{
@@ -1407,8 +1418,14 @@ class PageHelper {
                 if($strDescription != ''){
                   $strItem .= '<p>'.$strDescription.'</p>';
                 }                    
+                
+                $strReadMoreText = $this->objTranslate->_('more_information');
+                if ($objPageEntry->read_more_text != '') {
+                  $strReadMoreText = $objPageEntry->read_more_text;
+                }
+                
                 $strItem .= '
-                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$this->objTranslate->_('more_information').'</a>                
+                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$strReadMoreText.'</a>                
                     </div>
                     <div class="clear"></div>
                   </div>';
@@ -1440,9 +1457,15 @@ class PageHelper {
                     <div class="text">';
                 if($strDescription != ''){
                   $strItem .= '<p>'.$strDescription.'</p>';
-                }                    
+                }
+
+                $strReadMoreText = $this->objTranslate->_('more_information');
+                if ($objPageEntry->read_more_text != '') {
+                  $strReadMoreText = $objPageEntry->read_more_text;
+                }
+                
                 $strItem .= '
-                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$this->objTranslate->_('more_information').'</a>
+                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$strReadMoreText.'</a>
                     </div>
                     <div class="clear"></div>
                   </div>';
@@ -1474,9 +1497,15 @@ class PageHelper {
                     <div class="text">';
                 if($strDescription != ''){
                   $strItem .= '<p>'.$strDescription.'</p>';
-                }                    
+                }
+
+                $strReadMoreText = $this->objTranslate->_('more_information');
+                if ($objPageEntry->read_more_text != '') {
+                  $strReadMoreText = $objPageEntry->read_more_text;
+                }
+                
                 $strItem .= '
-                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$this->objTranslate->_('more_information').'</a>
+                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$strReadMoreText.'</a>
                     </div>
                     <div class="clear"></div>
                   </div>';
@@ -1520,9 +1549,15 @@ class PageHelper {
                     <div class="text">';
                 if($strDescription != ''){
                   $strItem .= '<p>'.$strDescription.'</p>';
-                }                    
+                }
+
+                $strReadMoreText = $this->objTranslate->_('more_information');
+                if ($objPageEntry->read_more_text != '') {
+                  $strReadMoreText = $objPageEntry->read_more_text;
+                }
+                
                 $strItem .= '
-                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$this->objTranslate->_('more_information').'</a>
+                      &raquo; <a href="'.$objPageEntry->url.'"'.(($objPageEntry->target !== false) ? ' target="'.$objPageEntry->target.'"' : '').'>'.$strReadMoreText.'</a>
                     </div>
                     <div class="clear"></div>
                   </div>';
