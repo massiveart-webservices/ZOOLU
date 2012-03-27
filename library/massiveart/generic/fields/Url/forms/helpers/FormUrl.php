@@ -111,7 +111,7 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement {
                   <div id="'.$this->view->escape($id).'_ToggleUrlHistory" class="urlHistoryContainer" style="display:none"></div>'; 
       }else{
         
-        $strTmpLanguageCode = ((array_key_exists('LanguageCode', $attribs)) ? $attribs['LanguageCode'] : $core->sysConfig->languages->default->code);
+        $strTmpLanguageCode = '/'.((array_key_exists('LanguageCode', $attribs)) ? $attribs['LanguageCode'] : $core->sysConfig->languages->default->code).'/';
         
         $strOutput .= '
                   <div class="urlwrapper" style="display:none">
