@@ -139,7 +139,7 @@ Navigation Top */
     right: 10px;
     background-color: #754480;
     height: 40px;
-    padding-right: 5px;
+    padding-right: 10px;
     border-radius: 5px;
     -moz-border-radius: 5px; 
 }
@@ -158,13 +158,10 @@ Navigation Top */
 
 .navtop {
     float: left;
-    margin-right: 10px;
 }
 
 .navtopinnerright {
     float: right;
-    margin-right: 10px;
-    margin-left: 10px;
 }
 
 .navtopcorner {
