@@ -510,8 +510,8 @@ class Model_Folders {
     $strFolderFilter = '';
     $strPageFilter = '';
     if(!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)){
-      $strFolderFilter = 'AND folderProperties.idStatus = '.$this->core->sysConfig->status->live;
-      $strPageFilter = 'AND pageProperties.idStatus = '.$this->core->sysConfig->status->live;
+      $strFolderFilter = ' AND folderProperties.idStatus = '.$this->core->sysConfig->status->live;
+      $strPageFilter = ' AND pageProperties.idStatus = '.$this->core->sysConfig->status->live;
     }
 
     if(!empty($this->intSegmentId)){
