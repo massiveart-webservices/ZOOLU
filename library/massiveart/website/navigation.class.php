@@ -109,7 +109,9 @@ class Navigation {
   protected $intRootLevelId;
   protected $intRootFolderId = 0;
   protected $strRootFolderId = '';
-  protected $intLanguageId;
+  protected $intLanguageId;  
+  protected $blnHasUrlPrefix;
+  protected $strUrlPrefix;  
   protected $blnHasSegments;
   protected $intSegmentId;
   protected $strSegmentCode;
@@ -886,19 +888,29 @@ class Navigation {
    * @param string $strLanguageCode
    * @param string $strItemUrl
    * @param null|string $strSegmentCode
+   * @param null|string $strUrlPrefix
    * @return string
    */
-  public function getUrlFor($strLanguageCode, $strItemUrl, $strSegmentCode = null){
-
-    if(!empty($strSegmentCode)){
-      return '/'.strtolower($strSegmentCode).'/'.strtolower($strLanguageCode).'/'.$strItemUrl;
-    }else if($this->blnHasSegments){
-      return '/'.$this->strSegmentCode.'/'.strtolower($strLanguageCode).'/'.$strItemUrl;
-    } else {
-      return '/'.strtolower($strLanguageCode).'/'.$strItemUrl;
+  public function getUrlFor($strLanguageCode, $strItemUrl, $strSegmentCode = null, $strUrlPrefix = null){
+    $strUrl = '';
+    
+    // url prefix
+    if(!empty($strUrlPrefix)){
+      $strUrl .= '/'.strtolower($strUrlPrefix);  
+    }else if($this->blnHasUrlPrefix){
+      $strUrl .= '/'.$this->strUrlPrefix;  
     }
+    
+    // segmentation
+    if(!empty($strSegmentCode)){
+      $strUrl .= '/'.strtolower($strSegmentCode);
+    }else if($this->blnHasSegments){
+      $strUrl .= '/'.$this->strSegmentCode;
+    }
+    
+    $strUrl .= '/'.strtolower($strLanguageCode).'/'.$strItemUrl;
 
-    return '/';
+    return $strUrl;
   }
 
   /**
@@ -1043,6 +1055,55 @@ class Navigation {
    */
   public function getSegmentCode(){
     return $this->strSegmentCode;
+  }
+  
+  
+  /**
+   * setHasUrlPrefix
+   * @param boolean $blnHasUrlPrefix
+   */
+  public function setHasUrlPrefix($blnHasUrlPrefix, $blnValidate = true){
+    if($blnValidate == true){
+      if($blnHasUrlPrefix === true || $blnHasUrlPrefix === 'true' || $blnHasUrlPrefix == 1){
+        $this->blnHasUrlPrefix = true;
+      }else{
+        $this->blnHasUrlPrefix = false;
+      }
+    }else{
+      $this->blnHasUrlPrefix = $blnHasUrlPrefix;
+    }
+  }
+
+  /**
+   * getHasUrlPrefix
+   * @return boolean $blnHasUrlPrefix
+   */
+  public function getHasUrlPrefix($blnReturnAsNumber = true){
+    if($blnReturnAsNumber == true){
+      if($this->blnHasUrlPrefix == true){
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return $this->blnHasUrlPrefix;
+    }
+  }
+  
+  /**
+   * setUrlPrefix
+   * @param string $strUrlPrefix
+   */
+  public function setUrlPrefix($strUrlPrefix){
+    $this->strUrlPrefix = $strUrlPrefix;
+  }
+
+  /**
+   * getUrlPrefix
+   * @param string $strUrlPrefix
+   */
+  public function getUrlPrefix(){
+    return $this->strUrlPrefix;
   }
 }
 ?>

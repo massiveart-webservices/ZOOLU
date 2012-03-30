@@ -127,6 +127,11 @@ class IndexController extends Zend_Controller_Action
      * @var string
      */
     private $strSegmentCode;
+    
+    /**
+     * @var string
+     */
+    private $strUrlPrefix;
 
     /**
      * @var HtmlTranslate
@@ -197,15 +202,26 @@ class IndexController extends Zend_Controller_Action
                  * you to not only clean and otherwise manipulate HTML documents,
                  * but also traverse the document tree.
                  */
-                $arrConfig = array(
-                    'indent'        => TRUE,
-                    'output-xhtml'  => TRUE,
-                    'wrap'          => 200
+                $arrConfig = array(          
+  					'tidy-mark'           => false,
+                  	'indent'              => true,
+                  	'indent-spaces'       => 4,
+                  	'new-blocklevel-tags' => 'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section',
+                  	'new-inline-tags'     => 'video,audio,canvas',
+                  	'doctype'             => '<!doctype html>',
+                  	'sort-attributes'     => 'alpha',
+                  	'vertical-space'      => false,
+                  	'output-xhtml'        => true,
+                  	'wrap'                => 200,
+                  	'wrap-attributes'     => false,
+                  	'break-before-br'     => false,
                 );
-
-                $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);
+                
+                $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);    
                 $objTidy->cleanRepair();
-
+                // tidy bugfix - doctype for html5
+                $objTidy = str_replace('<!--%TIDY_DOCTYPE%-->', '<!doctype html>', $objTidy);
+                
                 $this->getResponse()->setBody($objTidy);
             }
 
@@ -242,12 +258,12 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->view->addFilter('PageReplacer');
-
-        // get cleaned url
-        $strUrl = $this->getUrl();
-
+        
         // load theme
         $this->loadTheme();
+        
+        // get cleaned url
+        $strUrl = $this->getUrl();
 
         // check portal security
         $this->checkPortalSecuirty();
@@ -306,7 +322,11 @@ class IndexController extends Zend_Controller_Action
             }
             $objNavigation->setRootLevelId($this->objTheme->idRootLevels);
             $objNavigation->setLanguageId($this->intLanguageId);
-
+            
+            // set navigation url prefix properties
+            $objNavigation->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
+            $objNavigation->setUrlPrefix($this->strUrlPrefix);
+            
             // set navigation segmentation properties
             $objNavigation->setHasSegments($this->objTheme->hasSegments);
             $objNavigation->setSegmentId($this->intSegmentId);
@@ -338,7 +358,7 @@ class IndexController extends Zend_Controller_Action
                         $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
                         $this->getResponse()->setHeader('Status', '301 Moved Permanently');
                         $this->getResponse()->setHttpResponseCode(301);
-                        $this->_redirect('/' . strtolower($objMainUrl->languageCode) . '/' . $objMainUrl->url);
+                        $this->_redirect($this->getPrefix() . '/' . strtolower($objMainUrl->languageCode) . '/' . $objMainUrl->url);
                     }
                 }
 
@@ -360,7 +380,11 @@ class IndexController extends Zend_Controller_Action
                 $this->objPage->setPageId($objUrlData->relationId);
                 $this->objPage->setPageVersion($objUrlData->version);
                 $this->objPage->setLanguageId($objUrlData->idLanguages);
-
+                
+                // set url prefix properties
+                $this->objPage->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
+                $this->objPage->setUrlPrefix($this->strUrlPrefix);
+                
                 // set navigation segmentation properties
                 $this->objPage->setHasSegments($this->objTheme->hasSegments);
                 $this->objPage->setSegmentId($this->intSegmentId);
@@ -484,6 +508,7 @@ class IndexController extends Zend_Controller_Action
                     $this->_forward('index', 'Search', null, array(
                                                                   'rootLevelId'  => $this->objPage->getRootLevelId(),
                                                                   'theme'        => $this->objTheme->path,
+                                                                  'urlPrefix'    => $this->strUrlPrefix,
                                                                   'segmentation' => array(
                                                                       'id'           => $this->intSegmentId,
                                                                       'code'         => $this->strSegmentCode,
@@ -722,13 +747,12 @@ class IndexController extends Zend_Controller_Action
     {
     	$this->blnUrlWithLanguage = true;
         $strUrl = $_SERVER['REQUEST_URI'];
-
+        
         // check for .rss ending
-        // FIXME : nicer solution
-        if (strpos($strUrl, '.rss') !== false) {
-            $strUrl = str_replace('.rss', '', $strUrl);
-            $this->blnIsRss = true;
-        }
+        $strUrl = $this->validateRss($strUrl);
+        
+        // cut off url prefix path
+        $strUrl = $this->cutUrlPrefix($strUrl);
 
         // cut off language & segment prefix of url
         if (preg_match('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', $strUrl)) {
@@ -758,9 +782,10 @@ class IndexController extends Zend_Controller_Action
         //if($this->objTheme->rootLevelLanguageId != $this->intLanguageId);
 
         if (count($objThemeData) > 0) {
-            $this->objTheme = $objThemeData->current();
+            
+            $this->validateUrlPrefix($objThemeData);
 
-            //FIXME : for markus to develop
+            //FIXME : for development
             if (strpos($strDomain, 'm.') === 0) {
                 $this->objTheme->path = 'mobile';
             }
@@ -769,6 +794,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->analyticsDomain = $strDomain;
             $this->view->mapsKey = $this->objTheme->mapsKey;
             $this->view->rootLevelId = $this->objTheme->idRootLevels;
+            $this->view->urlPrefix = $this->strUrlPrefix;
 
             if ($this->objTheme->localization != '') {
                 Zend_Registry::get('Location')->setLocale($this->objTheme->localization);
@@ -776,6 +802,55 @@ class IndexController extends Zend_Controller_Action
         } else {
             throw new Exception('Unable to load theme based on the URL "' . $strDomain . '"');
         }
+    }
+    
+    /**
+     * validateUrlPrefix
+     * @param Zend_Db_Table_Rowset $objThemeData
+     */
+    private function validateUrlPrefix($objThemeData)
+    {
+        if (count($objThemeData) > 1) {
+            $strUrl = ltrim($_SERVER['REQUEST_URI'], '/');
+            foreach ($objThemeData as $objTheme) {
+                if (strpos($strUrl, $objTheme->urlPath) !== false && strpos($strUrl, $objTheme->urlPath) == 0) {
+                    $this->objTheme = $objTheme;
+                }
+            }
+        } else {
+            $this->objTheme = $objThemeData->current();
+        }
+        
+        $this->strUrlPrefix = $this->objTheme->urlPath;
+    }
+    
+    /**
+     * validateRss
+     * @param string $strUrl
+     * @return void
+     */
+    private function validateRss($strUrl)
+    {        
+        if (strpos($strUrl, '.rss') !== false) {
+            $strUrl = str_replace('.rss', '', $strUrl);
+            $this->blnIsRss = true;
+        }
+        
+        return $strUrl;    
+    }
+    
+    /**
+     * cutUrlPrefix
+     * @param string $strUrl
+     * @return void
+     */
+    private function cutUrlPrefix($strUrl)
+    {
+        if ($this->strUrlPrefix != '') {
+            $strUrl = substr($strUrl, strlen($this->strUrlPrefix) + 1);  
+        }
+        
+        return $strUrl;  
     }
 
     /**
@@ -930,7 +1005,7 @@ class IndexController extends Zend_Controller_Action
                 $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
                 $this->getResponse()->setHeader('Status', '301 Moved Permanently');
                 $this->getResponse()->setHttpResponseCode(301);
-                $this->_redirect('/' . $this->strLanguageCode . '/' . $strTmpUrl);
+                $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/' . $strTmpUrl);
             } else {
                 $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
                 $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
@@ -939,6 +1014,25 @@ class IndexController extends Zend_Controller_Action
                 $this->renderScript('error-404.php');
             }
         }
+    }
+    
+    /**
+     * getPrefix
+     * @return string
+     */
+    private function getPrefix()
+    {
+        $strUrlPrefix = '';
+        // check for url prefix
+        if ($this->strUrlPrefix != '') {
+            $strUrlPrefix .= '/' . $this->strUrlPrefix;  
+        }
+        // check for segmentation
+        if ($this->objTheme->hasSegments == 1) {
+            $strUrlPrefix .= '/' . $this->strSegmentCode;  
+        }  
+        
+        return $strUrlPrefix;
     }
 
     /**
@@ -977,6 +1071,11 @@ class IndexController extends Zend_Controller_Action
     private function initPageCache($strUrl)
     {
         $this->strCacheId = 'page_' . $this->objTheme->idRootLevels;
+        
+        // add url prefix to page cache key
+        if($this->strUrlPrefix != ''){
+            $this->strCacheId .= '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $this->strUrlPrefix);
+        }
 
         // add segment to page cache key
         if($this->objTheme->hasSegments == 1){
