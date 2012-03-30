@@ -488,6 +488,7 @@
      
       var swfu;
       var sessionId = '<?php echo session_id(); ?>';
+      var swf_file_size_limit = '<?php echo ((Zend_Registry::get('Core')->sysConfig->upload->videos->max_filesize / 1024) / 1024); ?> MB';
 
       var clip = null;
       
