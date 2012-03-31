@@ -366,7 +366,7 @@ Massiveart.Media = Class.create({
         PHPSESSID: sessionId, 
         folderId: myNavigation.parentFolderId
       }, 
-      file_size_limit : "100 MB",
+      file_size_limit : swf_file_size_limit,
       file_types : "*.*",
       file_types_description : myCore.translate.All_files,
       file_upload_limit : 100,
@@ -423,7 +423,7 @@ Massiveart.Media = Class.create({
         PHPSESSID: sessionId,
         fileId: fileId
       }, 
-      file_size_limit: "100 MB",
+      file_size_limit: swf_file_size_limit,
       file_types: "*.*",
       file_types_description: myCore.translate.All_files,
       file_upload_limit: "0",

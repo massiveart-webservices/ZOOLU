@@ -127,6 +127,11 @@ class IndexController extends Zend_Controller_Action
      * @var string
      */
     private $strSegmentCode;
+    
+    /**
+     * @var string
+     */
+    private $strUrlPrefix;
 
     /**
      * @var HtmlTranslate
@@ -197,15 +202,26 @@ class IndexController extends Zend_Controller_Action
                  * you to not only clean and otherwise manipulate HTML documents,
                  * but also traverse the document tree.
                  */
-                $arrConfig = array(
-                    'indent'        => TRUE,
-                    'output-xhtml'  => TRUE,
-                    'wrap'          => 200
+                $arrConfig = array(          
+  					'tidy-mark'           => false,
+                  	'indent'              => true,
+                  	'indent-spaces'       => 4,
+                  	'new-blocklevel-tags' => 'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section',
+                  	'new-inline-tags'     => 'video,audio,canvas',
+                  	'doctype'             => '<!doctype html>',
+                  	'sort-attributes'     => 'alpha',
+                  	'vertical-space'      => false,
+                  	'output-xhtml'        => true,
+                  	'wrap'                => 200,
+                  	'wrap-attributes'     => false,
+                  	'break-before-br'     => false,
                 );
-
-                $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);
+                
+                $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);    
                 $objTidy->cleanRepair();
-
+                // tidy bugfix - doctype for html5
+                $objTidy = str_replace('<!--%TIDY_DOCTYPE%-->', '<!doctype html>', $objTidy);
+                
                 $this->getResponse()->setBody($objTidy);
             }
 
@@ -242,12 +258,12 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->view->addFilter('PageReplacer');
-
-        // get cleaned url
-        $strUrl = $this->getUrl();
-
+        
         // load theme
         $this->loadTheme();
+        
+        // get cleaned url
+        $strUrl = $this->getUrl();
 
         // check portal security
         $this->checkPortalSecuirty();
@@ -256,266 +272,281 @@ class IndexController extends Zend_Controller_Action
         $this->validateLanguage();
 
         // validate root level segment
-        $this->validateSegment();
-
-        //Load URL now, because language is alredy needed
-        if($this->blnUrlWithLanguage){
-            //Load stadard url if there is a language
-            $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
-        }else{
-            //Load landingpage if there is no language in the url
-            $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
-            if (!isset($objUrl->url) || count($objUrl->url) == 0) {
-                //If there is no landingpage, try normal page with default language 
+        $this->validateSegment();        
+        
+        // check if rootlevel has portal gate
+        if ($this->isPortalGate()) {
+            $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/' . $this->objTheme->path.'/');
+            $this->renderScript('portalgate.php');
+        } else {            
+            //Load URL now, because language is alredy needed
+            if($this->blnUrlWithLanguage){
+                //Load stadard url if there is a language
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
-            }
-            if (isset($objUrl->url) && count($objUrl->url) > 0) {
-                //Needed for landingpage: change language for redirect
-                $this->setLanguage($objUrl->url->current()->idLanguages);
-            }
-        }
-        
-        // set translate
-        $this->setTranslate();
-        
-        // init page cache
-        $this->initPageCache($strUrl);
-        
-        /**
-         * check if "q" param is in the url for the search
-         */
-        if (strpos($strUrl, '?q=') !== false) {
-            $this->blnSearch = true;
-            $strUrl = '';
-        }
-
-        // check, if cached page exists
-        if ($this->core->sysConfig->cache->page == 'false' ||
-            ($this->core->sysConfig->cache->page == 'true' && $this->objCache->test($this->strCacheId) == false) ||
-            ($this->core->sysConfig->cache->page == 'true' && isset($_SESSION['sesTestMode']))
-        ) {
-
-            $this->getModelUrls(true);
-            $this->getModelPages();
-
-            if (file_exists(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php')) {
-                require_once(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php');
-                $objNavigation = new Client_Navigation();
-            } else {
-                $objNavigation = new Navigation();
-            }
-            $objNavigation->setRootLevelId($this->objTheme->idRootLevels);
-            $objNavigation->setLanguageId($this->intLanguageId);
-
-            // set navigation segmentation properties
-            $objNavigation->setHasSegments($this->objTheme->hasSegments);
-            $objNavigation->setSegmentId($this->intSegmentId);
-            $objNavigation->setSegmentCode($this->strSegmentCode);
-
-            if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php')) {
-                require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php');
-                $strNavigationHelper = ucfirst($this->objTheme->path) . '_NavigationHelper';
-                $objNavigationHelper = new $strNavigationHelper();
-            } else {
-                require_once(dirname(__FILE__) . '/../helpers/NavigationHelper.php');
-                $objNavigationHelper = new NavigationHelper();
-            }
-
-            $objNavigationHelper->setNavigation($objNavigation);
-            $objNavigationHelper->setTranslate($this->translate);
-            Zend_Registry::set('NavigationHelper', $objNavigationHelper);
-
-            $this->core->logger->debug('loadUrls 1st Approach');
-
-            if (isset($objUrl->url) && count($objUrl->url) > 0) {
-                $objUrlData = $objUrl->url->current();
-
-                // check if url is main
-                if (!$objUrlData->isMain) {
-                    $objMainUrl = $this->objModelUrls->loadUrl($objUrlData->relationId, $objUrlData->version, $objUrlData->idUrlTypes);
-                    if (count($objMainUrl) > 0) {
-                        $objMainUrl = $objMainUrl->current();
-                        $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
-                        $this->getResponse()->setHeader('Status', '301 Moved Permanently');
-                        $this->getResponse()->setHttpResponseCode(301);
-                        $this->_redirect('/' . strtolower($objMainUrl->languageCode) . '/' . $objMainUrl->url);
-                    }
+            }else{
+                //Load landingpage if there is no language in the url
+                $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
+                if (!isset($objUrl->url) || count($objUrl->url) == 0) {
+                    //If there is no landingpage, try normal page with default language 
+                    $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
                 }
-
-                if ($this->core->sysConfig->cache->page == 'true' && !isset($_SESSION['sesTestMode']) && $this->blnSearch == false && (!isset($_POST) || count($_POST) == 0)) {
-                    $this->objCache->start($this->strCacheId);
-                    $this->blnCachingStart = true;
+                if (isset($objUrl->url) && count($objUrl->url) > 0) {
+                    //Needed for landingpage: change language for redirect
+                    $this->setLanguage($objUrl->url->current()->idLanguages);
                 }
-
-                if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
-                    require_once(GLOBAL_ROOT_PATH . 'client/website/page.class.php');
-                    $this->objPage = new Client_Page();
+            }
+        
+            // set translate
+            $this->setTranslate();
+            
+            // init page cache
+            $this->initPageCache($strUrl);
+        
+            /**
+             * check if "q" param is in the url for the search
+             */
+            if (strpos($strUrl, '?q=') !== false) {
+                $this->blnSearch = true;
+                $strUrl = '';
+            }
+    
+            // check, if cached page exists
+            if ($this->core->sysConfig->cache->page == 'false' ||
+                ($this->core->sysConfig->cache->page == 'true' && $this->objCache->test($this->strCacheId) == false) ||
+                ($this->core->sysConfig->cache->page == 'true' && isset($_SESSION['sesTestMode']))
+            ) {
+    
+                $this->getModelUrls(true);
+                $this->getModelPages();
+    
+                if (file_exists(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php')) {
+                    require_once(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php');
+                    $objNavigation = new Client_Navigation();
                 } else {
-                    $this->objPage = new Page();
+                    $objNavigation = new Navigation();
                 }
-                $this->objPage->setRootLevelId($this->objTheme->idRootLevels);
-                $this->objPage->setRootLevelTitle(($this->core->blnIsDefaultLanguage === true ? $this->objTheme->defaultTitle : $this->objTheme->title));
-                $this->objPage->setRootLevelAlternativeTitle(((isset($this->core->config->languages->alternative->id)) ? $this->objTheme->alternativeTitle : ''));
-                $this->objPage->setRootLevelGroupId($this->objTheme->idRootLevelGroups);
-                $this->objPage->setPageId($objUrlData->relationId);
-                $this->objPage->setPageVersion($objUrlData->version);
-                $this->objPage->setLanguageId($objUrlData->idLanguages);
-
+                $objNavigation->setRootLevelId($this->objTheme->idRootLevels);
+                $objNavigation->setLanguageId($this->intLanguageId);
+                
+                // set navigation url prefix properties
+                $objNavigation->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
+                $objNavigation->setUrlPrefix($this->strUrlPrefix);
+                
                 // set navigation segmentation properties
-                $this->objPage->setHasSegments($this->objTheme->hasSegments);
-                $this->objPage->setSegmentId($this->intSegmentId);
-                $this->objPage->setSegmentCode($this->strSegmentCode);
-
-                switch ($objUrlData->idUrlTypes) {
-                    case $this->core->sysConfig->url_types->page:
-                        $this->objPage->setType('page');
-                        $this->objPage->setModelSubPath('cms/models/');
-                        break;
-                    case $this->core->sysConfig->url_types->global:
-                        $this->objPage->setType('global');
-                        $this->objPage->setModelSubPath('global/models/');
-                        $this->objPage->setElementLinkId($objUrlData->idLink);
-                        $this->objPage->setNavParentId($objUrlData->idLinkParent);
-                        $this->objPage->setPageLinkId($objUrlData->linkId);
-                        break;
-                }
-
-                /**
-                 * preset navigation parent properties
-                 * e.g. is a collection page
-                 */
-                if ($objUrlData->idParent !== null) {
-                    $this->objPage->setNavParentId($objUrlData->idParent);
-                    $this->objPage->setNavParentTypeId($objUrlData->idParentTypes);
-                }
-
-                /**
-                 * has base url object
-                 * e.g. prduct tree
-                 */
-                if (isset($objUrl->baseUrl)) {
-                    $objNavigation->setBaseUrl($objUrl->baseUrl);
-                    $this->objPage->setBaseUrl($objUrl->baseUrl);
-                    $this->objPage->setNavParentId($objUrlData->idLinkParent);
-                }
-
-                $this->objPage->loadPage();
-
-                /**
-                 * check status
-                 */
-                if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
-                    $this->_redirect('/');
-                }
-
-                if ($this->objPage->ParentPage() instanceof Page) {
-                    $objNavigation->setPage($this->objPage->ParentPage());
+                $objNavigation->setHasSegments($this->objTheme->hasSegments);
+                $objNavigation->setSegmentId($this->intSegmentId);
+                $objNavigation->setSegmentCode($this->strSegmentCode);
+    
+                if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php')) {
+                    require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php');
+                    $strNavigationHelper = ucfirst($this->objTheme->path) . '_NavigationHelper';
+                    $objNavigationHelper = new $strNavigationHelper();
                 } else {
-                    $objNavigation->setPage($this->objPage);
+                    require_once(dirname(__FILE__) . '/../helpers/NavigationHelper.php');
+                    $objNavigationHelper = new NavigationHelper();
                 }
-
-                // update default cache lifetime
-                if ($this->objPage->getTemplateCacheLifetime() > 0) {
-                    $this->objCache->setOption('lifetime', $this->objPage->getTemplateCacheLifetime());
-                } else {
-                    // deactivate caching
-                    $this->blnCachingStart = false;
-                }
-
-                // update default render script
-                if ($this->objPage->getTemplateRenderScript() != '') {
-                    $this->strRenderScript = $this->objPage->getTemplateRenderScript();
-                }
-
-                /**
-                 * check page security
-                 */
-                if ($objNavigation->secuirtyZoneCheck()) {
-                    // deactivate caching
-                    $this->blnCachingStart = false;
-
-                    $blnHasIdentity = true;
-                    $objAuth = Zend_Auth::getInstance();
-                    $objAuth->setStorage(new Zend_Auth_Storage_Session());
-                    if (!$objAuth->hasIdentity()) {
-                        $blnHasIdentity = false;
-                    }
-                    // for members
-                    $blnHasIdentityMembers = true;
-                    $objAuth->setStorage(new Zend_Auth_Storage_Session('Members'));
-                    if (!$objAuth->hasIdentity()) {
-                        $blnHasIdentityMembers = false;
-                    }
-
-                    if ($blnHasIdentity == false && $blnHasIdentityMembers == false) {
-                        $this->_redirect('/login?re=' . urlencode($_SERVER['REQUEST_URI']));
-                    } else {
-                        if (!$objNavigation->checkZonePrivileges()) {
-                            $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-                            $this->getResponse()->setHeader('Status', '403 Forbidden');
-                            $this->getResponse()->setHttpResponseCode(403);
-                            $this->strRenderScript = 'error-403.php';
+    
+                $objNavigationHelper->setNavigation($objNavigation);
+                $objNavigationHelper->setTranslate($this->translate);
+                Zend_Registry::set('NavigationHelper', $objNavigationHelper);
+    
+                $this->core->logger->debug('loadUrls 1st Approach');
+    
+                if (isset($objUrl->url) && count($objUrl->url) > 0) {
+                    $objUrlData = $objUrl->url->current();
+    
+                    // check if url is main
+                    if (!$objUrlData->isMain) {
+                        $objMainUrl = $this->objModelUrls->loadUrl($objUrlData->relationId, $objUrlData->version, $objUrlData->idUrlTypes);
+                        if (count($objMainUrl) > 0) {
+                            $objMainUrl = $objMainUrl->current();
+                            $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
+                            $this->getResponse()->setHeader('Status', '301 Moved Permanently');
+                            $this->getResponse()->setHttpResponseCode(301);
+                            $this->_redirect($this->getPrefix() . '/' . strtolower($objMainUrl->languageCode) . '/' . $objMainUrl->url);
                         }
                     }
-                }
-
-                /**
-                 * set values for replacers
-                 */
-                Zend_Registry::set('TemplateCss', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->portal_startpage_templateId) ? '' : '');
-                Zend_Registry::set('TemplateJs', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->headquarters_templateId) ? '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $this->view->mapsKey . '" type="text/javascript"></script>' : '');
-
-                if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php')) {
-                    require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php');
-                    $strPageHelper = ucfirst($this->objTheme->path) . '_PageHelper';
-                    $objPageHelper = new $strPageHelper();
-                } else {
-                    require_once(dirname(__FILE__) . '/../helpers/PageHelper.php');
-                    $objPageHelper = new PageHelper();
-                }
-                $objPageHelper->setTheme($this->objTheme->path);
-
-                $objPageHelper->setPage($this->objPage);
-                $objPageHelper->setTranslate($this->translate);
-                Zend_Registry::set('PageHelper', $objPageHelper);
-
-                // forward to SearchController
-                if ($this->blnSearch == true) {
-                    $this->_forward('index', 'Search', null, array(
-                                                                  'rootLevelId'  => $this->objPage->getRootLevelId(),
-                                                                  'theme'        => $this->objTheme->path,
-                                                                  'segmentation' => array(
-                                                                      'id'           => $this->intSegmentId,
-                                                                      'code'         => $this->strSegmentCode,
-                                                                      'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
-                                                                  )
-                                                             ));
-                }
-                // forward to RssController
-                elseif ($this->blnIsRss == true) {
-                    $this->_forward('index', 'Rss', null, array(
-                                                               'page'  => $this->objPage,
-                                                               'theme' => $this->objTheme
-                                                          ));
-                } else {
+    
+                    if ($this->core->sysConfig->cache->page == 'true' && !isset($_SESSION['sesTestMode']) && $this->blnSearch == false && (!isset($_POST) || count($_POST) == 0)) {
+                        $this->objCache->start($this->strCacheId);
+                        $this->blnCachingStart = true;
+                    }
+    
+                    if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
+                        require_once(GLOBAL_ROOT_PATH . 'client/website/page.class.php');
+                        $this->objPage = new Client_Page();
+                    } else {
+                        $this->objPage = new Page();
+                    }
+                    $this->objPage->setRootLevelId($this->objTheme->idRootLevels);
+                    $this->objPage->setRootLevelTitle(($this->core->blnIsDefaultLanguage === true ? $this->objTheme->defaultTitle : $this->objTheme->title));
+                    $this->objPage->setRootLevelAlternativeTitle(((isset($this->core->config->languages->alternative->id)) ? $this->objTheme->alternativeTitle : ''));
+                    $this->objPage->setRootLevelGroupId($this->objTheme->idRootLevelGroups);
+                    $this->objPage->setPageId($objUrlData->relationId);
+                    $this->objPage->setPageVersion($objUrlData->version);
+                    $this->objPage->setLanguageId($objUrlData->idLanguages);
+                    
+                    // set url prefix properties
+                    $this->objPage->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
+                    $this->objPage->setUrlPrefix($this->strUrlPrefix);
+                    
+                    // set navigation segmentation properties
+                    $this->objPage->setHasSegments($this->objTheme->hasSegments);
+                    $this->objPage->setSegmentId($this->intSegmentId);
+                    $this->objPage->setSegmentCode($this->strSegmentCode);
+    
+                    switch ($objUrlData->idUrlTypes) {
+                        case $this->core->sysConfig->url_types->page:
+                            $this->objPage->setType('page');
+                            $this->objPage->setModelSubPath('cms/models/');
+                            break;
+                        case $this->core->sysConfig->url_types->global:
+                            $this->objPage->setType('global');
+                            $this->objPage->setModelSubPath('global/models/');
+                            $this->objPage->setElementLinkId($objUrlData->idLink);
+                            $this->objPage->setNavParentId($objUrlData->idLinkParent);
+                            $this->objPage->setPageLinkId($objUrlData->linkId);
+                            break;
+                    }
+    
                     /**
-                     * get page template filename
+                     * preset navigation parent properties
+                     * e.g. is a collection page
                      */
-                    $this->view->template = $this->objPage->getTemplateFile();
-                    $this->view->publisher = $this->objPage->getPublisherName();
-                    $this->view->publishdate = $this->objPage->getPublishDate();
-
-                    $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
-                    $this->renderScript($this->strRenderScript);
+                    if ($objUrlData->idParent !== null) {
+                        $this->objPage->setNavParentId($objUrlData->idParent);
+                        $this->objPage->setNavParentTypeId($objUrlData->idParentTypes);
+                    }
+    
+                    /**
+                     * has base url object
+                     * e.g. prduct tree
+                     */
+                    if (isset($objUrl->baseUrl)) {
+                        $objNavigation->setBaseUrl($objUrl->baseUrl);
+                        $this->objPage->setBaseUrl($objUrl->baseUrl);
+                        $this->objPage->setNavParentId($objUrlData->idLinkParent);
+                    }
+    
+                    $this->objPage->loadPage();
+    
+                    /**
+                     * check status
+                     */
+                    if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
+                        $this->_redirect($this->getPrefix() . '/');
+                    }
+    
+                    if ($this->objPage->ParentPage() instanceof Page) {
+                        $objNavigation->setPage($this->objPage->ParentPage());
+                    } else {
+                        $objNavigation->setPage($this->objPage);
+                    }
+    
+                    // update default cache lifetime
+                    if ($this->objPage->getTemplateCacheLifetime() > 0) {
+                        $this->objCache->setOption('lifetime', $this->objPage->getTemplateCacheLifetime());
+                    } else {
+                        // deactivate caching
+                        $this->blnCachingStart = false;
+                    }
+    
+                    // update default render script
+                    if ($this->objPage->getTemplateRenderScript() != '') {
+                        $this->strRenderScript = $this->objPage->getTemplateRenderScript();
+                    }
+    
+                    /**
+                     * check page security
+                     */
+                    if ($objNavigation->secuirtyZoneCheck()) {
+                        // deactivate caching
+                        $this->blnCachingStart = false;
+    
+                        $blnHasIdentity = true;
+                        $objAuth = Zend_Auth::getInstance();
+                        $objAuth->setStorage(new Zend_Auth_Storage_Session());
+                        if (!$objAuth->hasIdentity()) {
+                            $blnHasIdentity = false;
+                        }
+                        // for members
+                        $blnHasIdentityMembers = true;
+                        $objAuth->setStorage(new Zend_Auth_Storage_Session('Members'));
+                        if (!$objAuth->hasIdentity()) {
+                            $blnHasIdentityMembers = false;
+                        }
+    
+                        if ($blnHasIdentity == false && $blnHasIdentityMembers == false) {
+                            $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
+                        } else {
+                            if (!$objNavigation->checkZonePrivileges()) {
+                                $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
+                                $this->getResponse()->setHeader('Status', '403 Forbidden');
+                                $this->getResponse()->setHttpResponseCode(403);
+                                $this->strRenderScript = 'error-403.php';
+                            }
+                        }
+                    }
+    
+                    /**
+                     * set values for replacers
+                     */
+                    Zend_Registry::set('TemplateCss', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->portal_startpage_templateId) ? '' : '');
+                    Zend_Registry::set('TemplateJs', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->headquarters_templateId) ? '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $this->view->mapsKey . '" type="text/javascript"></script>' : '');
+    
+                    if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php')) {
+                        require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php');
+                        $strPageHelper = ucfirst($this->objTheme->path) . '_PageHelper';
+                        $objPageHelper = new $strPageHelper();
+                    } else {
+                        require_once(dirname(__FILE__) . '/../helpers/PageHelper.php');
+                        $objPageHelper = new PageHelper();
+                    }
+                    $objPageHelper->setTheme($this->objTheme->path);
+    
+                    $objPageHelper->setPage($this->objPage);
+                    $objPageHelper->setTranslate($this->translate);
+                    Zend_Registry::set('PageHelper', $objPageHelper);
+    
+                    // forward to SearchController
+                    if ($this->blnSearch == true) {
+                        $this->_forward('index', 'Search', null, array(
+                                                                      'rootLevelId'  => $this->objPage->getRootLevelId(),
+                                                                      'theme'        => $this->objTheme->path,
+                                                                      'urlPrefix'    => $this->strUrlPrefix,
+                                                                      'segmentation' => array(
+                                                                          'id'           => $this->intSegmentId,
+                                                                          'code'         => $this->strSegmentCode,
+                                                                          'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
+                                                                      )
+                                                                 ));
+                    }
+                    // forward to RssController
+                    elseif ($this->blnIsRss == true) {
+                        $this->_forward('index', 'Rss', null, array(
+                                                                   'page'  => $this->objPage,
+                                                                   'theme' => $this->objTheme
+                                                              ));
+                    } else {
+                        /**
+                         * get page template filename
+                         */
+                        $this->view->template = $this->objPage->getTemplateFile();
+                        $this->view->publisher = $this->objPage->getPublisherName();
+                        $this->view->publishdate = $this->objPage->getPublishDate();
+    
+                        $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
+                        $this->renderScript($this->strRenderScript);
+                    }
+                } else {
+                    // try url with/without slash redirect or error output
+                    $this->urlRetryRedirectAndError($strUrl);
                 }
             } else {
-                // try url with/without slash redirect or error output
-                $this->urlRetryRedirectAndError($strUrl);
+                $this->blnCachingOutput = true;
+                $this->getResponse()->setBody($this->objCache->load($this->strCacheId));
+                $this->_helper->viewRenderer->setNoRender();
             }
-        } else {
-            $this->blnCachingOutput = true;
-            $this->getResponse()->setBody($this->objCache->load($this->strCacheId));
-            $this->_helper->viewRenderer->setNoRender();
         }
     }
 
@@ -542,12 +573,12 @@ class IndexController extends Zend_Controller_Action
                 $this->_helper->viewRenderer->setNoRender();
                 $this->blnPostDispatch = false;
                 $this->getResponse()->setHeader('Content-Type', 'text/xml')
-                    ->setBody(file_get_contents(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml'));
+                     ->setBody(file_get_contents(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml'));
             } else {
-                $this->_redirect('/');
+                $this->_redirect($this->getPrefix() . '/');
             }
         } else {
-            $this->_redirect('/');
+            $this->_redirect($this->getPrefix() . '/');
         }
     }
 
@@ -689,7 +720,7 @@ class IndexController extends Zend_Controller_Action
     {
         $objAuth = Zend_Auth::getInstance();
         $objAuth->clearIdentity();
-        $this->_redirect('/');
+        $this->_redirect($this->getPrefix() . '/');
     }
 
     /**
@@ -722,13 +753,12 @@ class IndexController extends Zend_Controller_Action
     {
     	$this->blnUrlWithLanguage = true;
         $strUrl = $_SERVER['REQUEST_URI'];
-
+        
         // check for .rss ending
-        // FIXME : nicer solution
-        if (strpos($strUrl, '.rss') !== false) {
-            $strUrl = str_replace('.rss', '', $strUrl);
-            $this->blnIsRss = true;
-        }
+        $strUrl = $this->validateRss($strUrl);
+        
+        // cut off url prefix path
+        $strUrl = $this->cutUrlPrefix($strUrl);
 
         // cut off language & segment prefix of url
         if (preg_match('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', $strUrl)) {
@@ -758,9 +788,10 @@ class IndexController extends Zend_Controller_Action
         //if($this->objTheme->rootLevelLanguageId != $this->intLanguageId);
 
         if (count($objThemeData) > 0) {
-            $this->objTheme = $objThemeData->current();
+            
+            $this->validateUrlPrefix($objThemeData);
 
-            //FIXME : for markus to develop
+            //FIXME : for development
             if (strpos($strDomain, 'm.') === 0) {
                 $this->objTheme->path = 'mobile';
             }
@@ -769,6 +800,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->analyticsDomain = $strDomain;
             $this->view->mapsKey = $this->objTheme->mapsKey;
             $this->view->rootLevelId = $this->objTheme->idRootLevels;
+            $this->view->urlPrefix = $this->strUrlPrefix;
 
             if ($this->objTheme->localization != '') {
                 Zend_Registry::get('Location')->setLocale($this->objTheme->localization);
@@ -776,6 +808,66 @@ class IndexController extends Zend_Controller_Action
         } else {
             throw new Exception('Unable to load theme based on the URL "' . $strDomain . '"');
         }
+    }
+    
+    /**
+     * validateUrlPrefix
+     * @param Zend_Db_Table_Rowset $objThemeData
+     */
+    private function validateUrlPrefix($objThemeData)
+    {
+        if (count($objThemeData) > 1) {
+            $strUrl = ltrim($_SERVER['REQUEST_URI'], '/');
+            foreach ($objThemeData as $objTheme) {
+                if (strpos($strUrl, $objTheme->urlPath) !== false && strpos($strUrl, $objTheme->urlPath) == 0) {
+                    $this->objTheme = $objTheme;
+                    break;
+                }
+            }
+            
+            // check if objTheme is null
+            if (!isset($this->objTheme)) {
+                foreach ($objThemeData as $objTheme) {
+                    if ((bool) $objTheme->isMain === true) {
+                        $this->objTheme = $objTheme;
+                        break;
+                    }
+                }  
+            }            
+        } else {
+            $this->objTheme = $objThemeData->current();
+        }
+        
+        $this->strUrlPrefix = $this->objTheme->urlPath;
+    }
+    
+    /**
+     * validateRss
+     * @param string $strUrl
+     * @return void
+     */
+    private function validateRss($strUrl)
+    {        
+        if (strpos($strUrl, '.rss') !== false) {
+            $strUrl = str_replace('.rss', '', $strUrl);
+            $this->blnIsRss = true;
+        }
+        
+        return $strUrl;    
+    }
+    
+    /**
+     * cutUrlPrefix
+     * @param string $strUrl
+     * @return void
+     */
+    private function cutUrlPrefix($strUrl)
+    {
+        if ($this->strUrlPrefix != '') {
+            $strUrl = substr($strUrl, strlen($this->strUrlPrefix) + 1);  
+        }
+        
+        return ($strUrl == '') ? '/' : $strUrl;  
     }
 
     /**
@@ -914,7 +1006,7 @@ class IndexController extends Zend_Controller_Action
             $this->core->updateSessionLanguage();
 
             // redirct
-            $this->_redirect('/?re=false');
+            $this->_redirect($this->getPrefix() . '/?re=false');
         } else {
             $strTmpUrl = ((parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
 
@@ -930,7 +1022,7 @@ class IndexController extends Zend_Controller_Action
                 $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
                 $this->getResponse()->setHeader('Status', '301 Moved Permanently');
                 $this->getResponse()->setHttpResponseCode(301);
-                $this->_redirect('/' . $this->strLanguageCode . '/' . $strTmpUrl);
+                $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/' . $strTmpUrl);
             } else {
                 $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
                 $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
@@ -940,6 +1032,27 @@ class IndexController extends Zend_Controller_Action
             }
         }
     }
+    
+    /**
+     * getPrefix
+     * @return string
+     */
+    private function getPrefix()
+    {
+        $strUrlPrefix = '';
+        
+        // check for url prefix
+        if ($this->strUrlPrefix != '') {
+            $strUrlPrefix .= '/' . $this->strUrlPrefix;  
+        }
+        
+        // check for segmentation
+        if ($this->objTheme->hasSegments == 1) {
+            $strUrlPrefix .= '/' . $this->strSegmentCode;  
+        }  
+        
+        return $strUrlPrefix;
+    }
 
     /**
      * setTranslate
@@ -947,9 +1060,7 @@ class IndexController extends Zend_Controller_Action
      */
     public function setTranslate()
     {
-        /**
-         * set up zoolu translate obj
-         */
+        // set up zoolu translate obj
         if (file_exists(GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->strLanguageCode . '.mo')) {
             $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->strLanguageCode . '.mo');
         } else {
@@ -969,6 +1080,30 @@ class IndexController extends Zend_Controller_Action
     {
         return $this->translate;
     }
+    
+    /**
+     * isPortalGate
+     * @return boolean
+     */
+    private function isPortalGate() 
+    {
+      // cut off url prefix path
+      $strUrl = $this->cutUrlPrefix($_SERVER['REQUEST_URI']);
+      
+      if (isset($this->objTheme->hasPortalGate) && (bool) $this->objTheme->hasPortalGate == true && parse_url($strUrl, PHP_URL_PATH) == '/') {
+          // load portal gate of rootlevel
+          return true;  
+      } else if (parse_url($strUrl, PHP_URL_PATH) == '/') {
+          // redirect to language
+          $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
+          $this->getResponse()->setHeader('Status', '301 Moved Permanently');
+          $this->getResponse()->setHttpResponseCode(301);
+          $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/');
+      } else {
+          // rootlevel has no portal gate
+          return false;
+      }
+    }
 
     /**
      * initPageCache
@@ -977,6 +1112,11 @@ class IndexController extends Zend_Controller_Action
     private function initPageCache($strUrl)
     {
         $this->strCacheId = 'page_' . $this->objTheme->idRootLevels;
+        
+        // add url prefix to page cache key
+        if($this->strUrlPrefix != ''){
+            $this->strCacheId .= '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $this->strUrlPrefix);
+        }
 
         // add segment to page cache key
         if($this->objTheme->hasSegments == 1){

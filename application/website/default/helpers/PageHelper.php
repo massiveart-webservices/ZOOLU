@@ -838,7 +838,7 @@ class PageHelper {
         if($objPage->ParentPage() instanceof Page && ($objPage->ParentPage()->getTypeId() == $this->core->sysConfig->page_types->product_tree->id || $objPage->ParentPage()->getTypeId() == $this->core->sysConfig->page_types->press_area->id || $objPage->ParentPage()->getTypeId() == $this->core->sysConfig->page_types->courses->id || $objPage->ParentPage()->getTypeId() == $this->core->sysConfig->page_types->events->id)){
           $strUrl = $objPage->ParentPage()->getFieldValue('url').$objPageInternalLink->url;  
         }else{
-          $strUrl = '/'.strtolower($objPageInternalLink->languageCode).'/'.$objPageInternalLink->url;  
+          $strUrl = $this->objPage->getUrlFor(strtolower($objPageInternalLink->languageCode), $objPageInternalLink->url);  
         }
         
         $strReturn .= '<div class="'.$strItemCss.'">
