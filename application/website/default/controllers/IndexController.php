@@ -434,7 +434,7 @@ class IndexController extends Zend_Controller_Action
                      * check status
                      */
                     if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
-                        $this->_redirect('/');
+                        $this->_redirect($this->getPrefix() . '/');
                     }
     
                     if ($this->objPage->ParentPage() instanceof Page) {
@@ -477,7 +477,7 @@ class IndexController extends Zend_Controller_Action
                         }
     
                         if ($blnHasIdentity == false && $blnHasIdentityMembers == false) {
-                            $this->_redirect('/login?re=' . urlencode($_SERVER['REQUEST_URI']));
+                            $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
                         } else {
                             if (!$objNavigation->checkZonePrivileges()) {
                                 $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
@@ -573,12 +573,12 @@ class IndexController extends Zend_Controller_Action
                 $this->_helper->viewRenderer->setNoRender();
                 $this->blnPostDispatch = false;
                 $this->getResponse()->setHeader('Content-Type', 'text/xml')
-                    ->setBody(file_get_contents(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml'));
+                     ->setBody(file_get_contents(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml'));
             } else {
-                $this->_redirect('/');
+                $this->_redirect($this->getPrefix() . '/');
             }
         } else {
-            $this->_redirect('/');
+            $this->_redirect($this->getPrefix() . '/');
         }
     }
 
@@ -720,7 +720,7 @@ class IndexController extends Zend_Controller_Action
     {
         $objAuth = Zend_Auth::getInstance();
         $objAuth->clearIdentity();
-        $this->_redirect('/');
+        $this->_redirect($this->getPrefix() . '/');
     }
 
     /**
@@ -1006,7 +1006,7 @@ class IndexController extends Zend_Controller_Action
             $this->core->updateSessionLanguage();
 
             // redirct
-            $this->_redirect('/?re=false');
+            $this->_redirect($this->getPrefix() . '/?re=false');
         } else {
             $strTmpUrl = ((parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
 
