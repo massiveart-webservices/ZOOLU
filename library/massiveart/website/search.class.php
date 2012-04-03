@@ -143,17 +143,11 @@ class Search {
     }else{
       $arrSearchValue = explode(' ',  $this->strSearchValue);
       foreach($arrSearchValue as $strSearchValue){
-        $strQuery .= '+('.$strSearchValue.' OR ';
-        $strSearchValue = preg_replace('/([^\pL\s\d])/u', '?', $strSearchValue);
-        $strQuery .= $strSearchValue.'* OR ';
-        $strSearchValue = str_replace('?', '', $strSearchValue);
-        $strQuery .= $strSearchValue.'~) ';
-        
-        /*$strQuery .= '+(title:'.$strSearchValue.' OR articletitle:'.$strSearchValue.' OR page_tags:'.$strSearchValue.' OR ';
-        $strSearchValue = preg_replace('/([^\pL\s\d])/u', '?', $strSearchValue);
-        $strQuery .= 'title:'.$strSearchValue.'* OR articletitle:'.$strSearchValue.'* OR page_tags:'.$strSearchValue.'* OR ';
-        $strSearchValue = str_replace('?', '', $strSearchValue);
-        $strQuery .= 'title:'.$strSearchValue.'~ OR articletitle:'.$strSearchValue.'~ OR page_tags:'.$strSearchValue.'~)';*/
+        if(strlen($strSearchValue) > 2){    
+          $strQuery .= '+('.Search::ZO_NODE_SUMMARY.':"'.$strSearchValue.'" OR '.Search::ZO_NODE_SUMMARY.':'.preg_replace('/([^\pL\s\d])/u', '?', str_replace('\\', '', $strSearchValue)).'* OR '.Search::ZO_NODE_SUMMARY.':'.$strSearchValue.'~) ';  
+        } else {
+          $strQuery .= '+('.Search::ZO_NODE_SUMMARY.':"'.$strSearchValue.'") ';
+        }
       }
     }
     
