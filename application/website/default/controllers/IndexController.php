@@ -1123,7 +1123,7 @@ class IndexController extends Zend_Controller_Action
             $this->strCacheId .= '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $this->strSegmentCode);
         }
 
-        $this->strCacheId .= '_' . strtolower(str_replace('-', '_', $this->strLanguageCode)) . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
+        $this->strCacheId .= '_' . strtolower(str_replace('-', '_', $this->strLanguageCode)) . '_' . strtolower(str_replace('-', '_', $this->objTheme->path)) . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
 
         $arrFrontendOptions = array(
             'lifetime'                => 604800, // cache lifetime (in seconds), if set to null, the cache is valid forever.
