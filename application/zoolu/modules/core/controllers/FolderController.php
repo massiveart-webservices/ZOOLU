@@ -393,6 +393,10 @@ class Core_FolderController extends AuthControllerAction {
     if(is_object($this->objForm) && $this->objForm instanceof GenericForm){
       $this->view->isurlfolder = $this->objForm->Setup()->getUrlFolder();
       $this->view->showinnavigation = $this->objForm->Setup()->getShowInNavigation();
+      
+      $this->view->segmentId = $this->objForm->Setup()->getSegmentId();
+      $this->view->segmentOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT segments.id AS VALUE, segmentTitles.title AS DISPLAY FROM segments INNER JOIN rootLevelSegments ON rootLevelSegments.idSegments = segments.id INNER JOIN rootLevels ON rootLevels.id = rootLevelSegments.idRootLevels AND rootLevels.hasSegments = 1 INNER JOIN segmentTitles ON segmentTitles.idSegments = segments.id AND segmentTitles.idLanguages = '.$this->objForm->Setup()->getFormLanguageId().' WHERE rootLevelSegments.idRootLevels = '.$this->objForm->Setup()->getRootLevelId().' ORDER BY segmentTitles.title', $this->objForm->Setup()->getSegmentId());
+      
       $this->view->hideInSitemap = $this->objForm->Setup()->getHideInSitemap();
       $this->view->showInWebsite = $this->objForm->Setup()->getShowInWebsite();
       $this->view->showInTablet = $this->objForm->Setup()->getShowInTablet();
@@ -678,6 +682,7 @@ class Core_FolderController extends AuthControllerAction {
     $this->objForm->Setup()->setParentId((($this->objRequest->getParam('parentFolderId') != '') ? $this->objRequest->getParam('parentFolderId') : null));
     $this->objForm->Setup()->setUrlFolder((($this->objRequest->getParam('isUrlFolder') != '') ? $this->objRequest->getParam('isUrlFolder') : 1));
     $this->objForm->Setup()->setShowInNavigation((($this->objRequest->getParam('showInNavigation') != '') ? $this->objRequest->getParam('showInNavigation') : 0));
+    $this->objForm->Setup()->setSegmentId((($this->objRequest->getParam("segmentId") != '') ? $this->objRequest->getParam("segmentId") : 0));
     $this->objForm->Setup()->setHideInSitemap((($this->objRequest->getParam('hideInSitemap') != '') ? $this->objRequest->getParam('hideInSitemap') : 0));
     $this->objForm->Setup()->setShowInWebsite((($this->objRequest->getParam("showInWebsite") != '') ? $this->objRequest->getParam("showInWebsite") : 1));
     $this->objForm->Setup()->setShowInTablet((($this->objRequest->getParam("showInTablet") != '') ? $this->objRequest->getParam("showInTablet") : 1));
@@ -719,6 +724,7 @@ class Core_FolderController extends AuthControllerAction {
       $this->objForm->addElement('hidden', 'isUrlFolder', array('value' => $this->objForm->Setup()->getUrlFolder(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'hideInSitemap', array('value' => $this->objForm->Setup()->getHideInSitemap(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'showInNavigation', array('value' => $this->objForm->Setup()->getShowInNavigation(), 'decorators' => array('Hidden'), 'ignore' => true));
+      $this->objForm->addElement('hidden', 'segmentId', array('value' => $this->objForm->Setup()->getSegmentId(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'showInWebsite', array('value' => $this->objForm->Setup()->getShowInWebsite(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'showInTablet', array('value' => $this->objForm->Setup()->getShowInTablet(), 'decorators' => array('Hidden')));
       $this->objForm->addElement('hidden', 'showInMobile', array('value' => $this->objForm->Setup()->getShowInMobile(), 'decorators' => array('Hidden')));
