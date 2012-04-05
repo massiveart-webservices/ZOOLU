@@ -82,7 +82,7 @@ class SearchHelper
                     }
 
                     if (!empty($this->intSegmentId)) {
-                        if (array_search('segmentId', $arrDocFields) && $objHit->segmentId != $this->intSegmentId) {
+                        if (array_search('segmentId', $arrDocFields) && $objHit->segmentId > 0 && $objHit->segmentId != $this->intSegmentId) {
 
                             $arrPortals = $this->core->config->portals->toArray();
 

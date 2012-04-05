@@ -777,6 +777,7 @@ class Model_Pages {
     }
     
     $strPageFilter = '';
+    $strFolderFilter = '';
     $strPublishedFilter = '';
     if(!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)){
       $timestamp = time();
@@ -821,6 +822,7 @@ class Model_Pages {
 
     if(!empty($this->intSegmentId)){
       $strPageFilter .= ' AND (pages.idSegments = 0 OR pages.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
+      $strFolderFilter .= ' AND (folders.idSegments = 0 OR folders.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT DISTINCT id, plId, genericFormId, version, plGenericFormId, plVersion,
@@ -904,6 +906,7 @@ class Model_Pages {
                                             '.$strDisplayFolderFilter.'
                                             '.$strSqlPageDepth.'
                                             '.$strPageFilter.'
+                                            '.$strFolderFilter.'
                                             '.$strPublishedFilter.'
                                             '.$strSqlCategory.'
                                             '.$strSqlLabel.'

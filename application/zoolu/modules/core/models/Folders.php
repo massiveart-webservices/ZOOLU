@@ -627,6 +627,7 @@ class Model_Folders {
 
     if(!empty($this->intSegmentId)){
       $strPageFilter .= ' AND (pages.idSegments = 0 OR pages.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
+      $strFolderFilter .= ' AND (folders.idSegments = 0 OR folders.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT folders.id AS idFolder, folders.folderId, folders.idParentFolder as parentId, folderTitles.title AS folderTitle, folderProperties.idStatus AS folderStatus, folders.depth, folders.sortPosition as folderOrder,
@@ -1352,6 +1353,7 @@ class Model_Folders {
 
     if(!empty($this->intSegmentId)){
       $objSelect1->where('pages.idSegments = 0 OR pages.idSegments = ?',$this->intSegmentId);
+      $objSelect1->where('folders.idSegments = 0 OR folders.idSegments = ?',$this->intSegmentId);
     }
     
     if($blnLoadSitemap){
