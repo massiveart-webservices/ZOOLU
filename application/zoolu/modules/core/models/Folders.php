@@ -103,7 +103,7 @@ class Model_Folders {
     $objSelect = $this->getFolderTable()->select();
     $objSelect->setIntegrityCheck(false);    
 
-    $objSelect->from('folders', array('id', 'folderId', 'relationId' => 'folderId', 'version'));
+    $objSelect->from('folders', array('id', 'folderId', 'relationId' => 'folderId', 'idSegments', 'version'));
     $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = '.$this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
     $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = folderProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
     $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = folderProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
@@ -148,6 +148,7 @@ class Model_Folders {
      */
     $arrMainData = array('folderId'         => $objFolder->folderId,
                          'version'          => $objFolder->version,
+                        'idSegments'        => $objGenericSetup->getSegmentId(),
                          'sortPosition'     => $objFolder->sortPosition,
                          'sortTimestamp'    => date('Y-m-d H:i:s'),
                          'idUsers'          => $intUserId,
@@ -200,8 +201,9 @@ class Model_Folders {
     $strWhere = $this->getFolderTable()->getAdapter()->quoteInto('folderId = ?', $objFolder->folderId);
     $strWhere .= $this->getFolderTable()->getAdapter()->quoteInto(' AND version = ?', $objFolder->version);
 
-    $this->getFolderTable()->update(array('idUsers'  => $intUserId,
-                                          'changed'  => date('Y-m-d H:i:s')), $strWhere);
+    $this->getFolderTable()->update(array('idUsers'    => $intUserId,
+                                          'idSegments' => $objGenericSetup->getSegmentId(),
+                                          'changed'    => date('Y-m-d H:i:s')), $strWhere);
     /**
      * update language specific folder properties
      */
@@ -516,6 +518,7 @@ class Model_Folders {
 
     if(!empty($this->intSegmentId)){
       $strPageFilter .= ' AND (pages.idSegments = 0 OR pages.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
+      $strFolderFilter .= ' AND (folders.idSegments = 0 OR folders.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT id, title, idStatus, url, pageId, folderId, sortPosition, sortTimestamp, isStartPage, (SELECT languageCode FROM languages WHERE id = ?) AS languageCode, target
@@ -625,6 +628,7 @@ class Model_Folders {
 
     if(!empty($this->intSegmentId)){
       $strPageFilter .= ' AND (pages.idSegments = 0 OR pages.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
+      $strFolderFilter .= ' AND (folders.idSegments = 0 OR folders.idSegments = '.$this->core->dbh->quote($this->intSegmentId, Zend_Db::INT_TYPE).')';
     }
 
     $sqlStmt = $this->core->dbh->query('SELECT folders.id AS idFolder, folders.folderId, folders.idParentFolder as parentId, folderTitles.title AS folderTitle, folderProperties.idStatus AS folderStatus, folders.depth, folders.sortPosition as folderOrder,
@@ -1350,6 +1354,7 @@ class Model_Folders {
 
     if(!empty($this->intSegmentId)){
       $objSelect1->where('pages.idSegments = 0 OR pages.idSegments = ?',$this->intSegmentId);
+      $objSelect1->where('folders.idSegments = 0 OR folders.idSegments = ?',$this->intSegmentId);
     }
     
     if($blnLoadSitemap){

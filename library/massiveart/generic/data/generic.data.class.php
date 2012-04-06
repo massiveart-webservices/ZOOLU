@@ -88,7 +88,7 @@ class GenericData {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function addFolderStartElement($strPageTitle){
+  public function addFolderStartElement($strPageTitle, $arrPageAttributes = array()){
     $this->core->logger->debug('massiveart->generic->data->GenericData->addFolderStartElement()');
      try{
       /**
@@ -98,7 +98,14 @@ class GenericData {
       $this->setup->loadGenericForm();
       $this->setup->loadGenericFormStructure();
 
-      if($this->setup->getCoreField('title')) $this->setup->getCoreField('title')->setValue($strPageTitle);
+      if($this->setup->getCoreField('title')) {
+      	$this->setup->getCoreField('title')->setValue($strPageTitle);
+      }
+      
+      if (array_key_exists('segmentId', $arrPageAttributes)) {
+        $this->setup->setSegmentId($arrPageAttributes['segmentId']);
+      }
+      
       $this->setup->setIsStartElement(true);
       
       $this->setup->removeSpecialField('url');
