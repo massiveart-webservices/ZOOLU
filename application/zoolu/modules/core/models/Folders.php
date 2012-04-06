@@ -148,6 +148,7 @@ class Model_Folders {
      */
     $arrMainData = array('folderId'         => $objFolder->folderId,
                          'version'          => $objFolder->version,
+                        'idSegments'        => $objGenericSetup->getSegmentId(),
                          'sortPosition'     => $objFolder->sortPosition,
                          'sortTimestamp'    => date('Y-m-d H:i:s'),
                          'idUsers'          => $intUserId,

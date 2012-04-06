@@ -137,7 +137,8 @@ class PageCommand implements CommandInterface {
         $objGenericData->Setup()->setHideInSitemap($objGenericSetup->getHideInSitemap());
         $objGenericData->Setup()->setModelSubPath('cms/models/');
         
-        $objGenericData->addFolderStartElement($objGenericSetup->getCoreField('title')->getValue());
+        $arrPageAttributes = array('segmentId' => $objGenericSetup->getSegmentId());
+        $objGenericData->addFolderStartElement($objGenericSetup->getCoreField('title')->getValue(), $arrPageAttributes);
 
         return true;
       }else{
@@ -178,7 +179,13 @@ class PageCommand implements CommandInterface {
                           'idLanguages' => $objGenericSetup->getLanguageId(),
                           'changed'     => date('Y-m-d H:i:s'));
 
-        $this->getModelPages($arrArgs)->updateStartPageMainData($intFolderId, $arrProperties, $arrTitle);
+        $arrPageAttributes = array('idUsers'    => $intUserId,
+                                   'creator'    => $objGenericSetup->getCreatorId(),
+                                   'changed'    => date('Y-m-d H:i:s'),
+                                   'idSegments' => $objGenericSetup->getSegmentId());
+        
+        
+        $this->getModelPages($arrArgs)->updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes);
         return true;
       }else{
         throw new Exception('There is no GenericSetup in the args array!');

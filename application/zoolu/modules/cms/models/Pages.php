@@ -535,11 +535,12 @@ class Model_Pages {
    * updateStartPageMainData
    * @param integer $intFolderId
    * @param array $arrProperties
-   * @param string $strTitle
+   * @param array $arrTitle
+   * @param array $arrPageAttributes
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function updateStartPageMainData($intFolderId, $arrProperties, $arrTitle){
+  public function updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes){
     $objSelect = $this->getPageTable()->select();
     $objSelect->from($this->objPageTable, array('pageId', 'version'));
     $objSelect->where('idParent = ?', $intFolderId)
@@ -554,6 +555,13 @@ class Model_Pages {
       $objStartPage = $objStartPageData->current();
 
       $strWhere = $this->getPagePropertyTable()->getAdapter()->quoteInto('pageId = ?', $objStartPage->pageId);
+
+      $intNumOfEffectedRows = $this->core->dbh->update('pages', $arrPageAttributes, $strWhere);      
+      if($intNumOfEffectedRows == 0){
+        $arrPageAttributes = array_merge($arrPageAttributes, array('pageId' => $objStartPage->pageId, 'version' => $objStartPage->version, 'idLanguages' => $this->intLanguageId));
+        $this->core->dbh->insert('pages', $arrPageAttributes);
+      }
+      
       $strWhere .= $this->objPagePropertyTable->getAdapter()->quoteInto(' AND version = ?',  $objStartPage->version);
       $strWhere .= $this->objPagePropertyTable->getAdapter()->quoteInto(' AND idLanguages = ?',  $this->intLanguageId);
       
