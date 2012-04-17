@@ -714,6 +714,7 @@ Massiveart.Form = Class.create({
     new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/internallink', { 
       parameters: {
         rootLevelId: myNavigation.rootLevelId,
+        portalLanguageId: (($('rootLevelLanguageId'+myNavigation.rootLevelId)) ? $F('rootLevelLanguageId'+myNavigation.rootLevelId) : ''),
         selectOne: true
       },
       evalScripts: true,

@@ -479,6 +479,10 @@ class Cms_OverlayController extends AuthControllerAction {
     $this->core->logger->debug('cms->controllers->OverlayController->loadRootNavigation('.$intRootLevelModule.', '.$intRootLevelType.', '.$intRootLevel.')');
 
     $this->getModelFolders();
+    $intPortalLanguageId = $this->getRequest()->getParam('portalLanguageId');
+    if((int) $intPortalLanguageId > 0){
+      $this->objModelFolders->setLanguageId($intPortalLanguageId);   
+    }
     
     if($intRootLevelType == $this->core->sysConfig->root_level_types->portals){
       $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel);
