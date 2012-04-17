@@ -40,6 +40,14 @@ Default = Class.create({
         this.validateNumeric(element.id);
       }.bind(this));
       
+      $$('.mandatory-radio').each(function(element){
+        this.validateInputRadio(formId, element.name, 'radio');
+      }.bind(this));
+      
+      $$('.mandatory-check-one').each(function(element){
+        //todo
+      }.bind(this));
+      
       /**
        * check captcha
        */
@@ -143,7 +151,23 @@ Default = Class.create({
     }
   },
   
-
+  /**
+   * validateInputRadio
+   */
+  validateInputRadio: function(formId, name, type){
+    var checked = false;
+    Form.getInputs(formId,type,name).each(function(radio) {
+      if (radio.checked) {
+        checked = checked | true;
+      }
+    }.bind(this));
+    if (checked) {
+      if($('lbl_'+name)) $('lbl_'+name).removeClassName('missing');
+    } else {
+      if($('lbl_'+name)) $('lbl_'+name).addClassName('missing');
+      this.retValue = false;
+    }
+  },
   
   /**
    * changeTestMode

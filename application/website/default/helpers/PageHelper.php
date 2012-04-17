@@ -1935,6 +1935,7 @@ class PageHelper {
         $strMandatoryCssClass = '';
         if($objField->mandatory){
           $strMandatory = ' *';
+          $strClassNameMandatory = ' mandatory';
           $strMandatoryCssClass = 'class="mandatory"';
         }
         
@@ -2034,25 +2035,26 @@ class PageHelper {
             break;
             
           case 'radio':
-            $i=1;
+            $i = 1;
             foreach($objField->options as $strOption){
               $strFields .= '
-                        	<input name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
+                    <input class="rd '.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
-              $strFields .= '<input name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" style="width:100px;" />';
+              $strFields .= '
+                <input class="rd" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
             }
             break;
             
           case 'checkbox':
-            $i=1;
-            foreach($objField->options as $strOption){
-              
+            $i = 1;
+            foreach($objField->options as $strOption){              
               $strFields .= '
-                                  	<input name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'"'.(($i - 1 == 1) ? $strMandatoryCssClass : '').' />'.$strOption;
+                    <input class="chbx'.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
-              $strFields .= '<input name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" style="width:100px;" />';
+              $strFields .= '
+                <input class="chbx" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
             }
             break;
             
