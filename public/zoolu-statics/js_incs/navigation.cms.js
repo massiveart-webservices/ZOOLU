@@ -180,5 +180,5 @@ Massiveart.Navigation.Cms = Class.create(Massiveart.Navigation, {
         $(this.genFormContainer).scrollTo($('widgetfunctions'));        
       }.bind(this)
     });
-  },
+  }
 });

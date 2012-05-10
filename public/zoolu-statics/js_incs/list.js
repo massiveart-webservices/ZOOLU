@@ -92,8 +92,8 @@ Massiveart.List = Class.create({
       new Ajax.Updater(id, url, {
         parameters: { 
           id: $F('id'),
-          page: this.page, 
-          itemsPerPage: this.ItemsPerPage,
+          page: this.page,
+          itemsPerPage: this.ItemsPerPage
         },      
         evalScripts: true,     
         onComplete: function(transport) {
