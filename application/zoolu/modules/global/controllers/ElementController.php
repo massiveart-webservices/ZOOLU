@@ -48,9 +48,14 @@ class Global_ElementController extends AuthControllerAction {
   protected $objForm;
   
   /**
-   * @var inter
+   * @var integer
    */
   protected $intItemLanguageId;
+  
+  /**
+   * @var string
+   */
+  protected $strItemLanguageCode;
 
   /**
    * request object instance
