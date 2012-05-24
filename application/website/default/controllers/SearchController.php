@@ -63,7 +63,7 @@ class SearchController extends Zend_Controller_Action {
     $this->core->logger->debug('website->controllers->SearchController->indexAction()');    
     
     $request = $this->getRequest();
-    $strSearchValue = $request->getParam('q');
+    $strSearchValue = strip_tags($request->getParam('q'));
     $intRootLevelId = $request->getParam('rootLevelId');
     $arrSegmentationInfos = $request->getParam('segmentation');
 
