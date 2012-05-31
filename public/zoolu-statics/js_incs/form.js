@@ -123,8 +123,7 @@ Massiveart.Form = Class.create({
   /**
    * deleteElement
    */
-  deleteElement: function(){
-    
+  deleteElement: function(){    
     if($(this.formId)){
 
       var tmpKey = 'Delete_' + $('elementType').getValue();
@@ -218,8 +217,7 @@ Massiveart.Form = Class.create({
    * loadFileFieldsContent
    * @param string strType
    */
-  loadFileFieldsContent: function(strType){
-	
+  loadFileFieldsContent: function(strType){	
     if(strType != ''){
     	
       var strViewType = 0;
