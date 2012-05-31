@@ -497,7 +497,15 @@ Massiveart.Form = Class.create({
     $('overlayGenContentWrapper').show();
     $('overlayGenContent').setStyle({height:'100%'});
     if($(areaId)){
-      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/internallink', { 
+      
+      var ajaxRequestUrl; 
+      if(myNavigation.module == 5){ //global
+        ajaxRequestUrl = '/zoolu/global/overlay/internallink';
+      }else{
+        ajaxRequestUrl = '/zoolu/cms/overlay/internallink';
+      }
+      
+      new Ajax.Updater(this.updateOverlayContainer, ajaxRequestUrl, { 
         parameters: {
           rootLevelId: $F('rootLevelId')
         },

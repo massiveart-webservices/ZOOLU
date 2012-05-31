@@ -42,7 +42,7 @@
 
 class Cms_OverlayController extends AuthControllerAction {
 
-	private $intRootLevelId;
+  private $intRootLevelId;
   private $intFolderId;
   
   /**

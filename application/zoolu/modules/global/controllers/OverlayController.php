@@ -42,7 +42,7 @@
 
 class Global_OverlayController extends AuthControllerAction {
 
-	private $intRootLevelId;
+  private $intRootLevelId;
   private $intFolderId;
   
   /**
@@ -54,6 +54,11 @@ class Global_OverlayController extends AuthControllerAction {
    * @var Model_Folders
    */
   protected $objModelFolders;
+  
+  /**
+   * @var Model_Globals
+   */
+  protected $objModelGlobals;
 
 	/**
    * indexAction
@@ -86,7 +91,58 @@ class Global_OverlayController extends AuthControllerAction {
     $this->view->assign('itemAction', $strItemAction);
     $this->view->assign('elementIds', $arrElementIds);
   }
+  
+  /**
+   * listglobalAction
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  public function listglobalAction(){
+    $this->core->logger->debug('global->controllers->OverlayController->listglobalAction()');
+    
+    $intFolderId = $this->getRequest()->getParam('folderId');
+    $strGlobalIds = $this->getRequest()->getParam('globalIds');
+    
+    $arrGlobalIds = explode('][', trim($strGlobalIds, '[]'));
+    $objGlobals = $this->getModelGlobals()->loadGlobalByParentFolder($intFolderId);
+    
+    $this->view->assign('globals', $objGlobals);
+    $this->view->assign('globalIds', $arrPageIds);
+  }
+  
+  /**
+   * internallinkAction
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  public function internallinkAction(){
+    $this->core->logger->debug('global->controllers->OverlayController->internallinkAction()');
+    $this->loadRootNavigation($this->core->sysConfig->modules->global, $this->core->sysConfig->root_level_types->global, $this->getRequest()->getParam('rootLevelId'));
+    
+    $this->view->assign('overlaytitle', $this->core->translate->_('Assign_internal_links'));
+    $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+    $this->view->assign('contenttype', 'global');
+    $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
+    $this->renderScript('overlay/overlay.phtml');
+  }
+  
+  /**
+   * loadRootNavigation
+   * @param integer $intRootLevelModule
+   * @param integer $intRootLevelType
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  protected function loadRootNavigation($intRootLevelModule, $intRootLevelType = -1, $intRootLevel = null){
+    $this->core->logger->debug('cms->controllers->OverlayController->loadRootNavigation('.$intRootLevelModule.', '.$intRootLevelType.', '.$intRootLevel.')');
 
+    $this->getModelFolders();
+    
+    if($intRootLevelType == $this->core->sysConfig->root_level_types->global){
+      $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel);
+      $this->view->assign('elements', $objRootLevelElements);
+    }
+  }
 
   /**
    * loadGlobalTreeForRootLevel
@@ -154,6 +210,26 @@ class Global_OverlayController extends AuthControllerAction {
     }
 
     return $this->objModelFolders;
+  }
+  
+  /**
+   * getModelGlobals
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  protected function getModelGlobals(){
+    if (null === $this->objModelGlobals) {
+      /**
+       * autoload only handles "library" compoennts.
+       * Since this is an application model, we need to require it
+       * from its modules path location.
+       */
+      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'global/models/Globals.php';
+      $this->objModelGlobals = new Model_Globals();
+      $this->objModelGlobals->setLanguageId($this->getItemLanguageId());
+    }
+
+    return $this->objModelGlobals;
   }
 
   /**

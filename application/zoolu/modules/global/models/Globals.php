@@ -137,7 +137,7 @@ class Model_Globals {
    * @param string $strGlobalId
    */
   public function loadByGlobalId($strGlobalId){
-    $this->core->logger->debug('global->models->Model_Globals->load('.$strGlobalId.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadByGlobalId('.$strGlobalId.')');
 
     $objSelect = $this->getGlobalTable()->select();
     $objSelect->setIntegrityCheck(false);
@@ -156,7 +156,7 @@ class Model_Globals {
    * @param string $strGlobalId
    */
   public function loadLinkByGlobalId($strGlobalId){
-    $this->core->logger->debug('global->models->Model_Globals->load('.$strGlobalId.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadLinkByGlobalId('.$strGlobalId.')');
 
     $objSelect = $this->getGlobalTable()->select();
     $objSelect->setIntegrityCheck(false);
@@ -180,7 +180,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadLinkGlobal($intElementId){
-    $this->core->logger->debug('cms->models->Model_Globals->loadLinkGlobal('.$intElementId.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadLinkGlobal('.$intElementId.')');
 
     $objSelect = $this->getGlobalTable()->select();
     $objSelect->setIntegrityCheck(false);
@@ -256,7 +256,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadGlobalsByFilter($intParentFolderId, $arrTagIds = array(), $intRootLevelGroupId = 0){
-    $this->core->logger->debug('cms->models->Model_Globals->loadPageByParentFolder()');
+    $this->core->logger->debug('global->models->Model_Globals->loadGlobalsByFilter('.$intParentFolderId.', '.$arrTagIds.', '.$intRootLevelGroupId.')');
     
     $strTagIds = '';
     if(count($arrTagIds) > 0){
@@ -266,7 +266,7 @@ class Model_Globals {
     $objSelect = $this->getGlobalTable()->select()->setIntegrityCheck(false);
     
     if($intRootLevelGroupId > 0 && $intRootLevelGroupId == $this->core->sysConfig->root_level_groups->product){      
-      $objSelect->from('globals', array('id', 'globalId', 'isStartGlobal', 'linkId' => 'lP.id'))
+      $objSelect->from('globals', array('id', 'globalId', 'isStartGlobal', 'linkId' => 'lP.id', 'linkGlobalId' => 'lP.globalId'))
                 ->join('globalLinks', 'globalLinks.globalId = globals.globalId', array())
                 ->join(array('lP' => 'globals'), 'lP.id = globalLinks.idGlobals', array())
                 ->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.idLanguages = '.$this->intLanguageId, array('idStatus'))
@@ -305,7 +305,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadFormAndTemplateById($intElementId){
-    $this->core->logger->debug('cms->models->Model_Globals->load('.$intElementId.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadFormAndTemplateById('.$intElementId.')');
 
     $objSelect = $this->getGlobalTable()->select();
     $objSelect->setIntegrityCheck(false);
@@ -465,7 +465,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadAllPublicGlobals($intRootLevelId = null, $intLanguageId = null){
-    $this->core->logger->debug('cms->models->Model_Globals->loadAllPublicGlobals()');
+    $this->core->logger->debug('global->models->Model_Globals->loadAllPublicGlobals()');
 
     $objSelect1 = $this->getGlobalUrlTable()->select()->distinct();
     $objSelect1->setIntegrityCheck(false);
@@ -529,7 +529,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadItems($mixedType, $intParentId, $intCategoryId = 0, $intLabelId = 0, $intEntryNumber = 0, $intSortTypeId = 0, $intSortOrderId = 0, $intEntryDepthId = 0, $arrGlobalIds = array(), $blnOnlyItems = false, $blnOnlyShowInNavigation = false){
-    $this->core->logger->debug('cms->models->Model_Globals->loadItems('.$intParentId.','.$intCategoryId.','.$intLabelId.','.$intEntryNumber.','.$intSortTypeId.','.$intSortOrderId.','.$intEntryDepthId.','.$arrGlobalIds.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadItems('.$intParentId.','.$intCategoryId.','.$intLabelId.','.$intEntryNumber.','.$intSortTypeId.','.$intSortOrderId.','.$intEntryDepthId.','.$arrGlobalIds.')');
 
     if(!is_array($mixedType)){
       $mixedType = array('id' => $mixedType);
@@ -720,13 +720,13 @@ class Model_Globals {
 
   /**
    * changeParentFolderId 
-   * @param integer $intPageId
+   * @param integer $intGlobalId
    * @param integer $intParentFolderId
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
    */
   public function changeParentFolderId($intGlobalId, $intParentFolderId){
-    $this->core->logger->debug('cms->models->Model_Globals->changeParentFolderId('.$intGlobalId.','.$intParentFolderId.')');    
+    $this->core->logger->debug('global->models->Model_Globals->changeParentFolderId('.$intGlobalId.','.$intParentFolderId.')');    
     try{ 
       $strWhere = $this->getGlobalTable()->getAdapter()->quoteInto('id = ?', $intGlobalId);
       $this->getGlobalTable()->update(array('idParent' => $intParentFolderId, 'idParentTypes' => $this->core->sysConfig->parent_types->folder), $strWhere);
@@ -737,13 +737,13 @@ class Model_Globals {
   
   /**
    * changeParentRootFolderId 
-   * @param integer $intPageId
+   * @param integer $intGlobalId
    * @param integer $intRootFolderId
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
    */
   public function changeParentRootFolderId($intGlobalId, $intRootFolderId){
-    $this->core->logger->debug('cms->models->Model_Globals->changeParentRootFolderId('.$intGlobalId.','.$intRootFolderId.')');    
+    $this->core->logger->debug('global->models->Model_Globals->changeParentRootFolderId('.$intGlobalId.','.$intRootFolderId.')');    
     try{ 
       $strWhere = $this->getGlobalTable()->getAdapter()->quoteInto('id = ?', $intGlobalId);
       $this->getGlobalTable()->update(array('idParent' => $intRootFolderId, 'idParentTypes' => $this->core->sysConfig->parent_types->rootlevel), $strWhere);
@@ -763,7 +763,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadItemInstanceDataByIds($strGenForm, $arrGlobalIds, $intImgFilterTag = 0, $strImgFieldIds = '5,55'){
-    $this->core->logger->debug('cms->models->Model_Globals->loadItemInstanceDataByIds('.$strGenForm.', '.$arrGlobalIds.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadItemInstanceDataByIds('.$strGenForm.', '.$arrGlobalIds.')');
 
     // FIXME : !!! CHANGE INSTANCE FIELDS DEFINTION
     // FIXME : !!! iFl.idFields IN (5,55) -> define
@@ -1241,7 +1241,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadContacts($intElementId, $intFieldId){
-    $this->core->logger->debug('cms->models->Model_Globals->loadContacts('.$intElementId.','.$intFieldId.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadContacts('.$intElementId.','.$intFieldId.')');
 
     $objSelect = $this->getGlobalContactsTable()->select();
     $objSelect->from($this->objGlobalContactsTable, array('idContacts'));
@@ -1268,7 +1268,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function addContact($intElementId, $strContactIds, $intFieldId){
-    $this->core->logger->debug('cms->models->Model_Globals->addContact('.$intElementId.','.$strContactIds.','.$intFieldId.')');
+    $this->core->logger->debug('global->models->Model_Globals->addContact('.$intElementId.','.$strContactIds.','.$intFieldId.')');
 
     $objGlobalData = $this->load($intElementId);
 
@@ -1311,7 +1311,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function addInternalLinks($strLinkedGlobalIds, $strElementId, $intVersion, $intFieldId){
-    $this->core->logger->debug('cms->models->Model_Globals->addInternalLinks('.$strLinkedGlobalIds.', '.$strElementId.', '.$intVersion.', '.$intFieldId.')');
+    $this->core->logger->debug('global->models->Model_Globals->addInternalLinks('.$strLinkedGlobalIds.', '.$strElementId.', '.$intVersion.', '.$intFieldId.')');
 
     $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
@@ -1345,7 +1345,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadInternalLinks($strElementId, $intVersion, $intFieldId){
-    $this->core->logger->debug('cms->models->Model_Globals->loadInternalLinks('.$strElementId.','.$intVersion.','.$intFieldId.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadInternalLinks('.$strElementId.','.$intVersion.','.$intFieldId.')');
 
     $objSelect = $this->getGlobalInternalLinkTable()->select();
     $objSelect->setIntegrityCheck(false);
@@ -1358,9 +1358,6 @@ class Model_Globals {
     $objSelect->joinLeft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
     $objSelect->join('globalInternalLinks', 'globalInternalLinks.linkedGlobalId = lP.globalId AND globalInternalLinks.globalId = '.$this->core->dbh->quote($strElementId).' AND globalInternalLinks.version = '.$this->core->dbh->quote($intVersion, Zend_Db::INT_TYPE).' AND globalInternalLinks.idFields = '.$this->core->dbh->quote($intFieldId, Zend_Db::INT_TYPE).' AND globalInternalLinks.idLanguages = '.$this->intLanguageId, array('sortPosition'));
     $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('title'));
-    $objSelect->joinLeft(array('iFiles' => 'global-DEFAULT_PRODUCT-1-InstanceFiles'), 'iFiles.id = (SELECT iFl.id FROM `global-DEFAULT_PRODUCT-1-InstanceFiles` AS iFl WHERE iFl.globalId = globals.globalId AND iFl.version = globals.version AND iFl.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).' AND iFl.idFields IN (174, 5, 55) ORDER BY iFl.idFields DESC LIMIT 1)', array()); //FIXME
-    $objSelect->joinLeft('files', 'files.id = iFiles.idFiles AND files.isImage = 1', array('filename', 'fileversion' => 'version', 'filepath' => 'path'));
-    $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('filetitle' => 'title'));
     $objSelect->where('globals.id = (SELECT p.id FROM globals AS p WHERE globals.globalId = p.globalId ORDER BY p.version DESC LIMIT 1)');
     $objSelect->order('globalInternalLinks.sortPosition ASC');
 
@@ -1377,7 +1374,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function deleteInternalLinks($strElementId, $intVersion, $intFieldId){
-    $this->core->logger->debug('cms->models->Model_Globals->deleteInternalLinks('.$strElementId.','.$intVersion.','.$intFieldId.')');
+    $this->core->logger->debug('global->models->Model_Globals->deleteInternalLinks('.$strElementId.','.$intVersion.','.$intFieldId.')');
 
     $strWhere = $this->getGlobalInternalLinkTable()->getAdapter()->quoteInto('globalId = ?', $strElementId);
     $strWhere .= $this->objGlobalInternalLinkTable->getAdapter()->quoteInto(' AND version = ?', $intVersion);
@@ -1522,7 +1519,7 @@ class Model_Globals {
    * @version 1.0
    */
   public function loadUrlHistory($intGlobalId, $intLanguageId){
-    $this->core->logger->debug('cms->models->Model_Globals->loadGlobalUrlHistory('.$intGlobalId.', '.$intLanguageId.')');
+    $this->core->logger->debug('global->models->Model_Globals->loadUrlHistory('.$intGlobalId.', '.$intLanguageId.')');
 
     $objSelect = $this->getGlobalTable()->select();
     $objSelect->setIntegrityCheck(false);
