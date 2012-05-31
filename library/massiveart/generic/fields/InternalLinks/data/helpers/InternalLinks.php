@@ -128,22 +128,28 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract  {
    */
   public function saveInstanceData($strType, $strElementId, $objRegion, $idRegionInstance, $intRegionInstanceId, $intVersion){
     try{
+      
+      $strGenForm = $this->objElement->Setup()->getFormId().'-'.$this->objElement->Setup()->getFormVersion();
+      $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'-'.$strGenForm.'-Region'.$objRegion->getRegionId().'-InstanceInternalLinks');
+      
+      // add instance values
       $arrValues = $this->objElement->getInstanceValue($intRegionInstanceId);
       $arrValues = explode('][', trim($arrValues, '[]'));
-  
+      
       foreach($arrValues as $strValue){
-        if(!empty($strValue)){
-          $arrFileData = array( $strType.'Id'        => $strElementId,
-                                    'version'            => $intVersion,
-                                    'idLanguages'        => $this->objElement->Setup()->getLanguageId(),
-                                    'idRegionInstances'  => $idRegionInstance,
-                                    'linkedPageId'       => $strValue,
-                                    'idFields'           => $this->objElement->id);
+      	if(!empty($strValue)){
+          $arrFileData = array( $strType.'Id'        			=> $strElementId,
+                                'version'            			=> $intVersion,
+                                'idLanguages'        			=> $this->objElement->Setup()->getLanguageId(),
+                                'idRegionInstances'  			=> $idRegionInstance,
+                                'linked'.ucfirst($strType).'Id' => $strValue,
+                                'idFields'           			=> $this->objElement->id);
   
-          $this->getModelGenericData()->getGenericTable($strType.'-'.$this->objElement->Setup()->getFormId().'-'.$this->objElement->Setup()->getFormVersion().'-Region'.$objRegion->getRegionId().'-InstanceInternalLinks')->insert($arrFileData);
+          $objGenTable->insert($arrFileData);
         }
       }
       
+      // load instance data
       $this->loadInstanceData($strType, $strElementId, $objRegion, $intVersion);
     }catch(Excpetion $exc){
       $this->core->logger->err($exc);
@@ -162,25 +168,41 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract  {
   public function loadInstanceData($strType, $strElementId, $objRegion, $intVersion){
     try{
       $this->strType = $strType;
-      $this->getModel();
 
       $strGenForm = $this->objElement->Setup()->getFormId().'-'.$this->objElement->Setup()->getFormVersion();
-      
       $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'-'.$strGenForm.'-Region'.$objRegion->getRegionId().'-InstanceInternalLinks');
   
       $objSelect = $objGenTable->select();
       $objSelect->setIntegrityCheck(false);
-      $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'relationId' => 'linkedPageId', 'pageId', 'idRegionInstances'));
-      $objSelect->join('pages', 'pages.pageId = `'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.`linkedPageId`', array('isStartItem' => 'isStartPage'));
-      $objSelect->join('pageProperties', 'pageProperties.pageId = pages.pageid AND pageProperties.version = '.$intVersion.' AND pageProperties.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('idStatus'));
-      $objSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = '.$intVersion.' AND pageTitles.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('title'));
+      
+      $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'relationId' => 'linked'.ucfirst($strType).'Id', $strType.'Id', 'idRegionInstances'));
+      $objSelect->join($strType.'s', $strType.'s.'.$strType.'Id = `'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.`linked'.ucfirst($strType).'Id`', array('isStartItem' => 'isStart'.ucfirst($strType)));
+      if($strType == 'global'){
+      	// FIXME : differences between products and standard gobals
+      	// at the moment it's only for product internal links
+      	$objSelect->joinLeft($strType.'Links', $strType.'Links.id'.ucfirst($strType).'s = '.$strType.'s.id', array());
+      	$objSelect->joinLeft(array('lP' => $strType.'s'), 'lP.'.$strType.'Id = '.$strType.'Links.'.$strType.'Id', array('lPId' => $strType.'Id'));
+      	$objSelect->joinLeft($strType.'Properties', $strType.'Properties.'.$strType.'Id = lP.'.$strType.'Id AND '.$strType.'Properties.version = '.$intVersion.' AND '.$strType.'Properties.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('idStatus'));
+      	$objSelect->joinLeft($strType.'Titles', $strType.'Titles.'.$strType.'Id = lP.'.$strType.'Id AND '.$strType.'Titles.version = '.$intVersion.' AND '.$strType.'Titles.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('title'));
+      	
+      	// FIXME: on at the moment it's only for product internal links
+        $objSelect->joinLeft(array('iFiles' => 'global-DEFAULT_PRODUCT-1-InstanceFiles'), 'iFiles.id = (SELECT iFl.id FROM `global-DEFAULT_PRODUCT-1-InstanceFiles` AS iFl WHERE iFl.globalId = lP.globalId AND iFl.version = lP.version AND iFl.idLanguages = '.$this->core->dbh->quote($this->objElement->Setup()->getLanguageId(), Zend_Db::INT_TYPE).' AND iFl.idFields IN (174, 5, 55) ORDER BY iFl.idFields DESC LIMIT 1)', array()); //FIXME
+        $objSelect->joinLeft('files', 'files.id = iFiles.idFiles AND files.isImage = 1', array('filename', 'fileversion' => 'version', 'filepath' => 'path'));
+        $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->core->dbh->quote($this->objElement->Setup()->getLanguageId(), Zend_Db::INT_TYPE), array('filetitle' => 'title'));      	
+
+        $objSelect->joinLeft(array('iProduct' => 'global-DEFAULT_PRODUCT-1-Instances'), 'iProduct.globalId = lP.globalId AND iProduct.version = lP.version AND iProduct.idLanguages = '.$this->core->dbh->quote($this->objElement->Setup()->getLanguageId(), Zend_Db::INT_TYPE), array('shop_url')); //FIXME
+        
+      }else{
+      	$objSelect->join($strType.'Properties', $strType.'Properties.'.$strType.'Id = '.$strType.'s.'.$strType.'Id AND '.$strType.'Properties.version = '.$intVersion.' AND '.$strType.'Properties.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('idStatus'));
+      	$objSelect->join($strType.'Titles', $strType.'Titles.'.$strType.'Id = '.$strType.'s.'.$strType.'Id AND '.$strType.'Titles.version = '.$intVersion.' AND '.$strType.'Titles.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('title'));
+      }
       $objSelect->join($strType.'-'.$this->objElement->Setup()->getFormId().'-'.$this->objElement->Setup()->getFormVersion().'-Region'.$objRegion->getRegionId().'-Instances AS regionInstance', '`'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.idRegionInstances = regionInstance.id', array('sortPosition'));
       $objSelect->join('fields', 'fields.id = `'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.idFields', array('name'));
       $objSelect->where('`'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.'.$strType.'Id = ?', $strElementId);
       $objSelect->where('`'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.'.'version = ?', $intVersion);
       $objSelect->where('`'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.'.'idLanguages = ?', $this->objElement->Setup()->getLanguageId());
       $objSelect->where('`'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.'.'idFields = ?', $this->objElement->id);
-  
+      
       $objRawInstanceData = $objGenTable->fetchAll($objSelect);
       
       if(count($objRawInstanceData) > 0) {

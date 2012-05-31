@@ -40,6 +40,8 @@
  * @version 1.0
  */
 
+require_once (dirname(__FILE__).'/../../../media/views/helpers/ViewHelper.php');
+
 class OverlayHelper {
 
   /**
@@ -55,6 +57,135 @@ class OverlayHelper {
   public function __construct(){
     $this->core = Zend_Registry::get('Core');
   }
+  
+  /**
+   * getNavigationElements
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  public function getNavigationElements($rowset, $viewtype, $intFolderId = 0, $intRootLevelId = 0, $intRootLevelTypeId = 0, $strContentType = null) {
+    $this->core->logger->debug('global->views->helpers->OverlayHelper->getNavigationElements()');
+
+    $strOutput = '';
+    
+    $strType = '';
+    if($strContentType != null){
+      $strType = ', \''.$strContentType.'\'';
+    }
+    
+    if($intRootLevelTypeId > 0 && $intRootLevelId > 0 && $intFolderId == 0){
+      $strRootTitle = '';
+      switch($intRootLevelTypeId){
+        default;
+          $strRootTitle = $this->core->translate->_('All');
+          break;
+      }
+      $strOutput .= '<div id="olnavitemAll" class="olnavrootitem" style="display:none;">
+                       <div onclick="myOverlay.getRootNavItem('.$intRootLevelId.', '.$viewtype.'); return false;" style="position:relative;">
+                         <div class="filterTitle">'.$strRootTitle.' <span class="small gray666">('.$this->core->translate->_('Only_with_filter').')</span></div>
+                         <div class="clear"></div>
+                       </div>
+                     </div>';  
+    }
+    
+    if(count($rowset) > 0){
+      foreach ($rowset as $row){
+        if($intFolderId == 0){
+          $strOutput .= '<div id="olnavitem'.$row->id.'" class="olnavrootitem">
+                           <div onclick="myOverlay.getNavItem('.$row->id.','.$viewtype.$strType.'); return false;" style="position:relative;">
+                             <div class="icon img_folder_on"></div>
+                             <span id="olnavitemtitle'.$row->id.'">'.htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</span>
+                           </div>
+                         </div>';
+        }else{
+          $strOutput .= '<div id="olnavitem'.$row->id.'" class="olnavchilditem">
+                           <div onclick="myOverlay.getNavItem('.$row->id.','.$viewtype.$strType.'); return false;" style="position:relative;">
+                             <div class="icon img_folder_on"></div>
+                             <span id="olnavitemtitle'.$row->id.'">'.htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</span>
+                           </div>
+                         </div>';
+        }
+      }
+    }
+
+    /**
+     * return html output
+     */
+    return $strOutput;
+  }
+  
+  /**
+   * getListGlobal
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  public function getListGlobal($rowset, $arrGlobalIds, $intRootLevelGroupId = 0){
+    $this->core->logger->debug('global->views->helpers->OverlayHelper->getListGlobal()');
+    
+    $this->objViewHelper = new ViewHelper();
+
+    /**
+     * create header of list output
+     */
+    $strOutputTop = '
+            <div>
+              <div class="olpagetopleft"></div>
+              <div class="olpagetopitemtitle bold">Titel</div>
+              <div class="olpagetopright"></div>
+              <div class="clear"></div>
+            </div>';
+
+    /**
+     * output of list rows (elements)
+     */
+    $strOutput = '';
+    if(count($rowset) > 0){
+      $strOutput .= '  
+            <div class="olpageitemcontainer">';
+      foreach ($rowset as $row) {
+      	$intGlobalId = $row->id;
+        $strGlobalId = $row->globalId;
+      	if($intRootLevelGroupId == $this->core->sysConfig->root_level_groups->product){
+      		//$intGlobalId = $row->linkId;
+      		$strGlobalId = $row->linkGlobalId;
+        }
+      	
+      	$strHidden = '';
+        if(array_search($strGlobalId, $arrGlobalIds) !== false){
+         $strHidden = ' style="display:none;"';
+        }
+        
+        $strOutput .= '
+            <div class="olpageitem" id="olItem'.$strGlobalId.'" onclick="myOverlay.addPageToListArea('.$intGlobalId.', \''.$strGlobalId.'\'); return false;"'.$strHidden.'>
+              <div class="olpageleft"></div>
+              <div style="display:none;" id="Remove'.$intGlobalId.'" class="itemremovelist"></div>
+              <div class="icon olpageicon img_'.(($row->isStartGlobal == 1) ? 'startpage' : 'page').'_'.(($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
+              <div class="olpageitemtitle">'.htmlentities((($row->title == '' && (isset($row->alternativeTitle))) ? ((isset($row->alternativeTitle) && $row->alternativeTitle != '') ? $row->alternativTitle : $row->fallbackTitle) : $row->title), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+              <div class="olpageright"></div>
+              <div class="clear"></div>
+            </div>';
+      }
+      $strOutput .= '
+              <div class="clear"></div>
+            </div>';
+    }
+    
+    /**
+     * list footer
+     */
+    $strOutputBottom = '
+            <div>
+              <div class="olpagebottomleft"></div>
+              <div class="olpagebottomcenter"></div>
+              <div class="olpagebottomright"></div>
+              <div class="clear"></div>
+            </div>';
+
+    /**
+     * return html output
+     */
+    return $strOutputTop.$strOutput.$strOutputBottom.'<div class="clear"></div>';
+  }
 
   /**
    * getGlobalTree
@@ -62,7 +193,7 @@ class OverlayHelper {
    * @version 1.0
    */
   public function getGlobalTree($objRowset, $strItemAction, $arrElementIds = array()) {
-    $this->core->logger->debug('cms->views->helpers->OverlayHelper->getGlobalTree()');
+    $this->core->logger->debug('global->views->helpers->OverlayHelper->getGlobalTree()');
 
     $strOutput = '';
 
@@ -103,6 +234,75 @@ class OverlayHelper {
      * return html output
      */
     return $strOutput;
+  }
+  
+  /**
+   * getMediaFilter
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  public function getMediaFilter($intRootLevelId, $intViewType = 0, $strContentType = null){
+    $this->core->logger->debug('global->views->helpers->OverlayHelper->getMediaFilter('.$intRootLevelId.', '.$intViewType.')');
+    
+    $strOutput = '';
+    
+    $strType = '';
+    if($strContentType != null){
+      $strType = ', \''.$strContentType.'\'';
+    }
+    
+    $strOutput .= '
+      <div class="olfilter">
+        <div class="filter">
+          <ol>
+            <li id="autocompletList_mediaFilter" class="autocompletList input-text">
+              <input type="text" value="" onchange="myOverlay.loadFileFilterContent('.$intViewType.$strType.');" id="mediaFilter_Tags" name="mediaFilter_Tags"/>
+              <div id="mediaFilter_Tags_autocompleter" class="autocompleter">
+                <div class="default">'.$this->core->translate->_('Search_tags').'</div>
+                <ul class="feed"></ul>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <input type="hidden" value="" id="mediaFilter_Folders" name="mediaFilter_Folders"/>
+        <input type="hidden" value="'.$intRootLevelId.'" id="mediaFilter_RootLevel" name="mediaFilter_RootLevel"/>
+      </div>
+      <script type="text/javascript">//<![CDATA[ 
+        myForm.initTag("mediaFilter_Tags",'.$this->getAllTagsForAutocompleter().');         
+      //]]>
+      </script>';
+    
+    return $strOutput;    
+  }  
+  
+  /**
+   * getAllTagsForAutocompleter
+   * @return string $strAllTags
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  public function getAllTagsForAutocompleter(){
+    require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Tags.php';
+    $objModelTags = new Model_Tags();
+    $objAllTags = $objModelTags->loadAllTags();
+    
+    $strAllTags = '[';
+    if(count($objAllTags) > 0){
+      foreach($objAllTags as $objTag){
+        $strAllTags .= '{"caption":"'.htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'","value":'.$objTag->id.'},';
+      }
+      $strAllTags = trim($strAllTags, ',');            
+    }
+    $strAllTags .= ']';
+    return $strAllTags;
+  }
+
+  public function getSearch(){
+    return $this->core->translate->_('Search');
+  }
+  
+  public function getReset(){
+    return $this->core->translate->_('Reset');
   }
 }
 

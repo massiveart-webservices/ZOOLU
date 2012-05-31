@@ -92,6 +92,11 @@ class Global_ElementController extends AuthControllerAction {
    * @var Model_GenericForms
    */
   protected $objModelGenericForm;
+  
+  /**
+   * @var Model_RootLevels
+   */
+  protected $objModelRootLevels;
 
   /**
    * init
@@ -475,7 +480,7 @@ class Global_ElementController extends AuthControllerAction {
         $this->view->globalurl = $this->objForm->Setup()->getField('url')->getValue();
         
         //add shop preview url
-        if($this->objForm->Setup()->getRootLevelGroupId() == $this->core->sysConfig->root_level_groups->product && $this->core->config->shop->root_level_ids){
+        if($this->objForm->Setup()->getRootLevelGroupId() == $this->core->sysConfig->root_level_groups->product && isset($this->core->config->shop->root_level_ids)){
           $strBaseUrl = $this->getModelFolders()->getRootLevelMainUrl($this->core->config->shop->root_level_ids->id->toArray(), null, true);
           if($strBaseUrl != '') {
             if(substr_count($strBaseUrl, '.') <= 1){
@@ -538,6 +543,44 @@ class Global_ElementController extends AuthControllerAction {
 	    $this->view->assign('fieldname', $strFieldName);
 	    $this->view->assign('viewtype', $strViewType);
 	  }catch (Exception $exc) {
+      $this->core->logger->err($exc);
+      exit();
+    }
+  }
+  
+  /**
+   * getfilteredglobalsAction
+   * @author Thomas Schedler <tsh@massiveart.com>
+   * @version 1.0
+   */
+  public function getfilteredglobalsAction(){
+    $this->core->logger->debug('cms->controllers->PageController->getfilteredglobalsAction()');
+    try{
+      
+      $arrTagIds = explode(',', $this->objRequest->getParam('tagIds'));
+      $arrFolderIds = explode('][', trim($this->objRequest->getParam('folderIds'), '[]'));
+      $intRootLevelId = (int) $this->objRequest->getParam('rootLevelId', -1);
+      $arrCurrFileIds = explode('][', trim($this->objRequest->getParam('fileIds'), '[]'));
+      
+      $objRootLevel = $this->getModelRootLevels()->loadRootLevelById($intRootLevelId)->current();
+
+      $this->view->assign('fieldname', $this->objRequest->getParam('fileFieldId'));
+      $this->view->assign('viewtype', $this->objRequest->getParam('viewtype'));
+      $this->view->assign('isOverlay', (bool) $this->objRequest->getParam('isOverlay', false));
+      $this->view->assign('globalIds', $arrCurrFileIds);
+
+      if($intRootLevelId > 0 || $arrFolderIds[0] > 0){
+        /**
+         * get files
+         */
+        $objGlobals = $this->getModelGlobals()->loadGlobalsByFilter($arrFolderIds, $arrTagIds, $objRootLevel->idRootLevelGroups);
+        $this->view->assign('globals', $objGlobals);
+        $this->view->assign('rootLevelGroupId', $objRootLevel->idRootLevelGroups);
+        $this->renderScript('overlay/listglobal.phtml');
+      }else{
+        $this->_helper->viewRenderer->setNoRender();
+      }
+    }catch (Exception $exc) {
       $this->core->logger->err($exc);
       exit();
     }
@@ -1222,6 +1265,25 @@ class Global_ElementController extends AuthControllerAction {
     }
 
     return $this->objModelGenericForm;
+  }
+  
+  /**
+   * getModelRootLevels
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  protected function getModelRootLevels(){
+    if (null === $this->objModelRootLevels) {
+      /**
+       * autoload only handles "library" compoennts.
+       * Since this is an application model, we need to require it
+       * from its modules path location.
+       */
+      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/RootLevels.php';
+      $this->objModelRootLevels = new Model_RootLevels();
+    }
+
+    return $this->objModelRootLevels;
   }
 }
 

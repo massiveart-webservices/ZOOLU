@@ -358,6 +358,8 @@ Massiveart.Overlay = Class.create({
           this.getMediaFolderContent(folderId, viewtype);
         }else if(contenttype == 'page'){
           this.getPortalFolderContent(folderId);
+        }else if(contenttype == 'global'){
+          this.getGlobalFolderContent(folderId);
         }
       }
     }else{
@@ -392,6 +394,8 @@ Massiveart.Overlay = Class.create({
                this.getMediaFolderContent(folderId, viewtype);
               }else if(contenttype == 'page'){
                 this.getPortalFolderContent(folderId);
+              }else if(contenttype == 'global'){
+                this.getGlobalFolderContent(folderId);
               }
             }
             myCore.removeBusyClass('olsubnav'+folderId);
@@ -577,6 +581,40 @@ Massiveart.Overlay = Class.create({
   },
   
   /**
+   * getGlobalFolderContent
+   */
+  getGlobalFolderContent: function(folderId){
+    $(this.updateContainer).innerHTML = '';
+    myCore.addBusyClass(this.updateContainer);
+    
+    var languageId = null;
+    if($('languageId')){
+      languageId = $F('languageId');
+    }
+    var languageCode = null;
+    if($('languageCode')){
+      languageCode = $F('languageCode');
+    }
+    
+    var fieldname = this.areaId.substring(this.areaId.indexOf('_')+1);
+    
+    console.log('getGlobalFolderContent: '+folderId+' // '+$(fieldname).value + ' // ' + languageId + ' // ' + languageCode);
+    
+    new Ajax.Updater(this.updateContainer, '/zoolu/global/overlay/listglobal', {
+      parameters: {
+        folderId: folderId,
+        globalIds: $(fieldname).value,
+        languageId: languageId,
+        languageCode: languageCode
+      },
+      evalScripts: true,
+      onComplete: function(){
+        myCore.removeBusyClass(this.updateContainer);
+      }.bind(this)
+    });
+  },
+  
+  /**
    * getUnitFolderContent
    * @param integer unitId
    */
@@ -625,6 +663,8 @@ Massiveart.Overlay = Class.create({
           strAjaxAction = '/zoolu/cms/page/getfilteredfiles';
         }else if(contenttype == 'page'){
           strAjaxAction = '/zoolu/cms/page/getfilteredpages';
+        }else if(contenttype == 'global'){
+          strAjaxAction = '/zoolu/global/element/getfilteredglobals';
         }
         
         if(selectOne){
@@ -664,7 +704,6 @@ Massiveart.Overlay = Class.create({
       }
     }
   },
-
   
   /**
    * toggleSubNavItem
