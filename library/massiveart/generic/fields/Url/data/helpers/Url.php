@@ -61,6 +61,11 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
    * @var Model_Urls
    */
   private $objModelUrls;
+
+  /**
+   * @var Model_Folders
+   */
+  private $objModelFolders;
   
   /**
    * @var Model_Utilities
@@ -107,7 +112,7 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
 
         // get the new url
         if(isset($_POST[$this->objElement->name.'_EditableUrl'])){
-        $this->strUrl = strtolower($_POST[$this->objElement->name.'_EditableUrl']);
+          $this->strUrl = strtolower($_POST[$this->objElement->name.'_EditableUrl']);
         }
         if($this->strUrl == '' && !($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() == null)){
           $objFieldData = $this->objElement->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->objElement->Setup()->getGenFormId());
@@ -127,6 +132,11 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
         }
         
         $this->strUrl = $this->getModelUrls()->makeUrlConform($this->strUrl);
+
+        if(!$this->checkUniqueness($this->strUrl)){
+          $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+        }
+
         //Check new URL 
         $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
         if(count($objUrlData) > 0){
@@ -216,25 +226,78 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
   }
 
   /**
-   * checkUrlUniqueness()
+   * checkUniqueness
+   * @param string $strUrl
+   * @return boolean
+   * @author Daniel Rotter <daniel.rotter@massiveart.com>
+   * @version 1.0
+   */
+  protected function checkUniqueness($strUrl){
+    $blnReturn = true;
+    $objUrls = $this->getModelUrls()->loadByUrl($this->objElement->Setup()->getRootLevelId(), $strUrl, $this->objElement->Setup()->getFormType());
+    if(isset($objUrls->url) && count($objUrls->url) > 0){
+      $blnReturn = false;
+    }
+    return $blnReturn;
+  }
+
+  /**
+   * buildUniqueUrl
+   * @param string $strUrl
+   * @param Zend_Db_Table_Rowset_Abstract $objItem
+   * @return Thomas Schedler <tsh@massiveart.com>
+   * @version 1.0
+   */
+  protected function makeUrlUnique($strUrl, $objItem){
+
+    $objParentFolders = array();
+    if($objItem->idParentTypes == $this->core->sysConfig->parent_types->folder){
+      switch($this->objElement->Setup()->getFormTypeId()){
+        case $this->core->sysConfig->form->types->page:
+          $objParentFolders = $this->getModelFolders()->loadParentFolders($objItem->idParent);
+          break;
+        case $this->core->sysConfig->form->types->global:
+          $objParentFolders = $this->getModelFolders()->loadGlobalParentFolders($objItem->idParent, $this->objElement->Setup()->getRootLevelGroupId());
+          break;
+      }
+    }
+
+    $blnFirst = true;
+
+    foreach($objParentFolders as $objParentFolder){
+      if(!($blnFirst && $this->objElement->Setup()->getIsStartElement(false))){
+        $strUrl = $this->getModelUrls()->makeUrlConform(strtolower($objParentFolder->title)) . '/' . $strUrl;
+        if($this->checkUniqueness($strUrl)){
+          break;
+        }
+      }
+      $blnFirst = false;
+    }
+
+    if(!$this->checkUniqueness($strUrl)){
+      $strUrl = $this->makeUrlUniqueIndeed($strUrl);
+    }
+
+    return $strUrl;
+  }
+
+  /**
+   * makeUrlUniqueIndeed()
    * @param string $strUrl
    * @param integer $intUrlAddon = 0
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function checkUrlUniqueness($strUrl, $intUrlAddon = 0){
-    $this->getModelUrls();
+  public function makeUrlUniqueIndeed($strUrl, $intUrlAddon = 0){
 
     if(rtrim($strUrl, '/') != $strUrl){
-    	$strNewUrl = ($intUrlAddon > 0) ? rtrim($strUrl, '/').'-'.$intUrlAddon.'/' : $strUrl;    	
-    }else{
-      $strNewUrl = ($intUrlAddon > 0) ? $strUrl.'-'.$intUrlAddon : $strUrl;	
-    }    
-    
-    $objUrlsData = $this->objModelUrls->loadByUrl($this->objElement->Setup()->getRootLevelId(), $strNewUrl);
+    $strNewUrl = ($intUrlAddon > 0) ? rtrim($strUrl, '/') . '-' . $intUrlAddon . '/' : $strUrl;
+    } else {
+    $strNewUrl = ($intUrlAddon > 0) ? $strUrl . '-' . $intUrlAddon : $strUrl;
+    }
 
-    if(isset($objUrlsData->url) && count($objUrlsData->url) > 0){
-      return $this->checkUrlUniqueness($strUrl, $intUrlAddon + 1);
+    if(!$this->checkUniqueness($strNewUrl)){
+      return $this->makeUrlUniqueIndeed($strUrl, $intUrlAddon + 1);
     }else{
       return $strNewUrl;
     }
@@ -296,6 +359,27 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
     }
 
     return $this->objModelUrls;
+  }
+
+  /**
+   * getModelFolders
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @version 1.0
+   */
+  protected function getModelFolders()
+  {
+    if (null === $this->objModelFolders) {
+      /**
+       * autoload only handles "library" compoennts.
+       * Since this is an application model, we need to require it
+       * from its modules path location.
+       */
+      require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+      $this->objModelFolders = new Model_Folders();
+      $this->objModelFolders->setLanguageId($this->objElement->Setup()->getLanguageId());
+    }
+
+    return $this->objModelFolders;
   }
 }
 ?>
