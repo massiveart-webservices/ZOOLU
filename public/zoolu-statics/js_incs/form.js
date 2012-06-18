@@ -505,7 +505,8 @@ Massiveart.Form = Class.create({
       
       new Ajax.Updater(this.updateOverlayContainer, ajaxRequestUrl, { 
         parameters: {
-          rootLevelId: $F('rootLevelId')
+          rootLevelId: $F('rootLevelId'),
+          languageId: $F('languageId')
         },
         evalScripts: true,
         onComplete: function(){
