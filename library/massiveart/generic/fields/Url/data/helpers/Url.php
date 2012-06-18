@@ -242,7 +242,7 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
   }
 
   /**
-   * buildUniqueUrl
+   * makeUrlUnique
    * @param string $strUrl
    * @param Zend_Db_Table_Rowset_Abstract $objItem
    * @return Thomas Schedler <tsh@massiveart.com>
@@ -291,9 +291,9 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
   public function makeUrlUniqueIndeed($strUrl, $intUrlAddon = 0){
 
     if(rtrim($strUrl, '/') != $strUrl){
-    $strNewUrl = ($intUrlAddon > 0) ? rtrim($strUrl, '/') . '-' . $intUrlAddon . '/' : $strUrl;
+      $strNewUrl = ($intUrlAddon > 0) ? rtrim($strUrl, '/') . '-' . $intUrlAddon . '/' : $strUrl;
     } else {
-    $strNewUrl = ($intUrlAddon > 0) ? $strUrl . '-' . $intUrlAddon : $strUrl;
+      $strNewUrl = ($intUrlAddon > 0) ? $strUrl . '-' . $intUrlAddon : $strUrl;
     }
 
     if(!$this->checkUniqueness($strNewUrl)){
