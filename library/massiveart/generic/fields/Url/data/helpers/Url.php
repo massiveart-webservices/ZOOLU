@@ -133,21 +133,27 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract  {
         
         $this->strUrl = $this->getModelUrls()->makeUrlConform($this->strUrl);
 
-        if(!$this->checkUniqueness($this->strUrl)){
-          $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
-        }
-
         //Check new URL 
         $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
         if(count($objUrlData) > 0){
           $objUrl = $objUrlData->current();
           if(strcmp($this->strUrl, $objUrl->url) !== 0){
             // Url have changed
+
+            if(!$this->checkUniqueness($this->strUrl)){
+              $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+            }
+
             // set all page urls to isMain 0
             $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
             $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
           }
         }else{
+
+          if(!$this->checkUniqueness($this->strUrl)){
+            $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+          }
+
           // set all page urls to isMain 0
           $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
           $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
