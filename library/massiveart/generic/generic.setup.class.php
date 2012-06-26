@@ -244,6 +244,7 @@ class GenericSetup {
    * FieldTypes
    */
   const FIELD_TYPE_ID_TAG = 16;
+  const FIELD_TYPE_ID_ARTICLES = 34;
   
 	/**
 	 * @var Core
@@ -464,12 +465,13 @@ class GenericSetup {
 	          $objGenField->isRegionTitle = $objFieldRegionTagData->isRegionTitle;
 	          $objGenField->isDependentOn = $objFieldRegionTagData->isDependentOn;
 	          $objGenField->showDisplayOptions = $objFieldRegionTagData->showDisplayOptions;
+              $objGenField->fieldOptions = $objFieldRegionTagData->options;
 	          $objGenField->copyValue = $objFieldRegionTagData->copyValue;
 	          $objGenField->decorator = $objFieldRegionTagData->decorator;
 	          $objGenField->isMultiply = $objFieldRegionTagData->isMultiply;
 	          $objGenField->idSearchFieldTypes = $objFieldRegionTagData->idSearchFieldTypes;
-						$objGenField->idFieldTypeGroup = $objFieldRegionTagData->idFieldTypeGroup;
-            $objGenField->validators = ($objFieldRegionTagData->validators != null) ? json_decode($objFieldRegionTagData->validators) : array();
+              $objGenField->idFieldTypeGroup = $objFieldRegionTagData->idFieldTypeGroup;
+              $objGenField->validators = ($objFieldRegionTagData->validators != null) ? json_decode($objFieldRegionTagData->validators) : array();
 
 	  			  /**
 	           * select field container
@@ -704,8 +706,10 @@ class GenericSetup {
                    * go through fields of the region
                    */
                   foreach ($objRegion->getFields() as $objField) {
-                    if($objField->idFieldTypeGroup == GenericSetup::FIELD_TYPE_FILE_FILTER_ID){
+                    if((int)$objField->idFieldTypeGroup == GenericSetup::FIELD_TYPE_FILE_FILTER_ID){
                       $objField->setInstanceValue($intRegionInstanceId, $this->getFileFilterObject($objField->name.'_'.$intRegionInstanceId, $arrValues));
+                    }else if((int)$objField->typeId == GenericSetup::FIELD_TYPE_ID_ARTICLES){
+                      $objField->setInstanceValue($intRegionInstanceId, $this->getArticlesObject($objField->name.'_'.$intRegionInstanceId, $arrValues));
                     }else if(array_key_exists($objField->name.'_'.$intRegionInstanceId, $arrValues)){
                       $objField->setInstanceValue($intRegionInstanceId, $arrValues[$objField->name.'_'.$intRegionInstanceId]);
                     }
@@ -781,6 +785,33 @@ class GenericSetup {
     }
 
     return $objFilters;
+  }
+
+  /**
+   * getArticlesObject
+   * @param string $strFieldName
+   * @param array $arrValues
+   * @return $objArticles
+   * @author Thomas Schedler <tsh@massiveart.com>
+   * @version 1.0
+   */
+  protected function getArticlesObject($strFieldName, &$arrValues)
+  {
+    $articles = array();
+
+    $arrArticleInstanceIds = array_unique(explode('][', trim($arrValues[$strFieldName . '_Instances'], '[]')));
+
+    foreach ($arrArticleInstanceIds as $intInstanceId) {
+      $objArticle = new stdClass();
+
+      $objArticle->size = array_key_exists($strFieldName . '_size_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_size_' . $intInstanceId] : null;
+      $objArticle->price = array_key_exists($strFieldName . '_price_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_price_' . $intInstanceId] : null;
+      $objArticle->discount = array_key_exists($strFieldName . '_discount_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_discount_' . $intInstanceId] : null;
+
+      $articles[] = $objArticle;
+    }
+
+    return $articles;
   }
 
 	/**

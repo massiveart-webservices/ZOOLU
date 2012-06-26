@@ -82,7 +82,6 @@ Massiveart.Form = Class.create({
           //problem: ajax.updater evalScripts = true was too late
           transport.responseText.evalScripts();
           
-
           if(this.blnShowFormAlert){
             if($('rootLevelId') && $F('rootLevelId') != '' && $F('rootLevelId') > 0){
               myNavigation.updateNavigationLevel();
@@ -109,6 +108,9 @@ Massiveart.Form = Class.create({
           // load contacts
           this.loadContactFieldsContent();
           this.loadGroupFieldsContent();
+          
+          //load article variants
+          this.loadArticleVariantsContent();
 
           if(this.selectNavigationItemNow == true){
             myNavigation.selectItem(blnFolderAdd);
@@ -327,10 +329,9 @@ Massiveart.Form = Class.create({
 
   /**
    * loadContactFieldsContent
-   * @param string strType
    */
   loadContactFieldsContent: function(){    
-    $$('#genFormContainer .contact').each(function(elDiv){    
+    $$('#genFormContainer .tact').each(function(elDiv){    
       if($(elDiv.id)){          
         var fieldId = elDiv.id.substring(elDiv.id.indexOf('_')+1);
         if($(fieldId).value != ''){
@@ -346,6 +347,17 @@ Massiveart.Form = Class.create({
             }.bind(this)
           });
         }          
+      }
+    }.bind(this));
+  }, 
+  
+  /**
+   * loadArticleVariantsContent
+   */
+  loadArticleVariantsContent: function(){    
+    $$('#genFormContainer .articlewrapper').each(function(elDiv){    
+      if($(elDiv.id)){          
+
       }
     }.bind(this));
   }, 
@@ -956,78 +968,78 @@ Massiveart.Form = Class.create({
     var arrWidgets = [];
     $('Region_'+regionId+'_Instances').value.scan(/\[\d*\]/, function(widgets){arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))});
     widgetId = Number(arrWidgets[arrWidgets.length - 1]) + 1;
-        
-    var emptyRegion = $('divRegion_'+regionId+'_REPLACE_n');    
+
+    var emptyRegion = $('divRegion_'+regionId+'_REPLACE_n');
     var newRegion = new Element(emptyRegion.tagName);
-     
+
     newRegion.update(emptyRegion.innerHTML.gsub(/REPLACE_n/, widgetId));
-    
+
     newRegion['id'] = 'divRegion_'+regionId+'_'+widgetId;
     newRegion.addClassName(emptyRegion.className);
-    
-    arrWidgets.each(function(wId){ 
+
+    arrWidgets.each(function(wId){
       if($('divAddRegion_'+regionId+'_'+wId)) $('divAddRegion_'+regionId+'_'+wId).show();
-      if($('divRemoveRegion_'+regionId+'_'+wId)) $('divRemoveRegion_'+regionId+'_'+wId).show(); 
+      if($('divRemoveRegion_'+regionId+'_'+wId)) $('divRemoveRegion_'+regionId+'_'+wId).show();
     });
-    
-    new Insertion.Before(emptyRegion, newRegion);        
-    
+
+    new Insertion.Before(emptyRegion, newRegion);
+
     if(this.regionTexteditorObj[regionId]){
-      this.regionTexteditorObj[regionId].each(function(elementId){        
+      this.regionTexteditorObj[regionId].each(function(elementId){
         this.initTexteditor(elementId.gsub(/REPLACE_n/, widgetId));
       }.bind(this));
     }
-    
+
     if(this.regionTitleObj[regionId]){
       this.regionTitleObj[regionId].each(function(elementId){
         this.initRegionTitleObserver(elementId.gsub(/REPLACE_n/, widgetId), regionId+'_'+widgetId);
       }.bind(this));
     }
-    
+
     if(this.regionTagObj[regionId]){
       this.regionTagObj[regionId].each(function(tagElement){
         this.initTag(tagElement.elementId.gsub(/REPLACE_n/, widgetId), tagElement.autocompleteFeed);
       }.bind(this));
     }
-            
+
     $('Region_'+regionId+'_Instances').value =  $('Region_'+regionId+'_Instances').value + '['+widgetId+']';
-    
+
     this.createSortableRegion(regionId);
-    
+
     var regionPos = $('divRegion_'+regionId+'_'+widgetId).cumulativeOffset();
-    var containerPos = $('genFormContainer').cumulativeOffset();    
+    var containerPos = $('genFormContainer').cumulativeOffset();
     $('genFormContainer').scrollTop = (regionPos.top - containerPos.top - 50);
-    
+
     if($('editbox'+regionId+'_'+widgetId) && $('editbox'+regionId+'_'+widgetId).hasClassName('editbox-closed')){
       this.toggleFieldsBox(regionId+'_'+widgetId);
     }
   },
-  
+
   /**
    * removeRegion
    */
   removeRegion: function(regionId, widgetId){
-    
+
     // remove tiny mce control
     if(this.regionTexteditorObj[regionId]){
       this.regionTexteditorObj[regionId].each(function(elementId){
-        tinyMCE.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));        
+        tinyMCE.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
       }.bind(this));
     }
-    
+
     $('divRegion_'+regionId+'_'+widgetId).remove();
-    regEx = "["+widgetId+"]";    
+    regEx = "["+widgetId+"]";
     $('Region_'+regionId+'_Instances').value = $('Region_'+regionId+'_Instances').value.replace(regEx, '');
     var arrWidgets = [];
     $('Region_'+regionId+'_Instances').value.scan(/\[\d*\]/, function(widgets){arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))});
-    
+
     if(arrWidgets.length == 1){
       if($('divRemoveRegion_'+regionId+'_'+arrWidgets[arrWidgets.length - 1])) $('divRemoveRegion_'+regionId+'_'+arrWidgets[arrWidgets.length - 1]).hide();
     }
-    
+
     $('Region_'+regionId+'_Order').value = Sortable.serialize('divRegion_'+regionId);
   },
-  
+
   /**
    * createSortableRegion
    */
@@ -1042,42 +1054,95 @@ Massiveart.Form = Class.create({
         only: 'sortablebox',
         handle:'editboxdrag',
         onUpdate: function(el){
-          rId = el.id.replace('divRegion_', '');        
+          rId = el.id.replace('divRegion_', '');
           $('Region_'+rId+'_Order').value = Sortable.serialize(el.id);
         }
       });
-      
-      $('Region_'+regionId+'_Order').value = Sortable.serialize(SortableRegionId);   
+
+      $('Region_'+regionId+'_Order').value = Sortable.serialize(SortableRegionId);
     }
   },
-  
+
+  /**
+   * addArticle
+   */
+  addArticle: function(fieldId) {
+
+    var arrWidgets = [], n, emptyArticle, newArticle;
+
+    $(fieldId + '_Instances').value.scan(/\[\d*\]/, function(widgets) {
+      arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))
+    });
+    n = Number(arrWidgets[arrWidgets.length - 1]) + 1;
+
+    emptyArticle = $(fieldId + '_REPLACE_n');
+    newArticle = new Element(emptyArticle.tagName);
+
+    newArticle.update(emptyArticle.innerHTML.gsub(/REPLACE_n/, n));
+
+    newArticle['id'] = fieldId + '_' + n;
+    newArticle.addClassName(emptyArticle.className);
+
+    arrWidgets.each(function(wId) {
+      if ($('addArticle_' + fieldId + '_' + wId)) $('addArticle_' + fieldId + '_' + wId).hide();
+      if ($('removeArticle_' + fieldId + '_' + wId)) $('removeArticle_' + fieldId + '_' + wId).show();
+    });
+
+    new Insertion.Before(emptyArticle, newArticle);
+
+    $(fieldId + '_Instances').value = $(fieldId + '_Instances').value + '[' + n + ']';
+  },
+
+  /**
+   * removeArticle
+   */
+  removeArticle: function(fieldId, n) {
+
+    $(fieldId + '_' + n).remove();
+    var regEx = "[" + n + "]", arrWidgets = [];
+
+    $(fieldId + '_Instances').value = $(fieldId + '_Instances').value.replace(regEx, '');
+
+    $(fieldId + '_Instances').value.scan(/\[\d*\]/, function(widgets) {
+      arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))
+    });
+
+    if (arrWidgets.length == 1) {
+      if ($('removeArticle_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1])) $('removeArticle_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1]).hide();
+    }
+
+    if ($('addArticle_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1])) $('addArticle_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1]).show();
+
+    //$(fieldId + '_Order').value = Sortable.serialize('divArticle_' + fieldId);
+  },
+
   /**
    * removeTinyMCEControl
    */
   removeTinyMCEControl: function(elementId){
-    var arrElementIds = elementId.split('_');    
+    var arrElementIds = elementId.split('_');
     if(arrElementIds.length == 3){
       regionId = arrElementIds[1];
       widgetId = arrElementIds[2];
       if(this.regionTexteditorObj[regionId]){
         this.regionTexteditorObj[regionId].each(function(elementId){
-          tinyMCE.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));        
+          tinyMCE.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
         }.bind(this));
       }
     }
   },
-  
+
   /**
    * addTinyMCEControl
    */
   addTinyMCEControl: function(elementId){
-    var arrElementIds = elementId.split('_');    
+    var arrElementIds = elementId.split('_');
     if(arrElementIds.length == 3){
       regionId = arrElementIds[1];
       widgetId = arrElementIds[2];
       if(this.regionTexteditorObj[regionId]){
         this.regionTexteditorObj[regionId].each(function(elementId){
-          tinyMCE.execCommand('mceAddControl', false, elementId.gsub(/REPLACE_n/, widgetId));        
+          tinyMCE.execCommand('mceAddControl', false, elementId.gsub(/REPLACE_n/, widgetId));
         }.bind(this));
       }
     }

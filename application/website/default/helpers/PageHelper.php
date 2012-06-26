@@ -329,7 +329,7 @@ class PageHelper {
   }
   
   /**
-   * getMetaDescription
+   * getMetaKeywords
    * @return string $strReturn
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0

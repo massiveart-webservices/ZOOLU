@@ -823,6 +823,63 @@ Linked Page */
 }
 
 /* ----------------
+Articles */
+
+.articlewrapper {
+    background-color: #E4E4E4;
+    border: 1px solid #CCCCCC;
+    padding: 10px 10px 0 10px;
+}
+
+.articlewrapper .article {
+    position: relative;
+}
+
+.articlewrapper .article .field {
+    padding-bottom: 10px;
+}
+
+.article-labels,
+.article-fieldgroup {
+    padding-right: 25px;
+}
+
+.articlewrapper .article-labels .field {
+    padding-bottom: 0;
+}
+
+.article-edit-box {
+    position: absolute;
+    width: 36px;
+    top: 4px;
+    right: 0;
+}
+
+.article-remove {
+    background: url('/zoolu-statics/images/icons/icon_remove_2.png') no-repeat center center;
+    height: 22px;
+    width: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+.article-remove.inactive {
+    background: url('/zoolu-statics/images/icons/icon_remove_2_inactive.png') no-repeat center center;
+    height: 22px;
+    width: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+.article-add {
+    background: url('/zoolu-statics/images/icons/icon_add_3.png') no-repeat center center;
+    height: 22px;
+    width: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+/* ----------------
 Function Widget */
 
 .widgetfunctions {

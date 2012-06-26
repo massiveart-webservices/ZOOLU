@@ -238,7 +238,10 @@ class Model_Folders {
                              'idStatus'         => $objGenericSetup->getStatusId(),
                              'isUrlFolder'      => $objGenericSetup->getUrlFolder(),
                              'showInNavigation' => $objGenericSetup->getShowInNavigation(),
-                             'hideInSitemap'    => $objGenericSetup->getHideInSitemap());
+                             'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
+                             'showInWebsite'    => $objGenericSetup->getShowInWebsite(),
+                             'showInTablet'     => $objGenericSetup->getShowInTablet(),
+                             'showInMobile'     => $objGenericSetup->getShowInMobile());
       $this->getFolderPropertyTable()->insert($arrProperties);
     }
   }

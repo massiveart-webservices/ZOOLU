@@ -190,8 +190,6 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract  {
         $objSelect->joinLeft('files', 'files.id = iFiles.idFiles AND files.isImage = 1', array('filename', 'fileversion' => 'version', 'filepath' => 'path'));
         $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->core->dbh->quote($this->objElement->Setup()->getLanguageId(), Zend_Db::INT_TYPE), array('filetitle' => 'title'));      	
 
-        $objSelect->joinLeft(array('iProduct' => 'global-DEFAULT_PRODUCT-1-Instances'), 'iProduct.globalId = lP.globalId AND iProduct.version = lP.version AND iProduct.idLanguages = '.$this->core->dbh->quote($this->objElement->Setup()->getLanguageId(), Zend_Db::INT_TYPE), array('shop_url')); //FIXME
-        
       }else{
       	$objSelect->join($strType.'Properties', $strType.'Properties.'.$strType.'Id = '.$strType.'s.'.$strType.'Id AND '.$strType.'Properties.version = '.$intVersion.' AND '.$strType.'Properties.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('idStatus'));
       	$objSelect->join($strType.'Titles', $strType.'Titles.'.$strType.'Id = '.$strType.'s.'.$strType.'Id AND '.$strType.'Titles.version = '.$intVersion.' AND '.$strType.'Titles.idLanguages = '.$this->objElement->Setup()->getLanguageId(), array('title'));

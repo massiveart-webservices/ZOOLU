@@ -276,7 +276,7 @@ $this->core->logger->debug(strval($objSelect));
               ->joinLeft('regions', 'regions.id = tabRegions.idRegions', array('regionId' => 'id', 'idRegionTypes', 'regionColumns' => 'columns', 'collapsable', 'isCollapsed', 'position', 'isMultiply', 'multiplyRegion'))
               ->joinLeft('regionTitles', 'regionTitles.idRegions = regions.id AND regionTitles.idLanguages = '.$this->intLanguageId, array('regionTitle' => 'title'))
               ->joinLeft('regionFields', 'regionFields.idRegions = regions.id', array('order'))
-              ->joinLeft('fields', 'fields.id = regionFields.idFields', array('id', 'idFieldTypes', 'name', 'idSearchFieldTypes', 'idRelationPage', 'idCategory', 'sqlSelect', 'columns', 'isCoreField', 'isKeyField', 'isSaveField', 'isRegionTitle', 'isDependentOn', 'showDisplayOptions', 'copyValue', 'validators'))
+              ->joinLeft('fields', 'fields.id = regionFields.idFields', array('id', 'idFieldTypes', 'name', 'idSearchFieldTypes', 'idRelationPage', 'idCategory', 'sqlSelect', 'columns', 'isCoreField', 'isKeyField', 'isSaveField', 'isRegionTitle', 'isDependentOn', 'showDisplayOptions', 'options', 'copyValue', 'validators'))
               ->joinLeft('fieldTitles', 'fieldTitles.idFields = fields.id AND fieldTitles.idLanguages = '.$this->intLanguageId, array('title'))
               ->joinLeft('fieldTypes', 'fieldTypes.id = fields.idFieldTypes', array('type' => 'title', 'defaultValue', 'idFieldTypeGroup'))
               ->joinLeft('decorators', 'decorators.id = fieldTypes.idDecorator', array('decorator' => 'title'))
