@@ -1913,7 +1913,7 @@ class PageHelper {
   }
 
   /**
-   * getForm
+   * getDynForm
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @return string
    */
@@ -1928,27 +1928,41 @@ class PageHelper {
       
       $counter = 0;
       foreach($arrFormFields as $objField){
-        
-        $strFieldId = htmlentities($objField->title.'_'.uniqid(), ENT_COMPAT, 'UTF-8');
+        $strFieldId = htmlentities(urlencode($objField->title).'_'.uniqid(), ENT_COMPAT, $this->core->sysConfig->encoding->default);
         
         $strMandatory = '';
         $strMandatoryCssClass = '';
+        $strClassNameMandatory = '';
         if($objField->mandatory){
           $strMandatory = ' *';
           $strClassNameMandatory = ' mandatory';
-          $strMandatoryCssClass = 'class="mandatory"';
+          $strMandatoryCssClass = ' class="mandatory"';
+        }        
+        
+        $strClass = 'field-1';        
+        if(isset($objField->display->id) && $objField->display->id == $this->core->sysConfig->display->one_column){
+          $strClass = 'field-2';
+          $counter--;
         }
         
-        $strClass = 'field-1';
-        if(isset($objField->display->id) && $objField->display->id == $this->core->sysConfig->display->two_column){
-          $strClass = 'field-2';
-        }
+        $strClearRight = 'last';
+        if($counter % 2 == 1) $strClass .= ' '.$strClearRight;
         
         $strFields .= '    
-            <div class="'.$strClass.'">
-              <input type="hidden" id="'.$strFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">';
-        if($objField->type->code != 'headline'){
-          $strFields .= '<label id="lbl_'.$strFieldId.'" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+            <div class="'.$strClass.'">';
+        if($objField->type->code != 'headline' && $objField->type->code != 'text' && $objField->type->code != 'divider'){
+          $strFields .= '
+          	<input type="hidden" id="'.$strFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">';
+          if ($objField->type->code != 'recaptcha_response_field') {
+            $strFields .= '
+          	<label id="lbl_'.$strFieldId.'" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+          } else {
+            $strFields .= '
+          	<label id="lbl_recaptcha_response_field" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';  
+          }
+          if($objField->description != ''){
+            $strFields .= '<p class="desc">'.htmlentities($objField->description, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</p>';    
+          }
         }
  
         switch($objField->type->code){
@@ -1964,60 +1978,37 @@ class PageHelper {
           case 'type' :
             $strFields .= '              
               <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
-                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>     
+                <option value="'.$this->objTranslate->_('Dental_office').'">'.$this->objTranslate->_('Dental_office').'</option>
+                <option value="'.$this->objTranslate->_('Dental_office_laboratory').'">'.$this->objTranslate->_('Dental_office_laboratory').'</option>
+                <option value="'.$this->objTranslate->_('Laboratory').'">'.$this->objTranslate->_('Laboratory').'</option>
+                <option value="'.$this->objTranslate->_('School').'">'.$this->objTranslate->_('School').'</option>
+                <option value="'.$this->objTranslate->_('Student').'">'.$this->objTranslate->_('Student').'</option>
+                <option value="'.$this->objTranslate->_('Private_person').'">'.$this->objTranslate->_('Private_person').'</option>           
               </select>';
             break;
             
           case 'country' :
             $strFields .= '
               <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
-                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>   
+                '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC').'             
               </select>';
-            // '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC').'
             break;
             
           case 'message' :
             $strFields .= '
-              <textarea id="'.$strFieldId.'" name="'.$strFieldId.'"></textarea>';
+              <textarea id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMandatoryCssClass.'></textarea>';
             break;
             
           case 'attachment' :
             $blnHasFileUpload = true;
             $strFields .= '
-              <input type="file" id="'.$strFieldId.'" name="'.$strFieldId.'"/>';
+              <input type="file" id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMandatoryCssClass.'/>';
             break;
             
-          case 'recaptcha_response_field' :             
-            $objRecaptchaService = new ReCaptchaService($this->core->sysConfig->recaptcha->keys->public, $this->core->sysConfig->recaptcha->keys->private);
-            $objRecaptchaService->setOption('theme', 'custom');
-            $objRecaptchaService->setOption('lang', strtolower($this->core->strLanguageCode));
-            $objRecaptchaService->setOption('custom_theme_widget', 'recaptcha_widget');
-
-            $strFields .= '
-              <div id="recaptcha_widget" style="display:none;">
-                <div id="recaptcha_image"></div>                
-                <div class="recaptchaOpts">
-                  <a id="recaptcha_reload_btn" href="javascript:Recaptcha.reload();" title="'.$this->getTranslate()->_('Get_a_new_challenge').'">
-                    <img width="25" height="18" alt="'.$this->getTranslate()->_('Get_a_new_challenge').'" id="recaptcha_reload" src="http://www.google.com/recaptcha/api/img/clean/refresh.png"/>
-                  </a>
-                  <a class="recaptcha_only_if_image" id="recaptcha_switch_audio_btn" href="javascript:Recaptcha.switch_type(\'audio\');" title="'.$this->getTranslate()->_('Get_an_audio_challenge').'">
-                    <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_an_audio_challenge').'" id="recaptcha_switch_audio" src="http://www.google.com/recaptcha/api/img/clean/audio.png"/>
-                  </a>
-                  <a class="recaptcha_only_if_audio" id="recaptcha_switch_img_btn" href="javascript:Recaptcha.switch_type(\'image\');" title="'.$this->getTranslate()->_('Get_a_visual_challenge').'">
-                    <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_a_visual_challenge').'" id="recaptcha_switch_img" src="http://www.google.com/recaptcha/api/img/clean/text.png"/>
-                  </a> 
-                  <a id="recaptcha_whatsthis_btn" href="javascript:Recaptcha.showhelp()" title="'.$this->getTranslate()->_('Help').'">
-                    <img width="25" height="16" id="recaptcha_whatsthis" src="http://www.google.com/recaptcha/api/img/clean/help.png" alt="'.$this->getTranslate()->_('Help').'"/>
-                  </a>
-                </div>
-                <div class="clear"></div>
-                <input type="text" name="recaptcha_response_field" id="recaptcha_response_field"'.$strMandatoryCssClass.'/>
-              </div>';
-            
-            $objReCaptchaAdapter = new Zend_Captcha_ReCaptcha();
-            $objReCaptchaAdapter->setService($objRecaptchaService); 
-            
-            $strFields .= $objReCaptchaAdapter->render();
+          case 'recaptcha_response_field' :
+            $strFields .= $this->getCaptchaField($strMandatoryCssClass);
             break;
             
           case 'select':
@@ -2038,11 +2029,11 @@ class PageHelper {
             $i = 1;
             foreach($objField->options as $strOption){
               $strFields .= '
-                    <input class="rd '.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
+             		<input class="rd '.(($objField->mandatory && $i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
               $strFields .= '
-                <input class="rd" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
+              	<input class="rd" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
             }
             break;
             
@@ -2050,21 +2041,27 @@ class PageHelper {
             $i = 1;
             foreach($objField->options as $strOption){              
               $strFields .= '
-                    <input class="chbx'.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
+             		<input class="chbx'.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
               $strFields .= '
-                <input class="chbx" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
+              	<input class="chbx" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
             }
             break;
             
           case 'headline':
             $strFields .= '
-                      <h2>'.$objField->title.'</h2>';
+           		<h2>'.$objField->title.'</h2>';
+            break;
+          
+          case 'text':
+            $strFields .= '
+            	<p>'.htmlentities($objField->description, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</p>';
             break;
             
           case 'divider':
-            $strFields .= '<div style="height:25px"></div>';
+            $strFields .= '
+            	<div class="divider">&nbsp;</div>';
             break;
             
           default :
@@ -2082,9 +2079,18 @@ class PageHelper {
             if($objField->maxlength){
               $strMaxLength = ' maxlength="'.$objField->maxlength.'"';
             }
-            $strClass = 'class="'.$strClassMandatory.' '.$strClassCode.' '.$strValidationClass.'"';
-            $strFields .= '
-              <input type="text" '.$strClass.' id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.' value=""'.$strClass.'/>';             
+            $strClass = ' class="'.$strClassMandatory.' '.$strClassCode.' '.$strValidationClass.'"';
+            
+            switch($objField->type->code){                              
+              case 'textarea':
+                $strFields .= '
+              		<textarea id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.$strClass.'></textarea>';
+                break;              
+              default :
+                $strFields .= '
+              		<input type="text" id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.' value=""'.$strClass.'/>';
+                break;
+            }           
             break;
         }
         
@@ -2097,10 +2103,10 @@ class PageHelper {
       $strReturn .= '
         <form id="'.$strFormId.'" name="'.$strFormId.'"  action="/zoolu-website/datareceiver" method="post" onsubmit="return false;"'.(($blnHasFileUpload) ? ' enctype="multipart/form-data"' : '').'>
           '.$strFields.'
-          <div class="fieldLeft required">
+          <div class="field-2 required">
             <span>'.$this->objTranslate->_('Fields_with_*_are_mandatory').'</span>  
-          </div>          
-          <div class="fieldRight buttonContainer">
+          </div>
+          <div class="field-2 buttonContainer">
             <div class="buttonBox" onclick="myDefault.submitForm(\''.$strFormId.'\');">
               <div class="left">&nbsp;</div>
               <div class="center">'.$this->objTranslate->_('Send').'</div>
@@ -2119,10 +2125,50 @@ class PageHelper {
           <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
           <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
           <input type="hidden" id="blnDynForm" name="blnDynForm" value="true" />
-          
-          <button onclick="myDefault.submitForm(\'contactForm\')">Absenden</button>
         </form>';  
     }
+    
+    return $strReturn;
+  }
+  
+  /**
+   * getCaptchaField
+   * @author Cornelius Hansjakob <cha@massiveart.com>
+   * @return string
+   */
+  private function getCaptchaField($strMandatoryCssClass){
+    $strReturn = '';
+    
+    $objRecaptchaService = new ReCaptchaService($this->core->sysConfig->recaptcha->keys->public, $this->core->sysConfig->recaptcha->keys->private);
+    $objRecaptchaService->setOption('theme', 'custom');
+    $objRecaptchaService->setOption('lang', strtolower($this->core->strLanguageCode));
+    $objRecaptchaService->setOption('custom_theme_widget', 'recaptcha_widget');
+
+    $strReturn .= '
+      <div id="recaptcha_widget" style="display:none;">
+        <div id="recaptcha_image"></div>                
+        <div class="recaptchaOpts">
+          <a id="recaptcha_reload_btn" href="javascript:Recaptcha.reload();" title="'.$this->getTranslate()->_('Get_a_new_challenge').'">
+            <img width="25" height="18" alt="'.$this->getTranslate()->_('Get_a_new_challenge').'" id="recaptcha_reload" src="http://www.google.com/recaptcha/api/img/clean/refresh.png"/>
+          </a>
+          <a class="recaptcha_only_if_image" id="recaptcha_switch_audio_btn" href="javascript:Recaptcha.switch_type(\'audio\');" title="'.$this->getTranslate()->_('Get_an_audio_challenge').'">
+            <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_an_audio_challenge').'" id="recaptcha_switch_audio" src="http://www.google.com/recaptcha/api/img/clean/audio.png"/>
+          </a>
+          <a class="recaptcha_only_if_audio" id="recaptcha_switch_img_btn" href="javascript:Recaptcha.switch_type(\'image\');" title="'.$this->getTranslate()->_('Get_a_visual_challenge').'">
+            <img width="25" height="15" alt="'.$this->getTranslate()->_('Get_a_visual_challenge').'" id="recaptcha_switch_img" src="http://www.google.com/recaptcha/api/img/clean/text.png"/>
+          </a> 
+          <a id="recaptcha_whatsthis_btn" href="javascript:Recaptcha.showhelp()" title="'.$this->getTranslate()->_('Help').'">
+            <img width="25" height="16" id="recaptcha_whatsthis" src="http://www.google.com/recaptcha/api/img/clean/help.png" alt="'.$this->getTranslate()->_('Help').'"/>
+          </a>
+        </div>
+        <div class="clear"></div>
+        <input type="text" name="recaptcha_response_field" id="recaptcha_response_field"/>
+      </div>';
+    
+    $objReCaptchaAdapter = new Zend_Captcha_ReCaptcha();
+    $objReCaptchaAdapter->setService($objRecaptchaService); 
+    
+    $strReturn .= $objReCaptchaAdapter->render();
     
     return $strReturn;
   }
