@@ -181,7 +181,7 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
                 ' . str_replace($wildcards, array(
                                                  $this->view->escape($id),
                                                  $this->view->escape($name),
-                                                 'REPLACE_n',
+                                                 'REPLACE_x',
                                                  implode("\n    ", $this->buildSelect($options, null)),
                                                  'style="display:none;"',
                                             ), $template) . '

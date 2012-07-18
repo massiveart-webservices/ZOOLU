@@ -331,7 +331,7 @@ Massiveart.Form = Class.create({
    * loadContactFieldsContent
    */
   loadContactFieldsContent: function(){    
-    $$('#genFormContainer .tact').each(function(elDiv){    
+    $$('#genFormContainer .contact').each(function(elDiv){    
       if($(elDiv.id)){          
         var fieldId = elDiv.id.substring(elDiv.id.indexOf('_')+1);
         if($(fieldId).value != ''){
@@ -1075,10 +1075,10 @@ Massiveart.Form = Class.create({
     });
     n = Number(arrWidgets[arrWidgets.length - 1]) + 1;
 
-    emptyArticle = $(fieldId + '_REPLACE_n');
+    emptyArticle = $(fieldId + '_REPLACE_x');
     newArticle = new Element(emptyArticle.tagName);
 
-    newArticle.update(emptyArticle.innerHTML.gsub(/REPLACE_n/, n));
+    newArticle.update(emptyArticle.innerHTML.gsub(/REPLACE_x/, n));
 
     newArticle['id'] = fieldId + '_' + n;
     newArticle.addClassName(emptyArticle.className);
