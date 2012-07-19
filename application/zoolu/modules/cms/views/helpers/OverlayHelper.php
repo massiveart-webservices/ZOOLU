@@ -641,7 +641,7 @@ class OverlayHelper
             <div>
                 <div class="olcontacttopleft"></div>
                 <div class="olcontacttopitemicon"></div>
-                <div class="olcontacttopitemtitle bold">Titel</div>
+                <div class="olcontacttopitemtitle bold">Name</div>
                 <div class="olcontacttopright"></div>
                 <div class="clear"></div>
             </div>
