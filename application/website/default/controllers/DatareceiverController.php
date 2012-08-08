@@ -431,7 +431,7 @@ class DatareceiverController extends Zend_Controller_Action {
                     </tr>
                     <tr>
                       <td>
-                        '.($this->strSuccessMessage != '' ? $this->strSuccessMessage : $this->translate->_('Success_message')).'
+                        '.($this->strSuccessMessage != '' ? $this->strSuccessMessage : $this->translate->_('Success_message', false)).'
                       </td>
                     </tr>
                  </table>
