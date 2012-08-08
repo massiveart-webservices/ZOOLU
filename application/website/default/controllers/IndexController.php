@@ -193,8 +193,6 @@ class IndexController extends Zend_Controller_Action
     public function postDispatch()
     {
         if ($this->blnPostDispatch == true) {
-            // trigger client specific dispatch helper
-            if ($this->core->sysConfig->helpers->client->dispatcher === 'enabled') ClientHelper::get('Dispatcher')->postDispatch($this);
 
             if (function_exists('tidy_parse_string') && $this->blnCachingOutput == false && $this->getResponse()->getBody() != '') {
                 /**
@@ -241,11 +239,13 @@ class IndexController extends Zend_Controller_Action
                     $arrTags[] = ucfirst($this->objPage->getType()) . 'Id_' . $this->objPage->getPageId() . '_' . $this->objPage->getLanguageId();
 
                     $this->core->logger->debug(var_export($arrTags, true));
-                    $this->objCache->end($arrTags);
+                    $this->objCache->end($arrTags, false, null, false);
                     $this->core->logger->debug('... end caching!');
-                    exit();
                 }
             }
+            // trigger client specific dispatch helper
+            if ($this->core->sysConfig->helpers->client->dispatcher === 'enabled') ClientHelper::get('Dispatcher')->postDispatch($this);
+            
             parent::postDispatch();
         }
     }
