@@ -2124,6 +2124,7 @@ class PageHelper {
           <input type="hidden" id="sender_mail" name="sender_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_mail')).'"/>
           <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
           <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
+          <input type="hidden" id="success_message_mail" name="success_message_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('success_message_mail')).'"/>
           <input type="hidden" id="blnDynForm" name="blnDynForm" value="true" />
         </form>';  
     }

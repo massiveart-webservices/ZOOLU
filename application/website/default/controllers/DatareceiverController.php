@@ -69,6 +69,7 @@ class DatareceiverController extends Zend_Controller_Action {
   protected $strReceiverName;
   protected $strReceiverMail;
   protected $strMailSubject = '';
+  protected $strSuccessMessage = '';
   
   protected $strUploadPath;
   protected $strAttachmentFile = '';
@@ -104,9 +105,7 @@ class DatareceiverController extends Zend_Controller_Action {
         $this->arrFileData = $_FILES;
       }
 
-      /**
-       * set up zoolu translate obj
-       */
+      // set up zoolu translate obj
       if(file_exists(GLOBAL_ROOT_PATH.'application/website/default/language/website-'.$this->core->strLanguageCode.'.mo')){
         $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH.'application/website/default/language/website-'.$this->core->strLanguageCode.'.mo');
       }else{
@@ -153,9 +152,7 @@ class DatareceiverController extends Zend_Controller_Action {
                                      'attachment'         => $this->translate->_('Attachment'),
                                      'checkLegalnotes'    => $this->translate->_('Check_Legalnotes'));
 
-        /**
-         * set sender name and e-mail
-         */
+        // set sender name and e-mail
         if(array_key_exists('sender_name', $this->arrFormData) && array_key_exists('sender_mail', $this->arrFormData)){
           $this->strSenderName = Crypt::decrypt($this->core, $this->core->config->crypt->key, $this->arrFormData['sender_name']);
           $this->strSenderMail = Crypt::decrypt($this->core, $this->core->config->crypt->key, $this->arrFormData['sender_mail']);
@@ -163,9 +160,7 @@ class DatareceiverController extends Zend_Controller_Action {
           unset($this->arrFormData['sender_mail']); 
         }
         
-        /**
-         * set receiver name and e-mail
-         */
+        // set receiver name and e-mail
         if(array_key_exists('receiver_name', $this->arrFormData) && array_key_exists('receiver_mail', $this->arrFormData)){
           $this->strReceiverName = Crypt::decrypt($this->core, $this->core->config->crypt->key, $this->arrFormData['receiver_name']);
           $this->strReceiverMail = Crypt::decrypt($this->core, $this->core->config->crypt->key, $this->arrFormData['receiver_mail']);
@@ -177,37 +172,33 @@ class DatareceiverController extends Zend_Controller_Action {
           unset($this->arrFormData['receiver_mail']);   
         }
 
-        /**
-         * set e-mail subject
-         */
+        // set e-mail subject
         if(array_key_exists('subject', $this->arrFormData)){
           $this->strMailSubject = $this->arrFormData['subject'];
         }
-
-        /**
-         * set redirect url
-         */
+        
+        // set redirect url
         if(array_key_exists('redirectUrl', $this->arrFormData)){
           $this->strRedirectUrl = $this->arrFormData['redirectUrl'];
           unset($this->arrFormData['redirectUrl']); 
         }
 
-        /**
-         * unset captcha fields
-         */
+        // set success message mail
+        if(array_key_exists('success_message_mail', $this->arrFormData)){
+          $this->strSuccessMessage = Crypt::decrypt($this->core, $this->core->config->crypt->key, $this->arrFormData['success_message_mail']);
+          unset($this->arrFormData['success_message_mail']); 
+        }
+
+        // unset captcha fields
         if(array_key_exists('recaptcha_response_field', $this->arrFormData)) unset($this->arrFormData['recaptcha_response_field']);
         if(array_key_exists('recaptcha_challenge_field', $this->arrFormData)) unset($this->arrFormData['recaptcha_challenge_field']);
         
-        /**
-         * send mail
-         */
+        // send mail
         if($this->core->config->mail->actions->sendmail->client == 'true'){          
           $this->sendMail();  
         }
 
-        /**
-         * save to database
-         */
+        // save to database
         if($this->core->config->mail->actions->database == 'true'){
           $this->insertDatabase();
         } 
@@ -270,9 +261,7 @@ class DatareceiverController extends Zend_Controller_Action {
         </html>';
     }
 
-    /**
-     * Adding Attachment to Mail
-     */
+    // Adding Attachment to Mail
     if(count($this->arrFileData) > 0){
       foreach($this->arrFileData as $arrFile){        
         if($arrFile['name'] != ''){
@@ -290,22 +279,14 @@ class DatareceiverController extends Zend_Controller_Action {
     }
 
 
-    /**
-     * set mail subject
-     */
+    // set mail subject
     $mail->setSubject($this->strMailSubject);
-    /**
-     * set html body
-     */
+    // set html body
     $mail->setBodyHtml($strHtmlBody);
-    /**
-     * set default FROM address
-     */
+    // set default FROM address
     $mail->setFrom($this->strSenderMail, $this->strSenderName);
 		
-    /**
-     * set TO address
-     */
+    // set TO address
     if($this->arrFormData['blnDynForm'] == 'true'){
       foreach($this->arrFormData as $key => $value){
         if(preg_match('/_type$/', $key)){
@@ -334,9 +315,7 @@ class DatareceiverController extends Zend_Controller_Action {
       $mail->addTo($this->arrMailRecipients['Email'], $this->arrMailRecipients['Name']);
       //set header for sending mail
       $mail->addHeader('Sender', $this->core->config->mail->params->username);
-      /**
-       * send mail if mail body is not empty
-       */
+      // send mail if mail body is not empty
       if($strHtmlBody != ''){
         $mail->send($transport);		 
       }	
@@ -447,12 +426,12 @@ class DatareceiverController extends Zend_Controller_Action {
                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
                        <td>
-                         <h2>Sehr geehrte(r) '.$this->strUserFName.' '.$this->strUserSName.'</h2>                         
+                         <h2>'.$this->translate->_('Dear').' '.$this->strUserFName.' '.$this->strUserSName.'</h2>                         
                        </td>
                     </tr>
                     <tr>
                       <td>
-                        Vielen Dank für Ihre Teilnahme
+                        '.($this->strSuccessMessage != '' ? $this->strSuccessMessage : $this->translate->_('Success_message')).'
                       </td>
                     </tr>
                  </table>
@@ -463,29 +442,19 @@ class DatareceiverController extends Zend_Controller_Action {
         </html>';
     }
       
-    /**
-     * set mail subject
-     */
+    // set mail subject
     $mail->setSubject($this->strMailSubject);
-    /**
-     * set default FROM address
-     */
+    // set default FROM address
     $mail->setFrom($this->strSenderMail, $this->strSenderName);
-    /**
-     * set html body
-     */
+    // set html body
     $mail->setBodyHtml($strHtmlBody);
-    /**
-     * set default FROM address
-     */
+    // set default FROM address
     if($this->strUserMail != ''){
       $mail->clearRecipients();
       $mail->addTo($this->strUserMail, $this->strUserFName.' '.$this->strUserSName);
       //set header for sending mail
       $mail->addHeader('Sender', $this->core->config->mail->params->username);
-      /**
-       * send mail if mail body is not empty
-       */
+      // send mail if mail body is not empty
       if($strHtmlBody != ''){
         $this->core->logger->debug('Send Confirmation Mail!');
         $mail->send($transport);
