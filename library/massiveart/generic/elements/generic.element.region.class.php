@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,358 +42,404 @@
  * @subpackage GenericElementRegion
  */
 
-require_once(dirname(__FILE__).'/generic.element.abstract.class.php');
+require_once(dirname(__FILE__) . '/generic.element.abstract.class.php');
 
-class GenericElementRegion extends GenericElementAbstract {
-    
-	protected $intRegionId;
-	protected $strRegionTitle;
-	protected $intRegionCols;
-	protected $intRegionOrder;
-	protected $intRegionPosition;
-	protected $intRegionTypeId;
-	protected $blnRegionCollapsable = true;
-	protected $blnRegionIsCollapsed = false;
-	protected $blnRegionIsMultiply = false;
-	protected $blnRegionMultiplyRegion = false;
+class GenericElementRegion extends GenericElementAbstract
+{
 
-	protected $arrFields = array();
-	
-	protected $arrRegionInstanceIds = array();
-  /**
-   * property of the region instance id array
-   * @return Array $arrRegionInstanceIds
-   */
-  public function RegionInstanceIds(){
-    return $this->arrRegionInstanceIds;
-  }
-  
-  protected $arrFieldNames = array();
-  /**
-   * property of the field name array
-   * @return Array $arrFieldNames
-   */
-  public function FieldNames(){
-    return $this->arrFieldNames;
-  }
-  	
-	protected $arrFileFieldNames = array();
-  /**
-   * property of the file field names array
-   * @return Array $arrFileFieldNames
-   */
-  public function FileFieldNames(){
-    return $this->arrFileFieldNames;
-  }
+    protected $intRegionId;
+    protected $strRegionTitle;
+    protected $intRegionCols;
+    protected $intRegionOrder;
+    protected $intRegionPosition;
+    protected $intRegionTypeId;
+    protected $blnRegionCollapsable = true;
+    protected $blnRegionIsCollapsed = false;
+    protected $blnRegionIsMultiply = false;
+    protected $blnRegionMultiplyRegion = false;
 
-  protected $arrFileFilterFieldNames = array();
-  /**
-   * property of the file filter field names array
-   * @return Array $arrFileFilterFieldNames
-   */
-  public function FileFilterFieldNames(){
-    return $this->arrFileFilterFieldNames;
-  }
+    protected $arrFields = array();
 
-	protected $arrMultiFieldNames = array();
-  /**
-   * property of the multi field names array
-   * @return Array $arrMultiFieldNames
-   */
-  public function MultiFieldNames(){
-    return $this->arrMultiFieldNames;
-  }
-  
-	protected $arrInstanceFieldNames = array();
-  /**
-   * property of the instance field names array
-   * @return Array $arrInstanceFieldNames
-   */
-  public function InstanceFieldNames(){
-    return $this->arrInstanceFieldNames;
-  }
-  
-  protected $arrSpecialFieldNames = array();
-  /**
-   * property of the special field names array
-   * @return Array $arrSpecialFieldNames
-   */
-  public function SpecialFieldNames(){
-    return $this->arrSpecialFieldNames;
-  }
-  
-	/**
-   * addField
-   * @param GenericElementField $objField
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-	public function addField(GenericElementField &$objField){
-	  $this->arrFields[$objField->name] = $objField;	  
-	}
-	
-  /**
-   * getField
-   * @param string $strFieldName
-   * @return GenericElementField|null
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getField($strFieldName){
-    if(array_key_exists($strFieldName, $this->arrFields)){
-      return $this->arrFields[$strFieldName];    
+    protected $arrRegionInstanceIds = array();
+
+    /**
+     * property of the region instance id array
+     * @return Array $arrRegionInstanceIds
+     */
+    public function RegionInstanceIds()
+    {
+        return $this->arrRegionInstanceIds;
     }
-    return null;
-  }
-	
-  /**
-   * getFields
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getFields(){
-    return $this->arrFields;   
-  }
-  
-  /**
-   * addRegionInstanceId
-   * @param integer $intRegionInstanceId
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addRegionInstanceId($intRegionInstanceId){
-    $this->arrRegionInstanceIds[] = $intRegionInstanceId;    
-  }
-  
-  /**
-   * resetRegionInstances
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function resetRegionInstances(){
-    $this->arrRegionInstanceIds = array();
-  }
-  
-  /**
-   * addFieldName
-   * @param string $strFieldName
-   * @param integer $intFieldType
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addFieldName($strFieldName, $intFieldType){
-    $this->arrFieldNames[$strFieldName] = $intFieldType;    
-  }
-  
-  /**
-   * addFileFieldName
-   * @param string $strFieldName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addFileFieldName($strFieldName){
-    $this->arrFileFieldNames[] = $strFieldName;    
-  }
 
-  /**
-   * addFileFilterFieldName
-   * @param string $strFieldName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addFileFilterFieldName($strFieldName){
-    $this->arrFileFilterFieldNames[] = $strFieldName;
-  }
-    
-  /**
-   * addMultiFieldName
-   * @param string $strFieldName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addMultiFieldName($strFieldName){
-    $this->arrMultiFieldNames[] = $strFieldName;    
-  }
-  
-  /**
-   * addInstanceFieldName
-   * @param string $strFieldName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addInstanceFieldName($strFieldName){
-     $this->arrInstanceFieldNames[] = $strFieldName;     
-  }
-  
-  /**
-   * addSpecialFieldName
-   * @param string $strFieldName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addSpecialFieldName($strFieldName){
-     $this->arrSpecialFieldNames[] = $strFieldName;     
-  }  
-	
-	/**
-	 * setRegionId
-	 * @param integer $intRegionId
-	 */
-	public function setRegionId($intRegionId){
-		$this->intRegionId = $intRegionId;
-	}
+    protected $arrFieldNames = array();
 
-	/**
-	 * getRegionId
-	 * @param integer $intRegionId
-	 */
-	public function getRegionId(){
-		return $this->intRegionId;
-	}
+    /**
+     * property of the field name array
+     * @return Array $arrFieldNames
+     */
+    public function FieldNames()
+    {
+        return $this->arrFieldNames;
+    }
 
-	/**
-	 * setRegionCols
-	 * @param integer $intRegionCols
-	 */
-	public function setRegionCols($intRegionCols){
-		$this->intRegionCols = $intRegionCols;
-	}
+    protected $arrFileFieldNames = array();
 
-	/**
-	 * getRegionCols
-	 * @param integer $intRegionCols
-	 */
-	public function getRegionCols(){
-		return $this->intRegionCols;
-	}
-	
-  /**
-   * setRegionOrder
-   * @param integer $intRegionOrder
-   */
-  public function setRegionOrder($intRegionOrder){
-    $this->intRegionOrder = $intRegionOrder;
-  }
+    /**
+     * property of the file field names array
+     * @return Array $arrFileFieldNames
+     */
+    public function FileFieldNames()
+    {
+        return $this->arrFileFieldNames;
+    }
 
-  /**
-   * getRegionOrder
-   * @param integer $intRegionOrder
-   */
-  public function getRegionOrder(){
-    return $this->intRegionOrder;
-  }
+    protected $arrFileFilterFieldNames = array();
 
-	/**
-	 * setRegionPosition
-	 * @param integer $intRegionPosition
-	 */
-	public function setRegionPosition($intRegionPosition){
-		$this->intRegionPosition = $intRegionPosition;
-	}
+    /**
+     * property of the file filter field names array
+     * @return Array $arrFileFilterFieldNames
+     */
+    public function FileFilterFieldNames()
+    {
+        return $this->arrFileFilterFieldNames;
+    }
 
-	/**
-	 * getRegionPosition
-	 * @param integer $intRegionPosition
-	 */
-	public function getRegionPosition(){
-		return $this->intRegionPosition;
-	}
+    protected $arrMultiFieldNames = array();
 
-	/**
-	 * setRegionTitle
-	 * @param string $strRegionTitle
-	 */
-	public function setRegionTitle($strRegionTitle){
-		$this->strRegionTitle = $strRegionTitle;
-	}
+    /**
+     * property of the multi field names array
+     * @return Array $arrMultiFieldNames
+     */
+    public function MultiFieldNames()
+    {
+        return $this->arrMultiFieldNames;
+    }
 
-	/**
-	 * getRegionTitle
-	 * @param string $strRegionTitle
-	 */
-	public function getRegionTitle(){
-		return $this->strRegionTitle;
-	}
-	
-  /**
-   * setRegionTypeId
-   * @param integer $intRegionTypeId
-   */
-  public function setRegionTypeId($intRegionTypeId){
-    $this->intRegionTypeId = $intRegionTypeId;
-  }
+    protected $arrInstanceFieldNames = array();
 
-  /**
-   * getRegionTypeId
-   * @param integer $intRegionTypeId
-   */
-  public function getRegionTypeId(){
-    return $this->intRegionTypeId;
-  }
+    /**
+     * property of the instance field names array
+     * @return Array $arrInstanceFieldNames
+     */
+    public function InstanceFieldNames()
+    {
+        return $this->arrInstanceFieldNames;
+    }
 
-	/**
-	 * setRegionCollapsable
-	 * @param boolean $blnRegionCollapsable
-	 */
-	public function setRegionCollapsable($blnRegionCollapsable){
-		$this->blnRegionCollapsable = ($blnRegionCollapsable == 1) ? true : false;
-	}
+    protected $arrSpecialFieldNames = array();
 
-	/**
-	 * getRegionCollapsable
-	 * @param boolean $blnRegionCollapsable
-	 */
-	public function getRegionCollapsable(){
-		return $this->blnRegionCollapsable;
-	}
-	
-  /**
-   * setRegionIsCollapsed
-   * @param boolean $blnRegionIsCollapsed
-   */
-  public function setRegionIsCollapsed($blnRegionIsCollapsed){
-    $this->blnRegionIsCollapsed = ($blnRegionIsCollapsed == 1) ? true : false;
-  }
+    /**
+     * property of the special field names array
+     * @return Array $arrSpecialFieldNames
+     */
+    public function SpecialFieldNames()
+    {
+        return $this->arrSpecialFieldNames;
+    }
 
-  /**
-   * getRegionIsCollapsed
-   * @param boolean $blnRegionIsCollapsed
-   */
-  public function getRegionIsCollapsed(){
-    return $this->blnRegionIsCollapsed;
-  }
-  
-  /**
-   * setRegionIsMultiply
-   * @param boolean $blnRegionIsMultiply
-   */
-  public function setRegionIsMultiply($blnRegionIsMultiply){
-    $this->blnRegionIsMultiply = ($blnRegionIsMultiply == 1) ? true : false;
-  }
+    /**
+     * addField
+     * @param GenericElementField $objField
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addField(GenericElementField &$objField)
+    {
+        $this->arrFields[$objField->name] = $objField;
+    }
 
-  /**
-   * getRegionIsMultiply
-   * @param boolean $blnRegionIsMultiply
-   */
-  public function getRegionIsMultiply(){
-    return $this->blnRegionIsMultiply;
-  }
-  
-  /**
-   * setRegionMultiplyRegion
-   * @param boolean $blnRegionMultiplyRegion
-   */
-  public function setRegionMultiplyRegion($blnRegionMultiplyRegion){
-    $this->blnRegionMultiplyRegion = ($blnRegionMultiplyRegion == 1) ? true : false;
-  }
+    /**
+     * getField
+     * @param string $strFieldName
+     * @return GenericElementField|null
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getField($strFieldName)
+    {
+        if (array_key_exists($strFieldName, $this->arrFields)) {
+            return $this->arrFields[$strFieldName];
+        }
+        return null;
+    }
 
-  /**
-   * getRegionMultiplyRegion
-   * @param boolean $blnRegionMultiplyRegion
-   */
-  public function getRegionMultiplyRegion(){
-    return $this->blnRegionMultiplyRegion;
-  }
+    /**
+     * getFields
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getFields()
+    {
+        return $this->arrFields;
+    }
+
+    /**
+     * addRegionInstanceId
+     * @param integer $intRegionInstanceId
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addRegionInstanceId($intRegionInstanceId)
+    {
+        $this->arrRegionInstanceIds[] = $intRegionInstanceId;
+    }
+
+    /**
+     * resetRegionInstances
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function resetRegionInstances()
+    {
+        $this->arrRegionInstanceIds = array();
+    }
+
+    /**
+     * addFieldName
+     * @param string $strFieldName
+     * @param integer $intFieldType
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addFieldName($strFieldName, $intFieldType)
+    {
+        $this->arrFieldNames[$strFieldName] = $intFieldType;
+    }
+
+    /**
+     * addFileFieldName
+     * @param string $strFieldName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addFileFieldName($strFieldName)
+    {
+        $this->arrFileFieldNames[] = $strFieldName;
+    }
+
+    /**
+     * addFileFilterFieldName
+     * @param string $strFieldName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addFileFilterFieldName($strFieldName)
+    {
+        $this->arrFileFilterFieldNames[] = $strFieldName;
+    }
+
+    /**
+     * addMultiFieldName
+     * @param string $strFieldName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addMultiFieldName($strFieldName)
+    {
+        $this->arrMultiFieldNames[] = $strFieldName;
+    }
+
+    /**
+     * addInstanceFieldName
+     * @param string $strFieldName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addInstanceFieldName($strFieldName)
+    {
+        $this->arrInstanceFieldNames[] = $strFieldName;
+    }
+
+    /**
+     * addSpecialFieldName
+     * @param string $strFieldName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addSpecialFieldName($strFieldName)
+    {
+        $this->arrSpecialFieldNames[] = $strFieldName;
+    }
+
+    /**
+     * setRegionId
+     * @param integer $intRegionId
+     */
+    public function setRegionId($intRegionId)
+    {
+        $this->intRegionId = $intRegionId;
+    }
+
+    /**
+     * getRegionId
+     * @param integer $intRegionId
+     */
+    public function getRegionId()
+    {
+        return $this->intRegionId;
+    }
+
+    /**
+     * setRegionCols
+     * @param integer $intRegionCols
+     */
+    public function setRegionCols($intRegionCols)
+    {
+        $this->intRegionCols = $intRegionCols;
+    }
+
+    /**
+     * getRegionCols
+     * @param integer $intRegionCols
+     */
+    public function getRegionCols()
+    {
+        return $this->intRegionCols;
+    }
+
+    /**
+     * setRegionOrder
+     * @param integer $intRegionOrder
+     */
+    public function setRegionOrder($intRegionOrder)
+    {
+        $this->intRegionOrder = $intRegionOrder;
+    }
+
+    /**
+     * getRegionOrder
+     * @param integer $intRegionOrder
+     */
+    public function getRegionOrder()
+    {
+        return $this->intRegionOrder;
+    }
+
+    /**
+     * setRegionPosition
+     * @param integer $intRegionPosition
+     */
+    public function setRegionPosition($intRegionPosition)
+    {
+        $this->intRegionPosition = $intRegionPosition;
+    }
+
+    /**
+     * getRegionPosition
+     * @param integer $intRegionPosition
+     */
+    public function getRegionPosition()
+    {
+        return $this->intRegionPosition;
+    }
+
+    /**
+     * setRegionTitle
+     * @param string $strRegionTitle
+     */
+    public function setRegionTitle($strRegionTitle)
+    {
+        $this->strRegionTitle = $strRegionTitle;
+    }
+
+    /**
+     * getRegionTitle
+     * @param string $strRegionTitle
+     */
+    public function getRegionTitle()
+    {
+        return $this->strRegionTitle;
+    }
+
+    /**
+     * setRegionTypeId
+     * @param integer $intRegionTypeId
+     */
+    public function setRegionTypeId($intRegionTypeId)
+    {
+        $this->intRegionTypeId = $intRegionTypeId;
+    }
+
+    /**
+     * getRegionTypeId
+     * @param integer $intRegionTypeId
+     */
+    public function getRegionTypeId()
+    {
+        return $this->intRegionTypeId;
+    }
+
+    /**
+     * setRegionCollapsable
+     * @param boolean $blnRegionCollapsable
+     */
+    public function setRegionCollapsable($blnRegionCollapsable)
+    {
+        $this->blnRegionCollapsable = ($blnRegionCollapsable == 1) ? true : false;
+    }
+
+    /**
+     * getRegionCollapsable
+     * @param boolean $blnRegionCollapsable
+     */
+    public function getRegionCollapsable()
+    {
+        return $this->blnRegionCollapsable;
+    }
+
+    /**
+     * setRegionIsCollapsed
+     * @param boolean $blnRegionIsCollapsed
+     */
+    public function setRegionIsCollapsed($blnRegionIsCollapsed)
+    {
+        $this->blnRegionIsCollapsed = ($blnRegionIsCollapsed == 1) ? true : false;
+    }
+
+    /**
+     * getRegionIsCollapsed
+     * @param boolean $blnRegionIsCollapsed
+     */
+    public function getRegionIsCollapsed()
+    {
+        return $this->blnRegionIsCollapsed;
+    }
+
+    /**
+     * setRegionIsMultiply
+     * @param boolean $blnRegionIsMultiply
+     */
+    public function setRegionIsMultiply($blnRegionIsMultiply)
+    {
+        $this->blnRegionIsMultiply = ($blnRegionIsMultiply == 1) ? true : false;
+    }
+
+    /**
+     * getRegionIsMultiply
+     * @param boolean $blnRegionIsMultiply
+     */
+    public function getRegionIsMultiply()
+    {
+        return $this->blnRegionIsMultiply;
+    }
+
+    /**
+     * setRegionMultiplyRegion
+     * @param boolean $blnRegionMultiplyRegion
+     */
+    public function setRegionMultiplyRegion($blnRegionMultiplyRegion)
+    {
+        $this->blnRegionMultiplyRegion = ($blnRegionMultiplyRegion == 1) ? true : false;
+    }
+
+    /**
+     * getRegionMultiplyRegion
+     * @param boolean $blnRegionMultiplyRegion
+     */
+    public function getRegionMultiplyRegion()
+    {
+        return $this->blnRegionMultiplyRegion;
+    }
 }
 
 ?>

@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -39,20 +39,21 @@
  */
 class Form_Helper_FormSitemapLink extends Zend_View_Helper_FormElement
 {
-    public function formSitemapLink($name, $value = null, $attribs = null, $options = null, Form_Element_SitemapLink $element){
+    public function formSitemapLink($name, $value = null, $attribs = null, $options = null, Form_Element_SitemapLink $element)
+    {
         $info = $this->_getInfo($name, $value, $attribs);
         $core = Zend_Registry::get('Core');
         extract($info);
-        
+
         $strOutput = '
-                <div class="linkedpage" id="sitemapLink_'.$id.'">
-                  <span class="big" id="sitemapLinkBreadcrumb_'.$id.'">'.$this->view->escape($element->strLinkedPageBreadcrumb).'</span><span class="bold big" id="sitemapLinkTitle_'.$id.'">'.$this->view->escape($element->strLinkedPageTitle).'</span> (<a href="#" onclick="myForm.getAddSitemapLinkOverlay(\''.$id.'\'); return false;">'.$core->translate->_('Select_page').'</a>)<br/>
-                  <!--<span class="small" id="sitemapLinkUrl_'.$id.'"><a href="'.$element->strLinkedPageUrl.'" target="_blank">'.$this->view->escape($element->strLinkedPageUrl).'</a></span>-->
-                  <input type="hidden" value="'.$this->view->escape($element->relationId).'" id="sitemapLinkRelation_'.$id.'" name="sitemapLinkRelation_'.$id.'" />
-                  <input type="hidden" value="'.$this->view->escape($element->intParentId).'" id="sitemapLinkParent_'.$id.'" name="sitemapLinkParent_'.$id.'" />
-                  <input type="hidden" value="'.$this->view->escape($element->strType).'" id="sitemapLinkType_'.$id.'" name="sitemapLinkType_'.$id.'" />
+                <div class="linkedpage" id="sitemapLink_' . $id . '">
+                  <span class="big" id="sitemapLinkBreadcrumb_' . $id . '">' . $this->view->escape($element->strLinkedPageBreadcrumb) . '</span><span class="bold big" id="sitemapLinkTitle_' . $id . '">' . $this->view->escape($element->strLinkedPageTitle) . '</span> (<a href="#" onclick="myForm.getAddSitemapLinkOverlay(\'' . $id . '\'); return false;">' . $core->translate->_('Select_page') . '</a>)<br/>
+                  <!--<span class="small" id="sitemapLinkUrl_' . $id . '"><a href="' . $element->strLinkedPageUrl . '" target="_blank">' . $this->view->escape($element->strLinkedPageUrl) . '</a></span>-->
+                  <input type="hidden" value="' . $this->view->escape($element->relationId) . '" id="sitemapLinkRelation_' . $id . '" name="sitemapLinkRelation_' . $id . '" />
+                  <input type="hidden" value="' . $this->view->escape($element->intParentId) . '" id="sitemapLinkParent_' . $id . '" name="sitemapLinkParent_' . $id . '" />
+                  <input type="hidden" value="' . $this->view->escape($element->strType) . '" id="sitemapLinkType_' . $id . '" name="sitemapLinkType_' . $id . '" />
                 </div>';
-        
+
         return $strOutput;
     }
 }

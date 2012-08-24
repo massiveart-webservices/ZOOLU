@@ -43,18 +43,19 @@
  * @subpackage CommandInterface
  */
 
-interface CommandInterface {
+interface CommandInterface
+{
 
-  /**
-   * onCommand
-   * @param string $strName
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0   
-   */
-  public function onCommand($strName, $arrArgs);
-  
+    /**
+     * onCommand
+     * @param string $strName
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function onCommand($strName, $arrArgs);
+
 }
 
 ?>

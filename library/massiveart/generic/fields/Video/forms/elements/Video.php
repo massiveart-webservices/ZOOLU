@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,22 +31,23 @@
  */
 /**
  * Form_Element_Video
- * 
+ *
  * Form element to add documents
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2010-03-24: Cornelius Hansjakob
- * 
+ *
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  * @package massiveart.generic.fields.Video.forms.elements
  * @subpackage Form_Element_Video
  */
 
-class Form_Element_Video extends FormElementXhtmlAbstract {
- 
-  public $helper = 'formVideo';
-  
+class Form_Element_Video extends FormElementXhtmlAbstract
+{
+
+    public $helper = 'formVideo';
+
 }
 
 ?>

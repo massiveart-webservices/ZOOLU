@@ -42,48 +42,52 @@
  * @subpackage Crypt
  */
 
-class Crypt {
+class Crypt
+{
 
-  /**
-   * encrypt
-   * @param string $key
-   * @param string $plain_text
-   * @return string
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public static function encrypt(Core &$core, $key, $plain_text){
-    $core->logger->debug('massiveart->utilities->Crypt->encrypt: '.$key.', '.$plain_text);
-    try{
-      $plain_text = trim($plain_text);
-      $iv = substr(md5($key), 0, mcrypt_get_iv_size(MCRYPT_CAST_256, MCRYPT_MODE_CFB));
-      $c_t = mcrypt_cfb(MCRYPT_CAST_256, $key, $plain_text, MCRYPT_ENCRYPT, $iv);
-      return base64_encode($c_t);
-    }catch (Exception $exc) {
-      $core->logger->err($exc);
-      return false;
+    /**
+     * encrypt
+     * @param string $key
+     * @param string $plain_text
+     * @return string
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public static function encrypt(Core &$core, $key, $plain_text)
+    {
+        $core->logger->debug('massiveart->utilities->Crypt->encrypt: ' . $key . ', ' . $plain_text);
+        try {
+            $plain_text = trim($plain_text);
+            $iv = substr(md5($key), 0, mcrypt_get_iv_size(MCRYPT_CAST_256, MCRYPT_MODE_CFB));
+            $c_t = mcrypt_cfb(MCRYPT_CAST_256, $key, $plain_text, MCRYPT_ENCRYPT, $iv);
+            return base64_encode($c_t);
+        } catch (Exception $exc) {
+            $core->logger->err($exc);
+            return false;
+        }
     }
-  }
 
-  /**
-   * decrypt
-   * @param string $key
-   * @param string $c_t
-   * @return string
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public static function decrypt(Core &$core, $key, $c_t){
-    $core->logger->debug('massiveart->utilities->Crypt->decrypt: '.$key.', '.$c_t);
-    try{
-      $c_t = base64_decode($c_t);
-      $iv = substr(md5($key), 0, mcrypt_get_iv_size(MCRYPT_CAST_256, MCRYPT_MODE_CFB));
-      $p_t = mcrypt_cfb(MCRYPT_CAST_256, $key, $c_t, MCRYPT_DECRYPT, $iv);
-      return trim($p_t);
-    }catch (Exception $exc) {
-      $core->logger->err($exc);
-      return false;
+    /**
+     * decrypt
+     * @param string $key
+     * @param string $c_t
+     * @return string
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public static function decrypt(Core &$core, $key, $c_t)
+    {
+        $core->logger->debug('massiveart->utilities->Crypt->decrypt: ' . $key . ', ' . $c_t);
+        try {
+            $c_t = base64_decode($c_t);
+            $iv = substr(md5($key), 0, mcrypt_get_iv_size(MCRYPT_CAST_256, MCRYPT_MODE_CFB));
+            $p_t = mcrypt_cfb(MCRYPT_CAST_256, $key, $c_t, MCRYPT_DECRYPT, $iv);
+            return trim($p_t);
+        } catch (Exception $exc) {
+            $core->logger->err($exc);
+            return false;
+        }
     }
-  }
 }
+
 ?>

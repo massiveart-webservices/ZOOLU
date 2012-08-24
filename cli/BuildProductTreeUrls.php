@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -35,49 +35,49 @@ define('APPLICATION_ENV', 'development');
 /**
  * include general (autoloader, config)
  */
-require_once(dirname(__FILE__).'/../sys_config/general.inc.php');
+require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 
-try{
-     
-  $objConsoleOpts = new Zend_Console_Getopt(
-    array(
-      'folderId|f=i'        => 'Folder Id',
-      'rootLevelId|r=i'     => 'RootLevel Id',
-      'languageId|l=i'      => 'Language Id',
-      'urlLanguageId|ul=i'  => 'URL Language Id',
-    )
-  );
-  
-  echo "build product tree urls\n---------------------------\n";
-  
-  if(isset($objConsoleOpts->languageId) && isset($objConsoleOpts->urlLanguageId)){
-    
-    echo "load fist level of the tree ...\n";    
-    
-    require_once GLOBAL_ROOT_PATH.$core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-    $objModelFolders = new Model_Folders();
-    $objModelFolders->setLanguageId($objConsoleOpts->languageId);
-    
-    if(isset($objConsoleOpts->folderId) && $objConsoleOpts->folderId > 0){
-      $objProducts = $objModelFolders->loadGlobalChildNavigation($objConsoleOpts->folderId, $core->sysConfig->root_level_groups->product);
-    }else if(isset($objConsoleOpts->rootLevelId) && $objConsoleOpts->rootLevelId > 0){
-      $objProducts = $objModelFolders->loadGlobalRootNavigation($objConsoleOpts->rootLevelId, $core->sysConfig->root_level_groups->product); //FIXME: Only loads folders!
+try {
+
+    $objConsoleOpts = new Zend_Console_Getopt(
+        array(
+             'folderId|f=i'        => 'Folder Id',
+             'rootLevelId|r=i'     => 'RootLevel Id',
+             'languageId|l=i'      => 'Language Id',
+             'urlLanguageId|ul=i'  => 'URL Language Id',
+        )
+    );
+
+    echo "build product tree urls\n---------------------------\n";
+
+    if (isset($objConsoleOpts->languageId) && isset($objConsoleOpts->urlLanguageId)) {
+
+        echo "load fist level of the tree ...\n";
+
+        require_once GLOBAL_ROOT_PATH . $core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+        $objModelFolders = new Model_Folders();
+        $objModelFolders->setLanguageId($objConsoleOpts->languageId);
+
+        if (isset($objConsoleOpts->folderId) && $objConsoleOpts->folderId > 0) {
+            $objProducts = $objModelFolders->loadGlobalChildNavigation($objConsoleOpts->folderId, $core->sysConfig->root_level_groups->product);
+        } else if (isset($objConsoleOpts->rootLevelId) && $objConsoleOpts->rootLevelId > 0) {
+            $objProducts = $objModelFolders->loadGlobalRootNavigation($objConsoleOpts->rootLevelId, $core->sysConfig->root_level_groups->product); //FIXME: Only loads folders!
+        }
+
+        // simulate user auth
+        $obj = new stdClass();
+        $obj->id = 3; //user id
+        Zend_Auth::getInstance()->getStorage()->write($obj);
+
+        if (isset($objProducts) && count($objProducts)) {
+            buildTreeUrlsNow($objProducts);
+        }
+
     }
-    
-    // simulate user auth
-    $obj = new stdClass();
-    $obj->id = 3; //user id
-    Zend_Auth::getInstance()->getStorage()->write($obj);
-    
-    if(isset($objProducts) && count($objProducts)){
-      buildTreeUrlsNow($objProducts);
-    }    
-    
-  }
-  echo "---------------------------\n";
-  
-}catch (Exception $exc) {
-  echo($exc);
+    echo "---------------------------\n";
+
+} catch (Exception $exc) {
+    echo($exc);
 }
 
 /*--------------------------------------------------------
@@ -87,89 +87,91 @@ try{
 /**
  * buildTreeUrlsNow
  */
-function buildTreeUrlsNow($objProducts, $intLevel = 0){
-  global $objModelFolders, $core;
-  
-  foreach($objProducts as $objProduct){
-    
-    for($i = 0; $i < ($intLevel * 2); $i++){
-      echo "-";
+function buildTreeUrlsNow($objProducts, $intLevel = 0)
+{
+    global $objModelFolders, $core;
+
+    foreach ($objProducts as $objProduct) {
+
+        for ($i = 0; $i < ($intLevel * 2); $i++) {
+            echo "-";
+        }
+        echo $objProduct->id . ' :: ' . $objProduct->elementType . ' :: ' . $objProduct->title . '|' . $objProduct->guiTitle . ' :: ' . $objProduct->genericFormId . ' :: ' . $objProduct->templateId . "\n";
+
+        switch ($objProduct->elementType) {
+            case 'folder':
+                $objNewProduct = $objModelFolders->loadGlobalChildNavigation($objProduct->id, $core->sysConfig->root_level_groups->product);
+                buildTreeUrlsNow($objNewProduct, ($intLevel + 1));
+                break;
+            case 'global':
+                if ($objProduct->genericFormId != '') buildProdcutUrl($objProduct);
+                break;
+        }
     }
-    echo $objProduct->id.' :: '.$objProduct->elementType.' :: '.$objProduct->title.'|'.$objProduct->guiTitle.' :: '.$objProduct->genericFormId.' :: '.$objProduct->templateId."\n";
-    
-    switch($objProduct->elementType){
-      case 'folder':
-        $objNewProduct = $objModelFolders->loadGlobalChildNavigation($objProduct->id, $core->sysConfig->root_level_groups->product);
-        buildTreeUrlsNow($objNewProduct, ($intLevel + 1));
-        break;
-      case 'global':
-        if($objProduct->genericFormId != '') buildProdcutUrl($objProduct);
-        break;
-    }
-  }
 }
 
 /**
  * buildProdcutLanguageVariant
  */
-function buildProdcutUrl($objProduct){
-  global $objConsoleOpts, $core;
-  
-  // product form
-  $objProductForm = new GenericForm();
-  $objProductForm->Setup()->setElementId($objProduct->id);
-  $objProductForm->Setup()->setElementLinkId($objProduct->linkGlobalId);
-  $objProductForm->Setup()->setFormId($objProduct->genericFormId);
-  $objProductForm->Setup()->setTemplateId($objProduct->templateId);
-  $objProductForm->Setup()->setFormVersion($objProduct->version);
-  $objProductForm->Setup()->setActionType($core->sysConfig->generic->actions->edit);
-  $objProductForm->Setup()->setLanguageId($objConsoleOpts->languageId);
-  $objProductForm->Setup()->setFormLanguageId($core->sysConfig->languages->default->id);
-  $objProductForm->Setup()->setModelSubPath('global/models/');
+function buildProdcutUrl($objProduct)
+{
+    global $objConsoleOpts, $core;
 
-  // load basic generic form
-  $objProductForm->Setup()->loadGenericForm();
+    // product form
+    $objProductForm = new GenericForm();
+    $objProductForm->Setup()->setElementId($objProduct->id);
+    $objProductForm->Setup()->setElementLinkId($objProduct->linkGlobalId);
+    $objProductForm->Setup()->setFormId($objProduct->genericFormId);
+    $objProductForm->Setup()->setTemplateId($objProduct->templateId);
+    $objProductForm->Setup()->setFormVersion($objProduct->version);
+    $objProductForm->Setup()->setActionType($core->sysConfig->generic->actions->edit);
+    $objProductForm->Setup()->setLanguageId($objConsoleOpts->languageId);
+    $objProductForm->Setup()->setFormLanguageId($core->sysConfig->languages->default->id);
+    $objProductForm->Setup()->setModelSubPath('global/models/');
 
-  // load generic form structur
-  $objProductForm->Setup()->loadGenericFormStructure();
+    // load basic generic form
+    $objProductForm->Setup()->loadGenericForm();
 
-  // init data type object
-  $objProductForm->initDataTypeObject();
-  
-  // load data
-  $objProductForm->loadFormData();
-  
-  
-  // product url form
-  $objProductUrlForm = new GenericForm();
-  $objProductUrlForm->Setup()->setElementId($objProduct->id);
-  $objProductUrlForm->Setup()->setElementLinkId($objProduct->linkGlobalId);
-  $objProductUrlForm->Setup()->setFormId($objProduct->genericFormId);
-  $objProductUrlForm->Setup()->setTemplateId($objProduct->templateId);
-  $objProductUrlForm->Setup()->setFormVersion($objProduct->version);
-  $objProductUrlForm->Setup()->setActionType($core->sysConfig->generic->actions->edit);
-  $objProductUrlForm->Setup()->setLanguageId($objConsoleOpts->urlLanguageId);
-  $objProductUrlForm->Setup()->setFormLanguageId($core->sysConfig->languages->default->id);
-  $objProductUrlForm->Setup()->setModelSubPath('global/models/');
+    // load generic form structur
+    $objProductForm->Setup()->loadGenericFormStructure();
 
-  // load basic generic form
-  $objProductUrlForm->Setup()->loadGenericForm();
+    // init data type object
+    $objProductForm->initDataTypeObject();
 
-  // load generic form structur
-  $objProductUrlForm->Setup()->loadGenericFormStructure();
+    // load data
+    $objProductForm->loadFormData();
 
-  // init data type object
-  $objProductUrlForm->initDataTypeObject();
-  
-  // load data
-  $objProductUrlForm->loadFormData();
-  
-  //rest url
-  if($objProductForm->Setup()->getField('url') && $objProductUrlForm->Setup()->getField('title') && $objProductUrlForm->Setup()->getField('title')->getValue() != ''){
-    $_POST['url_EditableUrl'] = trim($objProductUrlForm->Setup()->getField('title')->getValue(),' _-+!?');
-    $objProductForm->Setup()->getField('url')->save($objProduct->linkGlobalId, 'global');
-    $objProductForm->Setup()->getField('url')->removeUrlHistory($objProduct->linkGlobalId, 'global');
-  }
+
+    // product url form
+    $objProductUrlForm = new GenericForm();
+    $objProductUrlForm->Setup()->setElementId($objProduct->id);
+    $objProductUrlForm->Setup()->setElementLinkId($objProduct->linkGlobalId);
+    $objProductUrlForm->Setup()->setFormId($objProduct->genericFormId);
+    $objProductUrlForm->Setup()->setTemplateId($objProduct->templateId);
+    $objProductUrlForm->Setup()->setFormVersion($objProduct->version);
+    $objProductUrlForm->Setup()->setActionType($core->sysConfig->generic->actions->edit);
+    $objProductUrlForm->Setup()->setLanguageId($objConsoleOpts->urlLanguageId);
+    $objProductUrlForm->Setup()->setFormLanguageId($core->sysConfig->languages->default->id);
+    $objProductUrlForm->Setup()->setModelSubPath('global/models/');
+
+    // load basic generic form
+    $objProductUrlForm->Setup()->loadGenericForm();
+
+    // load generic form structur
+    $objProductUrlForm->Setup()->loadGenericFormStructure();
+
+    // init data type object
+    $objProductUrlForm->initDataTypeObject();
+
+    // load data
+    $objProductUrlForm->loadFormData();
+
+    //rest url
+    if ($objProductForm->Setup()->getField('url') && $objProductUrlForm->Setup()->getField('title') && $objProductUrlForm->Setup()->getField('title')->getValue() != '') {
+        $_POST['url_EditableUrl'] = trim($objProductUrlForm->Setup()->getField('title')->getValue(), ' _-+!?');
+        $objProductForm->Setup()->getField('url')->save($objProduct->linkGlobalId, 'global');
+        $objProductForm->Setup()->getField('url')->removeUrlHistory($objProduct->linkGlobalId, 'global');
+    }
 }
 
 ?>

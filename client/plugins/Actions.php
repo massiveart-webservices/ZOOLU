@@ -4,7 +4,7 @@
  * Client_Actions
  *
  * Client specific IndexController Addon Actions
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2011-05-03: Cornelius Hansjakob
  *
@@ -14,18 +14,20 @@
  * @subpackage Client_Actions
  */
 
-class Client_Actions implements ClientHelperInterface  {
+class Client_Actions implements ClientHelperInterface
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * __construct
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   */
-  public function __construct() {
-    $this->core = Zend_Registry::get('Core');
-  } 
+    /**
+     * @var Core
+     */
+    protected $core;
+
+    /**
+     * __construct
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
 }

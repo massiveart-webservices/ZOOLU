@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,152 +31,159 @@
  */
 /**
  * Form_Decorator_Url
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2009-02-06: Thomas Schedler
- * 
+ *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  */
 
-class Form_Decorator_LandingPageUrl extends Zend_Form_Decorator_Abstract {
-  
-  /**
-   * @var Core
-   */
-  private $core;
-  
-  /**
-   * Constructor 
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct($options = null){        
-    $this->core = Zend_Registry::get('Core');
-    parent::__construct($options);
-  } 
-  
-  /**
-   * buildLabel
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function buildLabel(){
-    
-    $element = $this->getElement();
-    $label = $element->getLabel();
-    
-    if (empty($label)){
-      return '';
+class Form_Decorator_LandingPageUrl extends Zend_Form_Decorator_Abstract
+{
+
+    /**
+     * @var Core
+     */
+    private $core;
+
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct($options = null)
+    {
+        $this->core = Zend_Registry::get('Core');
+        parent::__construct($options);
     }
-    
-    if ($element->isRequired()) {
-      $label .= ' *';
+
+    /**
+     * buildLabel
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function buildLabel()
+    {
+
+        $element = $this->getElement();
+        $label = $element->getLabel();
+
+        if (empty($label)) {
+            return '';
+        }
+
+        if ($element->isRequired()) {
+            $label .= ' *';
+        }
+
+        return $element->getView()->formLabel($element->getName(), $label, array('class' => 'fieldtitle')) . '<br/>';
     }
-    
-    return $element->getView()->formLabel($element->getName(), $label, array('class' => 'fieldtitle')).'<br/>';
-  }
-  
-  /**
-   * buildDescription
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function buildDescription(){
-    $element = $this->getElement();
-    $desc    = $element->getDescription();
-    
-    if (empty($desc)){
-      return '';
+
+    /**
+     * buildDescription
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function buildDescription()
+    {
+        $element = $this->getElement();
+        $desc = $element->getDescription();
+
+        if (empty($desc)) {
+            return '';
+        }
+
+        return '<div class="description">' . $desc . '</div>';
     }
-    
-    return '<div class="description">'.$desc.'</div>';
-  }
-  
-  /**
-   * buildUrl
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function buildUrl(){
-  	
-    $element = $this->getElement();
-    $helper  = $element->helper;
-  
-    $strOutput = $element->getView()->$helper($element->getName(), $element->getValue(), $element->getAttribs(), $element->blnIsStartElement, $element->options, $element->intParentId, $element->getMessages());
-    
-    return $strOutput;
-  }
-  
-  /**
-   * buildErrors
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function buildErrors(){
-    
-    $element  = $this->getElement();
-    $messages = $element->getMessages();
-    
-    if (empty($messages)){
-      return '';
+
+    /**
+     * buildUrl
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function buildUrl()
+    {
+
+        $element = $this->getElement();
+        $helper = $element->helper;
+
+        $strOutput = $element->getView()->$helper($element->getName(), $element->getValue(), $element->getAttribs(), $element->blnIsStartElement, $element->options, $element->intParentId, $element->getMessages());
+
+        return $strOutput;
     }
-    
-    $strError = '<div class="errors">
+
+    /**
+     * buildErrors
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function buildErrors()
+    {
+
+        $element = $this->getElement();
+        $messages = $element->getMessages();
+
+        if (empty($messages)) {
+            return '';
+        }
+
+        $strError = '<div class="errors">
         <ul>';
-    $strError .= (isset($messages['errMessage'])) ? '<li>'.$messages['errMessage'].'</li>' : '';
-    $strError .= (isset($messages['buildMessage'])) ? '<li>'.$messages['buildMessage'].'</li>' : '';
-    $strError .= '</ul>
+        $strError .= (isset($messages['errMessage'])) ? '<li>' . $messages['errMessage'] . '</li>' : '';
+        $strError .= (isset($messages['buildMessage'])) ? '<li>' . $messages['buildMessage'] . '</li>' : '';
+        $strError .= '</ul>
       </div>';
-      
-    return $strError;
-  }
-  
-  /**
-   * render
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function render($content){
-    
-    $element = $this->getElement();
-           
-    if (!$element instanceof Zend_Form_Element) {
-      return $content;
-    }
-        
-    if (null === $element->getView()) {
-      return $content;
+
+        return $strError;
     }
 
-    $separator = $this->getSeparator();
-    $placement = $this->getPlacement();
-    $label     = $this->buildLabel();
-    $url       = $this->buildUrl();
-    $errors    = $this->buildErrors();
-    $desc      = $this->buildDescription();
-    
-    $strOutput = '';
-    if($url != ''){
-      $strOutput = '<div class="field-'.$element->getAttrib('columns').'">';
-      $strOutput .= '<div class="field">'
-                      .$label
-                      .$desc
-                      .$url
-                      .$errors
-                   .'</div>
+    /**
+     * render
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function render($content)
+    {
+
+        $element = $this->getElement();
+
+        if (!$element instanceof Zend_Form_Element) {
+            return $content;
+        }
+
+        if (null === $element->getView()) {
+            return $content;
+        }
+
+        $separator = $this->getSeparator();
+        $placement = $this->getPlacement();
+        $label = $this->buildLabel();
+        $url = $this->buildUrl();
+        $errors = $this->buildErrors();
+        $desc = $this->buildDescription();
+
+        $strOutput = '';
+        if ($url != '') {
+            $strOutput = '<div class="field-' . $element->getAttrib('columns') . '">';
+            $strOutput .= '<div class="field">'
+                . $label
+                . $desc
+                . $url
+                . $errors
+                . '</div>
                    </div>';
+        }
+
+        switch ($placement) {
+            case (self::PREPEND):
+                return $strOutput . $separator . $content;
+            case (self::APPEND):
+            default:
+                return $content . $separator . $strOutput;
+        }
     }
 
-    switch ($placement) {
-      case (self::PREPEND):
-        return $strOutput . $separator . $content;
-      case (self::APPEND):
-      default:
-        return $content . $separator . $strOutput;
-    }
-  }
-  
 }
 
 ?>

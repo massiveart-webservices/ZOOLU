@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -40,62 +40,65 @@
  * @version 1.0
  */
 
-class Form_Decorator_Tab extends Zend_Form_Decorator_Fieldset {
+class Form_Decorator_Tab extends Zend_Form_Decorator_Fieldset
+{
 
-  protected $_helper = 'tab';
+    protected $_helper = 'tab';
 
-	public function getHelper(){
-	  if(null !== ($helper = $this->getOption('helper'))){
-	    $this->setHelper($helper);
-	    $this->removeOption('helper');
-	  }
+    public function getHelper()
+    {
+        if (null !== ($helper = $this->getOption('helper'))) {
+            $this->setHelper($helper);
+            $this->removeOption('helper');
+        }
 
-	  return $this->_helper;
-  }
-
-  /**
-   * Render a region
-   *
-   * @param  string $content
-   * @return string
-   */
-  public function render($content) {
-    $form = $this->getElement();
-    $view = $form->getView();
-
-    if(null === $view){
-      return $content;
+        return $this->_helper;
     }
 
-    $helper        = $this->getHelper();
-    $attribs       = $this->getOptions();
-    $name          = $form->getFullyQualifiedName();
-    $attribs['id'] = $form->getId();
+    /**
+     * Render a region
+     *
+     * @param  string $content
+     * @return string
+     */
+    public function render($content)
+    {
+        $form = $this->getElement();
+        $view = $form->getView();
 
-    $strHideTab = ($form->getHide() == true) ? ' style="display:none;"' : '';
-    
-    $strContent = '';
-    $strAction = $form->getAction();
-    if($strAction == null){
-      $strContent = $content;
-    }else{
-      $strContent = '<script type="text/javscript">
-        myCore.addBusyClass("div'.$name.'");
-        new Ajax.Updater("div'.$name.'", "'.$strAction.'", {
+        if (null === $view) {
+            return $content;
+        }
+
+        $helper = $this->getHelper();
+        $attribs = $this->getOptions();
+        $name = $form->getFullyQualifiedName();
+        $attribs['id'] = $form->getId();
+
+        $strHideTab = ($form->getHide() == true) ? ' style="display:none;"' : '';
+
+        $strContent = '';
+        $strAction = $form->getAction();
+        if ($strAction == null) {
+            $strContent = $content;
+        } else {
+            $strContent = '<script type="text/javscript">
+        myCore.addBusyClass("div' . $name . '");
+        new Ajax.Updater("div' . $name . '", "' . $strAction . '", {
        	  evalScripts: true,
           parameters: {
             id: $F("id")
           },
           onComplete: function(){
-            myCore.removeBusyClass("div'.$name.'");
+            myCore.removeBusyClass("div' . $name . '");
           }
         });
       </script>';
+        }
+
+        $strOutput = '<div class="tab" id="div' . $name . '"' . $strHideTab . '>' . $strContent . '</div>';
+        return $strOutput;
     }
-    
-    $strOutput = '<div class="tab" id="div'.$name.'"'.$strHideTab.'>'.$strContent.'</div>';
-    return $strOutput;
-  }
 }
 
 ?>

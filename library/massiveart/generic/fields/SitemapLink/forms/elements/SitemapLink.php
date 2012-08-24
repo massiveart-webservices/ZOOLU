@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -32,13 +32,13 @@
 
 /**
  * A fieldType for adding a link chosen from a sitemap
- * 
+ *
  * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  * @package massiveart.forms.elements
  * @subpackage Form_Element_SitemapLink
  */
-class Form_Element_SitemapLink extends FormElementXhtmlAbstract 
+class Form_Element_SitemapLink extends FormElementXhtmlAbstract
 {
     public $helper = 'formSitemapLink';
 }

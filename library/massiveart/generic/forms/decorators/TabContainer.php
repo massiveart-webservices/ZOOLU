@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -40,73 +40,76 @@
  * @version 1.0
  */
 
-class Form_Decorator_TabContainer extends Zend_Form_Decorator_Fieldset {
+class Form_Decorator_TabContainer extends Zend_Form_Decorator_Fieldset
+{
 
-  protected $_helper = 'tabcontainer';
+    protected $_helper = 'tabcontainer';
 
-	public function getHelper() {
-	  if (null !== ($helper = $this->getOption('helper'))) {
-	    $this->setHelper($helper);
-	    $this->removeOption('helper');
-	  }
-    return $this->_helper;
-	}
-
-  /**
-   * Render a region
-   *
-   * @param  string $content
-   * @return string
-   */
-  public function render($content) {
-    $form    = $this->getElement();
-    $view    = $form->getView();
-
-    if(null === $view){
-      return $content;
+    public function getHelper()
+    {
+        if (null !== ($helper = $this->getOption('helper'))) {
+            $this->setHelper($helper);
+            $this->removeOption('helper');
+        }
+        return $this->_helper;
     }
 
-    $helper        = $this->getHelper();
-    $attribs       = $this->getOptions();
-    $name          = $form->getFullyQualifiedName();
-    $attribs['id'] = $form->getId();
+    /**
+     * Render a region
+     *
+     * @param  string $content
+     * @return string
+     */
+    public function render($content)
+    {
+        $form = $this->getElement();
+        $view = $form->getView();
 
-    if(count($form->getSubForms()) > 1){
-      $strTab = '
-        <div class="tabNavContainer" id="tabNavContainer">
-          <ul>';
-      $intCounter = 0;
-      $strScriptAddon = '';
-      foreach($form->getSubForms() as $objSubForm){
-        $intCounter++;
-
-        $strSelected = '';
-        if($intCounter == 1){
-          $strSelected = ' selected';
-          $strScriptAddon = 'myForm.setActiveTab('.$objSubForm->getId().');';
+        if (null === $view) {
+            return $content;
         }
 
-        $strTab .= '
-            <li id="tabNavItem_'.$objSubForm->getId().'" class="item'.$strSelected.'" onclick="myForm.selectTab('.$objSubForm->getId().'); return false;">
+        $helper = $this->getHelper();
+        $attribs = $this->getOptions();
+        $name = $form->getFullyQualifiedName();
+        $attribs['id'] = $form->getId();
+
+        if (count($form->getSubForms()) > 1) {
+            $strTab = '
+        <div class="tabNavContainer" id="tabNavContainer">
+          <ul>';
+            $intCounter = 0;
+            $strScriptAddon = '';
+            foreach ($form->getSubForms() as $objSubForm) {
+                $intCounter++;
+
+                $strSelected = '';
+                if ($intCounter == 1) {
+                    $strSelected = ' selected';
+                    $strScriptAddon = 'myForm.setActiveTab(' . $objSubForm->getId() . ');';
+                }
+
+                $strTab .= '
+            <li id="tabNavItem_' . $objSubForm->getId() . '" class="item' . $strSelected . '" onclick="myForm.selectTab(' . $objSubForm->getId() . '); return false;">
               <div class="start"></div>
-              <div class="middle"><a href="#">'.$objSubForm->getTitle().'</a></div>
+              <div class="middle"><a href="#">' . $objSubForm->getTitle() . '</a></div>
               <div class="end"></div>
             </li>';
-      }
+            }
 
-      $strTab .= '
+            $strTab .= '
           </ul>
         </div>
         <script type="text/javascript">//<![CDATA[
-          '.$strScriptAddon.'
+          ' . $strScriptAddon . '
         //]]>
         </script>';
 
-      $content = $strTab.$content;
-    }
+            $content = $strTab . $content;
+        }
 
-    return $content;
-  }
+        return $content;
+    }
 }
 
 ?>

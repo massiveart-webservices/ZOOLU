@@ -43,8 +43,9 @@
  * @subpackage Page
  */
 
-class Client_Page extends Page {
-  
+class Client_Page extends Page
+{
+
 }
 
 ?>

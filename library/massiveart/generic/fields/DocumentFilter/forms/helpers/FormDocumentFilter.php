@@ -43,149 +43,152 @@
  * @subpackage Form_Helper_FormDocumentFilter
  */
 
-class Form_Helper_FormDocumentFilter extends Zend_View_Helper_FormElement {
-
-  /**
-   * formDocumentFilter
-   * @param string $name
-   * @param string $value
-   * @param array $attribs
-   * @param mixed $options
-   * @param Zend_Db_Table_Rowset $objAllTags
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function formDocumentFilter($name, $objFilters = null, $attribs = null, $options = null, $regionId = null, $objAllTags){
-    $info = $this->_getInfo($name, $objFilters, $attribs);
-    $core = Zend_Registry::get('Core');
-    extract($info); // name, value, attribs, options, listsep, disable
-
-    // XHTML or HTML end tag
-    $endTag = ' />';
-
-    if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
-      $endTag= '>';
-    }
-
-    // build the element
-    $strTags = '';
-    $strTagIds = '';
-    $strFolderIds = '';
-    $strRootLeveId = '';
-
-    if($objFilters instanceof stdClass){
-
-      if(array_key_exists('ft'.$core->sysConfig->filter_types->tags, $objFilters->filters)){
-        $objFilter = $objFilters->filters['ft'.$core->sysConfig->filter_types->tags];
-        foreach($objAllTags as $objTag){
-          if(in_array($objTag->id, $objFilter->referenceIds)){
-            $strTags .= '<li value="'.$objTag->id.'">'.htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default).'</li>';
-            $strTagIds .= $objTag->id.',';
-          }
-        }
-      }
-
-      if(array_key_exists('ft'.$core->sysConfig->filter_types->folders, $objFilters->filters)){
-        $objFilter = $objFilters->filters['ft'.$core->sysConfig->filter_types->folders];
-        foreach($objFilter->referenceIds as $intReferenceId){
-          $strFolderIds .= '['.$intReferenceId.']';
-        }
-      }
-
-      if(array_key_exists('ft'.$core->sysConfig->filter_types->rootLevel, $objFilters->filters)){
-        $objFilter = $objFilters->filters['ft'.$core->sysConfig->filter_types->rootLevel];
-        foreach($objFilter->referenceIds as $intReferenceId){
-          $strRootLeveId = $intReferenceId;
-        }
-      }
-    }
-    
-    /**
-     * is it disabled?
-     */
-    $disabled = '';
-    if ($disable) {
-      $disabled = ' disabled="disabled"';
-    }
+class Form_Helper_FormDocumentFilter extends Zend_View_Helper_FormElement
+{
 
     /**
-     * build the element
+     * formDocumentFilter
+     * @param string $name
+     * @param string $value
+     * @param array $attribs
+     * @param mixed $options
+     * @param Zend_Db_Table_Rowset $objAllTags
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
      */
-    $strOutput = '<div>
+    public function formDocumentFilter($name, $objFilters = null, $attribs = null, $options = null, $regionId = null, $objAllTags)
+    {
+        $info = $this->_getInfo($name, $objFilters, $attribs);
+        $core = Zend_Registry::get('Core');
+        extract($info); // name, value, attribs, options, listsep, disable
+
+        // XHTML or HTML end tag
+        $endTag = ' />';
+
+        if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
+            $endTag = '>';
+        }
+
+        // build the element
+        $strTags = '';
+        $strTagIds = '';
+        $strFolderIds = '';
+        $strRootLeveId = '';
+
+        if ($objFilters instanceof stdClass) {
+
+            if (array_key_exists('ft' . $core->sysConfig->filter_types->tags, $objFilters->filters)) {
+                $objFilter = $objFilters->filters['ft' . $core->sysConfig->filter_types->tags];
+                foreach ($objAllTags as $objTag) {
+                    if (in_array($objTag->id, $objFilter->referenceIds)) {
+                        $strTags .= '<li value="' . $objTag->id . '">' . htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default) . '</li>';
+                        $strTagIds .= $objTag->id . ',';
+                    }
+                }
+            }
+
+            if (array_key_exists('ft' . $core->sysConfig->filter_types->folders, $objFilters->filters)) {
+                $objFilter = $objFilters->filters['ft' . $core->sysConfig->filter_types->folders];
+                foreach ($objFilter->referenceIds as $intReferenceId) {
+                    $strFolderIds .= '[' . $intReferenceId . ']';
+                }
+            }
+
+            if (array_key_exists('ft' . $core->sysConfig->filter_types->rootLevel, $objFilters->filters)) {
+                $objFilter = $objFilters->filters['ft' . $core->sysConfig->filter_types->rootLevel];
+                foreach ($objFilter->referenceIds as $intReferenceId) {
+                    $strRootLeveId = $intReferenceId;
+                }
+            }
+        }
+
+        /**
+         * is it disabled?
+         */
+        $disabled = '';
+        if ($disable) {
+            $disabled = ' disabled="disabled"';
+        }
+
+        /**
+         * build the element
+         */
+        $strOutput = '<div>
 	                  <ol>
-							        <li id="autocompletList_'.$this->view->escape($id).'" class="autocompletList input-text">
-                        <label class="fieldtitle" for="'.$this->view->escape($id).'_Tags">'.$core->translate->_('Document_filtering_by_tags').'</label>
-                        <input type="text" value="'.$this->view->escape(trim($strTagIds, ',')).'" onchange="myForm.loadFileFilterFieldContent(\''.$this->view->escape($id).'\', \'documentFilter\');" id="'.$this->view->escape($id).'_Tags" name="'.$this->view->escape($name).'_Tags"'.$endTag.'
-							          <div id="'.$this->view->escape($id).'_Tags_autocompleter" class="autocompleter">
-							            <div class="default">'.$core->translate->_('Search_tags').'</div>
+							        <li id="autocompletList_' . $this->view->escape($id) . '" class="autocompletList input-text">
+                        <label class="fieldtitle" for="' . $this->view->escape($id) . '_Tags">' . $core->translate->_('Document_filtering_by_tags') . '</label>
+                        <input type="text" value="' . $this->view->escape(trim($strTagIds, ',')) . '" onchange="myForm.loadFileFilterFieldContent(\'' . $this->view->escape($id) . '\', \'documentFilter\');" id="' . $this->view->escape($id) . '_Tags" name="' . $this->view->escape($name) . '_Tags"' . $endTag . '
+							          <div id="' . $this->view->escape($id) . '_Tags_autocompleter" class="autocompleter">
+							            <div class="default">' . $core->translate->_('Search_tags') . '</div>
 							            <ul class="feed">
-							              '.$strTags.'
+							              ' . $strTags . '
 							            </ul>
 							          </div>
 							        </li>
 							      </ol>
 						      </div>';
-    /**
-     * is empty element
-     */
-    $blnIsEmpty = false;
-    if(array_key_exists('isEmptyField', $attribs) && $attribs['isEmptyField'] == 1){
-      $blnIsEmpty = true;  
-    }
-    
-    if($blnIsEmpty == true){
-      $strOutput .= '
+        /**
+         * is empty element
+         */
+        $blnIsEmpty = false;
+        if (array_key_exists('isEmptyField', $attribs) && $attribs['isEmptyField'] == 1) {
+            $blnIsEmpty = true;
+        }
+
+        if ($blnIsEmpty == true) {
+            $strOutput .= '
         <script type="text/javascript">//<![CDATA[ 
-          myForm.addTag("'.$this->view->escape($id).'_Tags","'.$this->view->escape($regionId).'",'.$this->getAllTagsForAutocompleter($objAllTags).');
+          myForm.addTag("' . $this->view->escape($id) . '_Tags","' . $this->view->escape($regionId) . '",' . $this->getAllTagsForAutocompleter($objAllTags) . ');
         //]]>
         </script>';
-    }else{
-      $strOutput .= '
+        } else {
+            $strOutput .= '
         <script type="text/javascript">//<![CDATA[ 
-          myForm.initTag("'.$this->view->escape($id).'_Tags",'.$this->getAllTagsForAutocompleter($objAllTags).');         
+          myForm.initTag("' . $this->view->escape($id) . '_Tags",' . $this->getAllTagsForAutocompleter($objAllTags) . ');
         //]]>
         </script>';
-    } 
-    /*
-                  <script type="text/javascript" language="javascript">
-                    '.$this->view->escape($id).'_list = new FacebookList(\''.$this->view->escape($id).'_Tags\', \''.$this->view->escape($id).'_autocompleter\',{ regexSearch: true });
-                    '.$this->getAllTagsForAutocompleter($objAllTags, $id).'
-                  </script>*/
-    $strOutput .= '
+        }
+        /*
+        <script type="text/javascript" language="javascript">
+          '.$this->view->escape($id).'_list = new FacebookList(\''.$this->view->escape($id).'_Tags\', \''.$this->view->escape($id).'_autocompleter\',{ regexSearch: true });
+          '.$this->getAllTagsForAutocompleter($objAllTags, $id).'
+        </script>*/
+        $strOutput .= '
                   <div style="display:none;">
-                    <div>'.$core->translate->_('Select_folder').': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getDocumentFolderChooserOverlay(\''.$this->view->escape($id).'_FoldersContainer\', \''.$this->view->escape($id).'\'); return false;"/></div>
-                    <div id="'.$this->view->escape($id).'_FoldersContainer"></div>
-                    <input type="hidden" value="'.$this->view->escape($strFolderIds).'" id="'.$this->view->escape($id).'_Folders" name="'.$this->view->escape($name).'_Folders"'.$endTag.'
-                    <input type="hidden" value="'.$this->view->escape($strRootLeveId).'" id="'.$this->view->escape($id).'_RootLevel" name="'.$this->view->escape($name).'_RootLevel"'.$endTag.'
+                    <div>' . $core->translate->_('Select_folder') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getDocumentFolderChooserOverlay(\'' . $this->view->escape($id) . '_FoldersContainer\', \'' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div id="' . $this->view->escape($id) . '_FoldersContainer"></div>
+                    <input type="hidden" value="' . $this->view->escape($strFolderIds) . '" id="' . $this->view->escape($id) . '_Folders" name="' . $this->view->escape($name) . '_Folders"' . $endTag . '
+                    <input type="hidden" value="' . $this->view->escape($strRootLeveId) . '" id="' . $this->view->escape($id) . '_RootLevel" name="' . $this->view->escape($name) . '_RootLevel"' . $endTag . '
                   </div>						      
                   <div class="docwrapper">
-                    <div class="doctop">'.$core->translate->_('Select_folder').': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getDocumentFolderChooserOverlay(\''.$this->view->escape($id).'_FoldersContainer\', \''.$this->view->escape($id).'\'); return false;"/></div>
-                    <div id="documentFilterContainer_'.$this->view->escape($id).'"'.$disabled.' class="'.$attribs['class'].'"></div>
+                    <div class="doctop">' . $core->translate->_('Select_folder') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getDocumentFolderChooserOverlay(\'' . $this->view->escape($id) . '_FoldersContainer\', \'' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div id="documentFilterContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '"></div>
                   </div>
-                  <input type="hidden" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" isCoreField="'.$attribs['isCoreField'].'" fieldId="'.$attribs['fieldId'].'" value=""/>';
+                  <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . $attribs['isCoreField'] . '" fieldId="' . $attribs['fieldId'] . '" value=""/>';
 
-    return $strOutput;
-  }
-
-  /**
-   * getAllTagsForAutocompleter
-   * @return Zend_Db_Table_Rowset $objAllTags
-   * @return string $strElementId
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getAllTagsForAutocompleter($objAllTags){
-  	$core = Zend_Registry::get('Core');
-    $strAllTags = '[';
-    if(count($objAllTags) > 0){
-      foreach($objAllTags as $objTag){
-        $strAllTags .= '{"caption":"'.htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default).'","value":'.$objTag->id.'},';
-      }
-      $strAllTags = trim($strAllTags, ',');            
+        return $strOutput;
     }
-    $strAllTags .= ']';
-    return $strAllTags;
-  }
+
+    /**
+     * getAllTagsForAutocompleter
+     * @return Zend_Db_Table_Rowset $objAllTags
+     * @return string $strElementId
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getAllTagsForAutocompleter($objAllTags)
+    {
+        $core = Zend_Registry::get('Core');
+        $strAllTags = '[';
+        if (count($objAllTags) > 0) {
+            foreach ($objAllTags as $objTag) {
+                $strAllTags .= '{"caption":"' . htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default) . '","value":' . $objTag->id . '},';
+            }
+            $strAllTags = trim($strAllTags, ',');
+        }
+        $strAllTags .= ']';
+        return $strAllTags;
+    }
 }
 
 ?>

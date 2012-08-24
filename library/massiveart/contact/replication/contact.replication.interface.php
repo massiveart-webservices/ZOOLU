@@ -43,21 +43,22 @@
  * @subpackage ContactReplicationInterface
  */
 
-interface ContactReplicationInterface {
-  
-  /**
-   * add contact
-   */
-  public function add($arrArgs);
-  
-  /**
-   * update contact
-   */
-  public function update($arrArgs);
-  
-  /**
-   * delete contact
-   */
-  public function delete($arrArgs);
-  
+interface ContactReplicationInterface
+{
+
+    /**
+     * add contact
+     */
+    public function add($arrArgs);
+
+    /**
+     * update contact
+     */
+    public function update($arrArgs);
+
+    /**
+     * delete contact
+     */
+    public function delete($arrArgs);
+
 }

@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,51 +31,53 @@
  */
 /**
  * Form_Helper_FormContact
- * 
+ *
  * Helper to generate a "add document" element
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2009-04-10: Thomas Schedler
- * 
+ *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  * @package massiveart.forms.helpers
  * @subpackage Form_Helper_FormContact
  */
 
-class Form_Helper_FormContact extends Zend_View_Helper_FormElement {
-
-  /**
-   * formContact
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function formContact($name, $value = null, $attribs = null){
-    $info = $this->_getInfo($name, $value, $attribs);
-    $core = Zend_Registry::get('Core');
-    extract($info); // name, value, attribs, options, listsep, disable
+class Form_Helper_FormContact extends Zend_View_Helper_FormElement
+{
 
     /**
-     * is it disabled?
-     */ 
-    $disabled = '';
-    if ($disable) {
-      $disabled = ' disabled="disabled"';
-    }
-
-    /**
-     * build the element
+     * formContact
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
      */
-    $strOutput = '<div class="conwrapper">
-                    <div class="contop">'.$core->translate->_('Add_contacts').': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddContactOverlay(\'divContactContainer_'.$this->view->escape($id).'\'); return false;"/></div>
-                    <div id="divContactContainer_'.$this->view->escape($id).'"'.$disabled.' class="'.$attribs['class'].'">
+    public function formContact($name, $value = null, $attribs = null)
+    {
+        $info = $this->_getInfo($name, $value, $attribs);
+        $core = Zend_Registry::get('Core');
+        extract($info); // name, value, attribs, options, listsep, disable
+
+        /**
+         * is it disabled?
+         */
+        $disabled = '';
+        if ($disable) {
+            $disabled = ' disabled="disabled"';
+        }
+
+        /**
+         * build the element
+         */
+        $strOutput = '<div class="conwrapper">
+                    <div class="contop">' . $core->translate->_('Add_contacts') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddContactOverlay(\'divContactContainer_' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div id="divContactContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '">
                     </div>
-                    <input type="hidden" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" isCoreField="'.$attribs['isCoreField'].'" fieldId="'.$attribs['fieldId'].'" value="'.$this->view->escape($value).'"/>
+                    <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . $attribs['isCoreField'] . '" fieldId="' . $attribs['fieldId'] . '" value="' . $this->view->escape($value) . '"/>
                   </div>';
-    
-    
-    return $strOutput;
-  }
+
+
+        return $strOutput;
+    }
 }
 
 ?>

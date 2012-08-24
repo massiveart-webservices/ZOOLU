@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -35,49 +35,49 @@ define('APPLICATION_ENV', 'development');
 /**
  * include general (autoloader, config)
  */
-require_once(dirname(__FILE__).'/../sys_config/general.inc.php');
+require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 
-try{
-     
-  $objConsoleOpts = new Zend_Console_Getopt(
-    array(
-      'folderId|f=i'        => 'Folder Id',
-      'rootLevelId|r=i'     => 'RootLevel Id',
-      'fromLanguageId|fl=i' => 'From Language Id',
-      'toLanguageId|tl=i'   => 'To Language Id',
-    )
-  );
-  
-  echo "build tree language variant\n---------------------------\n";
-  
-  if(isset($objConsoleOpts->fromLanguageId) && isset($objConsoleOpts->toLanguageId)){
-    
-    echo "load fist level of the tree ...\n";    
-    
-    require_once GLOBAL_ROOT_PATH.$core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-    $objModelFolders = new Model_Folders();
-    $objModelFolders->setLanguageId($objConsoleOpts->fromLanguageId);
-    
-    if(isset($objConsoleOpts->folderId) && $objConsoleOpts->folderId > 0){
-      $objProducts = $objModelFolders->loadGlobalChildNavigation($objConsoleOpts->folderId, $core->sysConfig->root_level_groups->product);
-    }else if(isset($objConsoleOpts->rootLevelId) && $objConsoleOpts->rootLevelId > 0){
-      $objProducts = $objModelFolders->loadGlobalRootNavigation($objConsoleOpts->rootLevelId, $core->sysConfig->root_level_groups->product);
+try {
+
+    $objConsoleOpts = new Zend_Console_Getopt(
+        array(
+             'folderId|f=i'        => 'Folder Id',
+             'rootLevelId|r=i'     => 'RootLevel Id',
+             'fromLanguageId|fl=i' => 'From Language Id',
+             'toLanguageId|tl=i'   => 'To Language Id',
+        )
+    );
+
+    echo "build tree language variant\n---------------------------\n";
+
+    if (isset($objConsoleOpts->fromLanguageId) && isset($objConsoleOpts->toLanguageId)) {
+
+        echo "load fist level of the tree ...\n";
+
+        require_once GLOBAL_ROOT_PATH . $core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+        $objModelFolders = new Model_Folders();
+        $objModelFolders->setLanguageId($objConsoleOpts->fromLanguageId);
+
+        if (isset($objConsoleOpts->folderId) && $objConsoleOpts->folderId > 0) {
+            $objProducts = $objModelFolders->loadGlobalChildNavigation($objConsoleOpts->folderId, $core->sysConfig->root_level_groups->product);
+        } else if (isset($objConsoleOpts->rootLevelId) && $objConsoleOpts->rootLevelId > 0) {
+            $objProducts = $objModelFolders->loadGlobalRootNavigation($objConsoleOpts->rootLevelId, $core->sysConfig->root_level_groups->product);
+        }
+
+        // simulate user auth
+        $obj = new stdClass();
+        $obj->id = 3; //user id
+        Zend_Auth::getInstance()->getStorage()->write($obj);
+
+        if (isset($objProducts) && count($objProducts)) {
+            buildTreeLanguageVariantNow($objProducts);
+        }
+
     }
-    
-    // simulate user auth
-    $obj = new stdClass();
-    $obj->id = 3; //user id
-    Zend_Auth::getInstance()->getStorage()->write($obj);
-    
-    if(isset($objProducts) && count($objProducts)){
-      buildTreeLanguageVariantNow($objProducts);
-    }    
-    
-  }
-  echo "---------------------------\n";
-  
-}catch (Exception $exc) {
-  echo($exc);
+    echo "---------------------------\n";
+
+} catch (Exception $exc) {
+    echo($exc);
 }
 
 /*--------------------------------------------------------
@@ -87,76 +87,78 @@ try{
 /**
  * buildTreeLanguageVariantNow
  */
-function buildTreeLanguageVariantNow($objProducts, $intLevel = 0){
-  global $objModelFolders, $core;
-  
-  foreach($objProducts as $objProduct){
-    
-    for($i = 0; $i < ($intLevel * 2); $i++){
-      echo "-";
+function buildTreeLanguageVariantNow($objProducts, $intLevel = 0)
+{
+    global $objModelFolders, $core;
+
+    foreach ($objProducts as $objProduct) {
+
+        for ($i = 0; $i < ($intLevel * 2); $i++) {
+            echo "-";
+        }
+        echo $objProduct->id . ' :: ' . $objProduct->elementType . ' :: ' . $objProduct->title . '|' . $objProduct->guiTitle . ' :: ' . $objProduct->genericFormId . ' :: ' . $objProduct->templateId . "\n";
+
+        switch ($objProduct->elementType) {
+            case 'folder':
+                $objNewProduct = $objModelFolders->loadGlobalChildNavigation($objProduct->id, $core->sysConfig->root_level_groups->product);
+                buildTreeLanguageVariantNow($objNewProduct, ($intLevel + 1));
+                break;
+            case 'global':
+                buildProdcutLanguageVariant($objProduct);
+                break;
+        }
     }
-    echo $objProduct->id.' :: '.$objProduct->elementType.' :: '.$objProduct->title.'|'.$objProduct->guiTitle.' :: '.$objProduct->genericFormId.' :: '.$objProduct->templateId."\n";
-    
-    switch($objProduct->elementType){
-      case 'folder':
-        $objNewProduct = $objModelFolders->loadGlobalChildNavigation($objProduct->id, $core->sysConfig->root_level_groups->product);
-        buildTreeLanguageVariantNow($objNewProduct, ($intLevel + 1));
-        break;
-      case 'global':
-        buildProdcutLanguageVariant($objProduct);
-        break;
-    }    
-  }
 }
 
 /**
  * buildProdcutLanguageVariant
  */
-function buildProdcutLanguageVariant($objProduct){
-  global $objConsoleOpts, $core;
-  
-  // product form
-  $objProductForm = new GenericForm();
-  $objProductForm->Setup()->setElementId($objProduct->id);
-  $objProductForm->Setup()->setElementLinkId($objProduct->linkGlobalId);
-  $objProductForm->Setup()->setFormId($objProduct->genericFormId);
-  $objProductForm->Setup()->setTemplateId($objProduct->templateId);
-  $objProductForm->Setup()->setFormVersion($objProduct->version);
-  $objProductForm->Setup()->setActionType($core->sysConfig->generic->actions->edit);
-  $objProductForm->Setup()->setLanguageId($objConsoleOpts->fromLanguageId);
-  $objProductForm->Setup()->setFormLanguageId($core->sysConfig->languages->default->id);
-  $objProductForm->Setup()->setModelSubPath('global/models/');
+function buildProdcutLanguageVariant($objProduct)
+{
+    global $objConsoleOpts, $core;
 
-  // load basic generic form
-  $objProductForm->Setup()->loadGenericForm();
+    // product form
+    $objProductForm = new GenericForm();
+    $objProductForm->Setup()->setElementId($objProduct->id);
+    $objProductForm->Setup()->setElementLinkId($objProduct->linkGlobalId);
+    $objProductForm->Setup()->setFormId($objProduct->genericFormId);
+    $objProductForm->Setup()->setTemplateId($objProduct->templateId);
+    $objProductForm->Setup()->setFormVersion($objProduct->version);
+    $objProductForm->Setup()->setActionType($core->sysConfig->generic->actions->edit);
+    $objProductForm->Setup()->setLanguageId($objConsoleOpts->fromLanguageId);
+    $objProductForm->Setup()->setFormLanguageId($core->sysConfig->languages->default->id);
+    $objProductForm->Setup()->setModelSubPath('global/models/');
 
-  // load generic form structur
-  $objProductForm->Setup()->loadGenericFormStructure();
+    // load basic generic form
+    $objProductForm->Setup()->loadGenericForm();
 
-  // init data type object
-  $objProductForm->initDataTypeObject();
-  
-  // load data
-  $objProductForm->loadFormData();
-    
+    // load generic form structur
+    $objProductForm->Setup()->loadGenericFormStructure();
 
-  // set fallback language
-  $objProductForm->Setup()->setLanguageFallbackId($objConsoleOpts->toLanguageId);
-  
-  // reset fields
-  foreach($objProductForm->Setup()->FieldNames() as $strField => $intType){
-    if($strField != 'title' && $strField != 'internal_links_title' && $strField != 'internal_links' && $strField != 'category' && $strField != 'label'){
-      $objProductForm->Setup()->getField($strField)->setValue(null);
+    // init data type object
+    $objProductForm->initDataTypeObject();
+
+    // load data
+    $objProductForm->loadFormData();
+
+
+    // set fallback language
+    $objProductForm->Setup()->setLanguageFallbackId($objConsoleOpts->toLanguageId);
+
+    // reset fields
+    foreach ($objProductForm->Setup()->FieldNames() as $strField => $intType) {
+        if ($strField != 'title' && $strField != 'internal_links_title' && $strField != 'internal_links' && $strField != 'category' && $strField != 'label') {
+            $objProductForm->Setup()->getField($strField)->setValue(null);
+        }
     }
-  }
-  
-  // reset multi regions
-  foreach($objProductForm->Setup()->MultiplyRegionIds() as $intRegionId){
-    $objProductForm->Setup()->getRegion($intRegionId)->resetRegionInstances();
-  }
-    
-  // set new language
-  $objProductForm->saveFormData();
+
+    // reset multi regions
+    foreach ($objProductForm->Setup()->MultiplyRegionIds() as $intRegionId) {
+        $objProductForm->Setup()->getRegion($intRegionId)->resetRegionInstances();
+    }
+
+    // set new language
+    $objProductForm->saveFormData();
 }
 
 ?>

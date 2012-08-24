@@ -43,349 +43,360 @@
  * @subpackage GenericDataHelper_Url
  */
 
-require_once(dirname(__FILE__).'/../../../../data/helpers/Abstract.php');
+require_once(dirname(__FILE__) . '/../../../../data/helpers/Abstract.php');
 
-class GenericDataHelper_Url extends GenericDataHelperAbstract  {
+class GenericDataHelper_Url extends GenericDataHelperAbstract
+{
 
-  /**
-   * @var Model_Pages|Model_Products
-   */
-  private $objModel;
-  
-  /**
-   * @var string
-   */
-  private $strType;
+    /**
+     * @var Model_Pages|Model_Products
+     */
+    private $objModel;
 
-  /**
-   * @var Model_Urls
-   */
-  private $objModelUrls;
+    /**
+     * @var string
+     */
+    private $strType;
 
-  /**
-   * @var Model_Folders
-   */
-  private $objModelFolders;
-  
-  /**
-   * @var Model_Utilities
-   */
-  private $objModelUtilities;
+    /**
+     * @var Model_Urls
+     */
+    private $objModelUrls;
 
-  /**
-   * @var Zend_Db_Table_Rowset_Abstract
-   */
-  private $objPathReplacers;
+    /**
+     * @var Model_Folders
+     */
+    private $objModelFolders;
 
-  /**
-   * @var string
-   */
-  private $strUrl;
+    /**
+     * @var Model_Utilities
+     */
+    private $objModelUtilities;
 
-  /**
-   * @var string
-   */
-  private $strParentPageUrl;
+    /**
+     * @var Zend_Db_Table_Rowset_Abstract
+     */
+    private $objPathReplacers;
 
-  /**
-   * save()
-   * @param integer $intElementId
-   * @param string $strType
-   * @param string $strElementId
-   * @param integet $intVersion
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function save($intElementId, $strType, $strElementId = null, $intVersion = null){
-    try{
-      $this->strType = $strType;
+    /**
+     * @var string
+     */
+    private $strUrl;
 
-      $this->getModel();
-      $this->getModelUrls();
+    /**
+     * @var string
+     */
+    private $strParentPageUrl;
 
-      $objItemData = $this->objModel->load($intElementId);
-            
-      if(count($objItemData) > 0){
-        $objItem = $objItemData->current();
+    /**
+     * save()
+     * @param integer $intElementId
+     * @param string $strType
+     * @param string $strElementId
+     * @param integet $intVersion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function save($intElementId, $strType, $strElementId = null, $intVersion = null)
+    {
+        try {
+            $this->strType = $strType;
 
-        $strUrlNew = '';
+            $this->getModel();
+            $this->getModelUrls();
 
-        // get the new url
-        if(isset($_POST[$this->objElement->name.'_EditableUrl'])){
-          $this->strUrl = strtolower($_POST[$this->objElement->name.'_EditableUrl']);
-        }
-        if($this->strUrl == '' && !($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() == null)){
-          $objFieldData = $this->objElement->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->objElement->Setup()->getGenFormId());
+            $objItemData = $this->objModel->load($intElementId);
 
-          if(count($objFieldData) > 0){
-            foreach($objFieldData as $objField){
-              if($this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue() != ''){
-                $this->strUrl .= str_replace('/', '-', $this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue());
-                break;
-              }
+            if (count($objItemData) > 0) {
+                $objItem = $objItemData->current();
+
+                $strUrlNew = '';
+
+                // get the new url
+                if (isset($_POST[$this->objElement->name . '_EditableUrl'])) {
+                    $this->strUrl = strtolower($_POST[$this->objElement->name . '_EditableUrl']);
+                }
+                if ($this->strUrl == '' && !($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() == null)) {
+                    $objFieldData = $this->objElement->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->objElement->Setup()->getGenFormId());
+
+                    if (count($objFieldData) > 0) {
+                        foreach ($objFieldData as $objField) {
+                            if ($this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue() != '') {
+                                $this->strUrl .= str_replace('/', '-', $this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue());
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if ($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() != null) {
+                    $this->strUrl = rtrim($this->strUrl, '/') . '/';
+                }
+
+                $this->strUrl = $this->getModelUrls()->makeUrlConform($this->strUrl);
+
+                //Check new URL
+                $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                if (count($objUrlData) > 0) {
+                    $objUrl = $objUrlData->current();
+                    if (strcmp($this->strUrl, $objUrl->url) !== 0) {
+                        // Url have changed
+
+                        if (!$this->checkUniqueness($this->strUrl)) {
+                            $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+                        }
+
+                        // set all page urls to isMain 0
+                        $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                        $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                    }
+                } else {
+
+                    if (!$this->checkUniqueness($this->strUrl)) {
+                        $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+                    }
+
+                    // set all page urls to isMain 0
+                    $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                    $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                }
             }
-          }
-        }
-        
-        if($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() != null){
-          $this->strUrl = rtrim($this->strUrl, '/').'/';
-        }
-        
-        $this->strUrl = $this->getModelUrls()->makeUrlConform($this->strUrl);
 
-        //Check new URL 
-        $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-        if(count($objUrlData) > 0){
-          $objUrl = $objUrlData->current();
-          if(strcmp($this->strUrl, $objUrl->url) !== 0){
-            // Url have changed
+            $this->load($intElementId, $strType, $strElementId, $intVersion);
 
-            if(!$this->checkUniqueness($this->strUrl)){
-              $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+    /**
+     * removeUrlHistory()
+     * @param integer $intElementId
+     * @param string $strType
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function removeUrlHistory($intElementId, $strType)
+    {
+        try {
+            $this->strType = $strType;
+
+            $this->getModel();
+            $this->getModelUrls();
+
+            $objItemData = $this->objModel->load($intElementId);
+            if (count($objItemData) > 0) {
+                $objItem = $objItemData->current();
+                $this->getModelUrls()->removeUrlHistory($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+
+    /**
+     * load()
+     * @param integer $intElementId
+     * @param string $strType
+     * @param string $strElementId
+     * @param integet $intVersion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function load($intElementId, $strType, $strElementId = null, $intVersion = null)
+    {
+        try {
+            $this->strType = $strType;
+
+            $this->getModel();
+            $this->getModelUrls();
+
+            $objItemData = $this->objModel->load($intElementId);
+
+            if (count($objItemData) > 0) {
+                $objItem = $objItemData->current();
+
+                $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+
+                if (count($objUrlData) > 0) {
+                    $objUrl = $objUrlData->current();
+                    $this->objElement->setValue('/' . strtolower($objUrl->languageCode) . '/' . $objUrl->url);
+                    $this->objElement->url = $objUrl->url;
+                    $this->objElement->languageCode = $objUrl->languageCode;
+
+                    $this->objElement->blnIsStartElement = $this->objElement->Setup()->getIsStartElement(false);
+                    $this->objElement->intParentId = $this->objElement->Setup()->getParentId();
+                }
             }
 
-            // set all page urls to isMain 0
-            $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-            $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-          }
-        }else{
-
-          if(!$this->checkUniqueness($this->strUrl)){
-            $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
-          }
-
-          // set all page urls to isMain 0
-          $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-          $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
-
-      $this->load($intElementId, $strType, $strElementId, $intVersion);
-      
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
     }
-  }
-  
-  /**
-   * removeUrlHistory()
-   * @param integer $intElementId
-   * @param string $strType
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function removeUrlHistory($intElementId, $strType){
-    try{
-      $this->strType = $strType;
-      
-      $this->getModel();
-      $this->getModelUrls();
-      
-      $objItemData = $this->objModel->load($intElementId);
-      if(count($objItemData) > 0){
-        $objItem = $objItemData->current();        
-        $this->getModelUrls()->removeUrlHistory($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-  
 
-  /**
-   * load()
-   * @param integer $intElementId
-   * @param string $strType
-   * @param string $strElementId
-   * @param integet $intVersion
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function load($intElementId, $strType, $strElementId = null, $intVersion = null){
-    try{
-      $this->strType = $strType;
-
-      $this->getModel();
-      $this->getModelUrls();
-
-      $objItemData = $this->objModel->load($intElementId);
-
-      if(count($objItemData) > 0){
-        $objItem = $objItemData->current();
-
-        $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-
-        if(count($objUrlData) > 0){
-          $objUrl = $objUrlData->current();
-          $this->objElement->setValue('/'.strtolower($objUrl->languageCode).'/'.$objUrl->url);
-          $this->objElement->url = $objUrl->url;
-          $this->objElement->languageCode = $objUrl->languageCode;
-
-          $this->objElement->blnIsStartElement = $this->objElement->Setup()->getIsStartElement(false);
-          $this->objElement->intParentId = $this->objElement->Setup()->getParentId();
+    /**
+     * checkUniqueness
+     * @param string $strUrl
+     * @return boolean
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    protected function checkUniqueness($strUrl)
+    {
+        $blnReturn = true;
+        $objUrls = $this->getModelUrls()->loadByUrl($this->objElement->Setup()->getRootLevelId(), $strUrl, $this->objElement->Setup()->getFormType());
+        if (isset($objUrls->url) && count($objUrls->url) > 0) {
+            $blnReturn = false;
         }
-      }
-
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * checkUniqueness
-   * @param string $strUrl
-   * @return boolean
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  protected function checkUniqueness($strUrl){
-    $blnReturn = true;
-    $objUrls = $this->getModelUrls()->loadByUrl($this->objElement->Setup()->getRootLevelId(), $strUrl, $this->objElement->Setup()->getFormType());
-    if(isset($objUrls->url) && count($objUrls->url) > 0){
-      $blnReturn = false;
-    }
-    return $blnReturn;
-  }
-
-  /**
-   * makeUrlUnique
-   * @param string $strUrl
-   * @param Zend_Db_Table_Rowset_Abstract $objItem
-   * @return Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function makeUrlUnique($strUrl, $objItem){
-
-    $objParentFolders = array();
-    if($objItem->idParentTypes == $this->core->sysConfig->parent_types->folder){
-      switch($this->objElement->Setup()->getFormTypeId()){
-        case $this->core->sysConfig->form->types->page:
-          $objParentFolders = $this->getModelFolders()->loadParentFolders($objItem->idParent);
-          break;
-        case $this->core->sysConfig->form->types->global:
-          $objParentFolders = $this->getModelFolders()->loadGlobalParentFolders($objItem->idParent, $this->objElement->Setup()->getRootLevelGroupId());
-          break;
-      }
+        return $blnReturn;
     }
 
-    $blnFirst = true;
+    /**
+     * makeUrlUnique
+     * @param string $strUrl
+     * @param Zend_Db_Table_Rowset_Abstract $objItem
+     * @return Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function makeUrlUnique($strUrl, $objItem)
+    {
 
-    foreach($objParentFolders as $objParentFolder){
-      if(!($blnFirst && $this->objElement->Setup()->getIsStartElement(false))){
-        $strUrl = $this->getModelUrls()->makeUrlConform(strtolower($objParentFolder->title)) . '/' . $strUrl;
-        if($this->checkUniqueness($strUrl)){
-          break;
+        $objParentFolders = array();
+        if ($objItem->idParentTypes == $this->core->sysConfig->parent_types->folder) {
+            switch ($this->objElement->Setup()->getFormTypeId()) {
+                case $this->core->sysConfig->form->types->page:
+                    $objParentFolders = $this->getModelFolders()->loadParentFolders($objItem->idParent);
+                    break;
+                case $this->core->sysConfig->form->types->global:
+                    $objParentFolders = $this->getModelFolders()->loadGlobalParentFolders($objItem->idParent, $this->objElement->Setup()->getRootLevelGroupId());
+                    break;
+            }
         }
-      }
-      $blnFirst = false;
+
+        $blnFirst = true;
+
+        foreach ($objParentFolders as $objParentFolder) {
+            if (!($blnFirst && $this->objElement->Setup()->getIsStartElement(false))) {
+                $strUrl = $this->getModelUrls()->makeUrlConform(strtolower($objParentFolder->title)) . '/' . $strUrl;
+                if ($this->checkUniqueness($strUrl)) {
+                    break;
+                }
+            }
+            $blnFirst = false;
+        }
+
+        if (!$this->checkUniqueness($strUrl)) {
+            $strUrl = $this->makeUrlUniqueIndeed($strUrl);
+        }
+
+        return $strUrl;
     }
 
-    if(!$this->checkUniqueness($strUrl)){
-      $strUrl = $this->makeUrlUniqueIndeed($strUrl);
+    /**
+     * makeUrlUniqueIndeed()
+     * @param string $strUrl
+     * @param integer $intUrlAddon = 0
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function makeUrlUniqueIndeed($strUrl, $intUrlAddon = 0)
+    {
+
+        if (rtrim($strUrl, '/') != $strUrl) {
+            $strNewUrl = ($intUrlAddon > 0) ? rtrim($strUrl, '/') . '-' . $intUrlAddon . '/' : $strUrl;
+        } else {
+            $strNewUrl = ($intUrlAddon > 0) ? $strUrl . '-' . $intUrlAddon : $strUrl;
+        }
+
+        if (!$this->checkUniqueness($strNewUrl)) {
+            return $this->makeUrlUniqueIndeed($strUrl, $intUrlAddon + 1);
+        } else {
+            return $strNewUrl;
+        }
     }
 
-    return $strUrl;
-  }
-
-  /**
-   * makeUrlUniqueIndeed()
-   * @param string $strUrl
-   * @param integer $intUrlAddon = 0
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function makeUrlUniqueIndeed($strUrl, $intUrlAddon = 0){
-
-    if(rtrim($strUrl, '/') != $strUrl){
-      $strNewUrl = ($intUrlAddon > 0) ? rtrim($strUrl, '/') . '-' . $intUrlAddon . '/' : $strUrl;
-    } else {
-      $strNewUrl = ($intUrlAddon > 0) ? $strUrl . '-' . $intUrlAddon : $strUrl;
+    /**
+     * setType
+     * @param string $strType
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function setType($strType)
+    {
+        $this->strType = $strType;
     }
 
-    if(!$this->checkUniqueness($strNewUrl)){
-      return $this->makeUrlUniqueIndeed($strUrl, $intUrlAddon + 1);
-    }else{
-      return $strNewUrl;
-    }
-  }
-    
-  /**
-   * setType
-   * @param string $strType   
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function setType($strType){
-  	$this->strType = $strType;
-  }
-
-  /**
-   * getModel
-   * @return type Model
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModel(){
-    if($this->objModel === null) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      $strModelFilePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.$this->objElement->Setup()->getModelSubPath().((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s').'.php';
-      $this->core->logger->debug($strModelFilePath);
-      if(file_exists($strModelFilePath)){
-        require_once $strModelFilePath;
-        $strModel = 'Model_'.((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s');
-        $this->objModel = new $strModel();
-        $this->objModel->setLanguageId($this->objElement->Setup()->getLanguageId());
-      }else{
-        throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "'.$this->strType.'"');
-      }
-    }
-    return $this->objModel;
-  }
-
-  /**
-   * getModelUrls
-   * @return Model_Urls
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelUrls(){
-    if (null === $this->objModelUrls) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Urls.php';
-      $this->objModelUrls = new Model_Urls();
-      $this->objModelUrls->setLanguageId($this->objElement->Setup()->getLanguageId());
+    /**
+     * getModel
+     * @return type Model
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModel()
+    {
+        if ($this->objModel === null) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            $strModelFilePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . $this->objElement->Setup()->getModelSubPath() . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's') . '.php';
+            $this->core->logger->debug($strModelFilePath);
+            if (file_exists($strModelFilePath)) {
+                require_once $strModelFilePath;
+                $strModel = 'Model_' . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's');
+                $this->objModel = new $strModel();
+                $this->objModel->setLanguageId($this->objElement->Setup()->getLanguageId());
+            } else {
+                throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "' . $this->strType . '"');
+            }
+        }
+        return $this->objModel;
     }
 
-    return $this->objModelUrls;
-  }
+    /**
+     * getModelUrls
+     * @return Model_Urls
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelUrls()
+    {
+        if (null === $this->objModelUrls) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Urls.php';
+            $this->objModelUrls = new Model_Urls();
+            $this->objModelUrls->setLanguageId($this->objElement->Setup()->getLanguageId());
+        }
 
-  /**
-   * getModelFolders
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelFolders()
-  {
-    if (null === $this->objModelFolders) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
-      $this->objModelFolders = new Model_Folders();
-      $this->objModelFolders->setLanguageId($this->objElement->Setup()->getLanguageId());
+        return $this->objModelUrls;
     }
 
-    return $this->objModelFolders;
-  }
+    /**
+     * getModelFolders
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->objElement->Setup()->getLanguageId());
+        }
+
+        return $this->objModelFolders;
+    }
 }
+
 ?>

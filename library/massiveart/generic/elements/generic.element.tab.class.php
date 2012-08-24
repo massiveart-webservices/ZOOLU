@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,111 +42,124 @@
  * @subpackage GenericElementTab
  */
 
-require_once(dirname(__FILE__).'/generic.element.abstract.class.php');
+require_once(dirname(__FILE__) . '/generic.element.abstract.class.php');
 
-class GenericElementTab extends GenericElementAbstract {
+class GenericElementTab extends GenericElementAbstract
+{
 
-	protected $intTabId;
-	protected $strTabTitle;
-	protected $intTabOrder;
-  protected $strAction;
+    protected $intTabId;
+    protected $strTabTitle;
+    protected $intTabOrder;
+    protected $strAction;
 
-	protected $arrRegions = array();
-  /**
-   * property of the regions array
-   * @return Array $arrRegions
-   */
-  public function Regions(){
-    return $this->arrRegions;
-  }
+    protected $arrRegions = array();
 
-	/**
-   * addRegion
-   * @param GenericElementRegion $objRegion
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-	public function addRegion(GenericElementRegion &$objRegion){
-	  $this->arrRegions[$objRegion->getRegionId()] = $objRegion;
-	}
-
-  /**
-   * getRegion
-   * @param integer $intRegionId
-   * @return GenericElementRegion|null
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getRegion($intRegionId){
-    if(array_key_exists($intRegionId, $this->arrRegions)){
-      return $this->arrRegions[$intRegionId];
+    /**
+     * property of the regions array
+     * @return Array $arrRegions
+     */
+    public function Regions()
+    {
+        return $this->arrRegions;
     }
-    return null;
-  }
 
-	/**
-	 * setTabId
-	 * @param integer $intTabId
-	 */
-	public function setTabId($intTabId){
-		$this->intTabId = $intTabId;
-	}
+    /**
+     * addRegion
+     * @param GenericElementRegion $objRegion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addRegion(GenericElementRegion &$objRegion)
+    {
+        $this->arrRegions[$objRegion->getRegionId()] = $objRegion;
+    }
 
-	/**
-	 * getTabId
-	 * @param integer $intTabId
-	 */
-	public function getTabId(){
-		return $this->intTabId;
-	}
+    /**
+     * getRegion
+     * @param integer $intRegionId
+     * @return GenericElementRegion|null
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getRegion($intRegionId)
+    {
+        if (array_key_exists($intRegionId, $this->arrRegions)) {
+            return $this->arrRegions[$intRegionId];
+        }
+        return null;
+    }
 
-  /**
-   * setTabOrder
-   * @param integer $intTabOrder
-   */
-  public function setTabOrder($intTabOrder){
-    $this->intTabOrder = $intTabOrder;
-  }
+    /**
+     * setTabId
+     * @param integer $intTabId
+     */
+    public function setTabId($intTabId)
+    {
+        $this->intTabId = $intTabId;
+    }
 
-  /**
-   * getTabOrder
-   * @param integer $intTabOrder
-   */
-  public function getTabOrder(){
-    return $this->intTabOrder;
-  }
+    /**
+     * getTabId
+     * @param integer $intTabId
+     */
+    public function getTabId()
+    {
+        return $this->intTabId;
+    }
 
-	/**
-	 * setTabTitle
-	 * @param string $strTabTitle
-	 */
-	public function setTabTitle($strTabTitle){
-		$this->strTabTitle = $strTabTitle;
-	}
+    /**
+     * setTabOrder
+     * @param integer $intTabOrder
+     */
+    public function setTabOrder($intTabOrder)
+    {
+        $this->intTabOrder = $intTabOrder;
+    }
 
-	/**
-	 * getTabTitle
-	 * @param string $strTabTitle
-	 */
-	public function getTabTitle(){
-		return $this->strTabTitle;
-	}
-  
-  /**
-   * setAction
-   * @param string $strAction
-   */
-  public function setAction($strAction){
-    $this->strAction = $strAction;
-  }
-  
-  /**
-   * getTitle
-   * @return string
-   */
-  public function getAction(){
-    return $this->strAction;
-  }
+    /**
+     * getTabOrder
+     * @param integer $intTabOrder
+     */
+    public function getTabOrder()
+    {
+        return $this->intTabOrder;
+    }
+
+    /**
+     * setTabTitle
+     * @param string $strTabTitle
+     */
+    public function setTabTitle($strTabTitle)
+    {
+        $this->strTabTitle = $strTabTitle;
+    }
+
+    /**
+     * getTabTitle
+     * @param string $strTabTitle
+     */
+    public function getTabTitle()
+    {
+        return $this->strTabTitle;
+    }
+
+    /**
+     * setAction
+     * @param string $strAction
+     */
+    public function setAction($strAction)
+    {
+        $this->strAction = $strAction;
+    }
+
+    /**
+     * getTitle
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->strAction;
+    }
 }
 
 ?>

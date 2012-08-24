@@ -56,7 +56,7 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
      */
     public function formArticles($name, $value = null, $attribs = null, $options = null, $regionId = null, $rawDataObject = null)
     {
-        
+
         $info = $this->_getInfo($name, $value, $attribs);
         extract($info); // name, value, attribs, options, listsep, disable
 
@@ -69,12 +69,12 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
         $values = array();
         if (is_array($value)) {
             $values = $value;
-        } else { 
+        } else {
             $values = json_decode(str_replace('][', ', ', $value));
         }
 
         $core = Zend_Registry::get('Core');
-        
+
         if (array_key_exists('fieldOptions', $attribs) && !empty($attribs['fieldOptions'])) {
             $fieldOptions = json_decode($attribs['fieldOptions']);
         } else {
@@ -120,39 +120,39 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
                     </div>
                 </div>';
 
-        $wildcards = array('{id}', '{name}', '{n}', '{options}', '{box_style}', '{value_price}', '{value_discount}', '{add_article_style}' );
+        $wildcards = array('{id}', '{name}', '{n}', '{options}', '{box_style}', '{value_price}', '{value_discount}', '{add_article_style}');
 
         $htmlData = '';
         $strIstances = '';
         if (count($values) > 0) {
             $i = 1;
-            foreach($values as $data){
+            foreach ($values as $data) {
                 $style = 'display: none;';
                 if (count($values) == $i) {
-                    $style = '';    
+                    $style = '';
                 }
                 $htmlData .= str_replace($wildcards, array(
-                                                     $this->view->escape($id),
-                                                     $this->view->escape($name),
-                                                     $i,
-                                                     implode("\n    ", $this->buildSelect($options, $data)),
-                                                     '',
-                                                     $data->price,
-                                                     $data->discount,
-                                                     $style
-                                                ), $template);
-                          $strIstances .= '['.$i.']';
+                                                          $this->view->escape($id),
+                                                          $this->view->escape($name),
+                                                          $i,
+                                                          implode("\n    ", $this->buildSelect($options, $data)),
+                                                          '',
+                                                          $data->price,
+                                                          $data->discount,
+                                                          $style
+                                                     ), $template);
+                $strIstances .= '[' . $i . ']';
                 $i++;
             }
         } else {
             $strIstances = '[1]';
             $htmlData = str_replace($wildcards, array(
-                                                 $this->view->escape($id),
-                                                 $this->view->escape($name),
-                                                 '1',
-                                                  implode("\n    ", $this->buildSelect($options, null)),
-                                                 '',
-                                            ), $template);
+                                                     $this->view->escape($id),
+                                                     $this->view->escape($name),
+                                                     '1',
+                                                     implode("\n    ", $this->buildSelect($options, null)),
+                                                     '',
+                                                ), $template);
         }
 
         $xhtml = '
@@ -186,65 +186,69 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
                                                  'style="display:none;"',
                                             ), $template) . '
                 <div class="clear"></div>
-                <input type="hidden" id="' . $this->view->escape($name) . '_Instances" value="'.$strIstances.'" name="' . $this->view->escape($name) . '_Instances"' . $endTag . '
+                <input type="hidden" id="' . $this->view->escape($name) . '_Instances" value="' . $strIstances . '" name="' . $this->view->escape($name) . '_Instances"' . $endTag . '
                 <input type="hidden" id="' . $this->view->escape($name) . '_Order" value="" name="' . $this->view->escape($name) . '_Order"' . $endTag . '
             </div>';
 
         return $xhtml;
     }
-    
-    protected function loadSizes($objSizeOptions, $core, $intLanguageId){
+
+    protected function loadSizes($objSizeOptions, $core, $intLanguageId)
+    {
 
         $arrOptions = array();
-        if(!empty($objSizeOptions->sql)){
+        if (!empty($objSizeOptions->sql)) {
             $objReplacer = new Replacer();
-            
+
             $sqlSelect = $objReplacer->sqlReplacer($objSizeOptions->sql, array('LANGUAGE_ID' => $intLanguageId));
             $sqlStmt = $core->dbh->query($sqlSelect)->fetchAll();
 
 
             $arrOptions[''] = $core->translate->_('Please_choose', false);
-            foreach($sqlStmt as $arrSql){
-                if(array_key_exists('depth', $arrSql)){
-                    $arrOptions[$arrSql['id']] = array('title' => $arrSql['title'],
-                                                       'depth' => $arrSql['depth']);
-                }else{
+            foreach ($sqlStmt as $arrSql) {
+                if (array_key_exists('depth', $arrSql)) {
+                    $arrOptions[$arrSql['id']] = array(
+                        'title' => $arrSql['title'],
+                        'depth' => $arrSql['depth']
+                    );
+                } else {
                     $arrOptions[$arrSql['id']] = $arrSql['title'];
                 }
             }
         }
-        
+
         return $arrOptions;
     }
-    
+
     /**
      * buildSelect
      * @param array $options
      * @param object $objData
      * @return array
      */
-    protected function buildSelect($options, $objData) {
-        $arrSelected =  array();
+    protected function buildSelect($options, $objData)
+    {
+        $arrSelected = array();
         if ($objData != null) {
-          $arrSelected[] = $objData->size;
+            $arrSelected[] = $objData->size;
         }
-        
-        foreach($options as $opt_value => $opt){
+
+        foreach ($options as $opt_value => $opt) {
             $depth = 0;
-            if(is_array($opt) && array_key_exists('title', $opt)){
+            if (is_array($opt) && array_key_exists('title', $opt)) {
 
                 $opt_label = $opt['title'];
-                if(array_key_exists('depth', $opt)){
+                if (array_key_exists('depth', $opt)) {
                     $depth = $opt['depth'];
                 }
 
                 $list[] = $this->_build($opt_value, $opt_label, $arrSelected, false, $depth - 2);
-            }else{
+            } else {
                 $opt_label = $opt;
                 $list[] = $this->_build($opt_value, $opt_label, $arrSelected, false, 0);
             }
         }
-        return $list; 
+        return $list;
     }
 
     /**
@@ -257,7 +261,8 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
      * @param integer $depth = 1
      * @return string Option Tag XHTML
      */
-    protected function _build($value, $label, $selected, $disable, $depth = 0) {
+    protected function _build($value, $label, $selected, $disable, $depth = 0)
+    {
         if (is_bool($disable)) {
             $disable = array();
         }
@@ -277,11 +282,11 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
         }
 
         $strBlanks = '';
-        for($i = 1; $i <= $depth; $i++){
+        for ($i = 1; $i <= $depth; $i++) {
             $strBlanks .= '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
 
-        $opt .= '>'.$strBlanks.$this->view->escape($label).'</option>';
+        $opt .= '>' . $strBlanks . $this->view->escape($label) . '</option>';
 
         return $opt;
     }

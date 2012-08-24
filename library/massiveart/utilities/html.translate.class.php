@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,21 +42,23 @@
  * @subpackage HtmlTranslate
  */
 
-class HtmlTranslate extends Zend_Translate {
+class HtmlTranslate extends Zend_Translate
+{
 
-  /**
-   * Translates the given string
-   * returns the translation
-   *
-   * @param  string             $messageId Translation string
-   * @param  boolean            $htmlEncoded user nl2br and htmlentities 
-   * @param  string|Zend_Locale $locale    (optional) Locale/Language to use, identical with locale
-   *                                       identifier, @see Zend_Locale for more information
-   * @return string
-   */
-  public function _($messageId, $htmlEncoded = true, $locale = null) {
-    return ($htmlEncoded == true) ? nl2br(htmlentities(parent::getAdapter()->_($messageId, $locale), ENT_COMPAT, Zend_Registry::get('Core')->sysConfig->encoding->default, false)) : parent::getAdapter()->_($messageId, $locale);
-  }
+    /**
+     * Translates the given string
+     * returns the translation
+     *
+     * @param  string             $messageId Translation string
+     * @param  boolean            $htmlEncoded user nl2br and htmlentities
+     * @param  string|Zend_Locale $locale    (optional) Locale/Language to use, identical with locale
+     *                                       identifier, @see Zend_Locale for more information
+     * @return string
+     */
+    public function _($messageId, $htmlEncoded = true, $locale = null)
+    {
+        return ($htmlEncoded == true) ? nl2br(htmlentities(parent::getAdapter()->_($messageId, $locale), ENT_COMPAT, Zend_Registry::get('Core')->sysConfig->encoding->default, false)) : parent::getAdapter()->_($messageId, $locale);
+    }
 
 }
 

@@ -44,9 +44,10 @@
  * @subpackage Form_Element_InternalLinks
  */
 
-class Form_Element_InternalLinks extends FormElementXhtmlAbstract {
+class Form_Element_InternalLinks extends FormElementXhtmlAbstract
+{
 
-  public $helper = 'formInternalLinks';
+    public $helper = 'formInternalLinks';
 
 }
 

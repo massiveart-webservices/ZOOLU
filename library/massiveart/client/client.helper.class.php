@@ -43,116 +43,124 @@
  * @subpackage ClientHelper
  */
 
-class ClientHelper {
-  
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * @var Zend_Loader_PluginLoader
-   */
-  protected static $objPluginLoader;
-  
-  /**
-   * @var ClientHelperAbstract
-   */
-  protected $objHelper;
-  
-  /**
-   * @var string
-   */
-  private $strType;
-  
-  /**
-   * @var array
-   */
-  private static $arrHelperTypes = array();
-  
-  /**
-   * construct
-   * @param $strType
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  protected function __construct($strType) {
-    $this->core = Zend_Registry::get('Core');
-    $this->strType = $strType;
-  }
-  
-  private function __clone(){}
-  
-  /**
-   * get
-   * @param $strType
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public static function get($strType) {
-    if(!array_key_exists($strType, self::$arrHelperTypes)){
-      self::$arrHelperTypes[$strType] = new ClientHelper($strType);
-    }
-    return self::$arrHelperTypes[$strType];
-  }
+class ClientHelper
+{
 
-  /**
-   * Method overloading
-   *
-   * @param  string $method
-   * @param  array $args
-   * @return mixed
-   * @throws Zend_Controller_Action_Exception if helper does not have a direct() method
-   */
-  public function __call($strMethod, $arrArgs){
-    try{
-      $objHelper = $this->getHelper();
-      if (!method_exists($objHelper, $strMethod)) {
-        throw new Exception('Helper "' . $this->strType . '" does not support overloading via '.$strMethod.'()');
-      }
-      return call_user_func_array(array($objHelper, $strMethod), $arrArgs); 
-      
-    }catch (Exception $exc) {
-      $this->core->logger->warn($exc);
-    }
-  }
+    /**
+     * @var Core
+     */
+    protected $core;
 
-  /**
-   * getHelper 
-   * @return ClientHelperInterface
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function getHelper(){
-    try{
-      if(!$this->objHelper instanceof ClientHelperInterface){
-        
-        try{
-          $strClass = $this->getPluginLoader()->load($this->strType);          
-        }catch (Zend_Loader_PluginLoader_Exception $e){            
-          throw new Exception('Action Helper by name ' . $this->strType . ' not found: ' . $strClass);
+    /**
+     * @var Zend_Loader_PluginLoader
+     */
+    protected static $objPluginLoader;
+
+    /**
+     * @var ClientHelperAbstract
+     */
+    protected $objHelper;
+
+    /**
+     * @var string
+     */
+    private $strType;
+
+    /**
+     * @var array
+     */
+    private static $arrHelperTypes = array();
+
+    /**
+     * construct
+     * @param $strType
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    protected function __construct($strType)
+    {
+        $this->core = Zend_Registry::get('Core');
+        $this->strType = $strType;
+    }
+
+    private function __clone()
+    {
+    }
+
+    /**
+     * get
+     * @param $strType
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public static function get($strType)
+    {
+        if (!array_key_exists($strType, self::$arrHelperTypes)) {
+            self::$arrHelperTypes[$strType] = new ClientHelper($strType);
         }
-
-        $this->objHelper = new $strClass();
-
-        if(!$this->objHelper instanceof ClientHelperInterface){
-          throw new Exception('Helper name ' . $this->strType . ' -> class ' . $strClass . ' is not of type ClientHelper');
-        }        
-      }
-      return $this->objHelper;      
-    }catch (Exception $exc) {
-      $this->core->logger->warn($exc);
+        return self::$arrHelperTypes[$strType];
     }
-  }
 
-  /**
-   * getPluginLoader
-   * @return Zend_Loader_PluginLoader
-   */
-  private static function getPluginLoader(){
-    if(null === self::$objPluginLoader){
-      self::$objPluginLoader = new Zend_Loader_PluginLoader(array(
-          'Client' => GLOBAL_ROOT_PATH.'client/plugins/',
-      ));
+    /**
+     * Method overloading
+     *
+     * @param  string $method
+     * @param  array $args
+     * @return mixed
+     * @throws Zend_Controller_Action_Exception if helper does not have a direct() method
+     */
+    public function __call($strMethod, $arrArgs)
+    {
+        try {
+            $objHelper = $this->getHelper();
+            if (!method_exists($objHelper, $strMethod)) {
+                throw new Exception('Helper "' . $this->strType . '" does not support overloading via ' . $strMethod . '()');
+            }
+            return call_user_func_array(array($objHelper, $strMethod), $arrArgs);
+
+        } catch (Exception $exc) {
+            $this->core->logger->warn($exc);
+        }
     }
-    return self::$objPluginLoader;
-  }
-  
+
+    /**
+     * getHelper
+     * @return ClientHelperInterface
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function getHelper()
+    {
+        try {
+            if (!$this->objHelper instanceof ClientHelperInterface) {
+
+                try {
+                    $strClass = $this->getPluginLoader()->load($this->strType);
+                } catch (Zend_Loader_PluginLoader_Exception $e) {
+                    throw new Exception('Action Helper by name ' . $this->strType . ' not found: ' . $strClass);
+                }
+
+                $this->objHelper = new $strClass();
+
+                if (!$this->objHelper instanceof ClientHelperInterface) {
+                    throw new Exception('Helper name ' . $this->strType . ' -> class ' . $strClass . ' is not of type ClientHelper');
+                }
+            }
+            return $this->objHelper;
+        } catch (Exception $exc) {
+            $this->core->logger->warn($exc);
+        }
+    }
+
+    /**
+     * getPluginLoader
+     * @return Zend_Loader_PluginLoader
+     */
+    private static function getPluginLoader()
+    {
+        if (null === self::$objPluginLoader) {
+            self::$objPluginLoader = new Zend_Loader_PluginLoader(array(
+                                                                       'Client' => GLOBAL_ROOT_PATH . 'client/plugins/',
+                                                                  ));
+        }
+        return self::$objPluginLoader;
+    }
+
 }

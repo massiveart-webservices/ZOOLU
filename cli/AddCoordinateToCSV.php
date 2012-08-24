@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -33,40 +33,40 @@
 /**
  * include general (autoloader, config)
  */
-require_once(dirname(__FILE__).'/../sys_config/general.inc.php');
-require_once(dirname(__FILE__).'/gmapsCoordinates.class.php');
+require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
+require_once(dirname(__FILE__) . '/gmapsCoordinates.class.php');
 
-try{
-  $objConsoleOpts = new Zend_Console_Getopt(
-      array(
-          'source|s=s'      => 'Source File',
-          'destination|d=s' => 'Destination File'
-      )
-  );
-  
-  $blnFirst = true;
-  
-  $sourceFile = fopen($objConsoleOpts->source, 'r');
-  $destinationFile = fopen($objConsoleOpts->destination, 'w');
-  $objCoordinate = new gmapsCoordinates();
-  $objCoordinate->getKeyFromCore();
-  while(($arrLine = fgetcsv($sourceFile, 0, ';')) !== false){
-    if($blnFirst){
-      array_push($arrLine, 'long', 'lat');
-      fputcsv($destinationFile, $arrLine, ';');
-      $blnFirst = false;
-    }else{
-      //FIXME: Positions in csv are hardcoded
-      $objCoordinate->setStreet($arrLine[3]);
-      $objCoordinate->setCity($arrLine[4]);
-      $objCoordinate->calculateCoordinates();
-      array_push($arrLine, $objCoordinate->getLongitude(), $objCoordinate->getLatitude());
-      fputcsv($destinationFile, $arrLine, ';');
+try {
+    $objConsoleOpts = new Zend_Console_Getopt(
+        array(
+             'source|s=s'      => 'Source File',
+             'destination|d=s' => 'Destination File'
+        )
+    );
+
+    $blnFirst = true;
+
+    $sourceFile = fopen($objConsoleOpts->source, 'r');
+    $destinationFile = fopen($objConsoleOpts->destination, 'w');
+    $objCoordinate = new gmapsCoordinates();
+    $objCoordinate->getKeyFromCore();
+    while (($arrLine = fgetcsv($sourceFile, 0, ';')) !== false) {
+        if ($blnFirst) {
+            array_push($arrLine, 'long', 'lat');
+            fputcsv($destinationFile, $arrLine, ';');
+            $blnFirst = false;
+        } else {
+            //FIXME: Positions in csv are hardcoded
+            $objCoordinate->setStreet($arrLine[3]);
+            $objCoordinate->setCity($arrLine[4]);
+            $objCoordinate->calculateCoordinates();
+            array_push($arrLine, $objCoordinate->getLongitude(), $objCoordinate->getLatitude());
+            fputcsv($destinationFile, $arrLine, ';');
+        }
     }
-  }
-  
-}catch (Exception $exc) {
-  $core->logger->err($exc);
-  exit();
+
+} catch (Exception $exc) {
+    $core->logger->err($exc);
+    exit();
 }
 ?>

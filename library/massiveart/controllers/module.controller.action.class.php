@@ -40,41 +40,45 @@
  * @version 1.0
  */
 
-class ModuleControllerAction extends AuthControllerAction {
+class ModuleControllerAction extends AuthControllerAction
+{
 
-  /**
-   * init
-   */
-  public function init(){
-    parent::init();
-  }
-
-	/**
-   * preDispatch
-   */
-  public function preDispatch(){
-  	parent::preDispatch();        
-  	
-  	/**
-     * load item if the defined params are posted
+    /**
+     * init
      */
-    if($this->getRequest()->isPost()){
-      $intRootLevelId = $this->getRequest()->getParam('rootLevelId', 0);
-      $intRootLevelGroupId = $this->getRequest()->getParam('rootLevelGroupId', 0);
-      $intRelationId = $this->getRequest()->getParam('relationId', 0);
-      $intParentId = $this->getRequest()->getParam('parentId', 0);
-      $intParentTypeId = $this->getRequest()->getParam('parentTypeId', 0);
-      
-      if($intRootLevelId > 0 && $intRelationId > 0 && $intParentId > 0 && $intParentTypeId > 0){
-        $objSelectItem = new stdClass();
-        $objSelectItem->rootLevelId = $intRootLevelId;
-        $objSelectItem->rootLevelGroupId = $intRootLevelGroupId;
-        $objSelectItem->relationId = $intRelationId;
-        $objSelectItem->parentId = $intParentId;
-        $objSelectItem->parentTypeId = $intParentTypeId;
-        $this->core->objCoreSession->selectItem = $objSelectItem;
-      }
+    public function init()
+    {
+        parent::init();
     }
-  }
+
+    /**
+     * preDispatch
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        /**
+         * load item if the defined params are posted
+         */
+        if ($this->getRequest()->isPost()) {
+            $intRootLevelId = $this->getRequest()->getParam('rootLevelId', 0);
+            $intRootLevelGroupId = $this->getRequest()->getParam('rootLevelGroupId', 0);
+            $intRelationId = $this->getRequest()->getParam('relationId', 0);
+            $intParentId = $this->getRequest()->getParam('parentId', 0);
+            $intParentTypeId = $this->getRequest()->getParam('parentTypeId', 0);
+
+            if ($intRootLevelId > 0 && $intRelationId > 0 && $intParentId > 0 && $intParentTypeId > 0) {
+                $objSelectItem = new stdClass();
+                $objSelectItem->rootLevelId = $intRootLevelId;
+                $objSelectItem->rootLevelGroupId = $intRootLevelGroupId;
+                $objSelectItem->relationId = $intRelationId;
+                $objSelectItem->parentId = $intParentId;
+                $objSelectItem->parentTypeId = $intParentTypeId;
+                $this->core->objCoreSession->selectItem = $objSelectItem;
+            }
+        }
+    }
 }
+
 ?>

@@ -44,94 +44,99 @@
  */
 
 // MailChimp API Class v1.3
-require_once(GLOBAL_ROOT_PATH.'library/MailChimp/MCAPI.class.php');
+require_once(GLOBAL_ROOT_PATH . 'library/MailChimp/MCAPI.class.php');
 
 // ZOOLU MailChimp integration
-require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/mailchimp/MailChimpConfig.php');
-require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/mailchimp/MailChimpList.php');
-require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/mailchimp/MailChimpMember.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpConfig.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpList.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpMember.php');
 
-class ContactReplication_MailChimp implements ContactReplicationInterface  {
+class ContactReplication_MailChimp implements ContactReplicationInterface
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * @var MailChimpConfig
-   */
-  private static $objMailChimpConfig;
-  
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-    
-    self::$objMailChimpConfig = new MailChimpConfig();
-    self::$objMailChimpConfig->setApiKey($this->core->sysConfig->mail_chimp->api_key)
-                             ->setListId($this->core->sysConfig->mail_chimp->list_id);
-  }
-  
-  /**
-   * add contact
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function add($arrArgs) {
-    //Only subscribe if the flag is set
-    if($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe){
-      if(class_exists('GearmanClient')){
-        $client= new GearmanClient();
-        $client->addServer();
-        $workload = new stdClass();
-        $workload->args = $arrArgs;
-        $workload->retry = 3;
-        $client->doBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_add', serialize($workload));
-      }else{
-        $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-        $objMailChimpList->subscribe(new MailChimpMember($arrArgs));
-      }
+    /**
+     * @var Core
+     */
+    protected $core;
+
+    /**
+     * @var MailChimpConfig
+     */
+    private static $objMailChimpConfig;
+
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+
+        self::$objMailChimpConfig = new MailChimpConfig();
+        self::$objMailChimpConfig->setApiKey($this->core->sysConfig->mail_chimp->api_key)
+            ->setListId($this->core->sysConfig->mail_chimp->list_id);
     }
-  }
-  
-  /**
-   * update contact
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function update($arrArgs) {
-    if(class_exists('GearmanClient')){
-      $client= new GearmanClient();
-      $client->addServer();
-      $workload = new stdClass();
-      $workload->args = $arrArgs;
-      $workload->retry = 3;
-      $client->doBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_update', serialize($workload));
-    }else{
-      $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);    
-      $blnSubscribe = ($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe);
-      $objMember = new MailChimpMember($arrArgs);
-      $objMailChimpList->update($objMember, $blnSubscribe);
+
+    /**
+     * add contact
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function add($arrArgs)
+    {
+        //Only subscribe if the flag is set
+        if ($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe) {
+            if (class_exists('GearmanClient')) {
+                $client = new GearmanClient();
+                $client->addServer();
+                $workload = new stdClass();
+                $workload->args = $arrArgs;
+                $workload->retry = 3;
+                $client->doBackground($this->core->sysConfig->client->id . '_contact_replication_mailchimp_add', serialize($workload));
+            } else {
+                $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+                $objMailChimpList->subscribe(new MailChimpMember($arrArgs));
+            }
+        }
     }
-  }
-  
-  /**
-   * delete contact
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function delete($arrArgs) {
-    if(class_exists('GearmanClient')){
-      $client= new GearmanClient();
-      $client->addServer();
-      $workload = new stdClass();
-      $workload->args = $arrArgs;
-      $workload->retry = 3;
-      $client->doBackground($this->core->sysConfig->client->id.'_contact_replication_mailchimp_delete', serialize($workload));
-    }else{
-      $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-      $objMailChimpList->unsubscribe(new MailChimpMember($arrArgs), true);
+
+    /**
+     * update contact
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function update($arrArgs)
+    {
+        if (class_exists('GearmanClient')) {
+            $client = new GearmanClient();
+            $client->addServer();
+            $workload = new stdClass();
+            $workload->args = $arrArgs;
+            $workload->retry = 3;
+            $client->doBackground($this->core->sysConfig->client->id . '_contact_replication_mailchimp_update', serialize($workload));
+        } else {
+            $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+            $blnSubscribe = ($arrArgs['Subscribed'] == $this->core->sysConfig->mail_chimp->mappings->subscribe);
+            $objMember = new MailChimpMember($arrArgs);
+            $objMailChimpList->update($objMember, $blnSubscribe);
+        }
     }
-  }
-  
+
+    /**
+     * delete contact
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function delete($arrArgs)
+    {
+        if (class_exists('GearmanClient')) {
+            $client = new GearmanClient();
+            $client->addServer();
+            $workload = new stdClass();
+            $workload->args = $arrArgs;
+            $workload->retry = 3;
+            $client->doBackground($this->core->sysConfig->client->id . '_contact_replication_mailchimp_delete', serialize($workload));
+        } else {
+            $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+            $objMailChimpList->unsubscribe(new MailChimpMember($arrArgs), true);
+        }
+    }
+
 }

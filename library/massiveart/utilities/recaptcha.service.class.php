@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,20 +42,21 @@
  * @subpackage ReCaptchaService
  */
 
-class ReCaptchaService extends Zend_Service_ReCaptcha {
-  
-  /**
-   * Options for tailoring reCaptcha
-   *
-   * See the different options on http://recaptcha.net/apidocs/captcha/client.html
-   *
-   * @var array
-   */
-  protected $_options = array(
-      'theme' => 'clean',
-      'lang' => 'en',
-  		'custom_theme_widget' => '',
-  );
+class ReCaptchaService extends Zend_Service_ReCaptcha
+{
+
+    /**
+     * Options for tailoring reCaptcha
+     *
+     * See the different options on http://recaptcha.net/apidocs/captcha/client.html
+     *
+     * @var array
+     */
+    protected $_options = array(
+        'theme'               => 'clean',
+        'lang'                => 'en',
+        'custom_theme_widget' => '',
+    );
 }
 
 ?>

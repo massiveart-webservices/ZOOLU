@@ -42,42 +42,46 @@
  * @subpackage Acl
  */
 
-class Acl extends Zend_Acl {
+class Acl extends Zend_Acl
+{
 
-  /**
-   * isAllowed
-   * @param RoleProvider|string $mixedRole
-   * @param string $strResourceKey
-   * @param string $strPrivilege
-   * @see library/Zend/Zend_Acl#isAllowed()
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function isAllowed($mixedRole, $strResourceKey, $strPrivilege = null){
-    if($mixedRole instanceof RoleProvider){
-      $blnIsAllowed = false;
-      foreach($mixedRole as $objRole){
-        $blnIsAllowed = parent::isAllowed($objRole, $strResourceKey, $strPrivilege);
-        if($blnIsAllowed === true){
-          break;
+    /**
+     * isAllowed
+     * @param RoleProvider|string $mixedRole
+     * @param string $strResourceKey
+     * @param string $strPrivilege
+     * @see library/Zend/Zend_Acl#isAllowed()
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function isAllowed($mixedRole, $strResourceKey, $strPrivilege = null)
+    {
+        if ($mixedRole instanceof RoleProvider) {
+            $blnIsAllowed = false;
+            foreach ($mixedRole as $objRole) {
+                $blnIsAllowed = parent::isAllowed($objRole, $strResourceKey, $strPrivilege);
+                if ($blnIsAllowed === true) {
+                    break;
+                }
+            }
+            return $blnIsAllowed;
+        } else {
+            return parent::isAllowed($mixedRole, $strResourceKey, $strPrivilege);
         }
-      }
-      return $blnIsAllowed;
-    }else{
-      return parent::isAllowed($mixedRole, $strResourceKey, $strPrivilege);
     }
-  }
 
-  /**
-   * deny
-   * @see library/Zend/Zend_Acl#deny()
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function deny(){
-    throw new Exception('This ACL supports no deny!');
-  }
+    /**
+     * deny
+     * @see library/Zend/Zend_Acl#deny()
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function deny()
+    {
+        throw new Exception('This ACL supports no deny!');
+    }
 
 }
+
 ?>

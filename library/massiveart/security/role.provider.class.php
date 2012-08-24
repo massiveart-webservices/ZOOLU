@@ -42,89 +42,100 @@
  * @subpackage RoleProvider
  */
 
-class RoleProvider implements Iterator, Countable {
+class RoleProvider implements Iterator, Countable
+{
 
-  /**
-   * array of roles
-   * @var array
-   */
-  private $arrRoles = array();
+    /**
+     * array of roles
+     * @var array
+     */
+    private $arrRoles = array();
 
-  /**
-   * construct
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct() { }
+    /**
+     * construct
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+    }
 
-  /**
-   * addRole
-   * @param Zend_Acl_Role_Interface $objRole
-   * @param string $strName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addRole(Zend_Acl_Role_Interface $objRole, $strName){
-    $this->arrRoles[$strName] = $objRole;
-  }
+    /**
+     * addRole
+     * @param Zend_Acl_Role_Interface $objRole
+     * @param string $strName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addRole(Zend_Acl_Role_Interface $objRole, $strName)
+    {
+        $this->arrRoles[$strName] = $objRole;
+    }
 
-  /**
-   * rewind
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function rewind() {
-    reset($this->arrRoles);
-  }
+    /**
+     * rewind
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function rewind()
+    {
+        reset($this->arrRoles);
+    }
 
-  /**
-   * current
-   * @return NavigationItem|NavigationTree
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function current() {
-    return current($this->arrRoles);
-  }
+    /**
+     * current
+     * @return NavigationItem|NavigationTree
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function current()
+    {
+        return current($this->arrRoles);
+    }
 
-  /**
-   * key
-   * @return string
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function key() {
-    return key($this->arrRoles);
-  }
+    /**
+     * key
+     * @return string
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function key()
+    {
+        return key($this->arrRoles);
+    }
 
-  /**
-   * next
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function next() {
-    next($this->arrRoles);
-  }
+    /**
+     * next
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function next()
+    {
+        next($this->arrRoles);
+    }
 
-  /**
-   * valid
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function valid() {
-    return (current($this->arrRoles) !== false);
-  }
+    /**
+     * valid
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function valid()
+    {
+        return (current($this->arrRoles) !== false);
+    }
 
-  /**
-   * count
-   * @return integer
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function count(){
-    return count($this->arrRoles);
-  }
+    /**
+     * count
+     * @return integer
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function count()
+    {
+        return count($this->arrRoles);
+    }
 
 }
+
 ?>

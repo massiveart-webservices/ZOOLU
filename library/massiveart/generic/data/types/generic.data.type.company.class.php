@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,7 +31,7 @@
  */
 
 /**
- * GenericDataTypeCompany extends GenericDataTypeAbstract 
+ * GenericDataTypeCompany extends GenericDataTypeAbstract
  *
  * Version history (please keep backward compatible):
  * 1.0, 2011-01-20: Cornelius Hansjakob
@@ -42,132 +42,139 @@
  * @subpackage GenericDataTypeCompany
  */
 
-require_once(dirname(__FILE__).'/generic.data.type.abstract.class.php');
+require_once(dirname(__FILE__) . '/generic.data.type.abstract.class.php');
 
-class GenericDataTypeCompany extends GenericDataTypeAbstract {
-  
-  /**
-   * @var Model_Members
-   */
-  protected $objModelCompanies;
-  
-  /**
-   * save
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function save(){
-    $this->core->logger->debug('massiveart->generic->data->GenericDataTypeCompany->save()');
-    try{
+class GenericDataTypeCompany extends GenericDataTypeAbstract
+{
 
-      $this->getModelCompanies()->setLanguageId($this->setup->getLanguageId());
+    /**
+     * @var Model_Members
+     */
+    protected $objModelCompanies;
 
-      $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
-      
-      /**
-       * add|edit|newVersion core and instance data
-       */
-      switch($this->setup->getActionType()){
-        case $this->core->sysConfig->generic->actions->add:
-                
-          $arrCoreData = array('idRootLevels'     => $this->setup->getRootLevelId(),
-          										 'idGenericForms'   => $this->setup->getGenFormId(),
-                               'idUsers'          => $intUserId,
-                               'creator'          => $intUserId, 
-                               'created'          => date('Y-m-d H:i:s'),
-                               'lastReset'        => date('Y-m-d H:i:s'));
-          
-          if(count($this->setup->CoreFields()) > 0){
-            foreach($this->setup->CoreFields() as $strField => $obField){
-              if($strField == 'password'){
-                if($obField->getValue() != '') $arrCoreData[$strField] = Crypt::encrypt($this->core, $this->core->config->crypt->key, $obField->getValue());
-              }else{
-                $arrCoreData[$strField] = $obField->getValue();    
-              }
+    /**
+     * save
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function save()
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericDataTypeCompany->save()');
+        try {
+
+            $this->getModelCompanies()->setLanguageId($this->setup->getLanguageId());
+
+            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+            /**
+             * add|edit|newVersion core and instance data
+             */
+            switch ($this->setup->getActionType()) {
+                case $this->core->sysConfig->generic->actions->add:
+
+                    $arrCoreData = array(
+                        'idRootLevels'     => $this->setup->getRootLevelId(),
+                        'idGenericForms'   => $this->setup->getGenFormId(),
+                        'idUsers'          => $intUserId,
+                        'creator'          => $intUserId,
+                        'created'          => date('Y-m-d H:i:s'),
+                        'lastReset'        => date('Y-m-d H:i:s')
+                    );
+
+                    if (count($this->setup->CoreFields()) > 0) {
+                        foreach ($this->setup->CoreFields() as $strField => $obField) {
+                            if ($strField == 'password') {
+                                if ($obField->getValue() != '') $arrCoreData[$strField] = Crypt::encrypt($this->core, $this->core->config->crypt->key, $obField->getValue());
+                            } else {
+                                $arrCoreData[$strField] = $obField->getValue();
+                            }
+                        }
+                    }
+
+                    /**
+                     * add contact
+                     */
+                    $this->setup->setElementId($this->objModelCompanies->addCompany($arrCoreData));
+                    break;
+                case $this->core->sysConfig->generic->actions->edit :
+
+                    $arrCoreData = array('idUsers' => $intUserId);
+
+                    if (count($this->setup->CoreFields()) > 0) {
+                        foreach ($this->setup->CoreFields() as $strField => $obField) {
+                            if ($strField == 'password') {
+                                if ($obField->getValue() != '') $arrCoreData[$strField] = Crypt::encrypt($this->core, $this->core->config->crypt->key, $obField->getValue());
+                            } else {
+                                $arrCoreData[$strField] = $obField->getValue();
+                            }
+                        }
+                    }
+
+                    /**
+                     * add contact
+                     */
+                    $this->objModelCompanies->editCompany($this->setup->getElementId(), $arrCoreData);
+                    break;
             }
-          }
-          
-          /**
-           * add contact 
-           */
-          $this->setup->setElementId($this->objModelCompanies->addCompany($arrCoreData));
-          break;
-        case $this->core->sysConfig->generic->actions->edit :
 
-          $arrCoreData = array('idUsers' => $intUserId);
-          
-          if(count($this->setup->CoreFields()) > 0){
-            foreach($this->setup->CoreFields() as $strField => $obField){
-              if($strField == 'password'){
-                if($obField->getValue() != '') $arrCoreData[$strField] = Crypt::encrypt($this->core, $this->core->config->crypt->key, $obField->getValue());
-              }else{
-                $arrCoreData[$strField] = $obField->getValue();    
-              }
-            }
-          }
-          
-          /**
-           * add contact 
-           */
-          $this->objModelCompanies->editCompany($this->setup->getElementId(), $arrCoreData);      
-          break;
-      }
-
-      return $this->setup->getElementId();
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * load
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function load(){
-    $this->core->logger->debug('massiveart->generic->data->GenericDataTypeCompany->load()');
-    try {
-      
-      $this->getModelCompanies()->setLanguageId($this->setup->getLanguageId());
-      $objCompaniesData = $this->getModelCompanies()->loadCompany($this->setup->getElementId());
-      
-      if(count($objCompaniesData) > 0){
-        $objCompanyData = $objCompaniesData->current();
-
-        if(count($this->setup->CoreFields()) > 0){
-          /**
-           * for each core field set field data
-           */
-          foreach($this->setup->CoreFields() as $strField => $objField){
-            if(isset($objCompanyData->$strField)){
-              $objField->setValue($objCompanyData->$strField);
-            }
-          }
+            return $this->setup->getElementId();
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
-      
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }    
-  }
-  
-  /**
-   * getModelCompanies
-   * @return Model_Companies
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelCompanies(){
-    if (null === $this->objModelCompanies) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Companies.php';
-      $this->objModelCompanies = new Model_Companies();
     }
-    return $this->objModelCompanies;
-  }
+
+    /**
+     * load
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function load()
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericDataTypeCompany->load()');
+        try {
+
+            $this->getModelCompanies()->setLanguageId($this->setup->getLanguageId());
+            $objCompaniesData = $this->getModelCompanies()->loadCompany($this->setup->getElementId());
+
+            if (count($objCompaniesData) > 0) {
+                $objCompanyData = $objCompaniesData->current();
+
+                if (count($this->setup->CoreFields()) > 0) {
+                    /**
+                     * for each core field set field data
+                     */
+                    foreach ($this->setup->CoreFields() as $strField => $objField) {
+                        if (isset($objCompanyData->$strField)) {
+                            $objField->setValue($objCompanyData->$strField);
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+    /**
+     * getModelCompanies
+     * @return Model_Companies
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelCompanies()
+    {
+        if (null === $this->objModelCompanies) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Companies.php';
+            $this->objModelCompanies = new Model_Companies();
+        }
+        return $this->objModelCompanies;
+    }
 }
+
 ?>

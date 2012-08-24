@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -41,28 +41,31 @@
  * @package massiveart.export
  * @subpackage Export
  */
- 
-class Export {
-  
-  /**
-   * exports a Rowset into a Csv
-   * @param Zend_Db_Table_Rowset $objRowset
-   */
-  public static function exportRowsetInCsv($objRowset){
-    //Create Headline
-    $arrRowset = $objRowset->toArray();
-    $arrColumns = $arrRowset[0];
-    $arrColumns = array_keys($arrColumns);
-    $strHeadLine = implode(';', $arrColumns).';
+
+class Export
+{
+
+    /**
+     * exports a Rowset into a Csv
+     * @param Zend_Db_Table_Rowset $objRowset
+     */
+    public static function exportRowsetInCsv($objRowset)
+    {
+        //Create Headline
+        $arrRowset = $objRowset->toArray();
+        $arrColumns = $arrRowset[0];
+        $arrColumns = array_keys($arrColumns);
+        $strHeadLine = implode(';', $arrColumns) . ';
 ';
-    
-    //Create Datalines
-    $strData = '';
-    foreach($arrRowset as $arrRow){
-      $strData .= implode(';', $arrRow).';
+
+        //Create Datalines
+        $strData = '';
+        foreach ($arrRowset as $arrRow) {
+            $strData .= implode(';', $arrRow) . ';
 ';
+        }
+        return $strHeadLine . $strData;
     }
-    return $strHeadLine.$strData;
-  }
 }
+
 ?>

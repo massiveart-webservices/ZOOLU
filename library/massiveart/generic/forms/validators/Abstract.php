@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -32,45 +32,50 @@
 
 /**
  * Form_Validator_Abstract
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2011-09-20: Daniel Rotter
- * 
+ *
  * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  */
 
-abstract class Form_Validator_Abstract implements Zend_Validate_Interface {
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * @var GenericSetup
-   */
-  protected $setup;
-  
-  /**
-   * property of the generic setup object
-   * @return GenericSetup $setup
-   */
-  public function Setup(){
-    return $this->setup;
-  }
-  
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * setGenericSetup
-   * @param GenericSetup $objGenericSetup
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function setGenericSetup(GenericSetup &$objGenericSetup){
-    $this->setup = $objGenericSetup;
-  }
+abstract class Form_Validator_Abstract implements Zend_Validate_Interface
+{
+    /**
+     * @var Core
+     */
+    protected $core;
+
+    /**
+     * @var GenericSetup
+     */
+    protected $setup;
+
+    /**
+     * property of the generic setup object
+     * @return GenericSetup $setup
+     */
+    public function Setup()
+    {
+        return $this->setup;
+    }
+
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
+
+    /**
+     * setGenericSetup
+     * @param GenericSetup $objGenericSetup
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function setGenericSetup(GenericSetup &$objGenericSetup)
+    {
+        $this->setup = $objGenericSetup;
+    }
 }
+
 ?>

@@ -133,8 +133,8 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
 
             // load instance data
             $this->loadInstanceData($strType, $strElementId, $objRegion, $intVersion);
-            
-            
+
+
         } catch (Excpetion $exc) {
             $this->core->logger->err($exc);
         }
@@ -161,14 +161,14 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
             $objSelect->setIntegrityCheck(false);
 
             $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'size', 'price', 'discount', 'idFields'));
-            $objSelect->join($strType.'-'.$this->objElement->Setup()->getFormId().'-'.$this->objElement->Setup()->getFormVersion().'-Region'.$objRegion->getRegionId().'-Instances AS regionInstance', '`'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.idRegionInstances = regionInstance.id', array('sortPosition'));
-            $objSelect->join('fields', 'fields.id = `'.$objGenTable->info(Zend_Db_Table_Abstract::NAME).'`.idFields', array('name'));
+            $objSelect->join($strType . '-' . $this->objElement->Setup()->getFormId() . '-' . $this->objElement->Setup()->getFormVersion() . '-Region' . $objRegion->getRegionId() . '-Instances AS regionInstance', '`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idRegionInstances = regionInstance.id', array('sortPosition'));
+            $objSelect->join('fields', 'fields.id = `' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idFields', array('name'));
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . $strType . 'Id = ?', $strElementId);
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . 'version = ?', $intVersion);
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . 'idLanguages = ?', $this->objElement->Setup()->getLanguageId());
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . 'idFields = ?', $this->objElement->id);
 
-            
+
             $objRawInstanceData = $objGenTable->fetchAll($objSelect);
 
             if (count($objRawInstanceData) > 0) {
@@ -178,19 +178,19 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
             $arrRawInstanceData = $objRawInstanceData->toArray();
             $arrInstanceData = array();
             $arrInstanceFieldNames = array();
-            
-            foreach($arrRawInstanceData as $arrInstanceDataRow){
+
+            foreach ($arrRawInstanceData as $arrInstanceDataRow) {
                 $arrTmp = array($arrInstanceDataRow['sortPosition'] => array());
                 $arrInstanceData += $arrTmp;
             }
 
             //Group the field values together (multiply instance)
-            foreach($arrRawInstanceData as $arrInstanceDataRow){
+            foreach ($arrRawInstanceData as $arrInstanceDataRow) {
                 $arrInstanceData[$arrInstanceDataRow['sortPosition']][] = json_encode(array(
-                    'size'     => $arrInstanceDataRow['size'],
-                    'price'    => $arrInstanceDataRow['price'],
-                    'discount' => $arrInstanceDataRow['discount'],
-                ));
+                                                                                           'size'     => $arrInstanceDataRow['size'],
+                                                                                           'price'    => $arrInstanceDataRow['price'],
+                                                                                           'discount' => $arrInstanceDataRow['discount'],
+                                                                                      ));
                 $arrInstanceFieldNames[$arrInstanceDataRow['sortPosition']] = $arrInstanceDataRow['name'];
             }
 
@@ -198,9 +198,9 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
             $arrInstanceData = array();
 
             //Generate value-string array
-            foreach($arrRawInstanceData as $intInstanceDataId => $arrInstanceDataRow){
+            foreach ($arrRawInstanceData as $intInstanceDataId => $arrInstanceDataRow) {
                 $strValue = implode('][', $arrInstanceDataRow);
-                $arrInstanceData[$intInstanceDataId] = array('name' => $arrInstanceFieldNames[$intInstanceDataId], 'value' => '['.$strValue.']');
+                $arrInstanceData[$intInstanceDataId] = array('name' => $arrInstanceFieldNames[$intInstanceDataId], 'value' => '[' . $strValue . ']');
             }
 
             return $arrInstanceData;

@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -32,8 +32,8 @@
 
 /**
  * AjaxControllerAction
- * 
- * 
+ *
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2008-10-14: Cornelius Hansjakob
  *
@@ -41,20 +41,22 @@
  * @version 1.0
  */
 
-class AjaxControllerAction extends AuthControllerAction {
-	
-	/**
-   * chek if this is an ajax-request
-   */
-  public function preDispatch(){		
+class AjaxControllerAction extends AuthControllerAction
+{
 
-		if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')){
-		  header ('Location: http://'.$_SERVER['HTTP_HOST']);
-		  exit();
-		}	
+    /**
+     * chek if this is an ajax-request
+     */
+    public function preDispatch()
+    {
 
-		parent::preDispatch();
-  }	  
+        if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            header('Location: http://' . $_SERVER['HTTP_HOST']);
+            exit();
+        }
+
+        parent::preDispatch();
+    }
 }
 
 ?>

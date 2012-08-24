@@ -43,8 +43,9 @@
  * @subpackage Navigation
  */
 
-class Client_Navigation extends Navigation {
-  
+class Client_Navigation extends Navigation
+{
+
 }
 
 ?>

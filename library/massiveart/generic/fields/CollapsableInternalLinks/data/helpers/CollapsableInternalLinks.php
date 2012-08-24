@@ -42,10 +42,12 @@
  * @subpackage GenericDataHelper_InternalLinks
  */
 
-require_once(dirname(__FILE__).'/../../../../data/helpers/Abstract.php');
-require_once(dirname(__FILE__).'/../../../InternalLinks/data/helpers/InternalLinks.php');
+require_once(dirname(__FILE__) . '/../../../../data/helpers/Abstract.php');
+require_once(dirname(__FILE__) . '/../../../InternalLinks/data/helpers/InternalLinks.php');
 
-class GenericDataHelper_CollapsableInternalLinks extends GenericDataHelper_InternalLinks  {
-  
+class GenericDataHelper_CollapsableInternalLinks extends GenericDataHelper_InternalLinks
+{
+
 }
+
 ?>

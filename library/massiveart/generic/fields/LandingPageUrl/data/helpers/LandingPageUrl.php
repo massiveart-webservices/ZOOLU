@@ -43,156 +43,163 @@
  * @subpackage GenericDataHelper_Url
  */
 
-require_once(dirname(__FILE__).'/../../../../data/helpers/Abstract.php');
+require_once(dirname(__FILE__) . '/../../../../data/helpers/Abstract.php');
 
-class GenericDataHelper_LandingPageUrl extends GenericDataHelperAbstract  {
+class GenericDataHelper_LandingPageUrl extends GenericDataHelperAbstract
+{
 
-  /**
-   * @var Model_Pages|Model_Products
-   */
-  private $objModel;
-  
-  /**
-   * @var string
-   */
-  private $strType;
+    /**
+     * @var Model_Pages|Model_Products
+     */
+    private $objModel;
 
-  /**
-   * @var Model_Urls
-   */
-  private $objModelUrls;
-  
-  /**
-   * save()
-   * @param integer $intElementId
-   * @param string $strType
-   * @param string $strElementId
-   * @param integet $intVersion
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function save($intElementId, $strType, $strElementId = null, $intVersion = null){
-    try{
-      $this->strType = $strType;
+    /**
+     * @var string
+     */
+    private $strType;
+
+    /**
+     * @var Model_Urls
+     */
+    private $objModelUrls;
+
+    /**
+     * save()
+     * @param integer $intElementId
+     * @param string $strType
+     * @param string $strElementId
+     * @param integet $intVersion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function save($intElementId, $strType, $strElementId = null, $intVersion = null)
+    {
+        try {
+            $this->strType = $strType;
 
 
-      $this->getModel();
-      $this->getModelUrls();
+            $this->getModel();
+            $this->getModelUrls();
 
-      $objItemData = $this->objModel->load($intElementId);
-            
-      if(count($objItemData) > 0){
-        $objItem = $objItemData->current();
+            $objItemData = $this->objModel->load($intElementId);
 
-        //LandingPage URL
-        $strLandingPageUrl = $this->getModelUrls()->makeUrlConform($_POST[$this->objElement->name]);
-        if($strLandingPageUrl != ''){
-          $this->objModelUrls->deleteUrls($objItem->relationId, true);
-          $this->objModelUrls->insertUrl($strLandingPageUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType, true);
-        }else{
-          $this->objModelUrls->deleteUrls($objItem->relationId, true);
+            if (count($objItemData) > 0) {
+                $objItem = $objItemData->current();
+
+                //LandingPage URL
+                $strLandingPageUrl = $this->getModelUrls()->makeUrlConform($_POST[$this->objElement->name]);
+                if ($strLandingPageUrl != '') {
+                    $this->objModelUrls->deleteUrls($objItem->relationId, true);
+                    $this->objModelUrls->insertUrl($strLandingPageUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType, true);
+                } else {
+                    $this->objModelUrls->deleteUrls($objItem->relationId, true);
+                }
+            }
+
+            $this->load($intElementId, $strType, $strElementId, $intVersion);
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
-
-      $this->load($intElementId, $strType, $strElementId, $intVersion);
-      
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
     }
-  }
-  
 
-  /**
-   * load()
-   * @param integer $intElementId
-   * @param string $strType
-   * @param string $strElementId
-   * @param integet $intVersion
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function load($intElementId, $strType, $strElementId = null, $intVersion = null){
-    try{
-      $this->strType = $strType;
 
-      $this->getModel();
-      $this->getModelUrls();
+    /**
+     * load()
+     * @param integer $intElementId
+     * @param string $strType
+     * @param string $strElementId
+     * @param integet $intVersion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function load($intElementId, $strType, $strElementId = null, $intVersion = null)
+    {
+        try {
+            $this->strType = $strType;
 
-      $objItemData = $this->objModel->load($intElementId);
+            $this->getModel();
+            $this->getModelUrls();
 
-      if(count($objItemData) > 0){
-        $objItem = $objItemData->current();
+            $objItemData = $this->objModel->load($intElementId);
 
-        $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType, true);
+            if (count($objItemData) > 0) {
+                $objItem = $objItemData->current();
 
-        if(count($objUrlData) > 0){
-          $objUrl = $objUrlData->current();
-          $this->objElement->setValue($objUrl->url);
-          $this->objElement->url = $objUrl->url;
+                $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType, true);
+
+                if (count($objUrlData) > 0) {
+                    $objUrl = $objUrlData->current();
+                    $this->objElement->setValue($objUrl->url);
+                    $this->objElement->url = $objUrl->url;
+                }
+            }
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
-
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-    
-  /**
-   * setType
-   * @param string $strType   
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function setType($strType){
-  	$this->strType = $strType;
-  }
-
-  /**
-   * getModel
-   * @return type Model
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModel(){
-    if($this->objModel === null) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      $strModelFilePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.$this->objElement->Setup()->getModelSubPath().((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s').'.php';
-      $this->core->logger->debug($strModelFilePath);
-      if(file_exists($strModelFilePath)){
-        require_once $strModelFilePath;
-        $strModel = 'Model_'.((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s');
-        $this->objModel = new $strModel();
-        $this->objModel->setLanguageId($this->objElement->Setup()->getLanguageId());
-      }else{
-        throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "'.$this->strType.'"');
-      }
-    }
-    return $this->objModel;
-  }
-
-  /**
-   * getModelUrls
-   * @return Model_Urls
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelUrls(){
-    if (null === $this->objModelUrls) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Urls.php';
-      $this->objModelUrls = new Model_Urls();
-      $this->objModelUrls->setLanguageId($this->objElement->Setup()->getLanguageId());
     }
 
-    return $this->objModelUrls;
-  }
+    /**
+     * setType
+     * @param string $strType
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function setType($strType)
+    {
+        $this->strType = $strType;
+    }
+
+    /**
+     * getModel
+     * @return type Model
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModel()
+    {
+        if ($this->objModel === null) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            $strModelFilePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . $this->objElement->Setup()->getModelSubPath() . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's') . '.php';
+            $this->core->logger->debug($strModelFilePath);
+            if (file_exists($strModelFilePath)) {
+                require_once $strModelFilePath;
+                $strModel = 'Model_' . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's');
+                $this->objModel = new $strModel();
+                $this->objModel->setLanguageId($this->objElement->Setup()->getLanguageId());
+            } else {
+                throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "' . $this->strType . '"');
+            }
+        }
+        return $this->objModel;
+    }
+
+    /**
+     * getModelUrls
+     * @return Model_Urls
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelUrls()
+    {
+        if (null === $this->objModelUrls) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Urls.php';
+            $this->objModelUrls = new Model_Urls();
+            $this->objModelUrls->setLanguageId($this->objElement->Setup()->getLanguageId());
+        }
+
+        return $this->objModelUrls;
+    }
 }
+
 ?>

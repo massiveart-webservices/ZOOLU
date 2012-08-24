@@ -44,74 +44,75 @@
  * @subpackage Form_Helper_FormInternalLinks
  */
 
-class Form_Helper_FormInternalLinks extends Zend_View_Helper_FormElement {
-
-  /**
-   * formInternalLinks
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function formInternalLinks($name, $value = null, $attribs = null, $options = null, Form_Element_InternalLinks $element){
-    $info = $this->_getInfo($name, $value, $attribs);
-    $core = Zend_Registry::get('Core');
-    extract($info); // name, value, attribs, options, listsep, disable
+class Form_Helper_FormInternalLinks extends Zend_View_Helper_FormElement
+{
 
     /**
-     * is it disabled?
+     * formInternalLinks
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
      */
-    $disabled = '';
-    if ($disable) {
-      $disabled = ' disabled="disabled"';
-    }
+    public function formInternalLinks($name, $value = null, $attribs = null, $options = null, Form_Element_InternalLinks $element)
+    {
+        $info = $this->_getInfo($name, $value, $attribs);
+        $core = Zend_Registry::get('Core');
+        extract($info); // name, value, attribs, options, listsep, disable
 
-    $strItemInternalLinks = '';
-    if(isset($element->objItemInternalLinks)){
-      foreach($element->objItemInternalLinks as $objItemInternalLink){
-        $strItemInternalLinks .= '
-                      <div id="'.$this->view->escape($name).'_item_'.$objItemInternalLink->relationId.'" class="elementitem" itemid="'.$objItemInternalLink->relationId.'">
-                        <div id="'.$this->view->escape($name).'_remove'.$objItemInternalLink->id.'" onclick="myForm.removeItem(\''.$this->view->escape($name).'\', \''.$this->view->escape($name).'_item_'.$objItemInternalLink->relationId.'\', \''.$objItemInternalLink->relationId.'\')" class="itemremovelist2"></div>
-                        <div id="Item'.$objItemInternalLink->id.'">
-                          <div class="icon img_'.(($objItemInternalLink->isStartItem == 1) ? 'startpage' : 'page').'_'.(($objItemInternalLink->idStatus == $core->sysConfig->status->live) ? 'on' : 'off').'"></div>'.htmlentities($objItemInternalLink->title, ENT_COMPAT, $core->sysConfig->encoding->default).'
+        /**
+         * is it disabled?
+         */
+        $disabled = '';
+        if ($disable) {
+            $disabled = ' disabled="disabled"';
+        }
+
+        $strItemInternalLinks = '';
+        if (isset($element->objItemInternalLinks)) {
+            foreach ($element->objItemInternalLinks as $objItemInternalLink) {
+                $strItemInternalLinks .= '
+                      <div id="' . $this->view->escape($name) . '_item_' . $objItemInternalLink->relationId . '" class="elementitem" itemid="' . $objItemInternalLink->relationId . '">
+                        <div id="' . $this->view->escape($name) . '_remove' . $objItemInternalLink->id . '" onclick="myForm.removeItem(\'' . $this->view->escape($name) . '\', \'' . $this->view->escape($name) . '_item_' . $objItemInternalLink->relationId . '\', \'' . $objItemInternalLink->relationId . '\')" class="itemremovelist2"></div>
+                        <div id="Item' . $objItemInternalLink->id . '">
+                          <div class="icon img_' . (($objItemInternalLink->isStartItem == 1) ? 'startpage' : 'page') . '_' . (($objItemInternalLink->idStatus == $core->sysConfig->status->live) ? 'on' : 'off') . '"></div>' . htmlentities($objItemInternalLink->title, ENT_COMPAT, $core->sysConfig->encoding->default) . '
                         </div>
                       </div>';
-      }
-    }elseif(isset($element->objInstanceInternalLinks)){
-      foreach($element->objInstanceInternalLinks as $objItemInternalLink){
-        if(trim($attribs['regionExtension'], '_') == $objItemInternalLink->sortPosition){
-          $strItemInternalLinks .= '
-                        <div id="'.$this->view->escape($name).'_item_'.$objItemInternalLink->relationId.'" class="elementitem" itemid="'.$objItemInternalLink->relationId.'">
-                          <div id="'.$this->view->escape($name).'_remove'.$objItemInternalLink->id.'" onclick="myForm.removeItem(\''.$this->view->escape($name).'\', \''.$this->view->escape($name).'_item_'.$objItemInternalLink->relationId.'\', \''.$objItemInternalLink->relationId.'\')" class="itemremovelist2"></div>
-                          <div id="Item'.$objItemInternalLink->id.'">
-                            <div class="icon img_'.(($objItemInternalLink->isStartItem == 1) ? 'startpage' : 'page').'_'.(($objItemInternalLink->idStatus == $core->sysConfig->status->live) ? 'on' : 'off').'"></div>'.htmlentities($objItemInternalLink->title, ENT_COMPAT, $core->sysConfig->encoding->default).'
+            }
+        } elseif (isset($element->objInstanceInternalLinks)) {
+            foreach ($element->objInstanceInternalLinks as $objItemInternalLink) {
+                if (trim($attribs['regionExtension'], '_') == $objItemInternalLink->sortPosition) {
+                    $strItemInternalLinks .= '
+                        <div id="' . $this->view->escape($name) . '_item_' . $objItemInternalLink->relationId . '" class="elementitem" itemid="' . $objItemInternalLink->relationId . '">
+                          <div id="' . $this->view->escape($name) . '_remove' . $objItemInternalLink->id . '" onclick="myForm.removeItem(\'' . $this->view->escape($name) . '\', \'' . $this->view->escape($name) . '_item_' . $objItemInternalLink->relationId . '\', \'' . $objItemInternalLink->relationId . '\')" class="itemremovelist2"></div>
+                          <div id="Item' . $objItemInternalLink->id . '">
+                            <div class="icon img_' . (($objItemInternalLink->isStartItem == 1) ? 'startpage' : 'page') . '_' . (($objItemInternalLink->idStatus == $core->sysConfig->status->live) ? 'on' : 'off') . '"></div>' . htmlentities($objItemInternalLink->title, ENT_COMPAT, $core->sysConfig->encoding->default) . '
                           </div>
                         </div>';
+                }
+            }
         }
-      }
-    }
 
-    /**
-     * build the element
-     */
-    $strOutput = '<div class="internallinkswrapper">
-                    <div class="top">'.$core->translate->_('Add_internal_links').': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddTreeOverlay(\'divInternalLinksContainer_'.$this->view->escape($id).'\'); return false;"/></div>
-                    <div id="divInternalLinksContainer_'.$this->view->escape($id).'"'.$disabled.' class="'.$attribs['class'].'">
-                    '.$strItemInternalLinks.'
-                    <div id="divClear_'.$this->view->escape($name).'" class="clear"></div>
+        /**
+         * build the element
+         */
+        $strOutput = '<div class="internallinkswrapper">
+                    <div class="top">' . $core->translate->_('Add_internal_links') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddTreeOverlay(\'divInternalLinksContainer_' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div id="divInternalLinksContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '">
+                    ' . $strItemInternalLinks . '
+                    <div id="divClear_' . $this->view->escape($name) . '" class="clear"></div>
                     </div>
-                    <input type="hidden" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" isCoreField="'.$attribs['isCoreField'].'" fieldId="'.$attribs['fieldId'].'" value="'.$this->view->escape($value).'"/>
+                    <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . $attribs['isCoreField'] . '" fieldId="' . $attribs['fieldId'] . '" value="' . $this->view->escape($value) . '"/>
                   </div>';
-    
-    /**
-     * add the scriptaculous sortable funcionality to the parent containert
-     */
-     $strOutput .= '<script type="text/javascript" language="javascript">/* <![CDATA[ */
-     myForm.initSortable(\''.$this->view->escape($id).'\', \'divInternalLinksContainer_'.$this->view->escape($id).'\', \'elementitem\', \'div\', \'itemid\', \'vertical\');
-     /* ]]> */</script>';
-   
-      
 
-    return $strOutput;
-  }
+        /**
+         * add the scriptaculous sortable funcionality to the parent containert
+         */
+        $strOutput .= '<script type="text/javascript" language="javascript">/* <![CDATA[ */
+     myForm.initSortable(\'' . $this->view->escape($id) . '\', \'divInternalLinksContainer_' . $this->view->escape($id) . '\', \'elementitem\', \'div\', \'itemid\', \'vertical\');
+     /* ]]> */</script>';
+
+
+        return $strOutput;
+    }
 }
 
 ?>

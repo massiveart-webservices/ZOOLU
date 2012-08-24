@@ -42,54 +42,58 @@
  * @version 1.0
  */
 
-class AuthControllerAction extends Zend_Controller_Action {
+class AuthControllerAction extends Zend_Controller_Action
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
-
-  /**
-   * Init
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function init(){
-    $this->core = Zend_Registry::get('Core');
-  }
-
-	/**
-   * ensure that no other actions are accessible if you are not logged in
-   */
-  public function preDispatch(){
-
-  	/**
-  	 * set default encoding to view
-  	 */
-  	$this->view->setEncoding($this->core->sysConfig->encoding->default);
-
-  	/**
-  	 * set translate obj
-  	 */
-    $this->view->translate = $this->core->translate;
-
-  	/**
-     * check if user is authenticated, else redirect to login form
+    /**
+     * @var Core
      */
-    $objAuth = Zend_Auth::getInstance();
-    
-    if(!$objAuth->hasIdentity() || !isset($_SESSION['sesZooluLogin']) || $_SESSION['sesZooluLogin'] == false){
-      if($this->getRequest()->isXmlHttpRequest()){
-        echo '<script type="text/javascript">
+    protected $core;
+
+    /**
+     * Init
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function init()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
+
+    /**
+     * ensure that no other actions are accessible if you are not logged in
+     */
+    public function preDispatch()
+    {
+
+        /**
+         * set default encoding to view
+         */
+        $this->view->setEncoding($this->core->sysConfig->encoding->default);
+
+        /**
+         * set translate obj
+         */
+        $this->view->translate = $this->core->translate;
+
+        /**
+         * check if user is authenticated, else redirect to login form
+         */
+        $objAuth = Zend_Auth::getInstance();
+
+        if (!$objAuth->hasIdentity() || !isset($_SESSION['sesZooluLogin']) || $_SESSION['sesZooluLogin'] == false) {
+            if ($this->getRequest()->isXmlHttpRequest()) {
+                echo '<script type="text/javascript">
               //<![CDATA[
                 window.location.reload();
               //]]>
               </script>';
-        exit();
-      }else{
-        $this->_redirect('/zoolu/users/user/login');
-      }
+                exit();
+            } else {
+                $this->_redirect('/zoolu/users/user/login');
+            }
+        }
     }
-  }
 }
+
 ?>

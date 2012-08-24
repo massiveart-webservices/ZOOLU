@@ -43,162 +43,172 @@
  * @subpackage MailChimpList
  */
 
-class MailChimpList {
-  
-  // MailChimp API Error codes
-  const API_ERROR_CODE_MEMBER_ALREADY_SUBSCRIBED = 214;
-  const API_ERROR_CODE_MEMBER_DOES_NOT_BELONG_TO_LIST = 215;
-  const API_ERROR_CODE_MEMBER_NOT_EXIST = 232;
-  const API_ERROR_CODE_TIMEOUT = -98;
-  
-  /**
-   * @var MailChimpConfig
-   */
-  private $objConfig;
-  
-  /**
-   * @var Core
-   */
-  private $core;
-  
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function __construct(MailChimpConfig $objConfig = null){
-    $this->objConfig = $objConfig;
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * subscribe member   
-   * @param $objMember
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function subscribe(MailChimpMember $objMember) {
-    
-    $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
-    
-    $arrMergeVars = array(
-      'FNAME'     => $objMember->getFirstName(), 
-      'LNAME'     => $objMember->getLastName(),
-      'SALUTATION'=> $objMember->getSalutation(),
-      'GROUPINGS' => $this->prepareInterestGroups($objMember->getInterestGroups())
-    );
-         
-    $objRetval = $objMailChimpApi->listSubscribe($this->objConfig->getListId(), $objMember->getEmail(), $arrMergeVars, 'html', false);
- 
-    if($objMailChimpApi->errorCode
-      && $objMailChimpApi->errorCode != self::API_ERROR_CODE_MEMBER_ALREADY_SUBSCRIBED){
-      require_once(dirname(__FILE__).'/MailChimpException.php');
-      throw new MailChimpException("\n\tUnable to subscribe member!\n\tCode=".$objMailChimpApi->errorCode."\n\tMsg=".$objMailChimpApi->errorMessage."\n", $objMailChimpApi->errorCode);
+class MailChimpList
+{
+
+    // MailChimp API Error codes
+    const API_ERROR_CODE_MEMBER_ALREADY_SUBSCRIBED = 214;
+    const API_ERROR_CODE_MEMBER_DOES_NOT_BELONG_TO_LIST = 215;
+    const API_ERROR_CODE_MEMBER_NOT_EXIST = 232;
+    const API_ERROR_CODE_TIMEOUT = -98;
+
+    /**
+     * @var MailChimpConfig
+     */
+    private $objConfig;
+
+    /**
+     * @var Core
+     */
+    private $core;
+
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function __construct(MailChimpConfig $objConfig = null)
+    {
+        $this->objConfig = $objConfig;
+        $this->core = Zend_Registry::get('Core');
     }
-  }
-  
-  /**
-   * update list member
-   * @param $objMember
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function update(MailChimpMember $objMember, $blnSubscribed) {
-    
-    $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
-    
-    $arrMergeVars = array();
-    if($objMember->getFirstName()) $arrMergeVars['FNAME'] = $objMember->getFirstName();
-    if($objMember->getLastName()) $arrMergeVars['LNAME'] = $objMember->getLastName();
-    if($objMember->getSalutation()) $arrMergeVars['SALUTATION'] = $objMember->getSalutation();
-    if($this->prepareInterestGroups($objMember->getInterestGroups())) $arrMergeVars['GROUPINGS'] = $this->prepareInterestGroups($objMember->getInterestGroups());
-    
-    $blnReplaceInterest = $objMember->getReplaceInterests();
-    
-    if($blnSubscribed){
-      $this->subscribe($objMember);
-    }else{
-      $this->unsubscribe($objMember);
-    }
-    
-    if((count($arrMergeVars) > 0) && $blnSubscribed){
-      $objRetval = $objMailChimpApi->listUpdateMember($this->objConfig->getListId(), $objMember->getEmail(), $arrMergeVars, 'html', $blnReplaceInterest);
- 
-      if($objMailChimpApi->errorCode){
-        if(($objMailChimpApi->errorCode == self::API_ERROR_CODE_MEMBER_NOT_EXIST
-          || $objMailChimpApi->errorCode == self::API_ERROR_CODE_MEMBER_DOES_NOT_BELONG_TO_LIST)
-          && $blnSubscribed) {
-          $this->subscribe($objMember);
-        }else{
-          require_once(dirname(__FILE__).'/MailChimpException.php');
-          throw new MailChimpException("\n\tUnable to update member info!\n\tCode=".$objMailChimpApi->errorCode."\n\tMsg=".$objMailChimpApi->errorMessage."\n", $objMailChimpApi->errorCode);
+
+    /**
+     * subscribe member
+     * @param $objMember
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function subscribe(MailChimpMember $objMember)
+    {
+
+        $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
+
+        $arrMergeVars = array(
+            'FNAME'     => $objMember->getFirstName(),
+            'LNAME'     => $objMember->getLastName(),
+            'SALUTATION'=> $objMember->getSalutation(),
+            'GROUPINGS' => $this->prepareInterestGroups($objMember->getInterestGroups())
+        );
+
+        $objRetval = $objMailChimpApi->listSubscribe($this->objConfig->getListId(), $objMember->getEmail(), $arrMergeVars, 'html', false);
+
+        if ($objMailChimpApi->errorCode
+            && $objMailChimpApi->errorCode != self::API_ERROR_CODE_MEMBER_ALREADY_SUBSCRIBED
+        ) {
+            require_once(dirname(__FILE__) . '/MailChimpException.php');
+            throw new MailChimpException("\n\tUnable to subscribe member!\n\tCode=" . $objMailChimpApi->errorCode . "\n\tMsg=" . $objMailChimpApi->errorMessage . "\n", $objMailChimpApi->errorCode);
         }
-      }
     }
-  }
-  
-  /**
-   * unsubscribe member   
-   * @param $objMember
-   * @param $blnDeleteMember
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function unsubscribe(MailChimpMember $objMember, $blnDeleteMember = false) {
-    
-    $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
-             
-    $objRetval = $objMailChimpApi->listUnsubscribe($this->objConfig->getListId(), $objMember->getEmail(), $blnDeleteMember);
- 
-    if($objMailChimpApi->errorCode 
-      && $objMailChimpApi->errorCode != self::API_ERROR_CODE_MEMBER_NOT_EXIST                 //Ignore message when user doesn't exist
-      && $objMailChimpApi->errorCode != self::API_ERROR_CODE_MEMBER_DOES_NOT_BELONG_TO_LIST   //Ignore Message when user already unsubscribed
-    ){ 
-      require_once(dirname(__FILE__).'/MailChimpException.php');
-      throw new MailChimpException("\n\tUnable to unsubscribe member!\n\tCode=".$objMailChimpApi->errorCode."\n\tMsg=".$objMailChimpApi->errorMessage."\n", $objMailChimpApi->errorCode);
-    }
-  }
-  
-  /**
-   * prepare interest groups
-   * @param Array $arrInterestGroups
-   * @return Array
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private function prepareInterestGroups($arrInterestGroups) {    
-    $arrGroups = array();
-    
-    if(count($arrInterestGroups) > 0){
-      foreach($arrInterestGroups as $strGroup => $arrInterests) {      
-        $arrInterestTitles = array();      
-        foreach($arrInterests as $arrInterest) {
-          $arrInterestTitles[] = $arrInterest['title'];
+
+    /**
+     * update list member
+     * @param $objMember
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function update(MailChimpMember $objMember, $blnSubscribed)
+    {
+
+        $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
+
+        $arrMergeVars = array();
+        if ($objMember->getFirstName()) $arrMergeVars['FNAME'] = $objMember->getFirstName();
+        if ($objMember->getLastName()) $arrMergeVars['LNAME'] = $objMember->getLastName();
+        if ($objMember->getSalutation()) $arrMergeVars['SALUTATION'] = $objMember->getSalutation();
+        if ($this->prepareInterestGroups($objMember->getInterestGroups())) $arrMergeVars['GROUPINGS'] = $this->prepareInterestGroups($objMember->getInterestGroups());
+
+        $blnReplaceInterest = $objMember->getReplaceInterests();
+
+        if ($blnSubscribed) {
+            $this->subscribe($objMember);
+        } else {
+            $this->unsubscribe($objMember);
         }
-        
-        $arrGroups[] = array(
-          'name'    => $strGroup, 
-          'groups'  => implode(',', $arrInterestTitles)
-        ); 
-      }
+
+        if ((count($arrMergeVars) > 0) && $blnSubscribed) {
+            $objRetval = $objMailChimpApi->listUpdateMember($this->objConfig->getListId(), $objMember->getEmail(), $arrMergeVars, 'html', $blnReplaceInterest);
+
+            if ($objMailChimpApi->errorCode) {
+                if (($objMailChimpApi->errorCode == self::API_ERROR_CODE_MEMBER_NOT_EXIST
+                    || $objMailChimpApi->errorCode == self::API_ERROR_CODE_MEMBER_DOES_NOT_BELONG_TO_LIST)
+                    && $blnSubscribed
+                ) {
+                    $this->subscribe($objMember);
+                } else {
+                    require_once(dirname(__FILE__) . '/MailChimpException.php');
+                    throw new MailChimpException("\n\tUnable to update member info!\n\tCode=" . $objMailChimpApi->errorCode . "\n\tMsg=" . $objMailChimpApi->errorMessage . "\n", $objMailChimpApi->errorCode);
+                }
+            }
+        }
     }
-    
-    return $arrGroups;
-  }
-  
-  /**
-   * set config object
-   * @param MailChimpConfig $objConfig
-   * @return MailChimpList
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function setConfig(MailChimpConfig $objConfig) {
-    $this->objConfig = $objConfig;
-    return $this;
-  }
-  
-  /**
-   * get mail chimp config object
-   * @return MailChimpConfig
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function getConfig(){
-    return $this->objConfig;
-  }
-  
+
+    /**
+     * unsubscribe member
+     * @param $objMember
+     * @param $blnDeleteMember
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function unsubscribe(MailChimpMember $objMember, $blnDeleteMember = false)
+    {
+
+        $objMailChimpApi = new MCAPI($this->objConfig->getApiKey());
+
+        $objRetval = $objMailChimpApi->listUnsubscribe($this->objConfig->getListId(), $objMember->getEmail(), $blnDeleteMember);
+
+        if ($objMailChimpApi->errorCode
+            && $objMailChimpApi->errorCode != self::API_ERROR_CODE_MEMBER_NOT_EXIST //Ignore message when user doesn't exist
+            && $objMailChimpApi->errorCode != self::API_ERROR_CODE_MEMBER_DOES_NOT_BELONG_TO_LIST //Ignore Message when user already unsubscribed
+        ) {
+            require_once(dirname(__FILE__) . '/MailChimpException.php');
+            throw new MailChimpException("\n\tUnable to unsubscribe member!\n\tCode=" . $objMailChimpApi->errorCode . "\n\tMsg=" . $objMailChimpApi->errorMessage . "\n", $objMailChimpApi->errorCode);
+        }
+    }
+
+    /**
+     * prepare interest groups
+     * @param Array $arrInterestGroups
+     * @return Array
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private function prepareInterestGroups($arrInterestGroups)
+    {
+        $arrGroups = array();
+
+        if (count($arrInterestGroups) > 0) {
+            foreach ($arrInterestGroups as $strGroup => $arrInterests) {
+                $arrInterestTitles = array();
+                foreach ($arrInterests as $arrInterest) {
+                    $arrInterestTitles[] = $arrInterest['title'];
+                }
+
+                $arrGroups[] = array(
+                    'name'    => $strGroup,
+                    'groups'  => implode(',', $arrInterestTitles)
+                );
+            }
+        }
+
+        return $arrGroups;
+    }
+
+    /**
+     * set config object
+     * @param MailChimpConfig $objConfig
+     * @return MailChimpList
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function setConfig(MailChimpConfig $objConfig)
+    {
+        $this->objConfig = $objConfig;
+        return $this;
+    }
+
+    /**
+     * get mail chimp config object
+     * @return MailChimpConfig
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function getConfig()
+    {
+        return $this->objConfig;
+    }
+
 }

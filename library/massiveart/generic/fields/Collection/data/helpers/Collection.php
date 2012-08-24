@@ -42,114 +42,119 @@
  * @subpackage GenericDataHelper_Collection
  */
 
-require_once(dirname(__FILE__).'/../../../../data/helpers/Abstract.php');
+require_once(dirname(__FILE__) . '/../../../../data/helpers/Abstract.php');
 
-class GenericDataHelper_Collection extends GenericDataHelperAbstract  {
+class GenericDataHelper_Collection extends GenericDataHelperAbstract
+{
 
-  /**
-   * @var Model_Pages
-   */
-  private $objModelPages;
+    /**
+     * @var Model_Pages
+     */
+    private $objModelPages;
 
-  /**
-   * save()
-   * @param integer $intElementId
-   * @param string $strType
-   * @param string $strElementId
-   * @param integet $intVersion
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function save($intElementId, $strType, $strElementId = null, $intVersion = null){
-    try{
+    /**
+     * save()
+     * @param integer $intElementId
+     * @param string $strType
+     * @param string $strElementId
+     * @param integet $intVersion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function save($intElementId, $strType, $strElementId = null, $intVersion = null)
+    {
+        try {
 
-      $this->getModelPages();
+            $this->getModelPages();
 
-      $intParentId = $this->objElement->Setup()->getParentId();
-      $intParentTypeId = $this->objElement->Setup()->getParentTypeId();
+            $intParentId = $this->objElement->Setup()->getParentId();
+            $intParentTypeId = $this->objElement->Setup()->getParentTypeId();
 
-      $this->objModelPages->deletePageCollection($strElementId, $intVersion);
-      $this->objModelPages->deletePageCollectionUrls($intParentId, $intParentTypeId);
+            $this->objModelPages->deletePageCollection($strElementId, $intVersion);
+            $this->objModelPages->deletePageCollectionUrls($intParentId, $intParentTypeId);
 
-      $this->objModelPages->addPageCollection($this->objElement->getValue(), $strElementId, $intVersion);
+            $this->objModelPages->addPageCollection($this->objElement->getValue(), $strElementId, $intVersion);
 
-      $this->load($intElementId, $strType, $strElementId, $intVersion);
+            $this->load($intElementId, $strType, $strElementId, $intVersion);
 
-      $strBaseUrl = '';
-      if($this->objElement->Setup()->getField('url') instanceof GenericElementField){
-        $strBaseUrl = preg_replace('/^\/[a-zA-Z]{2}\//', '', $this->objElement->Setup()->getField('url')->getValue());
-      }
+            $strBaseUrl = '';
+            if ($this->objElement->Setup()->getField('url') instanceof GenericElementField) {
+                $strBaseUrl = preg_replace('/^\/[a-zA-Z]{2}\//', '', $this->objElement->Setup()->getField('url')->getValue());
+            }
 
-      if(count($this->objElement->objPageCollection) > 0){
+            if (count($this->objElement->objPageCollection) > 0) {
 
-        $objUrlHelper = new GenericDataHelper_Url();
-        $objUrlHelper->setElement($this->objElement);
-        $objUrlHelper->setType($strType);
+                $objUrlHelper = new GenericDataHelper_Url();
+                $objUrlHelper->setElement($this->objElement);
+                $objUrlHelper->setType($strType);
 
-        foreach($this->objElement->objPageCollection as $objPageCollection){
-          $objPageCollection->url = $objUrlHelper->checkUrlUniqueness($strBaseUrl.$objUrlHelper->makeUrlConform($objPageCollection->title));
+                foreach ($this->objElement->objPageCollection as $objPageCollection) {
+                    $objPageCollection->url = $objUrlHelper->checkUrlUniqueness($strBaseUrl . $objUrlHelper->makeUrlConform($objPageCollection->title));
+                }
+            }
+
+            if ($this->objElement->objPageCollection) $this->objModelPages->addPageCollectionUrls($this->objElement->objPageCollection, $intParentId, $intParentTypeId);
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
-
-      if($this->objElement->objPageCollection) $this->objModelPages->addPageCollectionUrls($this->objElement->objPageCollection, $intParentId, $intParentTypeId);
-
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
     }
-  }
 
-  /**
-   * load()
-   * @param integer $intElementId
-   * @param string $strType
-   * @param string $strElementId
-   * @param integet $intVersion
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function load($intElementId, $strType, $strElementId = null, $intVersion = null){
-    try{
-      $this->getModelPages();
+    /**
+     * load()
+     * @param integer $intElementId
+     * @param string $strType
+     * @param string $strElementId
+     * @param integet $intVersion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function load($intElementId, $strType, $strElementId = null, $intVersion = null)
+    {
+        try {
+            $this->getModelPages();
 
-      $intParentId = $this->objElement->Setup()->getParentId();
-      $intParentTypeId = $this->objElement->Setup()->getParentTypeId();
+            $intParentId = $this->objElement->Setup()->getParentId();
+            $intParentTypeId = $this->objElement->Setup()->getParentTypeId();
 
-      $objPageCollectionData = $this->objModelPages->loadPageCollection($strElementId, $intVersion, $intParentId, $intParentTypeId);
+            $objPageCollectionData = $this->objModelPages->loadPageCollection($strElementId, $intVersion, $intParentId, $intParentTypeId);
 
-      if(count($objPageCollectionData) > 0){
-        $this->objElement->objPageCollection = $objPageCollectionData;
+            if (count($objPageCollectionData) > 0) {
+                $this->objElement->objPageCollection = $objPageCollectionData;
 
-        $strValue = '';
-        foreach($objPageCollectionData as $objPageInternalLink){
-          $strValue .= '['.$objPageInternalLink->pageId.']';
+                $strValue = '';
+                foreach ($objPageCollectionData as $objPageInternalLink) {
+                    $strValue .= '[' . $objPageInternalLink->pageId . ']';
+                }
+
+                $this->objElement->setValue($strValue);
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+    /**
+     * getModelPages
+     * @return Model_Pages
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelPages()
+    {
+        if (null === $this->objModelPages) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/Pages.php';
+            $this->objModelPages = new Model_Pages();
+            $this->objModelPages->setLanguageId($this->objElement->Setup()->getLanguageId());
         }
 
-        $this->objElement->setValue($strValue);
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
+        return $this->objModelPages;
     }
-  }
-
-  /**
-   * getModelPages
-   * @return Model_Pages
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelPages(){
-    if (null === $this->objModelPages) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'cms/models/Pages.php';
-      $this->objModelPages = new Model_Pages();
-      $this->objModelPages->setLanguageId($this->objElement->Setup()->getLanguageId());
-    }
-
-    return $this->objModelPages;
-  }
 }
+
 ?>

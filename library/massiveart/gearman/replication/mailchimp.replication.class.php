@@ -44,216 +44,224 @@
  */
 
 // MailChimp API Class v1.3
-require_once(GLOBAL_ROOT_PATH.'library/MailChimp/MCAPI.class.php');
+require_once(GLOBAL_ROOT_PATH . 'library/MailChimp/MCAPI.class.php');
 
 // ZOOLU MailChimp integration
-require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/mailchimp/MailChimpConfig.php');
-require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/mailchimp/MailChimpList.php');
-require_once(GLOBAL_ROOT_PATH.'library/massiveart/newsletter/mailchimp/MailChimpMember.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpConfig.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpList.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpMember.php');
 
-class GearmanReplicationMailChimp {
-  
-  /**
-   * @var Core
-   */
-  private static $core;
-  
-  /**
-   * @var MailChimpConfig
-   */
-  private static $objMailChimpConfig;
-  
-  private static $job;
-  private static $workload;
-  
-  private static $exceptions = array();
-  
-  /**
-   * init
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private static function init($job){    
-       
-    self::$job = $job;
-    self::$workload = unserialize($job->workload());
-    
-    if(empty(self::$core)){
-      self::$core = Zend_Registry::get('Core');
-    }
-    
-    if(empty(self::$objMailChimpConfig)){
-      self::$objMailChimpConfig = new MailChimpConfig();
-      self::$objMailChimpConfig->setApiKey(self::$core->sysConfig->mail_chimp->api_key)
-                               ->setListId(self::$core->sysConfig->mail_chimp->list_id);
-    }
-  }
-  
-  /**
-   * handleException
-   * @param Exception exc
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private static function handleException(Exception $exc){      
-    if($exc->getCode() == MailChimpList::API_ERROR_CODE_TIMEOUT){   
-      if(self::$workload->retry >= 0){
-        self::$workload->retry--;
-        
-        echo date('Y-m-d H:i:s')." WARNING - retry\n";
-        sleep((3 - self::$workload->retry) * 5);
-        
-        $client= new GearmanClient();
-        $client->addServer();
-        $client->doHighBackground(self::$job->functionName(), serialize(self::$workload));
-      }else{
-        self::$exceptions[] = $exc;
-        //self::sendExceptionMail($exc);
-      }      
-    }else{
-      self::$exceptions[] = $exc;
-      //self::sendExceptionMail($exc);
-    }
-  }
-  
-  /**
-   * handleException
-   * @param Exception exc
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private static function sendExceptionMail(Exception $exc){
-    
-    $mail = new Zend_Mail('utf-8');
-    
-    $mail->setSubject('MailChimp EXCEPTION '.$exc->getCode());
-    $mail->setBodyHtml(nl2br($exc->getMessage().'<pre>'.var_export(self::$workload->args, true).'</pre>'));
-    
-    $mail->setFrom(self::$core->config->mail->from->address, self::$core->config->mail->from->name);
-    
-    $mail->addTo(self::$core->config->mail->ma_recipient->address, self::$core->config->mail->ma_recipient->name);
-    
-    //set header for sending mail
-    $mail->addHeader('Sender', 'websitemail@zoolucms.com');
-    
-    $mail->send();
-    
-    echo date('Y-m-d H:i:s')." EXCEPTION ".$exc->getCode()."\n";
-    echo $exc->getMessage()."\n";
-  }
-  
-  /**
-   * add contact
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public static function add($job) {
-    
-    self::init($job);
-        
-    try{
-      //Only subscribe if the flag is set
-      if(self::$workload->args['Subscribed'] == self::$core->sysConfig->mail_chimp->mappings->subscribe){
-        $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-        $objMailChimpList->subscribe(new MailChimpMember(self::$workload->args));
-      }
-      
-      echo date('Y-m-d H:i:s')." INFO - added\n";
-    }catch(SubscriberException $se){
-      self::handleException($se);
-    }catch(MailChimpException $mce){
-      self::handleException($mce);
-    }
-  }
-  
-  /**
-   * update contact
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public static function update($job) {
-    
-    self::init($job);
-        
-    try{
-      $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-      $blnSubscribe = (self::$workload->args['Subscribed'] == self::$core->sysConfig->mail_chimp->mappings->subscribe);
-      $objMember = new MailChimpMember(self::$workload->args);
-      $objMailChimpList->update($objMember, $blnSubscribe);
-      
-      echo date('Y-m-d H:i:s')." INFO - updated\n";
-    }catch(SubscriberException $se){
-      self::handleException($se);
-    }catch(MailChimpException $mce){
-      self::handleException($mce);
-    }
-  }
-  
-  /**
-   * delete contact
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public static function delete($job) {
-    
-    self::init($job);    
-    
-    try{
-      $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
-      $objMailChimpList->unsubscribe(new MailChimpMember(self::$workload->args), true);
-      
-      echo date('Y-m-d H:i:s')." INFO - deleted\n";
-    }catch(MailChimpException $mce){
-      self::handleException($mce);
-    }
-  }
-  
-  /**
-   * replication done
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public static function done($job){
-        
-    try{
+class GearmanReplicationMailChimp
+{
 
-      $data = unserialize($job->workload());
-      
-      $email = $data->email;
-      
-      $mail = new Zend_Mail('utf-8');
-      
-      $mail->setSubject('MailChimp Import Done');
-      
-      if(count($data->errors) == 0 && count($data->warnings) == 0){
-        $mail->setBodyHtml('Dear ZOOLU-User,<br/>your last import was successfully transferred to MailChimp.<br/>RockOn, your ZOOLU team');
-      }else{
-        $strBody = 'Dear ZOOLU-User,<br/>your last import produced some errors:<br/>';
-        //Add Errors and Warnings
-        $strBody .= '<h2>Errors</h2>';
-        $strBody .= '<ul>';
-        foreach($data->errors as $error){
-          $strBody .= '<li>'.$error.'</li>';
+    /**
+     * @var Core
+     */
+    private static $core;
+
+    /**
+     * @var MailChimpConfig
+     */
+    private static $objMailChimpConfig;
+
+    private static $job;
+    private static $workload;
+
+    private static $exceptions = array();
+
+    /**
+     * init
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private static function init($job)
+    {
+
+        self::$job = $job;
+        self::$workload = unserialize($job->workload());
+
+        if (empty(self::$core)) {
+            self::$core = Zend_Registry::get('Core');
         }
-        $strBody .= '</ul>';
 
-        $strBody .= '<h2>Warnings</h2>';
-        $strBody .= '<ul>';
-        foreach($data->warnings as $warning){
-          $strBody .= '<li>'.$warning.'</li>';
+        if (empty(self::$objMailChimpConfig)) {
+            self::$objMailChimpConfig = new MailChimpConfig();
+            self::$objMailChimpConfig->setApiKey(self::$core->sysConfig->mail_chimp->api_key)
+                ->setListId(self::$core->sysConfig->mail_chimp->list_id);
         }
-        $strBody .= '</ul>';
-        $strBody .= '<br/>RockOn, your ZOOLU team';
-        $mail->setBodyHtml($strBody);
-      }
-      
-      $mail->setFrom('noreply@zoolucms.com', 'Noreply');
-      
-      $mail->addTo($email);
-      
-      //set header for sending mail
-      $mail->addHeader('Sender', 'websitemail@zoolucms.com');
-      
-      $mail->send();
-    
-      self::$exceptions = array();
-      echo date('Y-m-d H:i:s')." INFO - done\n";
-    }catch(Exception $mce){
-      self::handleException($mce);
     }
-  }
-  
+
+    /**
+     * handleException
+     * @param Exception exc
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private static function handleException(Exception $exc)
+    {
+        if ($exc->getCode() == MailChimpList::API_ERROR_CODE_TIMEOUT) {
+            if (self::$workload->retry >= 0) {
+                self::$workload->retry--;
+
+                echo date('Y-m-d H:i:s') . " WARNING - retry\n";
+                sleep((3 - self::$workload->retry) * 5);
+
+                $client = new GearmanClient();
+                $client->addServer();
+                $client->doHighBackground(self::$job->functionName(), serialize(self::$workload));
+            } else {
+                self::$exceptions[] = $exc;
+                //self::sendExceptionMail($exc);
+            }
+        } else {
+            self::$exceptions[] = $exc;
+            //self::sendExceptionMail($exc);
+        }
+    }
+
+    /**
+     * handleException
+     * @param Exception exc
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private static function sendExceptionMail(Exception $exc)
+    {
+
+        $mail = new Zend_Mail('utf-8');
+
+        $mail->setSubject('MailChimp EXCEPTION ' . $exc->getCode());
+        $mail->setBodyHtml(nl2br($exc->getMessage() . '<pre>' . var_export(self::$workload->args, true) . '</pre>'));
+
+        $mail->setFrom(self::$core->config->mail->from->address, self::$core->config->mail->from->name);
+
+        $mail->addTo(self::$core->config->mail->ma_recipient->address, self::$core->config->mail->ma_recipient->name);
+
+        //set header for sending mail
+        $mail->addHeader('Sender', 'websitemail@zoolucms.com');
+
+        $mail->send();
+
+        echo date('Y-m-d H:i:s') . " EXCEPTION " . $exc->getCode() . "\n";
+        echo $exc->getMessage() . "\n";
+    }
+
+    /**
+     * add contact
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public static function add($job)
+    {
+
+        self::init($job);
+
+        try {
+            //Only subscribe if the flag is set
+            if (self::$workload->args['Subscribed'] == self::$core->sysConfig->mail_chimp->mappings->subscribe) {
+                $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+                $objMailChimpList->subscribe(new MailChimpMember(self::$workload->args));
+            }
+
+            echo date('Y-m-d H:i:s') . " INFO - added\n";
+        } catch (SubscriberException $se) {
+            self::handleException($se);
+        } catch (MailChimpException $mce) {
+            self::handleException($mce);
+        }
+    }
+
+    /**
+     * update contact
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public static function update($job)
+    {
+
+        self::init($job);
+
+        try {
+            $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+            $blnSubscribe = (self::$workload->args['Subscribed'] == self::$core->sysConfig->mail_chimp->mappings->subscribe);
+            $objMember = new MailChimpMember(self::$workload->args);
+            $objMailChimpList->update($objMember, $blnSubscribe);
+
+            echo date('Y-m-d H:i:s') . " INFO - updated\n";
+        } catch (SubscriberException $se) {
+            self::handleException($se);
+        } catch (MailChimpException $mce) {
+            self::handleException($mce);
+        }
+    }
+
+    /**
+     * delete contact
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public static function delete($job)
+    {
+
+        self::init($job);
+
+        try {
+            $objMailChimpList = new MailChimpList(self::$objMailChimpConfig);
+            $objMailChimpList->unsubscribe(new MailChimpMember(self::$workload->args), true);
+
+            echo date('Y-m-d H:i:s') . " INFO - deleted\n";
+        } catch (MailChimpException $mce) {
+            self::handleException($mce);
+        }
+    }
+
+    /**
+     * replication done
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public static function done($job)
+    {
+
+        try {
+
+            $data = unserialize($job->workload());
+
+            $email = $data->email;
+
+            $mail = new Zend_Mail('utf-8');
+
+            $mail->setSubject('MailChimp Import Done');
+
+            if (count($data->errors) == 0 && count($data->warnings) == 0) {
+                $mail->setBodyHtml('Dear ZOOLU-User,<br/>your last import was successfully transferred to MailChimp.<br/>RockOn, your ZOOLU team');
+            } else {
+                $strBody = 'Dear ZOOLU-User,<br/>your last import produced some errors:<br/>';
+                //Add Errors and Warnings
+                $strBody .= '<h2>Errors</h2>';
+                $strBody .= '<ul>';
+                foreach ($data->errors as $error) {
+                    $strBody .= '<li>' . $error . '</li>';
+                }
+                $strBody .= '</ul>';
+
+                $strBody .= '<h2>Warnings</h2>';
+                $strBody .= '<ul>';
+                foreach ($data->warnings as $warning) {
+                    $strBody .= '<li>' . $warning . '</li>';
+                }
+                $strBody .= '</ul>';
+                $strBody .= '<br/>RockOn, your ZOOLU team';
+                $mail->setBodyHtml($strBody);
+            }
+
+            $mail->setFrom('noreply@zoolucms.com', 'Noreply');
+
+            $mail->addTo($email);
+
+            //set header for sending mail
+            $mail->addHeader('Sender', 'websitemail@zoolucms.com');
+
+            $mail->send();
+
+            self::$exceptions = array();
+            echo date('Y-m-d H:i:s') . " INFO - done\n";
+        } catch (Exception $mce) {
+            self::handleException($mce);
+        }
+    }
+
 }

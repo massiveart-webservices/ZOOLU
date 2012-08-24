@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -33,14 +33,14 @@
 /**
  * include general (autoloader, config)
  */
-require_once(dirname(__FILE__).'/../sys_config/general.inc.php');
+require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 
-try{
-  $objIndex = new Index();
-  $objIndex->indexAllPublicPages();
-    
-}catch (Exception $exc) {
-  $core->logger->err($exc);
-  exit();
+try {
+    $objIndex = new Index();
+    $objIndex->indexAllPublicPages();
+
+} catch (Exception $exc) {
+    $core->logger->err($exc);
+    exit();
 }
 ?>

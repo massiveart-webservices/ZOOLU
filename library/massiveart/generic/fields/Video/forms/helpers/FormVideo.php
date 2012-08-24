@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,51 +31,53 @@
  */
 /**
  * Form_Helper_FormVideo
- * 
+ *
  * Helper to generate a "add video" element
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2010-03-24: Cornelius Hansjakob
- * 
+ *
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  * @package massiveart.generic.fields.Video.forms.helpers
  * @subpackage Form_Helper_FormVideo
  */
 
-class Form_Helper_FormVideo extends Zend_View_Helper_FormElement {
-
-  /**
-   * formVideo
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function formVideo($name, $value = null, $attribs = null){
-    $info = $this->_getInfo($name, $value, $attribs);
-    $core = Zend_Registry::get('Core');
-    extract($info); // name, value, attribs, options, listsep, disable
+class Form_Helper_FormVideo extends Zend_View_Helper_FormElement
+{
 
     /**
-     * is it disabled?
-     */ 
-    $disabled = '';
-    if ($disable) {
-      $disabled = ' disabled="disabled"';
-    }
-
-    /**
-     * build the element
+     * formVideo
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $strOutput = '<div class="vidwrapper">
-                    <div class="top">'.$core->translate->_('Add_videos').': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddVideoOverlay(\'divVideoContainer_'.$this->view->escape($id).'\'); return false;"/></div>
-                    <div id="divVideoContainer_'.$this->view->escape($id).'"'.$disabled.' class="'.$attribs['class'].'">
+    public function formVideo($name, $value = null, $attribs = null)
+    {
+        $info = $this->_getInfo($name, $value, $attribs);
+        $core = Zend_Registry::get('Core');
+        extract($info); // name, value, attribs, options, listsep, disable
+
+        /**
+         * is it disabled?
+         */
+        $disabled = '';
+        if ($disable) {
+            $disabled = ' disabled="disabled"';
+        }
+
+        /**
+         * build the element
+         */
+        $strOutput = '<div class="vidwrapper">
+                    <div class="top">' . $core->translate->_('Add_videos') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddVideoOverlay(\'divVideoContainer_' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div id="divVideoContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '">
                     </div>
-                    <input type="hidden" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" isCoreField="'.$attribs['isCoreField'].'" fieldId="'.$attribs['fieldId'].'" value="'.$this->view->escape($value).'"/>
+                    <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . $attribs['isCoreField'] . '" fieldId="' . $attribs['fieldId'] . '" value="' . $this->view->escape($value) . '"/>
                   </div>';
-    
-    
-    return $strOutput;
-  }
+
+
+        return $strOutput;
+    }
 }
 
 ?>

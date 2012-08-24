@@ -42,295 +42,306 @@
  * @subpackage GenericData
  */
 
-class GenericData {
-
-  /**
-   * @var Core
-   */
-  protected $core;
-
-  /**
-   * @var GenericSetup
-   */
-  protected $setup;
-  /**
-   * property of the generic setup object
-   * @return GenericSetup $setup
-   */
-  public function Setup(){
-    return $this->setup;
-  }
-
-  /**
-   * @var GenericDataTypeAbstract
-   */
-  protected $objDataType;
-
-  /**
-   * @var Model_Templates
-   */
-  protected $objModelTemplates;
-
-  /**
-   * Constructor
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
+class GenericData
+{
 
     /**
-     * new generic setup object
+     * @var Core
      */
-    $this->setup = new GenericSetup();
-  }
+    protected $core;
 
-  /**
-   * addFolderStartElement
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addFolderStartElement($strPageTitle, $arrPageAttributes = array()){
-    $this->core->logger->debug('massiveart->generic->data->GenericData->addFolderStartElement()');
-     try{
-      /**
-       * load the generic structure
-       */
-      $this->initDataTypeObject();
-      $this->setup->loadGenericForm();
-      $this->setup->loadGenericFormStructure();
+    /**
+     * @var GenericSetup
+     */
+    protected $setup;
 
-      if($this->setup->getCoreField('title')) {
-      	$this->setup->getCoreField('title')->setValue($strPageTitle);
-      }
-      
-      if (array_key_exists('segmentId', $arrPageAttributes)) {
-        $this->setup->setSegmentId($arrPageAttributes['segmentId']);
-      }
-      
-      $this->setup->setIsStartElement(true);
-      
-      $this->setup->removeSpecialField('url');
-
-      $this->objDataType->save();
-
-     }catch (Exception $exc) {
-      $this->core->logger->err($exc);
+    /**
+     * property of the generic setup object
+     * @return GenericSetup $setup
+     */
+    public function Setup()
+    {
+        return $this->setup;
     }
-  }
 
-  /**
-   * loadData
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function loadData(){
-    $this->core->logger->debug('massiveart->generic->data->GenericData->loadData()');
-    try{
+    /**
+     * @var GenericDataTypeAbstract
+     */
+    protected $objDataType;
 
-    	/**
-       * load the generic data
-       */
-      $this->initDataTypeObject();
-      $this->setup->loadGenericForm();
-      $this->setup->loadGenericFormStructure();
-      $this->objDataType->load();
+    /**
+     * @var Model_Templates
+     */
+    protected $objModelTemplates;
 
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+
+        /**
+         * new generic setup object
+         */
+        $this->setup = new GenericSetup();
     }
-  }
 
-  /**
-   * indexData
-   * @param string $strIndexPath
-   * @param string $strKey
-   * @param array $arrParentPageContainer
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function indexData($strIndexPath, $strKey, $arrParentPageContainer = array(), $arrParentFolderIds = array()){
-    $this->core->logger->debug('massiveart->generic->data->GenericData->indexData('.$strIndexPath.', '.$strKey.')');
-    if($this->objDataType instanceof GenericDataTypeAbstract){
-      if(count($arrParentPageContainer) > 0){
-        foreach($arrParentPageContainer as $intRootLevelId => $objParentPageContainer){
-          if($this->setup->getLanguageFallbackId() > 0 && $this->setup->getLanguageFallbackId() != $this->setup->getLanguageId()){
-            $this->objDataType->updateIndex($strIndexPath, $strKey.'_'.$this->setup->getLanguageFallbackId().'_r'.$intRootLevelId, $objParentPageContainer, $arrParentFolderIds);
-          }else{
-            $this->objDataType->updateIndex($strIndexPath, $strKey.'_'.$this->setup->getLanguageId().'_r'.$intRootLevelId, $objParentPageContainer, $arrParentFolderIds);  
-          }          
+    /**
+     * addFolderStartElement
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addFolderStartElement($strPageTitle, $arrPageAttributes = array())
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericData->addFolderStartElement()');
+        try {
+            /**
+             * load the generic structure
+             */
+            $this->initDataTypeObject();
+            $this->setup->loadGenericForm();
+            $this->setup->loadGenericFormStructure();
+
+            if ($this->setup->getCoreField('title')) {
+                $this->setup->getCoreField('title')->setValue($strPageTitle);
+            }
+
+            if (array_key_exists('segmentId', $arrPageAttributes)) {
+                $this->setup->setSegmentId($arrPageAttributes['segmentId']);
+            }
+
+            $this->setup->setIsStartElement(true);
+
+            $this->setup->removeSpecialField('url');
+
+            $this->objDataType->save();
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }else{
-        $this->objDataType->updateIndex($strIndexPath, $strKey.'_'.$this->setup->getLanguageId());  
-      }
     }
-  }
 
-  /**
-   * changeTemplate
-   * @param integer $intNewTemplateId
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function changeTemplate($intNewTemplateId){
-    $this->core->logger->debug('massiveart->generic->data->GenericData->changeTemplate('.$intNewTemplateId.')');
-    try{
+    /**
+     * loadData
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadData()
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericData->loadData()');
+        try {
 
-      $objTemplateData = $this->getModelTemplates()->loadTemplateById($intNewTemplateId);
+            /**
+             * load the generic data
+             */
+            $this->initDataTypeObject();
+            $this->setup->loadGenericForm();
+            $this->setup->loadGenericFormStructure();
+            $this->objDataType->load();
 
-      if(count($objTemplateData) == 1){
-        $objTemplate = $objTemplateData->current();
-
-        /**
-         * set form id from template
-         */
-        $strNewFormId = $objTemplate->genericFormId;
-        $intNewFormVersion = $objTemplate->version;
-        $intNewFormTypeId = $objTemplate->formTypeId;
-      }else{
-        throw new Exception('Not able to change template, because there is no new form id!');
-      }
-
-      /**
-       * check, if the new and the old form type are the same
-       */
-      if($intNewFormTypeId != $this->setup->getFormTypeId()){
-        throw new Exception('Not able to change template, because there are different form types! '.$intNewFormTypeId.'-'.$this->setup->getFormTypeId());
-      }
-
-      /**
-       * load the "old" generic data
-       */
-      $this->initDataTypeObject();
-      $this->setup->loadGenericForm();
-      $this->setup->loadGenericFormStructure();
-      $this->objDataType->load();
-
-      /**
-       * check, if the new template is based on another form
-       */
-      if($strNewFormId != $this->setup->getFormId() || $intNewFormVersion != $this->setup->getFormVersion()){
-
-        /**
-         * clone the old generic setup object and change some properties
-         */
-        $objNewGenericSetup = clone $this->setup;
-        $objNewGenericSetup->setFormId($strNewFormId);
-        $objNewGenericSetup->setFormVersion($intNewFormVersion);
-        $objNewGenericSetup->setFormTypeId($intNewFormTypeId);
-        $objNewGenericSetup->setTemplateId($intNewTemplateId);
-        $objNewGenericSetup->setActionType($this->core->sysConfig->generic->actions->change_template);
-        $objNewGenericSetup->loadGenericForm();
-        $objNewGenericSetup->resetGenericStructure();
-        $objNewGenericSetup->loadGenericFormStructure();
-
-       /**
-         * get new data object
-         */
-        $objNewDataType = GenericSetup::getDataTypeObject($objNewGenericSetup->getFormTypeId());
-        $objNewDataType->setGenericSetup($objNewGenericSetup);
-        $objNewDataType->load();
-
-        /**
-         * now compare values of the fields
-         */
-        $this->compareGenericFieldValues($objNewGenericSetup);
-
-        if($this->setup->getElementId() > 0) $objNewDataType->save();
-
-        $this->setup = $objNewGenericSetup;
-      }else{
-        $this->setup->setActionType($this->core->sysConfig->generic->actions->change_template_id);
-        $this->setup->setTemplateId($intNewTemplateId);
-        $this->setup->resetGenericStructure();
-        $this->setup->loadGenericFormStructure();
-        $this->objDataType->load();
-        if($this->setup->getElementId() > 0) $this->objDataType->save();
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * compareGenericFieldValues
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function compareGenericFieldValues(GenericSetup &$objGenericSetup){
-    $this->core->logger->debug('massiveart->generic->data->GenericData->compareGenericFieldValues()');
-    try{
-      if(count($objGenericSetup->CoreFields()) > 0){
-        /**
-         * for each core field, try to get the "old" value
-         */
-        foreach($objGenericSetup->CoreFields() as $strField => $objField){
-          if(!is_null($this->setup->getCoreField($strField))){
-            $objField->setValue($this->setup->getCoreField($strField)->getValue());
-          }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
+    }
 
-      if(count($objGenericSetup->FileFields()) > 0){
-        /**
-         * for each file field, try to get the "old" value
-         */
-        foreach($objGenericSetup->FileFields() as $strField => $objField){
-          if(!is_null($this->setup->getFileField($strField))){
-            $objField->setValue($this->setup->getFileField($strField)->getValue());
-          }
+    /**
+     * indexData
+     * @param string $strIndexPath
+     * @param string $strKey
+     * @param array $arrParentPageContainer
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function indexData($strIndexPath, $strKey, $arrParentPageContainer = array(), $arrParentFolderIds = array())
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericData->indexData(' . $strIndexPath . ', ' . $strKey . ')');
+        if ($this->objDataType instanceof GenericDataTypeAbstract) {
+            if (count($arrParentPageContainer) > 0) {
+                foreach ($arrParentPageContainer as $intRootLevelId => $objParentPageContainer) {
+                    if ($this->setup->getLanguageFallbackId() > 0 && $this->setup->getLanguageFallbackId() != $this->setup->getLanguageId()) {
+                        $this->objDataType->updateIndex($strIndexPath, $strKey . '_' . $this->setup->getLanguageFallbackId() . '_r' . $intRootLevelId, $objParentPageContainer, $arrParentFolderIds);
+                    } else {
+                        $this->objDataType->updateIndex($strIndexPath, $strKey . '_' . $this->setup->getLanguageId() . '_r' . $intRootLevelId, $objParentPageContainer, $arrParentFolderIds);
+                    }
+                }
+            } else {
+                $this->objDataType->updateIndex($strIndexPath, $strKey . '_' . $this->setup->getLanguageId());
+            }
         }
-      }
+    }
 
-      if(count($objGenericSetup->InstanceFields()) > 0){
-        /**
-         * for each instance field, try to get the "old" values
-         */
-        foreach($objGenericSetup->InstanceFields() as $strField => $objField){
-          if(!is_null($this->setup->getInstanceField($strField))){
-            $objField->setValue($this->setup->getInstanceField($strField)->getValue());
-          }
+    /**
+     * changeTemplate
+     * @param integer $intNewTemplateId
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function changeTemplate($intNewTemplateId)
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericData->changeTemplate(' . $intNewTemplateId . ')');
+        try {
+
+            $objTemplateData = $this->getModelTemplates()->loadTemplateById($intNewTemplateId);
+
+            if (count($objTemplateData) == 1) {
+                $objTemplate = $objTemplateData->current();
+
+                /**
+                 * set form id from template
+                 */
+                $strNewFormId = $objTemplate->genericFormId;
+                $intNewFormVersion = $objTemplate->version;
+                $intNewFormTypeId = $objTemplate->formTypeId;
+            } else {
+                throw new Exception('Not able to change template, because there is no new form id!');
+            }
+
+            /**
+             * check, if the new and the old form type are the same
+             */
+            if ($intNewFormTypeId != $this->setup->getFormTypeId()) {
+                throw new Exception('Not able to change template, because there are different form types! ' . $intNewFormTypeId . '-' . $this->setup->getFormTypeId());
+            }
+
+            /**
+             * load the "old" generic data
+             */
+            $this->initDataTypeObject();
+            $this->setup->loadGenericForm();
+            $this->setup->loadGenericFormStructure();
+            $this->objDataType->load();
+
+            /**
+             * check, if the new template is based on another form
+             */
+            if ($strNewFormId != $this->setup->getFormId() || $intNewFormVersion != $this->setup->getFormVersion()) {
+
+                /**
+                 * clone the old generic setup object and change some properties
+                 */
+                $objNewGenericSetup = clone $this->setup;
+                $objNewGenericSetup->setFormId($strNewFormId);
+                $objNewGenericSetup->setFormVersion($intNewFormVersion);
+                $objNewGenericSetup->setFormTypeId($intNewFormTypeId);
+                $objNewGenericSetup->setTemplateId($intNewTemplateId);
+                $objNewGenericSetup->setActionType($this->core->sysConfig->generic->actions->change_template);
+                $objNewGenericSetup->loadGenericForm();
+                $objNewGenericSetup->resetGenericStructure();
+                $objNewGenericSetup->loadGenericFormStructure();
+
+                /**
+                 * get new data object
+                 */
+                $objNewDataType = GenericSetup::getDataTypeObject($objNewGenericSetup->getFormTypeId());
+                $objNewDataType->setGenericSetup($objNewGenericSetup);
+                $objNewDataType->load();
+
+                /**
+                 * now compare values of the fields
+                 */
+                $this->compareGenericFieldValues($objNewGenericSetup);
+
+                if ($this->setup->getElementId() > 0) $objNewDataType->save();
+
+                $this->setup = $objNewGenericSetup;
+            } else {
+                $this->setup->setActionType($this->core->sysConfig->generic->actions->change_template_id);
+                $this->setup->setTemplateId($intNewTemplateId);
+                $this->setup->resetGenericStructure();
+                $this->setup->loadGenericFormStructure();
+                $this->objDataType->load();
+                if ($this->setup->getElementId() > 0) $this->objDataType->save();
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
-
-      // TODO : compare special fields
-
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * initDataTypeObject
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function initDataTypeObject(){
-
-    $this->objDataType = GenericSetup::getDataTypeObject($this->setup->getFormTypeId());
-
-    if($this->objDataType instanceof GenericDataTypeAbstract){
-      $this->objDataType->setGenericSetup($this->setup);
-    }
-  }
-
-  /**
-   * getModelTemplates
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @return Model_Templates $this->objModelTemplates
-   * @version 1.0
-   */
-  protected function getModelTemplates(){
-    if (null === $this->objModelTemplates) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Templates.php';
-      $this->objModelTemplates = new Model_Templates();
     }
 
-    return $this->objModelTemplates;
-  }
+    /**
+     * compareGenericFieldValues
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function compareGenericFieldValues(GenericSetup &$objGenericSetup)
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericData->compareGenericFieldValues()');
+        try {
+            if (count($objGenericSetup->CoreFields()) > 0) {
+                /**
+                 * for each core field, try to get the "old" value
+                 */
+                foreach ($objGenericSetup->CoreFields() as $strField => $objField) {
+                    if (!is_null($this->setup->getCoreField($strField))) {
+                        $objField->setValue($this->setup->getCoreField($strField)->getValue());
+                    }
+                }
+            }
+
+            if (count($objGenericSetup->FileFields()) > 0) {
+                /**
+                 * for each file field, try to get the "old" value
+                 */
+                foreach ($objGenericSetup->FileFields() as $strField => $objField) {
+                    if (!is_null($this->setup->getFileField($strField))) {
+                        $objField->setValue($this->setup->getFileField($strField)->getValue());
+                    }
+                }
+            }
+
+            if (count($objGenericSetup->InstanceFields()) > 0) {
+                /**
+                 * for each instance field, try to get the "old" values
+                 */
+                foreach ($objGenericSetup->InstanceFields() as $strField => $objField) {
+                    if (!is_null($this->setup->getInstanceField($strField))) {
+                        $objField->setValue($this->setup->getInstanceField($strField)->getValue());
+                    }
+                }
+            }
+
+            // TODO : compare special fields
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+    /**
+     * initDataTypeObject
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function initDataTypeObject()
+    {
+
+        $this->objDataType = GenericSetup::getDataTypeObject($this->setup->getFormTypeId());
+
+        if ($this->objDataType instanceof GenericDataTypeAbstract) {
+            $this->objDataType->setGenericSetup($this->setup);
+        }
+    }
+
+    /**
+     * getModelTemplates
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @return Model_Templates $this->objModelTemplates
+     * @version 1.0
+     */
+    protected function getModelTemplates()
+    {
+        if (null === $this->objModelTemplates) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Templates.php';
+            $this->objModelTemplates = new Model_Templates();
+        }
+
+        return $this->objModelTemplates;
+    }
 }
 
 ?>

@@ -43,6 +43,7 @@
  * @subpackage ClientHelperInterface
  */
 
-interface ClientHelperInterface {
-  
+interface ClientHelperInterface
+{
+
 }

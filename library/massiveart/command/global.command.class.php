@@ -43,202 +43,213 @@
  * @subpackage GlobalCommand
  */
 
-require_once(dirname(__FILE__).'/command.interface.php');
+require_once(dirname(__FILE__) . '/command.interface.php');
 
-class GlobalCommand implements CommandInterface {
+class GlobalCommand implements CommandInterface
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
+    /**
+     * @var Core
+     */
+    protected $core;
 
-  /**
-   * @var Model_Globals
-   */
-  protected $objModelGlobals;
+    /**
+     * @var Model_Globals
+     */
+    protected $objModelGlobals;
 
-  /**
-   * @var Model_Templates
-   */
-  protected $objModelTemplates;
-  
-  protected $intRootLevelGroupId;
-  protected $strRootLevelGroupKey;
+    /**
+     * @var Model_Templates
+     */
+    protected $objModelTemplates;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct($intRootLevelGroupId, $strRootLevelGroupKey){
-    $this->intRootLevelGroupId = $intRootLevelGroupId;
-    $this->strRootLevelGroupKey = $strRootLevelGroupKey;
-    $this->core = Zend_Registry::get('Core');
-  }
+    protected $intRootLevelGroupId;
+    protected $strRootLevelGroupKey;
 
-  /**
-   * onCommand
-   * @param string $strName
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function onCommand($strName, $arrArgs){
-    switch($strName){
-      case 'addFolderStartElement':
-        return $this->addFolderStartGlobal($arrArgs);
-      case 'editFolderStartElement':
-        return $this->editFolderStartGlobal($arrArgs);
-      default:
-        return true;
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct($intRootLevelGroupId, $strRootLevelGroupKey)
+    {
+        $this->intRootLevelGroupId = $intRootLevelGroupId;
+        $this->strRootLevelGroupKey = $strRootLevelGroupKey;
+        $this->core = Zend_Registry::get('Core');
     }
-  }
 
-  /**
-   * addFolderStartGlobal
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  private function addFolderStartGlobal($arrArgs){
-    try{
-      if(array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup){
-        $objGenericSetup = $arrArgs['GenericSetup'];
-        
-        $strGlobalType = $this->strRootLevelGroupKey.'_overview';
-        
-        $intTemplateId = $this->core->sysConfig->global_types->$strGlobalType->default_templateId;
-        $objTemplateData = $this->getModelTemplates()->loadTemplateById($intTemplateId);
+    /**
+     * onCommand
+     * @param string $strName
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function onCommand($strName, $arrArgs)
+    {
+        switch ($strName) {
+            case 'addFolderStartElement':
+                return $this->addFolderStartGlobal($arrArgs);
+            case 'editFolderStartElement':
+                return $this->editFolderStartGlobal($arrArgs);
+            default:
+                return true;
+        }
+    }
 
-        if(count($objTemplateData) == 1){
-          $objTemplate = $objTemplateData->current();
+    /**
+     * addFolderStartGlobal
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    private function addFolderStartGlobal($arrArgs)
+    {
+        try {
+            if (array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup) {
+                $objGenericSetup = $arrArgs['GenericSetup'];
 
-          /**
-           * set form id from template
-           */
-          $strFormId = $objTemplate->genericFormId;
-          $intFormVersion = $objTemplate->version;
-          $intFormTypeId = $objTemplate->formTypeId;
-        }else{
-          throw new Exception('Not able to create a generic data object, because there is no form id!');
+                $strGlobalType = $this->strRootLevelGroupKey . '_overview';
+
+                $intTemplateId = $this->core->sysConfig->global_types->$strGlobalType->default_templateId;
+                $objTemplateData = $this->getModelTemplates()->loadTemplateById($intTemplateId);
+
+                if (count($objTemplateData) == 1) {
+                    $objTemplate = $objTemplateData->current();
+
+                    /**
+                     * set form id from template
+                     */
+                    $strFormId = $objTemplate->genericFormId;
+                    $intFormVersion = $objTemplate->version;
+                    $intFormTypeId = $objTemplate->formTypeId;
+                } else {
+                    throw new Exception('Not able to create a generic data object, because there is no form id!');
+                }
+
+                $objGenericData = new GenericData();
+                $objGenericData->Setup()->setFormId($strFormId);
+                $objGenericData->Setup()->setFormVersion($intFormVersion);
+                $objGenericData->Setup()->setFormTypeId($intFormTypeId);
+                $objGenericData->Setup()->setTemplateId($intTemplateId);
+                $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+                $objGenericData->Setup()->setLanguageId($arrArgs['LanguageId']);
+                $objGenericData->Setup()->setLanguageCode($arrArgs['LanguageCode']);
+                $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
+
+                $objGenericData->Setup()->setParentId($arrArgs['ParentId']);
+                $objGenericData->Setup()->setRootLevelId($objGenericSetup->getRootLevelId());
+                $objGenericData->Setup()->setRootLevelGroupId($this->intRootLevelGroupId);
+                $objGenericData->Setup()->setElementTypeId($this->core->sysConfig->global_types->$strGlobalType->id);
+                $objGenericData->Setup()->setCreatorId($objGenericSetup->getCreatorId());
+                $objGenericData->Setup()->setStatusId($objGenericSetup->getStatusId());
+                $objGenericData->Setup()->setShowInNavigation($objGenericSetup->getShowInNavigation());
+                $objGenericData->Setup()->setModelSubPath('global/models/');
+
+                $objGenericData->addFolderStartElement($objGenericSetup->getCoreField('title')->getValue());
+
+                return true;
+            } else {
+                throw new Exception('There ist now GenericSetup in the args array!');
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            return false;
+        }
+    }
+
+    /**
+     * editFolderStartGlobal
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    private function editFolderStartGlobal($arrArgs)
+    {
+        try {
+            if (array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup) {
+                $objGenericSetup = $arrArgs['GenericSetup'];
+
+                $intFolderId = $objGenericSetup->getElementId();
+                $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+
+                $arrProperties = array(
+                    'idUsers'          => $intUserId,
+                    'creator'          => $objGenericSetup->getCreatorId(),
+                    'idStatus'         => $objGenericSetup->getStatusId(),
+                    'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+                    'changed'          => date('Y-m-d H:i:s')
+                );
+
+                $strGlobalType = $this->strRootLevelGroupKey . '_overview';
+                $intDefaultTemplateId = $this->core->sysConfig->global_types->$strGlobalType->default_templateId;
+
+                $arrTitle = array(
+                    'idUsers'     => $intUserId,
+                    'creator'     => $objGenericSetup->getCreatorId(),
+                    'title'       => $objGenericSetup->getCoreField('title')->getValue(),
+                    'idLanguages' => $objGenericSetup->getLanguageId(),
+                    'changed'     => date('Y-m-d H:i:s')
+                );
+
+                $this->getModelGlobals($arrArgs)->updateFolderStartGlobal($intFolderId, $arrProperties, $arrTitle, $this->intRootLevelGroupId, $intDefaultTemplateId);
+                return true;
+            } else {
+                throw new Exception('There ist now GenericSetup in the args array!');
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            return false;
+        }
+    }
+
+    /**
+     * getModelGlobals
+     * @param array $arrArgs
+     * @return Model_Globals
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelGlobals($arrArgs)
+    {
+        if (null === $this->objModelGlobals) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'global/models/Globals.php';
+            $this->objModelGlobals = new Model_Globals();
+            $this->objModelGlobals->setLanguageId($arrArgs['LanguageId']);
         }
 
-        $objGenericData = new GenericData();
-        $objGenericData->Setup()->setFormId($strFormId);
-        $objGenericData->Setup()->setFormVersion($intFormVersion);
-        $objGenericData->Setup()->setFormTypeId($intFormTypeId);
-        $objGenericData->Setup()->setTemplateId($intTemplateId);
-        $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
-        $objGenericData->Setup()->setLanguageId($arrArgs['LanguageId']);
-        $objGenericData->Setup()->setLanguageCode($arrArgs['LanguageCode']);
-        $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
-
-        $objGenericData->Setup()->setParentId($arrArgs['ParentId']);
-        $objGenericData->Setup()->setRootLevelId($objGenericSetup->getRootLevelId());
-        $objGenericData->Setup()->setRootLevelGroupId($this->intRootLevelGroupId);
-        $objGenericData->Setup()->setElementTypeId($this->core->sysConfig->global_types->$strGlobalType->id);
-        $objGenericData->Setup()->setCreatorId($objGenericSetup->getCreatorId());
-        $objGenericData->Setup()->setStatusId($objGenericSetup->getStatusId());
-        $objGenericData->Setup()->setShowInNavigation($objGenericSetup->getShowInNavigation());
-        $objGenericData->Setup()->setModelSubPath('global/models/');
-        
-        $objGenericData->addFolderStartElement($objGenericSetup->getCoreField('title')->getValue());
-
-        return true;
-      }else{
-        throw new Exception('There ist now GenericSetup in the args array!');
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-      return false;
-    }
-  }
-
-  /**
-   * editFolderStartGlobal
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  private function editFolderStartGlobal($arrArgs){
-    try{
-      if(array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup){
-        $objGenericSetup = $arrArgs['GenericSetup'];
-
-        $intFolderId = $objGenericSetup->getElementId();
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
-
-
-        $arrProperties = array('idUsers'          => $intUserId,
-                               'creator'          => $objGenericSetup->getCreatorId(),
-                               'idStatus'         => $objGenericSetup->getStatusId(),
-                               'showInNavigation' => $objGenericSetup->getShowInNavigation(),
-                               'changed'          => date('Y-m-d H:i:s'));
-
-        $strGlobalType = $this->strRootLevelGroupKey.'_overview';        
-        $intDefaultTemplateId = $this->core->sysConfig->global_types->$strGlobalType->default_templateId;
-        
-        $arrTitle = array('idUsers'     => $intUserId,
-                          'creator'     => $objGenericSetup->getCreatorId(),
-                          'title'       => $objGenericSetup->getCoreField('title')->getValue(),
-                          'idLanguages' => $objGenericSetup->getLanguageId(),
-                          'changed'     => date('Y-m-d H:i:s'));
-
-        $this->getModelGlobals($arrArgs)->updateFolderStartGlobal($intFolderId, $arrProperties, $arrTitle, $this->intRootLevelGroupId, $intDefaultTemplateId);
-        return true;
-      }else{
-        throw new Exception('There ist now GenericSetup in the args array!');
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-      return false;
-    }
-  }
-
-  /**
-   * getModelGlobals
-   * @param array $arrArgs
-   * @return Model_Globals
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelGlobals($arrArgs){
-    if (null === $this->objModelGlobals) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'global/models/Globals.php';
-      $this->objModelGlobals = new Model_Globals();
-      $this->objModelGlobals->setLanguageId($arrArgs['LanguageId']);
+        return $this->objModelGlobals;
     }
 
-    return $this->objModelGlobals;
-  }
+    /**
+     * getModelTemplates
+     * @return Model_Templates
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelTemplates()
+    {
+        if (null === $this->objModelTemplates) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Templates.php';
+            $this->objModelTemplates = new Model_Templates();
+        }
 
-  /**
-   * getModelTemplates
-   * @return Model_Templates
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelTemplates(){
-    if (null === $this->objModelTemplates) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Templates.php';
-      $this->objModelTemplates = new Model_Templates();
+        return $this->objModelTemplates;
     }
-
-    return $this->objModelTemplates;
-  }
 }
 
 ?>

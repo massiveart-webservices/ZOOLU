@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,22 +31,23 @@
  */
 /**
  * Form_Element_Contact
- * 
+ *
  * Form element to add documents
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2008-11-28: Thomas Schedler
- * 
+ *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  * @package massiveart.forms.elements
  * @subpackage Form_Element_Contact
  */
 
-class Form_Element_Group extends FormElementXhtmlAbstract {
- 
-  public $helper = 'formGroup';
-  
+class Form_Element_Group extends FormElementXhtmlAbstract
+{
+
+    public $helper = 'formGroup';
+
 }
 
 ?>

@@ -43,24 +43,27 @@
  * @subpackage Chart
  */
 
-require_once(GLOBAL_ROOT_PATH."library/pChart/class/pData.class.php");
-require_once(GLOBAL_ROOT_PATH."library/pChart/class/pDraw.class.php");
-require_once(GLOBAL_ROOT_PATH."library/pChart/class/pImage.class.php");
+require_once(GLOBAL_ROOT_PATH . "library/pChart/class/pData.class.php");
+require_once(GLOBAL_ROOT_PATH . "library/pChart/class/pDraw.class.php");
+require_once(GLOBAL_ROOT_PATH . "library/pChart/class/pImage.class.php");
 
-class Chart extends pImage {
-  
-  public function __construct($XSize, $YSize, $Values, $Labels, $Margin = 30, $Min = 0, $Max = 100){
-    $DataSet = new pData();
-    $DataSet->addPoints($Values);
-    $DataSet->addPoints($Labels, 'Labels');
-    $DataSet->setSerieDescription('Labels');
-    $DataSet->setAbscissa('Labels');
+class Chart extends pImage
+{
 
-    parent::__construct($XSize, $YSize, $DataSet);
+    public function __construct($XSize, $YSize, $Values, $Labels, $Margin = 30, $Min = 0, $Max = 100)
+    {
+        $DataSet = new pData();
+        $DataSet->addPoints($Values);
+        $DataSet->addPoints($Labels, 'Labels');
+        $DataSet->setSerieDescription('Labels');
+        $DataSet->setAbscissa('Labels');
 
-    $this->setFontProperties(array('FontName' => GLOBAL_ROOT_PATH.'library/pChart/fonts/calibri.ttf', 'FontSize' => 8));
-    $this->setGraphArea($Margin, $Margin, $XSize - $Margin, $YSize - $Margin);
-    $this->drawScale(array('Mode' => SCALE_MODE_MANUAL, 'ManualScale' => array(0 => array('Min' => $Min, 'Max' => $Max))));
-  }
+        parent::__construct($XSize, $YSize, $DataSet);
+
+        $this->setFontProperties(array('FontName' => GLOBAL_ROOT_PATH . 'library/pChart/fonts/calibri.ttf', 'FontSize' => 8));
+        $this->setGraphArea($Margin, $Margin, $XSize - $Margin, $YSize - $Margin);
+        $this->drawScale(array('Mode' => SCALE_MODE_MANUAL, 'ManualScale' => array(0 => array('Min' => $Min, 'Max' => $Max))));
+    }
 }
+
 ?>

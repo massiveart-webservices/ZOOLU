@@ -4,7 +4,7 @@
  * Client_Mails
  *
  * Client specific Addon Mails
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2011-06-15: Cornelius Hansjakob
  *
@@ -14,18 +14,20 @@
  * @subpackage Client_Mails
  */
 
-class Client_Mails implements ClientHelperInterface  {
+class Client_Mails implements ClientHelperInterface
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * __construct
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   */
-  public function __construct() {
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * @var Core
+     */
+    protected $core;
+
+    /**
+     * __construct
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
 }

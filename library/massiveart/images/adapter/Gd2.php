@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,158 +42,175 @@
  * @subpackage ImageAdapter_Gd2
  */
 
-require_once(dirname(__FILE__).'/interface.class.php');
+require_once(dirname(__FILE__) . '/interface.class.php');
 
-class ImageAdapter_Gd2 implements ImageAdapterInterface {
+class ImageAdapter_Gd2 implements ImageAdapterInterface
+{
 
-  /**
-   * @var string
-   */
-  protected $strSourceFile;
+    /**
+     * @var string
+     */
+    protected $strSourceFile;
 
-  /**
-   * Constructor
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct($strSourceFile = ''){
-    $this->strSourceFile = $strSourceFile;
-  }
+    /**
+     * Constructor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct($strSourceFile = '')
+    {
+        $this->strSourceFile = $strSourceFile;
+    }
 
-  /**
-   * resize
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function resize(){
+    /**
+     * resize
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function resize()
+    {
 
-  }
+    }
 
-  /**
-   * crop
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function crop(){
+    /**
+     * crop
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function crop()
+    {
 
-  }
+    }
 
-  /**
-   * scale
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function scale(){
+    /**
+     * scale
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function scale()
+    {
 
-  }
+    }
 
-  /**
-   * roundCorners
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function roundCorners(){
+    /**
+     * roundCorners
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function roundCorners()
+    {
 
-  }
+    }
 
-  /**
-   * rotate
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function rotate(){
+    /**
+     * rotate
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function rotate()
+    {
 
-  }
+    }
 
-  /**
-   * flipHorizontal
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function flipHorizontal(){
+    /**
+     * flipHorizontal
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function flipHorizontal()
+    {
 
-  }
+    }
 
-  /**
-   * flipVertical
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function flipVertical(){
+    /**
+     * flipVertical
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function flipVertical()
+    {
 
-  }
+    }
 
-  /**
-   * grayscale
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function grayscale(){
+    /**
+     * grayscale
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function grayscale()
+    {
 
-  }
+    }
 
-  /**
-   * brighten
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function brighten(){
+    /**
+     * brighten
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function brighten()
+    {
 
-  }
+    }
 
-  /**
-   * brighten
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function darken(){
+    /**
+     * brighten
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function darken()
+    {
 
-  }
+    }
 
-  /**
-   * shadow
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function shadow(){
+    /**
+     * shadow
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function shadow()
+    {
 
-  }
+    }
 
-  /**
-   * fakePolaroid
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function fakePolaroid(){
+    /**
+     * fakePolaroid
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function fakePolaroid()
+    {
 
-  }
+    }
 
-  /**
-   * polaroid
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function polaroid(){
+    /**
+     * polaroid
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function polaroid()
+    {
 
-  }
+    }
 
-  /**
-   * invert
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function invert(){
+    /**
+     * invert
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function invert()
+    {
 
-  }
+    }
 
-  /**
-   * watermark
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function watermark(){
+    /**
+     * watermark
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function watermark()
+    {
 
-  }
+    }
 
 }
 

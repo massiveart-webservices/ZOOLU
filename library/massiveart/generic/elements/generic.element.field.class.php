@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,115 +42,124 @@
  * @subpackage GenericElementField
  */
 
-require_once(dirname(__FILE__).'/generic.element.abstract.class.php');
+require_once(dirname(__FILE__) . '/generic.element.abstract.class.php');
 
-class GenericElementField extends GenericElementAbstract {
-  
-  /**
-   * mixed value of the element field
-   * @var mixed
-   */
-  protected $value = null;
-  
-  
-  /**
-   * mixed value of the element field
-   * @var array
-   */
-  protected $instanceValues = array();
-  
-  /**
-   * properties of the element instance
-   * @var array
-   */
-  protected $arrInstanceProperties = array();
-  
-  /**
-   * setValue
-   * @param mixed $value
-   */
-  public function setValue($value){    
-    $this->value = $value;
-  }
+class GenericElementField extends GenericElementAbstract
+{
 
-  /**
-   * getValue
-   * @param mixed $value
-   */
-  public function getValue(){
-    return ((is_null($this->value)) ? $this->defaultValue : $this->value);
-  }
-  
-  /**
-   * setInstanceValue
-   * @param integer $intRegionInstanceId
-   * @param mixed $value
-   */
-  public function setInstanceValue($intInstanceId, $value){
-    $this->instanceValues[$intInstanceId] = $value;
-  }
-  
-  /**
-   * getInstanceValue
-   * @param integer $intRegionInstanceId
-   * @param mixed $value
-   */
-  public function getInstanceValue($intInstanceId){
-    if(array_key_exists($intInstanceId, $this->instanceValues)){
-      return $this->instanceValues[$intInstanceId];  
-    }else{
-      return $this->defaultValue;
+    /**
+     * mixed value of the element field
+     * @var mixed
+     */
+    protected $value = null;
+
+
+    /**
+     * mixed value of the element field
+     * @var array
+     */
+    protected $instanceValues = array();
+
+    /**
+     * properties of the element instance
+     * @var array
+     */
+    protected $arrInstanceProperties = array();
+
+    /**
+     * setValue
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
     }
-  }
 
-  /**
-   * setInstanceProperty
-   * @param integer $intInstanceId
-   * @param string $strName
-   * @param mixed $mixedValue
-   */
-  public function setInstanceProperty($intInstanceId, $strName, $mixedValue) {
-    if (!array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
-      $this->arrInstanceProperties[$intInstanceId] = array();
+    /**
+     * getValue
+     * @param mixed $value
+     */
+    public function getValue()
+    {
+        return ((is_null($this->value)) ? $this->defaultValue : $this->value);
     }
-    $this->arrInstanceProperties[$intInstanceId][$strName] = $mixedValue;
-  }
 
-  /**
-   * getInstanceProperty
-   * @param integer $intInstanceId
-   * @param string $strName
-   * @return mixed $mixedValue
-   */
-  public function getInstanceProperty($intInstanceId, $strName) {
-    if (array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
-      if (array_key_exists($strName, $this->arrInstanceProperties[$intInstanceId])) {
-        return $this->arrInstanceProperties[$intInstanceId][$strName];
-      }
-      return null;
+    /**
+     * setInstanceValue
+     * @param integer $intRegionInstanceId
+     * @param mixed $value
+     */
+    public function setInstanceValue($intInstanceId, $value)
+    {
+        $this->instanceValues[$intInstanceId] = $value;
     }
-    return null;
-  }
 
-  /**
-   * getProperties
-   * @return array
-   */
-  public function getProperties() {
-    return $this->arrProperties;
-  }
-
-  /**
-   * getProperties
-   * @param integer $intInstanceId
-   * @return array
-   */
-  public function getInstanceProperties($intInstanceId) {
-    if (array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
-      return $this->arrInstanceProperties[$intInstanceId];
+    /**
+     * getInstanceValue
+     * @param integer $intRegionInstanceId
+     * @param mixed $value
+     */
+    public function getInstanceValue($intInstanceId)
+    {
+        if (array_key_exists($intInstanceId, $this->instanceValues)) {
+            return $this->instanceValues[$intInstanceId];
+        } else {
+            return $this->defaultValue;
+        }
     }
-    return array();
-  }
+
+    /**
+     * setInstanceProperty
+     * @param integer $intInstanceId
+     * @param string $strName
+     * @param mixed $mixedValue
+     */
+    public function setInstanceProperty($intInstanceId, $strName, $mixedValue)
+    {
+        if (!array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
+            $this->arrInstanceProperties[$intInstanceId] = array();
+        }
+        $this->arrInstanceProperties[$intInstanceId][$strName] = $mixedValue;
+    }
+
+    /**
+     * getInstanceProperty
+     * @param integer $intInstanceId
+     * @param string $strName
+     * @return mixed $mixedValue
+     */
+    public function getInstanceProperty($intInstanceId, $strName)
+    {
+        if (array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
+            if (array_key_exists($strName, $this->arrInstanceProperties[$intInstanceId])) {
+                return $this->arrInstanceProperties[$intInstanceId][$strName];
+            }
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * getProperties
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->arrProperties;
+    }
+
+    /**
+     * getProperties
+     * @param integer $intInstanceId
+     * @return array
+     */
+    public function getInstanceProperties($intInstanceId)
+    {
+        if (array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
+            return $this->arrInstanceProperties[$intInstanceId];
+        }
+        return array();
+    }
 }
 
 ?>

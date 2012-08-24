@@ -43,57 +43,62 @@
  * @subpackage MailChimpConfig
  */
 
-class MailChimpConfig {
-  
-  /**
-   * mail chimp api key
-   * @var String
-   */
-  private $strApiKey;
-  
-  /**
-   * mail chimp list id
-   * @var String
-   */
-  private $strListId;
-  
-  /**
-   * set key
-   * @param String $strApiKey
-   * @return MailChimpConfig
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function setApiKey($strApiKey) {
-    $this->strApiKey = $strApiKey;
-    return $this;
-  }
-  
-  /**
-   * get key
-   * @return String
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function getApiKey(){
-    return $this->strApiKey;
-  }
-  
-  /**
-   * set list id
-   * @param String $strListId
-   * @return MailChimpConfig
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function setListId($strListId) {
-    $this->strListId = $strListId;
-    return $this;
-  }
-  
-  /**
-   * get list id
-   * @return String
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function getListId(){
-    return $this->strListId;
-  }
+class MailChimpConfig
+{
+
+    /**
+     * mail chimp api key
+     * @var String
+     */
+    private $strApiKey;
+
+    /**
+     * mail chimp list id
+     * @var String
+     */
+    private $strListId;
+
+    /**
+     * set key
+     * @param String $strApiKey
+     * @return MailChimpConfig
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function setApiKey($strApiKey)
+    {
+        $this->strApiKey = $strApiKey;
+        return $this;
+    }
+
+    /**
+     * get key
+     * @return String
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function getApiKey()
+    {
+        return $this->strApiKey;
+    }
+
+    /**
+     * set list id
+     * @param String $strListId
+     * @return MailChimpConfig
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function setListId($strListId)
+    {
+        $this->strListId = $strListId;
+        return $this;
+    }
+
+    /**
+     * get list id
+     * @return String
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function getListId()
+    {
+        return $this->strListId;
+    }
 }

@@ -30,7 +30,7 @@
  * @version    $Id: version.php
  */
 
-require_once(dirname(__FILE__).'/SubscriberException.php');
+require_once(dirname(__FILE__) . '/SubscriberException.php');
 
 /**
  * AddressNotFoundException
@@ -44,14 +44,16 @@ require_once(dirname(__FILE__).'/SubscriberException.php');
  * @package massiveart.contact.replication.MailChimp
  * @subpackage MailChimpException
  */
-class AddressNotFoundException extends SubscriberException  {
-  
-  /**
-   * @param string $email
-   * @param string $msg
-   * @param number $code
-   */
-  public function __construct($email){
-    parent::__construct($email, '', 0);
-  }
+class AddressNotFoundException extends SubscriberException
+{
+
+    /**
+     * @param string $email
+     * @param string $msg
+     * @param number $code
+     */
+    public function __construct($email)
+    {
+        parent::__construct($email, '', 0);
+    }
 }

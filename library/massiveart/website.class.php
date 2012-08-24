@@ -43,36 +43,39 @@
  * @subpackage Website
  */
 
-class Website {
+class Website
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * Constructor
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * expireCache
-   * @return void
-   * @author Thomas Schedler <tsh@massiveart.com> 
-   */
-  public function expireCache(){
-    if(is_dir(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->cache->tmp)){
-      foreach(glob(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->cache->tmp.'*') as $strCacheFile) {
-        unlink($strCacheFile);
-      }
+    /**
+     * @var Core
+     */
+    protected $core;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-    
-    if(is_dir(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->cache->pages)){
-      foreach(glob(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->cache->pages.'*') as $strCacheFile) {
-        unlink($strCacheFile);
-      }
-    }    
-  }
+
+    /**
+     * expireCache
+     * @return void
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function expireCache()
+    {
+        if (is_dir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->cache->tmp)) {
+            foreach (glob(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->cache->tmp . '*') as $strCacheFile) {
+                unlink($strCacheFile);
+            }
+        }
+
+        if (is_dir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->cache->pages)) {
+            foreach (glob(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->cache->pages . '*') as $strCacheFile) {
+                unlink($strCacheFile);
+            }
+        }
+    }
 }

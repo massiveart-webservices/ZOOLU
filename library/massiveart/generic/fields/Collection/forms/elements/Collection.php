@@ -44,9 +44,10 @@
  * @subpackage Form_Element_Collection
  */
 
-class Form_Element_Collection extends FormElementXhtmlAbstract {
+class Form_Element_Collection extends FormElementXhtmlAbstract
+{
 
-  public $helper = 'formCollection';
+    public $helper = 'formCollection';
 
 }
 

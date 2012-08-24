@@ -106,7 +106,7 @@ class Form_Decorator_Articles extends Zend_Form_Decorator_Abstract
     {
 
         $element = $this->getElement();
-        
+
         $helper = $element->helper;
 
         $output = $element->getView()->$helper($element->getName(), $element->getValue(), $element->getAttribs(), $element->options, $element->regionId, $element->objInstanceArticles);
@@ -141,7 +141,7 @@ class Form_Decorator_Articles extends Zend_Form_Decorator_Abstract
     {
 
         $element = $this->getElement();
-        
+
         if (!$element instanceof Zend_Form_Element) {
             return $content;
         }
@@ -159,11 +159,11 @@ class Form_Decorator_Articles extends Zend_Form_Decorator_Abstract
 
         $output = '<div class="field-' . $element->getAttrib('columns') . '">';
         $output .= '<div class="field">'
-                        . $label
-                        . $desc
-                        . $articles
-                        . $errors
-                        . '</div>
+            . $label
+            . $desc
+            . $articles
+            . $errors
+            . '</div>
                     </div>';
 
         switch ($placement) {

@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,110 +31,113 @@
  */
 /**
  * Form_Helper_FormTag
- * 
+ *
  * Helper to generate a "tag" element
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2009-01-27: Thomas Schedler
- * 
+ *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  * @package massiveart.forms.helpers
  * @subpackage Form_Helper_FormTag
  */
 
-class Form_Helper_FormTag extends Zend_View_Helper_FormElement {
-  
-  /**
-   * formTag
-   * @param string $name
-   * @param string $value
-   * @param array $attribs
-   * @param mixed $options
-   * @param Zend_Db_Table_Rowset $objAllTags
-   * @param array $arrTagIds
-   * @author Thomas Schedler <tsh@massiveart.com>  
-   * @version 1.0
-   */
-  public function formTag($name, $value = null, $attribs = null, $options = null, $regionId = null, $objAllTags, $arrTagIds){
-    $info = $this->_getInfo($name, $value, $attribs);
-    $core = Zend_Registry::get('Core');
-    extract($info); // name, value, attribs, options, listsep, disable
-    
-    // XHTML or HTML end tag
-    $endTag = ' />';
-   
-    if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
-      $endTag= '>';
-    }
-       
-    // build the element
-    $strTags = '';
-    
-    if(is_object($value) || is_array($value)){
-      foreach($value as $objTag){
-        $strTags .= '<li value="'.$objTag->id.'">'.htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default).'</li>';        
-      }
-    }
-        
-    $strOutput = '<div>
+class Form_Helper_FormTag extends Zend_View_Helper_FormElement
+{
+
+    /**
+     * formTag
+     * @param string $name
+     * @param string $value
+     * @param array $attribs
+     * @param mixed $options
+     * @param Zend_Db_Table_Rowset $objAllTags
+     * @param array $arrTagIds
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function formTag($name, $value = null, $attribs = null, $options = null, $regionId = null, $objAllTags, $arrTagIds)
+    {
+        $info = $this->_getInfo($name, $value, $attribs);
+        $core = Zend_Registry::get('Core');
+        extract($info); // name, value, attribs, options, listsep, disable
+
+        // XHTML or HTML end tag
+        $endTag = ' />';
+
+        if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
+            $endTag = '>';
+        }
+
+        // build the element
+        $strTags = '';
+
+        if (is_object($value) || is_array($value)) {
+            foreach ($value as $objTag) {
+                $strTags .= '<li value="' . $objTag->id . '">' . htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default) . '</li>';
+            }
+        }
+
+        $strOutput = '<div>
 	                  <ol>        
-							        <li id="autocompletList_'.$this->view->escape($id).'" class="autocompletList input-text">
-                        <input type="text" value="" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" '.$this->_htmlAttribs($attribs).$endTag.'
-							          <div id="'.$this->view->escape($id).'_autocompleter" class="autocompleter">
-							            <div class="default">'.$core->translate->_('Search_or_add_tags').'</div> 
+							        <li id="autocompletList_' . $this->view->escape($id) . '" class="autocompletList input-text">
+                        <input type="text" value="" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" ' . $this->_htmlAttribs($attribs) . $endTag . '
+							          <div id="' . $this->view->escape($id) . '_autocompleter" class="autocompleter">
+							            <div class="default">' . $core->translate->_('Search_or_add_tags') . '</div>
 							            <ul class="feed">
-							              '.$strTags.'
+							              ' . $strTags . '
 							            </ul>
 							          </div>
 							        </li>
 							      </ol>
 						      </div>';
-    
+
+        /**
+         * is empty element
+         */
+        $blnIsEmpty = false;
+        if (array_key_exists('isEmptyField', $attribs) && $attribs['isEmptyField'] == 1) {
+            $blnIsEmpty = true;
+        }
+
+        if ($blnIsEmpty == true) {
+            $strOutput .= '
+        <script type="text/javascript">//<![CDATA[ 
+          myForm.addTag("' . $this->view->escape($id) . '","' . $this->view->escape($regionId) . '",' . $this->getAllTagsForAutocompleter($objAllTags) . ');
+        //]]>
+        </script>';
+        } else {
+            $strOutput .= '
+        <script type="text/javascript">//<![CDATA[ 
+          myForm.initTag("' . $this->view->escape($id) . '",' . $this->getAllTagsForAutocompleter($objAllTags) . ');
+        //]]>
+        </script>';
+        }
+
+        return $strOutput;
+    }
+
     /**
-     * is empty element
+     * getAllTagsForAutocompleter
+     * @return Zend_Db_Table_Rowset $objAllTags
+     * @return string $strElementId
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
      */
-    $blnIsEmpty = false;
-    if(array_key_exists('isEmptyField', $attribs) && $attribs['isEmptyField'] == 1){
-      $blnIsEmpty = true;  
+    public function getAllTagsForAutocompleter($objAllTags)
+    {
+        $core = Zend_Registry::get('Core');
+        $strAllTags = '[';
+        if (count($objAllTags) > 0) {
+            foreach ($objAllTags as $objTag) {
+                $strAllTags .= '{"caption":"' . htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default) . '","value":' . $objTag->id . '},';
+            }
+            $strAllTags = trim($strAllTags, ',');
+        }
+        $strAllTags .= ']';
+        return $strAllTags;
     }
-    
-    if($blnIsEmpty == true){
-      $strOutput .= '
-        <script type="text/javascript">//<![CDATA[ 
-          myForm.addTag("'.$this->view->escape($id).'","'.$this->view->escape($regionId).'",'.$this->getAllTagsForAutocompleter($objAllTags).');
-        //]]>
-        </script>';
-    }else{
-      $strOutput .= '
-        <script type="text/javascript">//<![CDATA[ 
-          myForm.initTag("'.$this->view->escape($id).'",'.$this->getAllTagsForAutocompleter($objAllTags).');         
-        //]]>
-        </script>';
-    } 
-        
-    return $strOutput;
-  }
-    
-  /**
-   * getAllTagsForAutocompleter
-   * @return Zend_Db_Table_Rowset $objAllTags
-   * @return string $strElementId
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getAllTagsForAutocompleter($objAllTags){
-  	$core = Zend_Registry::get('Core');
-    $strAllTags = '[';
-    if(count($objAllTags) > 0){
-      foreach($objAllTags as $objTag){
-        $strAllTags .= '{"caption":"'.htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default).'","value":'.$objTag->id.'},';
-      }
-      $strAllTags = trim($strAllTags, ',');
-    }
-    $strAllTags .= ']';
-    return $strAllTags;
-  }
 }
 
 ?>

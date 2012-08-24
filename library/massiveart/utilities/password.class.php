@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,27 +42,30 @@
  * @subpackage PasswordHelper
  */
 
-class PasswordHelper {
+class PasswordHelper
+{
 
-  /**
-   * generatePassword
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function generatePassword($intLength = 8){
-    $dummy = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), array('#','&','@','$','_','%','?','+'));
+    /**
+     * generatePassword
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function generatePassword($intLength = 8)
+    {
+        $dummy = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), array('#', '&', '@', '$', '_', '%', '?', '+'));
 
-    // shuffle array
-    mt_srand((double)microtime()*1000000);
+        // shuffle array
+        mt_srand((double) microtime() * 1000000);
 
-    for ($i = 1; $i <= (count($dummy)*2); $i++){
-      $swap = mt_rand(0,count($dummy)-1);
-      $tmp = $dummy[$swap];
-      $dummy[$swap] = $dummy[0];
-      $dummy[0] = $tmp;
+        for ($i = 1; $i <= (count($dummy) * 2); $i++) {
+            $swap = mt_rand(0, count($dummy) - 1);
+            $tmp = $dummy[$swap];
+            $dummy[$swap] = $dummy[0];
+            $dummy[0] = $tmp;
+        }
+
+        return substr(implode('', $dummy), 0, $intLength);
     }
-    
-    return substr(implode('',$dummy), 0, $intLength); 
-  }
 }
+
 ?>

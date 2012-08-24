@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -44,26 +44,29 @@
 /**
  * require image resize classes
  */
-require_once(dirname(__FILE__).'/image.resize.class.php');
+require_once(dirname(__FILE__) . '/image.resize.class.php');
 
 
-class ImageResizeFactory{
-  
-  /**
-   * Method ImageResizeFactory::getInstanceOf()
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public static function getInstanceOf($strImageName, $arrImageSizes){
-    $arrExtension = explode(".", $strImageName);
-    
-    if(preg_match("/jpg|JPG|jpeg|JPEG/", end($arrExtension)))    {
-      return new ImageResizeJpeg($strImageName, $arrImageSizes);      
-    }elseif(preg_match("/png|PNG/", end($arrExtension))){
-      return new ImageResizePng($strImageName, $arrImageSizes);
-    }elseif(preg_match("/gif|GIF/", end($arrExtension))){
-      return new ImageResizeGif($strImageName, $arrImageSizes);
+class ImageResizeFactory
+{
+
+    /**
+     * Method ImageResizeFactory::getInstanceOf()
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public static function getInstanceOf($strImageName, $arrImageSizes)
+    {
+        $arrExtension = explode(".", $strImageName);
+
+        if (preg_match("/jpg|JPG|jpeg|JPEG/", end($arrExtension))) {
+            return new ImageResizeJpeg($strImageName, $arrImageSizes);
+        } elseif (preg_match("/png|PNG/", end($arrExtension))) {
+            return new ImageResizePng($strImageName, $arrImageSizes);
+        } elseif (preg_match("/gif|GIF/", end($arrExtension))) {
+            return new ImageResizeGif($strImageName, $arrImageSizes);
+        }
     }
-  }
 }
+
 ?>

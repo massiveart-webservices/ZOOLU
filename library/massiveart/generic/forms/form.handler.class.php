@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -44,218 +44,240 @@
  * @subpackage FormHandler
  */
 
-class FormHandler {
+class FormHandler
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  private $strFormId;
-	private $intTemplateId;
-  private $intFormVersion;
-  private $intFormLanguageId;
-  private $intActionType;
-  private $intLanguageId;
-  private $strLanguageCode;
-  private $intElementId;
+    private $strFormId;
+    private $intTemplateId;
+    private $intFormVersion;
+    private $intFormLanguageId;
+    private $intActionType;
+    private $intLanguageId;
+    private $strLanguageCode;
+    private $intElementId;
 
-	/**
-   * @var FormHandler object instance
-   */
-  private static $instance = null;
+    /**
+     * @var FormHandler object instance
+     */
+    private static $instance = null;
 
-  /**
-   * Constructor
-   */
-  protected function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-
-  private function __clone(){}
-
-  /**
-   * getInstance
-   * @return FormHandler object instance of the class
-   */
-  public static function getInstance(){
-    if(self::$instance == null){
-      self::$instance = new FormHandler();
+    /**
+     * Constructor
+     */
+    protected function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-    return self::$instance;
-  }
 
-  /**
-   * getGenericForm
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.1
-   * @return GenericForm
-   */
-	public function getGenericForm(){
-		try{
-
-		  //TODO : get Form from cache or create ??
-
-      $objForm = new GenericForm();
-
-      $objForm->Setup()->setFormId($this->strFormId);
-      $objForm->Setup()->setTemplateId($this->intTemplateId);
-      $objForm->Setup()->setFormVersion($this->intFormVersion);
-      $objForm->Setup()->setActionType($this->intActionType);
-      $objForm->Setup()->setLanguageId($this->intLanguageId);
-      $objForm->Setup()->setLanguageCode($this->strLanguageCode);
-      $objForm->Setup()->setFormLanguageId($this->intFormLanguageId);
-      $objForm->Setup()->setElementId($this->intElementId);
-
-      /**
-       * load basic generic form
-       */
-      $objForm->Setup()->loadGenericForm();
-
-      /**
-       * load generic form structur
-       */
-      $objForm->Setup()->loadGenericFormStructure();
-
-      /**
-       * init data type object
-       */
-      $objForm->initDataTypeObject();
-
-      return $objForm;
-
-		}catch (Exception $exc) {
-      $this->core->logger->err($exc);
+    private function __clone()
+    {
     }
-	}
 
-  /**
-   * setFormId
-   * @param string $strFormId
-   */
-  public function setFormId($strFormId){
-    $this->strFormId = $strFormId;
-  }
+    /**
+     * getInstance
+     * @return FormHandler object instance of the class
+     */
+    public static function getInstance()
+    {
+        if (self::$instance == null) {
+            self::$instance = new FormHandler();
+        }
+        return self::$instance;
+    }
 
-  /**
-   * getFormId
-   * @param string $strFormId
-   */
-  public function getFormId(){
-    return $this->strFormId;
-  }
+    /**
+     * getGenericForm
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.1
+     * @return GenericForm
+     */
+    public function getGenericForm()
+    {
+        try {
 
-  /**
-   * setTemplateId
-   * @param integer $intTemplateId
-   */
-  public function setTemplateId($intTemplateId){
-    $this->intTemplateId = $intTemplateId;
-  }
+            //TODO : get Form from cache or create ??
 
-  /**
-   * getTemplateId
-   * @param integer $intTemplateId
-   */
-  public function getTemplateId(){
-    return $this->intTemplateId;
-  }
+            $objForm = new GenericForm();
 
-  /**
-   * setFormVersion
-   * @param integer $intFormVersion
-   */
-  public function setFormVersion($intFormVersion){
-    $this->intFormVersion = $intFormVersion;
-  }
+            $objForm->Setup()->setFormId($this->strFormId);
+            $objForm->Setup()->setTemplateId($this->intTemplateId);
+            $objForm->Setup()->setFormVersion($this->intFormVersion);
+            $objForm->Setup()->setActionType($this->intActionType);
+            $objForm->Setup()->setLanguageId($this->intLanguageId);
+            $objForm->Setup()->setLanguageCode($this->strLanguageCode);
+            $objForm->Setup()->setFormLanguageId($this->intFormLanguageId);
+            $objForm->Setup()->setElementId($this->intElementId);
 
-  /**
-   * getFormVersion
-   * @param integer $intFormVersion
-   */
-  public function getFormVersion(){
-    return $this->intFormVersion;
-  }
+            /**
+             * load basic generic form
+             */
+            $objForm->Setup()->loadGenericForm();
 
-  /**
-   * setLanguageId
-   * @param integer $intLanguageId
-   */
-  public function setLanguageId($intLanguageId){
-    $this->intLanguageId = $intLanguageId;
-  }
+            /**
+             * load generic form structur
+             */
+            $objForm->Setup()->loadGenericFormStructure();
 
-  /**
-   * getLanguageId
-   * @param integer $intLanguageId
-   */
-  public function getLanguageId(){
-    return $this->intLanguageId;
-  }
-  
-  /**
-   * setLanguageCode
-   * @param string $strLanguageCode
-   */
-  public function setLanguageCode($strLanguageCode){
-    $this->strLanguageCode = $strLanguageCode;
-  }
+            /**
+             * init data type object
+             */
+            $objForm->initDataTypeObject();
 
-  /**
-   * getLanguageCode
-   * @param string $strLanguageCode
-   */
-  public function getLanguageCode(){
-    return $this->strLanguageCode;
-  }
+            return $objForm;
 
-  /**
-   * setFormLanguageId
-   * @param integer $intFormLanguageId
-   */
-  public function setFormLanguageId($intFormLanguageId){
-    $this->intFormLanguageId = $intFormLanguageId;
-  }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
 
-  /**
-   * getFormLanguageId
-   * @param integer $intFormLanguageId
-   */
-  public function getFormLanguageId(){
-    return $this->intFormLanguageId;
-  }
+    /**
+     * setFormId
+     * @param string $strFormId
+     */
+    public function setFormId($strFormId)
+    {
+        $this->strFormId = $strFormId;
+    }
 
-  /**
-   * setActionType
-   * @param integer $intActionType
-   */
-  public function setActionType($intActionType){
-    $this->intActionType = $intActionType;
-  }
+    /**
+     * getFormId
+     * @param string $strFormId
+     */
+    public function getFormId()
+    {
+        return $this->strFormId;
+    }
 
-  /**
-   * getActionType
-   * @param integer $intActionType
-   */
-  public function getActionType(){
-    return $this->intActionType;
-  }
+    /**
+     * setTemplateId
+     * @param integer $intTemplateId
+     */
+    public function setTemplateId($intTemplateId)
+    {
+        $this->intTemplateId = $intTemplateId;
+    }
 
-  /**
-   * setElementId
-   * @param integer $intElementId
-   */
-  public function setElementId($intElementId){
-    $this->intElementId = $intElementId;
-  }
+    /**
+     * getTemplateId
+     * @param integer $intTemplateId
+     */
+    public function getTemplateId()
+    {
+        return $this->intTemplateId;
+    }
 
-  /**
-   * getElementId
-   * @param integer $intElementId
-   */
-  public function getElementId(){
-    return $this->intElementId;
-  }
+    /**
+     * setFormVersion
+     * @param integer $intFormVersion
+     */
+    public function setFormVersion($intFormVersion)
+    {
+        $this->intFormVersion = $intFormVersion;
+    }
+
+    /**
+     * getFormVersion
+     * @param integer $intFormVersion
+     */
+    public function getFormVersion()
+    {
+        return $this->intFormVersion;
+    }
+
+    /**
+     * setLanguageId
+     * @param integer $intLanguageId
+     */
+    public function setLanguageId($intLanguageId)
+    {
+        $this->intLanguageId = $intLanguageId;
+    }
+
+    /**
+     * getLanguageId
+     * @param integer $intLanguageId
+     */
+    public function getLanguageId()
+    {
+        return $this->intLanguageId;
+    }
+
+    /**
+     * setLanguageCode
+     * @param string $strLanguageCode
+     */
+    public function setLanguageCode($strLanguageCode)
+    {
+        $this->strLanguageCode = $strLanguageCode;
+    }
+
+    /**
+     * getLanguageCode
+     * @param string $strLanguageCode
+     */
+    public function getLanguageCode()
+    {
+        return $this->strLanguageCode;
+    }
+
+    /**
+     * setFormLanguageId
+     * @param integer $intFormLanguageId
+     */
+    public function setFormLanguageId($intFormLanguageId)
+    {
+        $this->intFormLanguageId = $intFormLanguageId;
+    }
+
+    /**
+     * getFormLanguageId
+     * @param integer $intFormLanguageId
+     */
+    public function getFormLanguageId()
+    {
+        return $this->intFormLanguageId;
+    }
+
+    /**
+     * setActionType
+     * @param integer $intActionType
+     */
+    public function setActionType($intActionType)
+    {
+        $this->intActionType = $intActionType;
+    }
+
+    /**
+     * getActionType
+     * @param integer $intActionType
+     */
+    public function getActionType()
+    {
+        return $this->intActionType;
+    }
+
+    /**
+     * setElementId
+     * @param integer $intElementId
+     */
+    public function setElementId($intElementId)
+    {
+        $this->intElementId = $intElementId;
+    }
+
+    /**
+     * getElementId
+     * @param integer $intElementId
+     */
+    public function getElementId()
+    {
+        return $this->intElementId;
+    }
 }
 
 ?>

@@ -42,240 +42,258 @@
  * @subpackage NavigationTree
  */
 
-require_once(dirname(__FILE__).'/item.class.php');
+require_once(dirname(__FILE__) . '/item.class.php');
 
-class NavigationTree extends NavigationItem implements Iterator, Countable {
+class NavigationTree extends NavigationItem implements Iterator, Countable
+{
 
-  private $blnOrderUpdated = false;
+    private $blnOrderUpdated = false;
 
-  private $arrItems = array();
-  private $arrTrees = array();
+    private $arrItems = array();
+    private $arrTrees = array();
 
-  private $arrOrder = array();
+    private $arrOrder = array();
 
-  /**
-   * construct
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct() { }
-
-  /**
-   * addItem
-   * @param NavigationItem $objItem
-   * @param string $strName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addItem(NavigationItem $objItem, $strName = null){
-    $this->arrItems[$strName] = $objItem;
-    $this->arrOrder[$strName] = $this->arrItems[$strName]->getOrder();
-    $this->blnOrderUpdated = true;
-  }
-
-  /**
-   * hasSubTrees
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function hasSubTrees(){
-    return (count($this->arrTrees) > 0) ? true : false;
-  }
-  
-  /**
-   * hasSubTree
-   * @param string $strName
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function hasSubTree($strName){
-    return (array_key_exists($strName, $this->arrTrees)) ? true : false;
-  }
-
-  /**
-   * addTree
-   * @param NavigationTree $objTree
-   * @param string $strName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addTree(NavigationTree $objTree, $strName = null){
-    $this->arrTrees[$strName] = $objTree;
-    $this->arrOrder[$strName] = $this->arrTrees[$strName]->getOrder();
-    $this->blnOrderUpdated = true;
-  }
-
-  /**
-   * addToParentTree
-   * @param NavigationTree|NavigationItem $objNav
-   * @param string $strName
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addToParentTree($objNav, $strName = null){
-    if($this->intId == $objNav->getParentId()){
-      if($objNav instanceof NavigationTree){
-        $this->addTree($objNav, $strName);
-      }else if($objNav instanceof NavigationItem){
-        $this->addItem($objNav, $strName);        
-      }
-      return true;
-    }else{
-      foreach($this->arrTrees as $objSubTree){
-        if($objSubTree->addToParentTree($objNav, $strName)){
-          break;
-        }
-      }
+    /**
+     * construct
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
     }
-  }
 
-  /**
-   * sort()
-   * Sort elements according to their order
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function sort(){
-    if($this->blnOrderUpdated){
-      $arrItems = array();
-      $intIndex = 0;
+    /**
+     * addItem
+     * @param NavigationItem $objItem
+     * @param string $strName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addItem(NavigationItem $objItem, $strName = null)
+    {
+        $this->arrItems[$strName] = $objItem;
+        $this->arrOrder[$strName] = $this->arrItems[$strName]->getOrder();
+        $this->blnOrderUpdated = true;
+    }
 
-      foreach ($this->arrOrder as $strKey => $intOrder){
-        if($intOrder === null){
-          if(($intOrder = $this->{$strKey}->getOrder()) === null) {
-            while(array_search($intIndex, $this->arrOrder, true)) {
-              $intIndex++;
+    /**
+     * hasSubTrees
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function hasSubTrees()
+    {
+        return (count($this->arrTrees) > 0) ? true : false;
+    }
+
+    /**
+     * hasSubTree
+     * @param string $strName
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function hasSubTree($strName)
+    {
+        return (array_key_exists($strName, $this->arrTrees)) ? true : false;
+    }
+
+    /**
+     * addTree
+     * @param NavigationTree $objTree
+     * @param string $strName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addTree(NavigationTree $objTree, $strName = null)
+    {
+        $this->arrTrees[$strName] = $objTree;
+        $this->arrOrder[$strName] = $this->arrTrees[$strName]->getOrder();
+        $this->blnOrderUpdated = true;
+    }
+
+    /**
+     * addToParentTree
+     * @param NavigationTree|NavigationItem $objNav
+     * @param string $strName
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addToParentTree($objNav, $strName = null)
+    {
+        if ($this->intId == $objNav->getParentId()) {
+            if ($objNav instanceof NavigationTree) {
+                $this->addTree($objNav, $strName);
+            } else if ($objNav instanceof NavigationItem) {
+                $this->addItem($objNav, $strName);
             }
-            $arrItems[$intIndex] = $strKey;
-            $intIndex++;
-          }else{
-            $arrItems[$intOrder] = $strKey;
-          }
-        }else{
-          $arrItems[$intOrder] = $strKey;
+            return true;
+        } else {
+            foreach ($this->arrTrees as $objSubTree) {
+                if ($objSubTree->addToParentTree($objNav, $strName)) {
+                    break;
+                }
+            }
         }
-      }
-
-      $arrItems = array_flip($arrItems);
-      asort($arrItems);
-      $this->arrOrder = $arrItems;
-      $this->blnOrderUpdated = false;
-    }
-  }
-
-  /**
-   * Overloading: access to navigation items and trees
-   * @param  string $strName
-   * @return NavigationItem|NavigationTree|null
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __get($strName){
-    if(isset($this->arrItems[$strName])){
-      return $this->arrItems[$strName];
-    }elseif (isset($this->arrTrees[$strName])){
-      return $this->arrTrees[$strName];
     }
 
-    return null;
-  }
+    /**
+     * sort()
+     * Sort elements according to their order
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function sort()
+    {
+        if ($this->blnOrderUpdated) {
+            $arrItems = array();
+            $intIndex = 0;
 
-  /**
-   * Overloading: access to navigation items and trees
-   * @param  string $strName
-   * @param  NavigationItem|NavigationTree $obj
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __set($strName, $obj){
-    if($value instanceof NavigationItem){
-      $this->addtem($obj, $strName);
-      return;
-    }elseif($obj instanceof NavigationTree){
-      $this->addTree($obj, $strName);
-      return;
+            foreach ($this->arrOrder as $strKey => $intOrder) {
+                if ($intOrder === null) {
+                    if (($intOrder = $this->{$strKey}->getOrder()) === null) {
+                        while (array_search($intIndex, $this->arrOrder, true)) {
+                            $intIndex++;
+                        }
+                        $arrItems[$intIndex] = $strKey;
+                        $intIndex++;
+                    } else {
+                        $arrItems[$intOrder] = $strKey;
+                    }
+                } else {
+                    $arrItems[$intOrder] = $strKey;
+                }
+            }
+
+            $arrItems = array_flip($arrItems);
+            asort($arrItems);
+            $this->arrOrder = $arrItems;
+            $this->blnOrderUpdated = false;
+        }
     }
 
-    if(is_object($obj)){
-      $strType = get_class($obj);
-    }else{
-      $strType = gettype($obj);
+    /**
+     * Overloading: access to navigation items and trees
+     * @param  string $strName
+     * @return NavigationItem|NavigationTree|null
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __get($strName)
+    {
+        if (isset($this->arrItems[$strName])) {
+            return $this->arrItems[$strName];
+        } elseif (isset($this->arrTrees[$strName])) {
+            return $this->arrTrees[$strName];
+        }
+
+        return null;
     }
-    throw new Zend_Form_Exception('Only navigation items and trees may be overloaded; variable of type "'.$strType.'" provided');
-  }
 
+    /**
+     * Overloading: access to navigation items and trees
+     * @param  string $strName
+     * @param  NavigationItem|NavigationTree $obj
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __set($strName, $obj)
+    {
+        if ($value instanceof NavigationItem) {
+            $this->addtem($obj, $strName);
+            return;
+        } elseif ($obj instanceof NavigationTree) {
+            $this->addTree($obj, $strName);
+            return;
+        }
 
-  /**
-   * rewind
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function rewind() {
-    $this->sort();
-    reset($this->arrOrder);
-  }
-
-  /**
-   * current
-   * @return NavigationItem|NavigationTree
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function current() {
-    $this->sort();
-    current($this->arrOrder);
-    $strKey = key($this->arrOrder);
-    if(isset($this->arrItems[$strKey])){
-      return $this->arrItems[$strKey];
-    }elseif (isset($this->arrTrees[$strKey])){
-      return $this->arrTrees[$strKey];
-    } else{
-      throw new Exception('Corruption detected in navigation tree; invalid key ("'.$strKey.'") found in internal iterator');
+        if (is_object($obj)) {
+            $strType = get_class($obj);
+        } else {
+            $strType = gettype($obj);
+        }
+        throw new Zend_Form_Exception('Only navigation items and trees may be overloaded; variable of type "' . $strType . '" provided');
     }
-  }
 
-  /**
-   * key
-   * @return string
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function key() {
-    $this->sort();
-    return key($this->arrOrder);
-  }
 
-  /**
-   * next
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function next() {
-    $this->sort();
-    next($this->arrOrder);
-  }
+    /**
+     * rewind
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function rewind()
+    {
+        $this->sort();
+        reset($this->arrOrder);
+    }
 
-  /**
-   * valid
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function valid() {
-    $this->sort();
-    return (current($this->arrOrder) !== false);
-  }
+    /**
+     * current
+     * @return NavigationItem|NavigationTree
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function current()
+    {
+        $this->sort();
+        current($this->arrOrder);
+        $strKey = key($this->arrOrder);
+        if (isset($this->arrItems[$strKey])) {
+            return $this->arrItems[$strKey];
+        } elseif (isset($this->arrTrees[$strKey])) {
+            return $this->arrTrees[$strKey];
+        } else {
+            throw new Exception('Corruption detected in navigation tree; invalid key ("' . $strKey . '") found in internal iterator');
+        }
+    }
 
-  /**
-   * count
-   * @return integer
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function count(){
-    return count($this->arrOrder);
-  }
+    /**
+     * key
+     * @return string
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function key()
+    {
+        $this->sort();
+        return key($this->arrOrder);
+    }
+
+    /**
+     * next
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function next()
+    {
+        $this->sort();
+        next($this->arrOrder);
+    }
+
+    /**
+     * valid
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function valid()
+    {
+        $this->sort();
+        return (current($this->arrOrder) !== false);
+    }
+
+    /**
+     * count
+     * @return integer
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function count()
+    {
+        return count($this->arrOrder);
+    }
 }
+
 ?>

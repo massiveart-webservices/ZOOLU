@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -43,104 +43,115 @@
  * @subpackage DownloadCenter
  */
 
-class DownloadCenter {
+class DownloadCenter
+{
 
-  protected $strTitle = '';
-  protected $intFolderId = 0;
-  protected $intFilterTagId = 0;
-  
-  protected $arrFiles = array();
-  
-  /**
-   * construct
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct() {
-    $this->arrFiles['0-9'] = array(); 
-    foreach(range('A','Z') as $strKey){
-      $this->arrFiles[$strKey] = array();
+    protected $strTitle = '';
+    protected $intFolderId = 0;
+    protected $intFilterTagId = 0;
+
+    protected $arrFiles = array();
+
+    /**
+     * construct
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->arrFiles['0-9'] = array();
+        foreach (range('A', 'Z') as $strKey) {
+            $this->arrFiles[$strKey] = array();
+        }
     }
-  }
 
-  /**
-   * add file
-   * @param object $objFile
-   */
-  public function add($objFile){
-    if($objFile->title != ''){
-      $strKey = strtoupper($objFile->title[0]);
-      if(!ctype_alpha($strKey)){
-        $this->arrFiles['0-9'][] = $objFile;
-      }elseif(array_key_exists($strKey, $this->arrFiles)){
-        $this->arrFiles[$strKey][] = $objFile;
-      }else{
-        // TODO
-      }
+    /**
+     * add file
+     * @param object $objFile
+     */
+    public function add($objFile)
+    {
+        if ($objFile->title != '') {
+            $strKey = strtoupper($objFile->title[0]);
+            if (!ctype_alpha($strKey)) {
+                $this->arrFiles['0-9'][] = $objFile;
+            } elseif (array_key_exists($strKey, $this->arrFiles)) {
+                $this->arrFiles[$strKey][] = $objFile;
+            } else {
+                // TODO
+            }
+        }
     }
-  }
-  
-  /**
-   * setTitle
-   * @param string $strTitle
-   */
-  public function setTitle($strTitle){
-    $this->strTitle = $strTitle;
-  }
 
-  /**
-   * getTitle
-   * @return string $strTitle
-   */
-  public function getTitle(){
-    return $this->strTitle;
-  }
-  
-  /**
-   * setFolderId
-   * @param integer $intFolderId
-   */
-  public function setFolderId($intFolderId){
-    $this->intFolderId = $intFolderId;
-  }
+    /**
+     * setTitle
+     * @param string $strTitle
+     */
+    public function setTitle($strTitle)
+    {
+        $this->strTitle = $strTitle;
+    }
 
-  /**
-   * getFolderId
-   * @return integer $intFolderId
-   */
-  public function getFolderId(){
-    return $this->intFolderId;
-  }
-  
-  /**
-   * setFilterTagId
-   * @param integer $intFilterTagId
-   */
-  public function setFilterTagId($intFilterTagId){
-    $this->intFilterTagId = $intFilterTagId;
-  }
+    /**
+     * getTitle
+     * @return string $strTitle
+     */
+    public function getTitle()
+    {
+        return $this->strTitle;
+    }
 
-  /**
-   * getFilterTagId
-   * @return integer $intFilterTagId
-   */
-  public function getFilterTagId(){
-    return $this->intFilterTagId;
-  }
+    /**
+     * setFolderId
+     * @param integer $intFolderId
+     */
+    public function setFolderId($intFolderId)
+    {
+        $this->intFolderId = $intFolderId;
+    }
 
-  /**
-   * setFiles
-   * @param array $arrFiles
-   */
-  public function setFiles($arrFiles){
-    $this->arrFiles = $arrFiles;
-  }
+    /**
+     * getFolderId
+     * @return integer $intFolderId
+     */
+    public function getFolderId()
+    {
+        return $this->intFolderId;
+    }
 
-  /**
-   * getFiles
-   * @return array $arrFiles
-   */
-  public function getFiles(){
-    return $this->arrFiles;
-  }
+    /**
+     * setFilterTagId
+     * @param integer $intFilterTagId
+     */
+    public function setFilterTagId($intFilterTagId)
+    {
+        $this->intFilterTagId = $intFilterTagId;
+    }
+
+    /**
+     * getFilterTagId
+     * @return integer $intFilterTagId
+     */
+    public function getFilterTagId()
+    {
+        return $this->intFilterTagId;
+    }
+
+    /**
+     * setFiles
+     * @param array $arrFiles
+     */
+    public function setFiles($arrFiles)
+    {
+        $this->arrFiles = $arrFiles;
+    }
+
+    /**
+     * getFiles
+     * @return array $arrFiles
+     */
+    public function getFiles()
+    {
+        return $this->arrFiles;
+    }
 }

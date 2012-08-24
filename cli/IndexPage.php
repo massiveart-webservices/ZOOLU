@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -33,27 +33,27 @@
 /**
  * include general (autoloader, config)
  */
-require_once(dirname(__FILE__).'/../sys_config/general.inc.php');
+require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 
-try{
-  $objConsoleOpts = new Zend_Console_Getopt(
-      array(
-          'pageId|p=s'      => 'Page Id',
-          'version|v=i'     => 'Page Version',
-          'languageId|l=i'  => 'Language Id',
-          'rootLevelId|r=i' => 'RootLevelId Id'
-      )
-  );
-  
-  if(isset($objConsoleOpts->pageId) && isset($objConsoleOpts->version) && isset($objConsoleOpts->languageId) && isset($objConsoleOpts->rootLevelId)){
-    $objIndex = new Index();
-    $core->logger->info('index page now ...');
-    $objIndex->indexPage($objConsoleOpts->pageId, $objConsoleOpts->version, $objConsoleOpts->languageId, $objConsoleOpts->rootLevelId);
-    $core->logger->info('... finished!');
-  }
-    
-}catch (Exception $exc) {
-  $core->logger->err($exc);
-  exit();
+try {
+    $objConsoleOpts = new Zend_Console_Getopt(
+        array(
+             'pageId|p=s'      => 'Page Id',
+             'version|v=i'     => 'Page Version',
+             'languageId|l=i'  => 'Language Id',
+             'rootLevelId|r=i' => 'RootLevelId Id'
+        )
+    );
+
+    if (isset($objConsoleOpts->pageId) && isset($objConsoleOpts->version) && isset($objConsoleOpts->languageId) && isset($objConsoleOpts->rootLevelId)) {
+        $objIndex = new Index();
+        $core->logger->info('index page now ...');
+        $objIndex->indexPage($objConsoleOpts->pageId, $objConsoleOpts->version, $objConsoleOpts->languageId, $objConsoleOpts->rootLevelId);
+        $core->logger->info('... finished!');
+    }
+
+} catch (Exception $exc) {
+    $core->logger->err($exc);
+    exit();
 }
 ?>

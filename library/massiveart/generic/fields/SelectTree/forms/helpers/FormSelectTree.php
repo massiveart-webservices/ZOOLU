@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,32 +31,34 @@
  */
 /**
  * Form_Helper_FormSelectTree
- * 
+ *
  * Helper to generate a "select tree" element
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2009-02-19: Cornelius Hansjakob
- * 
+ *
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  * @package massiveart.forms.helpers
  * @subpackage Form_Helper_FormSelectTree
  */
 
-class Form_Helper_FormSelectTree extends Zend_View_Helper_FormElement {
-	
-	  /**
-	   * formSelectTree    
-	   * @param string $name
-	   * @param string $value
-	   * @param array $attribs
-	   * @param mixed $options
-	   * @param string $listsep
-	   * @return string
-	   * @author Cornelius Hansjakob <cha@massiveart.com>
-	   * @version 1.0
-	   */
-    public function formSelectTree($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n"){
+class Form_Helper_FormSelectTree extends Zend_View_Helper_FormElement
+{
+
+    /**
+     * formSelectTree
+     * @param string $name
+     * @param string $value
+     * @param array $attribs
+     * @param mixed $options
+     * @param string $listsep
+     * @return string
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function formSelectTree($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
+    {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info); // name, id, value, attribs, options, listsep, disable
 
@@ -87,7 +89,7 @@ class Form_Helper_FormSelectTree extends Zend_View_Helper_FormElement {
                 $multiple = '';
             }
             unset($attribs['multiple']);
-        } 
+        }
 
         // now start building the XHTML.
         $disabled = '';
@@ -97,31 +99,31 @@ class Form_Helper_FormSelectTree extends Zend_View_Helper_FormElement {
 
         // Build the surrounding select element first.
         $xhtml = '<select'
-                . ' name="' . $this->view->escape($name) . '"'
-                . ' id="' . $this->view->escape($id) . '"'
-                . $multiple
-                . $disabled
-                . $this->_htmlAttribs($attribs)
-                . ">\n    ";
+            . ' name="' . $this->view->escape($name) . '"'
+            . ' id="' . $this->view->escape($id) . '"'
+            . $multiple
+            . $disabled
+            . $this->_htmlAttribs($attribs)
+            . ">\n    ";
 
         // build the list of options
         $list = array();
 
-		    foreach((array) $options as $opt_value => $opt){		    	
-		      $depth = 0;
-		      if(is_array($opt) && array_key_exists('title', $opt)){
-		        
-		      	$opt_label = $opt['title'];
-		        if(array_key_exists('depth', $opt)){
-		          $depth = $opt['depth'];
-		        }
-		        $list[] = $this->_build($opt_value, $opt_label, $value, $disable, $depth);           
-		      }else{		        
-		      	$opt_label = $opt;
-		      	$list[] = $this->_build($opt_value, $opt_label, $value, $disable, 0);  
-		      }
-		    }
-		    
+        foreach ((array) $options as $opt_value => $opt) {
+            $depth = 0;
+            if (is_array($opt) && array_key_exists('title', $opt)) {
+
+                $opt_label = $opt['title'];
+                if (array_key_exists('depth', $opt)) {
+                    $depth = $opt['depth'];
+                }
+                $list[] = $this->_build($opt_value, $opt_label, $value, $disable, $depth);
+            } else {
+                $opt_label = $opt;
+                $list[] = $this->_build($opt_value, $opt_label, $value, $disable, 0);
+            }
+        }
+
         // add the options to the xhtml and close the select
         $xhtml .= implode("\n    ", $list) . "\n</select>";
 
@@ -138,13 +140,14 @@ class Form_Helper_FormSelectTree extends Zend_View_Helper_FormElement {
      * @param integer $depth = 1
      * @return string Option Tag XHTML
      */
-    protected function _build($value, $label, $selected, $disable, $depth = 0) {
+    protected function _build($value, $label, $selected, $disable, $depth = 0)
+    {
         if (is_bool($disable)) {
             $disable = array();
         }
 
         $opt = '<option'
-             . ' value="' . $this->view->escape($value) . '"';
+            . ' value="' . $this->view->escape($value) . '"';
         //     . ' label="' . $this->view->escape($label) . '"';
 
         // selected?
@@ -156,13 +159,13 @@ class Form_Helper_FormSelectTree extends Zend_View_Helper_FormElement {
         if (in_array($value, $disable)) {
             $opt .= ' disabled="disabled"';
         }
-        
+
         $strBlanks = '';
-        for($i = 1; $i <= $depth; $i++){
-          $strBlanks .= '&nbsp;&nbsp;&nbsp;&nbsp;';	
+        for ($i = 1; $i <= $depth; $i++) {
+            $strBlanks .= '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
 
-        $opt .= '>'.$strBlanks.$this->view->escape($label).'</option>';
+        $opt .= '>' . $strBlanks . $this->view->escape($label) . '</option>';
 
         return $opt;
     }

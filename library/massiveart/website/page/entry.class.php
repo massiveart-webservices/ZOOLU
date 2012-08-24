@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,7 +31,7 @@
  */
 /**
  * PageEntry
- * 
+ *
  *
  * Version history (please keep backward compatible):
  * 1.0, 2009-02-20: Cornelius Hansjakob
@@ -42,60 +42,67 @@
  * @subpackage PageEntry
  */
 
-class PageEntry {
-  
-	protected $intEntryId = 0;
-	
-	/**
-   * properties of the element
-   * @var Array
-   */
-  protected $arrProperties = array();
-	
-  /**
-   * construct
-   * @author Cornelius Hansjakob <cha@massiveart.com>   
-   * @version 1.0
-   */
-  public function __construct() { }
-  
-  /**
-   * __set
-   * @param string $strName
-   * @param mixed $mixedValue
-   */
-  public function __set($strName, $mixedValue) {      
-    $this->arrProperties[$strName] = $mixedValue;
-  }
-  
-  /**
-   * __get
-   * @param string $strName
-   * @return mixed $mixedValue
-   */
-  public function __get($strName) {      
-    if (array_key_exists($strName, $this->arrProperties)) {
-      return $this->arrProperties[$strName];
-    }
-    return null;
-  }
-  
-  /**
-   * setEntryId
-   * @param integer $intEntryId
-   */
-  public function setEntryId($intEntryId){
-    $this->intEntryId = $intEntryId;
-  }
+class PageEntry
+{
 
-  /**
-   * getEntryId
-   * @param integer $intEntryId
-   */
-  public function getEntryId(){
-    return $this->intEntryId;
-  }
-  
+    protected $intEntryId = 0;
+
+    /**
+     * properties of the element
+     * @var Array
+     */
+    protected $arrProperties = array();
+
+    /**
+     * construct
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * __set
+     * @param string $strName
+     * @param mixed $mixedValue
+     */
+    public function __set($strName, $mixedValue)
+    {
+        $this->arrProperties[$strName] = $mixedValue;
+    }
+
+    /**
+     * __get
+     * @param string $strName
+     * @return mixed $mixedValue
+     */
+    public function __get($strName)
+    {
+        if (array_key_exists($strName, $this->arrProperties)) {
+            return $this->arrProperties[$strName];
+        }
+        return null;
+    }
+
+    /**
+     * setEntryId
+     * @param integer $intEntryId
+     */
+    public function setEntryId($intEntryId)
+    {
+        $this->intEntryId = $intEntryId;
+    }
+
+    /**
+     * getEntryId
+     * @param integer $intEntryId
+     */
+    public function getEntryId()
+    {
+        return $this->intEntryId;
+    }
+
 }
 
 ?>

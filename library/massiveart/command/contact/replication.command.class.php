@@ -43,137 +43,145 @@
  * @subpackage ContactCommand
  */
 
-require_once(dirname(__FILE__).'/../command.interface.php');
+require_once(dirname(__FILE__) . '/../command.interface.php');
 
-class ContactReplicationCommand implements CommandInterface {
+class ContactReplicationCommand implements CommandInterface
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * @var Zend_Loader_PluginLoader
-   */
-  protected static $objPluginLoader;
+    /**
+     * @var Core
+     */
+    protected $core;
 
-  /**
-   * @var array
-   */
-  private $arrReplications = array();
+    /**
+     * @var Zend_Loader_PluginLoader
+     */
+    protected static $objPluginLoader;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * @var array
+     */
+    private $arrReplications = array();
 
-  /**
-   * onCommand
-   * @param string $strName
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function onCommand($strName, $arrArgs){
-    
-    $arrReplications = $this->core->sysConfig->contact->replications->toArray();
-    $arrReplications = is_array($arrReplications['replication']) ? $arrReplications['replication'] : array($arrReplications['replication']);
-    
-    foreach($arrReplications as $strReplicationClass){
-      $this->getReplicationHelper($strReplicationClass);
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-    
-    if(count($this->arrReplications) > 0) {
-      switch($strName){
-        case 'added':
-          return $this->added($arrArgs);
-        case 'updated':
-          return $this->updated($arrArgs);
-        case 'deleted':
-          return $this->deleted($arrArgs);
-        default:
-          return true;
-      }
-    }else{
-      return true;
-    }
-  }
-  
-  /**
-   * contact has been added
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private function added($arrArgs) {
-    foreach($this->arrReplications as $objReplication){
-      $objReplication->add($arrArgs);
-    }
-  }
-  
-  /**
-   * contact has been updated
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private function updated($arrArgs) {
-    foreach($this->arrReplications as $objReplication){
-      $objReplication->update($arrArgs);
-    }    
-  }
-  
-  /**
-   * contact has been deleted
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private function deleted($arrArgs) {
-    foreach($this->arrReplications as $objReplication){
-      $objReplication->delete($arrArgs);
-    }
-  }
-  
-  /**
-   * getReplicationHelper 
-   * @return ContactReplicationInterface
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  private function getReplicationHelper($strReplicationClass){
-    try{
-      if(!array_key_exists($strReplicationClass, $this->arrReplications) || !$this->arrReplications[$strReplicationClass] instanceof ContactReplicationInterface){
-        
-        try{
-          $strClass = $this->getPluginLoader()->load($strReplicationClass);          
-        }catch (Zend_Loader_PluginLoader_Exception $e){            
-          throw new Exception('Replication Helper by name ' . $strReplicationClass . ' not found: ' . $strClass);
+
+    /**
+     * onCommand
+     * @param string $strName
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function onCommand($strName, $arrArgs)
+    {
+
+        $arrReplications = $this->core->sysConfig->contact->replications->toArray();
+        $arrReplications = is_array($arrReplications['replication']) ? $arrReplications['replication'] : array($arrReplications['replication']);
+
+        foreach ($arrReplications as $strReplicationClass) {
+            $this->getReplicationHelper($strReplicationClass);
         }
 
-        $this->arrReplications[$strReplicationClass] = new $strClass();
-
-        if(!$this->arrReplications[$strReplicationClass] instanceof ContactReplicationInterface){
-          throw new Exception('Replication name ' . $strReplicationClass . ' -> class ' . $strClass . ' is not of type ClientHelper');
-        }  
-
-        return $this->arrReplications[$strReplicationClass];
-      }else{
-        $this->arrReplications[$strReplicationClass];
-      }   
-    }catch (Exception $exc) {
-      $this->core->logger->warn($exc);
+        if (count($this->arrReplications) > 0) {
+            switch ($strName) {
+                case 'added':
+                    return $this->added($arrArgs);
+                case 'updated':
+                    return $this->updated($arrArgs);
+                case 'deleted':
+                    return $this->deleted($arrArgs);
+                default:
+                    return true;
+            }
+        } else {
+            return true;
+        }
     }
-  }
 
-  /**
-   * getPluginLoader
-   * @return Zend_Loader_PluginLoader
-   */
-  private static function getPluginLoader(){
-    if(null === self::$objPluginLoader){
-      self::$objPluginLoader = new Zend_Loader_PluginLoader(array(
-          'ContactReplication' => GLOBAL_ROOT_PATH.'library/massiveart/contact/replication/',
-      ));
+    /**
+     * contact has been added
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private function added($arrArgs)
+    {
+        foreach ($this->arrReplications as $objReplication) {
+            $objReplication->add($arrArgs);
+        }
     }
-    return self::$objPluginLoader;
-  }
+
+    /**
+     * contact has been updated
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private function updated($arrArgs)
+    {
+        foreach ($this->arrReplications as $objReplication) {
+            $objReplication->update($arrArgs);
+        }
+    }
+
+    /**
+     * contact has been deleted
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private function deleted($arrArgs)
+    {
+        foreach ($this->arrReplications as $objReplication) {
+            $objReplication->delete($arrArgs);
+        }
+    }
+
+    /**
+     * getReplicationHelper
+     * @return ContactReplicationInterface
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    private function getReplicationHelper($strReplicationClass)
+    {
+        try {
+            if (!array_key_exists($strReplicationClass, $this->arrReplications) || !$this->arrReplications[$strReplicationClass] instanceof ContactReplicationInterface) {
+
+                try {
+                    $strClass = $this->getPluginLoader()->load($strReplicationClass);
+                } catch (Zend_Loader_PluginLoader_Exception $e) {
+                    throw new Exception('Replication Helper by name ' . $strReplicationClass . ' not found: ' . $strClass);
+                }
+
+                $this->arrReplications[$strReplicationClass] = new $strClass();
+
+                if (!$this->arrReplications[$strReplicationClass] instanceof ContactReplicationInterface) {
+                    throw new Exception('Replication name ' . $strReplicationClass . ' -> class ' . $strClass . ' is not of type ClientHelper');
+                }
+
+                return $this->arrReplications[$strReplicationClass];
+            } else {
+                $this->arrReplications[$strReplicationClass];
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->warn($exc);
+        }
+    }
+
+    /**
+     * getPluginLoader
+     * @return Zend_Loader_PluginLoader
+     */
+    private static function getPluginLoader()
+    {
+        if (null === self::$objPluginLoader) {
+            self::$objPluginLoader = new Zend_Loader_PluginLoader(array(
+                                                                       'ContactReplication' => GLOBAL_ROOT_PATH . 'library/massiveart/contact/replication/',
+                                                                  ));
+        }
+        return self::$objPluginLoader;
+    }
 }

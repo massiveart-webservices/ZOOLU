@@ -358,7 +358,9 @@ class Core
         }
     }
 
-    private function __clone() { }
+    private function __clone()
+    {
+    }
 
     /**
      * updateSessionLanguage
@@ -405,9 +407,9 @@ class Core
 
 
         $this->objTmpCache = Zend_Cache::factory('Core',
-                                                 'File',
-                                                 $arrFrontendOptions,
-                                                 $arrBackendOptions);
+            'File',
+            $arrFrontendOptions,
+            $arrBackendOptions);
     }
 
     /**

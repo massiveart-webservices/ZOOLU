@@ -43,200 +43,213 @@
  * @subpackage PageCommand
  */
 
-require_once(dirname(__FILE__).'/command.interface.php');
+require_once(dirname(__FILE__) . '/command.interface.php');
 
-class PageCommand implements CommandInterface {
+class PageCommand implements CommandInterface
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
+    /**
+     * @var Core
+     */
+    protected $core;
 
-  /**
-   * @var Model_Pages
-   */
-  protected $objModelPages;
+    /**
+     * @var Model_Pages
+     */
+    protected $objModelPages;
 
-  /**
-   * @var Model_Templates
-   */
-  protected $objModelTemplates;
+    /**
+     * @var Model_Templates
+     */
+    protected $objModelTemplates;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-
-  /**
-   * onCommand
-   * @param string $strName
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function onCommand($strName, $arrArgs){
-    switch($strName){
-      case 'addFolderStartElement':
-        return $this->addFolderStartPage($arrArgs);
-      case 'editFolderStartElement':
-        return $this->editFolderStartPage($arrArgs);
-      default:
-        return true;
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-  }
 
-  /**
-   * addFolderStartPage
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  private function addFolderStartPage($arrArgs){
-    try{
-      if(array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup){
-        $objGenericSetup = $arrArgs['GenericSetup'];
+    /**
+     * onCommand
+     * @param string $strName
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function onCommand($strName, $arrArgs)
+    {
+        switch ($strName) {
+            case 'addFolderStartElement':
+                return $this->addFolderStartPage($arrArgs);
+            case 'editFolderStartElement':
+                return $this->editFolderStartPage($arrArgs);
+            default:
+                return true;
+        }
+    }
 
-        $intTemplateId = $this->core->sysConfig->page_types->page->startpage_templateId;
-        $objTemplateData = $this->getModelTemplates()->loadTemplateById($intTemplateId);
+    /**
+     * addFolderStartPage
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    private function addFolderStartPage($arrArgs)
+    {
+        try {
+            if (array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup) {
+                $objGenericSetup = $arrArgs['GenericSetup'];
 
-        if(count($objTemplateData) == 1){
-          $objTemplate = $objTemplateData->current();
+                $intTemplateId = $this->core->sysConfig->page_types->page->startpage_templateId;
+                $objTemplateData = $this->getModelTemplates()->loadTemplateById($intTemplateId);
 
-          /**
-           * set form id from template
-           */
-          $strFormId = $objTemplate->genericFormId;
-          $intFormVersion = $objTemplate->version;
-          $intFormTypeId = $objTemplate->formTypeId;
-        }else{
-          throw new Exception('Not able to create a generic data object, because there is no form id!');
+                if (count($objTemplateData) == 1) {
+                    $objTemplate = $objTemplateData->current();
+
+                    /**
+                     * set form id from template
+                     */
+                    $strFormId = $objTemplate->genericFormId;
+                    $intFormVersion = $objTemplate->version;
+                    $intFormTypeId = $objTemplate->formTypeId;
+                } else {
+                    throw new Exception('Not able to create a generic data object, because there is no form id!');
+                }
+
+                $objGenericData = new GenericData();
+                $objGenericData->Setup()->setFormId($strFormId);
+                $objGenericData->Setup()->setFormVersion($intFormVersion);
+                $objGenericData->Setup()->setFormTypeId($intFormTypeId);
+                $objGenericData->Setup()->setTemplateId($intTemplateId);
+                $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+                $objGenericData->Setup()->setLanguageId($arrArgs['LanguageId']);
+                $objGenericData->Setup()->setLanguageCode($arrArgs['LanguageCode']);
+                $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
+
+                $objGenericData->Setup()->setParentId($arrArgs['ParentId']);
+                $objGenericData->Setup()->setRootLevelId($objGenericSetup->getRootLevelId());
+                $objGenericData->Setup()->setElementTypeId($this->core->sysConfig->page_types->page->id);
+                $objGenericData->Setup()->setCreatorId($objGenericSetup->getCreatorId());
+                $objGenericData->Setup()->setStatusId($objGenericSetup->getStatusId());
+                $objGenericData->Setup()->setShowInNavigation($objGenericSetup->getShowInNavigation());
+                $objGenericData->Setup()->setHideInSitemap($objGenericSetup->getHideInSitemap());
+                $objGenericData->Setup()->setModelSubPath('cms/models/');
+
+                $arrPageAttributes = array('segmentId' => $objGenericSetup->getSegmentId());
+                $objGenericData->addFolderStartElement($objGenericSetup->getCoreField('title')->getValue(), $arrPageAttributes);
+
+                return true;
+            } else {
+                throw new Exception('There is no GenericSetup in the args array!');
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            return false;
+        }
+    }
+
+    /**
+     * editFolderStartPage
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    private function editFolderStartPage($arrArgs)
+    {
+        try {
+            if (array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup) {
+                $objGenericSetup = $arrArgs['GenericSetup'];
+
+                $intFolderId = $objGenericSetup->getElementId();
+                $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+
+                $arrProperties = array(
+                    'idUsers'          => $intUserId,
+                    'creator'          => $objGenericSetup->getCreatorId(),
+                    'idStatus'         => $objGenericSetup->getStatusId(),
+                    'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+                    'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
+                    'changed'          => date('Y-m-d H:i:s')
+                );
+
+                $arrTitle = array(
+                    'idUsers'     => $intUserId,
+                    'creator'     => $objGenericSetup->getCreatorId(),
+                    'title'       => $objGenericSetup->getCoreField('title')->getValue(),
+                    'idLanguages' => $objGenericSetup->getLanguageId(),
+                    'changed'     => date('Y-m-d H:i:s')
+                );
+
+                $arrPageAttributes = array(
+                    'idUsers'    => $intUserId,
+                    'creator'    => $objGenericSetup->getCreatorId(),
+                    'changed'    => date('Y-m-d H:i:s'),
+                    'idSegments' => $objGenericSetup->getSegmentId()
+                );
+
+
+                $this->getModelPages($arrArgs)->updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes);
+                return true;
+            } else {
+                throw new Exception('There is no GenericSetup in the args array!');
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            return false;
+        }
+    }
+
+    /**
+     * getModelPages
+     * @param array $arrArgs
+     * @return Model_Pages
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelPages($arrArgs)
+    {
+        if (null === $this->objModelPages) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/Pages.php';
+            $this->objModelPages = new Model_Pages();
+            $this->objModelPages->setLanguageId($arrArgs['LanguageId']);
         }
 
-        $objGenericData = new GenericData();
-        $objGenericData->Setup()->setFormId($strFormId);
-        $objGenericData->Setup()->setFormVersion($intFormVersion);
-        $objGenericData->Setup()->setFormTypeId($intFormTypeId);
-        $objGenericData->Setup()->setTemplateId($intTemplateId);
-        $objGenericData->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
-        $objGenericData->Setup()->setLanguageId($arrArgs['LanguageId']);
-        $objGenericData->Setup()->setLanguageCode($arrArgs['LanguageCode']);
-        $objGenericData->Setup()->setFormLanguageId($this->core->intZooluLanguageId);
-
-        $objGenericData->Setup()->setParentId($arrArgs['ParentId']);
-        $objGenericData->Setup()->setRootLevelId($objGenericSetup->getRootLevelId());
-        $objGenericData->Setup()->setElementTypeId($this->core->sysConfig->page_types->page->id);
-        $objGenericData->Setup()->setCreatorId($objGenericSetup->getCreatorId());
-        $objGenericData->Setup()->setStatusId($objGenericSetup->getStatusId());
-        $objGenericData->Setup()->setShowInNavigation($objGenericSetup->getShowInNavigation());
-        $objGenericData->Setup()->setHideInSitemap($objGenericSetup->getHideInSitemap());
-        $objGenericData->Setup()->setModelSubPath('cms/models/');
-        
-        $arrPageAttributes = array('segmentId' => $objGenericSetup->getSegmentId());
-        $objGenericData->addFolderStartElement($objGenericSetup->getCoreField('title')->getValue(), $arrPageAttributes);
-
-        return true;
-      }else{
-        throw new Exception('There is no GenericSetup in the args array!');
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-      return false;
-    }
-  }
-
-  /**
-   * editFolderStartPage
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  private function editFolderStartPage($arrArgs){
-    try{
-      if(array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup){
-        $objGenericSetup = $arrArgs['GenericSetup'];
-
-        $intFolderId = $objGenericSetup->getElementId();
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
-
-
-        $arrProperties = array('idUsers'          => $intUserId,
-                               'creator'          => $objGenericSetup->getCreatorId(),
-                               'idStatus'         => $objGenericSetup->getStatusId(),
-                               'showInNavigation' => $objGenericSetup->getShowInNavigation(),
-                               'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
-                               'changed'          => date('Y-m-d H:i:s'));
-
-        $arrTitle = array('idUsers'     => $intUserId,
-                          'creator'     => $objGenericSetup->getCreatorId(),
-                          'title'       => $objGenericSetup->getCoreField('title')->getValue(),
-                          'idLanguages' => $objGenericSetup->getLanguageId(),
-                          'changed'     => date('Y-m-d H:i:s'));
-
-        $arrPageAttributes = array('idUsers'    => $intUserId,
-                                   'creator'    => $objGenericSetup->getCreatorId(),
-                                   'changed'    => date('Y-m-d H:i:s'),
-                                   'idSegments' => $objGenericSetup->getSegmentId());
-        
-        
-        $this->getModelPages($arrArgs)->updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes);
-        return true;
-      }else{
-        throw new Exception('There is no GenericSetup in the args array!');
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-      return false;
-    }
-  }
-
-  /**
-   * getModelPages
-   * @param array $arrArgs
-   * @return Model_Pages
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelPages($arrArgs){
-    if (null === $this->objModelPages) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'cms/models/Pages.php';
-      $this->objModelPages = new Model_Pages();
-      $this->objModelPages->setLanguageId($arrArgs['LanguageId']);
+        return $this->objModelPages;
     }
 
-    return $this->objModelPages;
-  }
+    /**
+     * getModelTemplates
+     * @return Model_Templates
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelTemplates()
+    {
+        if (null === $this->objModelTemplates) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Templates.php';
+            $this->objModelTemplates = new Model_Templates();
+        }
 
-  /**
-   * getModelTemplates
-   * @return Model_Templates
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelTemplates(){
-    if (null === $this->objModelTemplates) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Templates.php';
-      $this->objModelTemplates = new Model_Templates();
+        return $this->objModelTemplates;
     }
-
-    return $this->objModelTemplates;
-  }
 }
 
 ?>

@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,64 +31,66 @@
  */
 /**
  * Form_Helper_FormTexteditor
- * 
+ *
  * Helper to generate a "texteditor" element
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2008-11-12: Cornelius Hansjakob
- * 
+ *
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  * @package massiveart.forms.helpers
  * @subpackage Form_Helper_FormTexteditor
  */
 
-class Form_Helper_FormTexteditor extends Zend_View_Helper_FormElement {
-
-  /**
-   * formTexteditor
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function formTexteditor($name, $value = null, $attribs = null, $options = null, $regionId = null){
-    $info = $this->_getInfo($name, $value, $attribs);
-    extract($info); // name, value, attribs, options, listsep, disable
-    
-    /**
-     * is it disabled?
-     */ 
-    $disabled = '';
-    if ($disable) {
-      $disabled = ' disabled="disabled"';
-    }
-    
-    /**
-     * is empty element
-     */
-    $blnIsEmpty = false;
-    if(array_key_exists('isEmptyField', $attribs) && $attribs['isEmptyField'] == 1){
-      $blnIsEmpty = true;  
-    }
+class Form_Helper_FormTexteditor extends Zend_View_Helper_FormElement
+{
 
     /**
-     * build the element
+     * formTexteditor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $strOutput = '<textarea name="'.$this->view->escape($name).'" id="'.$this->view->escape($id).'"'.$disabled.' '. $this->_htmlAttribs($attribs).'>'.$this->view->escape($value).'</textarea>';
-    
-    if($blnIsEmpty == true){
-      $strOutput .= '<script type="text/javascript">//<![CDATA[ 
-          myForm.addTexteditor("'.$this->view->escape($id).'","'.$this->view->escape($regionId).'");
+    public function formTexteditor($name, $value = null, $attribs = null, $options = null, $regionId = null)
+    {
+        $info = $this->_getInfo($name, $value, $attribs);
+        extract($info); // name, value, attribs, options, listsep, disable
+
+        /**
+         * is it disabled?
+         */
+        $disabled = '';
+        if ($disable) {
+            $disabled = ' disabled="disabled"';
+        }
+
+        /**
+         * is empty element
+         */
+        $blnIsEmpty = false;
+        if (array_key_exists('isEmptyField', $attribs) && $attribs['isEmptyField'] == 1) {
+            $blnIsEmpty = true;
+        }
+
+        /**
+         * build the element
+         */
+        $strOutput = '<textarea name="' . $this->view->escape($name) . '" id="' . $this->view->escape($id) . '"' . $disabled . ' ' . $this->_htmlAttribs($attribs) . '>' . $this->view->escape($value) . '</textarea>';
+
+        if ($blnIsEmpty == true) {
+            $strOutput .= '<script type="text/javascript">//<![CDATA[
+          myForm.addTexteditor("' . $this->view->escape($id) . '","' . $this->view->escape($regionId) . '");
         //]]>
         </script>';
-    }else{
-      $strOutput .= '<script type="text/javascript">//<![CDATA[ 
-          myForm.initTexteditor("'.$this->view->escape($id).'");
+        } else {
+            $strOutput .= '<script type="text/javascript">//<![CDATA[
+          myForm.initTexteditor("' . $this->view->escape($id) . '");
         //]]>
         </script>';
+        }
+
+        return $strOutput;
     }
-    
-    return $strOutput;
-  }
 }
 
 ?>

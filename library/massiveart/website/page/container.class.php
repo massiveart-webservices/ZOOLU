@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -42,217 +42,243 @@
  * @subpackage PageContainer
  */
 
-class PageContainer {
+class PageContainer
+{
 
-  protected $strContainerTitle = '';
-  protected $intContainerKey = 0;
-  protected $intEntryNumber = 0;
-  protected $intContainerSortType = 0;
-  protected $intContainerSortOrder = 0;
-  protected $intContainerLabel = 0;
-  protected $intContainerDepth = 0;
-  protected $intEntryViewType = 0;
+    protected $strContainerTitle = '';
+    protected $intContainerKey = 0;
+    protected $intEntryNumber = 0;
+    protected $intContainerSortType = 0;
+    protected $intContainerSortOrder = 0;
+    protected $intContainerLabel = 0;
+    protected $intContainerDepth = 0;
+    protected $intEntryViewType = 0;
 
-  protected $arrEntries = array();
+    protected $arrEntries = array();
 
-  /**
-   * construct
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct() { }
-
-  /**
-   * addPageEntry
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function addPageEntry(PageEntry $objItem, $strName = null){
-    $this->arrEntries[$strName] = $objItem;
-  }
-  
-  /**
-   * removePageEntry
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function removePageEntry($strName){
-    if(array_key_exists($strName, $this->arrEntries)){
-      unset($this->arrEntries[$strName]);
+    /**
+     * construct
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
     }
-  }
-  
-  /**
-   * sortEntries
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function sortEntries(){
-    ksort($this->arrEntries);
-  }
 
-  /**
-   * shuffleEntries
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function shuffleEntries(){
-    shuffle($this->arrEntries);
-  }
-  
-  /**
-   * getPageEntry
-   * @return PageEntry
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function getPageEntry($strName){
-    return $this->arrEntries[$strName];
-  }
+    /**
+     * addPageEntry
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function addPageEntry(PageEntry $objItem, $strName = null)
+    {
+        $this->arrEntries[$strName] = $objItem;
+    }
 
-  /**
-   * setContainerTitle
-   * @param string $strContainerTitle
-   */
-  public function setContainerTitle($strContainerTitle){
-    $this->strContainerTitle = $strContainerTitle;
-  }
+    /**
+     * removePageEntry
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function removePageEntry($strName)
+    {
+        if (array_key_exists($strName, $this->arrEntries)) {
+            unset($this->arrEntries[$strName]);
+        }
+    }
 
-  /**
-   * getContainerTitle
-   * @return string $strContainerTitle
-   */
-  public function getContainerTitle(){
-    return $this->strContainerTitle;
-  }
+    /**
+     * sortEntries
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function sortEntries()
+    {
+        ksort($this->arrEntries);
+    }
 
-  /**
-   * setContainerKey
-   * @param integer $intContainerKey
-   */
-  public function setContainerKey($intContainerKey){
-    $this->intContainerKey = $intContainerKey;
-  }
+    /**
+     * shuffleEntries
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function shuffleEntries()
+    {
+        shuffle($this->arrEntries);
+    }
 
-  /**
-   * getContainerKey
-   * @return integer $intContainerKey
-   */
-  public function getContainerKey(){
-    return $this->intContainerKey;
-  }
+    /**
+     * getPageEntry
+     * @return PageEntry
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getPageEntry($strName)
+    {
+        return $this->arrEntries[$strName];
+    }
 
-  /**
-   * setEntryNumber
-   * @param integer $intEntryNumber
-   */
-  public function setEntryNumber($intEntryNumber){
-    $this->intEntryNumber = $intEntryNumber;
-  }
+    /**
+     * setContainerTitle
+     * @param string $strContainerTitle
+     */
+    public function setContainerTitle($strContainerTitle)
+    {
+        $this->strContainerTitle = $strContainerTitle;
+    }
 
-  /**
-   * getEntryNumber
-   * @return integer $intEntryNumber
-   */
-  public function getEntryNumber(){
-    return $this->intEntryNumber;
-  }
+    /**
+     * getContainerTitle
+     * @return string $strContainerTitle
+     */
+    public function getContainerTitle()
+    {
+        return $this->strContainerTitle;
+    }
 
-  /**
-   * setContainerSortType
-   * @param integer $intContainerSortType
-   */
-  public function setContainerSortType($intContainerSortType){
-    $this->intContainerSortType = $intContainerSortType;
-  }
+    /**
+     * setContainerKey
+     * @param integer $intContainerKey
+     */
+    public function setContainerKey($intContainerKey)
+    {
+        $this->intContainerKey = $intContainerKey;
+    }
 
-  /**
-   * getContainerSortType
-   * @return integer $intContainerSortType
-   */
-  public function getContainerSortType(){
-    return $this->intContainerSortType;
-  }
+    /**
+     * getContainerKey
+     * @return integer $intContainerKey
+     */
+    public function getContainerKey()
+    {
+        return $this->intContainerKey;
+    }
 
-  /**
-   * setContainerSortOrder
-   * @param integer $intContainerSortOrder
-   */
-  public function setContainerSortOrder($intContainerSortOrder){
-    $this->intContainerSortOrder = $intContainerSortOrder;
-  }
+    /**
+     * setEntryNumber
+     * @param integer $intEntryNumber
+     */
+    public function setEntryNumber($intEntryNumber)
+    {
+        $this->intEntryNumber = $intEntryNumber;
+    }
 
-  /**
-   * getContainerSortOrder
-   * @return integer $intContainerSortOrder
-   */
-  public function getContainerSortOrder(){
-    return $this->intContainerSortOrder;
-  }
+    /**
+     * getEntryNumber
+     * @return integer $intEntryNumber
+     */
+    public function getEntryNumber()
+    {
+        return $this->intEntryNumber;
+    }
 
-  /**
-   * setContainerLabel
-   * @param integer $intContainerLabel
-   */
-  public function setContainerLabel($intContainerLabel){
-    $this->intContainerLabel = $intContainerLabel;
-  }
+    /**
+     * setContainerSortType
+     * @param integer $intContainerSortType
+     */
+    public function setContainerSortType($intContainerSortType)
+    {
+        $this->intContainerSortType = $intContainerSortType;
+    }
 
-  /**
-   * getContainerLabel
-   * @return integer $intContainerLabel
-   */
-  public function getContainerLabel(){
-    return $this->intContainerLabel;
-  }
+    /**
+     * getContainerSortType
+     * @return integer $intContainerSortType
+     */
+    public function getContainerSortType()
+    {
+        return $this->intContainerSortType;
+    }
 
-  /**
-   * setContainerDepth
-   * @param integer $intContainerDepth
-   */
-  public function setContainerDepth($intContainerDepth){
-    $this->intContainerDepth = $intContainerDepth;
-  }
+    /**
+     * setContainerSortOrder
+     * @param integer $intContainerSortOrder
+     */
+    public function setContainerSortOrder($intContainerSortOrder)
+    {
+        $this->intContainerSortOrder = $intContainerSortOrder;
+    }
 
-  /**
-   * getContainerDepth
-   * @return integer $intContainerDepth
-   */
-  public function getContainerDepth(){
-    return $this->intContainerDepth;
-  }
+    /**
+     * getContainerSortOrder
+     * @return integer $intContainerSortOrder
+     */
+    public function getContainerSortOrder()
+    {
+        return $this->intContainerSortOrder;
+    }
 
-  /**
-   * setEntryViewType
-   * @param integer $intEntryViewType
-   */
-  public function setEntryViewType($intEntryViewType){
-    $this->intEntryViewType = $intEntryViewType;
-  }
+    /**
+     * setContainerLabel
+     * @param integer $intContainerLabel
+     */
+    public function setContainerLabel($intContainerLabel)
+    {
+        $this->intContainerLabel = $intContainerLabel;
+    }
 
-  /**
-   * getEntryViewType
-   * @return integer $intEntryViewType
-   */
-  public function getEntryViewType(){
-    return $this->intEntryViewType;
-  }
+    /**
+     * getContainerLabel
+     * @return integer $intContainerLabel
+     */
+    public function getContainerLabel()
+    {
+        return $this->intContainerLabel;
+    }
 
-  /**
-   * setEntries
-   * @param array $arrEntries
-   */
-  public function setEntries($arrEntries){
-    $this->arrEntries = $arrEntries;
-  }
+    /**
+     * setContainerDepth
+     * @param integer $intContainerDepth
+     */
+    public function setContainerDepth($intContainerDepth)
+    {
+        $this->intContainerDepth = $intContainerDepth;
+    }
 
-  /**
-   * getEntries
-   * @return array $arrEntries
-   */
-  public function getEntries(){
-    return $this->arrEntries;
-  }
+    /**
+     * getContainerDepth
+     * @return integer $intContainerDepth
+     */
+    public function getContainerDepth()
+    {
+        return $this->intContainerDepth;
+    }
+
+    /**
+     * setEntryViewType
+     * @param integer $intEntryViewType
+     */
+    public function setEntryViewType($intEntryViewType)
+    {
+        $this->intEntryViewType = $intEntryViewType;
+    }
+
+    /**
+     * getEntryViewType
+     * @return integer $intEntryViewType
+     */
+    public function getEntryViewType()
+    {
+        return $this->intEntryViewType;
+    }
+
+    /**
+     * setEntries
+     * @param array $arrEntries
+     */
+    public function setEntries($arrEntries)
+    {
+        $this->arrEntries = $arrEntries;
+    }
+
+    /**
+     * getEntries
+     * @return array $arrEntries
+     */
+    public function getEntries()
+    {
+        return $this->arrEntries;
+    }
 }
 
 ?>

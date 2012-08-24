@@ -42,254 +42,260 @@
  * @subpackage GenericFormTypePage
  */
 
-require_once(dirname(__FILE__).'/generic.data.type.abstract.class.php');
+require_once(dirname(__FILE__) . '/generic.data.type.abstract.class.php');
 
-class GenericDataTypePage extends GenericDataTypeAbstract {
+class GenericDataTypePage extends GenericDataTypeAbstract
+{
 
-  /**
-   * @var Model_Pages
-   */
-  protected $objModelPages;
+    /**
+     * @var Model_Pages
+     */
+    protected $objModelPages;
 
-  /**
-   * @var Model_Folders
-   */
-  protected $objModelFolders;
+    /**
+     * @var Model_Folders
+     */
+    protected $objModelFolders;
 
-  /**
-   * save
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function save(){
-    $this->core->logger->debug('massiveart->generic->data->GenericDataTypePage->save()');
-    try{
+    /**
+     * save
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function save()
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericDataTypePage->save()');
+        try {
 
-      $this->getModelPages()->setLanguageId($this->setup->getLanguageId());
+            $this->getModelPages()->setLanguageId($this->setup->getLanguageId());
 
-      $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
-      /**
-       * add|edit|newVersion core and instance data
-       */
-      switch($this->setup->getActionType()){
-        case $this->core->sysConfig->generic->actions->add :
+            /**
+             * add|edit|newVersion core and instance data
+             */
+            switch ($this->setup->getActionType()) {
+                case $this->core->sysConfig->generic->actions->add :
 
-          $objPage = $this->objModelPages->add($this->setup);
+                    $objPage = $this->objModelPages->add($this->setup);
 
-          $this->setup->setElementId($objPage->id);
-         
-          $this->insertCoreData('page', $objPage->pageId, $objPage->version);
-          $this->insertFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-          $this->insertMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-          $this->insertInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-          $this->insertMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-          break;
+                    $this->setup->setElementId($objPage->id);
 
-        case $this->core->sysConfig->generic->actions->edit :
+                    $this->insertCoreData('page', $objPage->pageId, $objPage->version);
+                    $this->insertFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                    $this->insertMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                    $this->insertInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                    $this->insertMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                    break;
 
-          $objPage = $this->objModelPages->load($this->setup->getElementId());
-          
-          if(count($objPage) > 0){
-            $objPage = $objPage->current();
-            
-            $this->objModelPages->update($this->setup, $objPage);
-            
-            $this->updateCoreData('page', $objPage->pageId, $objPage->version);
-            $this->updateFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-            $this->updateMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-            $this->updateInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-            $this->updateMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-          }
-          break;
+                case $this->core->sysConfig->generic->actions->edit :
 
-        case $this->core->sysConfig->generic->actions->change_template :
+                    $objPage = $this->objModelPages->load($this->setup->getElementId());
 
-          $objPage = $this->objModelPages->load($this->setup->getElementId());
-          
-          if(count($objPage) > 0){
-            $objPage = $objPage->current();
+                    if (count($objPage) > 0) {
+                        $objPage = $objPage->current();
 
-            $this->objModelPages->update($this->setup, $objPage);
-                        
-            $this->insertCoreData('page', $objPage->pageId, $objPage->version);
+                        $this->objModelPages->update($this->setup, $objPage);
 
-            if($this->blnHasLoadedFileData){
-              $this->updateFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-            }else{
-              $this->insertFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        $this->updateCoreData('page', $objPage->pageId, $objPage->version);
+                        $this->updateFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        $this->updateMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        $this->updateInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        $this->updateMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                    }
+                    break;
+
+                case $this->core->sysConfig->generic->actions->change_template :
+
+                    $objPage = $this->objModelPages->load($this->setup->getElementId());
+
+                    if (count($objPage) > 0) {
+                        $objPage = $objPage->current();
+
+                        $this->objModelPages->update($this->setup, $objPage);
+
+                        $this->insertCoreData('page', $objPage->pageId, $objPage->version);
+
+                        if ($this->blnHasLoadedFileData) {
+                            $this->updateFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        } else {
+                            $this->insertFileData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        }
+
+                        if ($this->blnHasLoadedMultiFieldData) {
+                            $this->updateMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        } else {
+                            $this->insertMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        }
+
+                        if ($this->blnHasLoadedInstanceData) {
+                            $this->updateInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        } else {
+                            $this->insertInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        }
+
+                        if ($this->blnHasLoadedMultiplyRegionData) {
+                            $this->updateMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        } else {
+                            $this->insertMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+                        }
+                    }
+                    break;
+                case $this->core->sysConfig->generic->actions->change_template_id :
+
+                    $objPage = $this->objModelPages->load($this->setup->getElementId());
+
+                    if (count($objPage) > 0) {
+                        $objPage = $objPage->current();
+
+                        $this->objModelPages->update($this->setup, $objPage);
+                    }
+                    break;
             }
 
-            if($this->blnHasLoadedMultiFieldData){
-              $this->updateMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-            }else{
-              $this->insertMultiFieldData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+            /**
+             * now save all the special fields
+             */
+            if (count($this->setup->SpecialFields()) > 0) {
+                foreach ($this->setup->SpecialFields() as $objField) {
+                    $objField->setGenericSetup($this->setup);
+                    $objField->save($this->setup->getElementId(), 'page', $objPage->pageId, $objPage->version);
+                }
             }
 
-            if($this->blnHasLoadedInstanceData){
-              $this->updateInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-            }else{
-              $this->insertInstanceData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+            //page index
+            if ($this->setup->getElementTypeId() != $this->core->sysConfig->page_types->link->id && $this->setup->getStatusId() == $this->core->sysConfig->status->live) {
+                if (substr(PHP_OS, 0, 3) === 'WIN') {
+                    $this->core->logger->warning('slow page index on windows based OS!');
+                    $this->updateIndex(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId . '_' . $this->setup->getLanguageId());
+                } else {
+                    $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexPage.php';
+                    //run page index in background
+                    exec("php $strIndexPageFilePath --pageId='" . $objPage->pageId . "' --version=" . $objPage->version . " --languageId=" . $this->setup->getLanguageId() . " --rootLevelId=" . $this->setup->getRootLevelId() . " > /dev/null &#038;");
+                }
+            } else {
+                //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->page.'/'.sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId.'_'.$this->setup->getLanguageId());
+                $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
+                //run remove page from index in background
+                exec("php " . $strIndexPageFilePath . " --key='" . $objPage->pageId . "_" . $this->setup->getLanguageId() . "_r*' > /dev/null &#038;");
             }
-            
-            if($this->blnHasLoadedMultiplyRegionData){
-              $this->updateMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-            }else{
-              $this->insertMultiplyRegionData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version)); 
+
+            //cache expiring
+            if ($this->Setup()->getField('url')) {
+                $strUrl = $this->Setup()->getField('url')->url;
+                $strUrlLanguageCode = $this->Setup()->getField('url')->languageCode;
+
+                $arrFrontendOptions = array(
+                    'lifetime'                => null, // cache lifetime (in seconds), if set to null, the cache is valid forever.
+                    'automatic_serialization' => true
+                );
+
+                $arrBackendOptions = array(
+                    'cache_dir' => GLOBAL_ROOT_PATH . $this->core->sysConfig->path->cache->pages // Directory where to put the cache files
+                );
+
+                // getting a Zend_Cache_Core object
+                $objCache = Zend_Cache::factory('Output',
+                    'File',
+                    $arrFrontendOptions,
+                    $arrBackendOptions);
+
+                $objCache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
+                                                                                  'StartPage',
+                                                                                  'PageType_' . $this->core->sysConfig->page_types->overview->id,
+                                                                                  'PageId_' . $objPage->pageId . '_' . $this->setup->getLanguageId()
+                                                                             )
+                );
             }
-          }
-          break;
-        case $this->core->sysConfig->generic->actions->change_template_id :
-         
-          $objPage = $this->objModelPages->load($this->setup->getElementId());
-          
-          if(count($objPage) > 0){
-            $objPage = $objPage->current();
-
-            $this->objModelPages->update($this->setup, $objPage);            
-          }
-          break;
-      }
-
-      /**
-       * now save all the special fields
-       */
-      if(count($this->setup->SpecialFields()) > 0){
-        foreach($this->setup->SpecialFields() as $objField){
-          $objField->setGenericSetup($this->setup);
-          $objField->save($this->setup->getElementId(), 'page', $objPage->pageId, $objPage->version);
+            return $this->setup->getElementId();
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
+    }
 
-      //page index
-      if($this->setup->getElementTypeId() != $this->core->sysConfig->page_types->link->id && $this->setup->getStatusId() == $this->core->sysConfig->status->live){
-        if(substr(PHP_OS, 0, 3) === 'WIN') {
-          $this->core->logger->warning('slow page index on windows based OS!');
-          $this->updateIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->page.'/'.sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId.'_'.$this->setup->getLanguageId());
-        }else{
-          $strIndexPageFilePath = GLOBAL_ROOT_PATH.'cli/IndexPage.php';
-          //run page index in background
-          exec("php $strIndexPageFilePath --pageId='".$objPage->pageId."' --version=".$objPage->version." --languageId=".$this->setup->getLanguageId()." --rootLevelId=".$this->setup->getRootLevelId()." > /dev/null &#038;");
+    /**
+     * load
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function load()
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericDataTypePage->load()');
+        try {
+
+            $objPage = $this->getModelPages()->load($this->setup->getElementId());
+
+            if (count($objPage) > 0) {
+                $objPage = $objPage->current();
+
+                /**
+                 * set some metainformations of current page to get them in the output
+                 */
+                $this->setup->setMetaInformation($objPage);
+                if ($objPage->idPageTypes > 0) $this->setup->setElementTypeId($objPage->idPageTypes);
+                if ($objPage->isStartPage != null) $this->setup->setIsStartElement($objPage->isStartPage);
+                if ($objPage->idParentTypes != null) $this->setup->setParentTypeId($objPage->idParentTypes);
+
+                parent::loadGenericData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
+
+                /**
+                 * now laod all data from the special fields
+                 */
+                if (count($this->setup->SpecialFields()) > 0) {
+                    foreach ($this->setup->SpecialFields() as $objField) {
+                        $objField->setGenericSetup($this->setup);
+                        $objField->load($this->setup->getElementId(), 'page', $objPage->pageId, $objPage->version);
+                    }
+                }
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }else{
-        //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->page.'/'.sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId.'_'.$this->setup->getLanguageId());
-        $strIndexPageFilePath = GLOBAL_ROOT_PATH.'cli/IndexRemovePage.php';
-        //run remove page from index in background
-        exec("php ".$strIndexPageFilePath." --key='".$objPage->pageId."_".$this->setup->getLanguageId()."_r*' > /dev/null &#038;");
-      }
-
-      //cache expiring
-      if($this->Setup()->getField('url')){
-        $strUrl = $this->Setup()->getField('url')->url;
-        $strUrlLanguageCode = $this->Setup()->getField('url')->languageCode;
-        
-        $arrFrontendOptions = array(
-          'lifetime' => null, // cache lifetime (in seconds), if set to null, the cache is valid forever.
-          'automatic_serialization' => true
-        );
-
-        $arrBackendOptions = array(
-          'cache_dir' => GLOBAL_ROOT_PATH.$this->core->sysConfig->path->cache->pages // Directory where to put the cache files
-        );
-
-        // getting a Zend_Cache_Core object
-        $objCache = Zend_Cache::factory('Output',
-                                        'File',
-                                        $arrFrontendOptions,
-                                        $arrBackendOptions);
-
-        $objCache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
-          'StartPage',
-          'PageType_'.$this->core->sysConfig->page_types->overview->id,
-          'PageId_'.$objPage->pageId.'_'.$this->setup->getLanguageId())
-        );
-      }
-      return $this->setup->getElementId();
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * load
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function load(){
-    $this->core->logger->debug('massiveart->generic->data->GenericDataTypePage->load()');
-    try {
-
-      $objPage = $this->getModelPages()->load($this->setup->getElementId());
-
-      if(count($objPage) > 0){
-        $objPage = $objPage->current();
-
-        /**
-         * set some metainformations of current page to get them in the output
-         */
-        $this->setup->setMetaInformation($objPage);
-        if($objPage->idPageTypes > 0) $this->setup->setElementTypeId($objPage->idPageTypes);
-        if($objPage->isStartPage != null) $this->setup->setIsStartElement($objPage->isStartPage);
-        if($objPage->idParentTypes != null) $this->setup->setParentTypeId($objPage->idParentTypes);
-
-        parent::loadGenericData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
-        
-        /**
-		     * now laod all data from the special fields
-		     */
-		    if(count($this->setup->SpecialFields()) > 0){
-		      foreach($this->setup->SpecialFields() as $objField){
-		        $objField->setGenericSetup($this->setup);
-		        $objField->load($this->setup->getElementId(), 'page', $objPage->pageId, $objPage->version);
-		      }
-		    }
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * getModelPages
-   * @return Model_Pages
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelPages(){
-    if (null === $this->objModelPages) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'cms/models/Pages.php';
-      $this->objModelPages = new Model_Pages();
-      $this->objModelPages->setLanguageId($this->setup->getLanguageId());
     }
 
-    return $this->objModelPages;
-  }
+    /**
+     * getModelPages
+     * @return Model_Pages
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelPages()
+    {
+        if (null === $this->objModelPages) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/Pages.php';
+            $this->objModelPages = new Model_Pages();
+            $this->objModelPages->setLanguageId($this->setup->getLanguageId());
+        }
 
-  /**
-   * getModelFolders
-   * @return Model_Folders
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelFolders(){
-    if (null === $this->objModelFolders) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-      $this->objModelFolders = new Model_Folders();
-      $this->objModelFolders->setLanguageId($this->setup->getLanguageId());
+        return $this->objModelPages;
     }
 
-    return $this->objModelFolders;
-  }
+    /**
+     * getModelFolders
+     * @return Model_Folders
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->setup->getLanguageId());
+        }
+
+        return $this->objModelFolders;
+    }
 }
 
 ?>

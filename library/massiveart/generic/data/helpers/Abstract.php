@@ -42,32 +42,35 @@
  * @subpackage GenericDataHelperAbstract
  */
 
-abstract class GenericDataHelperAbstract {
+abstract class GenericDataHelperAbstract
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
+    /**
+     * @var Core
+     */
+    protected $core;
 
-  /**
-   * @var GenericElementAbstract
-   */
-  protected $objElement;
+    /**
+     * @var GenericElementAbstract
+     */
+    protected $objElement;
 
-  /**
-   * Constructor
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
 
-  /**
-   * setElement
-   * @param GenericElementAbstract $objElement
-   */
-  public function setElement(GenericElementAbstract &$objElement){
-    $this->objElement = $objElement;
-  }
+    /**
+     * setElement
+     * @param GenericElementAbstract $objElement
+     */
+    public function setElement(GenericElementAbstract &$objElement)
+    {
+        $this->objElement = $objElement;
+    }
 }
 
 ?>

@@ -42,171 +42,175 @@
  * @subpackage HtmlOutput
  */
 
-class HtmlOutput {
+class HtmlOutput
+{
 
-  /**
-   * getOptionsOfSQL
-	 * returns the result of a SQL-Statement in the valid output form
-	 * <option value=[VALUE] >[DISPLAY]</option>
-	 *
-	 * Version history (please keep backward compatible):
-   * 1.0, 2008-11-17: Cornelius Hansjakob
-   *
-   * @param Core $core
-	 * @param string $strSQL SQL statment
-	 * @param string $strSelectedValue
-	 * @return string $strHtmlOutput
-	 * @return array $arrSecurityCheck
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-	 */
-	public static function getOptionsOfSQL(Core &$core, $strSQL, $strSelectedValue = '', $arrSecurityCheck = array()){
-    $core->logger->debug('massiveart->utilities->HtmlOutput->getOptionsOfSQL: '.$strSQL);
-    $strHtmlOutput = '';
+    /**
+     * getOptionsOfSQL
+     * returns the result of a SQL-Statement in the valid output form
+     * <option value=[VALUE] >[DISPLAY]</option>
+     *
+     * Version history (please keep backward compatible):
+     * 1.0, 2008-11-17: Cornelius Hansjakob
+     *
+     * @param Core $core
+     * @param string $strSQL SQL statment
+     * @param string $strSelectedValue
+     * @return string $strHtmlOutput
+     * @return array $arrSecurityCheck
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public static function getOptionsOfSQL(Core &$core, $strSQL, $strSelectedValue = '', $arrSecurityCheck = array())
+    {
+        $core->logger->debug('massiveart->utilities->HtmlOutput->getOptionsOfSQL: ' . $strSQL);
+        $strHtmlOutput = '';
 
-    try {
+        try {
 
-    	foreach($core->dbh->query($strSQL)->fetchAll() as $arrSQLRow) {
-    	  if(count($arrSecurityCheck) == 0 || Security::get()->isAllowed(sprintf($arrSecurityCheck['ResourceKey'], $arrSQLRow['VALUE']), $arrSecurityCheck['Privilege'], $arrSecurityCheck['CheckForAllLanguages'], $arrSecurityCheck['IfResourceNotExists'])){
-      	  if($arrSQLRow['VALUE'] == $strSelectedValue){
-            $strSelected = ' selected';
-          }else{
-            $strSelected = '';
-          }
-          $strHtmlOutput .= '<option value="'.$arrSQLRow['VALUE'].'"'.$strSelected.'>'.htmlentities($arrSQLRow['DISPLAY'], ENT_COMPAT, $core->sysConfig->encoding->default).'</option>'.chr(13);    	    
+            foreach ($core->dbh->query($strSQL)->fetchAll() as $arrSQLRow) {
+                if (count($arrSecurityCheck) == 0 || Security::get()->isAllowed(sprintf($arrSecurityCheck['ResourceKey'], $arrSQLRow['VALUE']), $arrSecurityCheck['Privilege'], $arrSecurityCheck['CheckForAllLanguages'], $arrSecurityCheck['IfResourceNotExists'])) {
+                    if ($arrSQLRow['VALUE'] == $strSelectedValue) {
+                        $strSelected = ' selected';
+                    } else {
+                        $strSelected = '';
+                    }
+                    $strHtmlOutput .= '<option value="' . $arrSQLRow['VALUE'] . '"' . $strSelected . '>' . htmlentities($arrSQLRow['DISPLAY'], ENT_COMPAT, $core->sysConfig->encoding->default) . '</option>' . chr(13);
+                }
+            }
+
+        } catch (Exception $exc) {
+            $core->logger->err($exc);
         }
-      }
 
-    } catch (Exception $exc) {
-      $core->logger->err($exc);
+        return $strHtmlOutput;
     }
 
-    return $strHtmlOutput;
-	}	
-  
-  /**
-   * getFormattedByteSize
-   * @param integer $size
-   * @param boolean $blnOnlySize
-   * @return string
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public static function getFormattedByteSize($size, $blnOnlySize = false){
-    $sizes = array('B', 'KB', 'MB', 'GB', 'TB');
-    for ($i=0; $size >= 1024 && $i < 5; $i++) {
-      $size /= 1024;
+    /**
+     * getFormattedByteSize
+     * @param integer $size
+     * @param boolean $blnOnlySize
+     * @return string
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public static function getFormattedByteSize($size, $blnOnlySize = false)
+    {
+        $sizes = array('B', 'KB', 'MB', 'GB', 'TB');
+        for ($i = 0; $size >= 1024 && $i < 5; $i++) {
+            $size /= 1024;
+        }
+        return round($size, 2) . ((!$blnOnlySize) ? ' ' . $sizes[$i] : '');
     }
-    return round($size, 2).((!$blnOnlySize) ? ' '.$sizes[$i] : '');
-  }
 
-  /**
-   * getIconByExtension
-   * @param string $strExtension
-   * @param string $strIconBase
-   * @param string $strIconExtension
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public static function getIconByExtension($strExtension, $strIconBase = '', $strIconExtension = 'png'){
-    $strIcon = '';
-    switch(strtolower($strExtension)){
-      case 'docx' :
-      case 'doc' :
-      case 'rtf' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_doc.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_doc.png';
+    /**
+     * getIconByExtension
+     * @param string $strExtension
+     * @param string $strIconBase
+     * @param string $strIconExtension
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public static function getIconByExtension($strExtension, $strIconBase = '', $strIconExtension = 'png')
+    {
+        $strIcon = '';
+        switch (strtolower($strExtension)) {
+            case 'docx' :
+            case 'doc' :
+            case 'rtf' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_doc.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_doc.png';
+                }
+                break;
+            case 'xlsx' :
+            case 'xls' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_excel.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_excel.png';
+                }
+                break;
+            case 'pdf' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_pdf.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_pdf.png';
+                }
+                break;
+            case 'ppt' :
+            case 'pps' :
+            case 'pptx' :
+            case 'ppsx' :
+            case 'ppz' :
+            case 'pot' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_ppt.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_ppt.png';
+                }
+                break;
+            case 'zip' :
+            case 'rar' :
+            case 'tar' :
+            case 'ace' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_compressed.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_compressed.png';
+                }
+                break;
+            case 'avi' :
+            case 'mov' :
+            case 'swf' :
+            case 'mpg' :
+            case 'mpeg' :
+            case 'wmv' :
+            case 'f4v' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_movie.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_movie.png';
+                }
+                break;
+            case 'mp3' :
+            case 'wav' :
+            case 'f4a' :
+            case 'wma' :
+            case 'aif' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_audio.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_audio.png';
+                }
+                break;
+            case 'gif' :
+            case 'jpg' :
+            case 'jpeg' :
+            case 'png' :
+            case 'bmp' :
+            case 'tif' :
+            case 'tiff' :
+            case 'eps' :
+            case 'psd' :
+            case 'ai' :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_img.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_img.png';
+                }
+                break;
+            default :
+                if ($strIconBase != '') {
+                    $strIcon = $strIconBase . '/icon_unknown.' . $strIconExtension;
+                } else {
+                    $strIcon = '/zoolu-statics/images/icons/docs/icon_unknown.png';
+                }
+                break;
         }
-        break;
-      case 'xlsx' :
-      case 'xls' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_excel.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_excel.png';
-        }
-        break;
-      case 'pdf' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_pdf.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_pdf.png';
-        }
-        break;
-      case 'ppt' :
-      case 'pps' :
-      case 'pptx' :
-      case 'ppsx' :
-      case 'ppz' :
-      case 'pot' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_ppt.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_ppt.png';
-        }
-        break;
-      case 'zip' :
-      case 'rar' :
-      case 'tar' :
-      case 'ace' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_compressed.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_compressed.png';
-        }
-        break;
-      case 'avi' :
-      case 'mov' :
-      case 'swf' :
-      case 'mpg' :
-      case 'mpeg' :
-      case 'wmv' :
-      case 'f4v' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_movie.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_movie.png';
-        }
-        break;
-      case 'mp3' :
-      case 'wav' :
-      case 'f4a' :
-      case 'wma' :
-      case 'aif' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_audio.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_audio.png';
-        }
-        break;
-      case 'gif' :
-      case 'jpg' :
-      case 'jpeg' :
-      case 'png' :
-      case 'bmp' :
-      case 'tif' :
-      case 'tiff' :
-      case 'eps' :
-      case 'psd' :
-      case 'ai' :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_img.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_img.png';
-        }
-        break;
-      default :
-        if($strIconBase != ''){
-          $strIcon = $strIconBase.'/icon_unknown.'.$strIconExtension;
-        }else{
-          $strIcon = '/zoolu-statics/images/icons/docs/icon_unknown.png';
-        }
-        break;
+        return $strIcon;
     }
-    return $strIcon;
-  }
 }
 
 ?>

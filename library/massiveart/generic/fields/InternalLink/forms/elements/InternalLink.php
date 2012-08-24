@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,22 +31,23 @@
  */
 /**
  * Form_Element_InternalLink
- * 
+ *
  * InternalLink form element
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2009-02-13: Thomas Schedler
- * 
+ *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  * @package massiveart.forms.elements
  * @subpackage Form_Element_InternalLink
  */
 
-class Form_Element_InternalLink extends FormElementXhtmlAbstract {
-	
-	public $helper = 'formInternalLink';
-	
+class Form_Element_InternalLink extends FormElementXhtmlAbstract
+{
+
+    public $helper = 'formInternalLink';
+
 }
 
 ?>

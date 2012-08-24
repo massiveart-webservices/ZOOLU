@@ -43,46 +43,51 @@
  * @subpackage CommandChain
  */
 
-class CommandChain {
+class CommandChain
+{
 
-  /**
-   * @var array
-   */
-  private $arrCommands = array();
+    /**
+     * @var array
+     */
+    private $arrCommands = array();
 
-  /**
-   * construct
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  function __construct() {}
-
-  /**
-   * addCommand
-   * @param CommandInterface $objCommand
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function addCommand(CommandInterface $objCommand){
-    $this->arrCommands[] = $objCommand;
-  }
-
-  /**
-   * runCommand
-   * @param string $strName
-   * @param array $arrArgs
-   * @return boolean
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function runCommand($strName, $arrArgs){
-    foreach($this->arrCommands as $objCommand){
-      if($objCommand->onCommand($strName, $arrArgs) === false){
-        return false;
-      }
+    /**
+     * construct
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    function __construct()
+    {
     }
-    return true;
-  }
+
+    /**
+     * addCommand
+     * @param CommandInterface $objCommand
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addCommand(CommandInterface $objCommand)
+    {
+        $this->arrCommands[] = $objCommand;
+    }
+
+    /**
+     * runCommand
+     * @param string $strName
+     * @param array $arrArgs
+     * @return boolean
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function runCommand($strName, $arrArgs)
+    {
+        foreach ($this->arrCommands as $objCommand) {
+            if ($objCommand->onCommand($strName, $arrArgs) === false) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
 

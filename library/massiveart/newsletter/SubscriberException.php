@@ -42,28 +42,31 @@
  * @package massiveart.contact.replication.MailChimp
  * @subpackage MailChimpException
  */
-class SubscriberException extends Exception {
-  
-  /**
-   * The email of the subscriber, which has thrown this exception
-   * @var string
-   */
-  private $_email;
-  
-  /**
-   * @param string $email
-   * @param string $msg
-   * @param number $code
-   */
-  public function __construct($email, $msg = '', $code = 0){
-    $this->_email = $email;
-    parent::__construct($msg, (int) $code);
-  }
-  
-  /**
-   * @return string
-   */
-  public function getEmail(){
-    return $this->_email;
-  }
+class SubscriberException extends Exception
+{
+
+    /**
+     * The email of the subscriber, which has thrown this exception
+     * @var string
+     */
+    private $_email;
+
+    /**
+     * @param string $email
+     * @param string $msg
+     * @param number $code
+     */
+    public function __construct($email, $msg = '', $code = 0)
+    {
+        $this->_email = $email;
+        parent::__construct($msg, (int) $code);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->_email;
+    }
 }

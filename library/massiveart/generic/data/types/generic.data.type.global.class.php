@@ -42,272 +42,279 @@
  * @subpackage GenericFormTypeGlobal
  */
 
-require_once(dirname(__FILE__).'/generic.data.type.abstract.class.php');
+require_once(dirname(__FILE__) . '/generic.data.type.abstract.class.php');
 
-class GenericDataTypeGlobal extends GenericDataTypeAbstract {
+class GenericDataTypeGlobal extends GenericDataTypeAbstract
+{
 
-  /**
-   * @var Model_Globals
-   */
-  protected $objModelGlobals;
+    /**
+     * @var Model_Globals
+     */
+    protected $objModelGlobals;
 
-  /**
-   * @var Model_Folders
-   */
-  protected $objModelFolders;
-  
-  /**
-   * save
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function save(){
-    $this->core->logger->debug('massiveart->generic->data->GenericDataTypeGlobal->save()');
-    try{
+    /**
+     * @var Model_Folders
+     */
+    protected $objModelFolders;
 
-      $this->getModelGlobals()->setLanguageId($this->setup->getLanguageId());
+    /**
+     * save
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function save()
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericDataTypeGlobal->save()');
+        try {
 
-      $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $this->getModelGlobals()->setLanguageId($this->setup->getLanguageId());
 
-      /**
-       * add|edit|newVersion core and instance data
-       */
-      switch($this->setup->getActionType()){
-        case $this->core->sysConfig->generic->actions->add :
+            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
-          $objGlobal = $this->objModelGlobals->add($this->setup);
+            /**
+             * add|edit|newVersion core and instance data
+             */
+            switch ($this->setup->getActionType()) {
+                case $this->core->sysConfig->generic->actions->add :
 
-          $this->setup->setElementId($objGlobal->id);
-          if(isset($objGlobal->linkId)) $this->setup->setElementLinkId($objGlobal->linkId);
+                    $objGlobal = $this->objModelGlobals->add($this->setup);
 
-          $this->insertCoreData('global', $objGlobal->globalId, $objGlobal->version);
-          $this->insertFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-          $this->insertMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-          $this->insertInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-          $this->insertMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-          break;
+                    $this->setup->setElementId($objGlobal->id);
+                    if (isset($objGlobal->linkId)) $this->setup->setElementLinkId($objGlobal->linkId);
 
-        case $this->core->sysConfig->generic->actions->edit :
+                    $this->insertCoreData('global', $objGlobal->globalId, $objGlobal->version);
+                    $this->insertFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                    $this->insertMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                    $this->insertInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                    $this->insertMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                    break;
 
-          $objGlobal = $this->objModelGlobals->load($this->setup->getElementId());
-          
-          if(count($objGlobal) > 0){
-            $objGlobal = $objGlobal->current();
+                case $this->core->sysConfig->generic->actions->edit :
 
-            $this->objModelGlobals->update($this->setup, $objGlobal);
+                    $objGlobal = $this->objModelGlobals->load($this->setup->getElementId());
 
-            $this->updateCoreData('global', $objGlobal->globalId, $objGlobal->version);
-            $this->updateFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-            $this->updateMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-            $this->updateInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-            $this->updateMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-          }
-          break;
+                    if (count($objGlobal) > 0) {
+                        $objGlobal = $objGlobal->current();
 
-        case $this->core->sysConfig->generic->actions->change_template :
+                        $this->objModelGlobals->update($this->setup, $objGlobal);
 
-          $objGlobal = $this->objModelGlobals->load($this->setup->getElementId());
-          
-          if(count($objGlobal) > 0){
-            $objGlobal = $objGlobal->current();
+                        $this->updateCoreData('global', $objGlobal->globalId, $objGlobal->version);
+                        $this->updateFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        $this->updateMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        $this->updateInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        $this->updateMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                    }
+                    break;
 
-            $this->objModelGlobals->update($this->setup, $objGlobal);
-            
-            $this->insertCoreData('global', $objGlobal->globalId, $objGlobal->version);
+                case $this->core->sysConfig->generic->actions->change_template :
 
-            if($this->blnHasLoadedFileData){
-              $this->updateFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-            }else{
-              $this->insertFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                    $objGlobal = $this->objModelGlobals->load($this->setup->getElementId());
+
+                    if (count($objGlobal) > 0) {
+                        $objGlobal = $objGlobal->current();
+
+                        $this->objModelGlobals->update($this->setup, $objGlobal);
+
+                        $this->insertCoreData('global', $objGlobal->globalId, $objGlobal->version);
+
+                        if ($this->blnHasLoadedFileData) {
+                            $this->updateFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        } else {
+                            $this->insertFileData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        }
+
+                        if ($this->blnHasLoadedMultiFieldData) {
+                            $this->updateMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        } else {
+                            $this->insertMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        }
+
+                        if ($this->blnHasLoadedInstanceData) {
+                            $this->updateInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        } else {
+                            $this->insertInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        }
+
+                        if ($this->blnHasLoadedMultiplyRegionData) {
+                            $this->updateMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        } else {
+                            $this->insertMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+                        }
+                    }
+                    break;
+
+                case $this->core->sysConfig->generic->actions->change_template_id :
+
+                    $objGlobal = $this->objModelGlobals->load($this->setup->getElementId());
+
+                    if (count($objGlobal) > 0) {
+                        $objGlobal = $objGlobal->current();
+
+                        $this->objModelGlobals->update($this->setup, $objGlobal);
+                    }
+                    break;
             }
 
-            if($this->blnHasLoadedMultiFieldData){
-              $this->updateMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-            }else{
-              $this->insertMultiFieldData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+            /**
+             * now save all the special fields
+             */
+            if (count($this->setup->SpecialFields()) > 0) {
+                foreach ($this->setup->SpecialFields() as $objField) {
+                    $objField->setGenericSetup($this->setup);
+                    if ($objField->type == GenericSetup::FIELD_TYPE_URL && (int) $this->setup->getElementLinkId() > 0) {
+                        $objField->save($this->setup->getElementLinkId(), 'global', $objGlobal->globalId, $objGlobal->version);
+                    } else {
+                        $objField->save($this->setup->getElementId(), 'global', $objGlobal->globalId, $objGlobal->version);
+                    }
+                }
             }
 
-            if($this->blnHasLoadedInstanceData){
-              $this->updateInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-            }else{
-              $this->insertInstanceData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
+            //cache expiring
+            if ($this->Setup()->getField('url')) {
+                $strUrl = $this->Setup()->getField('url')->url;
+                $strUrlLanguageCode = $this->Setup()->getField('url')->languageCode;
+
+                $arrFrontendOptions = array(
+                    'lifetime'                => null, // cache lifetime (in seconds), if set to null, the cache is valid forever.
+                    'automatic_serialization' => true
+                );
+
+                $arrBackendOptions = array(
+                    'cache_dir' => GLOBAL_ROOT_PATH . $this->core->sysConfig->path->cache->pages // Directory where to put the cache files
+                );
+
+                // getting a Zend_Cache_Core object
+                $objCache = Zend_Cache::factory('Output',
+                    'File',
+                    $arrFrontendOptions,
+                    $arrBackendOptions);
+
+                $strCacheId = 'page_' . $this->Setup()->getRootLevelId() . '_' . strtolower(str_replace('-', '_', $strUrlLanguageCode)) . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
+
+                $objCache->remove($strCacheId);
+
+                $objCache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
+                                                                                  'StartGlobal',
+                                                                                  'GlobalType_' . $this->core->sysConfig->global_types->product_overview->id,
+                                                                                  'GlobalType_' . $this->core->sysConfig->global_types->content_overview->id,
+                                                                                  'GlobalType_' . $this->core->sysConfig->global_types->press_overview->id,
+                                                                                  'GlobalType_' . $this->core->sysConfig->global_types->course_overview->id,
+                                                                                  'GlobalType_' . $this->core->sysConfig->global_types->event_overview->id,
+                                                                                  'GlobalId_' . $objGlobal->globalId . '_' . $this->setup->getLanguageId()
+                                                                             ));
             }
-            
-            if($this->blnHasLoadedMultiplyRegionData){
-              $this->updateMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-            }else{
-              $this->insertMultiplyRegionData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version)); 
+
+            //global index
+            if ($this->setup->getStatusId() == $this->core->sysConfig->status->live) {
+                if (substr(PHP_OS, 0, 3) === 'WIN') {
+                    $this->core->logger->warning('Now indexing implemented at the moment!');
+                    //TODO:FIXME $this->updateIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->global, $objGlobal->globalId.'_'.$this->setup->getLanguageId());
+                } else {
+                    $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexGlobal.php';
+                    //run global index in background
+                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $objGlobal->globalId . "' --linkId='" . $this->setup->getElementLinkId() . "' --version=" . $objGlobal->version . " --languageId=" . $this->setup->getLanguageId() . " --rootLevelId=" . $this->setup->getRootLevelId() . " > /dev/null &#038;");
+                }
+            } else {
+                //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->global, $objGlobal->globalId.'_'.$this->setup->getLanguageId().'_r*');
+                $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
+                //run remove global from index in background
+                exec("php " . $strIndexGlobalFilePath . " --key='" . $objGlobal->globalId . "_" . $this->setup->getLanguageId() . "_r*' > /dev/null &#038;");
             }
-          }          
-          break;
 
-        case $this->core->sysConfig->generic->actions->change_template_id :
-
-          $objGlobal = $this->objModelGlobals->load($this->setup->getElementId());
-          
-          if(count($objGlobal) > 0){
-            $objGlobal = $objGlobal->current();
-
-            $this->objModelGlobals->update($this->setup, $objGlobal);                        
-          }          
-          break;
-      }
-
-      /**
-       * now save all the special fields
-       */
-      if(count($this->setup->SpecialFields()) > 0){
-        foreach($this->setup->SpecialFields() as $objField){
-          $objField->setGenericSetup($this->setup);
-          if($objField->type == GenericSetup::FIELD_TYPE_URL && (int) $this->setup->getElementLinkId() > 0){
-          	$objField->save($this->setup->getElementLinkId(), 'global', $objGlobal->globalId, $objGlobal->version);
-          }else{
-            $objField->save($this->setup->getElementId(), 'global', $objGlobal->globalId, $objGlobal->version);	
-          }
+            return $this->setup->getElementId();
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }
-      
-      //cache expiring
-      if($this->Setup()->getField('url')){
-        $strUrl = $this->Setup()->getField('url')->url;
-        $strUrlLanguageCode = $this->Setup()->getField('url')->languageCode;
-        
-        $arrFrontendOptions = array(
-          'lifetime' => null, // cache lifetime (in seconds), if set to null, the cache is valid forever.
-          'automatic_serialization' => true
-        );
+    }
 
-        $arrBackendOptions = array(
-          'cache_dir' => GLOBAL_ROOT_PATH.$this->core->sysConfig->path->cache->pages // Directory where to put the cache files
-        );
+    /**
+     * load
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function load()
+    {
+        $this->core->logger->debug('massiveart->generic->data->GenericDataTypeGlobal->load()');
+        try {
 
-        // getting a Zend_Cache_Core object
-        $objCache = Zend_Cache::factory('Output',
-                                        'File',
-                                        $arrFrontendOptions,
-                                        $arrBackendOptions);
+            $objGlobal = $this->getModelGlobals()->load($this->setup->getElementId());
 
-        $strCacheId = 'page_'.$this->Setup()->getRootLevelId().'_'.strtolower(str_replace('-', '_', $strUrlLanguageCode)).'_'.preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
+            if (count($objGlobal) > 0) {
+                $objGlobal = $objGlobal->current();
 
-        $objCache->remove($strCacheId);
+                /**
+                 * set some metainformations of current global to get them in the output
+                 */
+                $this->setup->setMetaInformation($objGlobal);
+                if ($objGlobal->idGlobalTypes > 0) $this->setup->setElementTypeId($objGlobal->idGlobalTypes);
+                if ($objGlobal->isStartGlobal != null) $this->setup->setIsStartElement($objGlobal->isStartGlobal);
+                if ($objGlobal->idParentTypes != null) $this->setup->setParentTypeId($objGlobal->idParentTypes);
 
-        $objCache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('StartGlobal', 
-                                                                           'GlobalType_'.$this->core->sysConfig->global_types->product_overview->id,
-                                                                           'GlobalType_'.$this->core->sysConfig->global_types->content_overview->id,
-                                                                           'GlobalType_'.$this->core->sysConfig->global_types->press_overview->id,        
-                                                                           'GlobalType_'.$this->core->sysConfig->global_types->course_overview->id,
-                                                                           'GlobalType_'.$this->core->sysConfig->global_types->event_overview->id,
-                                                                           'GlobalId_'.$objGlobal->globalId.'_'.$this->setup->getLanguageId()));        
-      }
+                parent::loadGenericData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
 
-      //global index      
-      if($this->setup->getStatusId() == $this->core->sysConfig->status->live){
-        if(substr(PHP_OS, 0, 3) === 'WIN') {
-          $this->core->logger->warning('Now indexing implemented at the moment!');
-          //TODO:FIXME $this->updateIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->global, $objGlobal->globalId.'_'.$this->setup->getLanguageId());
-        }else{
-          $strIndexGlobalFilePath = GLOBAL_ROOT_PATH.'cli/IndexGlobal.php';
-          //run global index in background
-          exec("php ".$strIndexGlobalFilePath." --globalId='".$objGlobal->globalId."' --linkId='".$this->setup->getElementLinkId()."' --version=".$objGlobal->version." --languageId=".$this->setup->getLanguageId()." --rootLevelId=".$this->setup->getRootLevelId()." > /dev/null &#038;");
+                /**
+                 * now laod all data from the special fields
+                 */
+                if (count($this->setup->SpecialFields()) > 0) {
+                    foreach ($this->setup->SpecialFields() as $objField) {
+                        $objField->setGenericSetup($this->setup);
+                        if ($objField->type == GenericSetup::FIELD_TYPE_URL && (int) $this->setup->getElementLinkId() > 0) {
+                            $objField->load($this->setup->getElementLinkId(), 'global', $objGlobal->globalId, $objGlobal->version);
+                        } else {
+                            $objField->load($this->setup->getElementId(), 'global', $objGlobal->globalId, $objGlobal->version);
+                        }
+                    }
+                }
+
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
-      }else{
-        //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->global, $objGlobal->globalId.'_'.$this->setup->getLanguageId().'_r*');
-        $strIndexGlobalFilePath = GLOBAL_ROOT_PATH.'cli/IndexRemoveGlobal.php';
-        //run remove global from index in background
-        exec("php ".$strIndexGlobalFilePath." --key='".$objGlobal->globalId."_".$this->setup->getLanguageId()."_r*' > /dev/null &#038;");
-      }
-      
-      return $this->setup->getElementId();
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * load
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function load(){
-    $this->core->logger->debug('massiveart->generic->data->GenericDataTypeGlobal->load()');
-    try {
-
-      $objGlobal = $this->getModelGlobals()->load($this->setup->getElementId());
-
-      if(count($objGlobal) > 0){
-        $objGlobal = $objGlobal->current();
-
-        /**
-         * set some metainformations of current global to get them in the output
-         */
-        $this->setup->setMetaInformation($objGlobal);
-        if($objGlobal->idGlobalTypes > 0) $this->setup->setElementTypeId($objGlobal->idGlobalTypes);
-        if($objGlobal->isStartGlobal != null) $this->setup->setIsStartElement($objGlobal->isStartGlobal);
-        if($objGlobal->idParentTypes != null) $this->setup->setParentTypeId($objGlobal->idParentTypes);
-
-        parent::loadGenericData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
-        
-        /**
-		     * now laod all data from the special fields
-		     */
-		    if(count($this->setup->SpecialFields()) > 0){
-		      foreach($this->setup->SpecialFields() as $objField){
-		        $objField->setGenericSetup($this->setup);
-		        if($objField->type == GenericSetup::FIELD_TYPE_URL && (int) $this->setup->getElementLinkId() > 0){
-		        	$objField->load($this->setup->getElementLinkId(), 'global', $objGlobal->globalId, $objGlobal->version);
-	          }else{
-	            $objField->load($this->setup->getElementId(), 'global', $objGlobal->globalId, $objGlobal->version); 
-	          }		        
-		      }
-		    }
-
-      }
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-    }
-  }
-
-  /**
-   * getModelGlobals
-   * @return Model_Globals
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelGlobals(){
-    if (null === $this->objModelGlobals) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'global/models/Globals.php';
-      $this->objModelGlobals = new Model_Globals();
-      $this->objModelGlobals->setLanguageId($this->setup->getLanguageId());
     }
 
-    return $this->objModelGlobals;
-  }
+    /**
+     * getModelGlobals
+     * @return Model_Globals
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelGlobals()
+    {
+        if (null === $this->objModelGlobals) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'global/models/Globals.php';
+            $this->objModelGlobals = new Model_Globals();
+            $this->objModelGlobals->setLanguageId($this->setup->getLanguageId());
+        }
 
-  /**
-   * getModelFolders
-   * @return Model_Folders
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelFolders(){
-    if (null === $this->objModelFolders) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-      $this->objModelFolders = new Model_Folders();
-      $this->objModelFolders->setLanguageId($this->setup->getLanguageId());
+        return $this->objModelGlobals;
     }
 
-    return $this->objModelFolders;
-  }
+    /**
+     * getModelFolders
+     * @return Model_Folders
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->setup->getLanguageId());
+        }
+
+        return $this->objModelFolders;
+    }
 }
 
 ?>

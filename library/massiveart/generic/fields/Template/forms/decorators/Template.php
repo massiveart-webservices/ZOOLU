@@ -39,139 +39,146 @@
  * @version 1.0
  */
 
-class Form_Decorator_Template extends Zend_Form_Decorator_Abstract {
+class Form_Decorator_Template extends Zend_Form_Decorator_Abstract
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct($options = null){
-    $this->core = Zend_Registry::get('Core');
-    parent::__construct($options);
-  }
-
-  /**
-   * buildLabel
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function buildLabel(){
-
-    $element = $this->getElement();
-    $label = $element->getLabel();
-
-    if (empty($label)){
-      return '';
+    /**
+     * Constructor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct($options = null)
+    {
+        $this->core = Zend_Registry::get('Core');
+        parent::__construct($options);
     }
 
-    if ($element->isRequired()) {
-      $label .= ' *';
+    /**
+     * buildLabel
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function buildLabel()
+    {
+
+        $element = $this->getElement();
+        $label = $element->getLabel();
+
+        if (empty($label)) {
+            return '';
+        }
+
+        if ($element->isRequired()) {
+            $label .= ' *';
+        }
+
+        return $element->getView()->formLabel($element->getName(), $label, array('class' => 'fieldtitle')) . '<br/>';
     }
 
-    return $element->getView()->formLabel($element->getName(), $label, array('class' => 'fieldtitle')).'<br/>';
-  }
+    /**
+     * buildDescription
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function buildDescription()
+    {
+        $element = $this->getElement();
+        $desc = $element->getDescription();
 
-  /**
-   * buildDescription
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function buildDescription(){
-    $element = $this->getElement();
-    $desc    = $element->getDescription();
+        if (empty($desc)) {
+            return '';
+        }
 
-    if (empty($desc)){
-      return '';
+        return '<div class="description">' . $desc . '</div>';
     }
 
-    return '<div class="description">'.$desc.'</div>';
-  }
+    /**
+     * buildTemplates
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.1
+     */
+    public function buildTemplates()
+    {
 
-  /**
-   * buildTemplates
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.1
-   */
-  public function buildTemplates(){
+        $element = $this->getElement();
+        $helper = $element->helper;
 
-    $element = $this->getElement();
-    $helper  = $element->helper;
+        require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Templates.php';
+        $objModelTemplates = new Model_Templates();
+        $objModelTemplates->setLanguageId($element->getAttrib('FormLanguageId'));
 
-    require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Templates.php';
-    $objModelTemplates = new Model_Templates();
-    $objModelTemplates->setLanguageId($element->getAttrib('FormLanguageId')); 
+        $objTemplatesData = $objModelTemplates->loadActiveTemplates($element->isStartElement, $element->intElementTypeId, $element->intParentTypeId, $element->intFormTypeId, $element->intRootLevelId);
 
-    $objTemplatesData = $objModelTemplates->loadActiveTemplates($element->isStartElement, $element->intElementTypeId, $element->intParentTypeId, $element->intFormTypeId, $element->intRootLevelId);
+        $strOutput = $element->getView()->$helper($element->getName(), $element->getValue(), $element->getAttribs(), $element->options, $objTemplatesData);
 
-    $strOutput = $element->getView()->$helper($element->getName(), $element->getValue(), $element->getAttribs(), $element->options, $objTemplatesData);
-
-    return $strOutput;
-  }
-
-  /**
-   * buildErrors
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function buildErrors(){
-
-    $element  = $this->getElement();
-    $messages = $element->getMessages();
-
-    if (empty($messages)){
-      return '';
+        return $strOutput;
     }
 
-    return '<div class="errors">'.$element->getView()->formErrors($messages).'</div>';
-  }
+    /**
+     * buildErrors
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function buildErrors()
+    {
 
-  /**
-   * render
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function render($content){
+        $element = $this->getElement();
+        $messages = $element->getMessages();
 
-    $element = $this->getElement();
+        if (empty($messages)) {
+            return '';
+        }
 
-    if (!$element instanceof Zend_Form_Element) {
-      return $content;
+        return '<div class="errors">' . $element->getView()->formErrors($messages) . '</div>';
     }
 
-    if (null === $element->getView()) {
-      return $content;
-    }
+    /**
+     * render
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function render($content)
+    {
 
-    $separator = $this->getSeparator();
-    $placement = $this->getPlacement();
-    $label     = $this->buildLabel();
-    $templates = $this->buildTemplates();
-    $errors    = $this->buildErrors();
-    $desc      = $this->buildDescription();
+        $element = $this->getElement();
 
-    $strOutput = '<div class="field-'.$element->getAttrib('columns').'">';
-    $strOutput .= '<div class="field">'
-                    .$label
-                    .$desc
-                    .$templates
-                    .$errors
-                 .'</div>
+        if (!$element instanceof Zend_Form_Element) {
+            return $content;
+        }
+
+        if (null === $element->getView()) {
+            return $content;
+        }
+
+        $separator = $this->getSeparator();
+        $placement = $this->getPlacement();
+        $label = $this->buildLabel();
+        $templates = $this->buildTemplates();
+        $errors = $this->buildErrors();
+        $desc = $this->buildDescription();
+
+        $strOutput = '<div class="field-' . $element->getAttrib('columns') . '">';
+        $strOutput .= '<div class="field">'
+            . $label
+            . $desc
+            . $templates
+            . $errors
+            . '</div>
                  </div>';
 
-    switch ($placement) {
-      case (self::PREPEND):
-        return $strOutput . $separator . $content;
-      case (self::APPEND):
-      default:
-        return $content . $separator . $strOutput;
+        switch ($placement) {
+            case (self::PREPEND):
+                return $strOutput . $separator . $content;
+            case (self::APPEND):
+            default:
+                return $content . $separator . $strOutput;
+        }
     }
-  }
 }
 
 ?>
