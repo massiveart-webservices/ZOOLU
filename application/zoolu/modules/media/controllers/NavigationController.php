@@ -99,7 +99,10 @@ class Media_NavigationController extends AuthControllerAction
          * get navigation
          */
         $this->getModelFolders();
+        $this->objModelFolders->setLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
         $objRootelements = $this->objModelFolders->loadRootNavigation($this->intPortalId);
+        $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+
 
         $this->view->assign('rootelements', $objRootelements);
         $this->view->assign('currLevel', $intCurrLevel);
@@ -123,7 +126,9 @@ class Media_NavigationController extends AuthControllerAction
          * get childnavigation
          */
         $this->getModelFolders();
+        $this->objModelFolders->setLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
         $objChildelements = $this->objModelFolders->loadChildNavigation($this->intFolderId);
+        $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
 
         $this->view->assign('childelements', $objChildelements);
         $this->view->assign('currLevel', $intCurrLevel);

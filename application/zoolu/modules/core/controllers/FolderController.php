@@ -770,7 +770,7 @@ class Core_FolderController extends AuthControllerAction
     {
         if ($this->intItemLanguageId == null) {
             if (!$this->objRequest->getParam("languageId")) {
-                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : $this->core->intZooluLanguageId;
+                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : Zend_Auth::getInstance()->getIdentity()->contentLanguageId;
 
                 $intRootLevelId = $this->objRequest->getParam("rootLevelId");
                 $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
