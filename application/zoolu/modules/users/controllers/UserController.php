@@ -632,9 +632,12 @@ class Users_UserController extends Zend_Controller_Action
                         /**
                          * store database row to auth's storage system but not the password
                          */
-                        $objUsersData = $objDbAuthAdapter->getResultRowObject(array('id', 'idLanguages', 'username', 'fname', 'sname', 'email', 'idFiles'));
+                        $objUsersData = $objDbAuthAdapter->getResultRowObject(array('id', 'idLanguages', 'idContentLanguages', 'username', 'fname', 'sname', 'email', 'idFiles'));
                         $objUsersData->languageId = $objUsersData->idLanguages;
                         $objUsersData->languageCode = null;
+                        $objUsersData->contentLanguageId = $objUsersData->idContentLanguages;
+                        $objUsersData->contentLanguageCode = null;
+
 
                         /**
                          * get user profile image
@@ -653,13 +656,21 @@ class Users_UserController extends Zend_Controller_Action
                         foreach ($arrLanguages as $arrLanguage) {
                             if ($arrLanguage['id'] == $objUsersData->languageId) {
                                 $objUsersData->languageCode = $arrLanguage['code'];
-                                break;
+                            }
+
+                            if ($arrLanguage['id'] == $objUsersData->contentLanguageId) {
+                                $objUsersData->contentLanguageCode = $arrLanguage['code'];
                             }
                         }
 
                         if ($objUsersData->languageCode === null) {
                             $objUsersData->languageId = $this->core->zooConfig->languages->default->id;
                             $objUsersData->languageCode = $this->core->zooConfig->languages->default->code;
+                        }
+
+                        if ($objUsersData->contentLanguageCode === null) {
+                            $objUsersData->contentLanguageId = $this->core->zooConfig->languages->default->id;
+                            $objUsersData->contentLanguageCode = $this->core->zooConfig->languages->default->code;
                         }
 
                         $objUserRoleProvider = new RoleProvider();
