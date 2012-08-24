@@ -687,6 +687,7 @@ class Users_UserController extends Zend_Controller_Action
                         Security::save($objSecurity);
 
                         unset($objUsersData->idLanguages);
+                        unset($objUsersData->idContentLanguages);
                         $objAuth->getStorage()->write($objUsersData);
 
                         $_SESSION['sesTestMode'] = true;

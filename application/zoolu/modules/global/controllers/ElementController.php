@@ -1133,7 +1133,7 @@ class Global_ElementController extends AuthControllerAction
     {
         if ($this->intItemLanguageId == null) {
             if (!$this->objRequest->getParam("languageId")) {
-                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : $this->core->intZooluLanguageId;
+                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : Zend_Auth::getInstance()->getIdentity()->contentLanguageId;
 
                 $intRootLevelId = $this->objRequest->getParam("rootLevelId");
                 $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
@@ -1217,6 +1217,7 @@ class Global_ElementController extends AuthControllerAction
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
             $this->objModelFolders = new Model_Folders();
             $this->objModelFolders->setLanguageId($this->getItemLanguageId());
+            $this->objModelFolders->setContentLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
         }
 
         return $this->objModelFolders;

@@ -44,6 +44,7 @@ class Model_Folders
 {
 
     private $intLanguageId;
+    private $intContentLanguageId = 1;
     private $intSegmentId;
 
     /**
@@ -285,7 +286,7 @@ class Model_Folders
         $objSelect->from('rootLevels', array('id', 'idRootLevelTypes', 'landingPages', 'href', 'order'));
         $objSelect->join('rootLevelTitles', 'rootLevelTitles.idRootLevels = rootLevels.id', array('title'));
         $objSelect->joinLeft('rootLevelLanguages', 'rootLevelLanguages.idRootLevels = rootLevels.id AND rootLevelLanguages.isFallback = 1', array('rootLevelLanguageId' => 'idLanguages'));
-        $objSelect->joinLeft(array('rLGuiLanguages' => 'rootLevelLanguages'), 'rLGuiLanguages.idRootLevels = rootLevels.id AND rLGuiLanguages.idLanguages = ' . $this->core->intZooluLanguageId, array('rootLevelGuiLanguageId' => 'rLGuiLanguages.idLanguages'));
+        $objSelect->joinLeft(array('rLGuiLanguages' => 'rootLevelLanguages'), 'rLGuiLanguages.idRootLevels = rootLevels.id AND rLGuiLanguages.idLanguages = ' . $this->intContentLanguageId, array('rootLevelGuiLanguageId' => 'rLGuiLanguages.idLanguages'));
         $objSelect->where('rootLevelTitles.idLanguages = ?', $this->intLanguageId);
         $objSelect->where('rootLevels.idModules = ?', $intRootLevelModule);
         $objSelect->where('rootLevels.active = 1');
@@ -323,7 +324,7 @@ class Model_Folders
         $objSelect->join('rootLevelGroups', 'rootLevelGroups.id = rootLevels.idRootLevelGroups', array('name'));
         $objSelect->joinLeft('rootLevelGroupTitles', 'rootLevelGroupTitles.idRootLevelGroups = rootLevelGroups.id AND rootLevelGroupTitles.idLanguages = ' . $this->intLanguageId, array('rootLevelGroupTitle' => 'title'));
         $objSelect->joinLeft('rootLevelLanguages', 'rootLevelLanguages.idRootLevels = rootLevels.id AND rootLevelLanguages.isFallback = 1', array('rootLevelLanguageId' => 'idLanguages'));
-        $objSelect->joinLeft(array('rLGuiLanguages' => 'rootLevelLanguages'), 'rLGuiLanguages.idRootLevels = rootLevels.id AND rLGuiLanguages.idLanguages = ' . $this->core->intZooluLanguageId, array('rootLevelGuiLanguageId' => 'rLGuiLanguages.idLanguages'));
+        $objSelect->joinLeft(array('rLGuiLanguages' => 'rootLevelLanguages'), 'rLGuiLanguages.idRootLevels = rootLevels.id AND rLGuiLanguages.idLanguages = ' . $this->intContentLanguageId, array('rootLevelGuiLanguageId' => 'rLGuiLanguages.idLanguages'));
         $objSelect->where('rootLevelTitles.idLanguages = ?', $this->intLanguageId);
         $objSelect->where('rootLevels.idModules = ?', $intRootLevelModule);
         $objSelect->where('rootLevels.active = 1');
@@ -2477,6 +2478,24 @@ class Model_Folders
     public function getLanguageId()
     {
         return $this->intLanguageId;
+    }
+
+    /**
+     * setContentLanguageId
+     * @param integer $intContentLanguageId
+     */
+    public function setContentLanguageId($intContentLanguageId)
+    {
+        $this->intContentLanguageId = $intContentLanguageId;
+    }
+
+    /**
+     * getContentLanguageId
+     * @param integer $intContentLanguageId
+     */
+    public function getContentLanguageId()
+    {
+        return $this->intContentLanguageId;
     }
 
     /**

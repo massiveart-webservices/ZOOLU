@@ -93,7 +93,7 @@ class NavigationHelper
               <div class="portalmenutitle">';
                         if (!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) {
                             $strOutput .= '
-              	<div class="portaledit" onclick="myNavigation.loadMaintenanceOverlay(' . $objNavigation->getItemId() . '); return false;"></div>';
+                <div class="portaledit" onclick="myNavigation.loadMaintenanceOverlay(' . $objNavigation->getItemId() . '); return false;"></div>';
                         }
                         //$strOutput .= '
                         //  	<a href="#" onclick="myNavigation.selectPortal('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().'); return false;">'.(($objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) ?  $this->core->translate->_('Shop') : $this->core->translate->_('Web_content')).'</a>';
@@ -109,7 +109,7 @@ class NavigationHelper
                                 $strSpanAddon = ' style="display:none;"';
                             }
                             $strOutput .= '
-                	<span id="spanMaintenanceStatus_' . $objNavigation->getItemId() . '" class="red"' . $strSpanAddon . '>Offline</span>';
+                    <span id="spanMaintenanceStatus_' . $objNavigation->getItemId() . '" class="red"' . $strSpanAddon . '>Offline</span>';
                         }
                         $strOutput .= '
               </div>
