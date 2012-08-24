@@ -392,41 +392,41 @@ class Model_Folders
         $this->core->logger->debug('core->models->Folders->loadRootNavigation(' . $intRootId . ')');
 
         $sqlStmt = $this->core->dbh->query("SELECT id, title, guiTitle, genericFormId, version, templateId, folderType, pageType, type, elementType, isStartPage AS isStartElement, isStartPage, sortPosition, sortTimestamp, idStatus, pageLinkTitle, pageGuiLinkTitle
-																	      FROM (SELECT folders.id, folderTitles.title, fGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, -1 AS templateId, folderProperties.idFolderTypes AS folderType, -1 AS pageType, folderTypes.title As type, 'folder' AS elementType, -1 AS isStartPage, folders.sortPosition, folders.sortTimestamp, folderProperties.idStatus,
-																	                   -1 AS pageLinkTitle, -1 AS pageGuiLinkTitle
-																	            FROM folders
-																	            LEFT JOIN folderProperties ON folderProperties.folderId = folders.folderId 
-                                               AND folderProperties.version = folders.version 
-                                               AND folderProperties.idLanguages = ?
-																				      LEFT JOIN folderTitles ON folderTitles.folderId = folders.folderId
-																				        AND folderTitles.version = folders.version AND folderTitles.idLanguages = ?
-																				      LEFT JOIN folderTitles AS fGuiTitles ON fGuiTitles.folderId = folders.folderId
-                                                AND fGuiTitles.version = folders.version AND fGuiTitles.idLanguages = 0
-																				      LEFT JOIN genericForms ON genericForms.id = folderProperties.idGenericForms
-																				      LEFT JOIN folderTypes ON folderTypes.id = folderProperties.idFolderTypes
-																				      WHERE folders.idRootLevels = ? AND
-																				            folders.idParentFolder = 0
-																	            UNION
-																	            SELECT pages.id, pageTitles.title, pGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, pageProperties.idTemplates  AS templateId, -1 AS folderType, pageProperties.idPageTypes AS pageType, pageTypes.title As type, 'page' AS elementType, pages.isStartPage, pages.sortPosition, pages.sortTimestamp, pageProperties.idStatus,
-																	                   (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = ? WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageLinkTitle,
-																	                   (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = 0 WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageGuiLinkTitle
-																	            FROM pages
-																	            LEFT JOIN pageProperties ON pageProperties.pageId = pages.pageId 
-																	             AND pageProperties.version = pages.version 
-																	             AND pageProperties.idLanguages = ?
-																	            LEFT JOIN pageTitles ON pageTitles.pageId = pages.pageId
-																	              AND pageTitles.version = pages.version
-																	              AND pageTitles.idLanguages = ?
-																	            LEFT JOIN pageTitles AS pGuiTitles ON pGuiTitles.pageId = pages.pageId
-                                                AND pGuiTitles.version = pages.version
-                                                AND pGuiTitles.idLanguages = 0
-																	            LEFT JOIN pageTypes ON pageTypes.id = pageProperties.idPageTypes
-																	            LEFT JOIN genericForms ON genericForms.id = pageProperties.idGenericForms
-																	            WHERE pages.idParent = ?
-																	              AND pages.idParentTypes = ?
-																	              AND pages.id = (SELECT p.id FROM pages p WHERE p.pageId = pages.pageId ORDER BY p.version DESC LIMIT 1))
-																	      AS tbl
-																	      ORDER BY sortPosition ASC, sortTimestamp $strSortTimestampOrderType, id ASC", array($this->intLanguageId, $this->intLanguageId, $intRootId, $this->intLanguageId, $this->intLanguageId, $this->intLanguageId, $intRootId, $this->core->sysConfig->parent_types->rootlevel));
+                                                                          FROM (SELECT folders.id, folderTitles.title, fGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, -1 AS templateId, folderProperties.idFolderTypes AS folderType, -1 AS pageType, folderTypes.title As type, 'folder' AS elementType, -1 AS isStartPage, folders.sortPosition, folders.sortTimestamp, folderProperties.idStatus,
+                                                                                       -1 AS pageLinkTitle, -1 AS pageGuiLinkTitle
+                                                                                  FROM folders
+                                                                                    LEFT JOIN folderProperties ON folderProperties.folderId = folders.folderId
+                                                                                      AND folderProperties.version = folders.version
+                                                                                      AND folderProperties.idLanguages = ?
+                                                                                    LEFT JOIN folderTitles ON folderTitles.folderId = folders.folderId
+                                                                                      AND folderTitles.version = folders.version AND folderTitles.idLanguages = ?
+                                                                                    LEFT JOIN folderTitles AS fGuiTitles ON fGuiTitles.folderId = folders.folderId
+                                                                                      AND fGuiTitles.version = folders.version AND fGuiTitles.idLanguages = 0
+                                                                                    LEFT JOIN genericForms ON genericForms.id = folderProperties.idGenericForms
+                                                                                    LEFT JOIN folderTypes ON folderTypes.id = folderProperties.idFolderTypes
+                                                                                   WHERE folders.idRootLevels = ? AND
+                                                                                         folders.idParentFolder = 0
+                                                                                UNION
+                                                                                SELECT pages.id, pageTitles.title, pGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, pageProperties.idTemplates  AS templateId, -1 AS folderType, pageProperties.idPageTypes AS pageType, pageTypes.title As type, 'page' AS elementType, pages.isStartPage, pages.sortPosition, pages.sortTimestamp, pageProperties.idStatus,
+                                                                                       (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = ? WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageLinkTitle,
+                                                                                       (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = 0 WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageGuiLinkTitle
+                                                                                  FROM pages
+                                                                                    LEFT JOIN pageProperties ON pageProperties.pageId = pages.pageId
+                                                                                      AND pageProperties.version = pages.version
+                                                                                      AND pageProperties.idLanguages = ?
+                                                                                    LEFT JOIN pageTitles ON pageTitles.pageId = pages.pageId
+                                                                                      AND pageTitles.version = pages.version
+                                                                                      AND pageTitles.idLanguages = ?
+                                                                                    LEFT JOIN pageTitles AS pGuiTitles ON pGuiTitles.pageId = pages.pageId
+                                                                                      AND pGuiTitles.version = pages.version
+                                                                                      AND pGuiTitles.idLanguages = 0
+                                                                                    LEFT JOIN pageTypes ON pageTypes.id = pageProperties.idPageTypes
+                                                                                    LEFT JOIN genericForms ON genericForms.id = pageProperties.idGenericForms
+                                                                                  WHERE pages.idParent = ? AND
+                                                                                        pages.idParentTypes = ? AND
+                                                                                        pages.id = (SELECT p.id FROM pages p WHERE p.pageId = pages.pageId ORDER BY p.version DESC LIMIT 1))
+                                                                          AS tbl
+                                                                          ORDER BY sortPosition ASC, sortTimestamp $strSortTimestampOrderType, id ASC", array($this->intLanguageId, $this->intLanguageId, $intRootId, $this->intLanguageId, $this->intLanguageId, $this->intLanguageId, $intRootId, $this->core->sysConfig->parent_types->rootlevel));
 
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
     }
@@ -781,41 +781,41 @@ class Model_Folders
         $this->core->logger->debug('core->models->Folders->loadChildNavigation(' . $intFolderId . ')');
 
         $sqlStmt = $this->core->dbh->query("SELECT id, title, guiTitle, genericFormId, version, templateId, folderType, pageType, type, elementType, isStartPage AS isStartElement, isStartPage, sortPosition, sortTimestamp, idStatus, pageLinkTitle, pageGuiLinkTitle
-																	      FROM (SELECT folders.id, folderTitles.title, fGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, -1 AS templateId, folderProperties.idFolderTypes AS folderType, -1 AS pageType, folderTypes.title AS type, 'folder' AS elementType, -1 AS isStartPage, folders.sortPosition, folders.sortTimestamp, folderProperties.idStatus,
-																	                   -1 AS pageLinkTitle, -1 AS pageGuiLinkTitle
-																	            FROM folders
-																	            LEFT JOIN folderProperties ON 
+                                                                          FROM (SELECT folders.id, folderTitles.title, fGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, -1 AS templateId, folderProperties.idFolderTypes AS folderType, -1 AS pageType, folderTypes.title AS type, 'folder' AS elementType, -1 AS isStartPage, folders.sortPosition, folders.sortTimestamp, folderProperties.idStatus,
+                                                                                       -1 AS pageLinkTitle, -1 AS pageGuiLinkTitle
+                                                                                FROM folders
+                                                                                LEFT JOIN folderProperties ON
                                                   folderProperties.folderId = folders.folderId AND 
                                                   folderProperties.version = folders.version AND 
                                                   folderProperties.idLanguages = ?
-																	            LEFT JOIN folderTitles ON folderTitles.folderId = folders.folderId
-																	              AND folderTitles.version = folders.version AND folderTitles.idLanguages = ?
-																	            LEFT JOIN folderTitles AS fGuiTitles ON fGuiTitles.folderId = folders.folderId
+                                                                                LEFT JOIN folderTitles ON folderTitles.folderId = folders.folderId
+                                                                                  AND folderTitles.version = folders.version AND folderTitles.idLanguages = ?
+                                                                                LEFT JOIN folderTitles AS fGuiTitles ON fGuiTitles.folderId = folders.folderId
                                                 AND fGuiTitles.version = folders.version AND fGuiTitles.idLanguages = 0
-																	            LEFT JOIN genericForms ON genericForms.id = folderProperties.idGenericForms
-																	            LEFT JOIN folderTypes ON folderTypes.id = folderProperties.idFolderTypes
-																	            WHERE folders.idParentFolder = ?
-																	            UNION
-																	            SELECT pages.id, pageTitles.title, pGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, pageProperties.idTemplates  AS templateId, -1 AS folderType, pageProperties.idPageTypes AS pageType, pageTypes.title AS type, 'page' AS elementType, pages.isStartPage, pages.sortPosition, pages.sortTimestamp, pageProperties.idStatus,
-																	                   (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = ? WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageLinkTitle,
-																	                   (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = 0 WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageGuiLinkTitle
-																	            FROM pages
-																	            LEFT JOIN pageProperties ON pageProperties.pageId = pages.pageId 
+                                                                                LEFT JOIN genericForms ON genericForms.id = folderProperties.idGenericForms
+                                                                                LEFT JOIN folderTypes ON folderTypes.id = folderProperties.idFolderTypes
+                                                                                WHERE folders.idParentFolder = ?
+                                                                                UNION
+                                                                                SELECT pages.id, pageTitles.title, pGuiTitles.title AS guiTitle, genericForms.genericFormId, genericForms.version, pageProperties.idTemplates  AS templateId, -1 AS folderType, pageProperties.idPageTypes AS pageType, pageTypes.title AS type, 'page' AS elementType, pages.isStartPage, pages.sortPosition, pages.sortTimestamp, pageProperties.idStatus,
+                                                                                       (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = ? WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageLinkTitle,
+                                                                                       (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = 0 WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageGuiLinkTitle
+                                                                                FROM pages
+                                                                                LEFT JOIN pageProperties ON pageProperties.pageId = pages.pageId
                                                AND pageProperties.version = pages.version 
                                                AND pageProperties.idLanguages = ?
-																	            LEFT JOIN pageTitles ON pageTitles.pageId = pages.pageId
-																	              AND pageTitles.version = pages.version
-																	              AND pageTitles.idLanguages = ?
-																	            LEFT JOIN pageTitles AS pGuiTitles ON pGuiTitles.pageId = pages.pageId
+                                                                                LEFT JOIN pageTitles ON pageTitles.pageId = pages.pageId
+                                                                                  AND pageTitles.version = pages.version
+                                                                                  AND pageTitles.idLanguages = ?
+                                                                                LEFT JOIN pageTitles AS pGuiTitles ON pGuiTitles.pageId = pages.pageId
                                                 AND pGuiTitles.version = pages.version
                                                 AND pGuiTitles.idLanguages = 0
-																	            LEFT JOIN pageTypes ON pageTypes.id = pageProperties.idPageTypes
-																	            LEFT JOIN genericForms ON genericForms.id = pageProperties.idGenericForms
-																	            WHERE pages.idParent = ?
-																	              AND pages.idParentTypes = ?
-																	              AND pages.id = (SELECT p.id FROM pages p WHERE p.pageId = pages.pageId ORDER BY p.version DESC LIMIT 1))
-																	      AS tbl
-																	      ORDER BY sortPosition ASC, sortTimestamp $strSortTimestampOrderType, id ASC", array($this->intLanguageId, $this->intLanguageId, $intFolderId, $this->intLanguageId, $this->intLanguageId, $this->intLanguageId, $intFolderId, $this->core->sysConfig->parent_types->folder));
+                                                                                LEFT JOIN pageTypes ON pageTypes.id = pageProperties.idPageTypes
+                                                                                LEFT JOIN genericForms ON genericForms.id = pageProperties.idGenericForms
+                                                                                WHERE pages.idParent = ?
+                                                                                  AND pages.idParentTypes = ?
+                                                                                  AND pages.id = (SELECT p.id FROM pages p WHERE p.pageId = pages.pageId ORDER BY p.version DESC LIMIT 1))
+                                                                          AS tbl
+                                                                          ORDER BY sortPosition ASC, sortTimestamp $strSortTimestampOrderType, id ASC", array($this->intLanguageId, $this->intLanguageId, $intFolderId, $this->intLanguageId, $this->intLanguageId, $this->intLanguageId, $intFolderId, $this->core->sysConfig->parent_types->folder));
 
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
     }
@@ -1081,7 +1081,7 @@ class Model_Folders
                                                  folders.idRootLevels = parent.idRootLevels
                                                  ' . $strFolderFilter . '
                                            ' . $strSqlOrderBy . '
-  	                                       ' . $strSqlLimit, array(
+                                           ' . $strSqlLimit, array(
                                                                     $this->intLanguageId,
                                                                     $this->core->sysConfig->parent_types->folder,
                                                                     $this->intLanguageId,
@@ -1635,30 +1635,30 @@ class Model_Folders
 
 
         $sqlStmt = $this->core->dbh->query("SELECT pages.id AS idPage, pages.idParent, pages.idParentTypes, IF(displayTitle.title <> '', displayTitle.title, fallbackTitle.title) AS pageTitle,
-    																					 genericForms.genericFormId, genericForms.version, pageProperties.idPageTypes AS pageType, pageTypes.title As type, 'page' AS elementType, 
-    																				   pages.isStartPage, pageProperties.idStatus AS pageStatus, pageProperties.created, pageProperties.changed, pageProperties.idTemplates  AS templateId,
-    																				   GROUP_CONCAT(languages.languageCode SEPARATOR ', ') AS languageCodes,
-    																				   CONCAT(`editor`.`fname`, ' ', `editor`.`sname`) AS changeUser,
-    																				   (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = " . $this->intLanguageId . " WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageLinkTitle,
-																	             (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = 0 WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageGuiLinkTitle
-																	      	FROM pages
-																	      		LEFT JOIN folders ON folders.idRootLevels = " . $intRootLevelId . "
-																	      		INNER JOIN pageProperties ON
-																							pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version
-																						INNER JOIN pageTitles ON
-																							pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = pageProperties.idLanguages
-																						INNER JOIN languages ON languages.id = pageTitles.idLanguages
-																						LEFT JOIN pageTitles AS displayTitle ON 
-																							displayTitle.pageId = pages.pageId AND displayTitle.version = pages.version AND displayTitle.idLanguages = " . Zend_Auth::getInstance()->getIdentity()->languageId . "
-																						INNER JOIN pageTitles As fallbackTitle ON
-																							fallbackTitle.pageId = pages.pageId AND fallbackTitle.version = pages.version AND fallbackTitle.idLanguages = 0
-																						LEFT JOIN users AS editor ON editor.id = pageProperties.idUsers
-																						LEFT JOIN pageTypes ON pageTypes.id = pageProperties.idPageTypes
-																						LEFT JOIN genericForms ON genericForms.id = pageProperties.idGenericForms	
-																	          WHERE (pages.idParent = folders.id AND pages.idParentTypes = " . $this->core->sysConfig->parent_types->folder . ") OR
-																	          	(pages.idParent = " . $intRootLevelId . " AND pages.idParentTypes = " . $this->core->sysConfig->parent_types->rootlevel . ")
-																	      	  ORDER BY pageProperties.changed DESC, 
-                                              			 pageProperties.created DESC
+                                                                                         genericForms.genericFormId, genericForms.version, pageProperties.idPageTypes AS pageType, pageTypes.title As type, 'page' AS elementType,
+                                                                                       pages.isStartPage, pageProperties.idStatus AS pageStatus, pageProperties.created, pageProperties.changed, pageProperties.idTemplates  AS templateId,
+                                                                                       GROUP_CONCAT(languages.languageCode SEPARATOR ', ') AS languageCodes,
+                                                                                       CONCAT(`editor`.`fname`, ' ', `editor`.`sname`) AS changeUser,
+                                                                                       (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = " . $this->intLanguageId . " WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageLinkTitle,
+                                                                                 (SELECT pt.title FROM pageLinks, pages AS p LEFT JOIN pageTitles AS pt ON pt.pageId = p.pageId AND pt.version = p.version AND pt.idLanguages = 0 WHERE pageLinks.idPages = pages.id AND pageLinks.pageId = p.pageId ORDER BY p.version DESC LIMIT 1) AS pageGuiLinkTitle
+                                                                            FROM pages
+                                                                                LEFT JOIN folders ON folders.idRootLevels = " . $intRootLevelId . "
+                                                                                INNER JOIN pageProperties ON
+                                                                                            pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version
+                                                                                        INNER JOIN pageTitles ON
+                                                                                            pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = pageProperties.idLanguages
+                                                                                        INNER JOIN languages ON languages.id = pageTitles.idLanguages
+                                                                                        LEFT JOIN pageTitles AS displayTitle ON
+                                                                                            displayTitle.pageId = pages.pageId AND displayTitle.version = pages.version AND displayTitle.idLanguages = " . Zend_Auth::getInstance()->getIdentity()->languageId . "
+                                                                                        INNER JOIN pageTitles As fallbackTitle ON
+                                                                                            fallbackTitle.pageId = pages.pageId AND fallbackTitle.version = pages.version AND fallbackTitle.idLanguages = 0
+                                                                                        LEFT JOIN users AS editor ON editor.id = pageProperties.idUsers
+                                                                                        LEFT JOIN pageTypes ON pageTypes.id = pageProperties.idPageTypes
+                                                                                        LEFT JOIN genericForms ON genericForms.id = pageProperties.idGenericForms
+                                                                              WHERE (pages.idParent = folders.id AND pages.idParentTypes = " . $this->core->sysConfig->parent_types->folder . ") OR
+                                                                                (pages.idParent = " . $intRootLevelId . " AND pages.idParentTypes = " . $this->core->sysConfig->parent_types->rootlevel . ")
+                                                                              ORDER BY pageProperties.changed DESC,
+                                                         pageProperties.created DESC
                                             LIMIT " . $intLimitNumber, array());
 
         //print_r($sqlStmt);
