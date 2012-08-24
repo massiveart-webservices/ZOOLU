@@ -72,7 +72,8 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
     'PluginLoader'                  => '/library/massiveart/loader/pluginLoader.class.php',
     'FormElementXhtmlAbstract'      => '/library/massiveart/generic/forms/fields/form.element.xhtml.abstract.class.php',
     'FormElementMultiAbstract'      => '/library/massiveart/generic/forms/fields/form.element.multi.abstract.class.php',
-    'Export'												=> '/library/massiveart/utilities/export.class.php',
+    'Export'						=> '/library/massiveart/utilities/export.class.php',
+    'Zip'                           => '/library/massiveart/utilities/zip.class.php',
     
     // Gearman
     'GearmanReplicationMailChimp'	  => '/library/massiveart/gearman/replication/mailchimp.replication.class.php',

@@ -650,7 +650,12 @@
         <vidbase>/website/uploads/videos/</vidbase>
         <thumb>/website/uploads/images/%sthumb/</thumb>
         <icon32>/website/uploads/images/%sicon32/</icon32>
-      </paths>
+      </paths>      
+      <download>
+        <zip_extensions>
+          <extension>dxf</extension>
+        </zip_extensions>
+      </download>
     </media>
     
     <!-- ENVIRONMENT -->    
