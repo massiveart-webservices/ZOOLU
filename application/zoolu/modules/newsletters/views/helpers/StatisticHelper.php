@@ -40,34 +40,37 @@
  * @version 1.0
  */
 
-class StatisticHelper {
-  
-  private $BAR_COLORS = array('0' => array('R' => 117, 'G' => 68, 'B' => 128, 'Alpha' => 100));
+class StatisticHelper
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
+    private $BAR_COLORS = array('0' => array('R' => 117, 'G' => 68, 'B' => 128, 'Alpha' => 100));
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * getNewsletterInfo
-   * @param MailChimpCampaign $objNewsletter
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function getNewsletterInfo(MailChimpCampaign $objCampaign, $strDeliveryDate, $strFilterTitle){
-    $strOutput = '';
-    
-    $strOutput .= '
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
+
+    /**
+     * getNewsletterInfo
+     * @param MailChimpCampaign $objNewsletter
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function getNewsletterInfo(MailChimpCampaign $objCampaign, $strDeliveryDate, $strFilterTitle)
+    {
+        $strOutput = '';
+
+        $strOutput .= '
     <div class="box-12">
       <div class="editbox">
         <div class="cornertl">
@@ -75,43 +78,43 @@ class StatisticHelper {
         </div>
         <div class="cornertr"></div>
         <div class="editboxtitlecontainer">
-          <div class="editboxtitle">'.$this->core->translate->_('General_information').'</div><div class="clear"></div>
+          <div class="editboxtitle">' . $this->core->translate->_('General_information') . '</div><div class="clear"></div>
         </div>
         <div style="" class="editboxfields">
           <div class="field-6">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Subject').'
+                ' . $this->core->translate->_('Subject') . '
               </label>
               <br>
-              '.$objCampaign->getTitle().'
+              ' . $objCampaign->getTitle() . '
             </div>
           </div>
           <div class="field-6">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Recipients').'
+                ' . $this->core->translate->_('Recipients') . '
               </label>
               <br>
-              '.$objCampaign->getRecipientCount().'
+              ' . $objCampaign->getRecipientCount() . '
             </div>
           </div>
           <div class="field-6">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Delivery_date').'
+                ' . $this->core->translate->_('Delivery_date') . '
               </label>
               <br>
-              '.$strDeliveryDate.'
+              ' . $strDeliveryDate . '
             </div>
           </div>
           <div class="field-6">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Sent_to_filter').'
+                ' . $this->core->translate->_('Sent_to_filter') . '
               </label>
               <br>
-              '.$strFilterTitle.'
+              ' . $strFilterTitle . '
             </div>
           </div>
           <div class="clear"></div>
@@ -120,43 +123,44 @@ class StatisticHelper {
         <div class="cornerbr"></div>
       </div>
     </div>';
-    
-    return $strOutput;
-  }
-  
-  public function getNewsletterStatistics(MailChimpCampaign $objCampaign){
-    $intRecipients = $objCampaign->getRecipientCount();
-    $intDelivered = $objCampaign->getSuccessfulDelivers();
-    $strOutput = '';
-    $intTimestamp = time();
-    
-    $this->drawChart($this->getPercentage($intRecipients, $objCampaign->getUniqueOpenCount()), 'OpenChart_'.$objCampaign->getCampaignId());
-    $this->drawChart($this->getPercentage($intRecipients, $intRecipients - $objCampaign->getUniqueOpenCount()), 'UnopenChart_'.$objCampaign->getCampaignId());
-    $this->drawChart($this->getPercentage($intRecipients, $objCampaign->getUniqueRecipientClickCount()), 'ClickChart_'.$objCampaign->getCampaignId());
-    
-    //Transform Data
-    $arrClickStatistics = $objCampaign->getClickStatistics();
-    $strClickStatistics = (count($arrClickStatistics) > 0) ? json_encode((object)$arrClickStatistics) : '';
-    
-    $arrUnsubscribes = $objCampaign->getUnsubscribes();
-    $strUnsubscribes = (count($arrUnsubscribes) > 0) ? json_encode((object)$arrUnsubscribes) : '';
-    
-    $arrComplaints = $objCampaign->getComplaints();
-    $strComplaints = (count($arrComplaints) > 0) ? json_encode((object)$arrComplaints) : '';
-    
-    $arrBounces = $objCampaign->getBounces();
-    $cntBounces =  count($arrBounces);
-    for($i = 0; $i < $cntBounces; $i++){
-      unset($arrBounces[$i]['message']);
+
+        return $strOutput;
     }
-    $strBounces = (count($arrBounces) > 0) ? json_encode((object)$arrBounces) : '';
-    
-    $strOutput .= '
+
+    public function getNewsletterStatistics(MailChimpCampaign $objCampaign)
+    {
+        $intRecipients = $objCampaign->getRecipientCount();
+        $intDelivered = $objCampaign->getSuccessfulDelivers();
+        $strOutput = '';
+        $intTimestamp = time();
+
+        $this->drawChart($this->getPercentage($intRecipients, $objCampaign->getUniqueOpenCount()), 'OpenChart_' . $objCampaign->getCampaignId());
+        $this->drawChart($this->getPercentage($intRecipients, $intRecipients - $objCampaign->getUniqueOpenCount()), 'UnopenChart_' . $objCampaign->getCampaignId());
+        $this->drawChart($this->getPercentage($intRecipients, $objCampaign->getUniqueRecipientClickCount()), 'ClickChart_' . $objCampaign->getCampaignId());
+
+        //Transform Data
+        $arrClickStatistics = $objCampaign->getClickStatistics();
+        $strClickStatistics = (count($arrClickStatistics) > 0) ? json_encode((object) $arrClickStatistics) : '';
+
+        $arrUnsubscribes = $objCampaign->getUnsubscribes();
+        $strUnsubscribes = (count($arrUnsubscribes) > 0) ? json_encode((object) $arrUnsubscribes) : '';
+
+        $arrComplaints = $objCampaign->getComplaints();
+        $strComplaints = (count($arrComplaints) > 0) ? json_encode((object) $arrComplaints) : '';
+
+        $arrBounces = $objCampaign->getBounces();
+        $cntBounces = count($arrBounces);
+        for ($i = 0; $i < $cntBounces; $i++) {
+            unset($arrBounces[$i]['message']);
+        }
+        $strBounces = (count($arrBounces) > 0) ? json_encode((object) $arrBounces) : '';
+
+        $strOutput .= '
       <!-- JSON Data -->
-      <div id="statClicks" style="display:none;">'.$strClickStatistics.'</div>
-      <div id="statUnsubscribes" style="display:none;">'.$strUnsubscribes.'</div>
-      <div id="statComplaints" style="display:none">'.$strComplaints.'</div>
-      <div id="statBounces" style="display:none">'.$strBounces.'</div>
+      <div id="statClicks" style="display:none;">' . $strClickStatistics . '</div>
+      <div id="statUnsubscribes" style="display:none;">' . $strUnsubscribes . '</div>
+      <div id="statComplaints" style="display:none">' . $strComplaints . '</div>
+      <div id="statBounces" style="display:none">' . $strBounces . '</div>
       <!-- end JSON data -->
       <div class="box-12">
       <div class="editbox">
@@ -165,106 +169,106 @@ class StatisticHelper {
         </div>
         <div class="cornertr"></div>
         <div class="editboxtitlecontainer">
-          <div class="editboxtitle">'.$this->core->translate->_('Statistics').'</div><div class="clear"></div>
+          <div class="editboxtitle">' . $this->core->translate->_('Statistics') . '</div><div class="clear"></div>
         </div>
         <div style="" class="editboxfields">
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Open_chart').'
+                ' . $this->core->translate->_('Open_chart') . '
               </label><br />
-              <img src="/tmp/images/OpenChart_'.$objCampaign->getCampaignId().'.png?v='.$intTimestamp.'" />
+              <img src="/tmp/images/OpenChart_' . $objCampaign->getCampaignId() . '.png?v=' . $intTimestamp . '" />
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Unopen_chart').'
+                ' . $this->core->translate->_('Unopen_chart') . '
               </label><br />
-              <img src="/tmp/images/UnopenChart_'.$objCampaign->getCampaignId().'.png?v='.$intTimestamp.'" />
+              <img src="/tmp/images/UnopenChart_' . $objCampaign->getCampaignId() . '.png?v=' . $intTimestamp . '" />
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Click_chart').'
+                ' . $this->core->translate->_('Click_chart') . '
               </label><br />
-              <img src="/tmp/images/ClickChart_'.$objCampaign->getCampaignId().'.png?v='.$intTimestamp.'" style="cursor:pointer;" onclick="myForm.showStatisticTable(\'clicks\', \'statClicks\', true)" />
+              <img src="/tmp/images/ClickChart_' . $objCampaign->getCampaignId() . '.png?v=' . $intTimestamp . '" style="cursor:pointer;" onclick="myForm.showStatisticTable(\'clicks\', \'statClicks\', true)" />
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                <a onclick="myForm.showStatisticTable(\'unsubscribes\', \'statUnsubscribes\', false)" href="#">'.$this->core->translate->_('Unsubscribers').'</a>
+                <a onclick="myForm.showStatisticTable(\'unsubscribes\', \'statUnsubscribes\', false)" href="#">' . $this->core->translate->_('Unsubscribers') . '</a>
               </label>
-              '.$this->getPercentage($intRecipients, $objCampaign->getUnsubscribeCount()).'
+              ' . $this->getPercentage($intRecipients, $objCampaign->getUnsubscribeCount()) . '
               <a onclick="myForm.exportStatistics(\'unsubscribes\')" href="#">(CSV)</a>
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                <a onclick="myForm.showStatisticTable(\'complaints\', \'statComplaints\', false)" href="#">'.$this->core->translate->_('Complaints').'</a>
+                <a onclick="myForm.showStatisticTable(\'complaints\', \'statComplaints\', false)" href="#">' . $this->core->translate->_('Complaints') . '</a>
               </label>
-              '.$this->getPercentage($intRecipients, $objCampaign->getComplaintCount()).'
+              ' . $this->getPercentage($intRecipients, $objCampaign->getComplaintCount()) . '
               <a onclick="myForm.exportStatistics(\'complaints\')" href="#">(CSV)</a>
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Delivered_to').'
+                ' . $this->core->translate->_('Delivered_to') . '
               </label>
-              '.$this->getPercentage($intRecipients, $objCampaign->getSuccessfulDelivers()).'
+              ' . $this->getPercentage($intRecipients, $objCampaign->getSuccessfulDelivers()) . '
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Unique_opens').'
+                ' . $this->core->translate->_('Unique_opens') . '
               </label>
-              '.$this->getPercentage($objCampaign->getOpenCount(), $objCampaign->getUniqueOpenCount()).'
+              ' . $this->getPercentage($objCampaign->getOpenCount(), $objCampaign->getUniqueOpenCount()) . '
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Opens_total').'
+                ' . $this->core->translate->_('Opens_total') . '
               </label>
-              '.$objCampaign->getOpenCount().'
+              ' . $objCampaign->getOpenCount() . '
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                <a onclick="myForm.showStatisticTable(\'bounces\', \'statBounces\', false)" href="#">'.$this->core->translate->_('Bounce').'</a>
+                <a onclick="myForm.showStatisticTable(\'bounces\', \'statBounces\', false)" href="#">' . $this->core->translate->_('Bounce') . '</a>
               </label>
-              '.$objCampaign->getBounceCount().'
+              ' . $objCampaign->getBounceCount() . '
               <a onclick="myForm.exportStatistics(\'bounces\')" href="#">(CSV)</a>
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Total_clicks').'
+                ' . $this->core->translate->_('Total_clicks') . '
               </label>
-              '.$objCampaign->getClicksCount().'
+              ' . $objCampaign->getClicksCount() . '
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Forward').'
+                ' . $this->core->translate->_('Forward') . '
               </label>
-              '.$objCampaign->getForwardCount().'
+              ' . $objCampaign->getForwardCount() . '
             </div>
           </div>
           <div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$this->core->translate->_('Forward_Opens').'
+                ' . $this->core->translate->_('Forward_Opens') . '
               </label>
-              '.$objCampaign->getForwardOpenCount().'
+              ' . $objCampaign->getForwardOpenCount() . '
             </div>
           </div>
           <div class="clear"></div>
@@ -273,15 +277,16 @@ class StatisticHelper {
         <div class="cornerbr"></div>
       </div>
     </div>';
-    
-    return $strOutput;
-  }
+
+        return $strOutput;
+    }
 
 
-  public function getNewsletterCountries(MailChimpCampaign $objCampaign){
-    $strOutput = '';
-    
-    $strOutput .= '
+    public function getNewsletterCountries(MailChimpCampaign $objCampaign)
+    {
+        $strOutput = '';
+
+        $strOutput .= '
     <div class="box-12">
       <div class="editbox">
         <div class="cornertl">
@@ -289,57 +294,60 @@ class StatisticHelper {
         </div>
         <div class="cornertr"></div>
         <div class="editboxtitlecontainer">
-          <div class="editboxtitle">'.$this->core->translate->_('Country_statistics').'</div><div class="clear"></div>
+          <div class="editboxtitle">' . $this->core->translate->_('Country_statistics') . '</div><div class="clear"></div>
         </div>
         <div style="" class="editboxfields">';
-        
-    //Display all the countries
-    $arrCountries = $objCampaign->getCountryStatistics();
-    if(count($arrCountries) > 0){
-      foreach($arrCountries as $arrCountry){
-        $strOutput .= '<div class="field-4">
+
+        //Display all the countries
+        $arrCountries = $objCampaign->getCountryStatistics();
+        if (count($arrCountries) > 0) {
+            foreach ($arrCountries as $arrCountry) {
+                $strOutput .= '<div class="field-4">
             <div class="field">
               <label class="fieldtitle">
-                '.$arrCountry['name'].'
+                ' . $arrCountry['name'] . '
               </label>
-              '.$arrCountry['opens'].'
+              ' . $arrCountry['opens'] . '
             </div>
           </div>';
-      }
-    }
+            }
+        }
 
-    $strOutput .= '<div class="clear"></div>
+        $strOutput .= '<div class="clear"></div>
         </div>
         <div class="cornerbl"></div>
         <div class="cornerbr"></div>
       </div>
     </div>';
-    
-    return $strOutput;
-  }
 
-  /**
-   * drawChart
-   * @param number $intCampaignValue
-   */
-  private function drawChart($intCampaignValue, $strName){
-    $objChart = new Chart(200,300,array($intCampaignValue), array('Campaign'));
-    $objChart->drawBarChart(array('DisplayValues' => true, 'OverrideColors' => $this->BAR_COLORS));
-    $objChart->render(GLOBAL_ROOT_PATH.'public/tmp/images/'.$strName.'.png');
-  }
-
-  /**
-   * getPercentage
-   * @return string
-   */
-  public function getPercentage($intTotal, $intValue, $intPrecision = 2){
-    if($intTotal != 0 && $intValue != 0){
-      $intRet = $intValue / $intTotal * 100;
-      $intRet = round($intRet, $intPrecision);
-      return $intRet.'%';
-    }else{
-      return '0%';
+        return $strOutput;
     }
-  }
+
+    /**
+     * drawChart
+     * @param number $intCampaignValue
+     */
+    private function drawChart($intCampaignValue, $strName)
+    {
+        $objChart = new Chart(200, 300, array($intCampaignValue), array('Campaign'));
+        $objChart->drawBarChart(array('DisplayValues' => true, 'OverrideColors' => $this->BAR_COLORS));
+        $objChart->render(GLOBAL_ROOT_PATH . 'public/tmp/images/' . $strName . '.png');
+    }
+
+    /**
+     * getPercentage
+     * @return string
+     */
+    public function getPercentage($intTotal, $intValue, $intPrecision = 2)
+    {
+        if ($intTotal != 0 && $intValue != 0) {
+            $intRet = $intValue / $intTotal * 100;
+            $intRet = round($intRet, $intPrecision);
+            return $intRet . '%';
+        } else {
+            return '0%';
+        }
+    }
 }
+
 ?>

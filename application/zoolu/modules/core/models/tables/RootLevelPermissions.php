@@ -40,22 +40,23 @@
  * @version 1.0
  */
 
-class Model_Table_RootLevelPermissions extends Zend_Db_Table_Abstract {
+class Model_Table_RootLevelPermissions extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'rootLevelPermissions';
+    protected $_name = 'rootLevelPermissions';
 
-  protected $_referenceMap    = array(
-      'RootLevel' => array(
-          'columns'           => array('idRootLevels'),
-          'refTableClass'     => 'rootLevels',
-          'refColumns'        => array('id')
-      ),
-      'Group' => array(
-          'columns'           => array('idGroups'),
-          'refTableClass'     => 'groups',
-          'refColumns'        => array('id')
-      )
-  );
+    protected $_referenceMap = array(
+        'RootLevel' => array(
+            'columns'           => array('idRootLevels'),
+            'refTableClass'     => 'rootLevels',
+            'refColumns'        => array('id')
+        ),
+        'Group'     => array(
+            'columns'           => array('idGroups'),
+            'refTableClass'     => 'groups',
+            'refColumns'        => array('id')
+        )
+    );
 }
 
 ?>

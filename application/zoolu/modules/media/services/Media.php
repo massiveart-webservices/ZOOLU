@@ -35,112 +35,118 @@
  *
  * Version history (please keep backward compatible):
  * 1.0, 2011-05-06: Cornelius Hansjakob
-
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  */
 
-class Service_Media {
+class Service_Media
+{
 
-  /**
-   * @var Core
-   */
-  protected $core;
-  
-  /**
-   * @var Model_Files
-   */
-  protected $objModelFiles;
+    /**
+     * @var Core
+     */
+    protected $core;
 
-  /**
-   * Constructor
-   */
-  public function __construct() {
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * @var Model_Files
+     */
+    protected $objModelFiles;
 
-  /**
-   * videoToLoad
-   * @param string $strDomainBase
-   * @param string $strHash 
-   * @return object
-   */
-  public function videoToLoad($strDomainBase, $strHash) {
-    $this->core->logger->debug('media->services->Media->videoToLoad('.$strDomainBase.', '.$strHash.')');
-    try {
-      $objReturn = new stdClass();
-      
-      // validate hash
-      if($strHash == $this->core->config->crypt->key){
-        // define enviroment
-        $objReturn->enviroment = APPLICATION_ENV;
-        
-        $objFiles = $this->getModelFiles()->loadFilesByStreamStatus(18, false, true); // 18 = rootlevel of videos
-        
-        if(count($objFiles) > 0){
-          foreach($objFiles as $objFileData){
-            $objReturn->fileLinks[] = array('id'       => $objFileData->id,
-            																'filename' => $objFileData->filename, 
-                                            'path'     => $objFileData->path,
-            															  'url'      => 'http://'.$strDomainBase.'/zoolu-website/media/download/'.$objFileData->id.'/'.urlencode($objFileData->filename));  
-          }  
-        }  
-      }else{
-        $objReturn->message = 'Forbidden!';  
-      }
-      return $objReturn;
-    }catch(Exception $exc){
-      $this->core->logger->err($exc->getMessage());
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-  }
-  
-  /**
-   * videoLoadSuccessful
-   * @param integer $intFileId
-   * @param string $strHash
-   * @return object
-   */
-  public function videoLoadSuccessful($intFileId, $strHash){
-    $this->core->logger->debug('media->services->Media->videoLoadSuccessful('.$intFileId.' ,'.$strHash.')');
-    try {
-      $objReturn = new stdClass();
-      
-      // validate hash
-      if($strHash == $this->core->config->crypt->key){
-        $intEffectedRows = $this->getModelFiles()->changeFileStreamStatusById($intFileId, true);      
-        if($intEffectedRows > 0){
-          $objReturn->successful = true;  
-        }else{
-          $objReturn->successful = false;  
+
+    /**
+     * videoToLoad
+     * @param string $strDomainBase
+     * @param string $strHash
+     * @return object
+     */
+    public function videoToLoad($strDomainBase, $strHash)
+    {
+        $this->core->logger->debug('media->services->Media->videoToLoad(' . $strDomainBase . ', ' . $strHash . ')');
+        try {
+            $objReturn = new stdClass();
+
+            // validate hash
+            if ($strHash == $this->core->config->crypt->key) {
+                // define enviroment
+                $objReturn->enviroment = APPLICATION_ENV;
+
+                $objFiles = $this->getModelFiles()->loadFilesByStreamStatus(18, false, true); // 18 = rootlevel of videos
+
+                if (count($objFiles) > 0) {
+                    foreach ($objFiles as $objFileData) {
+                        $objReturn->fileLinks[] = array(
+                            'id'       => $objFileData->id,
+                            'filename' => $objFileData->filename,
+                            'path'     => $objFileData->path,
+                            'url'      => 'http://' . $strDomainBase . '/zoolu-website/media/download/' . $objFileData->id . '/' . urlencode($objFileData->filename)
+                        );
+                    }
+                }
+            } else {
+                $objReturn->message = 'Forbidden!';
+            }
+            return $objReturn;
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc->getMessage());
         }
-      }else{
-        $objReturn->successful = false;
-        $objReturn->message = 'Forbidden!'; 
-      }
-      return $objReturn;
-    }catch(Exception $exc){
-      $this->core->logger->err($exc->getMessage());
-    }  
-  }
-  
-  /**
-   * getModelFiles
-   * @return Model_Files
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  private function getModelFiles(){
-    if (null === $this->objModelFiles) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Files.php';
-      $this->objModelFiles = new Model_Files();
     }
-    return $this->objModelFiles;
-  }
+
+    /**
+     * videoLoadSuccessful
+     * @param integer $intFileId
+     * @param string $strHash
+     * @return object
+     */
+    public function videoLoadSuccessful($intFileId, $strHash)
+    {
+        $this->core->logger->debug('media->services->Media->videoLoadSuccessful(' . $intFileId . ' ,' . $strHash . ')');
+        try {
+            $objReturn = new stdClass();
+
+            // validate hash
+            if ($strHash == $this->core->config->crypt->key) {
+                $intEffectedRows = $this->getModelFiles()->changeFileStreamStatusById($intFileId, true);
+                if ($intEffectedRows > 0) {
+                    $objReturn->successful = true;
+                } else {
+                    $objReturn->successful = false;
+                }
+            } else {
+                $objReturn->successful = false;
+                $objReturn->message = 'Forbidden!';
+            }
+            return $objReturn;
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc->getMessage());
+        }
+    }
+
+    /**
+     * getModelFiles
+     * @return Model_Files
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    private function getModelFiles()
+    {
+        if (null === $this->objModelFiles) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Files.php';
+            $this->objModelFiles = new Model_Files();
+        }
+        return $this->objModelFiles;
+    }
 }
 
 ?>

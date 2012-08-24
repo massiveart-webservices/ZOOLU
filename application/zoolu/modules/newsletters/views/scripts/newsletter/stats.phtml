@@ -1,11 +1,11 @@
 <?php
-require_once (dirname(__FILE__).'/../../helpers/StatisticHelper.php');
+require_once (dirname(__FILE__) . '/../../helpers/StatisticHelper.php');
 $objHelper = new StatisticHelper();
 ?>
 <div id="statistics">
-  <?php 
-  echo $objHelper->getNewsletterInfo($this->objNewsletter, $this->strDeliveryDate, $this->strFilterTitle);
-  echo $objHelper->getNewsletterStatistics($this->objNewsletter);
-  echo $objHelper->getNewsletterCountries($this->objNewsletter);
-  ?>
+    <?php
+    echo $objHelper->getNewsletterInfo($this->objNewsletter, $this->strDeliveryDate, $this->strFilterTitle);
+    echo $objHelper->getNewsletterStatistics($this->objNewsletter);
+    echo $objHelper->getNewsletterCountries($this->objNewsletter);
+    ?>
 </div>

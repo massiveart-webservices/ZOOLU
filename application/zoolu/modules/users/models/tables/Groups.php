@@ -40,12 +40,13 @@
  * @version 1.0
  */
 
-class Model_Table_Groups extends Zend_Db_Table_Abstract {
+class Model_Table_Groups extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'groups';
-  protected $_primary = 'id';
+    protected $_name = 'groups';
+    protected $_primary = 'id';
 
-  protected $_dependentTables = array('GroupPermissions', 'ResourceGroups', 'UserGroups');
+    protected $_dependentTables = array('GroupPermissions', 'ResourceGroups', 'UserGroups');
 }
 
 ?>

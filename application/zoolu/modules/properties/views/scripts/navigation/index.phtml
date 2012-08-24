@@ -1,42 +1,42 @@
 <?php
 
-  require_once (dirname(__FILE__).'/../../helpers/NavigationHelper.php');
-  $objHelper = new NavigationHelper();
+require_once (dirname(__FILE__) . '/../../helpers/NavigationHelper.php');
+$objHelper = new NavigationHelper();
 
-?>    
-    <script type="text/javascript">//<![CDATA[    
-      var categoryFormDefaultId = '<?php echo $this->categoryFormDefaultId; ?>';
-      var unitFormDefaultId  = '<?php echo $this->unitFormDefaultId; ?>';
-      var contactFormDefaultId  = '<?php echo $this->contactFormDefaultId; ?>';
-    //]]>
-    </script>
-    
-    <!-- navigation main -->
-    <div id="navigation-main">
+?>
+<script type="text/javascript">//<![CDATA[
+var categoryFormDefaultId = '<?php echo $this->categoryFormDefaultId; ?>';
+var unitFormDefaultId = '<?php echo $this->unitFormDefaultId; ?>';
+var contactFormDefaultId = '<?php echo $this->contactFormDefaultId; ?>';
+//]]>
+</script>
 
-      <!-- navigation left -->
-      <div id="divNaviLeft">
+<!-- navigation main -->
+<div id="navigation-main">
+
+    <!-- navigation left -->
+    <div id="divNaviLeft">
         <div id="divNaviLeftInner">
-          <!-- main navigatin -->
-          <div id="divNaviLeftMain">
-            <?php echo $objHelper->getRootLevels($this->rootLevels); ?>
-          </div>
+            <!-- main navigatin -->
+            <div id="divNaviLeftMain">
+                <?php echo $objHelper->getRootLevels($this->rootLevels); ?>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- navigation center -->
-      <div id="divNaviCenter">
+    <!-- navigation center -->
+    <div id="divNaviCenter">
         <!-- navigation output container -->
         <div id="divNaviCenterInner">
         </div>
-      </div>
+    </div>
 
-      <!-- navigation right -->
-      <div id="divNaviRight">
+    <!-- navigation right -->
+    <div id="divNaviRight">
         <div id="divNaviRightInner">
-          
-        </div>
-      </div>
 
-      <div class="clear"></div>
-    </div> <!-- END navigation main -->
+        </div>
+    </div>
+
+    <div class="clear"></div>
+</div> <!-- END navigation main -->

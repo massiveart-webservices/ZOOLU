@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -32,85 +32,90 @@
 
 /**
  * Model_Languages
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2011-09-14: Daniel Rotter
- * 
+ *
  * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  */
 
-class Model_Languages {
-    
-  /**
-   * @var Core
-   */
-  private $core;
-  
-  /**
-   * @var Model_Table_Languages
-   */
-  protected $objLanguagesTable;
-  
-  /**
-   * Constructor 
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * loadLanguages
-   * @return Zend_Db_Table_Rowset
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function loadLanguages($intRootLevelId = null, array $arrLanguagesExclude = array()){
-    $objSelect = $this->getLanguagesTable()->select()->setIntegrityCheck(false);
-    
-    $objSelect->from('languages', array('id', 'languageCode', 'title'));
-    if($intRootLevelId != null){
-      $objSelect->join('rootLevelLanguages', 'rootLevelLanguages.idLanguages = languages.id', array())
+class Model_Languages
+{
+
+    /**
+     * @var Core
+     */
+    private $core;
+
+    /**
+     * @var Model_Table_Languages
+     */
+    protected $objLanguagesTable;
+
+    /**
+     * Constructor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
+
+    /**
+     * loadLanguages
+     * @return Zend_Db_Table_Rowset
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadLanguages($intRootLevelId = null, array $arrLanguagesExclude = array())
+    {
+        $objSelect = $this->getLanguagesTable()->select()->setIntegrityCheck(false);
+
+        $objSelect->from('languages', array('id', 'languageCode', 'title'));
+        if ($intRootLevelId != null) {
+            $objSelect->join('rootLevelLanguages', 'rootLevelLanguages.idLanguages = languages.id', array())
                 ->where('rootLevelLanguages.idRootLevels = ?', $intRootLevelId);
+        }
+        if (count($arrLanguagesExclude) > 0) {
+            $objSelect->where('languages.id NOT IN (?)', $arrLanguagesExclude);
+        }
+        $objSelect->order('title');
+
+        return $this->getLanguagesTable()->fetchAll($objSelect);
     }
-    if(count($arrLanguagesExclude) > 0){
-      $objSelect->where('languages.id NOT IN (?)', $arrLanguagesExclude);
+
+    /**
+     * loadLanguageById
+     * @param number $intLanguageId
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadLanguageById($intLanguageId)
+    {
+        $objSelect = $this->getLanguagesTable()->select()->setIntegrityCheck(false);
+
+        $objSelect->from('languages', array('id', 'languageCode', 'title'));
+        $objSelect->where('id = ?', $intLanguageId);
+
+        return $this->getLanguagesTable()->fetchAll($objSelect);
     }
-    $objSelect->order('title');
-    
-    return $this->getLanguagesTable()->fetchAll($objSelect);
-  }
-  
-  /**
-   * loadLanguageById
-   * @param number $intLanguageId
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function loadLanguageById($intLanguageId){
-    $objSelect = $this->getLanguagesTable()->select()->setIntegrityCheck(false);
-    
-    $objSelect->from('languages', array('id', 'languageCode', 'title'));
-    $objSelect->where('id = ?', $intLanguageId);
-    
-    return $this->getLanguagesTable()->fetchAll($objSelect);
-  }
-  
-  /**
-   * getActivityCommentsTable
-   * @return Zend_Db_Table_Abstract
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function getLanguagesTable(){
-    if($this->objLanguagesTable === null) {
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/tables/Languages.php';
-      $this->objLanguagesTable = new Model_Table_Languages();
+
+    /**
+     * getActivityCommentsTable
+     * @return Zend_Db_Table_Abstract
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getLanguagesTable()
+    {
+        if ($this->objLanguagesTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/Languages.php';
+            $this->objLanguagesTable = new Model_Table_Languages();
+        }
+        return $this->objLanguagesTable;
     }
-    return $this->objLanguagesTable;
-  }
 }
 
 ?>

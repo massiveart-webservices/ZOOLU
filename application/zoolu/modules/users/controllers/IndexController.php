@@ -40,40 +40,43 @@
  * @version 1.0
  */
 
-class Users_IndexController extends AuthControllerAction {
+class Users_IndexController extends AuthControllerAction
+{
 
-  /**
-   * init
-   */
-  public function init(){
-    parent::init();
-    if(!Security::get()->isAllowed('user_administration', Security::PRIVILEGE_VIEW)){
-      $this->_redirect('/zoolu');
+    /**
+     * init
+     */
+    public function init()
+    {
+        parent::init();
+        if (!Security::get()->isAllowed('user_administration', Security::PRIVILEGE_VIEW)) {
+            $this->_redirect('/zoolu');
+        }
     }
-  }
-  
-  /**
-   * The default action - show the home page
-   */
-  public function indexAction(){
 
-    $this->_helper->viewRenderer->setNoRender();
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
 
-    Zend_Layout::startMvc(array(
-      'layout' => 'users',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
+        $this->_helper->viewRenderer->setNoRender();
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'users'));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->users)));
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'users',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('module', $this->core->sysConfig->modules->users);
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'users'));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->users)));
 
-  }
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('module', $this->core->sysConfig->modules->users);
+
+    }
 }
 
 ?>

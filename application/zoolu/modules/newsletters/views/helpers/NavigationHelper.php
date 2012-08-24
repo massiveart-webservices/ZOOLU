@@ -40,108 +40,111 @@
  * @version 1.0
  */
 
-class NavigationHelper {
+class NavigationHelper
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-
-  /**
-   * getMainNavigation
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getMainNavigation(NavigationTree $rootLevelNavigation, $rootLevelId, $strViewType = '') {
-    $this->core->logger->debug('newsletters->views->helpers->NavigationHelper->getMainNavigation()');
-
-    $strOutput = '';
-    
-    foreach ($rootLevelNavigation as $objNavigationTree) {
-    
-      if(count($objNavigationTree) == 1){        
-        foreach($objNavigationTree as $objNavigation){
-          if(Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$objNavigation->getId(), Security::PRIVILEGE_VIEW, true, false)){
-            $strSelected = '';
-            if($rootLevelId == $objNavigation->getId()){
-              $strSelected = ' selected';
-             
-              $strOutput .= '
-              <script type="text/javascript">//<![CDATA[
-                var preSelectedNaviItem = \'naviitem'.$objNavigation->getId().'\';
-              </script>';
-            }      
-            
-            $strOutput .= '
-          <div class="naviitemcontainer">
-            <div id="naviitem'.$objNavigation->getId().'" class="naviitem'.$strSelected.'" onclick="myNavigation.selectRootLevel('.$objNavigation->getId().', '.$objNavigationTree->getTypeId().', \''.$objNavigation->getUrl().'\', true, \''.$strViewType.'\'); return false;">
-              <div class="producticon"></div>
-              <div id="divRootLevelTitle_'.$objNavigation->getId().'" class="itemtitle">'.htmlentities($objNavigation->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
-              <div class="clear"></div>
-              <input type="hidden" value="'.$objNavigationTree->getItemId().'" id="rootLevelGroupKey'.$objNavigationTree->getTypeId().'"/>
-              <input type="hidden" value="'.$objNavigation->getLanguageId().'" id="rootLevelLanguageId'.$objNavigation->getId().'"/>              
-            </div>
-            <div class="clear"></div>
-          </div>';
-          }
-        }
-      }else{         
-        $strSubNavi = '';
-        $strDisplaySubNavi = ' style="display:none;"';
-        $strSubNaviSelected = '';
-        foreach($objNavigationTree as $objNavigation){
-          if(Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$objNavigation->getId(), Security::PRIVILEGE_VIEW, true, false)){
-            $strSelected = '';
-            if($rootLevelId == $objNavigation->getId()){
-              $strSelected = ' selected';
-              $strSubNaviSelected = ' selected';
-              $strDisplaySubNavi = '';
-              
-              $strSubNavi .= '
-              <script type="text/javascript">//<![CDATA[
-                var preSelectedNaviItem = \'naviitem'.$objNavigationTree->getId().'\';
-                var preSelectedSubNaviItem = \'subnaviitem'.$objNavigation->getId().'\';
-              </script>';
-            }
-            
-            $strSubNavi .= '          
-              <div id="subnaviitem'.$objNavigation->getId().'" class="menulink'.$strSelected.'">
-                <div class="portalcontenticon"></div>
-                <div class="menutitle"><a onclick="myNavigation.selectRootLevel('.$objNavigation->getId().', '.$objNavigationTree->getTypeId().', \''.$objNavigation->getUrl().'\', true, \''.$strViewType.'\'); return false;" href="#">'.htmlentities($objNavigation->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></div>
-                <div class="clear"></div>
-              </div>';
-          }
-        }
-        
-        if($strSubNavi != ''){
-          $strOutput .= '
-          <div class="naviitemcontainer">
-            <div id="naviitem'.$objNavigationTree->getId().'" class="naviitem'.$strSubNaviSelected.' hasmenu" onclick="myNavigation.selectRootLevel('.$objNavigationTree->getId().', '.$objNavigationTree->getTypeId().', \'\', false, \''.$strViewType.'\'); return false;">
-              <div class="producticon"></div>
-              <div id="divRootLevelTitle_'.$objNavigationTree->getId().'" class="itemtitle">'.htmlentities($objNavigationTree->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
-              <div class="clear"></div>  
-              <input type="hidden" value="'.$objNavigationTree->getItemId().'" id="rootLevelGroupKey'.$objNavigationTree->getTypeId().'"/>
-              <input type="hidden" value="'.$objNavigationTree->getLanguageId().'" id="rootLevelLanguageId'.$objNavigationTree->getId().'"/>
-            </div>
-            <div id="naviitem'.$objNavigationTree->getId().'menu" class="menu"'.$strDisplaySubNavi.'>
-            '.$strSubNavi.'
-            </div>
-            <div class="clear"></div>
-          </div>';
-        }        
-      }  
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
 
-    return $strOutput;
-  }
+    /**
+     * getMainNavigation
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getMainNavigation(NavigationTree $rootLevelNavigation, $rootLevelId, $strViewType = '')
+    {
+        $this->core->logger->debug('newsletters->views->helpers->NavigationHelper->getMainNavigation()');
+
+        $strOutput = '';
+
+        foreach ($rootLevelNavigation as $objNavigationTree) {
+
+            if (count($objNavigationTree) == 1) {
+                foreach ($objNavigationTree as $objNavigation) {
+                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objNavigation->getId(), Security::PRIVILEGE_VIEW, true, false)) {
+                        $strSelected = '';
+                        if ($rootLevelId == $objNavigation->getId()) {
+                            $strSelected = ' selected';
+
+                            $strOutput .= '
+              <script type="text/javascript">//<![CDATA[
+                var preSelectedNaviItem = \'naviitem' . $objNavigation->getId() . '\';
+              </script>';
+                        }
+
+                        $strOutput .= '
+          <div class="naviitemcontainer">
+            <div id="naviitem' . $objNavigation->getId() . '" class="naviitem' . $strSelected . '" onclick="myNavigation.selectRootLevel(' . $objNavigation->getId() . ', ' . $objNavigationTree->getTypeId() . ', \'' . $objNavigation->getUrl() . '\', true, \'' . $strViewType . '\'); return false;">
+              <div class="producticon"></div>
+              <div id="divRootLevelTitle_' . $objNavigation->getId() . '" class="itemtitle">' . htmlentities($objNavigation->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
+              <div class="clear"></div>
+              <input type="hidden" value="' . $objNavigationTree->getItemId() . '" id="rootLevelGroupKey' . $objNavigationTree->getTypeId() . '"/>
+              <input type="hidden" value="' . $objNavigation->getLanguageId() . '" id="rootLevelLanguageId' . $objNavigation->getId() . '"/>
+            </div>
+            <div class="clear"></div>
+          </div>';
+                    }
+                }
+            } else {
+                $strSubNavi = '';
+                $strDisplaySubNavi = ' style="display:none;"';
+                $strSubNaviSelected = '';
+                foreach ($objNavigationTree as $objNavigation) {
+                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objNavigation->getId(), Security::PRIVILEGE_VIEW, true, false)) {
+                        $strSelected = '';
+                        if ($rootLevelId == $objNavigation->getId()) {
+                            $strSelected = ' selected';
+                            $strSubNaviSelected = ' selected';
+                            $strDisplaySubNavi = '';
+
+                            $strSubNavi .= '
+              <script type="text/javascript">//<![CDATA[
+                var preSelectedNaviItem = \'naviitem' . $objNavigationTree->getId() . '\';
+                var preSelectedSubNaviItem = \'subnaviitem' . $objNavigation->getId() . '\';
+              </script>';
+                        }
+
+                        $strSubNavi .= '
+              <div id="subnaviitem' . $objNavigation->getId() . '" class="menulink' . $strSelected . '">
+                <div class="portalcontenticon"></div>
+                <div class="menutitle"><a onclick="myNavigation.selectRootLevel(' . $objNavigation->getId() . ', ' . $objNavigationTree->getTypeId() . ', \'' . $objNavigation->getUrl() . '\', true, \'' . $strViewType . '\'); return false;" href="#">' . htmlentities($objNavigation->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a></div>
+                <div class="clear"></div>
+              </div>';
+                    }
+                }
+
+                if ($strSubNavi != '') {
+                    $strOutput .= '
+          <div class="naviitemcontainer">
+            <div id="naviitem' . $objNavigationTree->getId() . '" class="naviitem' . $strSubNaviSelected . ' hasmenu" onclick="myNavigation.selectRootLevel(' . $objNavigationTree->getId() . ', ' . $objNavigationTree->getTypeId() . ', \'\', false, \'' . $strViewType . '\'); return false;">
+              <div class="producticon"></div>
+              <div id="divRootLevelTitle_' . $objNavigationTree->getId() . '" class="itemtitle">' . htmlentities($objNavigationTree->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
+              <div class="clear"></div>  
+              <input type="hidden" value="' . $objNavigationTree->getItemId() . '" id="rootLevelGroupKey' . $objNavigationTree->getTypeId() . '"/>
+              <input type="hidden" value="' . $objNavigationTree->getLanguageId() . '" id="rootLevelLanguageId' . $objNavigationTree->getId() . '"/>
+            </div>
+            <div id="naviitem' . $objNavigationTree->getId() . 'menu" class="menu"' . $strDisplaySubNavi . '>
+            ' . $strSubNavi . '
+            </div>
+            <div class="clear"></div>
+          </div>';
+                }
+            }
+        }
+
+        return $strOutput;
+    }
 
 }

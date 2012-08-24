@@ -40,27 +40,29 @@
  * @version 1.0
  */
 
-class Zoolu_IndexController extends AuthControllerAction {
+class Zoolu_IndexController extends AuthControllerAction
+{
 
-  /**
-	 * The default action - show the home page
-	 */
-  public function indexAction(){
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
 
-  	$this->_helper->viewRenderer->setNoRender();
+        $this->_helper->viewRenderer->setNoRender();
 
-  	Zend_Layout::startMvc(array(
-		  'layout' => 'index',
-		  'layoutPath' => '../application/zoolu/layouts'
-		));
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'index',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-		$objLayout = Zend_Layout::getMvcInstance();
-		$objLayout->assign('navigation', '');
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', '');
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-  }
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+    }
 
 }

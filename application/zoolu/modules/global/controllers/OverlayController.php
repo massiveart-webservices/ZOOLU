@@ -40,229 +40,244 @@
  * @version 1.0
  */
 
-class Global_OverlayController extends AuthControllerAction {
+class Global_OverlayController extends AuthControllerAction
+{
 
-  private $intRootLevelId;
-  private $intFolderId;
-  
-  /**
-   * @var integer
-   */
-  protected $intItemLanguageId;
+    private $intRootLevelId;
+    private $intFolderId;
 
-	/**
-   * @var Model_Folders
-   */
-  protected $objModelFolders;
-  
-  /**
-   * @var Model_Globals
-   */
-  protected $objModelGlobals;
+    /**
+     * @var integer
+     */
+    protected $intItemLanguageId;
 
-	/**
-   * indexAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function indexAction(){ }
+    /**
+     * @var Model_Folders
+     */
+    protected $objModelFolders;
 
-  /**
-   * elementtreeAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function elementtreeAction(){
-    $this->core->logger->debug('global->controllers->OverlayController->elementtreeAction()');
+    /**
+     * @var Model_Globals
+     */
+    protected $objModelGlobals;
 
-    $objRequest = $this->getRequest();
-    $intRootLevelId = $objRequest->getParam('rootLevelId');
-    $intRootLevelGroupId = $objRequest->getParam('rootLevelGroupId');    
-    $strItemAction = $objRequest->getParam('itemAction');
-
-    $strElementIds = $objRequest->getParam('itemIds');
-
-    $strTmpElementIds = trim($strElementIds, '[]');
-    $arrElementIds = explode('][', $strTmpElementIds);
-
-
-    $this->loadGlobalTreeForRootLevel($intRootLevelId, $intRootLevelGroupId);
-    $this->view->assign('overlaytitle', $this->core->translate->_('Select_product'));
-    $this->view->assign('itemAction', $strItemAction);
-    $this->view->assign('elementIds', $arrElementIds);
-  }
-  
-  /**
-   * listglobalAction
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function listglobalAction(){
-    $this->core->logger->debug('global->controllers->OverlayController->listglobalAction()');
-    
-    $intFolderId = $this->getRequest()->getParam('folderId');
-    $strGlobalIds = $this->getRequest()->getParam('globalIds');
-    
-    $arrGlobalIds = explode('][', trim($strGlobalIds, '[]'));
-    $objGlobals = $this->getModelGlobals()->loadGlobalByParentFolder($intFolderId);
-    
-    $this->view->assign('globals', $objGlobals);
-    $this->view->assign('globalIds', $arrPageIds);
-  }
-  
-  /**
-   * internallinkAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function internallinkAction(){
-    $this->core->logger->debug('global->controllers->OverlayController->internallinkAction()');
-    $this->loadRootNavigation($this->core->sysConfig->modules->global, $this->core->sysConfig->root_level_types->global, $this->getRequest()->getParam('rootLevelId'));
-    
-    $this->view->assign('overlaytitle', $this->core->translate->_('Assign_internal_links'));
-    $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
-    $this->view->assign('contenttype', 'global');
-    $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
-    $this->renderScript('overlay/overlay.phtml');
-  }
-  
-  /**
-   * loadRootNavigation
-   * @param integer $intRootLevelModule
-   * @param integer $intRootLevelType
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function loadRootNavigation($intRootLevelModule, $intRootLevelType = -1, $intRootLevel = null){
-    $this->core->logger->debug('cms->controllers->OverlayController->loadRootNavigation('.$intRootLevelModule.', '.$intRootLevelType.', '.$intRootLevel.')');
-
-    $this->getModelFolders();
-    
-    if($intRootLevelType == $this->core->sysConfig->root_level_types->global){
-      $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel);
-      $this->view->assign('elements', $objRootLevelElements);
+    /**
+     * indexAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function indexAction()
+    {
     }
-  }
 
-  /**
-   * loadGlobalTreeForRootLevel
-   * @param integer $intRootLevelId
-   * @param integer $intRootLevelGroupId
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function loadGlobalTreeForRootLevel($intRootLevelId, $intRootLevelGroupId){
-    $this->core->logger->debug('global->controllers->OverlayController->loadGlobalTreeForRootLevel('.$intRootLevelId.', '.$intRootLevelGroupId.')');
+    /**
+     * elementtreeAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function elementtreeAction()
+    {
+        $this->core->logger->debug('global->controllers->OverlayController->elementtreeAction()');
 
-    $this->getModelFolders();
-    $objElementTree = $this->objModelFolders->loadGlobalRootLevelChilds($intRootLevelId, $intRootLevelGroupId);
+        $objRequest = $this->getRequest();
+        $intRootLevelId = $objRequest->getParam('rootLevelId');
+        $intRootLevelGroupId = $objRequest->getParam('rootLevelGroupId');
+        $strItemAction = $objRequest->getParam('itemAction');
 
-    $this->view->assign('elements', $objElementTree);
-    $this->view->assign('rootLevelId', $intRootLevelId);
-  }
-  
-  /**
-   * getItemLanguageId
-   * @param integer $intActionType
-   * @return integer
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0 
-   */
-  protected function getItemLanguageId($intActionType = null){
-    if($this->intItemLanguageId == null){
-      if(!$this->getRequest()->getParam("languageId")){
-        $this->intItemLanguageId = $this->getRequest()->getParam("rootLevelLanguageId") != '' ? $this->getRequest()->getParam("rootLevelLanguageId") : $this->core->intZooluLanguageId;
-        
-        $intRootLevelId = $this->getRequest()->getParam("rootLevelId");
-        $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
-        
-        $arrLanguages = $this->core->config->languages->language->toArray();      
-        foreach($arrLanguages as $arrLanguage){
-          if(Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$intRootLevelId.'_'.$arrLanguage['id'], $PRIVILEGE, false, false)){
-            $this->intItemLanguageId = $arrLanguage['id']; 
-            break;
-          }          
+        $strElementIds = $objRequest->getParam('itemIds');
+
+        $strTmpElementIds = trim($strElementIds, '[]');
+        $arrElementIds = explode('][', $strTmpElementIds);
+
+
+        $this->loadGlobalTreeForRootLevel($intRootLevelId, $intRootLevelGroupId);
+        $this->view->assign('overlaytitle', $this->core->translate->_('Select_product'));
+        $this->view->assign('itemAction', $strItemAction);
+        $this->view->assign('elementIds', $arrElementIds);
+    }
+
+    /**
+     * listglobalAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function listglobalAction()
+    {
+        $this->core->logger->debug('global->controllers->OverlayController->listglobalAction()');
+
+        $intFolderId = $this->getRequest()->getParam('folderId');
+        $strGlobalIds = $this->getRequest()->getParam('globalIds');
+
+        $arrGlobalIds = explode('][', trim($strGlobalIds, '[]'));
+        $objGlobals = $this->getModelGlobals()->loadGlobalByParentFolder($intFolderId);
+
+        $this->view->assign('globals', $objGlobals);
+        $this->view->assign('globalIds', $arrPageIds);
+    }
+
+    /**
+     * internallinkAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function internallinkAction()
+    {
+        $this->core->logger->debug('global->controllers->OverlayController->internallinkAction()');
+        $this->loadRootNavigation($this->core->sysConfig->modules->global, $this->core->sysConfig->root_level_types->global, $this->getRequest()->getParam('rootLevelId'));
+
+        $this->view->assign('overlaytitle', $this->core->translate->_('Assign_internal_links'));
+        $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+        $this->view->assign('contenttype', 'global');
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
+        $this->renderScript('overlay/overlay.phtml');
+    }
+
+    /**
+     * loadRootNavigation
+     * @param integer $intRootLevelModule
+     * @param integer $intRootLevelType
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function loadRootNavigation($intRootLevelModule, $intRootLevelType = -1, $intRootLevel = null)
+    {
+        $this->core->logger->debug('cms->controllers->OverlayController->loadRootNavigation(' . $intRootLevelModule . ', ' . $intRootLevelType . ', ' . $intRootLevel . ')');
+
+        $this->getModelFolders();
+
+        if ($intRootLevelType == $this->core->sysConfig->root_level_types->global) {
+            $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel);
+            $this->view->assign('elements', $objRootLevelElements);
         }
-        
-      }else{
-        $this->intItemLanguageId = $this->getRequest()->getParam("languageId");
-      }
-    }
-    
-    return $this->intItemLanguageId;
-  }
-
-  /**
-   * getModelFolders
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelFolders(){
-    if (null === $this->objModelFolders) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-      $this->objModelFolders = new Model_Folders();
-      $this->objModelFolders->setLanguageId($this->getItemLanguageId());
     }
 
-    return $this->objModelFolders;
-  }
-  
-  /**
-   * getModelGlobals
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelGlobals(){
-    if (null === $this->objModelGlobals) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'global/models/Globals.php';
-      $this->objModelGlobals = new Model_Globals();
-      $this->objModelGlobals->setLanguageId($this->getItemLanguageId());
+    /**
+     * loadGlobalTreeForRootLevel
+     * @param integer $intRootLevelId
+     * @param integer $intRootLevelGroupId
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function loadGlobalTreeForRootLevel($intRootLevelId, $intRootLevelGroupId)
+    {
+        $this->core->logger->debug('global->controllers->OverlayController->loadGlobalTreeForRootLevel(' . $intRootLevelId . ', ' . $intRootLevelGroupId . ')');
+
+        $this->getModelFolders();
+        $objElementTree = $this->objModelFolders->loadGlobalRootLevelChilds($intRootLevelId, $intRootLevelGroupId);
+
+        $this->view->assign('elements', $objElementTree);
+        $this->view->assign('rootLevelId', $intRootLevelId);
     }
 
-    return $this->objModelGlobals;
-  }
+    /**
+     * getItemLanguageId
+     * @param integer $intActionType
+     * @return integer
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getItemLanguageId($intActionType = null)
+    {
+        if ($this->intItemLanguageId == null) {
+            if (!$this->getRequest()->getParam("languageId")) {
+                $this->intItemLanguageId = $this->getRequest()->getParam("rootLevelLanguageId") != '' ? $this->getRequest()->getParam("rootLevelLanguageId") : $this->core->intZooluLanguageId;
 
-  /**
-   * setRootLevelId
-   * @param integer $intRootLevelId
-   */
-  public function setRootLevelId($intRootLevelId){
-    $this->intRootLevelId = $intRootLevelId;
-  }
+                $intRootLevelId = $this->getRequest()->getParam("rootLevelId");
+                $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
 
-  /**
-   * getRootLevelId
-   * @param integer $intRootLevelId
-   */
-  public function getRootLevelId(){
-    return $this->intRootLevelId;
-  }
+                $arrLanguages = $this->core->config->languages->language->toArray();
+                foreach ($arrLanguages as $arrLanguage) {
+                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId . '_' . $arrLanguage['id'], $PRIVILEGE, false, false)) {
+                        $this->intItemLanguageId = $arrLanguage['id'];
+                        break;
+                    }
+                }
 
-  /**
-   * setFolderId
-   * @param integer $intFolderId
-   */
-  public function setFolderId($intFolderId){
-    $this->intFolderId = $intFolderId;
-  }
+            } else {
+                $this->intItemLanguageId = $this->getRequest()->getParam("languageId");
+            }
+        }
 
-  /**
-   * getFolderId
-   * @param integer $intFolderId
-   */
-  public function getFolderId(){
-    return $this->intFolderId;
-  }
+        return $this->intItemLanguageId;
+    }
+
+    /**
+     * getModelFolders
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelFolders;
+    }
+
+    /**
+     * getModelGlobals
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelGlobals()
+    {
+        if (null === $this->objModelGlobals) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'global/models/Globals.php';
+            $this->objModelGlobals = new Model_Globals();
+            $this->objModelGlobals->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelGlobals;
+    }
+
+    /**
+     * setRootLevelId
+     * @param integer $intRootLevelId
+     */
+    public function setRootLevelId($intRootLevelId)
+    {
+        $this->intRootLevelId = $intRootLevelId;
+    }
+
+    /**
+     * getRootLevelId
+     * @param integer $intRootLevelId
+     */
+    public function getRootLevelId()
+    {
+        return $this->intRootLevelId;
+    }
+
+    /**
+     * setFolderId
+     * @param integer $intFolderId
+     */
+    public function setFolderId($intFolderId)
+    {
+        $this->intFolderId = $intFolderId;
+    }
+
+    /**
+     * getFolderId
+     * @param integer $intFolderId
+     */
+    public function getFolderId()
+    {
+        return $this->intFolderId;
+    }
 
 }
 

@@ -1,12 +1,12 @@
 <?php
-require_once (dirname(__FILE__).'/../../helpers/OverlayHelper.php');
+require_once (dirname(__FILE__) . '/../../helpers/OverlayHelper.php');
 $objHelper = new OverlayHelper();
 ?>
 <div class="oltitle"><?php echo $objHelper->getOverlayTitle($this->test); ?></div>
 <p class="confirmation">
-  <?php echo $objHelper->getConfirmationText(); ?>
+    <?php echo $objHelper->getConfirmationText(); ?>
 </p>
-<?php if($this->test == 'true'): ?>
+<?php if ($this->test == 'true'): ?>
 <?php echo $objHelper->getTestInformation($this->subject, $this->recipients); ?>
 <?php else: ?>
 <?php echo $objHelper->getInformation($this->subject, $this->recipients, $this->filtertitle); ?>

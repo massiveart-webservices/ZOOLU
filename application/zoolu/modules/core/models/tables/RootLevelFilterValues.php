@@ -35,14 +35,15 @@
  *
  * Version history (please keep backward compatible):
  * 1.0, 2011-07-07: Daniel Rotter
- * 
+ *
  * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  */
 
-class Model_Table_RootLevelFilterValues extends Zend_Db_Table_Abstract {
+class Model_Table_RootLevelFilterValues extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'rootLevelFilterValues';
+    protected $_name = 'rootLevelFilterValues';
 }
 
 ?>

@@ -40,47 +40,51 @@
  * @version 1.0
  */
 
-class Newsletters_IndexController extends AuthControllerAction {
+class Newsletters_IndexController extends AuthControllerAction
+{
 
-  /**
-   * init
-   */
-  public function init(){
-    parent::init();
-    if(!Security::get()->isAllowed('newsletters', Security::PRIVILEGE_VIEW)){
-      $this->_redirect('/zoolu');
+    /**
+     * init
+     */
+    public function init()
+    {
+        parent::init();
+        if (!Security::get()->isAllowed('newsletters', Security::PRIVILEGE_VIEW)) {
+            $this->_redirect('/zoolu');
+        }
     }
-  }
-  
-  /**
-   * The default action - show the home page
-   */
-  public function indexAction(){
-    $this->_helper->viewRenderer->setNoRender(true);
-    $this->_forward('list');
-  }
 
-  /**
-   * listAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function listAction(){
-    $this->_helper->viewRenderer->setNoRender();
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_forward('list');
+    }
 
-    Zend_Layout::startMvc(array(
-      'layout' => 'newsletters-list',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
+    /**
+     * listAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function listAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'newsletters', array('layoutType' => 'list')));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->newsletters)));
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'newsletters-list',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('module', $this->core->sysConfig->modules->newsletters);        
-  }
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'newsletters', array('layoutType' => 'list')));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->newsletters)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('module', $this->core->sysConfig->modules->newsletters);
+    }
 
 }

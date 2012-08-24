@@ -1,6 +1,6 @@
 <?php
-  require_once (dirname(__FILE__).'/../../helpers/DashboardHelper.php');
-  $objHelper = new DashboardHelper();
-  $objHelper->setTranslate($this->translate);
-  echo $objHelper->getNavigationElements($this->elements, $this->viewtype, $this->intFolderId, 0, $this->rootLevelTypeId, $this->rootLevelGroupId, $this->contenttype);
+require_once (dirname(__FILE__) . '/../../helpers/DashboardHelper.php');
+$objHelper = new DashboardHelper();
+$objHelper->setTranslate($this->translate);
+echo $objHelper->getNavigationElements($this->elements, $this->viewtype, $this->intFolderId, 0, $this->rootLevelTypeId, $this->rootLevelGroupId, $this->contenttype);
 ?>

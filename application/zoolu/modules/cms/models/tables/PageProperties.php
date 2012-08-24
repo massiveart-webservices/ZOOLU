@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -32,19 +32,20 @@
 
 /**
  * Model_Table_PageProperties
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2010-01-12: Thomas Schedler
- * 
+ *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  */
 
-class Model_Table_PageProperties extends Zend_Db_Table_Abstract {
-  
-  protected $_name = 'pageProperties';
-  protected $_primary = 'id';
-  
+class Model_Table_PageProperties extends Zend_Db_Table_Abstract
+{
+
+    protected $_name = 'pageProperties';
+    protected $_primary = 'id';
+
 }
 
 ?>

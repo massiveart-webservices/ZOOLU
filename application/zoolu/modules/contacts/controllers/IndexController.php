@@ -40,78 +40,83 @@
  * @version 1.0
  */
 
-class Contacts_IndexController extends AuthControllerAction {
+class Contacts_IndexController extends AuthControllerAction
+{
 
-  /**
-   * init
-   */
-  public function init(){
-    parent::init();
-    if(!Security::get()->isAllowed('contacts', Security::PRIVILEGE_VIEW)){
-      $this->_redirect('/zoolu');
-    }
-  }
-  
-  /**
-   * The default action - show the home page
-   */
-  public function indexAction(){
-    $this->_helper->viewRenderer->setNoRender(true);
-    $this->_forward('tree');
-  }
-
-  /**
-   * listAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function listAction(){
-    $this->_helper->viewRenderer->setNoRender();
-
-    Zend_Layout::startMvc(array(
-      'layout' => 'contacts-list',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
-    
-    //Additional information for upload
-    $strFileId = $this->getRequest()->getParam('fileId', '');
-    if($strFileId != ''){
-      $this->view->assign('fileId', $strFileId);
-      $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
+    /**
+     * init
+     */
+    public function init()
+    {
+        parent::init();
+        if (!Security::get()->isAllowed('contacts', Security::PRIVILEGE_VIEW)) {
+            $this->_redirect('/zoolu');
+        }
     }
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'contacts', array('layoutType' => 'list')));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->contacts)));
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_forward('tree');
+    }
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('module', $this->core->sysConfig->modules->contacts);   
-  }
+    /**
+     * listAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function listAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
 
-  /**
-   * treeAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function treeAction(){
-    $this->_helper->viewRenderer->setNoRender();
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'contacts-list',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-    Zend_Layout::startMvc(array(
-      'layout' => 'contacts-tree',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
+        //Additional information for upload
+        $strFileId = $this->getRequest()->getParam('fileId', '');
+        if ($strFileId != '') {
+            $this->view->assign('fileId', $strFileId);
+            $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
+        }
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'contacts', array('layoutType' => 'tree')));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->contacts)));
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'contacts', array('layoutType' => 'list')));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->contacts)));
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('module', $this->core->sysConfig->modules->contacts);    
-  }
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('module', $this->core->sysConfig->modules->contacts);
+    }
+
+    /**
+     * treeAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function treeAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'contacts-tree',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
+
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'contacts', array('layoutType' => 'tree')));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->contacts)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('module', $this->core->sysConfig->modules->contacts);
+    }
 }
 
 ?>

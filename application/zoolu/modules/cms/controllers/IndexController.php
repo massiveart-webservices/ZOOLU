@@ -40,105 +40,110 @@
  * @version 1.0
  */
 
-class Cms_IndexController extends ModuleControllerAction {
-  
-  /**
-   * @var Model_Folders
-   */
-  private $objModelFolders;
-  
-  /**
-   * init
-   */
-  public function init(){
-    parent::init();
-    if(!Security::get()->isAllowed('portals', Security::PRIVILEGE_VIEW)){
-      $this->_redirect('/zoolu');
-    }
-  }
+class Cms_IndexController extends ModuleControllerAction
+{
 
-  /**
-   * The default action - show the home page
-   */
-  public function indexAction(){
-
-    $this->_helper->viewRenderer->setNoRender();
-
-    Zend_Layout::startMvc(array(
-      'layout' => 'cms',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
-
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'cms'));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->cms)));
-
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->portals);
-    $this->view->assign('module', $this->core->sysConfig->modules->cms);
-    
-    $strMapsKey = '';
-    $objThemeData = $this->getModelFolders()->getThemeByDomain($_SERVER['SERVER_NAME']);        
-    if(count($objThemeData) > 0){
-      $objTheme = $objThemeData->current();      
-      $strMapsKey = $objTheme->mapsKey;
-    }
-    
     /**
-     * Load Plugin JS
+     * @var Model_Folders
      */
-    $strJsPlugin = '';
-    foreach($this->core->sysConfig->pluginsJs as $key => $value) {
-    	$strJsPlugin .= '<script type="text/javascript" src="'.str_replace('{MAPSKEY}', $strMapsKey, $value).'"></script>';
-    }
-    $this->view->assign('jsPlugins', $strJsPlugin);
-  }
+    private $objModelFolders;
 
-  /**
-   * listAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function listAction(){
-    $this->_helper->viewRenderer->setNoRender();
-
-    Zend_Layout::startMvc(array(
-      'layout' => 'cms-list',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
-
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'cms', array('layoutType' => 'list')));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->cms)));
-
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->portals);
-    $this->view->assign('module', $this->core->sysConfig->modules->cms);        
-  }
-  
-  /**
-   * getModelFolders
-   * @return Model_Folders
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelFolders(){
-    if (null === $this->objModelFolders) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-      $this->objModelFolders = new Model_Folders();
-      $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+    /**
+     * init
+     */
+    public function init()
+    {
+        parent::init();
+        if (!Security::get()->isAllowed('portals', Security::PRIVILEGE_VIEW)) {
+            $this->_redirect('/zoolu');
+        }
     }
 
-    return $this->objModelFolders;
-  }
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
+
+        $this->_helper->viewRenderer->setNoRender();
+
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'cms',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
+
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'cms'));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->cms)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->portals);
+        $this->view->assign('module', $this->core->sysConfig->modules->cms);
+
+        $strMapsKey = '';
+        $objThemeData = $this->getModelFolders()->getThemeByDomain($_SERVER['SERVER_NAME']);
+        if (count($objThemeData) > 0) {
+            $objTheme = $objThemeData->current();
+            $strMapsKey = $objTheme->mapsKey;
+        }
+
+        /**
+         * Load Plugin JS
+         */
+        $strJsPlugin = '';
+        foreach ($this->core->sysConfig->pluginsJs as $key => $value) {
+            $strJsPlugin .= '<script type="text/javascript" src="' . str_replace('{MAPSKEY}', $strMapsKey, $value) . '"></script>';
+        }
+        $this->view->assign('jsPlugins', $strJsPlugin);
+    }
+
+    /**
+     * listAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function listAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'cms-list',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
+
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'cms', array('layoutType' => 'list')));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->cms)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->portals);
+        $this->view->assign('module', $this->core->sysConfig->modules->cms);
+    }
+
+    /**
+     * getModelFolders
+     * @return Model_Folders
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+        }
+
+        return $this->objModelFolders;
+    }
 
 }

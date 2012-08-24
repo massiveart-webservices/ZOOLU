@@ -40,77 +40,84 @@
  * @version 1.0
  */
 
-class Model_Utilities {
+class Model_Utilities
+{
 
-  private $intLanguageId;
+    private $intLanguageId;
 
-  /**
-   * @var Model_Table_PathReplacers
-   */
-  protected $objPathReplacersTable;
-  
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Model_Table_PathReplacers
+     */
+    protected $objPathReplacersTable;
 
-  /**
-   * Constructor
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * loadPathReplacers
-   * @return Zend_Db_Table_Rowset_Abstract
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function loadPathReplacers(){
-    $this->core->logger->debug('cms->models->Model_Pages->loadPathReplacers()');
-
-    $objSelect = $this->getPathReplacersTable()->select();
-
-    $objSelect->from($this->objPathReplacersTable, array('from', 'to'));
-    $objSelect->where('pathReplacers.idLanguages = ?', $this->intLanguageId);
-
-    return $this->objPathReplacersTable->fetchAll($objSelect);
-  }
-  
-  /**
-   * getPathReplacersTable
-   * @return Zend_Db_Table_Abstract
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function getPathReplacersTable(){
-
-    if($this->objPathReplacersTable === null) {
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/tables/PathReplacers.php';
-      $this->objPathReplacersTable = new Model_Table_PathReplacers();
+    /**
+     * Constructor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
 
-    return $this->objPathReplacersTable;
-  }
-  
-  /**
-   * setLanguageId
-   * @param integer $intLanguageId
-   */
-  public function setLanguageId($intLanguageId){
-    $this->intLanguageId = $intLanguageId;
-  }
+    /**
+     * loadPathReplacers
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function loadPathReplacers()
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadPathReplacers()');
 
-  /**
-   * getLanguageId
-   * @param integer $intLanguageId
-   */
-  public function getLanguageId(){
-    return $this->intLanguageId;
-  }
-  
+        $objSelect = $this->getPathReplacersTable()->select();
+
+        $objSelect->from($this->objPathReplacersTable, array('from', 'to'));
+        $objSelect->where('pathReplacers.idLanguages = ?', $this->intLanguageId);
+
+        return $this->objPathReplacersTable->fetchAll($objSelect);
+    }
+
+    /**
+     * getPathReplacersTable
+     * @return Zend_Db_Table_Abstract
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getPathReplacersTable()
+    {
+
+        if ($this->objPathReplacersTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/PathReplacers.php';
+            $this->objPathReplacersTable = new Model_Table_PathReplacers();
+        }
+
+        return $this->objPathReplacersTable;
+    }
+
+    /**
+     * setLanguageId
+     * @param integer $intLanguageId
+     */
+    public function setLanguageId($intLanguageId)
+    {
+        $this->intLanguageId = $intLanguageId;
+    }
+
+    /**
+     * getLanguageId
+     * @param integer $intLanguageId
+     */
+    public function getLanguageId()
+    {
+        return $this->intLanguageId;
+    }
+
 }
+
 ?>

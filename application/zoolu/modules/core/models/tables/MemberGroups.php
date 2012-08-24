@@ -40,22 +40,23 @@
  * @version 1.0
  */
 
-class Model_Table_MemberGroups extends Zend_Db_Table_Abstract {
+class Model_Table_MemberGroups extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'memberGroups';
+    protected $_name = 'memberGroups';
 
-  protected $_referenceMap    = array(
-      'Member' => array(
-          'columns'           => array('idMembers'),
-          'refTableClass'     => 'members',
-          'refColumns'        => array('id')
-      ),
-      'Group' => array(
-          'columns'           => array('idGroups'),
-          'refTableClass'     => 'groups',
-          'refColumns'        => array('id')
-      )
-  );
+    protected $_referenceMap = array(
+        'Member' => array(
+            'columns'           => array('idMembers'),
+            'refTableClass'     => 'members',
+            'refColumns'        => array('id')
+        ),
+        'Group'  => array(
+            'columns'           => array('idGroups'),
+            'refTableClass'     => 'groups',
+            'refColumns'        => array('id')
+        )
+    );
 
 }
 

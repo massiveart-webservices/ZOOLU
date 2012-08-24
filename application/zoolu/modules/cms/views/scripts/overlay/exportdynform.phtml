@@ -1,54 +1,55 @@
-              <div class="oltitle" style="margin-bottom:15px;"><?php echo $this->translate->_('Export'); ?></div>
-              <div id="editbox" class="editbox">
-              <div class="cornertl"></div>
-              <div class="cornertr"></div>
-              <div class="editboxtitlecontainer">
-                <div class="editboxtitle">
-                <?php echo $this->translate->_('Export'); ?>
+<div class="oltitle" style="margin-bottom:15px;"><?php echo $this->translate->_('Export'); ?></div>
+<div id="editbox" class="editbox">
+    <div class="cornertl"></div>
+    <div class="cornertr"></div>
+    <div class="editboxtitlecontainer">
+        <div class="editboxtitle">
+            <?php echo $this->translate->_('Export'); ?>
+        </div>
+    </div>
+    <div class="editboxfields">
+        <form id="dbrdForm" name="dbrdForm" action="/zoolu/core/dashboard/add" method="post" onsubmit="return false;" enctype="application/x-www-form-urlencoded">
+            <div class="field-6">
+                <div class="field">
+                    <div class="textdisplaywrapper">
+                        <label id="lbl_from" for="from" class="fieldtitle"><?php echo $this->translate->_('From'); ?></label><br/>
+                        <input type="text" class="text" name="from" id="from" value=""/>
+                    </div>
                 </div>
-              </div>
-                <div class="editboxfields">
-                  <form id="dbrdForm" name="dbrdForm" action="/zoolu/core/dashboard/add" method="post" onsubmit="return false;" enctype="application/x-www-form-urlencoded">
-                    <div class="field-6">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_from" for="from" class="fieldtitle"><?php echo $this->translate->_('From'); ?></label><br/>
-                          <input type="text" class="text" name="from" id="from" value=""/>
-                        </div>
-                      </div>
+            </div>
+            <div class="field-6">
+                <div class="field">
+                    <div class="textdisplaywrapper">
+                        <label id="lbl_to" for="to" class="fieldtitle"><?php echo $this->translate->_('To'); ?></label><br/>
+                        <input type="text" class="text" name="to" id="to" value=""/>
                     </div>
-                    <div class="field-6">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_to" for="to" class="fieldtitle"><?php echo $this->translate->_('To'); ?></label><br/>
-                          <input type="text" class="text" name="to" id="to" value=""/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="field-6">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_startdate" for="startdate" class="fieldtitle"><?php echo $this->translate->_('Startdate'); ?></label><br/>
-                          <input type="text" class="text" name="startdate" id="startdate" value=""/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="field-6">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_enddate" for="enddate" class="fieldtitle"><?php echo $this->translate->_('Enddate'); ?></label><br/>
-                          <input type="text" class="text" name="enddate" id="enddate" value=""/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="field-12">
-                      <div class="field">
-                      <label for="headline"><input type="checkbox" id="headline" name="headline" value="true" class="multiCheckbox" /><?php echo $this->translate->_('Export_header') ?></label><br />
-                      </div>
-                    </div>
-                    <div class="clear"></div>
-                  </form>
                 </div>
-                <div class="cornerbl"></div>
-                <div class="cornerbr"></div>
-              </div>
+            </div>
+            <div class="field-6">
+                <div class="field">
+                    <div class="textdisplaywrapper">
+                        <label id="lbl_startdate" for="startdate" class="fieldtitle"><?php echo $this->translate->_('Startdate'); ?></label><br/>
+                        <input type="text" class="text" name="startdate" id="startdate" value=""/>
+                    </div>
+                </div>
+            </div>
+            <div class="field-6">
+                <div class="field">
+                    <div class="textdisplaywrapper">
+                        <label id="lbl_enddate" for="enddate" class="fieldtitle"><?php echo $this->translate->_('Enddate'); ?></label><br/>
+                        <input type="text" class="text" name="enddate" id="enddate" value=""/>
+                    </div>
+                </div>
+            </div>
+            <div class="field-12">
+                <div class="field">
+                    <label for="headline"><input type="checkbox" id="headline" name="headline" value="true" class="multiCheckbox"/><?php echo $this->translate->_('Export_header') ?>
+                    </label><br/>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </form>
+    </div>
+    <div class="cornerbl"></div>
+    <div class="cornerbr"></div>
+</div>

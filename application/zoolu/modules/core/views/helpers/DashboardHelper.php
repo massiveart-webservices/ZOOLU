@@ -483,7 +483,7 @@ class DashboardHelper
             }
 
             $strReturn .=
-                    $strEntries . '
+                $strEntries . '
                     <div class="clear"></div>
                 </div>';
         }

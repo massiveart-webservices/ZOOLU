@@ -40,27 +40,28 @@
  * @version 1.0
  */
 
-class Model_Table_GroupPermissions extends Zend_Db_Table_Abstract {
+class Model_Table_GroupPermissions extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'groupPermissions';
+    protected $_name = 'groupPermissions';
 
-  protected $_referenceMap    = array(
-      'Group' => array(
-          'columns'           => array('idGroups'),
-          'refTableClass'     => 'groups',
-          'refColumns'        => array('id')
-      ),
-      'Language' => array(
-          'columns'           => array('idLanguages'),
-          'refTableClass'     => 'languages',
-          'refColumns'        => array('id')
-      ),
-      'Permission' => array(
-          'columns'           => array('idPermissions'),
-          'refTableClass'     => 'permissions',
-          'refColumns'        => array('id')
-      )
-  );
+    protected $_referenceMap = array(
+        'Group'      => array(
+            'columns'           => array('idGroups'),
+            'refTableClass'     => 'groups',
+            'refColumns'        => array('id')
+        ),
+        'Language'   => array(
+            'columns'           => array('idLanguages'),
+            'refTableClass'     => 'languages',
+            'refColumns'        => array('id')
+        ),
+        'Permission' => array(
+            'columns'           => array('idPermissions'),
+            'refTableClass'     => 'permissions',
+            'refColumns'        => array('id')
+        )
+    );
 
 }
 

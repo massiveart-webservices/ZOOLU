@@ -40,60 +40,66 @@
  * @version 1.0
  */
 
-class Core_LanguageController extends AuthControllerAction {
-  
-  /**
-   * @var Model_Languages
-   */
-  protected $objModelLanguages;
-  
-  public function getcopylanguagesAction(){
-    $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
-    $intModuleId = $this->getRequest()->getParam('moduleId');
-    $intSrcLanguage = $this->getRequest()->getParam('srcLanguage');
-    
-    $objLanguages = null;
-    if($intModuleId == $this->core->sysConfig->modules->global){
-      $objLanguages = $this->getModelLanguages()->loadLanguages(null, array($intSrcLanguage));
-    }elseif($intModuleId == $this->core->sysConfig->modules->cms){
-      $objLanguages = $this->getModelLanguages()->loadLanguages($intRootLevelId, array($intSrcLanguage));
+class Core_LanguageController extends AuthControllerAction
+{
+
+    /**
+     * @var Model_Languages
+     */
+    protected $objModelLanguages;
+
+    public function getcopylanguagesAction()
+    {
+        $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
+        $intModuleId = $this->getRequest()->getParam('moduleId');
+        $intSrcLanguage = $this->getRequest()->getParam('srcLanguage');
+
+        $objLanguages = null;
+        if ($intModuleId == $this->core->sysConfig->modules->global) {
+            $objLanguages = $this->getModelLanguages()->loadLanguages(null, array($intSrcLanguage));
+        } elseif ($intModuleId == $this->core->sysConfig->modules->cms) {
+            $objLanguages = $this->getModelLanguages()->loadLanguages($intRootLevelId, array($intSrcLanguage));
+        }
+
+        $arrSecurityCheck = array(
+            'ResourceKey'           => Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId . '_%d',
+            'Privilege'             => Security::PRIVILEGE_VIEW,
+            'CheckForAllLanguages'  => false,
+            'IfResourceNotExists'   => false
+        );
+
+        $blnGeneralUpdateAuthorization = Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId, Security::PRIVILEGE_UPDATE, false, false);
+        $arrLanguages = array();
+        foreach ($objLanguages as $objLanguage) {
+            if (($blnGeneralUpdateAuthorization) || Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId . '_' . $objLanguage->id, Security::PRIVILEGE_UPDATE, false, false)) {
+                $arrLanguages[] = array('title' => $objLanguage->title, 'id' => $objLanguage->id);
+            }
+        }
+
+        $this->view->assign('languages', $arrLanguages);
+        $this->view->assign('overlaytitle', $this->core->translate->_('language_copy'));
     }
 
-    $arrSecurityCheck = array('ResourceKey'           => Security::RESOURCE_ROOT_LEVEL_PREFIX.$intRootLevelId.'_%d', 
-                          'Privilege'             => Security::PRIVILEGE_VIEW, 
-                          'CheckForAllLanguages'  => false,
-                          'IfResourceNotExists'   => false);  
-                          
-    $blnGeneralUpdateAuthorization = Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$intRootLevelId, Security::PRIVILEGE_UPDATE, false, false);
-    $arrLanguages = array();
-    foreach($objLanguages as $objLanguage){
-      if(($blnGeneralUpdateAuthorization) || Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$intRootLevelId.'_'.$objLanguage->id, Security::PRIVILEGE_UPDATE, false, false)){
-        $arrLanguages[] = array('title' => $objLanguage->title, 'id' => $objLanguage->id);
-      }
-    }
+    /**
+     * getModelLanguages
+     * @return Model_Languages
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelLanguages()
+    {
+        if (null === $this->objModelLanguages) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Languages.php';
+            $this->objModelLanguages = new Model_Languages();
+        }
 
-    $this->view->assign('languages', $arrLanguages);
-    $this->view->assign('overlaytitle', $this->core->translate->_('language_copy'));
-  }
-  
-  /**
-   * getModelLanguages
-   * @return Model_Languages
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelLanguages(){
-    if (null === $this->objModelLanguages) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Languages.php';
-      $this->objModelLanguages = new Model_Languages();
+        return $this->objModelLanguages;
     }
-
-    return $this->objModelLanguages;
-  }
 }
+
 ?>

@@ -30,66 +30,66 @@
  * @version    $Id: version.php
  */
 
-  $core = Zend_Registry::get('Core');
+$core = Zend_Registry::get('Core');
 
-  /**
-   * top navigation
-   */
-  $core->translate->_('portals');
-  $core->translate->_('media');
-  $core->translate->_('global');
-  $core->translate->_('user_administration');
-  $core->translate->_('settings');
-  $core->translate->_('contacts');
-  $core->translate->_('newsletters');
-  
-  /**
-   * user list
-   */
-  $core->translate->_('name');
-  $core->translate->_('fname');
-  $core->translate->_('sname');
-  $core->translate->_('editor');
-  $core->translate->_('changed');
+/**
+ * top navigation
+ */
+$core->translate->_('portals');
+$core->translate->_('media');
+$core->translate->_('global');
+$core->translate->_('user_administration');
+$core->translate->_('settings');
+$core->translate->_('contacts');
+$core->translate->_('newsletters');
 
-  /**
-   * group list
-   */
-  $core->translate->_('title');
+/**
+ * user list
+ */
+$core->translate->_('name');
+$core->translate->_('fname');
+$core->translate->_('sname');
+$core->translate->_('editor');
+$core->translate->_('changed');
 
-  /**
-   * resources list
-   */
-  $core->translate->_('key');
-  
-  /**
-   * member list
-   */
-  $core->translate->_('status');
-  $core->translate->_('company');
-  $core->translate->_('username');
-  $core->translate->_('companyStatus');
-  $core->translate->_('country');
-  $core->translate->_('lastLogin');
-  
-  /**
-   * subscriber list
-   */
-  $core->translate->_('email');
-  $core->translate->_('one');
-  $core->translate->_('none');
-  $core->translate->_('all');
-  $core->translate->_('subscribed');
-  $core->translate->_('dirty');
-  
-  /**
-   * navigation mehtods
-   */
-  $core->translate->_('New_Content');
-  $core->translate->_('New_Product');
-  $core->translate->_('New_Product_Link');
-  $core->translate->_('New_Press');
-  $core->translate->_('New_Course');
-  $core->translate->_('New_Event');
-  
+/**
+ * group list
+ */
+$core->translate->_('title');
+
+/**
+ * resources list
+ */
+$core->translate->_('key');
+
+/**
+ * member list
+ */
+$core->translate->_('status');
+$core->translate->_('company');
+$core->translate->_('username');
+$core->translate->_('companyStatus');
+$core->translate->_('country');
+$core->translate->_('lastLogin');
+
+/**
+ * subscriber list
+ */
+$core->translate->_('email');
+$core->translate->_('one');
+$core->translate->_('none');
+$core->translate->_('all');
+$core->translate->_('subscribed');
+$core->translate->_('dirty');
+
+/**
+ * navigation mehtods
+ */
+$core->translate->_('New_Content');
+$core->translate->_('New_Product');
+$core->translate->_('New_Product_Link');
+$core->translate->_('New_Press');
+$core->translate->_('New_Course');
+$core->translate->_('New_Event');
+
 ?>

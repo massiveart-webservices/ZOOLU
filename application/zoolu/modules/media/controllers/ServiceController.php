@@ -35,55 +35,58 @@
  *
  * Version history (please keep backward compatible):
  * 1.0, 2011-05-06: Cornelius Hansjakob
-
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  */
 
-require_once(dirname(__FILE__).'/../services/Media.php');
+require_once(dirname(__FILE__) . '/../services/Media.php');
 
-class Media_ServiceController extends Zend_Controller_Action {
+class Media_ServiceController extends Zend_Controller_Action
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
-  
-  /**
-   * @var integer
-   */
-  protected $intLanguageId;
-  
-  /**
-   * @var string
-   */
-  protected $strLanguageCode;  
-   
-  /**
-   * init index controller and get core obj
-   */
-  public function init(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * indexAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function indexAction(){
-    $this->core->logger->debug('media->controllers->ServiceController->indexAction()');    
-    $this->_helper->viewRenderer->setNoRender();    
-    
-    if($this->getRequest()->getParam('wsdl') !== null) {
-      $objWsdl = new Zend_Soap_AutoDiscover();
-      $objWsdl->setClass('Service_Media');
-      $objWsdl->handle();
-    } else {
-      $objServer = new Zend_Soap_Server('http://'.$_SERVER['HTTP_HOST'].'/zoolu/media/service?wsdl');
-      $objServer->setClass('Service_Media');
-      $objServer->handle();
+    /**
+     * @var Core
+     */
+    private $core;
+
+    /**
+     * @var integer
+     */
+    protected $intLanguageId;
+
+    /**
+     * @var string
+     */
+    protected $strLanguageCode;
+
+    /**
+     * init index controller and get core obj
+     */
+    public function init()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-  }
+
+    /**
+     * indexAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function indexAction()
+    {
+        $this->core->logger->debug('media->controllers->ServiceController->indexAction()');
+        $this->_helper->viewRenderer->setNoRender();
+
+        if ($this->getRequest()->getParam('wsdl') !== null) {
+            $objWsdl = new Zend_Soap_AutoDiscover();
+            $objWsdl->setClass('Service_Media');
+            $objWsdl->handle();
+        } else {
+            $objServer = new Zend_Soap_Server('http://' . $_SERVER['HTTP_HOST'] . '/zoolu/media/service?wsdl');
+            $objServer->setClass('Service_Media');
+            $objServer->handle();
+        }
+    }
 }
+
 ?>

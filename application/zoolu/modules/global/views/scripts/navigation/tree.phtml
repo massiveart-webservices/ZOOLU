@@ -1,79 +1,89 @@
 <?php
 
-  require_once (dirname(__FILE__).'/../../helpers/NavigationHelper.php');
-  $objHelper = new NavigationHelper();
+require_once (dirname(__FILE__) . '/../../helpers/NavigationHelper.php');
+$objHelper = new NavigationHelper();
 
 ?>
 
-    <script type="text/javascript">//<![CDATA[
-      <?php if($this->rootLevelId > 0 && $this->rootLevelGroupId > 0): ?>
-      var rootLevelId = <?php echo $this->rootLevelId; ?>;
-      var rootLevelGroupId = <?php echo $this->rootLevelGroupId; ?>;      
-      <?php endif; ?>
-      var folderFormDefaultId, elementFormDefaultId, elementTemplateDefaultId, elementTypeDefaultId = '';              
-    //]]>
-    </script>
+<script type="text/javascript">//<![CDATA[
+<?php if ($this->rootLevelId > 0 && $this->rootLevelGroupId > 0): ?>
+var rootLevelId = <?php echo $this->rootLevelId; ?>;
+var rootLevelGroupId = <?php echo $this->rootLevelGroupId; ?>;
+    <?php endif; ?>
+var folderFormDefaultId, elementFormDefaultId, elementTemplateDefaultId, elementTypeDefaultId = '';
+//]]>
+</script>
 
-    <!-- navigation main -->
-    <div id="navigation-main">
+<!-- navigation main -->
+<div id="navigation-main">
 
-      <!-- navigation left -->
-      <div id="divNaviLeft">
+    <!-- navigation left -->
+    <div id="divNaviLeft">
         <div id="divNaviLeftInner">
-          <!-- main navigatin -->
-          <div id="divNaviLeftMain" style="padding:0 0 0 5px;">
-            <?php echo $objHelper->getMainNavigation($this->rootLevelNavigation, $this->rootLevelId, 'tree'); ?>
-          </div>
+            <!-- main navigatin -->
+            <div id="divNaviLeftMain" style="padding:0 0 0 5px;">
+                <?php echo $objHelper->getMainNavigation($this->rootLevelNavigation, $this->rootLevelId, 'tree'); ?>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- navigation center -->
-      <div id="divNaviCenter">
+    <!-- navigation center -->
+    <div id="divNaviCenter">
         <!-- navigation output container -->
         <div id="divNaviCenterInner">
         </div>
-      </div>
+    </div>
 
-      <!-- navigation right -->
-      <div id="divNaviRight">
+    <!-- navigation right -->
+    <div id="divNaviRight">
         <div id="divNaviRightInner">
-          <div id="divFolderRapper" style="display: none;">
-            <img width="98" height="68" src="/zoolu-statics/images/icons/icon_folder_large.png"/>
-            <div class="spacer1"></div>
-            <div id="divFolderInfo">
-              <div id="divFolderTitle"><a href="#" class="big bold" onclick="myNavigation.getEditFormMainFolder(); return false;" id="aFolderTitle"></a></div>
-              <div class="linegray"></div>
-              <div id="divFolderActions">
-                <div id="divFolderChangeParent">
-                  <div class="icon_folder"></div>
-                  <div><a href="#" onclick="myFolder.getCurrentFolderParentChooser(); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a></div>
-                </div>
-                <div class="clear"></div>
-                <div id="divFolderChangeParent">
-                  <div class="icon_list"></div>
-                  <div><a href="#" onclick="myFolder.getFolderContentList(); return false;"><?php echo $this->translate->_('Load_content_as_list'); ?></a></div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            </div>
-          </div>
-          <div id="divElementRapper" style="display: none;">
-            <img width="68" height="68" src="/zoolu-statics/images/icons/icon_page_large.png"/>
-            <div class="spacer1"></div>
-            <div id="divElementInfo">
-              <div id="divElementTitle" class="big bold"></div>
-              <div class="linegray"></div>
-              <div id="divElementActions">
-                <div id="divElementChangeParent">
-                  <div class="icon_folder"></div>
-                  <div><a href="#" onclick="myFolder.getCurrentFolderParentChooser('MOVE_GLOBAL'); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a></div>                  
-                </div>
-                <div class="clear"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            <div id="divFolderRapper" style="display: none;">
+                <img width="98" height="68" src="/zoolu-statics/images/icons/icon_folder_large.png"/>
 
-      <div class="clear"></div>
-    </div> <!-- END navigation main -->
+                <div class="spacer1"></div>
+                <div id="divFolderInfo">
+                    <div id="divFolderTitle">
+                        <a href="#" class="big bold" onclick="myNavigation.getEditFormMainFolder(); return false;" id="aFolderTitle"></a>
+                    </div>
+                    <div class="linegray"></div>
+                    <div id="divFolderActions">
+                        <div id="divFolderChangeParent">
+                            <div class="icon_folder"></div>
+                            <div>
+                                <a href="#" onclick="myFolder.getCurrentFolderParentChooser(); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div id="divFolderChangeParent">
+                            <div class="icon_list"></div>
+                            <div>
+                                <a href="#" onclick="myFolder.getFolderContentList(); return false;"><?php echo $this->translate->_('Load_content_as_list'); ?></a>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="divElementRapper" style="display: none;">
+                <img width="68" height="68" src="/zoolu-statics/images/icons/icon_page_large.png"/>
+
+                <div class="spacer1"></div>
+                <div id="divElementInfo">
+                    <div id="divElementTitle" class="big bold"></div>
+                    <div class="linegray"></div>
+                    <div id="divElementActions">
+                        <div id="divElementChangeParent">
+                            <div class="icon_folder"></div>
+                            <div>
+                                <a href="#" onclick="myFolder.getCurrentFolderParentChooser('MOVE_GLOBAL'); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+</div> <!-- END navigation main -->

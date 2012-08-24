@@ -40,61 +40,66 @@
  * @version 1.0
  */
 
-class Users_NavigationController extends AuthControllerAction {
+class Users_NavigationController extends AuthControllerAction
+{
 
-  private $intFolderId;
-  private $intLanguageId;
+    private $intFolderId;
+    private $intLanguageId;
 
-  /**
-   * @var Model_Folders
-   */
-  protected $objModelFolders;
+    /**
+     * @var Model_Folders
+     */
+    protected $objModelFolders;
 
-  /**
-   * indexAction
-   */
-  public function indexAction(){
-    $objModuleRootLevels = $this->getModelFolders()->loadAllRootLevels($this->core->sysConfig->modules->users);
+    /**
+     * indexAction
+     */
+    public function indexAction()
+    {
+        $objModuleRootLevels = $this->getModelFolders()->loadAllRootLevels($this->core->sysConfig->modules->users);
 
-    $this->view->assign('moduleRootLevels', $objModuleRootLevels);
-  }
-
-  /**
-   * getModelFolders
-   * @return Model_Folders
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelFolders(){
-    if (null === $this->objModelFolders) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-      $this->objModelFolders = new Model_Folders();
-      $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+        $this->view->assign('moduleRootLevels', $objModuleRootLevels);
     }
 
-    return $this->objModelFolders;
-  }
+    /**
+     * getModelFolders
+     * @return Model_Folders
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+        }
 
-  /**
-   * setLanguageId
-   * @param integer $intLanguageId
-   */
-  public function setLanguageId($intLanguageId){
-    $this->intLanguageId = $intLanguageId;
-  }
+        return $this->objModelFolders;
+    }
 
-  /**
-   * getLanguageId
-   * @param integer $intLanguageId
-   */
-  public function getLanguageId(){
-    return $this->intLanguageId;
-  }
+    /**
+     * setLanguageId
+     * @param integer $intLanguageId
+     */
+    public function setLanguageId($intLanguageId)
+    {
+        $this->intLanguageId = $intLanguageId;
+    }
+
+    /**
+     * getLanguageId
+     * @param integer $intLanguageId
+     */
+    public function getLanguageId()
+    {
+        return $this->intLanguageId;
+    }
 }
 
 ?>

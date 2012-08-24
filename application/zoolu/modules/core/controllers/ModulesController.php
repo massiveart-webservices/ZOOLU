@@ -40,53 +40,58 @@
  * @version 1.0
  */
 
-class Core_ModulesController extends AuthControllerAction {
+class Core_ModulesController extends AuthControllerAction
+{
 
-  /**
-   * @var Model_Modules
-   */
-  protected $objModelModules;
+    /**
+     * @var Model_Modules
+     */
+    protected $objModelModules;
 
-  /**
-	 * The default action - show the home page
-	 */
-  public function indexAction(){ }
-
-  /**
-   * navtopAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function navtopAction(){
-    $this->core->logger->debug('core->controllers->ModulesController->navtopAction()');
-    try{
-
-      $this->view->modules = $this->getModelModules()->getModules();
-      $this->view->module = $this->getRequest()->getParam('module', 0);
-
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-      exit();
-    }
-  }
-
-  /**
-   * getModelModules
-   * @return Model_Modules
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelModules(){
-    if (null === $this->objModelModules) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Modules.php';
-      $this->objModelModules = new Model_Modules();
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
     }
 
-    return $this->objModelModules;
-  }
+    /**
+     * navtopAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function navtopAction()
+    {
+        $this->core->logger->debug('core->controllers->ModulesController->navtopAction()');
+        try {
+
+            $this->view->modules = $this->getModelModules()->getModules();
+            $this->view->module = $this->getRequest()->getParam('module', 0);
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            exit();
+        }
+    }
+
+    /**
+     * getModelModules
+     * @return Model_Modules
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelModules()
+    {
+        if (null === $this->objModelModules) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Modules.php';
+            $this->objModelModules = new Model_Modules();
+        }
+
+        return $this->objModelModules;
+    }
 }

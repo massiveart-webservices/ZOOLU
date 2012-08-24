@@ -40,50 +40,53 @@
  * @version 1.0
  */
 
-class ModulesNavigationHelper {
+class ModulesNavigationHelper
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-
-  /**
-   * getTopNavigation
-   * @param Zend_Db_Table_Rowset_Abstract $objRowset
-   * @param integer $strModule
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  function getTopNavigation($objRowset, $intModuleId = 0) {
-    $this->core->logger->debug('core->views->helpers->NavigationHelper->getTopNavigation()');
-
-    $strOutput = '';
-
-    if(count($objRowset) > 0){
-      foreach($objRowset as $objRow){
-        if(Security::get()->isAllowed($objRow->resourceKey, Security::PRIVILEGE_VIEW)){
-
-          $strItemClass = ($objRow->id == $intModuleId) ? 'navtoplink_on' : 'navtoplink';
-
-          $strOutput .= '
-          <div class="'.$objRow->cssClass.'">
-            <div class="'.$strItemClass.'" onmouseover="this.style.cursor=\'pointer\';" onclick="location.href=\'/zoolu/'.$objRow->title.'/\'">'.$this->core->translate->_($objRow->resourceKey).'</div>
-          </div>';
-        }
-      }
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
 
-    return $strOutput;
-  }
+    /**
+     * getTopNavigation
+     * @param Zend_Db_Table_Rowset_Abstract $objRowset
+     * @param integer $strModule
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    function getTopNavigation($objRowset, $intModuleId = 0)
+    {
+        $this->core->logger->debug('core->views->helpers->NavigationHelper->getTopNavigation()');
+
+        $strOutput = '';
+
+        if (count($objRowset) > 0) {
+            foreach ($objRowset as $objRow) {
+                if (Security::get()->isAllowed($objRow->resourceKey, Security::PRIVILEGE_VIEW)) {
+
+                    $strItemClass = ($objRow->id == $intModuleId) ? 'navtoplink_on' : 'navtoplink';
+
+                    $strOutput .= '
+          <div class="' . $objRow->cssClass . '">
+            <div class="' . $strItemClass . '" onmouseover="this.style.cursor=\'pointer\';" onclick="location.href=\'/zoolu/' . $objRow->title . '/\'">' . $this->core->translate->_($objRow->resourceKey) . '</div>
+          </div>';
+                }
+            }
+        }
+
+        return $strOutput;
+    }
 
 }
 

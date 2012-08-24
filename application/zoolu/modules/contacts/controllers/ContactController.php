@@ -40,110 +40,164 @@
  * @version 1.0
  */
 
-class Contacts_ContactController extends AuthControllerAction {
+class Contacts_ContactController extends AuthControllerAction
+{
 
- /**
-   * @var GenericForm
-   */
-  protected $objForm;
-  
-  /**
-   * @var inter
-   */
-  protected $intItemLanguageId;
+    /**
+     * @var GenericForm
+     */
+    protected $objForm;
 
-  /**
-   * request object instance
-   * @var Zend_Controller_Request_Abstract
-   */
-  protected $objRequest;
-  
-  /**
-   * @var Model_Contacts
-   */
-  public $objModelContacts;
+    /**
+     * @var inter
+     */
+    protected $intItemLanguageId;
 
-  /**
-   * @var Model_Units
-   */
-  public $objModelUnits;
-  
-  /**
-   * init
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   * @return void
-   */
-  public function init(){
-    parent::init();
-    if(!Security::get()->isAllowed('contact', Security::PRIVILEGE_VIEW)){
-      $this->_redirect('/zoolu');
+    /**
+     * request object instance
+     * @var Zend_Controller_Request_Abstract
+     */
+    protected $objRequest;
+
+    /**
+     * @var Model_Contacts
+     */
+    public $objModelContacts;
+
+    /**
+     * @var Model_Units
+     */
+    public $objModelUnits;
+
+    /**
+     * init
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     * @return void
+     */
+    public function init()
+    {
+        parent::init();
+        if (!Security::get()->isAllowed('contact', Security::PRIVILEGE_VIEW)) {
+            $this->_redirect('/zoolu');
+        }
+        $this->objRequest = $this->getRequest();
     }
-    $this->objRequest = $this->getRequest();
-  }
-
-  /**
-   * The default action
-   */
-  public function indexAction(){ 
-    $this->_helper->viewRenderer->setNoRender();
-  }
-  
-  /**
-   * addformAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function addformAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->addformAction()');
-
-    $this->getForm($this->core->sysConfig->generic->actions->edit);
 
     /**
-     * set action
+     * The default action
      */
-    $this->objForm->setAction('/zoolu/contacts/contact/add');
+    public function indexAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+    }
 
     /**
-     * prepare form (add fields and region to the Zend_Form)
+     * addformAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $this->objForm->prepareForm();
+    public function addformAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->addformAction()');
+
+        $this->getForm($this->core->sysConfig->generic->actions->edit);
+
+        /**
+         * set action
+         */
+        $this->objForm->setAction('/zoolu/contacts/contact/add');
+
+        /**
+         * prepare form (add fields and region to the Zend_Form)
+         */
+        $this->objForm->prepareForm();
+
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
+    }
 
     /**
-     * get form title
+     * contactAddAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+    public function addAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->addAction()');
 
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
-  
-  /**
-   * contactAddAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function addAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->addAction()');
+        $this->getForm($this->core->sysConfig->generic->actions->add);
 
-    $this->getForm($this->core->sysConfig->generic->actions->add);
+        /**
+         * set action
+         */
+        $this->objForm->setAction('/zoolu/contacts/contact/add');
+
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+
+            $arrFormData = $this->getRequest()->getPost();
+            $this->objForm->Setup()->setFieldValues($arrFormData);
+
+            /**
+             * prepare form (add fields and region to the Zend_Form)
+             */
+            $this->objForm->prepareForm();
+
+            if ($this->objForm->isValid($arrFormData)) {
+
+                /**
+                 * set action
+                 */
+                $this->objForm->setAction('/zoolu/contacts/contact/edit');
+
+                /**
+                 * set rootlevelid and parentid for contact creation
+                 */
+                $this->objForm->Setup()->setRootLevelId($this->objForm->getElement('rootLevelId')->getValue());
+                $this->objForm->Setup()->setParentId($this->objForm->getElement('parentId')->getValue());
+
+                $intContactId = $this->objForm->saveFormData();
+                $this->objForm->getElement('id')->setValue($intContactId);
+
+                $this->view->blnShowFormAlert = true;
+            }
+        } else {
+
+            /**
+             * prepare form (add fields and region to the Zend_Form)
+             */
+            $this->objForm->prepareForm();
+        }
+
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
+    }
 
     /**
-     * set action
+     * editformAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $this->objForm->setAction('/zoolu/contacts/contact/add');
+    public function editformAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ElementController->editformAction()');
 
-    if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+        $this->getForm($this->core->sysConfig->generic->actions->edit);
 
-      $arrFormData = $this->getRequest()->getPost();
-      $this->objForm->Setup()->setFieldValues($arrFormData);
-
-      /**
-       * prepare form (add fields and region to the Zend_Form)
-       */
-      $this->objForm->prepareForm();
-
-      if($this->objForm->isValid($arrFormData)){
+        /**
+         * load generic data
+         */
+        $this->objForm->loadFormData();
 
         /**
          * set action
@@ -151,409 +205,371 @@ class Contacts_ContactController extends AuthControllerAction {
         $this->objForm->setAction('/zoolu/contacts/contact/edit');
 
         /**
-         * set rootlevelid and parentid for contact creation
+         * prepare form (add fields and region to the Zend_Form)
          */
-        $this->objForm->Setup()->setRootLevelId($this->objForm->getElement('rootLevelId')->getValue());
-        $this->objForm->Setup()->setParentId($this->objForm->getElement('parentId')->getValue());
+        $this->objForm->prepareForm();
 
-        $intContactId = $this->objForm->saveFormData();
-        $this->objForm->getElement('id')->setValue($intContactId);
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
-        $this->view->blnShowFormAlert = true;
-      }
-    }else{
-
-      /**
-       * prepare form (add fields and region to the Zend_Form)
-       */
-      $this->objForm->prepareForm();
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
     }
 
     /**
-     * get form title
+     * editAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+    public function editAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->editAction()');
 
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
-  
-  /**
-   * editformAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function editformAction(){
-    $this->core->logger->debug('contacts->controllers->ElementController->editformAction()');
+        $this->getForm($this->core->sysConfig->generic->actions->edit);
 
-    $this->getForm($this->core->sysConfig->generic->actions->edit);
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
-    /**
-     * load generic data
-     */
-    $this->objForm->loadFormData();
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
 
-    /**
-     * set action
-     */
-    $this->objForm->setAction('/zoolu/contacts/contact/edit');
+            $arrFormData = $this->getRequest()->getPost();
+            $this->objForm->Setup()->setFieldValues($arrFormData);
 
-    /**
-     * prepare form (add fields and region to the Zend_Form)
-     */
-    $this->objForm->prepareForm();
+            /**
+             * set action
+             */
+            $this->objForm->setAction('/zoolu/contacts/contact/edit');
 
-    /**
-     * get form title
-     */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+            /**
+             * prepare form (add fields and region to the Zend_Form)
+             */
+            $this->objForm->prepareForm();
 
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
-  
-  /**
-   * editAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function editAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->editAction()');
+            if ($this->objForm->isValid($arrFormData)) {
+                $this->objForm->saveFormData();
+                $this->view->blnShowFormAlert = true;
+            }
+        }
 
-    $this->getForm($this->core->sysConfig->generic->actions->edit);
-
-    /**
-     * get form title
-     */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
-
-    if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-
-      $arrFormData = $this->getRequest()->getPost();
-      $this->objForm->Setup()->setFieldValues($arrFormData);
-
-      /**
-       * set action
-       */
-      $this->objForm->setAction('/zoolu/contacts/contact/edit');
-
-      /**
-       * prepare form (add fields and region to the Zend_Form)
-       */
-      $this->objForm->prepareForm();
-
-      if($this->objForm->isValid($arrFormData)){
-        $this->objForm->saveFormData();
-        $this->view->blnShowFormAlert = true;
-      }
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
     }
 
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
-  
-  /**
-   * deleteAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function deleteAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->deleteAction()');
+    /**
+     * deleteAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->deleteAction()');
 
-    $this->getModelContacts();
+        $this->getModelContacts();
 
-    if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-      $objRequest = $this->getRequest();
-      $this->objModelContacts->deleteContact($objRequest->getParam("id"));
-      $this->view->blnShowFormAlert = true;
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+            $objRequest = $this->getRequest();
+            $this->objModelContacts->deleteContact($objRequest->getParam("id"));
+            $this->view->blnShowFormAlert = true;
+        }
+
+        $this->renderScript('form.phtml');
     }
 
-    $this->renderScript('form.phtml');
-  }
-  
-  /**
-   * unitAddformAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function unitAddformAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->unitAddformAction()');
+    /**
+     * unitAddformAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function unitAddformAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->unitAddformAction()');
 
-    $this->getForm($this->core->sysConfig->generic->actions->edit);
+        $this->getForm($this->core->sysConfig->generic->actions->edit);
+
+        /**
+         * set action
+         */
+        $this->objForm->setAction('/zoolu/contacts/contact/add-unit');
+
+        /**
+         * prepare form (add fields and region to the Zend_Form)
+         */
+        $this->objForm->prepareForm();
+
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
+    }
 
     /**
-     * set action
+     * addUnitAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $this->objForm->setAction('/zoolu/contacts/contact/add-unit');
+    public function addUnitAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->addUnitAction()');
+
+        $this->getForm($this->core->sysConfig->generic->actions->add);
+
+        /**
+         * set action
+         */
+        $this->objForm->setAction('/zoolu/contacts/contact/add-unit');
+
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+
+            $arrFormData = $this->getRequest()->getPost();
+            $this->objForm->Setup()->setFieldValues($arrFormData);
+
+            /**
+             * prepare form (add fields and region to the Zend_Form)
+             */
+            $this->objForm->prepareForm();
+
+            if ($this->objForm->isValid($arrFormData)) {
+
+                /**
+                 * set action
+                 */
+                $this->objForm->setAction('/zoolu/contacts/contact/edit-unit');
+
+                /**
+                 * set rootlevelid and parentid for unit creation
+                 */
+                $this->objForm->Setup()->setRootLevelId($this->objForm->getElement('rootLevelId')->getValue());
+                $this->objForm->Setup()->setParentId($this->objForm->getElement('parentId')->getValue());
+
+                $intUnitId = $this->objForm->saveFormData();
+                $this->objForm->getElement('id')->setValue($intUnitId);
+
+                $this->view->blnShowFormAlert = true;
+            }
+        } else {
+
+            /**
+             * prepare form (add fields and region to the Zend_Form)
+             */
+            $this->objForm->prepareForm();
+        }
+
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
+    }
 
     /**
-     * prepare form (add fields and region to the Zend_Form)
+     * unitEditformAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $this->objForm->prepareForm();
+    public function unitEditformAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->unitEditformAction()');
 
-    /**
-     * get form title
-     */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+        $this->getForm($this->core->sysConfig->generic->actions->edit);
 
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
+        /**
+         * load generic data
+         */
+        $this->objForm->loadFormData();
 
-  /**
-   * addUnitAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function addUnitAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->addUnitAction()');
-
-    $this->getForm($this->core->sysConfig->generic->actions->add);
-
-    /**
-     * set action
-     */
-    $this->objForm->setAction('/zoolu/contacts/contact/add-unit');
-
-    if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-
-      $arrFormData = $this->getRequest()->getPost();
-      $this->objForm->Setup()->setFieldValues($arrFormData);
-
-      /**
-       * prepare form (add fields and region to the Zend_Form)
-       */
-      $this->objForm->prepareForm();
-
-      if($this->objForm->isValid($arrFormData)){
-
-      	/**
+        /**
          * set action
          */
         $this->objForm->setAction('/zoolu/contacts/contact/edit-unit');
 
         /**
-         * set rootlevelid and parentid for unit creation
+         * prepare form (add fields and region to the Zend_Form)
          */
-        $this->objForm->Setup()->setRootLevelId($this->objForm->getElement('rootLevelId')->getValue());
-        $this->objForm->Setup()->setParentId($this->objForm->getElement('parentId')->getValue());
+        $this->objForm->prepareForm();
 
-        $intUnitId = $this->objForm->saveFormData();
-        $this->objForm->getElement('id')->setValue($intUnitId);
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
-        $this->view->blnShowFormAlert = true;
-      }
-    }else{
-
-      /**
-       * prepare form (add fields and region to the Zend_Form)
-       */
-      $this->objForm->prepareForm();
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
     }
 
     /**
-     * get form title
+     * editUnitAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
      */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
+    public function editUnitAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->editUnitAction()');
 
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
+        $this->getForm($this->core->sysConfig->generic->actions->edit);
 
-  /**
-   * unitEditformAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function unitEditformAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->unitEditformAction()');
+        /**
+         * get form title
+         */
+        $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
-    $this->getForm($this->core->sysConfig->generic->actions->edit);
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
 
-    /**
-     * load generic data
-     */
-    $this->objForm->loadFormData();
+            $arrFormData = $this->getRequest()->getPost();
+            $this->objForm->Setup()->setFieldValues($arrFormData);
 
-    /**
-     * set action
-     */
-    $this->objForm->setAction('/zoolu/contacts/contact/edit-unit');
+            /**
+             * set action
+             */
+            $this->objForm->setAction('/zoolu/contacts/contact/edit-unit');
 
-    /**
-     * prepare form (add fields and region to the Zend_Form)
-     */
-    $this->objForm->prepareForm();
+            /**
+             * prepare form (add fields and region to the Zend_Form)
+             */
+            $this->objForm->prepareForm();
 
-    /**
-     * get form title
-     */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
-
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
-
-  /**
-   * editUnitAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function editUnitAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->editUnitAction()');
-
-    $this->getForm($this->core->sysConfig->generic->actions->edit);
-
-    /**
-     * get form title
-     */
-    $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
-
-    if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-
-      $arrFormData = $this->getRequest()->getPost();
-      $this->objForm->Setup()->setFieldValues($arrFormData);
-
-      /**
-       * set action
-       */
-      $this->objForm->setAction('/zoolu/contacts/contact/edit-unit');
-
-      /**
-       * prepare form (add fields and region to the Zend_Form)
-       */
-      $this->objForm->prepareForm();
-
-      if($this->objForm->isValid($arrFormData)){
-        $this->objForm->saveFormData();
-        $this->view->blnShowFormAlert = true;
-      }
-    }
-
-    $this->view->form = $this->objForm;
-    $this->renderScript('form.phtml');
-  }
-
-  /**
-   * deleteUnitAction
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function deleteUnitAction(){
-    $this->core->logger->debug('contacts->controllers->ContactController->deleteUnitAction()');
-
-    $this->getModelContacts();
-
-    if($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-      $objRequest = $this->getRequest();
-      $this->objModelContacts->deleteUnitNode($objRequest->getParam("id"));
-      $this->view->blnShowFormAlert = true;
-    }
-    $this->renderScript('form.phtml');
-  }
-  
-  /**
-   * getForm
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  private function getForm($intActionType = null){
-    $this->core->logger->debug('contacts->controllers->ContactController->getForm('.$intActionType.')');
-
-    try{
-      $objRequest = $this->getRequest();
-
-      $strFormId = $objRequest->getParam("formId");
-      $intElementId = ($objRequest->getParam("id") != '') ? $objRequest->getParam("id") : null;
-      
-      /**
-       * if there is no formId
-       */
-      if($strFormId == ''){
-        throw new Exception('Not able to create a form, because there is no form id!');  
-      }
-
-      $objFormHandler = FormHandler::getInstance();
-      $objFormHandler->setFormId($strFormId);
-      $objFormHandler->setActionType($intActionType);
-      $objFormHandler->setLanguageId($this->getItemLanguageId($intActionType));
-      $objFormHandler->setFormLanguageId($this->core->intZooluLanguageId);
-      $objFormHandler->setElementId($intElementId);
-
-      $this->objForm = $objFormHandler->getGenericForm();
-
-      /**
-       * add contact & unit specific hidden fields
-       */
-      $this->objForm->addElement('hidden', 'rootLevelId', array('value' => $objRequest->getParam("rootLevelId"), 'decorators' => array('Hidden')));
-      $this->objForm->addElement('hidden', 'parentId', array('value' => $objRequest->getParam("parentId"), 'decorators' => array('Hidden')));
-      
-      /**
-       * add currlevel hidden field
-       */
-      $this->objForm->addElement('hidden', 'currLevel', array('value' => $objRequest->getParam("currLevel"), 'decorators' => array('Hidden'), 'ignore' => true));
-      
-      /**
-       * add elementTye hidden field (folder, element, ...)
-       */
-      $this->objForm->addElement('hidden', 'elementType', array('value' => $this->objRequest->getParam("elementType"), 'decorators' => array('Hidden'), 'ignore' => true));
-      
-    }catch (Exception $exc) {
-      $this->core->logger->err($exc);
-      exit();
-    }
-  }
-  
-  /**
-   * getItemLanguageId
-   * @param integer $intActionType
-   * @return integer
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0 
-   */
-  protected function getItemLanguageId($intActionType = null){
-    if($this->intItemLanguageId == null){
-      if(!$this->objRequest->getParam("languageId")){
-        $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : $this->core->intZooluLanguageId;
-        
-        $intRootLevelId = $this->objRequest->getParam("rootLevelId");
-        $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
-        
-        $arrLanguages = $this->core->config->languages->language->toArray();      
-        foreach($arrLanguages as $arrLanguage){
-          if(Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$intRootLevelId.'_'.$arrLanguage['id'], $PRIVILEGE, false, false)){
-            $this->intItemLanguageId = $arrLanguage['id']; 
-            break;
-          }          
+            if ($this->objForm->isValid($arrFormData)) {
+                $this->objForm->saveFormData();
+                $this->view->blnShowFormAlert = true;
+            }
         }
-        
-      }else{
-        $this->intItemLanguageId = $this->objRequest->getParam("languageId");
-      }
-    }
-    
-    return $this->intItemLanguageId;
-  }
-  
-  /**
-   * getModelContacts
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelContacts(){
-    if (null === $this->objModelContacts) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Contacts.php';
-      $this->objModelContacts = new Model_Contacts();
-      $this->objModelContacts->setLanguageId($this->getItemLanguageId());
+
+        $this->view->form = $this->objForm;
+        $this->renderScript('form.phtml');
     }
 
-    return $this->objModelContacts;
-  }
+    /**
+     * deleteUnitAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteUnitAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->deleteUnitAction()');
+
+        $this->getModelContacts();
+
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+            $objRequest = $this->getRequest();
+            $this->objModelContacts->deleteUnitNode($objRequest->getParam("id"));
+            $this->view->blnShowFormAlert = true;
+        }
+        $this->renderScript('form.phtml');
+    }
+
+    /**
+     * getForm
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    private function getForm($intActionType = null)
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->getForm(' . $intActionType . ')');
+
+        try {
+            $objRequest = $this->getRequest();
+
+            $strFormId = $objRequest->getParam("formId");
+            $intElementId = ($objRequest->getParam("id") != '') ? $objRequest->getParam("id") : null;
+
+            /**
+             * if there is no formId
+             */
+            if ($strFormId == '') {
+                throw new Exception('Not able to create a form, because there is no form id!');
+            }
+
+            $objFormHandler = FormHandler::getInstance();
+            $objFormHandler->setFormId($strFormId);
+            $objFormHandler->setActionType($intActionType);
+            $objFormHandler->setLanguageId($this->getItemLanguageId($intActionType));
+            $objFormHandler->setFormLanguageId($this->core->intZooluLanguageId);
+            $objFormHandler->setElementId($intElementId);
+
+            $this->objForm = $objFormHandler->getGenericForm();
+
+            /**
+             * add contact & unit specific hidden fields
+             */
+            $this->objForm->addElement('hidden', 'rootLevelId', array('value' => $objRequest->getParam("rootLevelId"), 'decorators' => array('Hidden')));
+            $this->objForm->addElement('hidden', 'parentId', array('value' => $objRequest->getParam("parentId"), 'decorators' => array('Hidden')));
+
+            /**
+             * add currlevel hidden field
+             */
+            $this->objForm->addElement('hidden', 'currLevel', array('value' => $objRequest->getParam("currLevel"), 'decorators' => array('Hidden'), 'ignore' => true));
+
+            /**
+             * add elementTye hidden field (folder, element, ...)
+             */
+            $this->objForm->addElement('hidden', 'elementType', array('value' => $this->objRequest->getParam("elementType"), 'decorators' => array('Hidden'), 'ignore' => true));
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            exit();
+        }
+    }
+
+    /**
+     * getItemLanguageId
+     * @param integer $intActionType
+     * @return integer
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getItemLanguageId($intActionType = null)
+    {
+        if ($this->intItemLanguageId == null) {
+            if (!$this->objRequest->getParam("languageId")) {
+                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : $this->core->intZooluLanguageId;
+
+                $intRootLevelId = $this->objRequest->getParam("rootLevelId");
+                $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
+
+                $arrLanguages = $this->core->config->languages->language->toArray();
+                foreach ($arrLanguages as $arrLanguage) {
+                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId . '_' . $arrLanguage['id'], $PRIVILEGE, false, false)) {
+                        $this->intItemLanguageId = $arrLanguage['id'];
+                        break;
+                    }
+                }
+
+            } else {
+                $this->intItemLanguageId = $this->objRequest->getParam("languageId");
+            }
+        }
+
+        return $this->intItemLanguageId;
+    }
+
+    /**
+     * getModelContacts
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelContacts()
+    {
+        if (null === $this->objModelContacts) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Contacts.php';
+            $this->objModelContacts = new Model_Contacts();
+            $this->objModelContacts->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelContacts;
+    }
 }
 
 ?>

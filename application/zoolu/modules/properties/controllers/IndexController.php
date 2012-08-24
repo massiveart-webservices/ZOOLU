@@ -40,39 +40,42 @@
  * @version 1.0
  */
 
-class Properties_IndexController extends AuthControllerAction {
+class Properties_IndexController extends AuthControllerAction
+{
 
-  /**
-   * init
-   */
-  public function init(){
-    parent::init();
-    if(!Security::get()->isAllowed('settings', Security::PRIVILEGE_VIEW)){
-      $this->_redirect('/zoolu');
+    /**
+     * init
+     */
+    public function init()
+    {
+        parent::init();
+        if (!Security::get()->isAllowed('settings', Security::PRIVILEGE_VIEW)) {
+            $this->_redirect('/zoolu');
+        }
     }
-  }
-  
-  /**
-   * The default action - show the home page
-   */
-  public function indexAction(){
 
-    $this->_helper->viewRenderer->setNoRender();
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
 
-    Zend_Layout::startMvc(array(
-      'layout' => 'properties',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
+        $this->_helper->viewRenderer->setNoRender();
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation',$this->view->action('index', 'Navigation', 'properties'));
-    $objLayout->assign('userinfo',$this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->properties)));
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'properties',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('module', $this->core->sysConfig->modules->properties);
-  }
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'properties'));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->properties)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('module', $this->core->sysConfig->modules->properties);
+    }
 
 }

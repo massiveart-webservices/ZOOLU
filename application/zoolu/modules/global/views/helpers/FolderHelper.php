@@ -40,166 +40,167 @@
  * @version 1.0
  */
 
-class FolderHelper {
-
-  /**
-   * @var Core
-   */
-  private $core;
-
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * getFolderContentList
-   * @param object $objRowset
-   * @param integer $intFolderId
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function getFolderContentList($objPaginator, $intFolderId, $currLevel, $strOrderColumn = '', $strOrderSort = '', $strGroupKey = ''){
-    $this->core->logger->debug('core->views->helpers->FolderHelper->getFolderContentList()');
-    $strTbody = '';
-    $strThead = '';
-		
-		$strGroupKeyOverview = $strGroupKey.'_overview';
+class FolderHelper
+{
 
     /**
-     * Tbody
+     * @var Core
      */
-    $strTbody .= '<tbody>';
-    if(count($objPaginator) > 0){
-      foreach($objPaginator as $objRow){
+    private $core;
 
-      	$strStatus = ($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off' ;
-				if($objRow->version == null)
-				{
-					$objRow->version = 'null';
-				}
-				if($objRow->idTemplates == null)
-				{
-					$objRow->idTemplates = -1;
-				}
-      	
-      	if($objRow->elementType == 'global') //FIXME: Replace Hardcode
-      	{
-					if($objRow->idTemplates == -1 && $strGroupKey != '')
-						{
-							$objRow->idTemplates = ($objRow->isStartGlobal == 1) ? $this->core->sysConfig->global_types->$strGroupKeyOverview->default_templateId : $this->core->sysConfig->global_types->$strGroupKey->default_templateId;
-						}
-      		if($objRow->isStartGlobal) {
-      			$strTbody .= '
-                      <tr class="listrow" id="Row'.$objRow->id.'">
-                        <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="'.$objRow->id.'" name="listSelect'.$objRow->id.'" id="listSelect'.$objRow->id.'"/></td>
-                        <td class="rowicon"><div class="img_start_'.$strStatus.'"></div></td>
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
+
+    /**
+     * getFolderContentList
+     * @param object $objRowset
+     * @param integer $intFolderId
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getFolderContentList($objPaginator, $intFolderId, $currLevel, $strOrderColumn = '', $strOrderSort = '', $strGroupKey = '')
+    {
+        $this->core->logger->debug('core->views->helpers->FolderHelper->getFolderContentList()');
+        $strTbody = '';
+        $strThead = '';
+
+        $strGroupKeyOverview = $strGroupKey . '_overview';
+
+        /**
+         * Tbody
+         */
+        $strTbody .= '<tbody>';
+        if (count($objPaginator) > 0) {
+            foreach ($objPaginator as $objRow) {
+
+                $strStatus = ($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off';
+                if ($objRow->version == null) {
+                    $objRow->version = 'null';
+                }
+                if ($objRow->idTemplates == null) {
+                    $objRow->idTemplates = -1;
+                }
+
+                if ($objRow->elementType == 'global') //FIXME: Replace Hardcode
+                {
+                    if ($objRow->idTemplates == -1 && $strGroupKey != '') {
+                        $objRow->idTemplates = ($objRow->isStartGlobal == 1) ? $this->core->sysConfig->global_types->$strGroupKeyOverview->default_templateId : $this->core->sysConfig->global_types->$strGroupKey->default_templateId;
+                    }
+                    if ($objRow->isStartGlobal) {
+                        $strTbody .= '
+                      <tr class="listrow" id="Row' . $objRow->id . '">
+                        <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="' . $objRow->id . '" name="listSelect' . $objRow->id . '" id="listSelect' . $objRow->id . '"/></td>
+                        <td class="rowicon"><div class="img_start_' . $strStatus . '"></div></td>
                         <td class="rowsortpos"></td>
                         <td class="rowtitle">
-                          <a onclick="myNavigation.getEditForm('.$objRow->id.', \''.$objRow->elementType.'\', \''.$objRow->genericFormId.'\', '.$objRow->version.', '.$objRow->idTemplates.', '.$objRow->linkId.', true); return false;" href="#">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>
+                          <a onclick="myNavigation.getEditForm(' . $objRow->id . ', \'' . $objRow->elementType . '\', \'' . $objRow->genericFormId . '\', ' . $objRow->version . ', ' . $objRow->idTemplates . ', ' . $objRow->linkId . ', true); return false;" href="#">' . htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
                         </td>
-                        <td class="rowauthor">'.$objRow->author.'</td>
-                        <td class="rowchanged" colspan="2">'.$objRow->changed.'</td>
+                        <td class="rowauthor">' . $objRow->author . '</td>
+                        <td class="rowchanged" colspan="2">' . $objRow->changed . '</td>
                       </tr>';
-      		} else {
-	          $strTbody .= '
-	                    <tr class="listrow" id="Row'.$objRow->id.'">
-	                      <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="'.$objRow->id.'" name="listSelect'.$objRow->id.'" id="listSelect'.$objRow->id.'"/></td>
-	                      <td class="rowicon"><div class="img_'.$objRow->elementType.'_'.$strStatus.'"></div></td>
-	                      <td class="rowsortpos"><input class="iptsortpos" name="listPos_'.$objRow->elementType.'_'.$objRow->id.'" id="listPos_'.$objRow->elementType.'_'.$objRow->id.'" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'listPos_'.$objRow->elementType.'_'.$objRow->id.'\',\''.$objRow->elementType.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'listPos_'.$objRow->elementType.'_'.$objRow->id.'\'); return false; }" type="text" value="'.$objRow->sortPosition.'" /></td>
+                    } else {
+                        $strTbody .= '
+	                    <tr class="listrow" id="Row' . $objRow->id . '">
+	                      <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="' . $objRow->id . '" name="listSelect' . $objRow->id . '" id="listSelect' . $objRow->id . '"/></td>
+	                      <td class="rowicon"><div class="img_' . $objRow->elementType . '_' . $strStatus . '"></div></td>
+	                      <td class="rowsortpos"><input class="iptsortpos" name="listPos_' . $objRow->elementType . '_' . $objRow->id . '" id="listPos_' . $objRow->elementType . '_' . $objRow->id . '" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'listPos_' . $objRow->elementType . '_' . $objRow->id . '\',\'' . $objRow->elementType . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'listPos_' . $objRow->elementType . '_' . $objRow->id . '\'); return false; }" type="text" value="' . $objRow->sortPosition . '" /></td>
                         <td class="rowtitle">
-                          <a onclick="myNavigation.getEditForm('.$objRow->id.', \''.$objRow->elementType.'\', \''.$objRow->genericFormId.'\', '.$objRow->version.', '.$objRow->idTemplates.', '.$objRow->linkId.', true); return false;" href="#">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>
+                          <a onclick="myNavigation.getEditForm(' . $objRow->id . ', \'' . $objRow->elementType . '\', \'' . $objRow->genericFormId . '\', ' . $objRow->version . ', ' . $objRow->idTemplates . ', ' . $objRow->linkId . ', true); return false;" href="#">' . htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
                         </td>
-	                      <td class="rowauthor">'.$objRow->author.'</td>
-	                      <td class="rowchanged" colspan="2">'.$objRow->changed.'</td>
+	                      <td class="rowauthor">' . $objRow->author . '</td>
+	                      <td class="rowchanged" colspan="2">' . $objRow->changed . '</td>
 	                    </tr>';
-      		}
-      	} elseif($objRow->elementType == 'folder') { //FIXME: Replace Hardcode
-					if($objRow->genericFormId == null){
-						$objRow->genericFormId = $this->core->sysConfig->form->ids->folders->default;
-					}
-      		  $strTbody .= '
-                        <tr class="listrow" id="Row'.$objRow->id.'">
-                          <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="'.$objRow->id.'" name="listSelect'.$objRow->id.'" id="listSelect'.$objRow->id.'"/></td>
-                          <td class="rowicon"><div class="img_folder_'.$strStatus.'"></div></td>
-                          <td class="rowsortpos"><input class="iptsortpos" name="listPos_'.$objRow->elementType.'_'.$objRow->id.'" id="listPos_'.$objRow->elementType.'_'.$objRow->id.'" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'listPos_'.$objRow->elementType.'_'.$objRow->id.'\',\''.$objRow->elementType.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'listPos_'.$objRow->elementType.'_'.$objRow->id.'\'); return false; }" type="text" value="'.$objRow->sortPosition.'" /></td>
+                    }
+                } elseif ($objRow->elementType == 'folder') { //FIXME: Replace Hardcode
+                    if ($objRow->genericFormId == null) {
+                        $objRow->genericFormId = $this->core->sysConfig->form->ids->folders->default;
+                    }
+                    $strTbody .= '
+                        <tr class="listrow" id="Row' . $objRow->id . '">
+                          <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="' . $objRow->id . '" name="listSelect' . $objRow->id . '" id="listSelect' . $objRow->id . '"/></td>
+                          <td class="rowicon"><div class="img_folder_' . $strStatus . '"></div></td>
+                          <td class="rowsortpos"><input class="iptsortpos" name="listPos_' . $objRow->elementType . '_' . $objRow->id . '" id="listPos_' . $objRow->elementType . '_' . $objRow->id . '" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'listPos_' . $objRow->elementType . '_' . $objRow->id . '\',\'' . $objRow->elementType . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'listPos_' . $objRow->elementType . '_' . $objRow->id . '\'); return false; }" type="text" value="' . $objRow->sortPosition . '" /></td>
                           <td class="rowtitle">
-                            <a onclick="myNavigation.getEditForm('.$objRow->id.', \''.$objRow->elementType.'\', \''.$objRow->genericFormId.'\', '.$objRow->version.', null, null, true); return false;" href="#">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>
+                            <a onclick="myNavigation.getEditForm(' . $objRow->id . ', \'' . $objRow->elementType . '\', \'' . $objRow->genericFormId . '\', ' . $objRow->version . ', null, null, true); return false;" href="#">' . htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
                           </td>
-                          <td class="rowauthor">'.$objRow->author.'</td>
-                          <td class="rowchanged" colspan="2">'.$objRow->changed.'</td>
+                          <td class="rowauthor">' . $objRow->author . '</td>
+                          <td class="rowchanged" colspan="2">' . $objRow->changed . '</td>
                         </tr>';
-      	}
+                }
 
-      }
-    }
-    $strTbody .= '</tbody>';
+            }
+        }
+        $strTbody .= '</tbody>';
 
-    /**
-     * Thead
-     */
-    $strThead .= '<thead>
+        /**
+         * Thead
+         */
+        $strThead .= '<thead>
                      <tr>
                        <th class="topcornerleft"><div>&nbsp;</div></th>
                        <th class="topcheckbox"></th>
                        <th class="topicon"></th>
-                       <th class="topsortposition'.(('sortposition' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'sortposition\''.(('sortposition' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
-                         <div'.(('sortposition' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').' style="height:100%"></div>
+                       <th class="topsortposition' . (('sortposition' == $strOrderColumn) ? ' sort' : '') . '" onclick="myList.sort(\'sortposition\'' . (('sortposition' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'') . ')">
+                         <div' . (('sortposition' == $strOrderColumn) ? ' class="' . $strOrderSort . '"' : '') . ' style="height:100%"></div>
                        </th>
-                       <th class="toptitle'.(('title' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'title\''.(('title' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
-                         <div'.(('title' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').'>'.$this->core->translate->_('title').'</div>
+                       <th class="toptitle' . (('title' == $strOrderColumn) ? ' sort' : '') . '" onclick="myList.sort(\'title\'' . (('title' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'') . ')">
+                         <div' . (('title' == $strOrderColumn) ? ' class="' . $strOrderSort . '"' : '') . '>' . $this->core->translate->_('title') . '</div>
                       </th>
-                       <th class="topauthor'.(('author' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'author\''.(('author' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
-                         <div'.(('author' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').'>'.$this->core->translate->_('Author').'</div>
+                       <th class="topauthor' . (('author' == $strOrderColumn) ? ' sort' : '') . '" onclick="myList.sort(\'author\'' . (('author' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'') . ')">
+                         <div' . (('author' == $strOrderColumn) ? ' class="' . $strOrderSort . '"' : '') . '>' . $this->core->translate->_('Author') . '</div>
                        </th>
-                       <th class="topchanged'.(('changed' == $strOrderColumn) ? ' sort' : '').'" onclick="myList.sort(\'changed\''.(('changed' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'').')">
-                         <div'.(('changed' == $strOrderColumn) ? ' class="'.$strOrderSort.'"' : '').'>'.$this->core->translate->_('changed').'</div>
+                       <th class="topchanged' . (('changed' == $strOrderColumn) ? ' sort' : '') . '" onclick="myList.sort(\'changed\'' . (('changed' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'') . ')">
+                         <div' . (('changed' == $strOrderColumn) ? ' class="' . $strOrderSort . '"' : '') . '>' . $this->core->translate->_('changed') . '</div>
                        </th>
                        <th class="topcornerright"><div>&nbsp;</div></th>
                      </tr>
                    </thead>';
 
+        /**
+         * return html output
+         */
+        $strOutput = $strThead . $strTbody;
+        return $strOutput;
+    }
+
     /**
-     * return html output
+     * getListTitle
+     * @param string $strSearchValue
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
      */
-    $strOutput = $strThead.$strTbody;
-    return $strOutput;
-  }
-  
-  /**
-   * getListTitle
-   * @param string $strSearchValue
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function getFolderContentListTitle($objPaginator, $strSearchValue = '') {
-    $strOutput = '';
-    if($strSearchValue != '') {
-      if(count($objPaginator) > 0){
-        $strOutput = '
-            <div class="formsubtitle searchtitle">'.sprintf($this->core->translate->_('Search_for_'), $strSearchValue).'</div>'; 
-      }else{
-        $strOutput = '
-            <div class="formsubtitle searchtitle">'.sprintf($this->core->translate->_('No_search_results_for_'), $strSearchValue).'</div>';   
-      }
-      $strOutput .= '
+    public function getFolderContentListTitle($objPaginator, $strSearchValue = '')
+    {
+        $strOutput = '';
+        if ($strSearchValue != '') {
+            if (count($objPaginator) > 0) {
+                $strOutput = '
+            <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('Search_for_'), $strSearchValue) . '</div>';
+            } else {
+                $strOutput = '
+            <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('No_search_results_for_'), $strSearchValue) . '</div>';
+            }
+            $strOutput .= '
             <div class="bttnSearchReset" onclick="myList.resetSearch();">
               <div class="button17leftOff"></div>
               <div class="button17centerOff">
-                <div>'.$this->core->translate->_('Reset').'</div>
+                <div>' . $this->core->translate->_('Reset') . '</div>
                 <div class="clear"></div>
               </div>
               <div class="button17rightOff"></div>
               <div class="clear"></div>
             </div>
             <div class="clear"></div>';
+        }
+        return $strOutput;
     }
-    return $strOutput;
-  }
 }
 
 ?>

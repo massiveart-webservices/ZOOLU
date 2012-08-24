@@ -40,10 +40,11 @@
  * @version 1.0
  */
 
-class Model_Table_GlobalLinks extends Zend_Db_Table_Abstract {
+class Model_Table_GlobalLinks extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'globalLinks';
-  protected $_primary = 'id';
+    protected $_name = 'globalLinks';
+    protected $_primary = 'id';
 
 }
 

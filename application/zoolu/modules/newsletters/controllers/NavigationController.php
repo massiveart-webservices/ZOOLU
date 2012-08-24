@@ -40,154 +40,163 @@
  * @version 1.0
  */
 
-class Newsletters_NavigationController extends AuthControllerAction {
+class Newsletters_NavigationController extends AuthControllerAction
+{
 
-  private $intRootLevelId;
-  private $intFolderId;
+    private $intRootLevelId;
+    private $intFolderId;
 
-  /**
-   * @var Model_Newsletters
-   */
-  protected $objModelNewsletters;
-    
-  /**
-   * @var Model_Folders
-   */
-  protected $objModelFolders;
+    /**
+     * @var Model_Newsletters
+     */
+    protected $objModelNewsletters;
 
-  /**
-   * init
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   * @return void
-   */
-  public function init(){
-    parent::init();
-    Security::get()->addFoldersToAcl($this->getModelFolders());
-    Security::get()->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->newsletters);
-  }
+    /**
+     * @var Model_Folders
+     */
+    protected $objModelFolders;
 
-  /**
-   * indexAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function indexAction(){
-    $this->getModelFolders();
-    $objRootLevels = $this->objModelFolders->loadAllRootLevelsWithGroups($this->core->sysConfig->modules->newsletters);
-        
-    $objRootLevelNavigation = new NavigationTree();    
-    if(count($objRootLevels) > 0){
-      $intOrder = 0;
-      foreach($objRootLevels as $objRootLevel){
-        $intOrder++;
-        
-        if(!$objRootLevelNavigation->hasSubTree($objRootLevel->name)){
-          $objNavGroup = new NavigationTree();
-          $objNavGroup->setId($objRootLevel->idRootLevelGroups);
-          $objNavGroup->setItemId($objRootLevel->name);
-          $objNavGroup->setTypeId($objRootLevel->idRootLevelGroups);
-          $objNavGroup->setTitle($objRootLevel->rootLevelGroupTitle);
-          $objNavGroup->setUrl($objRootLevel->href);
-          $objNavGroup->setLanguageId(((int) $objRootLevel->rootLevelGuiLanguageId > 0 ? $objRootLevel->rootLevelGuiLanguageId : $objRootLevel->rootLevelLanguageId));
-          
-          $objRootLevelNavigation->addTree($objNavGroup, $objRootLevel->name);
+    /**
+     * init
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     * @return void
+     */
+    public function init()
+    {
+        parent::init();
+        Security::get()->addFoldersToAcl($this->getModelFolders());
+        Security::get()->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->newsletters);
+    }
+
+    /**
+     * indexAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function indexAction()
+    {
+        $this->getModelFolders();
+        $objRootLevels = $this->objModelFolders->loadAllRootLevelsWithGroups($this->core->sysConfig->modules->newsletters);
+
+        $objRootLevelNavigation = new NavigationTree();
+        if (count($objRootLevels) > 0) {
+            $intOrder = 0;
+            foreach ($objRootLevels as $objRootLevel) {
+                $intOrder++;
+
+                if (!$objRootLevelNavigation->hasSubTree($objRootLevel->name)) {
+                    $objNavGroup = new NavigationTree();
+                    $objNavGroup->setId($objRootLevel->idRootLevelGroups);
+                    $objNavGroup->setItemId($objRootLevel->name);
+                    $objNavGroup->setTypeId($objRootLevel->idRootLevelGroups);
+                    $objNavGroup->setTitle($objRootLevel->rootLevelGroupTitle);
+                    $objNavGroup->setUrl($objRootLevel->href);
+                    $objNavGroup->setLanguageId(((int) $objRootLevel->rootLevelGuiLanguageId > 0 ? $objRootLevel->rootLevelGuiLanguageId : $objRootLevel->rootLevelLanguageId));
+
+                    $objRootLevelNavigation->addTree($objNavGroup, $objRootLevel->name);
+                }
+
+                $objNavItem = new NavigationItem();
+                $objNavItem->setId($objRootLevel->id);
+                $objNavItem->setItemId($objRootLevel->name);
+                $objNavItem->setTypeId($objRootLevel->idRootLevelTypes);
+                $objNavItem->setTitle($objRootLevel->title);
+                $objNavItem->setUrl($objRootLevel->href);
+                $objNavItem->setOrder($intOrder);
+                $objNavItem->setParentId($objRootLevel->idRootLevelGroups);
+                $objNavItem->setLanguageId(((int) $objRootLevel->rootLevelGuiLanguageId > 0 ? $objRootLevel->rootLevelGuiLanguageId : $objRootLevel->rootLevelLanguageId));
+
+                $objRootLevelNavigation->addToParentTree($objNavItem, $objRootLevel->name . '_' . $objRootLevel->id);
+            }
         }
-        
-        $objNavItem = new NavigationItem();
-        $objNavItem->setId($objRootLevel->id);
-        $objNavItem->setItemId($objRootLevel->name);
-        $objNavItem->setTypeId($objRootLevel->idRootLevelTypes);
-        $objNavItem->setTitle($objRootLevel->title);
-        $objNavItem->setUrl($objRootLevel->href);
-        $objNavItem->setOrder($intOrder);
-        $objNavItem->setParentId($objRootLevel->idRootLevelGroups);
-        $objNavItem->setLanguageId(((int) $objRootLevel->rootLevelGuiLanguageId > 0 ? $objRootLevel->rootLevelGuiLanguageId : $objRootLevel->rootLevelLanguageId));
-        
-        $objRootLevelNavigation->addToParentTree($objNavItem, $objRootLevel->name.'_'.$objRootLevel->id);        
-      }
-    }   
 
-    $this->view->assign('rootLevelNavigation', $objRootLevelNavigation);
-    $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
-    $this->view->assign('rootLevelGroupId', $this->getRequest()->getParam('rootLevelGroupId'));
-    $this->view->assign('rootLevelGroupKey', $this->getRequest()->getParam('rootLevelGroupKey'));
-    $this->view->assign('rootLevelType', $this->getRequest()->getParam('rootLevelType'));
-    
-    $this->renderScript('navigation/list.phtml');
-  }
+        $this->view->assign('rootLevelNavigation', $objRootLevelNavigation);
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
+        $this->view->assign('rootLevelGroupId', $this->getRequest()->getParam('rootLevelGroupId'));
+        $this->view->assign('rootLevelGroupKey', $this->getRequest()->getParam('rootLevelGroupKey'));
+        $this->view->assign('rootLevelType', $this->getRequest()->getParam('rootLevelType'));
 
-  /**
-   * getModelNewsletters
-   * @return Model_Newsletters
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelNewsletters(){
-    if (null === $this->objModelNewsletters) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it 
-       * from its modules path location.
-       */ 
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Newsletters.php';
-      $this->objModelNewsletters = new Model_Newsletters();
-      $this->objModelNewsletters->setLanguageId(1);
+        $this->renderScript('navigation/list.phtml');
     }
-    
-    return $this->objModelNewsletters;
-  }
-  
-  /**
-   * getModelFolders
-   * @return Model_Folders
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelFolders(){
-    if (null === $this->objModelFolders) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it 
-       * from its modules path location.
-       */ 
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Folders.php';
-      $this->objModelFolders = new Model_Folders();
-      $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+
+    /**
+     * getModelNewsletters
+     * @return Model_Newsletters
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelNewsletters()
+    {
+        if (null === $this->objModelNewsletters) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Newsletters.php';
+            $this->objModelNewsletters = new Model_Newsletters();
+            $this->objModelNewsletters->setLanguageId(1);
+        }
+
+        return $this->objModelNewsletters;
     }
-    
-    return $this->objModelFolders;
-  }
 
-  /**
-   * setRootLevelId
-   * @param integer $intRootLevelId
-   */
-  public function setRootLevelId($intRootLevelId){
-    $this->intRootLevelId = $intRootLevelId;
-  }
+    /**
+     * getModelFolders
+     * @return Model_Folders
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+        }
 
-  /**
-   * getRootLevelId
-   * @param integer $intRootLevelId
-   */
-  public function getRootLevelId(){
-    return $this->intRootLevelId;
-  }
+        return $this->objModelFolders;
+    }
 
-  /**
-   * setFolderId
-   * @param integer $intFolderId
-   */
-  public function setFolderId($intFolderId){
-    $this->intFolderId = $intFolderId;
-  }
+    /**
+     * setRootLevelId
+     * @param integer $intRootLevelId
+     */
+    public function setRootLevelId($intRootLevelId)
+    {
+        $this->intRootLevelId = $intRootLevelId;
+    }
 
-  /**
-   * getFolderId
-   * @param integer $intFolderId
-   */
-  public function getFolderId(){
-    return $this->intFolderId;
-  }
+    /**
+     * getRootLevelId
+     * @param integer $intRootLevelId
+     */
+    public function getRootLevelId()
+    {
+        return $this->intRootLevelId;
+    }
+
+    /**
+     * setFolderId
+     * @param integer $intFolderId
+     */
+    public function setFolderId($intFolderId)
+    {
+        $this->intFolderId = $intFolderId;
+    }
+
+    /**
+     * getFolderId
+     * @param integer $intFolderId
+     */
+    public function getFolderId()
+    {
+        return $this->intFolderId;
+    }
 }

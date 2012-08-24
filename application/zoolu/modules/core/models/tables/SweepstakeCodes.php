@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -32,19 +32,20 @@
 
 /**
  * Model_Table_SweepstakeCodes
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2011-03-01: Cornelius Hansjakob
- * 
+ *
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  */
 
-class Model_Table_SweepstakeCodes extends Zend_Db_Table_Abstract {
-  
-  protected $_name = 'sweepstakeCodes';
-  protected $_primary = 'id';
-  
+class Model_Table_SweepstakeCodes extends Zend_Db_Table_Abstract
+{
+
+    protected $_name = 'sweepstakeCodes';
+    protected $_primary = 'id';
+
 }
 
 ?>

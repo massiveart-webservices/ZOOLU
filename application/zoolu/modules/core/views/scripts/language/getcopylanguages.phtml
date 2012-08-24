@@ -1,11 +1,11 @@
 <?php
-  require_once (dirname(__FILE__).'/../../helpers/LanguageHelper.php');
-  $objHelper = new LanguageHelper();
-?> 
+require_once (dirname(__FILE__) . '/../../helpers/LanguageHelper.php');
+$objHelper = new LanguageHelper();
+?>
 
 <div class="oltitle"><?php echo $this->overlaytitle; ?></div>
 <div class="spacer1"></div>
 <div class="olnavigationwrapper2">
-  <?php echo $objHelper->getCopyLanguages($this->languages); ?>
+    <?php echo $objHelper->getCopyLanguages($this->languages); ?>
 </div>
 <div class="spacer1 clear"></div>

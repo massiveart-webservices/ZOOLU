@@ -1,15 +1,15 @@
 <?php
-  require_once (dirname(__FILE__).'/../../helpers/DashboardHelper.php');
-  $objHelper = new DashboardHelper();
-  $objHelper->setTranslate($this->translate);
-?> 
+require_once (dirname(__FILE__) . '/../../helpers/DashboardHelper.php');
+$objHelper = new DashboardHelper();
+$objHelper->setTranslate($this->translate);
+?>
 
 <div id="dbrdOverlayTitle" class="oltitle"><?php echo $this->overlaytitle; ?></div>
 <div id="olBack" style="display:none;" onclick="myDashboard.stepBack(); return false;"><?php echo $this->translate->_('back'); ?></div>
 <div class="spacer1 clear"></div>
 <div id="olContent" class="olnavigationwrapper2">
-  <?php echo $objHelper->getModuleListView($this->elements, $this->overlaytitle); ?>
-  <input type="hidden" id="olModuleId" name="olModuleId" value=""/>
-  <input type="hidden" id="olRootLevelId" name="olRootLevelId" value=""/>
+    <?php echo $objHelper->getModuleListView($this->elements, $this->overlaytitle); ?>
+    <input type="hidden" id="olModuleId" name="olModuleId" value=""/>
+    <input type="hidden" id="olRootLevelId" name="olRootLevelId" value=""/>
 </div>
 <div class="spacer1 clear"></div>

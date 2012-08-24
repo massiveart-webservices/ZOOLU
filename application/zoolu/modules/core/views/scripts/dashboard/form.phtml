@@ -1,42 +1,45 @@
 <?php define('SPECIAL_OVERLAY', 'OVERLAY'); ?>
 
-            <?php if($this->mode == SPECIAL_OVERLAY) : ?>                  
+<?php if ($this->mode == SPECIAL_OVERLAY) : ?>
               <div id="editbox" class="editbox">
                 <div class="cornertl"></div>
-                <div class="cornertr"></div>                                    
+    <div class="cornertr"></div>
                 <div class="editboxfields">
                   <form id="dbrdForm" name="dbrdForm" action="/zoolu/core/dashboard/add" method="post" onsubmit="return false;" enctype="application/x-www-form-urlencoded">
             <?php endif; ?>
-                    <div class="field-12">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_dbrd-title" for="dbrd-title" class="fieldtitle"><?php echo $this->translate->_('Title'); ?></label><br/>
-                          <input type="text" class="text keyfield mandatory" name="title" id="dbrd-title" value=""/>
-                        </div>
-                      </div>
+    <div class="field-12">
+        <div class="field">
+            <div class="textdisplaywrapper">
+                <label id="lbl_dbrd-title" for="dbrd-title" class="fieldtitle"><?php echo $this->translate->_('Title'); ?></label><br/>
+                <input type="text" class="text keyfield mandatory" name="title" id="dbrd-title" value=""/>
+            </div>
+        </div>
+    </div>
+    <div class="field-12">
+        <div class="field">
+            <div class="textdisplaywrapper">
+                <label id="lbl_dbrd-description" for="dbrd-description" class="fieldtitle"><?php echo $this->translate->_('Message'); ?></label><br/>
+                <textarea id="dbrd-description" name="description" style="height:100px; resize:vertical"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="field-12">
+        <div class="field">
+            <div class="textdisplaywrapper">
+                <label id="lbl_dbrd-users" for="dbrd-users" class="fieldtitle"><?php echo $this->translate->_('Contacts'); ?></label><br/>
+
+                <div class="conwrapper">
+                    <div class="contop"><?php echo $this->translate->_('Add_contacts'); ?>:
+                        <img width="16" height="16" onclick="myDashboard.getAddUsersOverlay('divContactContainer_users'); return false;" src="/zoolu-statics/images/icons/icon_addmedia.png"/>
                     </div>
-                    <div class="field-12">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_dbrd-description" for="dbrd-description" class="fieldtitle"><?php echo $this->translate->_('Message'); ?></label><br/>
-                          <textarea id="dbrd-description" name="description" style="height:100px; resize:vertical"></textarea>
-                        </div>
-                      </div>
+                    <div class="contact" id="divContactContainer_users">
                     </div>
-                    <div class="field-12">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_dbrd-users" for="dbrd-users" class="fieldtitle"><?php echo $this->translate->_('Contacts'); ?></label><br/>
-                          <div class="conwrapper">
-                            <div class="contop"><?php echo $this->translate->_('Add_contacts'); ?>: <img width="16" height="16" onclick="myDashboard.getAddUsersOverlay('divContactContainer_users'); return false;" src="/zoolu-statics/images/icons/icon_addmedia.png"/></div>
-                            <div class="contact" id="divContactContainer_users">
-                            </div>
-                            <input type="hidden" value="" name="users" id="dbrd-users"/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!--<div class="field-6">
+                    <input type="hidden" value="" name="users" id="dbrd-users"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="field-6">
                       <div class="field">
                         <div class="textdisplaywrapper">
                           <label id="lbl_category" for="category" class="fieldtitle"><?php echo $this->translate->_('Categories'); ?></label><br/>                          
@@ -48,34 +51,39 @@
                         </div>
                       </div> 
                     </div>-->
-                  <?php if($this->mode != SPECIAL_OVERLAY) : ?>
-                    <div class="field-12">
-                      <div class="field">
-                        <div class="textdisplaywrapper">
-                          <label id="lbl_dbrd-links" for="dbrd-links" class="fieldtitle"><?php echo $this->translate->_('Contents'); ?></label><br/>
-                          <div class="internallinkswrapper">
-                            <div class="top"><?php echo $this->translate->_('Add_contents'); ?>: <img width="16" height="16" onclick="myDashboard.getModuleOverlay('divLinksContainer_links'); return false;" src="/zoolu-statics/images/icons/icon_addmedia.png"/></div>
-                            <div class="internalLinks" id="divLinksContainer_links">
-                            </div>
-                            <input type="hidden" value="" name="links" id="dbrd-links"/>
-                          </div>
-                        </div>
-                      </div>
+<?php if ($this->mode != SPECIAL_OVERLAY) : ?>
+    <div class="field-12">
+        <div class="field">
+            <div class="textdisplaywrapper">
+                <label id="lbl_dbrd-links" for="dbrd-links" class="fieldtitle"><?php echo $this->translate->_('Contents'); ?></label><br/>
+
+                <div class="internallinkswrapper">
+                    <div class="top"><?php echo $this->translate->_('Add_contents'); ?>:
+                        <img width="16" height="16" onclick="myDashboard.getModuleOverlay('divLinksContainer_links'); return false;" src="/zoolu-statics/images/icons/icon_addmedia.png"/>
                     </div>
-                    <div onclick="myDashboard.save(); return false;" id="buttonsave">
-                      <div class="button25leftOn"></div>
-                      <div class="button25centerOn"><div><?php echo $this->translate->_('Send'); ?></div></div>
-                      <div class="button25rightOn"></div>
-                      <div class="clear"></div>
+                    <div class="internalLinks" id="divLinksContainer_links">
                     </div>
-                  <?php else : ?>
-                    <input type="hidden" name="links" id="dbrd-links" value=""/>  
-                  <?php endif; ?>
-                    <div class="clear"></div>
-            <?php if($this->mode == SPECIAL_OVERLAY) : ?>
+                    <input type="hidden" value="" name="links" id="dbrd-links"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div onclick="myDashboard.save(); return false;" id="buttonsave">
+        <div class="button25leftOn"></div>
+        <div class="button25centerOn">
+            <div><?php echo $this->translate->_('Send'); ?></div>
+        </div>
+        <div class="button25rightOn"></div>
+        <div class="clear"></div>
+    </div>
+    <?php else : ?>
+    <input type="hidden" name="links" id="dbrd-links" value=""/>
+    <?php endif; ?>
+    <div class="clear"></div>
+<?php if ($this->mode == SPECIAL_OVERLAY) : ?>
                   </form>
                 </div>
                 <div class="cornerbl"></div>
-                <div class="cornerbr"></div>
+    <div class="cornerbr"></div>
               </div>
             <?php endif; ?>

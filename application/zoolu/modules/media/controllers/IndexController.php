@@ -40,33 +40,35 @@
  * @version 1.0
  */
 
-class Media_IndexController extends ModuleControllerAction {
+class Media_IndexController extends ModuleControllerAction
+{
 
-  /**
-   * The default action - show the home page
-   */
-  public function indexAction(){
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
 
-    $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->viewRenderer->setNoRender();
 
-    Zend_Layout::startMvc(array(
-      'layout' => 'media',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'media',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'media'));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->media)));
-    
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('module', $this->core->sysConfig->modules->media);
-    
-    $this->view->assign('languageId', $this->core->intZooluLanguageId);
-    $this->view->assign('languageDefaultId', $this->core->sysConfig->languages->default->id);
-    $this->view->assign('languageOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->core->intZooluLanguageId));
-  }
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'media'));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->media)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('module', $this->core->sysConfig->modules->media);
+
+        $this->view->assign('languageId', $this->core->intZooluLanguageId);
+        $this->view->assign('languageDefaultId', $this->core->sysConfig->languages->default->id);
+        $this->view->assign('languageOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->core->intZooluLanguageId));
+    }
 }
 
 ?>

@@ -1,35 +1,38 @@
 <?php
-  require_once (dirname(__FILE__).'/../../helpers/OverlayHelper.php');
-  $objHelper = new OverlayHelper();
-?> 
+require_once (dirname(__FILE__) . '/../../helpers/OverlayHelper.php');
+$objHelper = new OverlayHelper();
+?>
 
 <div class="oltitle">
-  <?php echo $this->overlaytitle; ?>
+    <?php echo $this->overlaytitle; ?>
 </div>
 <div class="spacer1"></div>
 <div class="groupSearchContainer">
-  <input id="groupSearch" type="text" name="groupSearch" value="<?php echo $this->search; ?>" onkeypress="myForm.searchGroupEnter(event, '<?php echo $this->fieldname; ?>')" />
-  <div onclick="myForm.searchGroup('<?php echo $this->fieldname; ?>');" id="groupSearchButton" class="searchbutton">
-    <div class="button25leftOff"></div>
-    <div class="button25centerOff">
-      <img width="14" height="14" src="/zoolu-statics/images/icons/icon_search_white.png" class="icondelete">
-      <div><?php echo $objHelper->getSearch(); ?></div>
+    <input id="groupSearch" type="text" name="groupSearch" value="<?php echo $this->search; ?>" onkeypress="myForm.searchGroupEnter(event, '<?php echo $this->fieldname; ?>')"/>
+
+    <div onclick="myForm.searchGroup('<?php echo $this->fieldname; ?>');" id="groupSearchButton" class="searchbutton">
+        <div class="button25leftOff"></div>
+        <div class="button25centerOff">
+            <img width="14" height="14" src="/zoolu-statics/images/icons/icon_search_white.png" class="icondelete">
+
+            <div><?php echo $objHelper->getSearch(); ?></div>
+        </div>
+        <div class="button25rightOff"></div>
     </div>
-    <div class="button25rightOff"></div>
-  </div>
-  <?php if($this->search): ?>
-  <div onclick="myForm.resetGroupSearch('<?php echo $this->fieldname; ?>');" class="bttnGroupSearchReset">
-    <div class="button25leftOff"></div>
-    <div class="button25centerOff">
-      <img width="14" height="14" src="/zoolu-statics/images/icons/icon_search_white.png" class="icondelete">
-      <div><?php echo $objHelper->getReset(); ?></div>
+    <?php if ($this->search): ?>
+    <div onclick="myForm.resetGroupSearch('<?php echo $this->fieldname; ?>');" class="bttnGroupSearchReset">
+        <div class="button25leftOff"></div>
+        <div class="button25centerOff">
+            <img width="14" height="14" src="/zoolu-statics/images/icons/icon_search_white.png" class="icondelete">
+
+            <div><?php echo $objHelper->getReset(); ?></div>
+        </div>
+        <div class="button25rightOff"></div>
     </div>
-    <div class="button25rightOff"></div>
-  </div>
-  <?php endif; ?>
-  <div class="clear"></div>
+    <?php endif; ?>
+    <div class="clear"></div>
 </div>
 <div id="olContent" class="olcontentwrapper olgroups">
-  <?php echo $objHelper->getGroupListView($this->listElements, $this->fileids); ?>
+    <?php echo $objHelper->getGroupListView($this->listElements, $this->fileids); ?>
 </div>
 <div class="spacer1 clear"></div>

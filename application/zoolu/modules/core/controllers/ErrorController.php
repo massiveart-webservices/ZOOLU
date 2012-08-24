@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -37,34 +37,36 @@
  * @version
  */
 
-class Core_ErrorController extends Zend_Controller_Action {
+class Core_ErrorController extends Zend_Controller_Action
+{
 
-  /**
-   * This action handles
-   *    - Application errors
-   *    - Errors in the controller chain arising from missing
-   *      controller classes and/or action methods
-   */
-  public function indexAction(){
+    /**
+     * This action handles
+     *    - Application errors
+     *    - Errors in the controller chain arising from missing
+     *      controller classes and/or action methods
+     */
+    public function indexAction()
+    {
 
-    $errors = $this->_getParam('error_handler');
+        $errors = $this->_getParam('error_handler');
 
-    switch ($errors->type){
-      case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+        switch ($errors->type) {
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
 
-      case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-        // 404 error -- controller or action not found
-        $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
-        $this->view->title = 'HTTP/1.1 404 Not Found';
-        break;
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+                // 404 error -- controller or action not found
+                $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
+                $this->view->title = 'HTTP/1.1 404 Not Found';
+                break;
 
-      default:
-        // application error; display error page, but don't change
-        // status code
-        $this->view->title = 'Application Error';
-        break;
+            default:
+                // application error; display error page, but don't change
+                // status code
+                $this->view->title = 'Application Error';
+                break;
+        }
+
+        $this->view->message = $errors->exception;
     }
-
-    $this->view->message = $errors->exception;
-  }
 }

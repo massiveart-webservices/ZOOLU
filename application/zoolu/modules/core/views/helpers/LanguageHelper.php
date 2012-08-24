@@ -40,38 +40,41 @@
  * @version 1.0
  */
 
-class LanguageHelper {
+class LanguageHelper
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
-  
-  public function getCopyLanguages($arrLanguages){
-    $strReturn = '';
-    $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
-    
-    foreach($arrLanguages as $arrLanguage){
-      $strReturn .= '
+    /**
+     * @var Core
+     */
+    private $core;
+
+    public function getCopyLanguages($arrLanguages)
+    {
+        $strReturn = '';
+        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        foreach ($arrLanguages as $arrLanguage) {
+            $strReturn .= '
                     <div class="olnavrootitem">
-                      <a href="#" onclick="myForm.copyLanguage('.$arrLanguage['id'].', '.$intUserId.')">
+                      <a href="#" onclick="myForm.copyLanguage(' . $arrLanguage['id'] . ', ' . $intUserId . ')">
                         <div class="icon"></div>
-                        '.$arrLanguage['title'].'
+                        ' . $arrLanguage['title'] . '
                       </a>
                     </div>';
-    }
-    
-    return $strReturn;
-  }
+        }
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+        return $strReturn;
+    }
+
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
 }
 
 ?>

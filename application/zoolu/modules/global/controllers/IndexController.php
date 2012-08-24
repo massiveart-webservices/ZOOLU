@@ -40,73 +40,78 @@
  * @version 1.0
  */
 
-class Global_IndexController extends ModuleControllerAction {
+class Global_IndexController extends ModuleControllerAction
+{
 
-  /**
-   * init
-   */
-  public function init(){
-    parent::init();
-    if(!Security::get()->isAllowed('global', Security::PRIVILEGE_VIEW)){
-      $this->_redirect('/zoolu');
+    /**
+     * init
+     */
+    public function init()
+    {
+        parent::init();
+        if (!Security::get()->isAllowed('global', Security::PRIVILEGE_VIEW)) {
+            $this->_redirect('/zoolu');
+        }
     }
-  }
-  
-  /**
-   * The default action - show the home page
-   */
-  public function indexAction(){
-    $this->_helper->viewRenderer->setNoRender(true);
-    $this->_forward('tree');
-  }
 
-  /**
-   * listAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function listAction(){
-    $this->_helper->viewRenderer->setNoRender();
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_forward('tree');
+    }
 
-    Zend_Layout::startMvc(array(
-      'layout' => 'global-list',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
+    /**
+     * listAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function listAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'global', array('layoutType' => 'list')));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->global)));
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'global-list',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->global);
-    $this->view->assign('module', $this->core->sysConfig->modules->global);        
-  }
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'global', array('layoutType' => 'list')));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->global)));
 
-  /**
-   * treeAction
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function treeAction(){
-    $this->_helper->viewRenderer->setNoRender();
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->global);
+        $this->view->assign('module', $this->core->sysConfig->modules->global);
+    }
 
-    Zend_Layout::startMvc(array(
-      'layout' => 'global-tree',
-      'layoutPath' => '../application/zoolu/layouts'
-    ));
+    /**
+     * treeAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function treeAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
 
-    $objLayout = Zend_Layout::getMvcInstance();
-    $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'global', array('layoutType' => 'tree')));
-    $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-    $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->global)));
+        Zend_Layout::startMvc(array(
+                                   'layout'     => 'global-tree',
+                                   'layoutPath' => '../application/zoolu/layouts'
+                              ));
 
-    $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-    $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-    $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->global);
-    $this->view->assign('module', $this->core->sysConfig->modules->global);    
-  }
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'global', array('layoutType' => 'tree')));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->global)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->global);
+        $this->view->assign('module', $this->core->sysConfig->modules->global);
+    }
 }
 
 ?>

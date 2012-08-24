@@ -1,78 +1,88 @@
 <?php
 
-  require_once (dirname(__FILE__).'/../../helpers/NavigationHelper.php');
-  $objHelper = new NavigationHelper();
+require_once (dirname(__FILE__) . '/../../helpers/NavigationHelper.php');
+$objHelper = new NavigationHelper();
 
-?>    
-    <script type="text/javascript">//<![CDATA[    
-      var folderFormDefaultId = '<?php echo $this->folderFormDefaultId; ?>';
-      var folderBlogFormDefaultId = '<?php echo $this->folderBlogFormDefaultId; ?>';
-      var pageFormDefaultId = '<?php echo $this->pageFormDefaultId; ?>';
-      var pageTemplateDefaultId = '<?php echo $this->pageTemplateDefaultId; ?>';      
-      var pageTypeDefaultId = <?php echo $this->pageTypeDefaultId; ?>;
-    //]]>
-    </script>
-    
-    <!-- navigation main -->
-    <div id="navigation-main">
+?>
+<script type="text/javascript">//<![CDATA[
+var folderFormDefaultId = '<?php echo $this->folderFormDefaultId; ?>';
+var folderBlogFormDefaultId = '<?php echo $this->folderBlogFormDefaultId; ?>';
+var pageFormDefaultId = '<?php echo $this->pageFormDefaultId; ?>';
+var pageTemplateDefaultId = '<?php echo $this->pageTemplateDefaultId; ?>';
+var pageTypeDefaultId = <?php echo $this->pageTypeDefaultId; ?>;
+//]]>
+</script>
 
-      <!-- navigation left -->
-      <div id="divNaviLeft">
+<!-- navigation main -->
+<div id="navigation-main">
+
+    <!-- navigation left -->
+    <div id="divNaviLeft">
         <div id="divNaviLeftInner">
-          <!-- main navigatin -->
-          <div id="divNaviLeftMain">
-            <?php echo $objHelper->getMainNavigation($this->rootLevelNavigation, $this->rootLevelMaintenances); ?>
-          </div>
+            <!-- main navigatin -->
+            <div id="divNaviLeftMain">
+                <?php echo $objHelper->getMainNavigation($this->rootLevelNavigation, $this->rootLevelMaintenances); ?>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- navigation center -->
-      <div id="divNaviCenter">
+    <!-- navigation center -->
+    <div id="divNaviCenter">
         <!-- navigation output container -->
         <div id="divNaviCenterInner">
         </div>
-      </div>
+    </div>
 
-      <!-- navigation right -->
-      <div id="divNaviRight">
+    <!-- navigation right -->
+    <div id="divNaviRight">
         <div id="divNaviRightInner">
-          <div id="divFolderRapper" style="display: none;">
-            <img width="98" height="68" src="/zoolu-statics/images/icons/icon_folder_large.png"/>
-            <div class="spacer1"></div>
-            <div id="divFolderInfo">
-              <div id="divFolderTitle"><a href="#" class="big bold" onclick="myNavigation.getEditFormMainFolder(); return false;" id="aFolderTitle"></a></div>
-              <div class="linegray"></div>
-              <div id="divFolderActions">
-                <div id="divFolderChangeParent">
-                  <div class="icon_folder"></div>
-                  <div><a href="#" onclick="myFolder.getCurrentFolderParentChooser(); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a></div>                  
-                </div>
-                <div class="clear"></div>
-                <div id="divFolderChangeParent">
-                  <div class="icon_list"></div>
-                  <div><a href="#" onclick="myFolder.getFolderContentList(); return false;"><?php echo $this->translate->_('Load_content_as_list'); ?></a></div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            </div>
-          </div>
-          <div id="divPageRapper" style="display: none;">
-            <img width="68" height="68" src="/zoolu-statics/images/icons/icon_page_large.png"/>
-            <div class="spacer1"></div>
-            <div id="divPageInfo">
-              <div id="divPageTitle" class="big bold"></div>
-              <div class="linegray"></div>
-              <div id="divPageActions">
-                <div id="divPageChangeParent">
-                  <div class="icon_folder"></div>
-                  <div><a href="#" onclick="myFolder.getCurrentFolderParentChooser('MOVE_PAGE'); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a></div>                  
-                </div>
-                <div class="clear"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            <div id="divFolderRapper" style="display: none;">
+                <img width="98" height="68" src="/zoolu-statics/images/icons/icon_folder_large.png"/>
 
-      <div class="clear"></div>
-    </div> <!-- END navigation main -->
+                <div class="spacer1"></div>
+                <div id="divFolderInfo">
+                    <div id="divFolderTitle">
+                        <a href="#" class="big bold" onclick="myNavigation.getEditFormMainFolder(); return false;" id="aFolderTitle"></a>
+                    </div>
+                    <div class="linegray"></div>
+                    <div id="divFolderActions">
+                        <div id="divFolderChangeParent">
+                            <div class="icon_folder"></div>
+                            <div>
+                                <a href="#" onclick="myFolder.getCurrentFolderParentChooser(); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div id="divFolderChangeParent">
+                            <div class="icon_list"></div>
+                            <div>
+                                <a href="#" onclick="myFolder.getFolderContentList(); return false;"><?php echo $this->translate->_('Load_content_as_list'); ?></a>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="divPageRapper" style="display: none;">
+                <img width="68" height="68" src="/zoolu-statics/images/icons/icon_page_large.png"/>
+
+                <div class="spacer1"></div>
+                <div id="divPageInfo">
+                    <div id="divPageTitle" class="big bold"></div>
+                    <div class="linegray"></div>
+                    <div id="divPageActions">
+                        <div id="divPageChangeParent">
+                            <div class="icon_folder"></div>
+                            <div>
+                                <a href="#" onclick="myFolder.getCurrentFolderParentChooser('MOVE_PAGE'); return false;"><?php echo $this->translate->_('Change_parent_folder'); ?></a>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+</div> <!-- END navigation main -->

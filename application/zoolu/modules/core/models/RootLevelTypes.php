@@ -40,111 +40,119 @@
  * @version 1.0
  */
 
-class Model_RootLevelTypes {
+class Model_RootLevelTypes
+{
 
-	private $intLanguageId;
+    private $intLanguageId;
 
-  /**
-   * @var Model_Table_RootLevelPermissions
-   */
-  protected $objRootLevelTypeFilterTypes;
-  
-  /**
-   * @var Model_Table_RootLevelTypeFilters
-   */
-  protected $objRootLevelFilters;
-  
-  /**
-   * @var RootLevelTypeFilterValues
-   */
-  protected $objRootLevelFilterValues;
-    
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Model_Table_RootLevelPermissions
+     */
+    protected $objRootLevelTypeFilterTypes;
 
-  /**
-   * Constructor
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * loadRootLevelTypeFilterTypes
-   * @param number $intRootLevelTypeId
-   * @author Daniel Rotter
-   * @version 1.0
-   */
-  public function loadRootLevelTypeFilterTypes($intRootLevelTypeId) {
-    $this->core->logger->debug('core->models->Model_RootLevelTypes->loadRootLevelTypeFilterTypes('.$intRootLevelTypeId.')');
-    
-    $objSelect = $this->getRootLevelTypeFilterTypesTable()->select()->setIntegrityCheck(false);
-    $objSelect->from($this->getRootLevelTypeFilterTypesTable()->info(Zend_Db_Table_Abstract::NAME), array('id', 'name', 'operators', 'sqlSelect'))
-               ->joinLeft('rootLevelTypeFilterTypeTitles', 'rootLevelTypeFilterTypeTitles.idRootLevelTypeFilterTypes = rootLevelTypeFilterTypes.id', array('title'))
-               ->where('rootLevelTypeFilterTypes.idRootLevelTypes = ?', $intRootLevelTypeId)
-               ->where('rootLevelTypeFilterTypeTitles.idLanguages = ?', $this->getLanguageId());
-    
-    return $this->getRootLevelTypeFilterTypesTable()->fetchAll($objSelect);
-  }
-  
-  /**
-   * getRootLevelPermissionTable
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getRootLevelTypeFilterTypesTable(){
-    if($this->objRootLevelTypeFilterTypes === null){
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/tables/RootLevelTypeFilterTypes.php';
-      $this->objRootLevelTypeFilterTypes = new Model_Table_RootLevelTypeFilterTypes();
+    /**
+     * @var Model_Table_RootLevelTypeFilters
+     */
+    protected $objRootLevelFilters;
+
+    /**
+     * @var RootLevelTypeFilterValues
+     */
+    protected $objRootLevelFilterValues;
+
+    /**
+     * @var Core
+     */
+    private $core;
+
+    /**
+     * Constructor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-    return $this->objRootLevelTypeFilterTypes;
-  }
-  
-  /**
-   * getRootLevelPermissionTable
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function getRootLevelFiltersTable(){
-    if($this->objRootLevelFilters === null){
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/tables/RootLevelFilters.php';
-      $this->objRootLevelFilters = new Model_Table_RootLevelFilters();
-    }
-    return $this->objRootLevelFilters;
-  }
-  
-  /**
-  * getRootLevelPermissionTable
-  * @author Daniel Rotter <daniel.rotter@massiveart.com>
-  * @version 1.0
-  */
-  public function getRootLevelFilterValuesTable(){
-    if($this->objRootLevelFilterValues === null){
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/tables/RootLevelFilterValues.php';
-      $this->objRootLevelFilterValues = new Model_Table_RootLevelFilterValues();
-    }
-    return $this->objRootLevelFilterValues;
-  }
 
-  /**
-   * setLanguageId
-   * @param integer $intLanguageId
-   */
-  public function setLanguageId($intLanguageId){
-    $this->intLanguageId = $intLanguageId;
-  }
+    /**
+     * loadRootLevelTypeFilterTypes
+     * @param number $intRootLevelTypeId
+     * @author Daniel Rotter
+     * @version 1.0
+     */
+    public function loadRootLevelTypeFilterTypes($intRootLevelTypeId)
+    {
+        $this->core->logger->debug('core->models->Model_RootLevelTypes->loadRootLevelTypeFilterTypes(' . $intRootLevelTypeId . ')');
 
-  /**
-   * getLanguageId
-   * @param integer $intLanguageId
-   */
-  public function getLanguageId(){
-    return $this->intLanguageId;
-  }
+        $objSelect = $this->getRootLevelTypeFilterTypesTable()->select()->setIntegrityCheck(false);
+        $objSelect->from($this->getRootLevelTypeFilterTypesTable()->info(Zend_Db_Table_Abstract::NAME), array('id', 'name', 'operators', 'sqlSelect'))
+            ->joinLeft('rootLevelTypeFilterTypeTitles', 'rootLevelTypeFilterTypeTitles.idRootLevelTypeFilterTypes = rootLevelTypeFilterTypes.id', array('title'))
+            ->where('rootLevelTypeFilterTypes.idRootLevelTypes = ?', $intRootLevelTypeId)
+            ->where('rootLevelTypeFilterTypeTitles.idLanguages = ?', $this->getLanguageId());
+
+        return $this->getRootLevelTypeFilterTypesTable()->fetchAll($objSelect);
+    }
+
+    /**
+     * getRootLevelPermissionTable
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getRootLevelTypeFilterTypesTable()
+    {
+        if ($this->objRootLevelTypeFilterTypes === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/RootLevelTypeFilterTypes.php';
+            $this->objRootLevelTypeFilterTypes = new Model_Table_RootLevelTypeFilterTypes();
+        }
+        return $this->objRootLevelTypeFilterTypes;
+    }
+
+    /**
+     * getRootLevelPermissionTable
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function getRootLevelFiltersTable()
+    {
+        if ($this->objRootLevelFilters === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/RootLevelFilters.php';
+            $this->objRootLevelFilters = new Model_Table_RootLevelFilters();
+        }
+        return $this->objRootLevelFilters;
+    }
+
+    /**
+     * getRootLevelPermissionTable
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function getRootLevelFilterValuesTable()
+    {
+        if ($this->objRootLevelFilterValues === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/RootLevelFilterValues.php';
+            $this->objRootLevelFilterValues = new Model_Table_RootLevelFilterValues();
+        }
+        return $this->objRootLevelFilterValues;
+    }
+
+    /**
+     * setLanguageId
+     * @param integer $intLanguageId
+     */
+    public function setLanguageId($intLanguageId)
+    {
+        $this->intLanguageId = $intLanguageId;
+    }
+
+    /**
+     * getLanguageId
+     * @param integer $intLanguageId
+     */
+    public function getLanguageId()
+    {
+        return $this->intLanguageId;
+    }
 }
 
 ?>

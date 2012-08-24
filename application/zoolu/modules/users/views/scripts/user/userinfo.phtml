@@ -1,17 +1,19 @@
-      <div id="userwrapper">
-        <div id="usercontent">
-          <div id="usercontenticon">
-            <?php if(isset($this->user->image) && $this->user->image != '') :?>
-              <img width="25" height="25" src="<?php echo $this->user->image; ?>"/>
-            <?php else : ?> 
-              <img width="25" height="25" src="/zoolu-statics/images/main/user_default.jpg"/>
+<div id="userwrapper">
+    <div id="usercontent">
+        <div id="usercontenticon">
+            <?php if (isset($this->user->image) && $this->user->image != '') : ?>
+            <img width="25" height="25" src="<?php echo $this->user->image; ?>"/>
+            <?php else : ?>
+            <img width="25" height="25" src="/zoolu-statics/images/main/user_default.jpg"/>
             <?php endif; ?>
-          </div>
-          <div id="usercontentuser">
-            <div class="headerusername"><?php echo htmlentities($this->user->fname.' '.$this->user->sname, ENT_COMPAT, Zend_Registry::get('Core')->sysConfig->encoding->default, false); ?></div>
-            <div class="headerdepartement"><a href="#" onclick="myOverlay.loadUserSettings(<?php echo $this->user->id; ?>); return false;"><?php echo $this->translate->_('My_Settings'); ?>,</a> <a href="/zoolu/users/user/logout"><?php echo $this->translate->_('Logout'); ?></a></div>            
-          </div>
-          <div class="clear"></div>
+        </div>
+        <div id="usercontentuser">
+            <div class="headerusername"><?php echo htmlentities($this->user->fname . ' ' . $this->user->sname, ENT_COMPAT, Zend_Registry::get('Core')->sysConfig->encoding->default, false); ?></div>
+            <div class="headerdepartement">
+                <a href="#" onclick="myOverlay.loadUserSettings(<?php echo $this->user->id; ?>); return false;"><?php echo $this->translate->_('My_Settings'); ?>,</a>
+                <a href="/zoolu/users/user/logout"><?php echo $this->translate->_('Logout'); ?></a></div>
         </div>
         <div class="clear"></div>
-      </div>
+    </div>
+    <div class="clear"></div>
+</div>

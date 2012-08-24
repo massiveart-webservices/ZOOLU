@@ -40,10 +40,11 @@
  * @version 1.0
  */
 
-class Model_Table_GlobalVideos extends Zend_Db_Table_Abstract {
+class Model_Table_GlobalVideos extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'globalVideos';
-  protected $_primary = 'id';
+    protected $_name = 'globalVideos';
+    protected $_primary = 'id';
 
 }
 

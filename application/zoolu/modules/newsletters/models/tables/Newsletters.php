@@ -40,9 +40,10 @@
  * @version 1.0
  */
 
-class Model_Table_Newsletters extends Zend_Db_Table_Abstract {
+class Model_Table_Newsletters extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'newsletters';
-  protected $_primary = 'id';
+    protected $_name = 'newsletters';
+    protected $_primary = 'id';
 
 }

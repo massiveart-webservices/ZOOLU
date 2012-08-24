@@ -1,13 +1,13 @@
 <?php
-require_once (dirname(__FILE__).'/../../helpers/ImportHelper.php');
+require_once (dirname(__FILE__) . '/../../helpers/ImportHelper.php');
 $objHelper = new ImportHelper();
 ?>
 <div class="oltitle">
-  <?php echo $objHelper->getImportTitle(); ?>
+    <?php echo $objHelper->getImportTitle(); ?>
 </div>
 <div class="overlayGenInner">
-  <form id="importForm" enctype="multipart/form-data" action="<?php echo $this->formAction; ?>" method="POST">
-    <input type="hidden" name="importRootLevelId" id="importRootLevelId" value="<?php echo $this->rootLevelId?>" />
-    <input id="importFile" name="importFile" type="file" />
-  </form>
+    <form id="importForm" enctype="multipart/form-data" action="<?php echo $this->formAction; ?>" method="POST">
+        <input type="hidden" name="importRootLevelId" id="importRootLevelId" value="<?php echo $this->rootLevelId?>"/>
+        <input id="importFile" name="importFile" type="file"/>
+    </form>
 </div>

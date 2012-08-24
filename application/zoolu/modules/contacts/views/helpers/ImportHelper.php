@@ -40,66 +40,72 @@
  * @version 1.0
  */
 
-class ImportHelper {
+class ImportHelper
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
-  
-  protected $objModelGenericData;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  public function getHeader(){
-    return $this->core->translate->_('Import_assignment');
-  }
-  
-  /**
-   * getAssignmentTitle
-   * @return string
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function getAssignmentTitle(){
-    return $this->core->translate->_('Assignment');
-  }
-  
-  /**
-   * getImportTitle
-   * @return string
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function getImportTitle(){
-    return $this->core->translate->_('Import');
-  }
-  
-  /**
-   * getModelGenericData
-   * @return Model_GenericData
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelGenericData(){
-    if (null === $this->objModelGenericData) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/GenericData.php';
-      $this->objModelGenericData = new Model_GenericData();
+    protected $objModelGenericData;
+
+    /**
+     * Constructor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
-    return $this->objModelGenericData;
-  }
+
+    public function getHeader()
+    {
+        return $this->core->translate->_('Import_assignment');
+    }
+
+    /**
+     * getAssignmentTitle
+     * @return string
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function getAssignmentTitle()
+    {
+        return $this->core->translate->_('Assignment');
+    }
+
+    /**
+     * getImportTitle
+     * @return string
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function getImportTitle()
+    {
+        return $this->core->translate->_('Import');
+    }
+
+    /**
+     * getModelGenericData
+     * @return Model_GenericData
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelGenericData()
+    {
+        if (null === $this->objModelGenericData) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/GenericData.php';
+            $this->objModelGenericData = new Model_GenericData();
+        }
+        return $this->objModelGenericData;
+    }
 }
 
 ?>

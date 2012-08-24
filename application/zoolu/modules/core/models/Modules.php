@@ -40,47 +40,51 @@
  * @version 1.0
  */
 
-class Model_Modules {
+class Model_Modules
+{
 
-  /**
-   * @var Model_Table_Modules
-   */
-  protected $objModuleTable;
+    /**
+     * @var Model_Table_Modules
+     */
+    protected $objModuleTable;
 
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-
-  public function getModules(){
-    $objSelect = $this->getModuleTable()->select()->where('active = 1');
-    $objSelect->order('order');
-    return $this->objModuleTable->fetchAll($objSelect);
-  }
-
-  /**
-   * getModuleTable
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getModuleTable(){
-
-    if($this->objModuleTable === null){
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/tables/Modules.php';
-      $this->objModuleTable = new Model_Table_Modules();
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
     }
 
-    return $this->objModuleTable;
-  }
+    public function getModules()
+    {
+        $objSelect = $this->getModuleTable()->select()->where('active = 1');
+        $objSelect->order('order');
+        return $this->objModuleTable->fetchAll($objSelect);
+    }
+
+    /**
+     * getModuleTable
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getModuleTable()
+    {
+
+        if ($this->objModuleTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/Modules.php';
+            $this->objModuleTable = new Model_Table_Modules();
+        }
+
+        return $this->objModuleTable;
+    }
 }
 
 ?>

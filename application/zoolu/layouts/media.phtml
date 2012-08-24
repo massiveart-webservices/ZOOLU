@@ -1,51 +1,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" >
-  <head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
     <title>ZOOLU - <?php echo $this->translate->_('media'); ?></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Language" content="de" />
-    <meta name="language" content="de" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Language" content="de"/>
+    <meta name="language" content="de"/>
 
-    <link href="/min/g=zExtCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet" />
-    <link href="/min/g=zMediaCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet" />
-    
-  </head>
-  <body id="myBody">
+    <link href="/min/g=zExtCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet"/>
+    <link href="/min/g=zMediaCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet"/>
+
+</head>
+<body id="myBody">
 
     <!-- navigation top -->
     <div id="navigation-top">
 
-      <div id="top">
+        <div id="top">
 
-        <div class="toplogo">
-          <a href="/zoolu">
-            <img src="/zoolu-statics/images/main/logo_zoolu_small.png" width="69" height="17" alt="ZOOLU"/>
-          </a>
+            <div class="toplogo">
+                <a href="/zoolu">
+                    <img src="/zoolu-statics/images/main/logo_zoolu_small.png" width="69" height="17" alt="ZOOLU"/>
+                </a>
+            </div>
+            <div class="topright">
+                <div class="openWebsite"><a href="/" target="_blank"><?php echo $this->translate->_('Open_website'); ?></a>
+                </div>
+                <div class="faqtitle"> |
+                    <a href="https://github.com/massiveart-webservices/ZOOLU" target="_blank"><?php echo $this->translate->_('Report_bugs'); ?></a> |
+                    <a href="http://documentation.getzoolu.org/"><?php echo $this->translate->_('Help_and_FAQ'); ?></a>
+                </div>
+                <div class="faqicon"><img src="/zoolu-statics/images/icons/icon_help.png" width="16" height="16"/></div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="clear"></div>
         </div>
-        <div class="topright">
-          <div class="openWebsite"><a href="/" target="_blank"><?php echo $this->translate->_('Open_website'); ?></a></div>
-          <div class="faqtitle"> | <a href="https://github.com/massiveart-webservices/ZOOLU" target="_blank"><?php echo $this->translate->_('Report_bugs'); ?></a> | <a href="http://documentation.getzoolu.org/"><?php echo $this->translate->_('Help_and_FAQ'); ?></a></div> 
-          <div class="faqicon"><img src="/zoolu-statics/images/icons/icon_help.png" width="16" height="16"/></div>
-          <div class="clear"></div>
+        <!-- END top -->
+
+        <?php echo $this->layout()->userinfo; ?>
+
+        <!--
+       <div id="navtopleft">
+         <img id="navtopleftimg" width="5" height="40" src="/zoolu-statics/images/main/bg_navigation_left.png"/>
+       </div>
+        -->
+
+        <div id="navtopwrapper">
+            <?php echo $this->layout()->modules; ?>
+            <div id="navtopbreadcrumb" style="display:none;"></div>
         </div>
-
-        <div class="clear"></div>
-      </div>  <!-- END top -->
-
-      <?php echo $this->layout()->userinfo; ?>
-
-      <!--
-      <div id="navtopleft">
-        <img id="navtopleftimg" width="5" height="40" src="/zoolu-statics/images/main/bg_navigation_left.png"/>
-      </div>
-       -->
-
-      <div id="navtopwrapper">
-        <?php echo $this->layout()->modules; ?>
-        <div id="navtopbreadcrumb" style="display:none;"></div>
-      </div>
 
     </div>
     <!-- END navigation top -->
@@ -54,468 +59,482 @@
 
     <!-- content -->
     <div id="content">
-      <div id="divFormContainer" >
+        <div id="divFormContainer">
 
-        <!-- content edit -->
-        <div id="genFormContainer" class="contentedit" style="display:none;">
+            <!-- content edit -->
+            <div id="genFormContainer" class="contentedit" style="display:none;">
+            </div>
+
+            <!-- content function widget -->
+            <div id="genFormSaveContainer" class="contentfunction" style="display:none;">
+
+                <!-- widget: save, delete, infos, ... -->
+                <div class="widgetfunctions">
+                    <div class="widget224content">
+                        <div class="widgetcontenttop">
+
+                            <!-- alerts for saving, editing, deleting, ... -->
+                            <div id="divFormSaveLoader" class="alertsave" style="display:none;">
+                                <div class="alertsaveloader white">
+                                    <img src="/zoolu-statics/images/main/loader_save.gif"/><?php echo $this->translate->_('Cancel'); ?>
+                                </div>
+                            </div>
+                            <div id="divFormSaveSucces" class="alertsavesucces" style="display:none;"><?php echo $this->translate->_('Saved'); ?>!</div>
+                            <div id="divFormSaveError" class="alertsaveerror" style="display:none;"><?php echo $this->translate->_('Can_not_Save'); ?>!</div>
+                            <div id="divFormDeleteSucces" class="alertdeletesucces" style="display:none;"><?php echo $this->translate->_('Deleted'); ?>!</div>
+
+                            <!-- save button -->
+                            <div id="buttonsave" onclick="myForm.save();">
+                                <div class="button25leftOn"></div>
+                                <div class="button25centerOn">
+                                    <img class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png" width="13" height="13"/>
+
+                                    <div><?php echo $this->translate->_('Save'); ?></div>
+                                </div>
+                                <div class="button25rightOn"></div>
+                                <div class="clear"></div>
+                            </div>
+
+                            <!-- delete button -->
+                            <div id="buttondelete" onclick="myForm.deleteElement();" style="display:none;">
+                                <div class="button25leftOff"></div>
+                                <div class="button25centerOff">
+                                    <img class="icondelete" src="/zoolu-statics/images/icons/icon_delete_white.png" width="11" height="14"/>
+
+                                    <div><?php echo $this->translate->_('Delete'); ?></div>
+                                </div>
+                                <div class="button25rightOff"></div>
+                                <div class="clear"></div>
+                            </div>
+
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="widgetcontentmain" id="divWidgetMetaInfos">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
+        <!-- END divFormContainer -->
 
-        <!-- content function widget -->
-        <div id="genFormSaveContainer" class="contentfunction" style="display:none;">
+        <div id="divMediaContainer" style="display:none;">
 
-          <!-- widget: save, delete, infos, ... -->
-          <div class="widgetfunctions">
-            <div class="widget224content">
-              <div class="widgetcontenttop">
+            <!-- media head -->
+            <div class="contenthead">
 
-                <!-- alerts for saving, editing, deleting, ... -->
-                <div id="divFormSaveLoader" class="alertsave" style="display:none;">
-                  <div class="alertsaveloader white"><img src="/zoolu-statics/images/main/loader_save.gif" /><?php echo $this->translate->_('Cancel'); ?></div>
+                <div id="mediabuttons">
+                    <div class="buttonsdivider"></div>
+                    <!-- new button -->
+                    <div id="buttonmedianew" onclick="myMedia.getUploadWidget(); return false;">
+                        <div class="button25leftOn"></div>
+                        <div class="button25centerOn">
+                            <img class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png" width="13" height="13"/>
+
+                            <div><?php echo $this->translate->_('New'); ?></div>
+                        </div>
+                        <div class="button25rightOn"></div>
+                        <div class="clear"></div>
+                    </div>
+                    <!-- edit menu -->
+                    <div id="buttonmediaedit" onclick="return false;">
+                        <div class="buttonedittop"></div>
+                        <div id="buttonmediaedittitle" class="buttoneditmiddle white" onclick="myMedia.toggleMediaEditMenu(this.id); return false;"><?php echo $this->translate->_('Edit'); ?></div>
+                        <div class="buttoneditbottom"></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="divMediaEditMenu" class="mediaeditmenu" style="display:none;">
+                        <div class="mediaeditmenuinner">
+                            <div class="mediaeditlink" onclick="myMedia.getFilesEditForm(); return false;"><?php echo $this->translate->_('Open'); ?></div>
+                            <div class="mediaeditlink" id="buttonmediamove" onclick="myMedia.moveFiles(); return false;"><?php echo $this->translate->_('Move'); ?></div>
+                            <div class="mediaeditlink" id="buttonmediadelete" onclick="myMedia.deleteFiles(); return false;"><?php echo $this->translate->_('Delete'); ?></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="buttoneditbottom"></div>
+                        <div class="clear"></div>
+                    </div>
                 </div>
-                <div id="divFormSaveSucces" class="alertsavesucces" style="display:none;"><?php echo $this->translate->_('Saved'); ?>!</div>
-                <div id="divFormSaveError" class="alertsaveerror" style="display:none;"><?php echo $this->translate->_('Can_not_Save'); ?>!</div>
-                <div id="divFormDeleteSucces" class="alertdeletesucces" style="display:none;"><?php echo $this->translate->_('Deleted'); ?>!</div>
 
-                <!-- save button -->
-                <div id="buttonsave" onclick="myForm.save();">
-                  <div class="button25leftOn"></div>
-                  <div class="button25centerOn">
-                    <img class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png" width="13" height="13"/>
-                    <div><?php echo $this->translate->_('Save'); ?></div>
-                  </div>
-                  <div class="button25rightOn"></div>
-                  <div class="clear"></div>
+                <div id="mediaviewtypes">
+                    <div id="divThumbView" class="iconthumbview" onclick="myMedia.getMediaThumbView(); return false;"></div>
+                    <div id="divListView" class="iconlistview" onclick="myMedia.getMediaListView(); return false;"></div>
+                    <div class="clear"></div>
                 </div>
 
-                <!-- delete button -->
-                <div id="buttondelete" onclick="myForm.deleteElement();" style="display:none;">
-                  <div class="button25leftOff"></div>
-                  <div class="button25centerOff">
-                    <img class="icondelete" src="/zoolu-statics/images/icons/icon_delete_white.png" width="11" height="14"/>
-                    <div><?php echo $this->translate->_('Delete'); ?></div>
-                  </div>
-                  <div class="button25rightOff"></div>
-                  <div class="clear"></div>
+                <div id="mediaslider" style="display:none;">
+                    <div class="slidermediasmall"></div>
+                    <div id="divMediaSliderTrack" class="slidertrack" style="position:absolute; top:0px; left:14px; width:151px; height: 19px;">
+                        <div id="divMediaSliderBall" style="width:19px; height:19px;">
+                            <img src="/zoolu-statics/images/slider/icon_slider_ball.png" width="19" height="19"/>
+                        </div>
+                    </div>
+                    <div class="slidermediabig"></div>
                 </div>
 
-                <div class="clear"></div>
-              </div>
+                <div id="mediaSearchContainer" class="searchContainer" style="display:none;">
+                    <input type="text" id="search" name="search" class="searchInput" value=""/>
+                    <!-- delete button -->
+                    <div id="buttonsearch" onclick="myList.search();">
+                        <div class="button25leftOff"></div>
+                        <div class="button25centerOff">
+                            <img class="icondelete" src="/zoolu-statics/images/icons/icon_search_white.png" width="14" height="14"/>
 
-              <div class="widgetcontentmain" id="divWidgetMetaInfos">
-              </div>
-
+                            <div><?php echo $this->translate->_('Search'); ?></div>
+                        </div>
+                        <div class="button25rightOff"></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div> <!-- END divFormContainer -->
 
-      <div id="divMediaContainer" style="display:none;">
-
-        <!-- media head -->
-        <div class="contenthead">
-
-          <div id="mediabuttons">
-            <div class="buttonsdivider"></div>
-            <!-- new button -->
-            <div id="buttonmedianew" onclick="myMedia.getUploadWidget(); return false;">
-              <div class="button25leftOn"></div>
-              <div class="button25centerOn">
-                <img class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png" width="13" height="13"/>
-                <div><?php echo $this->translate->_('New'); ?></div>
-              </div>
-              <div class="button25rightOn"></div>
-              <div class="clear"></div>
+            <!-- thumb view -->
+            <div id="divThumbViewContainer" class="contentview" style="display:none;">
             </div>
-            <!-- edit menu -->
-            <div id="buttonmediaedit" onclick="return false;">
-              <div class="buttonedittop"></div>
-              <div id="buttonmediaedittitle" class="buttoneditmiddle white" onclick="myMedia.toggleMediaEditMenu(this.id); return false;"><?php echo $this->translate->_('Edit'); ?></div>
-              <div class="buttoneditbottom"></div>
-              <div class="clear"></div>
+            <!-- list view -->
+            <div id="divListViewContainer" class="contentview" style="display:none;">
             </div>
+
             <div class="clear"></div>
-            <div id="divMediaEditMenu" class="mediaeditmenu" style="display:none;">
-              <div class="mediaeditmenuinner">
-                <div class="mediaeditlink" onclick="myMedia.getFilesEditForm(); return false;"><?php echo $this->translate->_('Open'); ?></div>
-                <div class="mediaeditlink" id="buttonmediamove" onclick="myMedia.moveFiles(); return false;"><?php echo $this->translate->_('Move'); ?></div>
-                <div class="mediaeditlink" id="buttonmediadelete" onclick="myMedia.deleteFiles(); return false;"><?php echo $this->translate->_('Delete'); ?></div>
-                <div class="clear"></div>
-              </div>
-              <div class="buttoneditbottom"></div>
-              <div class="clear"></div>
-            </div>
-          </div>
-
-          <div id="mediaviewtypes">
-            <div id="divThumbView" class="iconthumbview" onclick="myMedia.getMediaThumbView(); return false;"></div>
-            <div id="divListView" class="iconlistview" onclick="myMedia.getMediaListView(); return false;"></div>
-            <div class="clear"></div>
-          </div>
-
-          <div id="mediaslider" style="display:none;">
-            <div class="slidermediasmall"></div>
-            <div id="divMediaSliderTrack" class="slidertrack" style="position:absolute; top:0px; left:14px; width:151px; height: 19px;">
-              <div id="divMediaSliderBall" style="width:19px; height:19px;">
-                <img src="/zoolu-statics/images/slider/icon_slider_ball.png" width="19" height="19" />
-              </div>
-            </div>
-            <div class="slidermediabig"></div>
-          </div>
-          
-          <div id="mediaSearchContainer" class="searchContainer" style="display:none;">
-	          <input type="text" id="search" name="search" class="searchInput" value=""/>
-	          <!-- delete button -->
-	          <div id="buttonsearch" onclick="myList.search();">
-	            <div class="button25leftOff"></div>
-	            <div class="button25centerOff">
-	              <img class="icondelete" src="/zoolu-statics/images/icons/icon_search_white.png" width="14" height="14"/>
-	              <div><?php echo $this->translate->_('Search'); ?></div>
-	            </div>
-	            <div class="button25rightOff"></div>
-	            <div class="clear"></div>
-	          </div>
-	          <div class="clear"></div> 
-	        </div>
         </div>
-
-        <!-- thumb view -->
-        <div id="divThumbViewContainer" class="contentview" style="display:none;">
-        </div>
-        <!-- list view -->
-        <div id="divListViewContainer" class="contentview" style="display:none;">
-        </div>
-
-        <div class="clear"></div>
-      </div> <!-- END divMediaContainer -->
-    </div> <!-- END content -->
+        <!-- END divMediaContainer -->
+    </div>
+    <!-- END content -->
 
     <!-- overlay transparent-->
     <div id="overlayTrans" class="overlaytrans" style="display:none;"></div>
     <!-- overlay black 75% -->
     <div id="overlayBlack75" class="overlayblack75" style="display:none;" onclick="myOverlay.close();"></div>
-    
+
     <!-- overlay for user settings -->
     <div id="overlayUserSettingsWrapper" class="overlaycontentwrapper" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myOverlay.closeUserSettingsOverlay(); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <!-- content -->
-              <div class="overlaycontent">
-                <div class="oltitle"><?php echo $this->translate->_('My_Settings'); ?></div>
-                <div class="spacer1"></div>
-                <div id="overlayUserSettingsContent" class="propertywrapper">
-                </div>
-                <div class="clear"></div> 
-                <div onclick="myOverlay.closeUserSettingsOverlay(); return false;" class="buttoncancel"><?php echo $this->translate->_('Cancel'); ?></div>
-                <div class="buttoneditsave" onclick="myForm.saveUserSettings();">
-                  <div class="button25leftOn"></div>
-                  <div class="button25centerOn">
-                    <img width="13" height="13" class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png"/>
-                    <div><?php echo $this->translate->_('Save'); ?></div>
-                  </div>
-                  <div class="button25rightOn"></div>
-                  <div class="clear"></div>
-                </div>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myOverlay.closeUserSettingsOverlay(); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <!-- content -->
+                    <div class="overlaycontent">
+                        <div class="oltitle"><?php echo $this->translate->_('My_Settings'); ?></div>
+                        <div class="spacer1"></div>
+                        <div id="overlayUserSettingsContent" class="propertywrapper">
+                        </div>
+                        <div class="clear"></div>
+                        <div onclick="myOverlay.closeUserSettingsOverlay(); return false;" class="buttoncancel"><?php echo $this->translate->_('Cancel'); ?></div>
+                        <div class="buttoneditsave" onclick="myForm.saveUserSettings();">
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                                <img width="13" height="13" class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png"/>
+
+                                <div><?php echo $this->translate->_('Save'); ?></div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    
+
     <!-- overlay for send to dashboard -->
     <div id="overlaySendToDashbaordWrapper" class="overlaycontentwrapper" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myDashboard.closeSendToDashboardOverlay(); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <!-- content -->
-              <div class="overlaycontent">
-                <div class="oltitle"><?php echo $this->translate->_('New_message'); ?></div>
-                <div class="spacer1"></div>
-                <div id="overlaySendToDashboardContent" class="olnavigationwrapper2">
-                </div>
-                <div class="clear"></div> 
-                <div onclick="myDashboard.closeSendToDashboardOverlay(); return false;" class="buttoncancel"><?php echo $this->translate->_('Cancel'); ?></div>
-                <div class="buttoneditsave" onclick="myDashboard.saveDashboardEntry();">
-                  <div class="button25leftOn"></div>
-                  <div class="button25centerOn">
-                    <img width="13" height="13" class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png"/>
-                    <div><?php echo $this->translate->_('Save'); ?></div>
-                  </div>
-                  <div class="button25rightOn"></div>
-                  <div class="clear"></div>
-                </div>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myDashboard.closeSendToDashboardOverlay(); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <!-- content -->
+                    <div class="overlaycontent">
+                        <div class="oltitle"><?php echo $this->translate->_('New_message'); ?></div>
+                        <div class="spacer1"></div>
+                        <div id="overlaySendToDashboardContent" class="olnavigationwrapper2">
+                        </div>
+                        <div class="clear"></div>
+                        <div onclick="myDashboard.closeSendToDashboardOverlay(); return false;" class="buttoncancel"><?php echo $this->translate->_('Cancel'); ?></div>
+                        <div class="buttoneditsave" onclick="myDashboard.saveDashboardEntry();">
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                                <img width="13" height="13" class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png"/>
+
+                                <div><?php echo $this->translate->_('Save'); ?></div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    
+
     <!-- overlay for generated content -->
     <div id="overlayGenContentWrapper" class="overlaycontentwrapper2" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myOverlay.close('overlayGenContentWrapper'); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <!-- cotnent -->
-              <div id="overlayGenContent" class="overlaycontent"></div>
-              <!-- buttons -->
-              <div id="overlayButtons" class="overlaycontent" style="display:none;">
-                <div id="buttonOk">
-                  <div class="button25leftOn"></div>
-		              <div class="button25centerOn">
-		                <!-- <img width="13" height="13" src="/zoolu-statics/images/icons/icon_ok_black.png" class="iconok"/> -->
-		                <div><?php echo $this->translate->_('Ok'); ?></div>
-		              </div>
-		              <div class="button25rightOn"></div>
-		              <div class="clear"></div>
-                </div>
-                <div id="buttonCancel">
-                  <div class="button25leftOff"></div>
-		              <div class="button25centerOff">
-		                <!-- <img width="11" height="14" src="/zoolu-statics/images/icons/icon_cancel_white.png" class="iconcancel"/> -->
-		                <div><?php echo $this->translate->_('Cancel'); ?></div>
-		              </div>
-		              <div class="button25rightOff"></div>
-		              <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div> <!-- END overlay for generated content -->
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myOverlay.close('overlayGenContentWrapper'); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <!-- cotnent -->
+                    <div id="overlayGenContent" class="overlaycontent"></div>
+                    <!-- buttons -->
+                    <div id="overlayButtons" class="overlaycontent" style="display:none;">
+                        <div id="buttonOk">
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                                <!-- <img width="13" height="13" src="/zoolu-statics/images/icons/icon_ok_black.png" class="iconok"/> -->
+                                <div><?php echo $this->translate->_('Ok'); ?></div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div id="buttonCancel">
+                            <div class="button25leftOff"></div>
+                            <div class="button25centerOff">
+                                <!-- <img width="11" height="14" src="/zoolu-statics/images/icons/icon_cancel_white.png" class="iconcancel"/> -->
+                                <div><?php echo $this->translate->_('Cancel'); ?></div>
+                            </div>
+                            <div class="button25rightOff"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- END overlay for generated content -->
 
     <!-- overlay SWF Upload -->
     <div id="overlayUpload" class="overlaycontentwrapper" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myOverlay.close('overlayupload'); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <div class="overlaycontent">
-                <div class="oltitle"><?php echo $this->translate->_('Upload_your_media'); ?></div>
-                <div class="spacer1"></div>
-                <form id="uploadForm" action="/zoolu/media/upload" method="post" enctype="multipart/form-data">
-                  <input type="hidden" id="addMediaFormLanguageId" value="<?php echo $this->languageId; ?>" name="languageId"/>
-                  <?php if($this->languageOptions != '') : ?>
-                  <div style="position:absolute; right:15px; top:28px;">
-                    <div class="languagecontainer">
-                      <select id="selectMediaFormLanguageId" onchange="myMedia.changeAddFormLanguage(this.value); return false;">
-                        <?php echo $this->languageOptions; ?>
-                      </select>
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myOverlay.close('overlayupload'); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <div class="overlaycontent">
+                        <div class="oltitle"><?php echo $this->translate->_('Upload_your_media'); ?></div>
+                        <div class="spacer1"></div>
+                        <form id="uploadForm" action="/zoolu/media/upload" method="post" enctype="multipart/form-data">
+                            <input type="hidden" id="addMediaFormLanguageId" value="<?php echo $this->languageId; ?>" name="languageId"/>
+                            <?php if ($this->languageOptions != '') : ?>
+                            <div style="position:absolute; right:15px; top:28px;">
+                                <div class="languagecontainer">
+                                    <select id="selectMediaFormLanguageId" onchange="myMedia.changeAddFormLanguage(this.value); return false;">
+                                        <?php echo $this->languageOptions; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                            <div id="divSWFUploadUI"><!-- myMedia.constSWFUploadUI --></div>
+                            <noscript style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px;">
+                                We're sorry. SWFUpload could not load. You must have JavaScript enabled to enjoy SWFUpload.
+                            </noscript>
+                            <div id="divLoadingContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+                                SWFUpload is loading. Please wait a moment...
+                            </div>
+                            <div id="divLongLoading" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+                                SWFUpload is taking a long time to load or the load has failed. Please make sure that the Flash Plugin is enabled and that a working version of the Adobe Flash Player is installed.
+                            </div>
+                            <div id="divAlternateContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+                                We're sorry. SWFUpload could not load. You may need to install or upgrade Flash Player.
+                                Visit the
+                                <a href="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">Adobe website</a> to get the Flash Player.
+                            </div>
+                        </form>
                     </div>
-                  </div>
-                  <?php endif; ?>
-                  <div id="divSWFUploadUI"><!-- myMedia.constSWFUploadUI --></div>
-                  <noscript style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px;">
-                    We're sorry. SWFUpload could not load. You must have JavaScript enabled to enjoy SWFUpload.
-                  </noscript>
-                  <div id="divLoadingContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
-                    SWFUpload is loading. Please wait a moment...
-                  </div>
-                  <div id="divLongLoading" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
-                    SWFUpload is taking a long time to load or the load has failed. Please make sure that the Flash Plugin is enabled and that a working version of the Adobe Flash Player is installed.
-                  </div>
-                  <div id="divAlternateContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
-                    We're sorry. SWFUpload could not load. You may need to install or upgrade Flash Player.
-                    Visit the <a href="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">Adobe website</a> to get the Flash Player.
-                  </div>
-                </form>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>    <!-- END overlay SWF Upload -->
-    
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- END overlay SWF Upload -->
+
     <!-- overlay single edit -->
     <div id="overlaySingleEdit" class="overlaycontentwrapper" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myOverlay.close('overlaySingleEdit'); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <!-- cotnent -->
-              <div id="overlaySingleEditContent" class="overlaycontent"></div>
-              <!-- buttons -->
-              <div id="overlaySingleEditButtons" class="overlaycontent" style="display:none;">
-                <div id="buttonOk">
-                  <div class="button25leftOn"></div>
-                  <div class="button25centerOn">
-                    <div><?php echo $this->translate->_('Ok'); ?></div>
-                  </div>
-                  <div class="button25rightOn"></div>
-                  <div class="clear"></div>
-                </div>
-                <div id="buttonCancel">
-                  <div class="button25leftOff"></div>
-                  <div class="button25centerOff">
-                    <div><?php echo $this->translate->_('Cancel'); ?></div>
-                  </div>
-                  <div class="button25rightOff"></div>
-                  <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myOverlay.close('overlaySingleEdit'); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <!-- cotnent -->
+                    <div id="overlaySingleEditContent" class="overlaycontent"></div>
+                    <!-- buttons -->
+                    <div id="overlaySingleEditButtons" class="overlaycontent" style="display:none;">
+                        <div id="buttonOk">
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                                <div><?php echo $this->translate->_('Ok'); ?></div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div id="buttonCancel">
+                            <div class="button25leftOff"></div>
+                            <div class="button25centerOff">
+                                <div><?php echo $this->translate->_('Cancel'); ?></div>
+                            </div>
+                            <div class="button25rightOff"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <!-- END  overlay single edit -->
-    
+
     <!-- libaries -->
     <script type="text/javascript" src="/min/g=zJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>
     <script type="text/javascript" src="/min/g=zMediaJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>
-    <script type="text/javascript" src="/zoolu-statics/zeroclipboard/ZeroClipboard.js?v=<?php echo $this->jsVersion; ?>"></script>  
+    <script type="text/javascript" src="/zoolu-statics/zeroclipboard/ZeroClipboard.js?v=<?php echo $this->jsVersion; ?>"></script>
     <script type="text/javascript" src="/zoolu-statics/tinymce/jscripts/tiny_mce/tiny_mce.js?v=<?php echo $this->jsVersion; ?>"></script>
-    
+
     <script type="text/javascript">//<![CDATA[
-      var myCore, myMedia, myFolder, myNavigation, myForm, myOverlay, myList, myDashboard;
-     
-      var swfu;
-      var sessionId = '<?php echo session_id(); ?>';
-      var swf_file_size_limit = '<?php echo ((Zend_Registry::get('Core')->sysConfig->upload->videos->max_filesize / 1024) / 1024); ?> MB';
+    var myCore, myMedia, myFolder, myNavigation, myForm, myOverlay, myList, myDashboard;
 
-      var clip = null;
-      
-      var currSliderValue = 100;
+    var swfu;
+    var sessionId = '<?php echo session_id(); ?>';
+    var swf_file_size_limit = '<?php echo ((Zend_Registry::get('Core')->sysConfig->upload->videos->max_filesize / 1024) / 1024); ?> MB';
 
-      //document.observe('dom:loaded', function() {
-      Event.observe(window, 'load', function() {
+    var clip = null;
+
+    var currSliderValue = 100;
+
+    //document.observe('dom:loaded', function() {
+    Event.observe(window, 'load', function() {
         myCore = new Massiveart.Core();
-        
+
         myCore.languageId = <?php echo Zend_Registry::get('Core')->intZooluLanguageId; ?>;
         myCore.languageCode = '<?php echo Zend_Registry::get('Core')->strZooluLanguageCode; ?>';
         myCore.translate = {
-          Save: '<?php echo $this->translate->_('Save'); ?>',
-          Cancel: '<?php echo $this->translate->_('Cancel'); ?>',
-          All_files: '<?php echo $this->translate->_('All_files'); ?>',
-          Apply: '<?php echo $this->translate->_('Apply'); ?>',
-          Edit: '<?php echo $this->translate->_('Edit'); ?>',
-          Delete_: '<?php echo $this->translate->_('Delete_'); ?>',
-          Delete_folder: '<?php echo $this->translate->_('Delete_folder'); ?>',
-          Delete_image: '<?php echo $this->translate->_('Delete_image'); ?>',
-          Delete_images: '<?php echo $this->translate->_('Delete_images'); ?>',
-          Delete_document: '<?php echo $this->translate->_('Delete_document'); ?>',
-          Delete_documents: '<?php echo $this->translate->_('Delete_documents'); ?>',
-          Delete_video: '<?php echo $this->translate->_('Delete_video'); ?>',
-          Delete_videos: '<?php echo $this->translate->_('Delete_videos'); ?>'
+            Save: '<?php echo $this->translate->_('Save'); ?>',
+            Cancel: '<?php echo $this->translate->_('Cancel'); ?>',
+            All_files: '<?php echo $this->translate->_('All_files'); ?>',
+            Apply: '<?php echo $this->translate->_('Apply'); ?>',
+            Edit: '<?php echo $this->translate->_('Edit'); ?>',
+            Delete_: '<?php echo $this->translate->_('Delete_'); ?>',
+            Delete_folder: '<?php echo $this->translate->_('Delete_folder'); ?>',
+            Delete_image: '<?php echo $this->translate->_('Delete_image'); ?>',
+            Delete_images: '<?php echo $this->translate->_('Delete_images'); ?>',
+            Delete_document: '<?php echo $this->translate->_('Delete_document'); ?>',
+            Delete_documents: '<?php echo $this->translate->_('Delete_documents'); ?>',
+            Delete_video: '<?php echo $this->translate->_('Delete_video'); ?>',
+            Delete_videos: '<?php echo $this->translate->_('Delete_videos'); ?>'
         };
-        
+
         myMedia = new Massiveart.Media();
         myFolder = new Massiveart.Folder();
         myNavigation = new Massiveart.Navigation.Media();
@@ -531,36 +550,36 @@
         myNavigation.topNaviTitle = '<?php echo $this->translate->_('Media'); ?>';
         myNavigation.module = <?php echo $this->module; ?>;
 
-        <?php 
-          $intRootLevelId = '';
-          if(isset(Zend_Registry::get('Core')->objCoreSession->selectItem)) {
+    <?php
+        $intRootLevelId = '';
+        if (isset(Zend_Registry::get('Core')->objCoreSession->selectItem)) {
             $objSelectItem = Zend_Registry::get('Core')->objCoreSession->selectItem;
-            if(isset($objSelectItem->rootLevelId) && $objSelectItem->rootLevelId != ''){
-              $intRootLevelId = $objSelectItem->rootLevelId;   
+            if (isset($objSelectItem->rootLevelId) && $objSelectItem->rootLevelId != '') {
+                $intRootLevelId = $objSelectItem->rootLevelId;
             }
-          } 
-        ?>
-        if(!Prototype.Browser.IE) myNavigation.initModuleMEDIA(<?php echo $intRootLevelId; ?>);
+        }
+    ?>
+        if (!Prototype.Browser.IE) myNavigation.initModuleMEDIA(<?php echo $intRootLevelId; ?>);
 
         var scaleSlider = new Control.Slider('divMediaSliderBall', 'divMediaSliderTrack',
-                                {range: $R(32, 200),
-                                 sliderValue: currSliderValue});
+            {range: $R(32, 200),
+                sliderValue: currSliderValue});
 
-        scaleSlider.options.onSlide = function(value){
-          myMedia.scaleThumbs(value);
+        scaleSlider.options.onSlide = function(value) {
+            myMedia.scaleThumbs(value);
         }
 
-        scaleSlider.options.onChange = function(value){
-          myMedia.scaleThumbs(value);
+        scaleSlider.options.onChange = function(value) {
+            myMedia.scaleThumbs(value);
         }
 
         new Draggable('overlayUpload', {handle: 'handle', scroll: window });
         new Draggable('overlaySingleEdit', {handle: 'handle', scroll: window });
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
         new Draggable('overlaySendToDashbaordWrapper', {handle: 'handle', scroll: window });
-      });
-      
+    });
+
     //]]>
     </script>
-  </body>
+</body>
 </html>

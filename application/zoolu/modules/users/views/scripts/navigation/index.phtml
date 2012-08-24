@@ -1,19 +1,19 @@
 <?php
 
-  require_once (dirname(__FILE__).'/../../helpers/NavigationHelper.php');
-  $objHelper = new NavigationHelper();
+require_once (dirname(__FILE__) . '/../../helpers/NavigationHelper.php');
+$objHelper = new NavigationHelper();
 
 ?>
-    <!-- navigation left -->
-    <div id="navigation-left">
+<!-- navigation left -->
+<div id="navigation-left">
 
-      <!-- navigation left -->
-      <div id="divNaviLeft2">
+    <!-- navigation left -->
+    <div id="divNaviLeft2">
         <div id="divNaviLeftInner">
-          <!-- main navigatin -->
-          <div id="divNaviLeftMain">
-            <?php echo $objHelper->getModuleRootLevels($this->moduleRootLevels); ?>
-          </div>
+            <!-- main navigatin -->
+            <div id="divNaviLeftMain">
+                <?php echo $objHelper->getModuleRootLevels($this->moduleRootLevels); ?>
+            </div>
         </div>
-      </div>
-    </div> <!-- END navigation main -->
+    </div>
+</div> <!-- END navigation main -->

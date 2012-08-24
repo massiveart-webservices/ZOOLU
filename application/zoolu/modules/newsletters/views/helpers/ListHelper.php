@@ -40,157 +40,161 @@
  * @version 1.0
  */
 
-class ListHelper {
+class ListHelper
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
 
-  /**
-   * getList
-   * @param Zend_Paginator $objPaginator
-   * @param string $strOrderColumn
-   * @param string $strSortOrder
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  function getList($objPaginator, $strOrderColumn, $strSortOrder, $strSearchValue) {
-    $this->core->logger->debug('global->views->helpers->ListHelper->getList()');
+    /**
+     * getList
+     * @param Zend_Paginator $objPaginator
+     * @param string $strOrderColumn
+     * @param string $strSortOrder
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    function getList($objPaginator, $strOrderColumn, $strSortOrder, $strSearchValue)
+    {
+        $this->core->logger->debug('global->views->helpers->ListHelper->getList()');
 
-    $strThead = '<thead>';
-    $strTbody = '<tbody id="listEntries">';
+        $strThead = '<thead>';
+        $strTbody = '<tbody id="listEntries">';
 
-    $intCounter = 0;
-    foreach ($objPaginator as $objItem) {
-      $intCounter ++;
+        $intCounter = 0;
+        foreach ($objPaginator as $objItem) {
+            $intCounter++;
 
-      if($intCounter == 1){
-        $strThead .= '
+            if ($intCounter == 1) {
+                $strThead .= '
             <tr>
               <th class="topcornerleft"><div>&nbsp;</div></th>
               <th class="topcheckbox"><input type="checkbox" class="listSelectAll" name="listSelectAll" id="listSelectAll"/></th>';
-      }
+            }
 
-      $strTbody .= '
-            <tr id="Row'.$objItem->id.'" class="listrow">
-              <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="'.$objItem->id.'" name="listSelect" id="listSelect'.$objItem->id.'"/></td>';
+            $strTbody .= '
+            <tr id="Row' . $objItem->id . '" class="listrow">
+              <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="' . $objItem->id . '" name="listSelect" id="listSelect' . $objItem->id . '"/></td>';
 
-      $arrItem = $objItem->toArray();
-      $intColumCounter = 0;
-      $intTemplateId = $arrItem['idTemplates'];
-      $blnSent = $arrItem['sent'];
-      $intRemoteId = ($arrItem['remoteId']) ? $arrItem['remoteId'] : 'null';
-      unset($arrItem['id']);
-      unset($arrItem['idTemplates']);
-      unset($arrItem['sent']);
-      unset($arrItem['remoteId']);
-      $intColums = count($arrItem);
-      foreach($arrItem as $column => $value){
-        $intColumCounter++;
-        
-        if($intCounter == 1){
-        	$strSortOrderClass = '';
-        	$strOrderColumnClass = '';
-        	if($column == $strOrderColumn){
-        		$strSortOrderClass = ' class="'.$strSortOrder.'"';
-        		$strOrderColumnClass = ' sort';
-        	}
-          $strThead .= '<th class="top'.$column.$strOrderColumnClass.'"><div'.$strSortOrderClass.' onclick="myList.sort(\''.$column.'\''.(($column == $strOrderColumn && $strSortOrder == 'asc') ? ', \'desc\'' : ', \'asc\'').'); return false;">'.$this->core->translate->_($column).'</div></th>';
-        }
+            $arrItem = $objItem->toArray();
+            $intColumCounter = 0;
+            $intTemplateId = $arrItem['idTemplates'];
+            $blnSent = $arrItem['sent'];
+            $intRemoteId = ($arrItem['remoteId']) ? $arrItem['remoteId'] : 'null';
+            unset($arrItem['id']);
+            unset($arrItem['idTemplates']);
+            unset($arrItem['sent']);
+            unset($arrItem['remoteId']);
+            $intColums = count($arrItem);
+            foreach ($arrItem as $column => $value) {
+                $intColumCounter++;
 
-        $strColspan = ($intColumCounter == $intColums) ? ' colspan="2"' : '';
+                if ($intCounter == 1) {
+                    $strSortOrderClass = '';
+                    $strOrderColumnClass = '';
+                    if ($column == $strOrderColumn) {
+                        $strSortOrderClass = ' class="' . $strSortOrder . '"';
+                        $strOrderColumnClass = ' sort';
+                    }
+                    $strThead .= '<th class="top' . $column . $strOrderColumnClass . '"><div' . $strSortOrderClass . ' onclick="myList.sort(\'' . $column . '\'' . (($column == $strOrderColumn && $strSortOrder == 'asc') ? ', \'desc\'' : ', \'asc\'') . '); return false;">' . $this->core->translate->_($column) . '</div></th>';
+                }
 
-        if($intColumCounter == 1){
-          $strTbody .= '
-              <td class="row'.$column.'"'.$strColspan.'><a href="#" onclick="myNavigation.getEditForm('.$objItem->id.', '.$intTemplateId.', '.$blnSent.'); return false;">'.htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></td>';
-        }else{
-          $strTbody .= '
-              <td class="row'.$column.'"'.$strColspan.'>'.htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</td>';
-        }
-      }
+                $strColspan = ($intColumCounter == $intColums) ? ' colspan="2"' : '';
 
-      if($intCounter == 1){
-        $strThead .= '
+                if ($intColumCounter == 1) {
+                    $strTbody .= '
+              <td class="row' . $column . '"' . $strColspan . '><a href="#" onclick="myNavigation.getEditForm(' . $objItem->id . ', ' . $intTemplateId . ', ' . $blnSent . '); return false;">' . htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a></td>';
+                } else {
+                    $strTbody .= '
+              <td class="row' . $column . '"' . $strColspan . '>' . htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</td>';
+                }
+            }
+
+            if ($intCounter == 1) {
+                $strThead .= '
               <th class="topcornerright"><div>&nbsp;</div></th>
             </tr>';
-      }
+            }
 
-      $strTbody .= '
+            $strTbody .= '
             </tr>';
-    }
-    $strThead .= '</thead>';
-    $strTbody .= '</tbody>';
+        }
+        $strThead .= '</thead>';
+        $strTbody .= '</tbody>';
 
-    $strOutput = '';
-    /**
-     * if list is filtered by search
-     */
-    if($strSearchValue != ''){
-      if(count($objPaginator) > 0){
-        $strOutput = '
-            <div class="formsubtitle searchtitle">'.sprintf($this->core->translate->_('Search_for_'), $strSearchValue).'</div>'; 
-      }else{
-        $strOutput = '
-            <div class="formsubtitle searchtitle">'.sprintf($this->core->translate->_('No_search_results_for_'), $strSearchValue).'</div>';   
-      }
-      $strOutput .= '
+        $strOutput = '';
+        /**
+         * if list is filtered by search
+         */
+        if ($strSearchValue != '') {
+            if (count($objPaginator) > 0) {
+                $strOutput = '
+            <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('Search_for_'), $strSearchValue) . '</div>';
+            } else {
+                $strOutput = '
+            <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('No_search_results_for_'), $strSearchValue) . '</div>';
+            }
+            $strOutput .= '
             <div class="bttnSearchReset" onclick="myList.resetSearch();">
               <div class="button17leftOff"></div>
               <div class="button17centerOff">
-                <div>'.$this->core->translate->_('Reset').'</div>
+                <div>' . $this->core->translate->_('Reset') . '</div>
                 <div class="clear"></div>
               </div>
               <div class="button17rightOff"></div>
               <div class="clear"></div>
             </div>
             <div class="clear"></div>';
-    }else{
-      $strOutput = '
+        } else {
+            $strOutput = '
             <div class="spacer2"></div>';
-    }
-    
-    $strOutput .= '
+        }
+
+        $strOutput .= '
             <table class="tablelist">
-              '.$strThead.'
-              '.$strTbody.'
+              ' . $strThead . '
+              ' . $strTbody . '
             </table>';
 
-    return $strOutput;
-  }
-
-  /**
-   * getSearchResultList
-   * @param Zend_Db_Table_Rowset_Abstract $objRowset
-   * @param string $strSearchValue
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function getSearchResultList($objRowset, $strSearchValue){
-    $strOutput = '';
-    if($objRowset instanceof Zend_Db_Table_Rowset_Abstract && count($objRowset) > 0){
-      $strOutput .= '<ul>';
-      $intCounter = 0;
-      foreach($objRowset as $objRow){
-        $intCounter++;
-        $strOutput .= '<li class="modulus'.($intCounter % 2).'"><a href="#" onclick="myGlobal.addElementLink(\''.$objRow->globalId.'\'); return false;">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></li>';
-      }
-      $strOutput .= '</ul>';
-    }else{
-      $strOutput .= '<ul><li>'.sprintf($this->core->translate->_('No_search_result'), $strSearchValue).'</li></ul>';
+        return $strOutput;
     }
 
-    return $strOutput;
-  }
+    /**
+     * getSearchResultList
+     * @param Zend_Db_Table_Rowset_Abstract $objRowset
+     * @param string $strSearchValue
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getSearchResultList($objRowset, $strSearchValue)
+    {
+        $strOutput = '';
+        if ($objRowset instanceof Zend_Db_Table_Rowset_Abstract && count($objRowset) > 0) {
+            $strOutput .= '<ul>';
+            $intCounter = 0;
+            foreach ($objRowset as $objRow) {
+                $intCounter++;
+                $strOutput .= '<li class="modulus' . ($intCounter % 2) . '"><a href="#" onclick="myGlobal.addElementLink(\'' . $objRow->globalId . '\'); return false;">' . htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a></li>';
+            }
+            $strOutput .= '</ul>';
+        } else {
+            $strOutput .= '<ul><li>' . sprintf($this->core->translate->_('No_search_result'), $strSearchValue) . '</li></ul>';
+        }
+
+        return $strOutput;
+    }
 
 }
 

@@ -40,22 +40,23 @@
  * @version 1.0
  */
 
-class Model_Table_GroupGroupTypes extends Zend_Db_Table_Abstract {
+class Model_Table_GroupGroupTypes extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'groupGroupTypes';
+    protected $_name = 'groupGroupTypes';
 
-  protected $_referenceMap    = array(
-      'Group' => array(
-          'columns'           => array('idGroups'),
-          'refTableClass'     => 'groups',
-          'refColumns'        => array('id')
-      ),
-      'GroupTypes' => array(
-          'columns'           => array('idGroupTypes'),
-          'refTableClass'     => 'groupTypes',
-          'refColumns'        => array('id')
-      )
-  );
+    protected $_referenceMap = array(
+        'Group'      => array(
+            'columns'           => array('idGroups'),
+            'refTableClass'     => 'groups',
+            'refColumns'        => array('id')
+        ),
+        'GroupTypes' => array(
+            'columns'           => array('idGroupTypes'),
+            'refTableClass'     => 'groupTypes',
+            'refColumns'        => array('id')
+        )
+    );
 }
 
 ?>

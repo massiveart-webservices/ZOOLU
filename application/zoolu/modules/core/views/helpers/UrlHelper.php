@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
  *
- * For further information visit our website www.getzoolu.org 
+ * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
  *
  * @category   ZOOLU
@@ -31,57 +31,59 @@
  */
 /**
  * UrlHistoryHelper
- * 
+ *
  * Version history (please keep backward compatible):
  * 1.0, 2009-11-09: Dominik Mößlang
- * 
+ *
  * @author Dominik Mößlang <dmo@massiveart.com>
  * @version 1.0
  */
 
-class UrlHistoryHelper {
-  
-  /**
-   * @var Core
-   */
-  private $core;
-    
-  /**
-   * Constructor 
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
-  
-  /**
-   * getUrlHistory 
-   * @author Dominik Mößlang <dmo@massiveart.com>
-   * @version 1.0
-   */
-  public function getUrlHistory($strElementId, $objUrls){
-    $strOutput = '';
-    
-    if($strElementId !== "" && $objUrls !== NULL){      
-        
-      foreach($objUrls as $objUrl)
-      {
-        $strOutput .='
-              <div id="'.$objUrl['id'].'_'.$strElementId.'" class="urlHistoryEntry">
-               <div class="itemremovelist2 itemRemoveUrl" onclick="myForm.removeUrlHistoryEntry(\''.$objUrl['id'].'\',\''.$objUrl['relationId'].'\',\''.$strElementId.'\')"></div>
-               <div class="urlHistoryName">/'.strtolower($objUrl['languageCode']).'/'.$objUrl['url'].'</div>
+class UrlHistoryHelper
+{
+
+    /**
+     * @var Core
+     */
+    private $core;
+
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
+
+    /**
+     * getUrlHistory
+     * @author Dominik Mößlang <dmo@massiveart.com>
+     * @version 1.0
+     */
+    public function getUrlHistory($strElementId, $objUrls)
+    {
+        $strOutput = '';
+
+        if ($strElementId !== "" && $objUrls !== NULL) {
+
+            foreach ($objUrls as $objUrl) {
+                $strOutput .= '
+              <div id="' . $objUrl['id'] . '_' . $strElementId . '" class="urlHistoryEntry">
+               <div class="itemremovelist2 itemRemoveUrl" onclick="myForm.removeUrlHistoryEntry(\'' . $objUrl['id'] . '\',\'' . $objUrl['relationId'] . '\',\'' . $strElementId . '\')"></div>
+               <div class="urlHistoryName">/' . strtolower($objUrl['languageCode']) . '/' . $objUrl['url'] . '</div>
                <div class="clear"></div>
               </div>  
              ';
-      }
-      
-    $strOutput .='<div class="clear"></div>';
-    
-    } 
+            }
 
-    return $strOutput;
-  }
+            $strOutput .= '<div class="clear"></div>';
+
+        }
+
+        return $strOutput;
+    }
 }
 
 ?>

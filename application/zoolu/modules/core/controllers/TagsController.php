@@ -40,36 +40,39 @@
  * @version 1.0
  */
 
-class Core_TagsController extends AuthControllerAction {
+class Core_TagsController extends AuthControllerAction
+{
 
-  /**
-	 * The default action - show the home page
-	 */
-  public function indexAction(){
+    /**
+     * The default action - show the home page
+     */
+    public function indexAction()
+    {
 
-  	$this->_helper->viewRenderer->setNoRender();
-  }
-  
-  /**
-   * livesearchAction
-   * @author Thomas Schedler <tsh@massiveart.com>   
-   */
-  public function livesearchAction(){
-    $this->_helper->viewRenderer->setNoRender();
-    
-    require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Tags.php';
-    $objModelTags = new Model_Tags();      
-    $objAllTags = $objModelTags->loadAllTags();
-    
-    $strAllTags = '[';
-    if(count($objAllTags) > 0){      
-      foreach($objAllTags as $objTag){
-        $strAllTags .= '{"caption":"'.htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'","value":'.$objTag->id.'},';
-      }
-      $strAllTags = trim($strAllTags, ',');
+        $this->_helper->viewRenderer->setNoRender();
     }
-    $strAllTags .= ']';
-    echo $strAllTags;
-  }
+
+    /**
+     * livesearchAction
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function livesearchAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Tags.php';
+        $objModelTags = new Model_Tags();
+        $objAllTags = $objModelTags->loadAllTags();
+
+        $strAllTags = '[';
+        if (count($objAllTags) > 0) {
+            foreach ($objAllTags as $objTag) {
+                $strAllTags .= '{"caption":"' . htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '","value":' . $objTag->id . '},';
+            }
+            $strAllTags = trim($strAllTags, ',');
+        }
+        $strAllTags .= ']';
+        echo $strAllTags;
+    }
 
 }

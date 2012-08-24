@@ -1,11 +1,11 @@
 <?php
-require_once (dirname(__FILE__).'/../../helpers/ViewHelper.php');
+require_once (dirname(__FILE__) . '/../../helpers/ViewHelper.php');
 $objHelper = new ViewHelper();
 ?>
 <div class="oltitle">
-  <?php echo $objHelper->getOverviewFilterTitle(); ?>
+    <?php echo $objHelper->getOverviewFilterTitle(); ?>
 </div>
 <div class="spacer1"></div>
 <div class="olnavigationwrapper2">
-  <?php echo $objHelper->getOverviewFilter($this->rootLevelFilters); ?>
+    <?php echo $objHelper->getOverviewFilter($this->rootLevelFilters); ?>
 </div>

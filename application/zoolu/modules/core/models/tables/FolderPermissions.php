@@ -40,22 +40,23 @@
  * @version 1.0
  */
 
-class Model_Table_FolderPermissions extends Zend_Db_Table_Abstract {
+class Model_Table_FolderPermissions extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'folderPermissions';
+    protected $_name = 'folderPermissions';
 
-  protected $_referenceMap    = array(
-      'Folder' => array(
-          'columns'           => array('idFolders'),
-          'refTableClass'     => 'folders',
-          'refColumns'        => array('id')
-      ),
-      'Group' => array(
-          'columns'           => array('idGroups'),
-          'refTableClass'     => 'groups',
-          'refColumns'        => array('id')
-      )
-  );
+    protected $_referenceMap = array(
+        'Folder' => array(
+            'columns'           => array('idFolders'),
+            'refTableClass'     => 'folders',
+            'refColumns'        => array('id')
+        ),
+        'Group'  => array(
+            'columns'           => array('idGroups'),
+            'refTableClass'     => 'groups',
+            'refColumns'        => array('id')
+        )
+    );
 }
 
 ?>

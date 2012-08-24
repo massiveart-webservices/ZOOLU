@@ -1,304 +1,312 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" >
-  <head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
     <title>ZOOLU - <?php echo $this->translate->_('Dashboard'); ?></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Language" content="de" />
-    <meta name="language" content="de" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Language" content="de"/>
+    <meta name="language" content="de"/>
 
-    <link href="/min/g=zExtCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet" />
-    <link href="/min/g=zDashboardCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet" />
-  </head>
-  <body id="myBody">
+    <link href="/min/g=zExtCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet"/>
+    <link href="/min/g=zDashboardCss?v=<?php echo $this->jsVersion; ?>" rel="stylesheet"/>
+</head>
+<body id="myBody">
 
     <!-- navigation top -->
     <div id="navigation-top">
 
-      <div id="top">
-        <div class="toplogo">
-          <a href="/zoolu">
-            <img src="/zoolu-statics/images/main/logo_zoolu_small.png" width="69" height="17" alt="ZOOLU"/>
-          </a>
+        <div id="top">
+            <div class="toplogo">
+                <a href="/zoolu">
+                    <img src="/zoolu-statics/images/main/logo_zoolu_small.png" width="69" height="17" alt="ZOOLU"/>
+                </a>
+            </div>
+            <div class="topright">
+                <div class="openWebsite"><a href="/" target="_blank"><?php echo $this->translate->_('Open_website'); ?></a>
+                </div>
+                <div class="faqtitle"> |
+                    <a href="https://github.com/massiveart-webservices/ZOOLU" target="_blank"><?php echo $this->translate->_('Report_bugs'); ?></a> |
+                    <a href="http://documentation.getzoolu.org/"><?php echo $this->translate->_('Help_and_FAQ'); ?></a>
+                </div>
+                <div class="faqicon"><img src="/zoolu-statics/images/icons/icon_help.png" width="16" height="16"/></div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
         </div>
-        <div class="topright">
-          <div class="openWebsite"><a href="/" target="_blank"><?php echo $this->translate->_('Open_website'); ?></a></div>
-          <div class="faqtitle"> | <a href="https://github.com/massiveart-webservices/ZOOLU" target="_blank"><?php echo $this->translate->_('Report_bugs'); ?></a> | <a href="http://documentation.getzoolu.org/"><?php echo $this->translate->_('Help_and_FAQ'); ?></a></div> 
-          <div class="faqicon"><img src="/zoolu-statics/images/icons/icon_help.png" width="16" height="16"/></div>
-          <div class="clear"></div>
+        <!-- END top -->
+
+        <?php echo $this->layout()->userinfo; ?>
+
+        <div id="navtopwrapper">
+            <?php echo $this->layout()->modules; ?>
+            <div id="navtopbreadcrumb" style="display:none;"></div>
         </div>
-        <div class="clear"></div>
-      </div>  <!-- END top -->
-
-      <?php echo $this->layout()->userinfo; ?>
-
-      <div id="navtopwrapper">
-        <?php echo $this->layout()->modules; ?>
-        <div id="navtopbreadcrumb" style="display:none;"></div>
-      </div>
 
     </div>
     <!-- END navigation top -->
-    
+
     <!-- navigation left -->
     <div id="navigation-left">
-      <div id="divNaviLeft-dbrd">
-        <div id="divNaviLeftInner">
-          <!-- main navigatin -->
-          <div id="divNaviLeftMain">
-            <div class="formtitle"><?php echo $this->translate->_('New_message'); ?></div>  
-            <form id="dbrdForm" method="post" action="/zoolu/core/dashboard/add" onsubmit="return false;" enctype="application/x-www-form-urlencoded">
-              <div class="box-dbrd">
-                <div class="editbox" id="editbox">
-                  <div class="editboxfields" id="fieldsbox">
-                  </div>
+        <div id="divNaviLeft-dbrd">
+            <div id="divNaviLeftInner">
+                <!-- main navigatin -->
+                <div id="divNaviLeftMain">
+                    <div class="formtitle"><?php echo $this->translate->_('New_message'); ?></div>
+                    <form id="dbrdForm" method="post" action="/zoolu/core/dashboard/add" onsubmit="return false;" enctype="application/x-www-form-urlencoded">
+                        <div class="box-dbrd">
+                            <div class="editbox" id="editbox">
+                                <div class="editboxfields" id="fieldsbox">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-              </div>
-            </form>
-          </div>
+            </div>
         </div>
-      </div>
-    </div> <!-- END navigation main -->
-    
+    </div>
+    <!-- END navigation main -->
+
     <!-- content -->
     <div id="content2">
-      <div class="widgetfunctions">
-        <div class="widgetcontenttop"></div>
-      </div>
-      
-      <!-- tabs -->
-      <div class="tabNavContainer">
-        <ul>
-          <li id="tabNavItem_ALL" onclick="myDashboard.selectTab('ALL'); return false;" class="item selected">
-            <div class="start"></div>
-            <div class="middle"><a href="#"><?php echo $this->translate->_('All_messages'); ?></a></div>
-            <div class="end"></div>
-          </li>
-          <li id="tabNavItem_MY" onclick="myDashboard.selectTab('MY'); return false;" class="item">
-            <div class="start"></div>
-            <div class="middle"><a href="#"><?php echo $this->translate->_('My_Messages'); ?></a></div>
-            <div class="end"></div>
-          </li>
-          <li id="tabNavItem_DONE" onclick="myDashboard.selectTab('DONE'); return false;" class="item">
-            <div class="start"></div>
-            <div class="middle"><a href="#"><?php echo $this->translate->_('Completed_tasks'); ?></a></div>
-            <div class="end"></div>
-          </li>
-        </ul>
-      </div>
-      <!-- search -->
-      <div class="searchContainer" style="display:none;">
-      </div>
-      <!-- entries -->
-      <div id="dbrdEntries">
-      </div> 
+        <div class="widgetfunctions">
+            <div class="widgetcontenttop"></div>
+        </div>
+
+        <!-- tabs -->
+        <div class="tabNavContainer">
+            <ul>
+                <li id="tabNavItem_ALL" onclick="myDashboard.selectTab('ALL'); return false;" class="item selected">
+                    <div class="start"></div>
+                    <div class="middle"><a href="#"><?php echo $this->translate->_('All_messages'); ?></a></div>
+                    <div class="end"></div>
+                </li>
+                <li id="tabNavItem_MY" onclick="myDashboard.selectTab('MY'); return false;" class="item">
+                    <div class="start"></div>
+                    <div class="middle"><a href="#"><?php echo $this->translate->_('My_Messages'); ?></a></div>
+                    <div class="end"></div>
+                </li>
+                <li id="tabNavItem_DONE" onclick="myDashboard.selectTab('DONE'); return false;" class="item">
+                    <div class="start"></div>
+                    <div class="middle"><a href="#"><?php echo $this->translate->_('Completed_tasks'); ?></a></div>
+                    <div class="end"></div>
+                </li>
+            </ul>
+        </div>
+        <!-- search -->
+        <div class="searchContainer" style="display:none;">
+        </div>
+        <!-- entries -->
+        <div id="dbrdEntries">
+        </div>
     </div>
-    
+
     <!-- overlay transparent-->
     <div id="overlayTrans" class="overlaytrans" style="display:none;"></div>
     <!-- overlay black 75% -->
     <div id="overlayBlack75" class="overlayblack75" style="display:none;" onclick="myOverlay.close();"></div>
-    
+
     <!-- overlay for user settings -->
     <div id="overlayUserSettingsWrapper" class="overlaycontentwrapper" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myOverlay.closeUserSettingsOverlay(); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <!-- content -->
-              <div class="overlaycontent">
-                <div class="oltitle"><?php echo $this->translate->_('My_Settings'); ?></div>
-                <div class="spacer1"></div>
-                <div id="overlayUserSettingsContent" class="propertywrapper">                
-                </div>
-                <div class="clear"></div> 
-                <div onclick="myOverlay.closeUserSettingsOverlay(); return false;" class="buttoncancel"><?php echo $this->translate->_('Cancel'); ?></div>
-                <div class="buttoneditsave" onclick="myForm.saveUserSettings();">
-                  <div class="button25leftOn"></div>
-                  <div class="button25centerOn">
-                    <img width="13" height="13" class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png"/>
-                    <div><?php echo $this->translate->_('Save'); ?></div>
-                  </div>
-                  <div class="button25rightOn"></div>
-                  <div class="clear"></div>
-                </div>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myOverlay.closeUserSettingsOverlay(); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <!-- content -->
+                    <div class="overlaycontent">
+                        <div class="oltitle"><?php echo $this->translate->_('My_Settings'); ?></div>
+                        <div class="spacer1"></div>
+                        <div id="overlayUserSettingsContent" class="propertywrapper">
+                        </div>
+                        <div class="clear"></div>
+                        <div onclick="myOverlay.closeUserSettingsOverlay(); return false;" class="buttoncancel"><?php echo $this->translate->_('Cancel'); ?></div>
+                        <div class="buttoneditsave" onclick="myForm.saveUserSettings();">
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                                <img width="13" height="13" class="iconsave" src="/zoolu-statics/images/icons/icon_save_black.png"/>
+
+                                <div><?php echo $this->translate->_('Save'); ?></div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    
+
     <!-- overlay for generated content -->
     <div id="overlayGenContentWrapper" class="overlaycontentwrapper" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myOverlay.close('overlayGenContentWrapper'); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <!-- cotnent -->
-              <div id="overlayGenContent" class="overlaycontent"></div>
-              <!-- buttons -->
-              <div id="overlayButtons" class="overlaycontent" style="display:none;">
-                <div id="buttonOk">
-                  <div class="button25leftOn"></div>
-		              <div class="button25centerOn">
-		                <!-- <img width="13" height="13" src="/zoolu-statics/images/icons/icon_ok_black.png" class="iconok"/> -->
-		                <div><?php echo $this->translate->_('Ok'); ?></div>
-		              </div>
-		              <div class="button25rightOn"></div>
-		              <div class="clear"></div>
-                </div>
-                <div id="buttonCancel">
-                  <div class="button25leftOff"></div>
-		              <div class="button25centerOff">
-		                <!-- <img width="11" height="14" src="/zoolu-statics/images/icons/icon_cancel_white.png" class="iconcancel"/> -->
-		                <div><?php echo $this->translate->_('Cancel'); ?></div>
-		              </div>
-		              <div class="button25rightOff"></div>
-		              <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div> <!-- END overlay for generated content -->    
-    
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myOverlay.close('overlayGenContentWrapper'); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <!-- cotnent -->
+                    <div id="overlayGenContent" class="overlaycontent"></div>
+                    <!-- buttons -->
+                    <div id="overlayButtons" class="overlaycontent" style="display:none;">
+                        <div id="buttonOk">
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                                <!-- <img width="13" height="13" src="/zoolu-statics/images/icons/icon_ok_black.png" class="iconok"/> -->
+                                <div><?php echo $this->translate->_('Ok'); ?></div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div id="buttonCancel">
+                            <div class="button25leftOff"></div>
+                            <div class="button25centerOff">
+                                <!-- <img width="11" height="14" src="/zoolu-statics/images/icons/icon_cancel_white.png" class="iconcancel"/> -->
+                                <div><?php echo $this->translate->_('Cancel'); ?></div>
+                            </div>
+                            <div class="button25rightOff"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- END overlay for generated content -->
+
     <!-- overlay single edit -->
     <div id="overlaySingleEdit" class="overlaycontentwrapper" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <td class="cornertopleft"></td>
-            <td class="topcenter"></td>
-            <td class="cornertopright"></td>
-          </tr>
-          <tr>
-            <td class="headerleft"></td>
-            <td class="headercenter handle">
-              <div class="headerclose" onclick="myOverlay.close('overlaySingleEdit'); return false;"></div>
-              <div class="clear"></div>
-            </td>
-            <td class="headerright"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="contentleft"></td>
-            <td class="contentcenter">
-              <!-- cotnent -->
-              <div id="overlaySingleEditContent" class="overlaycontent"></div>
-              <!-- buttons -->
-              <div id="overlaySingleEditButtons" class="overlaycontent" style="display:none;">
-                <div id="buttonOk">
-                  <div class="button25leftOn"></div>
-                  <div class="button25centerOn">
-                    <div><?php echo $this->translate->_('Ok'); ?></div>
-                  </div>
-                  <div class="button25rightOn"></div>
-                  <div class="clear"></div>
-                </div>
-                <div id="buttonCancel">
-                  <div class="button25leftOff"></div>
-                  <div class="button25centerOff">
-                    <div><?php echo $this->translate->_('Cancel'); ?></div>
-                  </div>
-                  <div class="button25rightOff"></div>
-                  <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            </td>
-            <td class="contentright"></td>
-          </tr>
-          <tr>
-            <td class="cornerbottomleft"></td>
-            <td class="bottomcenter"></td>
-            <td class="cornerbottomright"></td>
-          </tr>
-        </tbody>
-      </table>
+        <table>
+            <thead>
+            <tr>
+                <td class="cornertopleft"></td>
+                <td class="topcenter"></td>
+                <td class="cornertopright"></td>
+            </tr>
+            <tr>
+                <td class="headerleft"></td>
+                <td class="headercenter handle">
+                    <div class="headerclose" onclick="myOverlay.close('overlaySingleEdit'); return false;"></div>
+                    <div class="clear"></div>
+                </td>
+                <td class="headerright"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="contentleft"></td>
+                <td class="contentcenter">
+                    <!-- cotnent -->
+                    <div id="overlaySingleEditContent" class="overlaycontent"></div>
+                    <!-- buttons -->
+                    <div id="overlaySingleEditButtons" class="overlaycontent" style="display:none;">
+                        <div id="buttonOk">
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                                <div><?php echo $this->translate->_('Ok'); ?></div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div id="buttonCancel">
+                            <div class="button25leftOff"></div>
+                            <div class="button25centerOff">
+                                <div><?php echo $this->translate->_('Cancel'); ?></div>
+                            </div>
+                            <div class="button25rightOff"></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </td>
+                <td class="contentright"></td>
+            </tr>
+            <tr>
+                <td class="cornerbottomleft"></td>
+                <td class="bottomcenter"></td>
+                <td class="cornerbottomright"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <!-- END  overlay single edit -->
-    
-    <!-- libaries --> 
-    <script type="text/javascript" src="/min/g=zJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>
-    <script type="text/javascript" src="/min/g=zDashboardJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>    
-    
-    <script type="text/javascript">//<![CDATA[
-      var myCore, myForm, myOverlay, myDashboard;
 
-      Event.observe(window, 'load', function() {
+    <!-- libaries -->
+    <script type="text/javascript" src="/min/g=zJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>
+    <script type="text/javascript" src="/min/g=zDashboardJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>
+
+    <script type="text/javascript">//<![CDATA[
+    var myCore, myForm, myOverlay, myDashboard;
+
+    Event.observe(window, 'load', function() {
         myCore = new Massiveart.Core();
         myForm = new Massiveart.Form();
         myOverlay = new Massiveart.Overlay();
         myDashboard = new Massiveart.Dashboard();
-                
+
         myCore.translate = {
-          Save: '<?php echo $this->translate->_('Save'); ?>',
-          Cancel: '<?php echo $this->translate->_('Cancel'); ?>',
-          Apply: '<?php echo $this->translate->_('Apply'); ?>',
-          Edit: '<?php echo $this->translate->_('Edit'); ?>',
-          Delete_Activity: '<?php echo $this->translate->_('Delete_Activity'); ?>',
-          Delete: '<?php echo $this->translate->_('Delete_'); ?>'          
+            Save: '<?php echo $this->translate->_('Save'); ?>',
+            Cancel: '<?php echo $this->translate->_('Cancel'); ?>',
+            Apply: '<?php echo $this->translate->_('Apply'); ?>',
+            Edit: '<?php echo $this->translate->_('Edit'); ?>',
+            Delete_Activity: '<?php echo $this->translate->_('Delete_Activity'); ?>',
+            Delete: '<?php echo $this->translate->_('Delete_'); ?>'
         };
 
         myDashboard.init();
         if ($('navDashboardLink')) {
-          $('navDashboardLink').removeClassName('navtoplink');
-          $('navDashboardLink').addClassName('navtoplink_on');
-        } 
-        
+            $('navDashboardLink').removeClassName('navtoplink');
+            $('navDashboardLink').addClassName('navtoplink_on');
+        }
+
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
         new Draggable('overlaySingleEdit', {handle: 'handle', scroll: window });
-      });
-      //]]>
+    });
+    //]]>
     </script>
-  </body>
+</body>
 </html>

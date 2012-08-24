@@ -78,7 +78,7 @@ class OverlayHelper
 
 //        $strType = '';
 //        if ($strContentType != null) {
-            $strType = ', \'' . $strContentType . '\'';
+        $strType = ', \'' . $strContentType . '\'';
 //        }
 
         if ($intRootLevelTypeId > 0 && $intRootLevelId > 0 && $intFolderId == 0) {
@@ -111,7 +111,7 @@ class OverlayHelper
                 if ($intFolderId == 0) {
                     $strOutput .= '
                         <div id="olnavitem' . $row->id . '" class="olnavrootitem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', '.$blnSelectOne.'); return false;" style="position:relative;">
+                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . '); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>
@@ -119,7 +119,7 @@ class OverlayHelper
                 } else {
                     $strOutput .= '
                         <div id="olnavitem' . $row->id . '" class="olnavchilditem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', '.$blnSelectOne.'); return false;" style="position:relative;">
+                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . '); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>
@@ -133,7 +133,7 @@ class OverlayHelper
          */
         return $strOutput;
     }
-    
+
     /**
      * Lists the given folders on the first level
      * @param Zend_Db_Table_Rowset $rowset
@@ -141,22 +141,22 @@ class OverlayHelper
     public function getSitemapNavigationElements($rowset)
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getSitemapNavigationElements()');
-        
+
 
         $strOutput = '';
 
         if (count($rowset) > 0) {
             foreach ($rowset as $row) {
                 $strType = '';
-                if(!isset($row->type)){
+                if (!isset($row->type)) {
                     $strType .= 'type_page';
-                }else{
-                    $strType = 'type_'.$row->type;
+                } else {
+                    $strType = 'type_' . $row->type;
                 }
-                
+
                 $strOutput .= '
-                    <div id="olnavitem' . $row->id . '" class="olnavchilditem '.$strType.'">
-                        <div style="position:relative;" onclick="myOverlay.getSiteMapNavItem(' . $row->id . ', \''.$row->genericFormId.'\', '.$row->version.')">
+                    <div id="olnavitem' . $row->id . '" class="olnavchilditem ' . $strType . '">
+                        <div style="position:relative;" onclick="myOverlay.getSiteMapNavItem(' . $row->id . ', \'' . $row->genericFormId . '\', ' . $row->version . ')">
                             <div class="icon img_folder_on"></div>
                             <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                         </div>
@@ -184,7 +184,7 @@ class OverlayHelper
         if ($intUnitId == 0) {
             $strOutput .= '
                 <div id="olnavitem0" class="olnavrootitem">
-                    <div onclick="myOverlay.getContactNavItem(0); return false;" style="position:relative;"><div class="icon img_folder_off"></div>' . $this->core->translate->_('Conatcts') .'</div>
+                    <div onclick="myOverlay.getContactNavItem(0); return false;" style="position:relative;"><div class="icon img_folder_off"></div>' . $this->core->translate->_('Conatcts') . '</div>
                     <div id="olsubnav0" class="" style="display: none;">';
         }
 
@@ -454,14 +454,14 @@ class OverlayHelper
                     $strHidden = ' style="display:none;"';
                 }
 
-                if($blnSelectOne){
-                  $strAction = 'myOverlay.selectPage('.$row->id.', \''.$row->pageId.'\'); return false;';
-                }else{
-                  $strAction = 'myOverlay.addPageToListArea('.$row->id.', \''.$row->pageId.'\'); return false;';
+                if ($blnSelectOne) {
+                    $strAction = 'myOverlay.selectPage(' . $row->id . ', \'' . $row->pageId . '\'); return false;';
+                } else {
+                    $strAction = 'myOverlay.addPageToListArea(' . $row->id . ', \'' . $row->pageId . '\'); return false;';
                 }
-                
+
                 $strOutput .= '
-                    <div class="olpageitem" id="olItem' . $row->pageId . '" onclick="'.$strAction.'"' . $strHidden . '>
+                    <div class="olpageitem" id="olItem' . $row->pageId . '" onclick="' . $strAction . '"' . $strHidden . '>
                         <div class="olpageleft"></div>
                         <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
                         <div class="icon olpageicon img_' . (($row->isStartPage == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
@@ -491,7 +491,7 @@ class OverlayHelper
          */
         return $strOutputTop . $strOutput . $strOutputBottom . '<div class="clear"></div>';
     }
-    
+
     /**
      * getListView
      * @author Cornelius Hansjakob <cha@massiveart.com>
@@ -509,7 +509,7 @@ class OverlayHelper
         $strOutputTop = '
             <div>
                 <div class="olpagetopleft"></div>
-                <div class="olpagetopitemtitle bold">'.$this->core->translate->_('Pagetitle').'</div>
+                <div class="olpagetopitemtitle bold">' . $this->core->translate->_('Pagetitle') . '</div>
                 <div class="olpagetopright"></div>
                 <div class="clear"></div>
             </div>';
@@ -523,10 +523,10 @@ class OverlayHelper
             <div class="olpageitemcontainer">';
             foreach ($rowset as $row) {
 
-                $strAction = 'myOverlay.selectSitemapPage(\''.$row->type.'\', \''.$row->relationId.'\', '.$row->id.'); return false;';
-                
+                $strAction = 'myOverlay.selectSitemapPage(\'' . $row->type . '\', \'' . $row->relationId . '\', ' . $row->id . '); return false;';
+
                 $strOutput .= '
-                    <div class="olpageitem" id="olItem' . $row->relationId . '" onclick="'.$strAction.'">
+                    <div class="olpageitem" id="olItem' . $row->relationId . '" onclick="' . $strAction . '">
                         <div class="olpageleft"></div>
                         <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
                         <div class="icon olpageicon img_' . (($row->isStartElement == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>

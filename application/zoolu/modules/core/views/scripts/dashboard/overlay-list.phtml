@@ -1,15 +1,15 @@
 <?php
-  require_once (dirname(__FILE__).'/../../helpers/DashboardHelper.php');
-  $objHelper = new DashboardHelper();
-  $objHelper->setTranslate($this->translate);
-  
-  switch($this->contenttype){
+require_once (dirname(__FILE__) . '/../../helpers/DashboardHelper.php');
+$objHelper = new DashboardHelper();
+$objHelper->setTranslate($this->translate);
+
+switch ($this->contenttype) {
     case 'media':
-      echo $objHelper->getListView($this->elements, $this->relation);
-      break;
+        echo $objHelper->getListView($this->elements, $this->relation);
+        break;
     default:
-      echo $objHelper->getListElements($this->elements, $this->relation, $this->contenttype);
-      break;
-  }
-  
+        echo $objHelper->getListElements($this->elements, $this->relation, $this->contenttype);
+        break;
+}
+
 ?>

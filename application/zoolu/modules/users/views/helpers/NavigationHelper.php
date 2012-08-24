@@ -40,66 +40,69 @@
  * @version 1.0
  */
 
-class NavigationHelper {
+class NavigationHelper
+{
 
-  /**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * Constructor
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
 
-  /**
-   * getModuleRootLevels
-   * @param Zend_Db_Table_Rowset_Abstract $objRowset
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  function getModuleRootLevels($objRowset) {
-    $this->core->logger->debug('users->views->helpers->NavigationHelper->getModuleRootLevels()');
+    /**
+     * getModuleRootLevels
+     * @param Zend_Db_Table_Rowset_Abstract $objRowset
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    function getModuleRootLevels($objRowset)
+    {
+        $this->core->logger->debug('users->views->helpers->NavigationHelper->getModuleRootLevels()');
 
-    $strOutput = '';
+        $strOutput = '';
 
-    $strRootLevelType = '';
-    foreach ($objRowset as $objRow) {
+        $strRootLevelType = '';
+        foreach ($objRowset as $objRow) {
 
-      switch($objRow->idRootLevelTypes){
-        case $this->core->sysConfig->root_level_types->users:
-          $strRootLevelType = 'user';
-          break;
-        case $this->core->sysConfig->root_level_types->groups:
-          $strRootLevelType = 'group';
-          break;
-        case $this->core->sysConfig->root_level_types->resources:
-          $strRootLevelType = 'resource';
-          break;
-        default:
-          $strRootLevelType = 'user';
-          break;
-      }
+            switch ($objRow->idRootLevelTypes) {
+                case $this->core->sysConfig->root_level_types->users:
+                    $strRootLevelType = 'user';
+                    break;
+                case $this->core->sysConfig->root_level_types->groups:
+                    $strRootLevelType = 'group';
+                    break;
+                case $this->core->sysConfig->root_level_types->resources:
+                    $strRootLevelType = 'resource';
+                    break;
+                default:
+                    $strRootLevelType = 'user';
+                    break;
+            }
 
-      /**
-       * get values of the row and create output
-       */
-      $strOutput .= '
+            /**
+             * get values of the row and create output
+             */
+            $strOutput .= '
             <div class="naviitemcontainer">
-              <div id="naviitem'.$objRow->id.'" class="naviitem" onclick="myNavigation.getModuleRootLevelList('.$objRow->id.', \''.$strRootLevelType.'\'); return false;">
-                <div class="'.$strRootLevelType.'icon"></div>
-                <div class="itemtitle">'.htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+              <div id="naviitem' . $objRow->id . '" class="naviitem" onclick="myNavigation.getModuleRootLevelList(' . $objRow->id . ', \'' . $strRootLevelType . '\'); return false;">
+                <div class="' . $strRootLevelType . 'icon"></div>
+                <div class="itemtitle">' . htmlentities($objRow->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
                  <div class="clear"></div>
               </div>
             </div>';
-    }
+        }
 
-    return $strOutput;
-  }
+        return $strOutput;
+    }
 
 }
 

@@ -40,22 +40,23 @@
  * @version 1.0
  */
 
-class Model_Table_ResourceGroups extends Zend_Db_Table_Abstract {
+class Model_Table_ResourceGroups extends Zend_Db_Table_Abstract
+{
 
-  protected $_name = 'resourceGroups';
+    protected $_name = 'resourceGroups';
 
-  protected $_referenceMap    = array(
-      'Resource' => array(
-          'columns'           => array('idResources'),
-          'refTableClass'     => 'resources',
-          'refColumns'        => array('id')
-      ),
-      'Group' => array(
-          'columns'           => array('idGroups'),
-          'refTableClass'     => 'groups',
-          'refColumns'        => array('id')
-      )
-  );
+    protected $_referenceMap = array(
+        'Resource' => array(
+            'columns'           => array('idResources'),
+            'refTableClass'     => 'resources',
+            'refColumns'        => array('id')
+        ),
+        'Group'    => array(
+            'columns'           => array('idGroups'),
+            'refTableClass'     => 'groups',
+            'refColumns'        => array('id')
+        )
+    );
 
 }
 

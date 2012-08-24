@@ -1,20 +1,21 @@
 <?php
 
-  require_once (dirname(__FILE__).'/../../helpers/ViewHelper.php');
-  $objHelper = new ViewHelper();
+require_once (dirname(__FILE__) . '/../../helpers/ViewHelper.php');
+$objHelper = new ViewHelper();
 
 ?>
 <div class="clear spacer1"></div>
 <form id="editForm" name="editForm" method="post" action="<?php echo $this->strEditFormAction; ?>" onsubmit="return false;">
-  <input type="hidden" name="rootLevelId" id="rootLevelId" value="<?php echo $this->rootLevelId; ?>" />
-  <input type="hidden" name="rootLevelFilterId" id="rootLevelFilterId" value="<?php echo $this->rootLevelFilterId; ?>" />
-  <div class="filterwrapper">
-    <div class="field">
-      <div class="fieldtitle gray666 bold">Title</div>
-      <input type="text" class="text" name="filtertitle" id="filtertitle" value="<?php echo $this->filtertitle; ?>" />
+    <input type="hidden" name="rootLevelId" id="rootLevelId" value="<?php echo $this->rootLevelId; ?>"/>
+    <input type="hidden" name="rootLevelFilterId" id="rootLevelFilterId" value="<?php echo $this->rootLevelFilterId; ?>"/>
+
+    <div class="filterwrapper">
+        <div class="field">
+            <div class="fieldtitle gray666 bold">Title</div>
+            <input type="text" class="text" name="filtertitle" id="filtertitle" value="<?php echo $this->filtertitle; ?>"/>
+        </div>
+        <div class="fieldtitle gray666 bold">Filters</div>
+        <?php echo $objHelper->getFilterList($this->rootLevelTypeFilters, $this->rootLevelFilter, $this->rootLevelFilterValues); ?>
     </div>
-    <div class="fieldtitle gray666 bold">Filters</div>
-	  <?php echo $objHelper->getFilterList($this->rootLevelTypeFilters, $this->rootLevelFilter, $this->rootLevelFilterValues); ?>
-  </div>
-  <div class="clear"></div>
+    <div class="clear"></div>
 </form>

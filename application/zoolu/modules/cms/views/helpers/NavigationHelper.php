@@ -41,297 +41,301 @@
  * @version 1.0
  */
 
-class NavigationHelper {
+class NavigationHelper
+{
 
-	/**
-   * @var Core
-   */
-  private $core;
+    /**
+     * @var Core
+     */
+    private $core;
 
-  /**
-   * Constructor
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  public function __construct(){
-    $this->core = Zend_Registry::get('Core');
-  }
+    /**
+     * Constructor
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function __construct()
+    {
+        $this->core = Zend_Registry::get('Core');
+    }
 
-	/**
-   * getMainNavigation
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  function getMainNavigation(NavigationTree $rootLevelNavigation, $arrRootLevelMaintenances = array()) {
-    $this->core->logger->debug('cms->views->helpers->NavigationHelper->getMainNavigation()');
+    /**
+     * getMainNavigation
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    function getMainNavigation(NavigationTree $rootLevelNavigation, $arrRootLevelMaintenances = array())
+    {
+        $this->core->logger->debug('cms->views->helpers->NavigationHelper->getMainNavigation()');
 
-  	$strOutput = '';
-    
-    if($arrRootLevelMaintenances == null) $arrRootLevelMaintenances = array();
-  	
-    foreach ($rootLevelNavigation as $objNavigationTree) {
-    
-      if(Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$objNavigationTree->getItemId(), Security::PRIVILEGE_VIEW, true, false)){
-          
-        $strOutput .= '
+        $strOutput = '';
+
+        if ($arrRootLevelMaintenances == null) $arrRootLevelMaintenances = array();
+
+        foreach ($rootLevelNavigation as $objNavigationTree) {
+
+            if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objNavigationTree->getItemId(), Security::PRIVILEGE_VIEW, true, false)) {
+
+                $strOutput .= '
       <div class="portalcontainer">
-        <div id="portal'.$objNavigationTree->getItemId().'" class="portal" onclick="myNavigation.selectPortal('.$objNavigationTree->getItemId().'); myNavigation.loadDashboard(); return false;">
+        <div id="portal' . $objNavigationTree->getItemId() . '" class="portal" onclick="myNavigation.selectPortal(' . $objNavigationTree->getItemId() . '); myNavigation.loadDashboard(); return false;">
           <div class="portalicon"></div>
-          <div id="divRootLevelTitle_'.$objNavigationTree->getItemId().'" class="portaltitle">'.htmlentities($objNavigationTree->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+          <div id="divRootLevelTitle_' . $objNavigationTree->getItemId() . '" class="portaltitle">' . htmlentities($objNavigationTree->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           <div class="clear"></div>          
         </div>
-        <div id="portal'.$objNavigationTree->getItemId().'menu" style="display:none;" class="portalmenu">';
-    
-        foreach($objNavigationTree as $objNavigation){
-          if(Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX.$objNavigation->getId(), Security::PRIVILEGE_VIEW)){                        
-            $strOutput .= '  
+        <div id="portal' . $objNavigationTree->getItemId() . 'menu" style="display:none;" class="portalmenu">';
+
+                foreach ($objNavigationTree as $objNavigation) {
+                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objNavigation->getId(), Security::PRIVILEGE_VIEW)) {
+                        $strOutput .= '
             <div class="portalmenulink">
               <div class="portalcontenticon"></div>
               <div class="portalmenutitle">';
-            if(!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops){
-              $strOutput .= '            		
-              	<div class="portaledit" onclick="myNavigation.loadMaintenanceOverlay('.$objNavigation->getItemId().'); return false;"></div>';  
-            }
-            //$strOutput .= '
-            //  	<a href="#" onclick="myNavigation.selectPortal('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().'); return false;">'.(($objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) ?  $this->core->translate->_('Shop') : $this->core->translate->_('Web_content')).'</a>';
-            $strUrlAddon = '';
-            if($objNavigation->getUrl() != null){
-              $strUrlAddon .= ', \''.$objNavigation->getUrl().'\'';
-            }
-            $strOutput .= '
-                <a href="#" onclick="myNavigation.selectRootLevel('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().$strUrlAddon.'); return false;">'.((!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) ?  $this->core->translate->_('Shop') : $this->core->translate->_('Web_content')).'</a>';
-            if(!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops){ 
-              $strSpanAddon = '';
-              if(!in_array($objNavigation->getItemId(), $arrRootLevelMaintenances)){
-                $strSpanAddon = ' style="display:none;"';    
-              }  
-              $strOutput .= '
-                	<span id="spanMaintenanceStatus_'.$objNavigation->getItemId().'" class="red"'.$strSpanAddon.'>Offline</span>';
-            }          
-            $strOutput .= '
+                        if (!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) {
+                            $strOutput .= '
+              	<div class="portaledit" onclick="myNavigation.loadMaintenanceOverlay(' . $objNavigation->getItemId() . '); return false;"></div>';
+                        }
+                        //$strOutput .= '
+                        //  	<a href="#" onclick="myNavigation.selectPortal('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().'); return false;">'.(($objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) ?  $this->core->translate->_('Shop') : $this->core->translate->_('Web_content')).'</a>';
+                        $strUrlAddon = '';
+                        if ($objNavigation->getUrl() != null) {
+                            $strUrlAddon .= ', \'' . $objNavigation->getUrl() . '\'';
+                        }
+                        $strOutput .= '
+                <a href="#" onclick="myNavigation.selectRootLevel(' . $objNavigation->getItemId() . ',' . $objNavigationTree->getItemId() . $strUrlAddon . '); return false;">' . ((!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) ? $this->core->translate->_('Shop') : $this->core->translate->_('Web_content')) . '</a>';
+                        if (!empty($this->core->sysConfig->root_level_types->shops) && $objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->shops) {
+                            $strSpanAddon = '';
+                            if (!in_array($objNavigation->getItemId(), $arrRootLevelMaintenances)) {
+                                $strSpanAddon = ' style="display:none;"';
+                            }
+                            $strOutput .= '
+                	<span id="spanMaintenanceStatus_' . $objNavigation->getItemId() . '" class="red"' . $strSpanAddon . '>Offline</span>';
+                        }
+                        $strOutput .= '
               </div>
-              <input type="hidden" value="'.$objNavigation->getLanguageId().'" id="rootLevelLanguageId'.$objNavigation->getItemId().'"/>
+              <input type="hidden" value="' . $objNavigation->getLanguageId() . '" id="rootLevelLanguageId' . $objNavigation->getItemId() . '"/>
               <div class="clear"></div>
             </div>';
-            
-            if($objNavigation->hasLandingPages()){
-              $strOutput .= '
+
+                        if ($objNavigation->hasLandingPages()) {
+                            $strOutput .= '
                 <div class="portalmenulink">
                   <div class="portalcontenticon"></div>
                   <div class="portalmenutitle">
-                    <a href="#" onclick="myNavigation.selectLandingPages('.$objNavigation->getItemId().','.$objNavigationTree->getItemId().', \'/zoolu/cms/index/list\', \'list\', \'landingpage\'); return false;">'.$this->core->translate->_('Landing_pages').'</a>
+                    <a href="#" onclick="myNavigation.selectLandingPages(' . $objNavigation->getItemId() . ',' . $objNavigationTree->getItemId() . ', \'/zoolu/cms/index/list\', \'list\', \'landingpage\'); return false;">' . $this->core->translate->_('Landing_pages') . '</a>
                   </div>
                   <input type="hidden" id="rootLevelLanguageId1" value="1">
                   <div class="clear"></div>
                 </div>';
-            }
-          }
-        }
-        
-        $strOutput .= '
+                        }
+                    }
+                }
+
+                $strOutput .= '
           <!--<div class="portalmenulink">
             <div class="portalwidgetsicon"></div>
-            <div class="portalmenutitle"><a href="#" onclick="return false;">'.$this->core->translate->_('Widgets').'</a></div>
+            <div class="portalmenutitle"><a href="#" onclick="return false;">' . $this->core->translate->_('Widgets') . '</a></div>
             <div class="clear"></div>
           </div>
           <div class="portalmenulink">
             <div class="portalsettingsicon"></div>
-            <div class="portalmenutitle"><a href="#" onclick="return false;">'.$this->core->translate->_('Settings').'</a></div>
+            <div class="portalmenutitle"><a href="#" onclick="return false;">' . $this->core->translate->_('Settings') . '</a></div>
             <div class="clear"></div>
           </div>-->
           <div class="clear"></div>
         </div>
         <div class="clear"></div>
       </div>';
-    
-      }      
+
+            }
+        }
+
+        return $strOutput;
     }
-    
-    return $strOutput;
-  }
 
-  /**
-   * getNavigationElements
-   * @author Cornelius Hansjakob <cha@massiveart.com>
-   * @version 1.0
-   */
-  function getNavigationElements($objRowset, $currLevel) {
-  	$this->core->logger->debug('cms->views->helpers->NavigationHelper->getNavigationElements()');
+    /**
+     * getNavigationElements
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    function getNavigationElements($objRowset, $currLevel)
+    {
+        $this->core->logger->debug('cms->views->helpers->NavigationHelper->getNavigationElements()');
 
-    $strOutput = '';
-    $strOutputStartpage = '';
+        $strOutput = '';
+        $strOutputStartpage = '';
 
-    $counter = 1;
+        $counter = 1;
 
-    if(count($objRowset) > 0){
-    	foreach ($objRowset as $objRow){
+        if (count($objRowset) > 0) {
+            foreach ($objRowset as $objRow) {
 
-    		$strPageTitle = $objRow->title;
-    		$strFolderTitle = $objRow->title;
-    		
-    		if($objRow->pageLinkTitle != -1 && $objRow->pageType == $this->core->sysConfig->page_types->link->id){
-    		  $strPageTitle = ($objRow->pageLinkTitle != '') ? $objRow->pageLinkTitle : (($objRow->pageGuiLinkTitle != '') ? $objRow->pageGuiLinkTitle : $objRow->title); 
-    		}
-        
-    		// gui fallback title
-    		if($strPageTitle == '' && $objRow->elementType == 'page'){
-    		  $strPageTitle = $objRow->guiTitle;
-          $objRow->pageType = $this->core->sysConfig->page_types->page->id;
-          $objRow->type = 'page';
-          $objRow->genericFormId = '';
-          $objRow->version = 'null';
-          $objRow->templateId = ($objRow->isStartPage == 1) ? $this->core->sysConfig->page_types->page->startpage_templateId : $this->core->sysConfig->page_types->page->default_templateId;
-        }
-        
-    	  // gui fallback title
-        if($strFolderTitle == '' && $objRow->elementType == 'folder'){
-          $strFolderTitle = $objRow->guiTitle;
-          $objRow->type = 'folder';
-          $objRow->genericFormId = $this->core->sysConfig->form->ids->folders->default;
-          $objRow->version = 'null';
-          $objRow->templateId = -1;
-        }
-        
-        $objRow->version = ($objRow->version != '') ? $objRow->version : 'null';
-        $objRow->templateId = ($objRow->templateId != '') ? $objRow->templateId : -1;
-        
-    		if($objRow->isStartPage == 1){
-    		  /**
-           * overwrite type with 'page'
-           */
-          $objRow->type = 'page';
+                $strPageTitle = $objRow->title;
+                $strFolderTitle = $objRow->title;
 
-          $strTitleAddonClass = '';
-          $strTitleAddon = '';
-          if($objRow->pageType == $this->core->sysConfig->page_types->link->id){
-            $strTitleAddonClass = ' italic';
-            $strTitleAddon = '&infin; ';
-          }
+                if ($objRow->pageLinkTitle != -1 && $objRow->pageType == $this->core->sysConfig->page_types->link->id) {
+                    $strPageTitle = ($objRow->pageLinkTitle != '') ? $objRow->pageLinkTitle : (($objRow->pageGuiLinkTitle != '') ? $objRow->pageGuiLinkTitle : $objRow->title);
+                }
 
-    			/**
-           * get values of the row and create startpage output
-           */
-          $strOutputStartpage .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-            <div class="icon img_startpage_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
-            <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title'.$strTitleAddonClass.'" onclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;">'.$strTitleAddon.htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                // gui fallback title
+                if ($strPageTitle == '' && $objRow->elementType == 'page') {
+                    $strPageTitle = $objRow->guiTitle;
+                    $objRow->pageType = $this->core->sysConfig->page_types->page->id;
+                    $objRow->type = 'page';
+                    $objRow->genericFormId = '';
+                    $objRow->version = 'null';
+                    $objRow->templateId = ($objRow->isStartPage == 1) ? $this->core->sysConfig->page_types->page->startpage_templateId : $this->core->sysConfig->page_types->page->default_templateId;
+                }
+
+                // gui fallback title
+                if ($strFolderTitle == '' && $objRow->elementType == 'folder') {
+                    $strFolderTitle = $objRow->guiTitle;
+                    $objRow->type = 'folder';
+                    $objRow->genericFormId = $this->core->sysConfig->form->ids->folders->default;
+                    $objRow->version = 'null';
+                    $objRow->templateId = -1;
+                }
+
+                $objRow->version = ($objRow->version != '') ? $objRow->version : 'null';
+                $objRow->templateId = ($objRow->templateId != '') ? $objRow->templateId : -1;
+
+                if ($objRow->isStartPage == 1) {
+                    /**
+                     * overwrite type with 'page'
+                     */
+                    $objRow->type = 'page';
+
+                    $strTitleAddonClass = '';
+                    $strTitleAddon = '';
+                    if ($objRow->pageType == $this->core->sysConfig->page_types->link->id) {
+                        $strTitleAddonClass = ' italic';
+                        $strTitleAddon = '&infin; ';
+                    }
+
+                    /**
+                     * get values of the row and create startpage output
+                     */
+                    $strOutputStartpage .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+            <div class="icon img_startpage_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+            <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title' . $strTitleAddonClass . '" onclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;">' . $strTitleAddon . htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           </div>';
-    		}else if($objRow->pageType == $this->core->sysConfig->page_types->page->id){
-    		  /**
-           * get values of the row and create page output
-           */
-          $strOutput .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-            <div class="icon img_'.$objRow->type.'_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
-            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_'.$objRow->type.'_'.$objRow->id.'" id="pos_'.$objRow->type.'_'.$objRow->id.'" value="'.$counter.'" onfocus="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_'.$objRow->type.'_'.$objRow->id.'\',\''.$objRow->type.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" /></div>
-            <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title" onclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;">'.htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                } else if ($objRow->pageType == $this->core->sysConfig->page_types->page->id) {
+                    /**
+                     * get values of the row and create page output
+                     */
+                    $strOutput .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+            <div class="icon img_' . $objRow->type . '_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_' . $objRow->type . '_' . $objRow->id . '" id="pos_' . $objRow->type . '_' . $objRow->id . '" value="' . $counter . '" onfocus="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_' . $objRow->type . '_' . $objRow->id . '\',\'' . $objRow->type . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" /></div>
+            <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title" onclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;">' . htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           </div>';
 
-          $counter++;
+                    $counter++;
 
-    		}else if($objRow->pageType == $this->core->sysConfig->page_types->link->id){
-    		  /**
-    		   * overwrite type with 'page'
-    		   */
-    		  $objRow->type = 'page';
+                } else if ($objRow->pageType == $this->core->sysConfig->page_types->link->id) {
+                    /**
+                     * overwrite type with 'page'
+                     */
+                    $objRow->type = 'page';
 
-          /**
-           * get values of the row and create page output
-           */
-          $strOutput .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-            <div class="icon img_'.$objRow->type.'_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
-            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_'.$objRow->type.'_'.$objRow->id.'" id="pos_'.$objRow->type.'_'.$objRow->id.'" value="'.$counter.'" onfocus="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_'.$objRow->type.'_'.$objRow->id.'\',\''.$objRow->type.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" /></div>
-            <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title italic" title="'.$strPageTitle.'" onclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;">&infin; '.htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                    /**
+                     * get values of the row and create page output
+                     */
+                    $strOutput .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+            <div class="icon img_' . $objRow->type . '_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_' . $objRow->type . '_' . $objRow->id . '" id="pos_' . $objRow->type . '_' . $objRow->id . '" value="' . $counter . '" onfocus="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_' . $objRow->type . '_' . $objRow->id . '\',\'' . $objRow->type . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" /></div>
+            <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title italic" title="' . $strPageTitle . '" onclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;">&infin; ' . htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           </div>';
 
-          $counter++;
+                    $counter++;
 
-        }else if($objRow->pageType == $this->core->sysConfig->page_types->external->id){
-          /**
-           * overwrite type with 'page'
-           */
-          $objRow->type = 'page';
+                } else if ($objRow->pageType == $this->core->sysConfig->page_types->external->id) {
+                    /**
+                     * overwrite type with 'page'
+                     */
+                    $objRow->type = 'page';
 
-          /**
-           * get values of the row and create page output
-           */
-          $strOutput .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-            <div class="icon img_'.$objRow->type.'_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
-            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_'.$objRow->type.'_'.$objRow->id.'" id="pos_'.$objRow->type.'_'.$objRow->id.'" value="'.$counter.'" onfocus="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_'.$objRow->type.'_'.$objRow->id.'\',\''.$objRow->type.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" /></div>
-            <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title" title="'.$strPageTitle.'" onclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;">'.htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                    /**
+                     * get values of the row and create page output
+                     */
+                    $strOutput .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+            <div class="icon img_' . $objRow->type . '_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_' . $objRow->type . '_' . $objRow->id . '" id="pos_' . $objRow->type . '_' . $objRow->id . '" value="' . $counter . '" onfocus="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_' . $objRow->type . '_' . $objRow->id . '\',\'' . $objRow->type . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" /></div>
+            <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title" title="' . $strPageTitle . '" onclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;">' . htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           </div>';
 
-          $counter++;
-        }else if($objRow->pageType == $this->core->sysConfig->page_types->sitemap->id){
-          /**
-           * overwrite type with 'page'
-           */
-          $objRow->type = 'page';
+                    $counter++;
+                } else if ($objRow->pageType == $this->core->sysConfig->page_types->sitemap->id) {
+                    /**
+                     * overwrite type with 'page'
+                     */
+                    $objRow->type = 'page';
 
-          /**
-           * get values of the row and create page output
-           */
-          $strOutput .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-            <div class="icon img_'.$objRow->type.'_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
-            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_'.$objRow->type.'_'.$objRow->id.'" id="pos_'.$objRow->type.'_'.$objRow->id.'" value="'.$counter.'" onfocus="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_'.$objRow->type.'_'.$objRow->id.'\',\''.$objRow->type.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" /></div>
-            <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title" title="'.$strPageTitle.'" onclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;">'.htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                    /**
+                     * get values of the row and create page output
+                     */
+                    $strOutput .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+            <div class="icon img_' . $objRow->type . '_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_' . $objRow->type . '_' . $objRow->id . '" id="pos_' . $objRow->type . '_' . $objRow->id . '" value="' . $counter . '" onfocus="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_' . $objRow->type . '_' . $objRow->id . '\',\'' . $objRow->type . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" /></div>
+            <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title" title="' . $strPageTitle . '" onclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;">' . htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           </div>';
 
-          $counter++;
-        }else if($objRow->pageType == $this->core->sysConfig->page_types->iframe->id){
-          /**
-           * overwrite type with 'page'
-           */
-          $objRow->type = 'page';
+                    $counter++;
+                } else if ($objRow->pageType == $this->core->sysConfig->page_types->iframe->id) {
+                    /**
+                     * overwrite type with 'page'
+                     */
+                    $objRow->type = 'page';
 
-          /**
-           * get values of the row and create page output
-           */
-          $strOutput .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-            <div class="icon img_'.$objRow->type.'_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
-            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_'.$objRow->type.'_'.$objRow->id.'" id="pos_'.$objRow->type.'_'.$objRow->id.'" value="'.$counter.'" onfocus="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_'.$objRow->type.'_'.$objRow->id.'\',\''.$objRow->type.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" /></div>
-            <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title" title="'.$strPageTitle.'" onclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;">'.htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                    /**
+                     * get values of the row and create page output
+                     */
+                    $strOutput .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+            <div class="icon img_' . $objRow->type . '_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_' . $objRow->type . '_' . $objRow->id . '" id="pos_' . $objRow->type . '_' . $objRow->id . '" value="' . $counter . '" onfocus="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_' . $objRow->type . '_' . $objRow->id . '\',\'' . $objRow->type . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" /></div>
+            <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title" title="' . $strPageTitle . '" onclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;">' . htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           </div>';
 
-          $counter++;
-        }else if($objRow->pageType == $this->core->sysConfig->page_types->process->id){
-          /**
-           * overwrite type with 'page'
-           */
-          $objRow->type = 'page';
+                    $counter++;
+                } else if ($objRow->pageType == $this->core->sysConfig->page_types->process->id) {
+                    /**
+                     * overwrite type with 'page'
+                     */
+                    $objRow->type = 'page';
 
-          /**
-           * get values of the row and create page output
-           */
-          $strOutput .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-            <div class="icon img_'.$objRow->type.'_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'"></div>
-            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_'.$objRow->type.'_'.$objRow->id.'" id="pos_'.$objRow->type.'_'.$objRow->id.'" value="'.$counter.'" onfocus="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_'.$objRow->type.'_'.$objRow->id.'\',\''.$objRow->type.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" /></div>
-            <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title" title="'.$strPageTitle.'" onclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;">'.htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                    /**
+                     * get values of the row and create page output
+                     */
+                    $strOutput .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+            <div class="icon img_' . $objRow->type . '_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+            <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_' . $objRow->type . '_' . $objRow->id . '" id="pos_' . $objRow->type . '_' . $objRow->id . '" value="' . $counter . '" onfocus="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_' . $objRow->type . '_' . $objRow->id . '\',\'' . $objRow->type . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" /></div>
+            <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title" title="' . $strPageTitle . '" onclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;">' . htmlentities($strPageTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
           </div>';
 
-          $counter++;
-        }else{
-          if(Security::get()->isAllowed(Security::RESOURCE_FOLDER_PREFIX.$objRow->id, Security::PRIVILEGE_VIEW)){
-      			/**
-  	         * get values of the row and create default output
-  	         */
-  	        $strOutput .= '<div id="'.$objRow->type.$objRow->id.'" class="'.$objRow->type.'">
-              <div id="divNavigationEdit_'.$objRow->id.'" class="icon img_'.$objRow->type.'_'.(($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off').'" ondblclick="myNavigation.getEditForm('.$objRow->id.',\''.$objRow->type.'\',\''.$objRow->genericFormId.'\','.$objRow->version.','.$objRow->templateId.'); return false;"></div>
-              <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_'.$objRow->type.'_'.$objRow->id.'" id="pos_'.$objRow->type.'_'.$objRow->id.'" value="'.$counter.'" onfocus="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_'.$objRow->type.'_'.$objRow->id.'\',\''.$objRow->type.'\','.$currLevel.'); myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_'.$objRow->type.'_'.$objRow->id.'\'); return false;"/></div>
-              <div id="divNavigationTitle_'.$objRow->type.$objRow->id.'" class="title" title="'.$strPageTitle.'" onclick="myNavigation.selectNavigationItem('.$currLevel.', \''.$objRow->type.'\','.$objRow->id.'); return false;">'.htmlentities($strFolderTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</div>
+                    $counter++;
+                } else {
+                    if (Security::get()->isAllowed(Security::RESOURCE_FOLDER_PREFIX . $objRow->id, Security::PRIVILEGE_VIEW)) {
+                        /**
+                         * get values of the row and create default output
+                         */
+                        $strOutput .= '<div id="' . $objRow->type . $objRow->id . '" class="' . $objRow->type . '">
+              <div id="divNavigationEdit_' . $objRow->id . '" class="icon img_' . $objRow->type . '_' . (($objRow->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '" ondblclick="myNavigation.getEditForm(' . $objRow->id . ',\'' . $objRow->type . '\',\'' . $objRow->genericFormId . '\',' . $objRow->version . ',' . $objRow->templateId . '); return false;"></div>
+              <div class="navsortpos"><input class="iptsortpos" type="text" name="pos_' . $objRow->type . '_' . $objRow->id . '" id="pos_' . $objRow->type . '_' . $objRow->id . '" value="' . $counter . '" onfocus="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;" onkeyup="if(event.keyCode==13){ myNavigation.updateSortPosition(\'pos_' . $objRow->type . '_' . $objRow->id . '\',\'' . $objRow->type . '\',' . $currLevel . '); myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false; }" onblur="myNavigation.toggleSortPosBox(\'pos_' . $objRow->type . '_' . $objRow->id . '\'); return false;"/></div>
+              <div id="divNavigationTitle_' . $objRow->type . $objRow->id . '" class="title" title="' . $strPageTitle . '" onclick="myNavigation.selectNavigationItem(' . $currLevel . ', \'' . $objRow->type . '\',' . $objRow->id . '); return false;">' . htmlentities($strFolderTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
             </div>';
-          }
+                    }
 
-          $counter++;
-    		}
-    	}
+                    $counter++;
+                }
+            }
 
-    	if($strOutputStartpage != ''){
-    	  $strOutputStartpage .= '<div class="linegray"></div>';
-      }
+            if ($strOutputStartpage != '') {
+                $strOutputStartpage .= '<div class="linegray"></div>';
+            }
+        }
+
+        return $strOutputStartpage . $strOutput;
+
     }
-
-    return $strOutputStartpage.$strOutput;
-
-  }
 
 }
 

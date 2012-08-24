@@ -1,10 +1,10 @@
 <?php
-  require_once (dirname(__FILE__).'/../../helpers/PageHelper.php');
-  $objHelper = new PageHelper();
-  $blnIsOverlay = (bool) $this->isOverlay; 
-  if($blnIsOverlay == true){
-    echo $objHelper->getOverlayFilesOutput($this->objFiles, $this->fieldname, $this->viewtype, $this->arrCurrFileIds);  
-  }else{
-    echo $objHelper->getFilesOutput($this->objFiles, $this->fieldname, $this->viewtype);  
-  }
+require_once (dirname(__FILE__) . '/../../helpers/PageHelper.php');
+$objHelper = new PageHelper();
+$blnIsOverlay = (bool) $this->isOverlay;
+if ($blnIsOverlay == true) {
+    echo $objHelper->getOverlayFilesOutput($this->objFiles, $this->fieldname, $this->viewtype, $this->arrCurrFileIds);
+} else {
+    echo $objHelper->getFilesOutput($this->objFiles, $this->fieldname, $this->viewtype);
+}
 ?>        
