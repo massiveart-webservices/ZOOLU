@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.63, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: zo-zoolu
 -- ------------------------------------------------------
--- Server version	5.1.63-0ubuntu0.10.04.1
+-- Server version	5.5.24-0ubuntu0.12.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -841,7 +841,7 @@ CREATE TABLE `fileAttributes` (
   PRIMARY KEY (`id`),
   KEY `idFiles` (`idFiles`),
   CONSTRAINT `fileAttributes_ibfk_1` FOREIGN KEY (`idFiles`) REFERENCES `files` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -896,7 +896,7 @@ CREATE TABLE `fileTitles` (
   PRIMARY KEY (`id`),
   KEY `idFiles` (`idFiles`),
   CONSTRAINT `fileTitles_ibfk_1` FOREIGN KEY (`idFiles`) REFERENCES `files` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -970,7 +970,7 @@ CREATE TABLE `fileVersions` (
   KEY `version` (`version`),
   KEY `idFiles_2` (`idFiles`,`version`),
   CONSTRAINT `fileVersions_ibfk_1` FOREIGN KEY (`idFiles`) REFERENCES `files` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1014,7 +1014,7 @@ CREATE TABLE `files` (
   `idFiles` bigint(20) DEFAULT NULL,
   `stream` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1046,7 +1046,7 @@ CREATE TABLE `folder-DEFAULT_FOLDER-1-Instances` (
   PRIMARY KEY (`id`),
   KEY `folderId` (`folderId`),
   CONSTRAINT `folder-DEFAULT_FOLDER-1-Instances_ibfk_1` FOREIGN KEY (`folderId`) REFERENCES `folders` (`folderId`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1156,7 +1156,7 @@ CREATE TABLE `folderProperties` (
   KEY `idUsers` (`idUsers`),
   KEY `folderId` (`folderId`),
   CONSTRAINT `folderProperties_ibfk_1` FOREIGN KEY (`folderId`) REFERENCES `folders` (`folderId`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1188,7 +1188,7 @@ CREATE TABLE `folderTitles` (
   PRIMARY KEY (`id`),
   KEY `folderId` (`folderId`),
   CONSTRAINT `folderTitles_ibfk_1` FOREIGN KEY (`folderId`) REFERENCES `folders` (`folderId`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1256,7 +1256,7 @@ CREATE TABLE `folders` (
   KEY `idRootLevels` (`idRootLevels`),
   KEY `lft` (`lft`),
   KEY `rgt` (`rgt`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6266,7 +6266,7 @@ CREATE TABLE `page-DEFAULT_PAGE_1-1-Instances` (
 
 LOCK TABLES `page-DEFAULT_PAGE_1-1-Instances` WRITE;
 /*!40000 ALTER TABLE `page-DEFAULT_PAGE_1-1-Instances` DISABLE KEYS */;
-INSERT INTO `page-DEFAULT_PAGE_1-1-Instances` VALUES (37,'4eb109f9c5796',1,1,3,'','',NULL,'','','','',NULL,'','','','',NULL,'','','','',28,'2012-02-07 14:31:48','2012-06-18 14:53:38');
+INSERT INTO `page-DEFAULT_PAGE_1-1-Instances` VALUES (37,'4eb109f9c5796',1,1,1,'','',NULL,'','','','',NULL,'','','','',NULL,'','','','',28,'2012-02-07 14:31:48','2012-08-28 10:18:52');
 /*!40000 ALTER TABLE `page-DEFAULT_PAGE_1-1-Instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6388,7 +6388,7 @@ CREATE TABLE `page-DEFAULT_PAGE_1-1-Region11-Instances` (
   PRIMARY KEY (`id`),
   KEY `pageId` (`pageId`),
   CONSTRAINT `page-DEFAULT_PAGE_1-1-Region11-Instances_ibfk_1` FOREIGN KEY (`pageId`) REFERENCES `pages` (`pageId`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6397,7 +6397,7 @@ CREATE TABLE `page-DEFAULT_PAGE_1-1-Region11-Instances` (
 
 LOCK TABLES `page-DEFAULT_PAGE_1-1-Region11-Instances` WRITE;
 /*!40000 ALTER TABLE `page-DEFAULT_PAGE_1-1-Region11-Instances` DISABLE KEYS */;
-INSERT INTO `page-DEFAULT_PAGE_1-1-Region11-Instances` VALUES (86,'4eb109f9c5796',1,1,1,'','');
+INSERT INTO `page-DEFAULT_PAGE_1-1-Region11-Instances` VALUES (88,'4eb109f9c5796',1,1,1,'','');
 /*!40000 ALTER TABLE `page-DEFAULT_PAGE_1-1-Region11-Instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -7698,7 +7698,7 @@ CREATE TABLE `pageContacts` (
   KEY `version` (`version`),
   KEY `pageId_2` (`pageId`,`version`),
   CONSTRAINT `pageContacts_ibfk_1` FOREIGN KEY (`pageId`) REFERENCES `pages` (`pageId`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7707,7 +7707,7 @@ CREATE TABLE `pageContacts` (
 
 LOCK TABLES `pageContacts` WRITE;
 /*!40000 ALTER TABLE `pageContacts` DISABLE KEYS */;
-INSERT INTO `pageContacts` VALUES (104,'4eb109f9c5796',1,1,1,0,86,3,'2012-06-18 14:53:38');
+INSERT INTO `pageContacts` VALUES (106,'4eb109f9c5796',1,1,1,0,86,1,'2012-08-28 10:18:52');
 /*!40000 ALTER TABLE `pageContacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -8075,7 +8075,7 @@ CREATE TABLE `pageProperties` (
 
 LOCK TABLES `pageProperties` WRITE;
 /*!40000 ALTER TABLE `pageProperties` DISABLE KEYS */;
-INSERT INTO `pageProperties` VALUES (39,'4eb109f9c5796',1,1,2,2,1,0,0,0,1,1,1,3,28,28,'2012-02-07 14:35:16','2012-06-18 14:53:38','2012-02-07 14:35:16',2);
+INSERT INTO `pageProperties` VALUES (39,'4eb109f9c5796',1,1,2,2,1,0,0,0,1,1,1,1,28,28,'2012-02-07 14:35:16','2012-08-28 10:18:52','2012-02-07 14:35:16',2);
 /*!40000 ALTER TABLE `pageProperties` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -8242,7 +8242,7 @@ CREATE TABLE `pageTitles` (
 
 LOCK TABLES `pageTitles` WRITE;
 /*!40000 ALTER TABLE `pageTitles` DISABLE KEYS */;
-INSERT INTO `pageTitles` VALUES (70,'4eb109f9c5796',1,1,'Home',3,1,'2012-02-07 14:34:56','2012-06-18 14:53:38'),(71,'4eb109f9c5796',1,0,'Home',3,3,'2012-06-18 14:53:38','2012-06-18 14:53:38');
+INSERT INTO `pageTitles` VALUES (70,'4eb109f9c5796',1,1,'Home',1,1,'2012-02-07 14:34:56','2012-08-28 10:18:52'),(71,'4eb109f9c5796',1,0,'Home',1,3,'2012-06-18 14:53:38','2012-08-28 10:18:39');
 /*!40000 ALTER TABLE `pageTitles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -8372,7 +8372,7 @@ CREATE TABLE `pages` (
 
 LOCK TABLES `pages` WRITE;
 /*!40000 ALTER TABLE `pages` DISABLE KEYS */;
-INSERT INTO `pages` VALUES (1,1,1,1,3,0,'2012-01-10 09:54:01','4eb109f9c5796',1,0,2,'2012-01-10 09:54:01','2012-06-18 14:53:38');
+INSERT INTO `pages` VALUES (1,1,1,1,1,0,'2012-01-10 09:54:01','4eb109f9c5796',1,0,2,'2012-01-10 09:54:01','2012-08-28 10:18:52');
 /*!40000 ALTER TABLE `pages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -9062,7 +9062,7 @@ CREATE TABLE `rootLevelUrls` (
 
 LOCK TABLES `rootLevelUrls` WRITE;
 /*!40000 ALTER TABLE `rootLevelUrls` DISABLE KEYS */;
-INSERT INTO `rootLevelUrls` VALUES (1,1,3,1,'zoolu.area51.at',NULL,1,NULL,'ABQIAAAAnHMYIdYGZwrp2NXW2gvzxhTqld5cmTrrwS1aqEPKXuX_0scLRBSoyyNTmdIf7bNnfc8fiwxV6-oolw',3,3,'2012-03-29 15:45:32','2010-05-12 12:37:58'),(2,1,3,1,'zoolu.area51.at','ies2012',1,NULL,'ABQIAAAAnHMYIdYGZwrp2NXW2gvzxhTqld5cmTrrwS1aqEPKXuX_0scLRBSoyyNTmdIf7bNnfc8fiwxV6-oolw',3,3,'2012-03-29 15:45:27','2010-05-12 12:37:58'),(3,1,3,0,'hackday.zoolu.area51.at',NULL,1,NULL,'ABQIAAAAnHMYIdYGZwrp2NXW2gvzxhTqld5cmTrrwS1aqEPKXuX_0scLRBSoyyNTmdIf7bNnfc8fiwxV6-oolw',3,3,'2012-04-20 09:59:32','2012-04-20 09:59:32'),(4,1,3,0,'shop.zoolu.area51.at',NULL,1,NULL,'ABQIAAAAnHMYIdYGZwrp2NXW2gvzxhTqld5cmTrrwS1aqEPKXuX_0scLRBSoyyNTmdIf7bNnfc8fiwxV6-oolw',3,3,'2012-07-30 17:21:28','2012-07-30 17:21:28');
+INSERT INTO `rootLevelUrls` VALUES (1,1,3,1,'zoolu.local',NULL,1,NULL,'AIzaSyCahRZs5cUwtxr71I2rVhsEVMHAa6CrmTo',3,3,'2012-03-29 15:45:32','2010-05-12 12:37:58');
 /*!40000 ALTER TABLE `rootLevelUrls` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -9917,9 +9917,12 @@ DROP TABLE IF EXISTS `userGroups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `userGroups` (
-  `idUsers` bigint(20) NOT NULL,
-  `idGroups` bigint(20) NOT NULL,
-  PRIMARY KEY (`idUsers`,`idGroups`)
+  `idUsers` int(10) unsigned NOT NULL,
+  `idGroups` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`idUsers`,`idGroups`),
+  KEY `idGroups` (`idGroups`),
+  CONSTRAINT `userGroups_ibfk_1` FOREIGN KEY (`idUsers`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `userGroups_ibfk_2` FOREIGN KEY (`idGroups`) REFERENCES `groups` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -9929,7 +9932,7 @@ CREATE TABLE `userGroups` (
 
 LOCK TABLES `userGroups` WRITE;
 /*!40000 ALTER TABLE `userGroups` DISABLE KEYS */;
-INSERT INTO `userGroups` VALUES (1,1),(1,5),(1,7),(1,8),(1,35),(1,37),(1,39),(1,41),(1,148),(1,155),(1,157),(1,159),(2,1),(2,5),(2,7),(2,8),(2,10),(2,11),(2,12),(2,13),(2,14),(2,16),(2,17),(2,18),(2,19),(2,20),(2,21),(2,22),(2,23),(2,24),(2,25),(2,26),(2,27),(2,28),(2,29),(2,30),(2,31),(2,32),(2,33),(2,34),(2,35),(2,37),(2,39),(2,41),(2,147),(2,148),(2,154),(2,155),(2,157),(3,1),(3,5),(3,7),(3,8),(3,35),(3,37),(3,39),(3,41),(3,148),(4,1),(4,5),(4,7),(4,8),(4,35),(4,37),(4,39),(4,41),(4,148),(4,155),(4,157),(4,159),(5,1),(5,5),(5,7),(5,8),(5,35),(5,37),(5,39),(5,41),(5,148),(5,155),(5,157),(5,159),(8,1),(8,5),(8,7),(8,8),(8,35),(8,37),(8,39),(8,41),(8,148),(11,1),(12,2),(12,3),(13,3),(13,5),(14,2),(14,5),(15,3),(16,3),(17,3),(18,5),(19,2),(19,3),(19,14),(19,43),(19,80),(19,106),(19,131),(19,148),(20,1),(20,2),(20,3),(20,4),(20,5),(20,6),(20,7),(21,1),(21,2),(21,3),(21,4),(21,5),(21,6),(21,7),(22,1),(22,3),(22,5),(22,6),(22,7),(23,1),(23,5),(23,7),(23,8),(23,14),(23,35),(23,37),(23,39),(23,41),(23,42),(23,43),(23,80),(23,86),(23,112),(23,131),(24,1),(24,2),(24,3),(24,5),(24,6),(24,7),(24,8),(24,35),(24,36),(24,37),(24,38),(24,40),(24,41),(24,107),(24,147),(24,148),(25,42),(25,43),(25,80),(25,106),(25,131),(26,1),(26,5),(26,7),(26,8),(26,35),(26,37),(26,39),(26,41),(26,148),(26,155),(26,157),(26,159),(27,1),(27,5),(27,7),(27,8),(27,35),(27,37),(27,39),(27,41),(27,148),(27,155),(27,157),(27,159),(28,1),(28,5),(28,7),(28,8),(28,10),(28,35),(28,37),(28,39),(28,41),(28,147),(28,148),(28,155),(28,157),(28,159),(29,1),(29,5),(29,7),(29,8),(29,10),(29,11),(29,12),(29,13),(29,14),(29,16),(29,17),(29,18),(29,19),(29,20),(29,21),(29,22),(29,23),(29,24),(29,25),(29,26),(29,27),(29,28),(29,29),(29,30),(29,31),(29,32),(29,33),(29,34),(29,35),(29,36),(29,37),(29,39),(29,41),(29,122),(29,123),(29,124),(29,125),(29,126),(29,127),(29,128),(29,129),(29,130),(29,131),(29,132),(29,133),(29,134),(29,135),(29,136),(29,137),(29,138),(29,139),(29,140),(29,141),(29,142),(29,143),(29,144),(29,145),(29,146),(29,147),(29,148),(29,155),(29,157),(29,159),(30,1),(30,5),(30,7),(30,8),(30,35),(30,37),(30,39),(30,41),(30,148),(30,155),(30,157),(30,159),(31,1),(31,5),(31,7),(31,8),(31,35),(31,37),(31,39),(31,41),(31,148),(31,155),(31,157),(31,159),(32,1),(32,5),(32,7),(32,8),(32,35),(32,37),(32,39),(32,41),(32,148),(32,155),(32,157),(32,159),(33,1),(33,5),(33,7),(33,8),(33,35),(33,37),(33,39),(33,41),(33,148),(33,155),(33,157),(33,159),(34,1),(34,5),(34,7),(34,8),(34,35),(34,37),(34,39),(34,41),(34,148),(34,155),(34,157),(34,159),(35,1),(35,5),(35,7),(35,8),(35,35),(35,37),(35,39),(35,41),(35,148),(35,155),(35,157),(35,159),(36,1),(36,5),(36,7),(36,8),(36,35),(36,37),(36,39),(36,41),(36,148),(36,155),(36,157),(36,159),(37,1),(37,5),(37,7),(37,8),(37,35),(37,37),(37,39),(37,41),(37,148),(37,155),(37,157),(37,159),(38,1),(38,5),(38,7),(38,8),(38,35),(38,37),(38,39),(38,41),(38,148),(38,155),(38,157),(38,159),(39,1),(39,2),(39,3),(39,5),(39,6),(39,7),(39,8),(39,35),(39,36),(39,37),(39,38),(39,39),(39,40),(39,41),(39,148),(39,155),(39,156),(39,157),(39,158),(39,159),(39,160);
+INSERT INTO `userGroups` VALUES (1,1),(1,5),(1,7),(1,8),(1,35),(1,37),(1,39),(1,41),(1,148),(1,155),(1,157),(1,159);
 /*!40000 ALTER TABLE `userGroups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -9979,8 +9982,18 @@ CREATE TABLE `users` (
   `changed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,1,1,'admin','21232f297a57a5a743894a0e4a801fc3','admin@zoolu.local','ZOOLU','ADMIN',0,1,1,'2012-08-28 10:08:04','2012-08-28 10:17:14');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `validators`
@@ -10063,4 +10076,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-28 11:10:02
+-- Dump completed on 2012-08-28 14:42:22
