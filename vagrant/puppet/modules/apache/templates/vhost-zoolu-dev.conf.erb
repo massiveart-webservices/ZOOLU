@@ -1,0 +1,25 @@
+<VirtualHost <%= vhost_name %>:<%= port %>>
+  ServerName <%= srvname %>
+<% if serveradmin %>
+  ServerAdmin <%= serveradmin %>
+<% end %>
+<% if serveraliases.is_a? Array -%>
+<% serveraliases.each do |name| -%><%= "  ServerAlias #{name}\n" %><% end -%>
+<% elsif serveraliases != '' -%>
+<%= "  ServerAlias #{serveraliases}" -%>
+<% end -%>
+
+  ErrorLog <%= logroot %>/<%= name %>_error.log
+  CustomLog <%= logroot %>/<%= name %>_access.log combined
+
+  SetEnv APPLICATION_ENV development
+
+  DocumentRoot <%= docroot %>
+  <Directory <%= directory %>>
+    Options <%= options %>
+    AllowOverride FileInfo
+    Order allow,deny
+    allow from all
+  </Directory>
+
+</VirtualHost>
