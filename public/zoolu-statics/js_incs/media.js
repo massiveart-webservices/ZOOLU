@@ -77,8 +77,8 @@ Massiveart.Media = Class.create({
         el = Event.element(event);        
         if(el.hasClassName('tdthumbcontainer')){
           myCore.toggleItemSelected(el.id);
-        }else{         
-          myCore.toggleItemSelected(el.up('.tdfthumbcontainer').id);
+        }else{
+          myCore.toggleItemSelected(el.up('.tdthumbcontainer').id);
         }              
       }.bind(this));                 
     }.bind(this));    

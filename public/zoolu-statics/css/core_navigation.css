@@ -449,12 +449,13 @@ Navigtion left */
 }
 
 .portal {
-    margin-left: 5px;
-    height: 26px;
-    width: 230px;
+    margin-left: 10px;
+    min-height: 26px;
+    width: 225px;
     overflow: hidden;
     cursor: pointer;
     padding-top: 4px;
+    padding-bottom: 4px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-topleft: 4px;
@@ -579,7 +580,7 @@ Navigtion left */
 }
 
 .portal .portaltitle {
-    height: 23px;
+    /*height: 23px;*/
     padding-right: 0;
     padding-top: 3px;
     padding-left: 10px;
