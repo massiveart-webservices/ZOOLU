@@ -92,7 +92,8 @@ class GenericSubForm extends Zend_Form_SubForm
         'objItemInternalLinks',
         'objInstanceInternalLinks',
         'objInstanceArticles',
-        'objPageCollection'
+        'objPageCollection',
+        'intLanguageDefinitionType'
     );
 
     /**

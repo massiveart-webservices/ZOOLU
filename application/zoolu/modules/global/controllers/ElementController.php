@@ -510,6 +510,7 @@ class Global_ElementController extends AuthControllerAction
                             )
                         );
                     }
+                    echo '###'.$strBaseUrl;
                 }
             }
 

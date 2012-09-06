@@ -55,7 +55,7 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
      * @param mixed $options
      * @version 1.0
      */
-    public function formUrl($name, $value = null, $attribs = null, $blnIsStartElement = null, $options = null, $intParentId = null, $arrMessages = array())
+    public function formUrl($name, $value = null, $attribs = null, $blnIsStartElement = null, $options = null, $intParentId = null, $arrMessages = array(), $intLanguageDefinitionType = null)
     {
         $info = $this->_getInfo($name, $value, $attribs);
         $core = Zend_Registry::get('Core');
@@ -70,11 +70,14 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
         $strValue = ltrim($this->view->escape($value), '/');
         $arrUrl = explode('/', $strValue);
 
-        $strLanguage = array_shift($arrUrl);
-
+        $strLanguage = '';
+        if ($intLanguageDefinitionType == $core->config->language_definition->folder) {
+            $strLanguage = array_shift($arrUrl) . '/';
+        }
+        
         if (is_null($intParentId) && $blnIsStartElement == true) {
             $strOutput = '<div class="urlwrapper">
-                      <span class="gray666 bold">Adresse: /' . $strLanguage . '/</span>
+                      <span class="gray666 bold">Adresse: /' . $strLanguage . '</span>
                     </div>';
         } else {
             $strOutput = '';
@@ -89,7 +92,7 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
                         array_pop($arrUrl);
                     }
 
-                    $strUrlShown = '/' . $strLanguage . '/';
+                    $strUrlShown = '/' . $strLanguage;
 
                     $blnSuggestion = isset($arrMessages['suggestion']);
 
@@ -123,6 +126,7 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
                   </div>';
             }
         }
+        
         return $strOutput;
     }
 }

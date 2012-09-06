@@ -86,6 +86,7 @@ class GenericSetup
     protected $intRootLevelGroupId;
     protected $intElementTypeId;
     protected $blnIsStartElement;
+    protected $intLanguageDefinitionType;
     protected $intShowInNavigation = 0;
     protected $intUrlFolder;
 
@@ -1682,6 +1683,22 @@ class GenericSetup
         } else {
             return $this->blnIsStartElement;
         }
+    }
+    
+    /**
+     * getLanguageDefinitionType
+     * @return int $intLanguageDefinitionType
+     */
+    public function getLanguageDefinitionType() {
+        return $this->intLanguageDefinitionType;
+    }
+    
+	/**
+     * setLanguageDefinitionType
+     * @param int $intLanguageDefinitionType
+     */
+    public function setLanguageDefinitionType($intLanguageDefinitionType) {
+        $this->intLanguageDefinitionType = $intLanguageDefinitionType; 
     }
 
     /**

@@ -117,6 +117,11 @@ class IndexController extends Zend_Controller_Action
      * @var string
      */
     private $strLanguageCode;
+    
+    /**
+     * @var integer
+     */
+    private $intLanguageDefinitionType;
 
     /**
      * @var integer
@@ -147,7 +152,12 @@ class IndexController extends Zend_Controller_Action
      * @var boolean
      */
     private $blnUrlWithLanguage;
-
+    
+    /**
+     * @var boolean
+     */
+    private $blnIsLandingPage = false;
+    
     /**
      * init index controller and get core obj
      */
@@ -166,7 +176,7 @@ class IndexController extends Zend_Controller_Action
         } elseif (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/login') {
             $this->getRequest()->setActionName('login');
         } // sitemap
-        elseif (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/sitemap.xml') {
+        elseif (preg_match('/\/sitemap\.xml$/', $_SERVER['REQUEST_URI'])) {
             $this->getRequest()->setActionName('sitemap');
         }
 
@@ -258,13 +268,13 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->view->addFilter('PageReplacer');
-        
+
         // load theme
         $this->loadTheme();
         
         // get cleaned url
         $strUrl = $this->getUrl();
-
+        
         // check portal security
         $this->checkPortalSecuirty();
 
@@ -278,24 +288,12 @@ class IndexController extends Zend_Controller_Action
         if ($this->isPortalGate()) {
             $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/' . $this->objTheme->path.'/');
             $this->renderScript('portalgate.php');
-        } else {            
-            //Load URL now, because language is alredy needed
-            if($this->blnUrlWithLanguage){
-                //Load stadard url if there is a language
-                $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
-            }else{
-                //Load landingpage if there is no language in the url
-                $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
-                if (!isset($objUrl->url) || count($objUrl->url) == 0) {
-                    //If there is no landingpage, try normal page with default language 
-                    $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
-                }
-                if (isset($objUrl->url) && count($objUrl->url) > 0) {
-                    //Needed for landingpage: change language for redirect
-                    $this->setLanguage($objUrl->url->current()->idLanguages);
-                }
-            }
-        
+        } else {        
+            //validate the url check if landingpage     
+            $objUrl = $this->getValidatedUrlObject($strUrl);
+            
+            $this->checkforLanguageRedirects($strUrl);
+            
             // set translate
             $this->setTranslate();
             
@@ -327,10 +325,11 @@ class IndexController extends Zend_Controller_Action
                 }
                 $objNavigation->setRootLevelId($this->objTheme->idRootLevels);
                 $objNavigation->setLanguageId($this->intLanguageId);
-                
+
                 // set navigation url prefix properties
                 $objNavigation->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
                 $objNavigation->setUrlPrefix($this->strUrlPrefix);
+                $objNavigation->setLanguageDefinitionType($this->intLanguageDefinitionType);
                 
                 // set navigation segmentation properties
                 $objNavigation->setHasSegments($this->objTheme->hasSegments);
@@ -363,7 +362,11 @@ class IndexController extends Zend_Controller_Action
                             $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
                             $this->getResponse()->setHeader('Status', '301 Moved Permanently');
                             $this->getResponse()->setHttpResponseCode(301);
-                            $this->_redirect($this->getPrefix() . '/' . strtolower($objMainUrl->languageCode) . '/' . $objMainUrl->url);
+                            $uriLanguageFolder = '';
+                            if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                                 $uriLanguageFolder = '/' . strtolower($objMainUrl->languageCode) . '/';
+                            }
+                            $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
                         }
                     }
     
@@ -389,6 +392,7 @@ class IndexController extends Zend_Controller_Action
                     // set url prefix properties
                     $this->objPage->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
                     $this->objPage->setUrlPrefix($this->strUrlPrefix);
+                    $this->objPage->setLanguageDefinitionType($this->intLanguageDefinitionType);
                     
                     // set navigation segmentation properties
                     $this->objPage->setHasSegments($this->objTheme->hasSegments);
@@ -557,18 +561,25 @@ class IndexController extends Zend_Controller_Action
     public function sitemapAction()
     {
         $this->loadTheme();
+        $this->validateLanguage();
 
         $strMainUrl = $this->getModelFolders()->getRootLevelMainUrl($this->objTheme->idRootLevels, $this->core->sysConfig->environments->production);
-
+        $strMainUrl = str_replace('http://', '', $strMainUrl);
         if ($strMainUrl != '') {
-
-            $arrUrlParts = explode('.', $strMainUrl);
-            if (count($arrUrlParts) == 2) {
-                $strMainUrl = str_replace('http://', 'www.', $strMainUrl);
+            $strMainUrl = str_replace('http://', '', $strMainUrl);
+            if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+                if (strtolower($this->objTheme->languageCode) == $this->strLanguageCode && $this->objTheme->hostPrefix != '') {
+                    $strMainUrl = $this->objTheme->hostPrefix . '.' . $strMainUrl;
+                } else {
+                    $strMainUrl = $this->strLanguageCode . '.' . $strMainUrl;
+                }
             } else {
-                $strMainUrl = str_replace('http://', '', $strMainUrl);
+                  $arrUrlParts = explode('.', $strMainUrl);
+                  if(count($arrUrlParts) == 2){
+                    $strMainUrl = 'www.' . $strMainUrl;
+                  }   
             }
-
+            
             if (file_exists(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml')) {
                 $this->_helper->viewRenderer->setNoRender();
                 $this->blnPostDispatch = false;
@@ -779,13 +790,9 @@ class IndexController extends Zend_Controller_Action
      */
     public function loadTheme()
     {
-
         // set domain
         $strDomain = $_SERVER['SERVER_NAME'];
-
-        $objThemeData = $this->getModelFolders()->getThemeByDomain($strDomain);
-
-        //if($this->objTheme->rootLevelLanguageId != $this->intLanguageId);
+        $objThemeData = $this->getModelFolders()->getThemeByDomain($this->core->getMainDomain($strDomain));
 
         if (count($objThemeData) > 0) {
             
@@ -807,6 +814,110 @@ class IndexController extends Zend_Controller_Action
             }
         } else {
             throw new Exception('Unable to load theme based on the URL "' . $strDomain . '"');
+        }
+    }
+    
+   /**
+    * getValidatedUrlObject
+    * @param string $strUrl
+    */
+    private function getValidatedUrlObject($strUrl) {
+        $objUrl = null;
+        
+        //Load URL now, because language is alredy needed if more then one language is defined
+        if($this->blnUrlWithLanguage){
+            //Load stadard url if there is a language
+            $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
+        }else{
+            //Load landingpage if there is no language in the url
+            $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
+            if (!isset($objUrl->url) || count($objUrl->url) == 0) {
+                //If there is no landingpage, try normal page with default language 
+                $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
+                $this->blnIsLandingPage = true;
+            }
+            if (isset($objUrl->url) && count($objUrl->url) > 0) {
+                //Needed for landingpage: change language for redirect
+                $this->setLanguage($objUrl->url->current()->idLanguages);
+            }
+        }
+        return $objUrl;
+    }
+    
+    /**
+     * checkForLanguageRedirects
+     * @param string $strUrl
+     */
+    public function checkForLanguageRedirects($strUrl) {
+        $strUri = $_SERVER['REQUEST_URI'];
+        $strDomain = $_SERVER['HTTP_HOST'];
+        $strRedirectUrl = '';
+        // Case: language should be defined in subdomain, but is defined in subfolder
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+            //check if uri contains language code
+            if(preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)){
+                $strMatch = trim($arrMatches[0], '/');
+                foreach($this->core->config->languages->language->toArray() as $arrLanguage){
+                    //check if language exists in config 
+                    if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strMatch)){
+                        $strRedirectUrl = '/'.preg_replace('/^\/[a-zA-Z\-]{2,5}\//', '', $strUri);
+                        //check if language is not default language of rootLevel
+                        if (strtolower($strMatch) != strtolower($this->objTheme->languageCode)) {
+                            if(strpos($strDomain, 'www.') === 0) {
+                                $strDomain = str_replace('www.', '', $strDomain);
+                            }
+                            //if language allready in subdomain
+                            if(strpos($strDomain, ($strMatch.'.')) !== 0){
+                                $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').$strMatch.'.'.$strDomain.$strRedirectUrl;
+                            }
+                        } else {
+                            //use host prefix for default language if is set. www e.g.
+                            if ($this->objTheme->hostPrefix != '') {
+                                $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').$this->objTheme->hostPrefix.'.'.$strDomain.$strRedirectUrl;
+                            } else {
+                                $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').$strMatch.'.'.$strDomain.$strRedirectUrl;
+                            }
+                        }
+                    }                        
+                }
+            }                
+        }
+        
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+            $strRedirectUri = $strUri;
+            $strRedirectDomain = $strDomain;
+            $strRedirectLanguage = $this->strLanguageCode;
+            //check if language comatined in subdomain
+            if ($this->core->config->enable_short_subdomains == 'false' && 2 === strlen(substr($strDomain, 0, strpos($strDomain, '.')))) {
+                $strMatchCode = '/^[a-zA-Z\-]{2,5}/';
+                preg_match($strMatchCode, $strDomain, $arrMatches);
+                $strRedirectLanguage = trim($arrMatches[0], '/');
+                $strRedirectDomain = $this->core->getMainDomain($strDomain);
+            }
+            //check if language not contained in uri
+            if (!preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)) {
+                //add langauge if not in uri
+                $strRedirectUri = '/' . $strRedirectLanguage . '/' . $strUrl;         
+            }
+            if ($strRedirectUri != $strUri || $strRedirectDomain != $strDomain || $strRedirectLanguage != $this->strLanguageCode) {
+                $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $this->core->getMainDomain($strDomain) . $strRedirectUri;
+            }
+        }
+        
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->none) {
+            //check if language contained in uri, then remove it
+            if (preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)) {
+                 $strMatch = $arrMatches[0];
+                 $strRedirectUri = str_replace($strMatch, '', $strUri);
+                 $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $strDomain . '/' . $strRedirectUri;         
+            } 
+        }
+        
+        if ($strRedirectUrl != '') {
+            $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
+            $this->getResponse()->setHeader('Status', '301 Moved Permanently');
+            $this->getResponse()->setHttpResponseCode(301);
+            $this->_redirect($strRedirectUrl);    
         }
     }
     
@@ -837,7 +948,6 @@ class IndexController extends Zend_Controller_Action
         } else {
             $this->objTheme = $objThemeData->current();
         }
-        
         $this->strUrlPrefix = $this->objTheme->urlPath;
     }
     
@@ -866,7 +976,6 @@ class IndexController extends Zend_Controller_Action
         if ($this->strUrlPrefix != '') {
             $strUrl = substr($strUrl, strlen($this->strUrlPrefix) + 1);  
         }
-        
         return ($strUrl == '') ? '/' : $strUrl;  
     }
 
@@ -915,18 +1024,57 @@ class IndexController extends Zend_Controller_Action
      */
     private function validateLanguage()
     {
-        if ($this->core->blnIsDefaultLanguage === true) {
+        $this->core->logger->debug('get language by: ');
+        $this->intLanguageDefinitionType = $this->objTheme->languageDefinitionType;
+        
+        $this->core->logger->debug('theme');
+        $this->core->intLanguageId = $this->objTheme->idLanguages;
+        $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
 
-            $this->core->intLanguageId = $this->objTheme->idLanguages;
-            $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
-
-            // update session language
-            $this->core->updateSessionLanguage();
-
-            $this->intLanguageId = $this->core->intLanguageId;
-            $this->strLanguageCode = $this->core->strLanguageCode;
+        if ($this->intLanguageDefinitionType != $this->core->config->language_definition->none) {
+            $strRequestString = '';
+            $strMatchCode = '';
+            $strTld = '';
+            if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                $this->core->logger->debug('folder');
+                $strRequestString = $_SERVER['REQUEST_URI'];
+                $strMatchCode = '/^\/[a-zA-Z\-]{2,5}\//';
+            } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+                $this->core->logger->debug('subdomain');
+                $strRequestString = $_SERVER['HTTP_HOST'];
+                $strMatchCode = '/^[a-zA-Z\-]{2}/';
+                $strTld = strrchr ( $_SERVER['SERVER_NAME'], "." );
+                $strTld = substr ( $strTld, 1 );
+            }
+            if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
+                preg_match($strMatchCode, $strRequestString, $arrMatches);
+                $intTmpLanguageId = -1;
+                $strCode = trim($arrMatches[0], '/');
+                if ($strTld != '') {
+                    $strTmpCode = $strCode . '-' . $strTld;
+                    foreach($this->core->config->languages->language->toArray() as $arrLanguage){
+                        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strTmpCode)) {
+                            $this->core->strLanguageCode = $strTmpCode;
+                            $intTmpLanguageId = $arrLanguage['id'];
+                            break;
+                        }
+                    }
+                }
+                if ($intTmpLanguageId == -1) {
+                    foreach($this->core->config->languages->language->toArray() as $arrLanguage){
+                        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strCode)) {
+                            $this->core->strLanguageCode = $strCode;
+                            $this->core->intLanguageId = $arrLanguage['id'];
+                            break;
+                        }
+                    }                    
+                } else {
+                    $this->core->intLanguageId = $intTmpLanguageId;
+                }
+            }
         }
-
+        $this->intLanguageId = $this->core->intLanguageId;
+        $this->strLanguageCode = $this->core->strLanguageCode;
         $this->view->languageId = $this->intLanguageId;
         $this->view->languageCode = $this->strLanguageCode;
     }
@@ -1001,9 +1149,6 @@ class IndexController extends Zend_Controller_Action
 
             $this->core->intLanguageId = $this->objTheme->idLanguages;
             $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
-
-            // update session language
-            $this->core->updateSessionLanguage();
 
             // redirct
             $this->_redirect($this->getPrefix() . '/?re=false');
@@ -1089,16 +1234,21 @@ class IndexController extends Zend_Controller_Action
     {
       // cut off url prefix path
       $strUrl = $this->cutUrlPrefix($_SERVER['REQUEST_URI']);
-      
       if (isset($this->objTheme->hasPortalGate) && (bool) $this->objTheme->hasPortalGate == true && parse_url($strUrl, PHP_URL_PATH) == '/') {
           // load portal gate of rootlevel
           return true;  
-      } else if (parse_url($strUrl, PHP_URL_PATH) == '/') {
+      } else if (parse_url($strUrl, PHP_URL_PATH) == '/' && $this->objTheme->languageDefinitionType == $this->core->config->language_definition->folder) {
           // redirect to language
           $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
           $this->getResponse()->setHeader('Status', '301 Moved Permanently');
           $this->getResponse()->setHttpResponseCode(301);
           $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/');
+      } else if (parse_url($strUrl, PHP_URL_PATH) == '/'.$this->strLanguageCode.'/' && $this->objTheme->languageDefinitionType == $this->core->config->language_definition->none) {
+          // redirect url without language
+          $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
+          $this->getResponse()->setHeader('Status', '301 Moved Permanently');
+          $this->getResponse()->setHttpResponseCode(301);
+          $this->_redirect($this->getPrefix());
       } else {
           // rootlevel has no portal gate
           return false;

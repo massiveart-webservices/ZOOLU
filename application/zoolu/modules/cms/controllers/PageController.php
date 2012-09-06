@@ -440,11 +440,24 @@ class Cms_PageController extends AuthControllerAction
             $this->view->blnIsStartPage = $this->objForm->Setup()->getIsStartElement(false);
 
             if ($this->objForm->Setup()->getField('url')) {
-                $strBaseUrl = $this->getModelFolders()->getRootLevelMainUrl($this->objForm->Setup()->getRootLevelId());
-                if (substr_count($strBaseUrl, '.') <= 1) {
-                    $strBaseUrl = str_replace('http://', 'http://www.', $strBaseUrl);
+                $objBaseUrl = $this->getModelFolders()->getRootLevelMainUrl($this->objForm->Setup()->getRootLevelId(), null, false, true);
+                $arrUrl = parse_url($objBaseUrl->url);
+                $strProtocol = $arrUrl['scheme'];
+                $strBaseUrl = str_replace($strProtocol.'://', '', $objBaseUrl->url);
+                $intLanguageDefinitionType = $this->objForm->Setup()->getLanguageDefinitionType();
+                if ($intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+                    if ($this->objForm->Setup()->getLanguageId() == $objBaseUrl->defaultLanguage && $objBaseUrl->hostPrefix != '') {
+                        $strBaseUrl = $objBaseUrl->hostPrefix . '.' . $strBaseUrl;
+                    } else {
+                        $strBaseUrl = $this->objForm->Setup()->getLanguageCode() . '.' . $strBaseUrl;
+                    }
+                    
+                } else {
+                    if (substr_count($strBaseUrl, '.') == 2) {
+                        $strBaseUrl = 'www.' . $strBaseUrl;
+                    }
                 }
-                $this->view->pageurl = $strBaseUrl . $this->objForm->Setup()->getField('url')->getValue();
+                $this->view->pageurl = $strProtocol.'://'.$strBaseUrl . $this->objForm->Setup()->getField('url')->getValue();
             }
 
             $this->view->languageOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT languages.id AS VALUE, languages.languageCode AS DISPLAY FROM languages INNER JOIN rootLevelLanguages ON rootLevelLanguages.idLanguages = languages.id AND rootLevelLanguages.idRootLevels = ' . $this->objForm->Setup()->getRootLevelId() . ' ORDER BY languages.sortOrder, languages.languageCode', $this->objForm->Setup()->getLanguageId());
@@ -1182,7 +1195,7 @@ class Cms_PageController extends AuthControllerAction
             $this->objForm->Setup()->setElementTypeId((($this->objRequest->getParam("pageTypeId") != '') ? $this->objRequest->getParam("pageTypeId") : $this->core->sysConfig->page_types->page->id));
             $this->objForm->Setup()->setParentTypeId((($this->objRequest->getParam("parentTypeId") != '') ? $this->objRequest->getParam("parentTypeId") : (($this->objRequest->getParam("parentFolderId") != '') ? $this->core->sysConfig->parent_types->folder : $this->core->sysConfig->parent_types->rootlevel)));
             $this->objForm->Setup()->setModelSubPath('cms/models/');
-
+            
             /**
              * add currlevel hidden field
              */
