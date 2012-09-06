@@ -14,10 +14,6 @@
  * @package zoolu
  */
 
-//date_default_timezone_set('Europe/Vienna'); // TODO Zend_Locale ????
-
-//session_start();
-
 /**
  * include config
  */
@@ -47,8 +43,6 @@ if (isset($_POST["PHPSESSID"])) {
   session_id($_POST["PHPSESSID"]);
 }
 
-Zend_Session::start(); // TODO Zend_Session ????
-
 /**
  * set default timezone
  */
@@ -67,5 +61,4 @@ Zend_Registry::set('Core', $core);
  */
 $locale = new Zend_Locale($sysConfig->location);
 Zend_Registry::set('Location', $locale);
-
 ?>

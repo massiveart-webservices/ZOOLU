@@ -359,12 +359,49 @@ class NavigationHelper {
   
   /**
    * getSitemap
-   * @author Thomas Schedler <tsh@massiveart.com>
+   * @author Raphael Stocker <rst@massiveart.com>
    * @return string
    */
-  public function getSitemap(){
-    //TODO default sitemap
+  public function getSitemap() {
+    $strReturn = '';
+    
+    $objSitemap = $this->objNavigation->loadSitemap();    
+    $strReturn .= $this->displaySitemap($objSitemap);   
+
+    return $strReturn;
   }
+  
+  protected function displaySitemap($objSitemap, $intLevel = 0){
+    $strReturn = '';    
+    
+    if($intLevel == 1){
+      $strReturn .= '<div class="block">';
+    }
+    
+    if($objSitemap->getUrl() != ''){
+      $strReturn .= '<span class="level'.$intLevel.'">';
+      $strReturn .= '<a href="'.$objSitemap->getUrl().'">'.htmlentities($objSitemap->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>';
+      $strReturn .= '</span>';
+    }
+    
+    if($objSitemap instanceof NavigationTree){   
+      if($intLevel > 0) $strReturn .= '<div class="item">';  
+      foreach($objSitemap as $objSub){
+        $strReturn .= $this->displaySitemap($objSub, $intLevel + 1);
+      }      
+      if($intLevel > 0) $strReturn = rtrim($strReturn, ', ').'</div>';     
+
+      if($intLevel == 1){
+        $strReturn .= '</div>';
+      }
+      return $strReturn;
+    }else{
+      if($intLevel == 1){
+        $strReturn .= '</div>';
+      }
+      return $strReturn.', ';
+    }
+  }  
   
   /**
    * setNavigation    

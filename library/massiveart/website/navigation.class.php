@@ -126,6 +126,7 @@ class Navigation
     protected $blnHasSegments;
     protected $intSegmentId;
     protected $strSegmentCode;
+    protected $intLanguageDefinitionType;
 
     /**
      * Constructor
@@ -931,9 +932,12 @@ class Navigation
         } else if ($this->blnHasSegments) {
             $strUrl .= '/' . $this->strSegmentCode;
         }
-
-        $strUrl .= '/' . strtolower($strLanguageCode) . '/' . $strItemUrl;
-
+        
+        $strLanguageFolder = '';
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+            $strLanguageFolder = strtolower($strLanguageCode) . '/';
+        } 
+        $strUrl .= '/' .$strLanguageFolder . $strItemUrl;
         return $strUrl;
     }
 
@@ -1146,6 +1150,24 @@ class Navigation
     public function getUrlPrefix()
     {
         return $this->strUrlPrefix;
+    }
+    
+    /**
+     * setLanguageDefinitionType
+     * @param int $intLanguageDefinitionType
+     */
+    public function setLanguageDefinitionType($intLanguageDefinitionType)
+    {
+        $this->intLanguageDefinitionType = $intLanguageDefinitionType;
+    }
+
+    /**
+     * getLanguageDefinitionType
+     * @return int intLanguageDefinitionType
+     */
+    public function getLanguageDefinitionType()
+    {
+        return $this->intLanguageDefinitionType;
     }
 }
 

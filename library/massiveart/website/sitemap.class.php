@@ -63,33 +63,68 @@ class Sitemap
         $this->core->logger->debug('massiveart->website->sitemap->generate()');
 
         $objRootLevels = $this->getModelFolders()->loadAllRootLevels($this->core->sysConfig->modules->cms);
-
+        
         if (count($objRootLevels) > 0) {
             foreach ($objRootLevels as $objRootLevel) {
                 $objRootLevelLanguages = $this->getModelFolders()->loadRootLevelLanguages($objRootLevel->id);
-                $strUrl = $this->getModelFolders()->getRootLevelMainUrl($objRootLevel->id, $this->core->sysConfig->environments->production);
-                if ($strUrl != '') {
-
-                    $arrUrlParts = explode('.', $strUrl);
-                    if (count($arrUrlParts) == 2) {
-                        $strUrl = str_replace('http://', 'http://www.', $strUrl);
+                $objUrl = $this->getModelFolders()->getRootLevelMainUrl($objRootLevel->id, $this->core->sysConfig->environments->production, false, true);
+                if ($objUrl != null) {
+                    // create xml for rootlevel which contains the languages, cause language is not specified in subdomain
+                    if ($objRootLevel->languageDefinitionType != $this->core->config->language_definition->subdomain) {
+                        $strUrl = $this->makeUrlForSitemap($objUrl, $objRootLevel->languageDefinitionType);
+                        $this->initXml($strUrl);
                     }
-
-                    // init sitemap xml
-                    $this->initXml($strUrl);
-
                     foreach ($objRootLevelLanguages as $objRootLevelLanguage) {
+                        $strUrl = $this->makeUrlForSitemap($objUrl, $objRootLevel->languageDefinitionType, $objRootLevelLanguage, $objRootLevel->idDefaultLanguage);
+                        
+                        // create xml for every langauge per rootLevel, cause language is specified in subdomain
+                        if ($objRootLevel->languageDefinitionType == $this->core->config->language_definition->subdomain) {
+                            $this->initXml($strUrl);                        
+                        }
+                        
+                        // get the sitemap 
                         $objNavigation = new Navigation();
                         $objNavigation->setRootLevelId($objRootLevel->id);
                         $objNavigation->setLanguageId($objRootLevelLanguage->id);
                         $this->addXmlUrlsetChilds($objNavigation->loadSitemap(), $strUrl, strtolower($objRootLevelLanguage->languageCode));
+                        
+                        // save xml for every langauge per rootLevel, cause language is specified in subdomain
+                        if ($objRootLevel->languageDefinitionType == $this->core->config->language_definition->subdomain) {
+                            $this->saveXml();
+                        }
                     }
-
-                    // save xml now
-                    $this->saveXml();
+                    // save xml for rootlevel which contains the languages, cause language is not specified in subdomain
+                    if ($objRootLevel->languageDefinitionType != $this->core->config->language_definition->subdomain) {
+                        $this->saveXml();
+                    }
                 }
+                
             }
         }
+    }
+    
+    /**
+     * makeUrlForSitemap
+     * @param string $strUrl
+     * @return string
+     */
+    private function makeUrlForSitemap($objUrl, $intLanguageDefinitionType, $objRootLevelLanguage = null , $intDefaultLanguageId = null) {
+        $strMainUrl = $objUrl->url;
+        $strMainUrl = str_replace('http://', '', $strMainUrl);
+        
+        if ($intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+            if ($objRootLevelLanguage->id == $intDefaultLanguageId && $objUrl->hostPrefix != '') {
+                $strMainUrl = $objUrl->hostPrefix . '.' . $strMainUrl;
+            } else {
+                $strMainUrl = strtolower($objRootLevelLanguage->languageCode) . '.' . $strMainUrl;
+            }
+        } else {
+              $arrUrlParts = explode('.', $strMainUrl);
+              if(count($arrUrlParts) == 2){
+                $strMainUrl = 'www.' . $strMainUrl;
+              }   
+        }
+        return $strMainUrl;
     }
 
     /**

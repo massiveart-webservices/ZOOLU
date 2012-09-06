@@ -221,9 +221,14 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
 
                 if (count($objUrlData) > 0) {
                     $objUrl = $objUrlData->current();
-                    $this->objElement->setValue('/' . strtolower($objUrl->languageCode) . '/' . $objUrl->url);
+                    if ($this->objElement->Setup()->getLanguageDefinitionType() == $this->core->config->language_definition->folder) {
+                        $this->objElement->setValue('/' . strtolower($objUrl->languageCode) . '/' . $objUrl->url);
+                    } else {
+                        $this->objElement->setValue('/' . $objUrl->url);
+                    }
                     $this->objElement->url = $objUrl->url;
                     $this->objElement->languageCode = $objUrl->languageCode;
+                    $this->objElement->intLanguageDefinitionType = $this->objElement->Setup()->getLanguageDefinitionType();
 
                     $this->objElement->blnIsStartElement = $this->objElement->Setup()->getIsStartElement(false);
                     $this->objElement->intParentId = $this->objElement->Setup()->getParentId();
