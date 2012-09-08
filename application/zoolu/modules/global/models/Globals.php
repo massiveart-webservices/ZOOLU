@@ -99,7 +99,7 @@ class Model_Globals
     /**
      * @var Core
      */
-    private $core;
+    protected $core;
 
 
     /**

@@ -110,7 +110,7 @@ class Model_Pages
     /**
      * @var Core
      */
-    private $core;
+    protected $core;
 
     /**
      * Constructor
