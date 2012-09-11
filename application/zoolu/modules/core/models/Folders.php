@@ -283,13 +283,12 @@ class Model_Folders
          *  AND rootLevels.idModules = ?
          *  AND rootLevels.idRootLevelTypes = ?
          */
-        
         $strAppEnv = APPLICATION_ENV;
         $intEnvironment = ($intEnvironment == null) ? $this->core->sysConfig->environments->$strAppEnv : $intEnvironment;
         
         $objSelect->from('rootLevels', array('id', 'idRootLevelTypes', 'landingPages', 'href', 'order', 'languageDefinitionType'));
         $objSelect->join('rootLevelTitles', 'rootLevelTitles.idRootLevels = rootLevels.id', array('title'));
-        $objSelect->join('rootLevelUrls', 'rootLevelUrls.idRootLevels = rootLevels.id AND idEnvironments = '.$intEnvironment.' AND isMain = 1', array('idLanguages AS idDefaultLanguage'));
+        $objSelect->joinLeft('rootLevelUrls', 'rootLevelUrls.idRootLevels = rootLevels.id AND idEnvironments = '.$intEnvironment.' AND isMain = 1', array('idLanguages AS idDefaultLanguage'));
         $objSelect->joinLeft('rootLevelLanguages', 'rootLevelLanguages.idRootLevels = rootLevels.id AND rootLevelLanguages.isFallback = 1', array('rootLevelLanguageId' => 'idLanguages'));
         $objSelect->joinLeft(array('rLGuiLanguages' => 'rootLevelLanguages'), 'rLGuiLanguages.idRootLevels = rootLevels.id AND rLGuiLanguages.idLanguages = ' . $this->intContentLanguageId, array('rootLevelGuiLanguageId' => 'rLGuiLanguages.idLanguages'));
         $objSelect->where('rootLevelTitles.idLanguages = ?', $this->intLanguageId);
