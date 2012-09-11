@@ -544,23 +544,24 @@ class GenericForm extends Zend_Form
              * add field to form
              */
             $this->addElement($objField->type, $objField->name . $strNameExtension, array(
-                                                                                         'value'              => $mixedValue,
-                                                                                         'label'              => $objField->title,
-                                                                                         'description'        => $objField->description,
-                                                                                         'decorators'         => array($objField->decorator),
-                                                                                         'fieldId'            => $objField->id,
-                                                                                         'columns'            => $objField->columns,
-                                                                                         'class'              => $objField->type . $strCssClass,
-                                                                                         'height'             => $objField->height,
-                                                                                         'isGenericSaveField' => $objField->isSaveField,
-                                                                                         'isCoreField'        => $objField->isCoreField,
-                                                                                         'MultiOptions'       => $arrOptions,
-                                                                                         'LanguageId'         => $this->setup->getLanguageId(),
-                                                                                         'LanguageCode'       => $this->setup->getLanguageCode(),
-                                                                                         'FormLanguageId'     => $this->objGenericForm->Setup()->getFormLanguageId(),
-                                                                                         'isEmptyField'       => (($blnEmpty == true) ? 1 : 0),
-                                                                                         'required'           => (($objField->isKeyField == 1) ? true : false),
-                                                                                         'validators'         => $objField->validators
+                                                                                         'value'                          => $mixedValue,
+                                                                                         'label'                          => $objField->title,
+                                                                                         'description'                    => $objField->description,
+                                                                                         'decorators'                     => array($objField->decorator),
+                                                                                         'fieldId'                        => $objField->id,
+                                                                                         'columns'           			  => $objField->columns,
+                                                                                         'class'                          => $objField->type . $strCssClass,
+                                                                                         'height'                         => $objField->height,
+                                                                                         'isGenericSaveField'             => $objField->isSaveField,
+                                                                                         'isCoreField'                    => $objField->isCoreField,
+                                                                                         'MultiOptions'                   => $arrOptions,
+                                                                                         'LanguageId'        			  => $this->setup->getLanguageId(),
+                                                                                         'LanguageCode'                   => $this->setup->getLanguageCode(),
+                                                                                         'FormLanguageId'                 => $this->objGenericForm->Setup()->getFormLanguageId(),
+                                                                                         'isEmptyField'                   => (($blnEmpty == true) ? 1 : 0),
+                                                                                         'required'                       => (($objField->isKeyField == 1) ? true : false),
+                                                                                         'validators'                     => $objField->validators,
+                                                                                         'disableLoadDefaultDecorators'   => true,
                                                                                     ));
 
             $this->getElement($objField->name . $strNameExtension)->regionId = $intRegionId;
