@@ -128,8 +128,13 @@ class Model_Files
                 $objSelect->where('idParent = ?', $intFolderId);
             }
             if ($strSearchValue != '') {
-                //$objSelect->where('fileTitles.title LIKE ? OR alternativFileTitles.title LIKE ? OR fallbackFileTitles.title LIKE ?', '%'.$strSearchValue.'%');
-                $objSelect->having('fileTitles.title LIKE ? OR alternativFileTitles.title LIKE ? OR fallbackFileTitles.title LIKE ? OR tags LIKE ?', '%' . $strSearchValue . '%');
+                $objSelect->having('fileTitles.title LIKE ? OR 
+                                    alternativFileTitles.title LIKE ? OR 
+                                    fallbackFileTitles.title LIKE ? OR
+                                    fileTitles.description LIKE ? OR 
+                                    alternativFileTitles.description LIKE ? OR 
+                                    fallbackFileTitles.description LIKE ? OR 
+                                    tags LIKE ?', '%' . $strSearchValue . '%');
             }
             if ($strOrderColumn != '') {
                 $objSelect->order($strOrderColumn . ' ' . $strOrderSort);
