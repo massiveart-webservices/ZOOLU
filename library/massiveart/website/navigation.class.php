@@ -197,10 +197,10 @@ class Navigation
                         $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
                         $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
-                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes) && $this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
+                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes)) {
 
                             $arrFilter = array();
-                            if ($this->objPage->getElementId() == $objNavigationItem->idPage) {
+                            if ($this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
                                 $arrFilter = array(
                                     'CategoryId'  => $this->objPage->getFieldValue('entry_category'),
                                     'LabelId'     => $this->objPage->getFieldValue('entry_label'),
@@ -367,9 +367,9 @@ class Navigation
                         $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
                         $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
-                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes) && $this->objPage instanceof Page) {
+                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes)) {
                             $arrFilter = array();
-                            if ($this->objPage->getElementId() == $objNavigationItem->idPage) {
+                            if ($this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
                                 $arrFilter = array(
                                     'CategoryId'  => $this->objPage->getFieldValue('entry_category'),
                                     'LabelId'     => $this->objPage->getFieldValue('entry_label'),
@@ -413,9 +413,9 @@ class Navigation
                             $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
                             $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
-                            if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes) && $this->objPage instanceof Page) {
+                            if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes)) {
                                 $arrFilter = array();
-                                if ($this->objPage->getElementId() == $objNavigationItem->idPage) {
+                                if ($this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
                                     $arrFilter = array(
                                         'CategoryId'  => $this->objPage->getFieldValue('entry_category'),
                                         'LabelId'     => $this->objPage->getFieldValue('entry_label'),
