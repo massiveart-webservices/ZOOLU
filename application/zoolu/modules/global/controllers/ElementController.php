@@ -1141,7 +1141,9 @@ class Global_ElementController extends AuthControllerAction
 
                 $arrLanguages = $this->core->config->languages->language->toArray();
                 foreach ($arrLanguages as $arrLanguage) {
-                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId . '_' . $arrLanguage['id'], $PRIVILEGE, false, false)) {
+                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId . '_' . $this->intItemLanguageId, $PRIVILEGE, false, false)) {
+                        break;
+                    } else if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $intRootLevelId . '_' . $arrLanguage['id'], $PRIVILEGE, false, false)) {
                         $this->intItemLanguageId = $arrLanguage['id'];
                         break;
                     }
