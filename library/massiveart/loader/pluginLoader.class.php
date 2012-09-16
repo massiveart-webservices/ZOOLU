@@ -66,7 +66,7 @@ class PluginLoader extends Zend_Loader_PluginLoader
         'TabContainer', 'Tag', 'Template', 'Texteditor',
         'TextDisplay', 'Url', 'InternalLinks', 'Collection',
         'DocumentFilter', 'Video', 'CollapsableInternalLinks', 'LandingPageUrl',
-        'SitemapLink', 'Articles'
+        'SitemapLink', 'Articles', 'Seo'
     );
 
     /**
