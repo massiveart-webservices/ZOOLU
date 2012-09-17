@@ -382,7 +382,7 @@ class ViewHelper
      * @param array $arrImagesSizes
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function getSingleEditForm(Zend_Db_Table_Rowset_Abstract $objFileData, $arrImagesSizes, $strDestinationOptions, $strGroupOptions, $objFileVersions = null, $blnAuthorizedToUpdate = true)
+    public function getSingleEditForm(Zend_Db_Table_Rowset_Abstract $objFileData, $arrImagesSizes, $strDestinationOptions, $strGroupOptions, $objFileVersions = null, $blnAuthorizedToUpdate = true, $arrFileFilters = null)
     {
         $this->core->logger->debug('media->views->helpers->ViewHelper->getSingleEditForm()');
 
@@ -564,10 +564,33 @@ class ViewHelper
 
             if ($blnIsImage == false) {
                 $strOutput .= '
+                       </div> <!-- mediasingleupload -->';
+            }
+            
+            if (count($arrFileFilters) > 0) {
+                $strOutput .= '
+                       <div class="spacer1"></div>
+                       <div class="fileFilters">';
+                foreach ($arrFileFilters as $objFileFilter) {
+                    $strOutput .= '
+                           <div class="fileFilter">';
+                    $strOutput .= '
+                               <label for="fileFilter_'.$objFileFilter->id.'" class="gray666 bold">' . $objFileFilter->title . '</label><br/>';    
+                    $strOutput .= '
+                               <select id="fileFilter_' . $objFileFilter->id . '" name="fileFilter_' . $objFileFilter->id . '" size="1">
+                                   <option value="">'.$this->core->translate->_('Please_choose', false).'</option>   
+                                        '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', $objFileFilter->value).'             
+                               </select>';
+                    $strOutput .= '
+                           </div> <!--fileFilter -->';
+                }
+                $strOutput .= '
+                           <div class="clear"></div>
                        </div>';
             }
-
+                    
             if ($objFileVersions != null && $objFileVersions instanceof Zend_Db_Table_Rowset_Abstract) {
+                
                 $objCreated = DateTimeHelper::getDateObject();
                 $objArchived = DateTimeHelper::getDateObject();
 
@@ -585,7 +608,7 @@ class ViewHelper
                 }
 
                 $strOutput .= '
-                         </div>';
+                       </div>';
             }
 
             $strOutput .= '

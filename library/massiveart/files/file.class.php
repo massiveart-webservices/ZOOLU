@@ -468,9 +468,7 @@ class File
                                 $strWhere = $this->objModelFile->getFileTitleTable()->getAdapter()->quoteInto('id = ?', $intEditFileId);
                                 $this->objModelFile->getFileTable()->update(array('isLanguageSpecific' => $intFileIsLanguageSpecific, 'idDestination' => $intFileDestinationId, 'idGroup' => $intFileGroupId, 'changed' => date('Y-m-d H:i:s'), 'idFiles' => (($intFilePreviewId > 0) ? $intFilePreviewId : 'NULL')), $strWhere);
 
-                                /**
-                                 * save tags (quick&dirty solution)
-                                 */
+                                // save tags (quick&dirty solution)
                                 $this->arrNewTags = array();
                                 $this->arrNewTags = explode(',', trim($this->arrFileDatas['FileTags' . $intEditFileId]));
 
@@ -478,6 +476,9 @@ class File
 
                                 $this->objModelTags->deletTypeTags('file', $intEditFileId, 1); // TODO : version
                                 $this->objModelTags->addTypeTags('file', $this->arrNewTagIds, $intEditFileId, 1); // TODO : version
+                                
+                                // saveFileFilters
+                                $this->updateFileFilters($intEditFileId);
                             }
                         } else {
                             $strWhere = $this->objModelFile->getFileTitleTable()->getAdapter()->quoteInto('idFiles = ?', $intEditFileId);
@@ -491,6 +492,26 @@ class File
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
+    }
+    
+    /**
+     * updateFileFilters
+     * @author Raphael Stocker <rst@massiveart.com>
+     * @param integer $intEditFileId
+     * @return void
+     */
+    private function updateFileFilters($intEditFileId) {
+        $arrFileFiltersData = array();
+        foreach ($this->arrFileDatas as $key => $val) {
+            if (strpos($key, 'fileFilter_') === 0) {
+                if ($val != '') {
+                    $intCategoryId = substr($key, 11); 
+                    $arrFileFiltersData[] = array('idFiles' => $intEditFileId, 'idCategories' => $intCategoryId, 'value' => $val);
+                }    
+            }
+        }
+        $this->objModelFile->deleteFileFilters($intEditFileId);
+        $this->objModelFile->updateFileFilters($arrFileFiltersData) ;
     }
 
     /**

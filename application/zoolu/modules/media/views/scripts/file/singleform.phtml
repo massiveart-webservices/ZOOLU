@@ -19,7 +19,7 @@ $objHelper = new ViewHelper();
     <input type="hidden" id="mediaFormLanguageId" value="<?php echo $this->languageId; ?>" name="languageId"/>
 
     <div id="overlayMediaWrapper" class="mediawrapper">
-        <?php echo $objHelper->getSingleEditForm($this->objFile, $this->imagesSizes, $this->destinationOptions, $this->groupOptions, $this->objFileVersions, $this->authorizedUpdate); ?>
+        <?php echo $objHelper->getSingleEditForm($this->objFile, $this->imagesSizes, $this->destinationOptions, $this->groupOptions, $this->objFileVersions, $this->authorizedUpdate, $this->arrFileFilters); ?>
         <input type="hidden" name="FileIds" id="EditFileIds" value="<?php echo $this->intFileId; ?>"/>
         <input type="hidden" name="IsSingleEdit" id="EditIsSingleEdit" value="true"/>
     </div>
