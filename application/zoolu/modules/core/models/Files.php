@@ -728,7 +728,20 @@ class Model_Files
             $objSelect->joinLeft('fileFilters', 'fileFilters.idCategories = categories.id AND fileFilters.idFiles = ' . $intFileId, array('value'));
             $objSelect->where('categories.idParentCategory = ' . $intFileFiltersCategoryId);
             $objSelect->order(array('categories.id'));
-            $arrReturn = $this->getCategoriesTable()->fetchAll($objSelect);
+            $objResults = $this->getCategoriesTable()->fetchAll($objSelect);
+            if (count($objResults) > 0) {
+                foreach ($objResults as $objResult) {
+                    if (key_exists($objResult->id, $arrReturn)) {
+                        $arrReturn[$objResult->id]->values[] = $objResult->value;
+                    } else {
+                        $objFilter = new stdClass();
+                        $objFilter->id = $objResult->id;
+                        $objFilter->title =  $objResult->title;
+                        $objFilter->values = array($objResult->value);
+                        $arrReturn[$objResult->id] = $objFilter;
+                    }
+                }
+            }
         }
         return $arrReturn;
     }

@@ -575,12 +575,9 @@ class ViewHelper
                     $strOutput .= '
                            <div class="fileFilter">';
                     $strOutput .= '
-                               <label for="fileFilter_'.$objFileFilter->id.'" class="gray666 bold">' . $objFileFilter->title . '</label><br/>';    
-                    $strOutput .= '
-                               <select id="fileFilter_' . $objFileFilter->id . '" name="fileFilter_' . $objFileFilter->id . '" size="1">
-                                   <option value="">'.$this->core->translate->_('Please_choose', false).'</option>   
-                                        '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', $objFileFilter->value).'             
-                               </select>';
+                               <span class="gray666 bold">' . $objFileFilter->title . '</span><br/>';    
+                    $strOutput .=  
+                               HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter_' . $objFileFilter->id, $objFileFilter->values);             
                     $strOutput .= '
                            </div> <!--fileFilter -->';
                 }

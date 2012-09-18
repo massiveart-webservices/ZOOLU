@@ -504,10 +504,13 @@ class File
         $arrFileFiltersData = array();
         foreach ($this->arrFileDatas as $key => $val) {
             if (strpos($key, 'fileFilter_') === 0) {
-                if ($val != '') {
-                    $intCategoryId = substr($key, 11); 
-                    $arrFileFiltersData[] = array('idFiles' => $intEditFileId, 'idCategories' => $intCategoryId, 'value' => $val);
-                }    
+                foreach ($val as $entry) {
+                    if ($entry != '') {
+                        $intCategoryId = substr($key, 11); 
+                        $arrFileFiltersData[] = array('idFiles' => $intEditFileId, 'idCategories' => $intCategoryId, 'value' => $entry);
+                    }    
+                }
+                
             }
         }
         $this->objModelFile->deleteFileFilters($intEditFileId);
