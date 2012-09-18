@@ -1456,9 +1456,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                 $intRegionInstanceId = $arrGenRowFormsData->idRegionInstances;
                                 $intRegionPos = array_search($intRegionInstanceId, $arrRegionInstanceIds);
 
-                                //echo '<Pre>';
-                                //var_export($intRegionPos);
-
                                 $arrTmpRelationIds = $objRegion->getField($arrGenRowFormsData->name)->getInstanceValue($intRegionPos);
                                 if (is_array($arrTmpRelationIds)) {
                                     array_push($arrTmpRelationIds, $arrGenRowFormsData->idRelation);
@@ -1477,8 +1474,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         foreach ($objRegion->SpecialFieldNames() as $strFieldName) {
                             $objField = $objRegion->getField($strFieldName);
                             $objField->setGenericSetup($this->Setup());
-                            $arrInstanceData = $objField->loadInstanceData($strType, $arrTypeProperties['Id'], $objRegion, $arrTypeProperties['Version']);
-                            foreach ($arrInstanceData as $intInstanceId => $arrInstanceDataRow) {
+                            $arrInstanceData = $objField->loadInstanceData($strType, $arrTypeProperties['Id'], $objRegion, $arrTypeProperties['Version']);  
+                            foreach ($arrInstanceData as $intInstanceId => $arrInstanceDataRow) {                                
                                 $objRegion->getField($arrInstanceDataRow['name'])->setInstanceValue($intInstanceId, $arrInstanceDataRow['value']);
                             }
                         }

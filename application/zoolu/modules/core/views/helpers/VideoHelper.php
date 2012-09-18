@@ -170,7 +170,7 @@ class VideoHelper
         $strBgClass = ' bg2';
         $strOutput = '';
         $strOutput .= '
-          <div id="' . $strElementId . 'SelectedService" class="field-12">' . $strVideoTypeName . '/' . $strChannelUserId . '</div>';
+          <div id="' . $strElementId . 'SelectedService" class="field-12" style="padding: 0 0 2px 0;"><strong>' . $strVideoTypeName . '</strong> &raquo; ' . $strChannelUserId . '</div>';
 
         switch ($intVideoTypeId) {
             // Vimeo Controller
@@ -212,8 +212,8 @@ class VideoHelper
                 <div class="videoThumb"><img src="' . $arrThumbnail['url'] . '" width="100"/></div>
                 <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideoEntity->getVideoId() . '" name="thumb_' . $strElementId . '_' . $objVideoEntity->getVideoId() . '" value="' . $arrThumbnail['url'] . '"/>
                 <div class="videoInfos">              
-                  <div onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideoEntity->getVideoId() . '\');" style="cursor:pointer; position:relative; float:right; padding-right:5px; padding-top:20px;">
-                    <div class="button25leftOff"></div>
+                    <div onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideoEntity->getVideoId() . '\');" style="cursor:pointer; position:relative; float:right; padding-right:5px; padding-top:20px;">
+                      <div class="button25leftOff"></div>
                       <div class="button25centerOff"><div>Löschen</div></div>
                       <div class="button25rightOff"></div>
                       <div class="clear"></div>

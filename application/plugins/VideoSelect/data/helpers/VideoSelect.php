@@ -132,7 +132,49 @@ class Plugin_DataHelper_VideoSelect extends GenericDataHelperAbstract  {
             
             $strGenForm = $this->objElement->Setup()->getFormId() . '-' . $this->objElement->Setup()->getFormVersion();
             $objGenTable = $this->getModelGenericData()->getGenericTable($strType . '-' . $strGenForm . '-Region' . $objRegion->getRegionId() . '-InstanceVideos');
+            
+            // get value of field
+            $strValue = $this->objElement->getInstanceValue($intRegionInstanceId);
+            
+            $intVideoTypeId = 0;
+            if (array_key_exists($this->objElement->name . '_' . $intRegionInstanceId . 'TypeCur', $_POST)) {
+                $intVideoTypeId = $_POST[$this->objElement->name . '_' . $intRegionInstanceId . 'TypeCur'];
+            }
 
+            $strVideoUserId = '';
+            if (array_key_exists($this->objElement->name . '_' . $intRegionInstanceId . 'UserCur', $_POST)) {
+                $strVideoUserId = $_POST[$this->objElement->name . '_' . $intRegionInstanceId . 'UserCur'];
+            }
+
+            $strVideoThumb = '';
+            if (array_key_exists($this->objElement->name . '_' . $intRegionInstanceId . 'Thumb', $_POST)) {
+                $strVideoThumb = $_POST[$this->objElement->name . '_' . $intRegionInstanceId . 'Thumb'];
+            }
+
+            $strVideoTitle = '';
+            if (array_key_exists($this->objElement->name . '_' . $intRegionInstanceId . 'Title', $_POST)) {
+                $strVideoTitle = $_POST[$this->objElement->name . '_' . $intRegionInstanceId . 'Title'];
+            }
+            
+            if (!empty($strValue) && $intVideoTypeId > 0 && $strVideoThumb != '' && $strVideoTitle != '') {                
+                $arrData = array(
+                    $strType . 'Id'      => $strElementId,
+                    'version'            => $intVersion,
+                    'idLanguages'        => $this->objElement->Setup()->getLanguageId(),
+                    'idRegionInstances'  => $idRegionInstance,
+                    'userId' 			 => $strVideoUserId,
+                    'videoId' 			 => $this->objElement->getInstanceValue($intRegionInstanceId),
+                    'title' 			 => $strVideoTitle,
+                    'thumb' 			 => $strVideoThumb,
+                    'idVideoTypes'		 => $intVideoTypeId,
+                    'idFields'           => $this->objElement->id
+                );
+                
+                $objGenTable->insert($arrData);
+            }
+            
+            // load instance data
+            $this->loadInstanceData($strType, $strElementId, $objRegion, $intVersion);
             
         } catch (Excpetion $exc) {
             $this->core->logger->err($exc);
@@ -159,7 +201,7 @@ class Plugin_DataHelper_VideoSelect extends GenericDataHelperAbstract  {
             $objSelect = $objGenTable->select();
             $objSelect->setIntegrityCheck(false);
 
-            $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'relationId' => $strType . 'Id', 'userId', 'videoId', 'idVideoTypes', 'videoThumb' => 'thumb', 'videoTitle' => 'title'));
+            $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'userId', 'videoId', 'idVideoTypes', 'thumb', 'title', 'idFields'));
             $objSelect->join($strType . '-' . $this->objElement->Setup()->getFormId() . '-' . $this->objElement->Setup()->getFormVersion() . '-Region' . $objRegion->getRegionId() . '-Instances AS regionInstance', '`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idRegionInstances = regionInstance.id', array('sortPosition'));
             $objSelect->join('fields', 'fields.id = `' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idFields', array('name'));
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . $strType . 'Id = ?', $strElementId);
@@ -168,18 +210,11 @@ class Plugin_DataHelper_VideoSelect extends GenericDataHelperAbstract  {
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . 'idFields = ?', $this->objElement->id);
 
             $objRawInstanceData = $objGenTable->fetchAll($objSelect);
-
-            $this->core->logger->debug('$objRawInstanceData: ' . var_export($objRawInstanceData, true));
             
-            if (count($objRawInstanceData) > 0) {
-                $objVideoSelect = $objRawInstanceData->current();
-                $this->objElement->setValue($objVideoSelect->videoId);
-                $this->objElement->intVideoTypeId = $objVideoSelect->idVideoTypes;
-                $this->objElement->strVideoUserId = $objVideoSelect->userId;
-                $this->objElement->strVideoThumb = $objVideoSelect->videoThumb;
-                $this->objElement->strVideoTitle = $objVideoSelect->videoTitle;
-            }            
-			
+            /*if (count($objRawInstanceData) > 0) {
+                $this->objElement->objInstanceVideos = $objRawInstanceData;
+            }*/
+
             $arrRawInstanceData = $objRawInstanceData->toArray();
             $arrInstanceData = array();
             $arrInstanceFieldNames = array();
@@ -191,7 +226,13 @@ class Plugin_DataHelper_VideoSelect extends GenericDataHelperAbstract  {
 
             //Group the field values together (multiply instance)
             foreach ($arrRawInstanceData as $arrInstanceDataRow) {
-                $arrInstanceData[$arrInstanceDataRow['sortPosition']][] = $arrInstanceDataRow['relationId'];
+                $arrInstanceData[$arrInstanceDataRow['sortPosition']] = array(
+                                                                            'userId'        => $arrInstanceDataRow['userId'],
+                                                                            'videoId'       => $arrInstanceDataRow['videoId'],
+                                                                            'idVideoTypes'  => $arrInstanceDataRow['idVideoTypes'],
+                                                                            'thumb'         => $arrInstanceDataRow['thumb'],
+                                                                            'title'         => $arrInstanceDataRow['title'],
+                                                                        );
                 $arrInstanceFieldNames[$arrInstanceDataRow['sortPosition']] = $arrInstanceDataRow['name'];
             }
 
@@ -200,8 +241,15 @@ class Plugin_DataHelper_VideoSelect extends GenericDataHelperAbstract  {
 
             //Generate value-string array
             foreach ($arrRawInstanceData as $intInstanceDataId => $arrInstanceDataRow) {
-                $strValue = implode('][', $arrInstanceDataRow);
-                $arrInstanceData[$intInstanceDataId] = array('name' => $arrInstanceFieldNames[$intInstanceDataId], 'value' => '[' . $strValue . ']');
+                $strValue = $arrInstanceDataRow['videoId']; 
+                
+                $this->objElement->setValue($strValue);
+                $this->objElement->intVideoTypeId = $arrInstanceDataRow['idVideoTypes'];
+                $this->objElement->strVideoUserId = $arrInstanceDataRow['userId'];
+                $this->objElement->strVideoThumb = $arrInstanceDataRow['thumb'];
+                $this->objElement->strVideoTitle = $arrInstanceDataRow['title'];
+                
+                $arrInstanceData[$intInstanceDataId] = array('name' => $arrInstanceFieldNames[$intInstanceDataId], 'value' => $strValue);
             }
 
             return $arrInstanceData;
