@@ -834,6 +834,7 @@ class IndexController extends Zend_Controller_Action
             if (!isset($objUrl->url) || count($objUrl->url) == 0) {
                 //If there is no landingpage, try normal page with default language 
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
+            } else {
                 $this->blnIsLandingPage = true;
             }
             if (isset($objUrl->url) && count($objUrl->url) > 0) {
