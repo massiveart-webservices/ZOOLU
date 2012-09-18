@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-class Model_Pages
+class Model_Pages extends ModelAbstract
 {
 
     private $intLanguageId;

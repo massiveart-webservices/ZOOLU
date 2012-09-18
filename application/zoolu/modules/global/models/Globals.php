@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-class Model_Globals
+class Model_Globals extends ModelAbstract
 {
 
     private $intLanguageId;
