@@ -75,7 +75,7 @@ class VideoHelper
 
             switch ($intVideoTypeId) {
                 // Vimeo Controller
-                case $this->core->sysConfig->video_channels->vimeo->id :
+                /*case $this->core->sysConfig->video_channels->vimeo->id :
                     $objThumbnails = $objVideo->getThumbnails();
                     $objThumbnail = current(current($objThumbnails));
 
@@ -111,7 +111,7 @@ class VideoHelper
                    <div class="clear"></div>
                   </div>';
 
-                    break;
+                    break;*/
 
                 // Youtube Controller
                 case $this->core->sysConfig->video_channels->youtube->id :
@@ -174,7 +174,7 @@ class VideoHelper
 
         switch ($intVideoTypeId) {
             // Vimeo Controller
-            case $this->core->sysConfig->video_channels->vimeo->id :
+            /*case $this->core->sysConfig->video_channels->vimeo->id :
 
                 $objThumbnails = $objVideoEntity->getThumbnails();
                 $objThumbnail = current(current($objThumbnails));
@@ -197,7 +197,7 @@ class VideoHelper
                 <input type="hidden" id="title_' . $strElementId . '_' . $objVideoEntity->getID() . '" name="title_' . $strElementId . '_' . $objVideoEntity->getID() . '" value="' . $objVideoEntity->getTitle() . '"/>
               </div>
             </div>';
-                break;
+                break;*/
 
             // Youtube Controller
             case $this->core->sysConfig->video_channels->youtube->id :

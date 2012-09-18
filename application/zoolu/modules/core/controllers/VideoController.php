@@ -73,21 +73,15 @@ class Core_VideoController extends AuthControllerAction
             $strSearchQuery = $objRequest->getParam('searchString');
 
             switch ($intChannelId) {
-                /*
-               * Vimeo Controller
-               */
-                case $this->core->sysConfig->video_channels->vimeo->id :
-                    /**
-                     * Requires simplevimeo base class
-                     */
+                // Vimeo Controller
+                /*case $this->core->sysConfig->video_channels->vimeo->id :
+                    // Requires simplevimeo base class
                     require_once(GLOBAL_ROOT_PATH . 'library/vimeo/vimeo.class.php');
 
                     $arrChannelUser = $this->core->sysConfig->video_channels->vimeo->users->user->toArray();
                     $intVideoTypeId = 1;
                     $arrVideos = array();
-                    /**
-                     * Get the vimeo video list
-                     */
+                    // Get the vimeo video list
                     if ($strChannelUserId !== '' && $strChannelUserId !== 'publicAccess' && $strSearchQuery == '') {
                         if (is_array($arrChannelUser)) {
                             foreach ($arrChannelUser AS $chUser) {
@@ -107,11 +101,9 @@ class Core_VideoController extends AuthControllerAction
                     }
                     // Set channel Users
                     $this->view->channelUsers = (array_key_exists('id', $arrChannelUser)) ? array(0 => $arrChannelUser) : $this->core->sysConfig->video_channels->vimeo->users->user->toArray();
-                    break;
+                    break;*/
 
-                /**
-                 * Youtube Controller
-                 */
+                // Youtube Controller
                 case $this->core->sysConfig->video_channels->youtube->id :
                     $arrChannelUser = $this->core->sysConfig->video_channels->youtube->users->user->toArray();
                     $intVideoTypeId = 2;
@@ -171,40 +163,30 @@ class Core_VideoController extends AuthControllerAction
             $strChannelUserId = $objRequest->getParam('channelUserId');
             $arrSelectedVideo = array();
 
-            switch ($intChannelId) {
-                /**
-                 * Vimeo Controller
-                 */
-                case $this->core->sysConfig->video_channels->vimeo->id :
+            switch ($intChannelId) {                
+                //Vimeo Controller
+                /*case $this->core->sysConfig->video_channels->vimeo->id :
                     require_once(GLOBAL_ROOT_PATH . 'library/vimeo/vimeo.class.php');
                     $intVideoTypeId = 1;
                     $strVideoTypeName = "Vimeo";
-                    /**
-                     * Get the selected Video
-                     */
+                    // Get the selected Video
                     if (isset($strValue)) {
                         $objResponse = VimeoVideosRequest::getInfo($strValue);
                         $objSelectedVideo = $objResponse->getVideo();
                     }
-                    break;
-                /**
-                 * Youtube Controller
-                 */
+                    break;*/
+                // Youtube Controller
                 case $this->core->sysConfig->video_channels->youtube->id :
                     $intVideoTypeId = 2;
                     $strVideoTypeName = "YouTube";
 
                     $objResponse = new Zend_Gdata_YouTube();
                     $objResponse->setMajorProtocolVersion(2);
-                    /**
-                     * Get the selected Video
-                     */
+                    // Get the selected Video
                     if (isset($strValue)) {
                         $objSelectedVideo = $objResponse->getVideoEntry($strValue);
                     }
-
                     break;
-
             }
             $this->view->strVideoTypeName = $strVideoTypeName;
             $this->view->intVideoTypeId = $intVideoTypeId;

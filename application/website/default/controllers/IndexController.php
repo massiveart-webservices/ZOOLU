@@ -269,6 +269,7 @@ class IndexController extends Zend_Controller_Action
     {
         $this->view->addFilter('PageReplacer');
 
+        
         // load theme
         $this->loadTheme();
         
@@ -772,7 +773,7 @@ class IndexController extends Zend_Controller_Action
         $strUrl = $this->cutUrlPrefix($strUrl);
 
         // cut off language & segment prefix of url
-        if (preg_match('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', $strUrl)) {
+        if       (preg_match('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', $strUrl)) {
             $strUrl = preg_replace('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', '', $strUrl);
         } elseif (preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUrl) && $blnCutLanguage) { // cut off language prefix of url
             $strUrl = preg_replace('/^\/[a-zA-Z\-]{2,5}\//', '', $strUrl);
@@ -780,7 +781,6 @@ class IndexController extends Zend_Controller_Action
             $strUrl = preg_replace('/^\//', '', $strUrl);
             $this->blnUrlWithLanguage = false;
         }
-
         return $strUrl;
     }
 
@@ -883,7 +883,7 @@ class IndexController extends Zend_Controller_Action
             }                
         }
         
-        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder && !$this->blnIsLandingPage) {
             $strRedirectUri = $strUri;
             $strRedirectDomain = $strDomain;
             $strRedirectLanguage = $this->strLanguageCode;

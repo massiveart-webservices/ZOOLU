@@ -20,10 +20,10 @@ $objHelper = new VideoHelper();
             <select id="<?php echo $this->elementId; ?>User" name="<?php echo $this->elementId; ?>User" class="select videoUserSelect">
                 <option value="publicAccess">Public</option>
                 <?php
-                foreach ($this->channelUsers as $channelUser) {
-                    $strSelected = ($this->channelUserId == $channelUser['id']) ? ' selected="selected"' : '';
-                    echo '<option value="' . $channelUser['id'] . '"' . $strSelected . '>' . $channelUser['name'] . '</option>';
-                }
+                    foreach ($this->channelUsers as $channelUser) {
+                        $strSelected = ($this->channelUserId == $channelUser['id']) ? ' selected="selected"' : '';
+                        echo '<option value="' . $channelUser['id'] . '"' . $strSelected . '>' . $channelUser['name'] . '</option>';
+                    }
                 ?>
             </select>
         </div>
@@ -31,8 +31,7 @@ $objHelper = new VideoHelper();
         <div style="width:40%; float:left;">
             <label class="fieldtitle" for="<?php echo $this->elementId; ?>Search">Video suchen</label><br/>
             <input type="text" class="videoSearchInp" id="<?php echo $this->elementId; ?>Search" name="<?php echo $this->elementId; ?>Search"/>
-            <!--  <input type="button" id="<?php echo $this->elementId; ?>SearchButton" value="suchen" />
-     -->
+            <!--  <input type="button" id="<?php echo $this->elementId; ?>SearchButton" value="suchen" /> -->
             <div id="<?php echo $this->elementId; ?>SearchButton" style="float:left; padding-left:5px; cursor:pointer">
                 <div class="button25leftOn"></div>
                 <div class="button25centerOn">
@@ -41,9 +40,7 @@ $objHelper = new VideoHelper();
                 <div class="button25rightOn"></div>
                 <div class="clear"></div>
             </div>
-
-            <?php echo '<span id="' . $this->elementId . 'SearchReset" class="videoSearchReset">reset</a>';?>
-
+            <span id="<?php echo $this->elementId; ?>SearchReset" class="videoSearchReset">reset</span>
         </div>
     </div>
 </div>
