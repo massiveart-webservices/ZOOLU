@@ -1910,5 +1910,12 @@ Massiveart.Form = Class.create({
    */
   cancleFormSaveLoader: function(){
     $('divFormSaveLoader').hide();    
+  },
+
+  countChars: function(elementId) {
+    var str = $( elementId ).getValue();
+    var chars = document.getElementById( 'chars_count_' + elementId );
+    chars.innerHTML = str.length;
   }
 });
+
