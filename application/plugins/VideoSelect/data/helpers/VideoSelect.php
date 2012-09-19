@@ -211,9 +211,9 @@ class Plugin_DataHelper_VideoSelect extends GenericDataHelperAbstract  {
 
             $objRawInstanceData = $objGenTable->fetchAll($objSelect);
             
-            /*if (count($objRawInstanceData) > 0) {
+            if (count($objRawInstanceData) > 0) {
                 $this->objElement->objInstanceVideos = $objRawInstanceData;
-            }*/
+            }
 
             $arrRawInstanceData = $objRawInstanceData->toArray();
             $arrInstanceData = array();
