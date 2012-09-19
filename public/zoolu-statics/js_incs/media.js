@@ -859,6 +859,19 @@ Massiveart.Media = Class.create({
         $(elementId).addClassName('textarea');   
       }    
     }
+  },
+  
+  /**
+   * toggleAllFileFiltes
+   */
+  toggleAllFileFiltes: function(filterId, value) {
+      $$('#' + filterId + ' input.checkboxOfSql').each(function (elem) {
+          if (value == true || value == 'true') {
+              elem.checked = 'checked';
+          } else {
+              elem.checked = '';
+          }
+      });
   }
   
 });

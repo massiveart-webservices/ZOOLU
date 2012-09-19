@@ -114,7 +114,7 @@ class HtmlOutput
                     } else {
                         $strChecked = '';
                     }
-                    $strHtmlOutput .= '<input type="checkbox" name="' . $strName . '[]" id="' . $strName . '_' . $arrSQLRow['VALUE'] . '" value="' . $arrSQLRow['VALUE'] . '"' . $strChecked . '> </input>' . chr(13) .'
+                    $strHtmlOutput .= '<input class="checkboxOfSql" type="checkbox" name="' . $strName . '[]" id="' . $strName . '_' . $arrSQLRow['VALUE'] . '" value="' . $arrSQLRow['VALUE'] . '"' . $strChecked . '> </input>' . chr(13) .'
                                        <label for="' . $strName . '_' . $arrSQLRow['VALUE'] . '" >' . $arrSQLRow['DISPLAY'] . '</label>
                                        <div class="clear"></div>';
                 }

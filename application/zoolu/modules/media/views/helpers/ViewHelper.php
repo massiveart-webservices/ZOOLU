@@ -573,9 +573,13 @@ class ViewHelper
                        <div class="fileFilters">';
                 foreach ($arrFileFilters as $objFileFilter) {
                     $strOutput .= '
-                           <div class="fileFilter">';
+                           <div class="fileFilter" id="fileFilter_' . $objFileFilter->id . '">';
                     $strOutput .= '
-                               <span class="gray666 bold">' . $objFileFilter->title . '</span><br/>';    
+                               <span class="gray666 bold">' . $objFileFilter->title . '</span><br/>
+                               <input type="checkbox" id="selectFileFilterAll_' . $objFileFilter->id . '" onchange="myMedia.toggleAllFileFiltes(\'fileFilter_' . $objFileFilter->id . '\', this.checked)"/>
+                               <label class="gray666 bold" for="selectFileFilterAll_' . $objFileFilter->id . '">' . $this->core->translate->_('All') . '</label>
+							   <div class="clear" style=""></div>
+                               ';    
                     $strOutput .=  
                                HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter_' . $objFileFilter->id, $objFileFilter->values);             
                     $strOutput .= '
