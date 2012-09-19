@@ -30,18 +30,19 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
         extract($info); // name, value, attribs, options, listsep, disable
 
         if( array_key_exists('fieldOptions', $attribs) && !empty($attribs['fieldOptions']) ) {
-            $fieldOptions = json_decode($attribs['fieldOptions']);
+            $fieldOptions = json_decode( $attribs['fieldOptions'] );
         } else {
             $fieldOptions = new stdClass();
             $fieldOptions->textbox = 'text';
         }
 
         if( $fieldOptions->textbox == 'text' ) {
-            $strOutput .= '<input type="text" name="" value="" />';
+
+            $strOutput .= '<input type="text" name="' . $this->view->escape($name) . '" value="' . $this->view->escape($value) . '" />';
 
         } elseif( $fieldOptions->textbox == 'textarea' ) {
 
-            $chars_max = 156;
+            $chars_max = $fieldOptions->charslimit;
             $fieldLength = strlen( $this->view->escape($value) );
             $chars_left = $chars_max - $fieldLength;
 
