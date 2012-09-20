@@ -29,6 +29,8 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info); // name, value, attribs, options, listsep, disable
 
+        $name = $this->view->escape($name);
+
         if( array_key_exists('fieldOptions', $attribs) && !empty($attribs['fieldOptions']) ) {
             $fieldOptions = json_decode( $attribs['fieldOptions'] );
         } else {
@@ -38,24 +40,29 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
 
         if( $fieldOptions->textbox == 'text' ) {
 
-            $strOutput .= '<input type="text" name="' . $this->view->escape($name) . '" value="' . $this->view->escape($value) . '" />';
+            $strOutput .= '<input type="text" name="' . $name . '" value="' . $this->view->escape($value) . '" />';
 
         } elseif( $fieldOptions->textbox == 'textarea' ) {
 
-            $chars_max = $fieldOptions->charslimit;
+            $maxChars = $fieldOptions->charslimit;
             $fieldLength = strlen( $this->view->escape($value) );
-            $chars_left = $chars_max - $fieldLength;
+            $chars_left = $maxChars - $fieldLength;
 
-            $strOutput .= '<textarea rows="80" cols="24" name="' . $this->view->escape($name) . '" id="' . $this->view->escape($name) . '"
-                                    onKeyDown="myForm.countChars('.$this->view->escape($name).')"
-                                    onKeyUp="myForm.countChars('.$this->view->escape($name).')"
+            $counter_id = "chars_count_" . $name;
+
+            $strOutput .= '<div id="wrapper_'.$name.'">';
+
+            $strOutput .= '<textarea rows="80" cols="24" name="'.$name.'" id="'.$name.'"
+                                onKeyDown="myForm.countChars(\''.$name.'\', '.$maxChars.')"
+                                onKeyUp="myForm.countChars(\''.$name.'\', '.$maxChars.')"
                            >'
                                 . $this->view->escape($value) .
                           '</textarea>';
 
-            $strOutput .= '<p>The ' . $fieldOptions->seoname . ' will be limited to ' . $chars_max . ' chars
-                                <span id="chars_count_' . $this->view->escape($name) . '">' . $chars_left . '</span> chars left.
+            $strOutput .= '<p>The ' . $fieldOptions->seoname . ' will be limited to ' . $maxChars . ' chars
+                                <span id="'.$counter_id.'">' . $chars_left . '</span> chars left.
                            </p>';
+            $strOutput .= '</div>';
         }
 
         return $strOutput;

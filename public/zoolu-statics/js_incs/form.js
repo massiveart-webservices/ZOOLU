@@ -2218,10 +2218,11 @@ Massiveart.Form = Class.create({
     $('divFormSaveLoader').hide();    
   },
 
-  countChars: function(elementId) {
-    var str = $( elementId ).getValue();
-    var chars = document.getElementById( 'chars_count_' + elementId );
-    chars.innerHTML = str.length;
+  countChars: function(elementId, maxChars) {
+
+    if( $( elementId ) ) {
+        var field = $( elementId ).getValue();
+        $( 'chars_count_' + elementId ).update( maxChars - field.length );
+    }
   }
 });
-
