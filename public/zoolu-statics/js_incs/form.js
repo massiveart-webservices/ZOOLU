@@ -1914,6 +1914,13 @@ Massiveart.Form = Class.create({
 
   countChars: function(elementId, maxChars) {
     var field = $( elementId ).getValue();
-    $( 'chars_count_' + elementId ).update( maxChars - field.length );
+    var count = maxChars - field.length;
+    var str = '';
+    if( count > 0 ) {
+        str = '<span class="plus">'+count+'</span>';
+    } else {
+        str = '<span class="minus">'+count+'</span>';
+    }
+    $( 'chars_count_' + elementId ).update( str );
   }
 });
