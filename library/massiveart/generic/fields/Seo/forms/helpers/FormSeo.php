@@ -38,19 +38,25 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
             $fieldOptions->textbox = 'text';
         }
 
+        $fieldLength = strlen( $this->view->escape($value) );
+        $maxChars = $fieldOptions->charslimit;
+        $chars_left = $maxChars - $fieldLength;
+
+        if( $chars_left > 0 ) {
+            $chars_left = '<span class="plus">' . $chars_left . '</span>';
+        } else {
+            $chars_left = '<span class="minus">' . $chars_left . '</span>';
+        }
+
         if( $fieldOptions->textbox == 'text' ) {
 
-            $strOutput .= '<input type="text" name="' . $name . '" value="' . $this->view->escape($value) . '" />';
+            $strOutput .= '<input type="text" name="' . $name . '" value="' . $this->view->escape($value) . '" id="'. $name .'"
+                                onKeyDown="myForm.countChars(\''.$name.'\', '.$maxChars.')"
+                                onKeyUp="myForm.countChars(\''.$name.'\', '.$maxChars.')"
+                            />';
+            $strOutput .= '';
 
         } elseif( $fieldOptions->textbox == 'textarea' ) {
-
-            $maxChars = $fieldOptions->charslimit;
-            $fieldLength = strlen( $this->view->escape($value) );
-            $chars_left = $maxChars - $fieldLength;
-
-            $counter_id = "chars_count_" . $name;
-
-            $strOutput .= '<div id="wrapper_'.$name.'">';
 
             $strOutput .= '<textarea rows="80" cols="24" name="'.$name.'" id="'.$name.'"
                                 onKeyDown="myForm.countChars(\''.$name.'\', '.$maxChars.')"
@@ -58,12 +64,11 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
                            >'
                                 . $this->view->escape($value) .
                           '</textarea>';
-
-            $strOutput .= '<p>The ' . $fieldOptions->seoname . ' will be limited to ' . $maxChars . ' chars
-                                <span id="'.$counter_id.'">' . $chars_left . '</span> chars left.
-                           </p>';
-            $strOutput .= '</div>';
         }
+
+        $strOutput .= '<p>The ' . $fieldOptions->seoname . ' will be limited to ' . $maxChars . ' chars
+                                <span id="chars_count_'. $name .'">' . $chars_left . '</span> chars left.
+                           </p>';
 
         return $strOutput;
     }
