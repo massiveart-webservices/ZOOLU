@@ -2219,10 +2219,7 @@ Massiveart.Form = Class.create({
   },
 
   countChars: function(elementId, maxChars) {
-
-    if( $( elementId ) ) {
-        var field = $( elementId ).getValue();
-        $( 'chars_count_' + elementId ).update( maxChars - field.length );
-    }
+    var field = $( elementId ).getValue();
+    $( 'chars_count_' + elementId ).update( maxChars - field.length );
   }
 });
