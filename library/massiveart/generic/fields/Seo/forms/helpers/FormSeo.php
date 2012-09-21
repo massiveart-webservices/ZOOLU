@@ -1,26 +1,7 @@
 <?php
 
 class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
-{
-
-    /**
-     * The default number of rows for a textarea.
-     *
-     * @access public
-     *
-     * @var int
-     */
-    public $rows = 24;
-
-    /**
-     * The default number of columns for a textarea.
-     *
-     * @access public
-     *
-     * @var int
-     */
-    public $cols = 80;
-
+{    
 
     function formSeo($name, $value = null, $attribs = null, $options = null)
     {
