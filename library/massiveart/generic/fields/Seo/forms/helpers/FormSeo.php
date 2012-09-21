@@ -7,8 +7,8 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
     {
         $strOutput = '';
 
-        $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
-        extract($info); // name, value, attribs, options, listsep, disable
+        $info = $this->_getInfo($name, $value, $attribs, $options);
+        extract($info); // name, value, attribs, options
 
         $name = $this->view->escape($name);
 
