@@ -5,15 +5,42 @@ class Form_Helper_FormSnippetPreview extends Zend_View_Helper_FormElement
 
         $strOutput = '';
 
-        $info = $this->_getInfo($name, $value, $attribs, $options);
-        extract($info); // name, value, attribs, options
+        #$info = $this->_getInfo($name, $value, $attribs, $options);
+        #extract($info); // name, value, attribs, options
 
-        $strOutput .= '<div id="seosnippet">';
-        $strOutput .= '<a class="pagetitle" style="color: #1122CC"></a>';
-        $strOutput .= '<a class="pageurl" style="color: #009933; font-style: normal;"></a>';
-        $strOutput .= '<a class="pagedesc"></a>';
-        $strOutput .= '</div>';
+        $seoFieldData = $this->loadSeoFieldValues();
 
-        return $strOutput;
+        $strOutput .= '
+            <style>
+                .seo_title { color: #1122CC; font-size: 16px; line-height: 19px; text-decoration: underline; }
+                .seo_url { color: #009933; font-style: normal; font-size: 13px; color: #282; line-height: 15px; cursor: pointer; }
+                .seo_desc { font-size: 13px; color: #000; line-height: 15px; }
+            </style>
+        ';
+
+        $strOutput .= '<a class="seo_title" id="snippet_seo_title">' . $seoFieldData['title'] . '</a><br/>';
+        $strOutput .= '<a class="seo_url" id="snippet_seo_url">' . $seoFieldData['url'] . '</a><br/>';
+        $strOutput .= '<p class="seo_desc" id="snippet_seo_desc">' . $seoFieldData['desc'] . '</p>';
+
+        $strOutput .= '
+            <script type="text/javascript">/* <![CDATA[ */
+                myForm.goSnippetPreviewJS();
+            /* ]]> */</script>
+        ';
+
+        return '<div id="seo_snippet_wrapper">' . $strOutput . '</div>';
     }
+
+
+    function loadSeoFieldValues() {
+
+        // TODO load seo field values
+
+        return array(
+                    'title' => 'Seo Page Title',
+                    'url' => 'http://getzoolu.com/',
+                    'desc' => 'Page Description'
+                );
+    }
+
 }
