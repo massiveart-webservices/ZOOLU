@@ -16,8 +16,10 @@ class Form_Helper_FormSnippetPreview extends Zend_View_Helper_FormElement
             </style>
         ';
 
+        $pageUrl = $_SERVER['SERVER_NAME'];
+
         $strOutput .= '<a class="seo_title" id="snippet_seo_title"></a><br/>';
-        $strOutput .= '<a class="seo_url" id="snippet_seo_url"></a><br/>';
+        $strOutput .= '<a class="seo_url" id="snippet_seo_url">' . $pageUrl . '</a><br/>';
         $strOutput .= '<p class="seo_desc" id="snippet_seo_desc"></p>';
 
         $strOutput .= '

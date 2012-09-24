@@ -2234,6 +2234,7 @@ Massiveart.Form = Class.create({
 
        updateSnippetPreviewTitle();
        updateSnippetPreviewDesc();
+       updateSnippetPreviewUrl();
 
        $('seo_title').observe('keyup', function(event){
           updateSnippetPreviewTitle();
@@ -2259,6 +2260,12 @@ Massiveart.Form = Class.create({
                desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
            }
            $('snippet_seo_desc').update( desc );
+       }
+
+       function updateSnippetPreviewUrl() {
+           // Get page url from 'Seite testen' link
+           var url = $('page_url').readAttribute('href');
+           var server = $('snippet_seo_url').insert(url);
        }
   }
 });
