@@ -12,7 +12,7 @@ class Form_Helper_FormSnippetPreview extends Zend_View_Helper_FormElement
             <style>
                 .seo_title { color: #1122CC; font-size: 16px; line-height: 19px; text-decoration: underline; }
                 .seo_url { color: #009933; font-style: normal; font-size: 13px; color: #282; line-height: 15px; cursor: pointer; }
-                .seo_desc { font-size: 13px; color: #000; line-height: 15px; }
+                .seo_desc { font-size: 13px; color: #000; line-height: 15px; width: 280px; }
             </style>
         ';
 
