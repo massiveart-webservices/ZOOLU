@@ -1926,40 +1926,53 @@ Massiveart.Form = Class.create({
 
   initSnippetPreview: function() {
 
-       updateSnippetPreviewTitle();
-       updateSnippetPreviewDesc();
-       updateSnippetPreviewUrl();
+    this.updateSnippetPreviewTitle();
+    this.updateSnippetPreviewDesc();
+    this.updateSnippetPreviewUrl();
 
-       $('seo_title').observe('keyup', function(event){
-          updateSnippetPreviewTitle();
-       });
+    $('articletitle').observe('keyup', function(event){
+        myForm.updateSnippetPreviewTitle();
+    });
 
-       $('seo_description').observe('keyup', function(event) {
-          updateSnippetPreviewDesc();
-       });
+    $('seo_title').observe('keyup', function(event){
+        myForm.updateSnippetPreviewTitle();
+    });
 
-       function updateSnippetPreviewTitle() {
-           var title = $('seo_title').getValue();
-           if( title.length > 70 ) {
-               var space = title.lastIndexOf( " ", 67 );
-               title = title.substring( 0, space ).concat( ' <strong>...</strong>' );
-           }
-           $('snippet_seo_title').update( title );
-       }
+    $('seo_description').observe('keyup', function(event) {
+        myForm.updateSnippetPreviewDesc();
+    });
+  },
 
-       function updateSnippetPreviewDesc() {
-           var desc = $('seo_description').getValue();
-           if( desc.length > 150 ) {
-               var space = desc.lastIndexOf( " ", 147 );
-               desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
-           }
-           $('snippet_seo_desc').update( desc );
-       }
+  updateSnippetPreviewTitle: function() {
 
-       function updateSnippetPreviewUrl() {
-           // Get page url from 'Seite testen' link
-           var url = $('page_url').readAttribute('href');
-           var server = $('snippet_seo_url').insert(url);
-       }
+    var title = $('seo_title').getValue();
+    if( title == '' ) {
+        title = $('articletitle').getValue();
+    }
+
+    if( title == '' ) {
+        title = $('title').getValue();
+    }
+
+    if( title.length > 70 ) {
+        var space = title.lastIndexOf( " ", 67 );
+        title = title.substring( 0, space ).concat( ' <strong>...</strong>' );
+    }
+
+    $('snippet_seo_title').update( title );
+  },
+
+  updateSnippetPreviewDesc: function () {
+    var desc = $('seo_description').getValue();
+    if( desc.length > 150 ) {
+        var space = desc.lastIndexOf( " ", 147 );
+        desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
+    }
+    $('snippet_seo_desc').update( desc );
+  },
+
+  updateSnippetPreviewUrl: function () {
+    var url = $('page_url').readAttribute('href');
+    $('snippet_seo_url').insert(url);
   }
 });
