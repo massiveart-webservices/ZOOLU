@@ -75,6 +75,7 @@
     	<none>0</none>
     	<folder>1</folder>    
     	<subdomain>2</subdomain> <!-- only use if enable_language_subdomains is true -->
+    	<subandtld>3</subandtld>
     </language_definition>
 	
     

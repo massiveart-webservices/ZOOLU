@@ -1040,7 +1040,7 @@ class IndexController extends Zend_Controller_Action
                 $this->core->logger->debug('folder');
                 $strRequestString = $_SERVER['REQUEST_URI'];
                 $strMatchCode = '/^\/[a-zA-Z\-]{2,5}\//';
-            } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+            } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain || $this->core->config->language_definition->subandtld) {
                 $this->core->logger->debug('subdomain');
                 $strRequestString = $_SERVER['HTTP_HOST'];
                 $strMatchCode = '/^[a-zA-Z\-]{2}/';
@@ -1049,28 +1049,26 @@ class IndexController extends Zend_Controller_Action
             }
             if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
                 preg_match($strMatchCode, $strRequestString, $arrMatches);
-                $intTmpLanguageId = -1;
                 $strCode = trim($arrMatches[0], '/');
-                if ($strTld != '') {
-                    $strTmpCode = $strCode . '-' . $strTld;
-                    foreach($this->core->config->languages->language->toArray() as $arrLanguage){
-                        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strTmpCode)) {
-                            $this->core->strLanguageCode = $strTmpCode;
-                            $intTmpLanguageId = $arrLanguage['id'];
-                            break;
+                if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subandtld) {
+                    if ($strTld != '') {
+                        $strTmpCode = $strCode . '-' . $strTld;
+                        foreach($this->core->config->languages->language->toArray() as $arrLanguage){
+                            if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strTmpCode)) {
+                                $this->core->strLanguageCode = $strTmpCode;
+                                $this->core->intLanguageId = $arrLanguage['id'];
+                                break;
+                            }
                         }
                     }
-                }
-                if ($intTmpLanguageId == -1) {
+                } else {
                     foreach($this->core->config->languages->language->toArray() as $arrLanguage){
                         if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strCode)) {
                             $this->core->strLanguageCode = $strCode;
                             $this->core->intLanguageId = $arrLanguage['id'];
                             break;
                         }
-                    }                    
-                } else {
-                    $this->core->intLanguageId = $intTmpLanguageId;
+                    }    
                 }
             }
         }
