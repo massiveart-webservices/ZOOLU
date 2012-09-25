@@ -1959,6 +1959,8 @@ Massiveart.Form = Class.create({
         title = title.substring( 0, space ).concat( ' <strong>...</strong>' );
     }
 
+    title = this.pickOutSeoKeywords( title );
+
     $('snippet_seo_title').update( title );
   },
 
@@ -1973,6 +1975,9 @@ Massiveart.Form = Class.create({
         var space = desc.lastIndexOf( " ", 147 );
         desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
     }
+
+    desc = this.pickOutSeoKeywords( desc );
+
     $('snippet_seo_desc').update( desc );
   },
 
@@ -1989,6 +1994,29 @@ Massiveart.Form = Class.create({
       text = text.replace(/^\s+|\s+$/g, '');
       text = text.replace(/<\/?[^>]+>/gi, '');
       text = text.replace(/\[(.+?)\](.+?\[\/\\1\])?/, '');
+      return text;
+  },
+
+  pickOutSeoKeywords: function( text ) {
+
+      var seo_keywords = $('seo_keywords').getValue();
+      if( seo_keywords == '' )
+          return text;
+
+      if ( seo_keywords.search(' ') != -1 ) {
+          var aKeywords = seo_keywords.split(' ');
+      } else {
+          var aKeywords	= new Array( seo_keywords );
+      }
+
+      for ( var i = 0; i < aKeywords.length; i++) {
+
+          var tKeyword = aKeywords[ i ].replace(',', '');
+          var tRegex = new RegExp( "(^|[ \s\n\r\t\.,'\(\"\+;!?:\-]+)(" + tKeyword + ")($|[ \s\n\r\t\.,'\)\"\+;!?:\-]+)", 'gim' );
+
+          text 	= text.replace( tRegex, "$1<strong>$2</strong>$3" );
+      }
+
       return text;
   }
 });
