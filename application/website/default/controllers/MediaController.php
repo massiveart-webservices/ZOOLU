@@ -430,11 +430,9 @@ class MediaController extends Zend_Controller_Action
                             $strExtension = '.zip';
                         }
                     }
-
                 }
             }
         }
-
         return $strExtension;
     }
 
@@ -446,9 +444,8 @@ class MediaController extends Zend_Controller_Action
     protected function sendDownloadPackage($strFileBase, $strFileName, $arrProperties = array())
     {
         $this->core->logger->debug('website->controllers->MediaController->sendDownloadPackage(' . $strFileBase . ', ' . $strFileName . ')');
-
         $strRealPath = realpath($strFileBase . $strFileName);
-
+        
         if (file_exists($strRealPath)) {
 
             // zip file if necessary
@@ -456,7 +453,7 @@ class MediaController extends Zend_Controller_Action
             if ($strZipExtension !== '') {
                 $strRealPath = realpath($strFileBase . $strFileName . $strZipExtension);
             }
-
+            
             // overwrite file name
             if (array_key_exists('DesiredFileName', $arrProperties)) {
                 $strFileName = $arrProperties['DesiredFileName'] . $strZipExtension;
@@ -477,7 +474,7 @@ class MediaController extends Zend_Controller_Action
             header('Content-Type: application/octet-stream');
             header('Content-Type: application/download');
 
-            if ($this->hasXSendFile()) {
+            if ($this->hasXSendFile() && strpos($strFileName, '.zip') == false) {  // Bugfix: file is empty if is zip
                 // Sending file via mod_xsendfile
                 $this->core->logger->info('website->controllers->MediaController->sendDownloadPackage(): X-Sendfile');
                 header('X-Sendfile: ' . $strRealPath);
@@ -494,6 +491,77 @@ class MediaController extends Zend_Controller_Action
         } else {
             // file doesn't exist
         }
+    }
+    
+    /**
+     * mulitDownloadAction
+     * @author Raphael Stocker <rst@massiveart.com>
+     * @version 1.0
+     */
+    public function multiDownloadAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+        $this->core->logger->debug('website->controllers->MediaController->multiDownloadAction()');
+        $this->getModelFiles();
+        $strFileIds = '';
+        if (isset($_GET['fileIds'])) {
+           foreach ($_GET['fileIds'] as $strFileId) {
+               $strFileIds .= '[' . $strFileId . ']';
+           }
+        }
+        $arrFileObjects = $this->getModelFiles()->loadFilesByIdForMultiDownload($strFileIds);
+        
+        $intMediaVersion = 1; // fix
+        
+        if (count($arrFileObjects) > 1) {
+            $arrFilesToZip = array();
+            foreach ($arrFileObjects as $objFileData) {
+                if ($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion) {
+                    $strFileName = $objFileData->fileId . '.v' . $objFileData->archiveVersion . '.' . $objFileData->archiveExtension;
+                } else {
+                    $strFileName = $objFileData->filename;
+                }
+                if ($objFileData->isImage) {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->images->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                } else if (strpos($objFileData->mimeType, 'video/') !== false || $objFileData->mimeType == 'application/x-shockwave-flash') {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->videos->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                } else {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->documents->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                }
+
+                if (file_exists($strFilePath)) {
+                    $arrFilesToZip[$strFileName] = $strFilePath;
+                }
+                 
+            }
+            $strFileSelection = '';
+            foreach ($arrFilesToZip as $file) {
+                $strFileSelection .= $file;
+            } 
+            $strFileSelectionHash = hash('md5', $strFileSelection);
+            $strDestinationZipBase = GLOBAL_ROOT_PATH . 'tmp/cache/zip_downloads/';
+            $strDestinationZipExt =  '.zip';
+            $strDestinationZipFile = $strDestinationZipBase . $strFileSelectionHash . $strDestinationZipExt;
+            $blnZipFileAvailable = false; 
+            if (!file_exists($strDestinationZipFile)) {
+                $blnZipFileAvailable = Zip::createZip($this->core, $arrFilesToZip, $strDestinationZipFile, false);
+            } else {
+                $blnZipFileAvailable = true;
+            }
+            if ($blnZipFileAvailable) {
+                
+            } else {
+                throw new Exception('An error occured by downloading the ziped file: '.$strDestinationZipFile);
+            }
+            $this->sendDownloadPackage($strDestinationZipBase, $strFileSelectionHash.$strDestinationZipExt, array('DesiredFileName' => 'Hoval-Dokumentpackage-' . date('Ymd') . '.zip'));
+                        
+        } else if (count($arrFileObjects) == 1) {
+            $this->_forward('download', 'media', null, array('id' => $arrFileObjects[0]->id));  
+        }
+        
     }
 
     /**

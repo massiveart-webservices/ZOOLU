@@ -258,6 +258,47 @@ class Model_Files
             $this->core->logger->err($exc);
         }
     }
+    
+    /**
+     * loadFilesByIdForMultiDownload 
+     * @param string $strFileIds
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadFilesByIdForMultiDownload($strFileIds){
+        $this->core->logger->debug('core->models->Model_Files->loadFilesByIdForMultiDownload('.$strFileIds.')');
+        try{
+            $this->getFileTable();
+            
+            $intVersion = 1; //TODO
+            
+            $strTmpFileIds = trim($strFileIds, '[]');
+            $arrFileIds = array();
+            $arrFileIds = explode('][', $strTmpFileIds);
+            
+            $objSelect = $this->getFileTable()->select();   
+            $objSelect->setIntegrityCheck(false);
+            
+            if (count($arrFileIds) > 0 && $strFileIds != '[]') {
+                $strIds = '';
+                foreach($arrFileIds as $intFileId){
+                    $strIds .= $intFileId.',';
+                }
+                
+                $objSelect->from('files', array('id', 'fileId', 'version', 'filename', 'isLanguageSpecific', 'idDestination', 'idGroup', 'isImage', 'created', 'changed', 'path', 'extension', 'mimeType', 'size', 'stream', 'idFiles'));
+              
+                if ($intVersion > 0) {
+                    $objSelect->join('fileVersions', 'fileVersions.idFiles = files.id AND fileVersions.version = ' . $intVersion, array('archiveVersion' => 'version', 'archiveExtension' => 'extension', 'archiveSize' => 'size', 'archived'));
+                }
+          
+                $objSelect->where('files.id IN ('.trim($strIds, ',').')');
+                $objSelect->order('FIND_IN_SET(files.id,\''.trim($strIds, ',').'\')');
+                return $this->getFileTable()->fetchAll($objSelect);
+            }
+          }catch (Exception $exc) {
+          $this->core->logger->err($exc);
+        }  
+    }
 
     /**
      * loadLatestFiles
