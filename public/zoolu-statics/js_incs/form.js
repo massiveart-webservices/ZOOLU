@@ -1945,13 +1945,13 @@ Massiveart.Form = Class.create({
 
   updateSnippetPreviewTitle: function() {
 
-    var title = $('seo_title').getValue();
+    var title = this.cleanText( $('seo_title').getValue() );
     if( title == '' ) {
-        title = $('articletitle').getValue();
+        title = this.cleanText( $('articletitle').getValue() );
     }
 
     if( title == '' ) {
-        title = $('title').getValue();
+        title = this.cleanText( $('title').getValue() );
     }
 
     if( title.length > 70 ) {
@@ -1963,7 +1963,12 @@ Massiveart.Form = Class.create({
   },
 
   updateSnippetPreviewDesc: function () {
-    var desc = $('seo_description').getValue();
+    var desc = this.cleanText( $('seo_description').getValue() );
+
+    if( desc == '' ) {
+        desc = this.cleanText( $('description').getValue() );
+    }
+
     if( desc.length > 150 ) {
         var space = desc.lastIndexOf( " ", 147 );
         desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
@@ -1974,5 +1979,16 @@ Massiveart.Form = Class.create({
   updateSnippetPreviewUrl: function () {
     var url = $('page_url').readAttribute('href');
     $('snippet_seo_url').insert(url);
+  },
+
+  cleanText: function( text ) {
+
+      if ( text == '' || text == undefined )
+          return '';
+
+      text = text.replace(/^\s+|\s+$/g, '');
+      text = text.replace(/<\/?[^>]+>/gi, '');
+      text = text.replace(/\[(.+?)\](.+?\[\/\\1\])?/, '');
+      return text;
   }
 });
