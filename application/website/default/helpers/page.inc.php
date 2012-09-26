@@ -104,6 +104,10 @@ function get_meta_description(){
   echo getPageHelperObject()->getMetaDescription();
 }
 
+function get_meta_robots(){
+  echo getPageHelperObject()->getMetaRobots();
+}
+
 /**
  * get_zoolu_header
  * @author Cornelius Hansjakob <cha@massiveart.com>
