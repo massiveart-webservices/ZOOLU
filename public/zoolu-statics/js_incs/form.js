@@ -2277,8 +2277,8 @@ Massiveart.Form = Class.create({
         desc = this.cleanText( $('description').getValue() );
     }
 
-    if( desc.length > 150 ) {
-        var space = desc.lastIndexOf( " ", 147 );
+    if( desc.length > 170 ) {
+        var space = desc.lastIndexOf( " ", 167 );
         desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
     }
 
