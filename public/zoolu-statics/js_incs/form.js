@@ -1959,7 +1959,7 @@ Massiveart.Form = Class.create({
         title = title.substring( 0, space ).concat( ' <strong>...</strong>' );
     }
 
-    title = this.pickOutSeoKeywords( title );
+    title = this.pickOutSeoKeywords( title, false );
 
     $('snippet_seo_title').update( title );
   },
@@ -1976,13 +1976,16 @@ Massiveart.Form = Class.create({
         desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
     }
 
-    desc = this.pickOutSeoKeywords( desc );
+    desc = this.pickOutSeoKeywords( desc, false );
 
     $('snippet_seo_desc').update( desc );
   },
 
   updateSnippetPreviewUrl: function () {
     var url = $('page_url').readAttribute('href');
+
+    url = this.pickOutSeoKeywords(url, true);
+
     $('snippet_seo_url').insert(url);
   },
 
@@ -1997,7 +2000,7 @@ Massiveart.Form = Class.create({
       return text;
   },
 
-  pickOutSeoKeywords: function( text ) {
+  pickOutSeoKeywords: function( text, strip_dashes ) {
 
       var seo_keywords = $('seo_keywords').getValue();
       if( seo_keywords == '' )
@@ -2012,7 +2015,12 @@ Massiveart.Form = Class.create({
       for ( var i = 0; i < aKeywords.length; i++) {
 
           var tKeyword = aKeywords[ i ].replace(',', '');
-          var tRegex = new RegExp( "(^|[ \s\n\r\t\.,'\(\"\+;!?:\-]+)(" + tKeyword + ")($|[ \s\n\r\t\.,'\)\"\+;!?:\-]+)", 'gim' );
+          if( strip_dashes ) {
+              var tKeyword 	= tKeyword.replace(' ','-').toLowerCase();
+              var tRegex = new RegExp( "([-/])(" + tKeyword + ")([-/])?" );
+          } else {
+              var tRegex = new RegExp( "(^|[ \s\n\r\t\.,'\(\"\+;!?:\-]+)(" + tKeyword + ")($|[ \s\n\r\t\.,'\)\"\+;!?:\-]+)", 'gim' );
+          }
 
           text 	= text.replace( tRegex, "$1<strong>$2</strong>$3" );
       }
