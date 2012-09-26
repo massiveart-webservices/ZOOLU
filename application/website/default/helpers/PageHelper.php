@@ -398,6 +398,27 @@ class PageHelper {
     }
     return $strReturn;
   }
+
+  /**
+   * getMetaRobots()
+   * @return string $strReturn
+   * @author Nurbek Chymbaev
+   * @version 1.0
+   */
+  public function getMetaRobots() {
+    $strReturn = '';
+    $metaIndex = $this->objPage->getFieldValue('seo_metaindex');
+    $metaFollow = $this->objPage->getFieldValue('seo_metafollow');
+
+    if( $metaFollow != '' || $metaIndex != '' ) {
+        if( $metaFollow != '' ) {
+            $metaFollow = ','.$metaFollow;
+        }
+        $strReturn .= '<meta name="robots" content="'.$metaIndex.$metaFollow.'"/>';
+    }
+
+    return $strReturn;
+  }
   
   /**
    * getAbstract
