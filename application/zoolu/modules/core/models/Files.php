@@ -755,6 +755,7 @@ class Model_Files
     /**
      * loadFileFilters
      * @param integer $intFileId
+     * @param integer $intFileFiltersCategoryId
      * @return Zend_Db_Table_Rowset_Abstract
      * @author Raphael Stocker <rst@massiveart.com>
      */
@@ -786,6 +787,37 @@ class Model_Files
         }
         return $arrReturn;
     }
+    
+        /**
+     * loadEmptyFileFilters
+     * @param integer $intFileFiltersCategoryId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function loadEmptyFileFilters($intFileFiltersCategoryId = 0) {
+        $this->core->logger->debug('core->models->Model_Files->loadEmptyFileFilters(' . $intFileFiltersCategoryId . ')');
+        $arrReturn = array();
+        if ($intFileFiltersCategoryId > 0) {
+            $objSelect = $this->getCategoriesTable()->select();
+            $objSelect->setIntegrityCheck(false);
+            $objSelect->from('categories', array('id'));
+            $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+            $objSelect->where('categories.idParentCategory = ' . $intFileFiltersCategoryId);
+            $objSelect->order(array('categories.id'));
+            $objResults = $this->getCategoriesTable()->fetchAll($objSelect);
+            if (count($objResults) > 0) {
+                foreach ($objResults as $objResult) {
+                    $objFilter = new stdClass();
+                    $objFilter->id = $objResult->id;
+                    $objFilter->title =  $objResult->title;
+                    $objFilter->values = array();
+                    $arrReturn[$objResult->id] = $objFilter;
+                }
+            }
+        }
+        return $arrReturn;
+    }
+    
     
     /**
      * deleteFileFilters

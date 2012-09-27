@@ -300,7 +300,7 @@ class ViewHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getEditForm($rowset)
+    public function getEditForm($rowset, $arrFilesFileFilters)
     {
         $this->core->logger->debug('media->views->helpers->ViewHelper->getEditForm()');
 
@@ -368,7 +368,8 @@ class ViewHelper
                              <label for="FileIsLanguageSpecific' . $row->id . '"><input type="checkbox"' . $strLanguageSpecificChecked . ' class="multiCheckbox" value="1" id="FileIsLanguageSpecific' . $row->id . '" name="FileIsLanguageSpecific' . $row->id . '"> ' . $this->core->translate->_('Medium_is_language_specific') . '</label>
                            </div>
                          </div>
-                         <div class="clear"></div>  
+                         ' . $this->getFileFilters($arrFilesFileFilters[$row->id], $row->id) . '
+                         <div class="clear"></div>
                        </div>
                        <div class="clear"></div> 
                      </div>';
@@ -567,28 +568,7 @@ class ViewHelper
                        </div> <!-- mediasingleupload -->';
             }
             
-            if (count($arrFileFilters) > 0) {
-                $strOutput .= '
-                       <div class="spacer1"></div>
-                       <div class="fileFilters">';
-                foreach ($arrFileFilters as $objFileFilter) {
-                    $strOutput .= '
-                           <div class="fileFilter" id="fileFilter_' . $objFileFilter->id . '">';
-                    $strOutput .= '
-                               <span class="gray666 bold">' . $objFileFilter->title . '</span><br/>
-                               <input type="checkbox" id="selectFileFilterAll_' . $objFileFilter->id . '" onchange="myMedia.toggleAllFileFiltes(\'fileFilter_' . $objFileFilter->id . '\', this.checked)"/>
-                               <label class="gray666 bold" for="selectFileFilterAll_' . $objFileFilter->id . '">' . $this->core->translate->_('All') . '</label>
-							   <div class="clear" style=""></div>
-                               ';    
-                    $strOutput .=  
-                               HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter_' . $objFileFilter->id, $objFileFilter->values);             
-                    $strOutput .= '
-                           </div> <!--fileFilter -->';
-                }
-                $strOutput .= '
-                           <div class="clear"></div>
-                       </div>';
-            }
+            $strOutput .= $this->getFileFilters($arrFileFilters, $objFile->id);
                     
             if ($objFileVersions != null && $objFileVersions instanceof Zend_Db_Table_Rowset_Abstract) {
                 
@@ -616,6 +596,34 @@ class ViewHelper
                        </div>
                        <div class="clear"></div>
                      </div>';
+        }
+        return $strOutput;
+    }
+    
+    public function getFileFilters($arrFileFilters, $intFileId) {
+        $strOutput = '';
+        if (count($arrFileFilters) > 0) {
+            $strOutput .= '
+                   <div class="spacer1"></div>
+                   <div class="fileFilters">';
+            foreach ($arrFileFilters as $objFileFilter) {
+                $strOutput .= '
+                       <div class="fileFilter" id="fileFilter_' . $objFileFilter->id . '">';
+                $strOutput .= '
+                           <span class="gray666 bold">' . $objFileFilter->title . '</span><br/>
+                           <input type="checkbox" id="selectFileFilterAll_' . $objFileFilter->id . '" onchange="myMedia.toggleAllFileFiltes(\'' . $objFileFilter->id . '\', this.checked, \'' . $this->core->translate->_('Select all') . '\', \'' . $this->core->translate->_('Deselect all') . '\')"/>
+                           <label class="gray666 bold" id="lbl_selectFileFilterAll_' . $objFileFilter->id . '" for="selectFileFilterAll_' . $objFileFilter->id . '">' . $this->core->translate->_('Select all') . '</label>
+                           <div class="allfilterSubline"></div>
+						   <div class="clear" style=""></div>
+                           ';    
+                $strOutput .=  
+                           HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter'. $intFileId .'_' . $objFileFilter->id, $objFileFilter->values);             
+                $strOutput .= '
+                       </div> <!--fileFilter -->';
+            }
+            $strOutput .= '
+                       <div class="clear"></div>
+                   </div>';
         }
         return $strOutput;
     }

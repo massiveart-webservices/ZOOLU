@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-18 11:30+0100\n"
+"POT-Creation-Date: 2012-09-20 17:16+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
@@ -320,15 +320,20 @@ msgstr "Medien hinzufügen"
 msgid "New_version"
 msgstr "Neue Version"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:581
-msgid "Please_choose"
-msgstr "Bitte wählen"
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:579
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:580
+msgid "Select all"
+msgstr "Alle wählen"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:599
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:579
+msgid "Deselect all"
+msgstr "Alle abwählen"
+
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:601
 msgid "Version_list"
 msgstr "Versionsliste"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:606
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:608
 msgid "Version"
 msgstr "Version"
 
@@ -562,6 +567,10 @@ msgstr "Neuen Benutzer anlegen"
 #: application/zoolu/modules/users/controllers/UserController.php:358
 msgid "Edit_User"
 msgstr "Benutzer bearbeiten"
+
+#: application/zoolu/modules/users/controllers/UserController.php:509
+msgid "Please_choose"
+msgstr "Bitte wählen"
 
 #: application/zoolu/modules/users/controllers/UserController.php:518
 msgid "system_language"
@@ -1239,6 +1248,12 @@ msgstr "Inhalte hinzufügen"
 #: application/zoolu/layouts/cms.phtml:28
 #: application/zoolu/layouts/media.phtml:28
 #: application/zoolu/layouts/index.phtml:26
+#: application/zoolu/layouts/contacts-tree.phtml:28
+#: application/zoolu/layouts/global-tree.phtml:28
+#: application/zoolu/layouts/properties.phtml:28
+#: application/zoolu/layouts/newsletters-list.phtml:28
+#: application/zoolu/layouts/users.phtml:27
+#: application/zoolu/layouts/cms-list.phtml:28
 msgid "Open_website"
 msgstr "Website öffnen"
 
@@ -1246,6 +1261,13 @@ msgstr "Website öffnen"
 #: application/zoolu/layouts/cms.phtml:31
 #: application/zoolu/layouts/media.phtml:31
 #: application/zoolu/layouts/index.phtml:29
+#: application/zoolu/layouts/contacts-tree.phtml:31
+#: application/zoolu/layouts/global-tree.phtml:31
+#: application/zoolu/layouts/properties.phtml:31
+#: application/zoolu/layouts/newsletters-list.phtml:31
+#: application/zoolu/layouts/users.phtml:30
+#: application/zoolu/layouts/contacts-list.phtml:29
+#: application/zoolu/layouts/cms-list.phtml:31
 msgid "Report_bugs"
 msgstr "Fehler melden"
 
@@ -1253,24 +1275,52 @@ msgstr "Fehler melden"
 #: application/zoolu/layouts/cms.phtml:32
 #: application/zoolu/layouts/media.phtml:32
 #: application/zoolu/layouts/index.phtml:30
+#: application/zoolu/layouts/contacts-tree.phtml:32
+#: application/zoolu/layouts/global-tree.phtml:32
+#: application/zoolu/layouts/properties.phtml:32
+#: application/zoolu/layouts/newsletters-list.phtml:32
+#: application/zoolu/layouts/users.phtml:31
+#: application/zoolu/layouts/contacts-list.phtml:30
+#: application/zoolu/layouts/cms-list.phtml:32
 msgid "Help_and_FAQ"
 msgstr "Hilfe & FAQ"
 
 #: application/zoolu/layouts/global-list.phtml:67
 #: application/zoolu/layouts/cms.phtml:78
 #: application/zoolu/layouts/media.phtml:82
+#: application/zoolu/layouts/contacts-tree.phtml:133
+#: application/zoolu/layouts/global-tree.phtml:78
+#: application/zoolu/layouts/properties.phtml:139
+#: application/zoolu/layouts/newsletters-list.phtml:67
+#: application/zoolu/layouts/users.phtml:66
+#: application/zoolu/layouts/contacts-list.phtml:69
+#: application/zoolu/layouts/cms-list.phtml:67
 msgid "Saved"
 msgstr "Gespeichert"
 
 #: application/zoolu/layouts/global-list.phtml:68
 #: application/zoolu/layouts/cms.phtml:79
 #: application/zoolu/layouts/media.phtml:83
+#: application/zoolu/layouts/contacts-tree.phtml:134
+#: application/zoolu/layouts/global-tree.phtml:79
+#: application/zoolu/layouts/properties.phtml:140
+#: application/zoolu/layouts/newsletters-list.phtml:68
+#: application/zoolu/layouts/users.phtml:67
+#: application/zoolu/layouts/contacts-list.phtml:70
+#: application/zoolu/layouts/cms-list.phtml:68
 msgid "Can_not_Save"
 msgstr "Speichern nicht möglich"
 
 #: application/zoolu/layouts/global-list.phtml:69
 #: application/zoolu/layouts/cms.phtml:80
 #: application/zoolu/layouts/media.phtml:84
+#: application/zoolu/layouts/contacts-tree.phtml:135
+#: application/zoolu/layouts/global-tree.phtml:80
+#: application/zoolu/layouts/properties.phtml:141
+#: application/zoolu/layouts/newsletters-list.phtml:69
+#: application/zoolu/layouts/users.phtml:68
+#: application/zoolu/layouts/contacts-list.phtml:71
+#: application/zoolu/layouts/cms-list.phtml:69
 msgid "Deleted"
 msgstr "Gelöscht"
 
@@ -1280,6 +1330,13 @@ msgstr "Gelöscht"
 #: application/zoolu/layouts/media.phtml:471
 #: application/zoolu/layouts/index.phtml:192
 #: application/zoolu/layouts/index.phtml:250
+#: application/zoolu/layouts/contacts-tree.phtml:261
+#: application/zoolu/layouts/global-tree.phtml:258
+#: application/zoolu/layouts/properties.phtml:267
+#: application/zoolu/layouts/newsletters-list.phtml:290
+#: application/zoolu/layouts/users.phtml:243
+#: application/zoolu/layouts/contacts-list.phtml:322
+#: application/zoolu/layouts/cms-list.phtml:302
 msgid "Ok"
 msgstr "Ok"
 
@@ -1287,42 +1344,63 @@ msgstr "Ok"
 #: application/zoolu/layouts/cms.phtml:396
 #: application/zoolu/layouts/media.phtml:528
 #: application/zoolu/layouts/index.phtml:297
+#: application/zoolu/layouts/contacts-tree.phtml:318
+#: application/zoolu/layouts/global-tree.phtml:343
+#: application/zoolu/layouts/properties.phtml:316
+#: application/zoolu/layouts/newsletters-list.phtml:390
+#: application/zoolu/layouts/users.phtml:294
+#: application/zoolu/layouts/contacts-list.phtml:442
+#: application/zoolu/layouts/cms-list.phtml:387
 msgid "Delete_"
 msgstr "Löschen?"
 
 #: application/zoolu/layouts/global-list.phtml:294
 #: application/zoolu/layouts/cms.phtml:397
 #: application/zoolu/layouts/media.phtml:529
+#: application/zoolu/layouts/global-tree.phtml:344
+#: application/zoolu/layouts/cms-list.phtml:388
 msgid "Delete_folder"
 msgstr "Wollen Sie diesen Ordner löschen?"
 
 #: application/zoolu/layouts/global-list.phtml:305
+#: application/zoolu/layouts/global-tree.phtml:363
 msgid "Global"
 msgstr "Global"
 
 #: application/zoolu/layouts/cms.phtml:146
+#: application/zoolu/layouts/cms-list.phtml:190
 msgid "Maintenance_properties"
 msgstr "Maintenance Einstellungen"
 
 #: application/zoolu/layouts/cms.phtml:252
 #: application/zoolu/layouts/media.phtml:288
 #: application/zoolu/layouts/index.phtml:55
+#: application/zoolu/layouts/global-tree.phtml:199
 msgid "New_message"
 msgstr "Neue Nachricht"
 
 #: application/zoolu/layouts/cms.phtml:398
+#: application/zoolu/layouts/cms-list.phtml:389
 msgid "Delete_page"
 msgstr "Wollen Sie diese Seite löschen?"
 
 #: application/zoolu/layouts/cms.phtml:399
+#: application/zoolu/layouts/global-tree.phtml:349
+#: application/zoolu/layouts/cms-list.phtml:390
 msgid "Copy_language_override"
 msgstr "Wollen Sie die bereits bestehenden Daten überschreiben?"
 
 #: application/zoolu/layouts/cms.phtml:412
+#: application/zoolu/layouts/cms-list.phtml:402
 msgid "Portals"
 msgstr "Portale"
 
 #: application/zoolu/layouts/media.phtml:135
+#: application/zoolu/layouts/contacts-tree.phtml:67
+#: application/zoolu/layouts/properties.phtml:73
+#: application/zoolu/layouts/newsletters-list.phtml:78
+#: application/zoolu/layouts/users.phtml:77
+#: application/zoolu/layouts/contacts-list.phtml:80
 msgid "New"
 msgstr "Neu"
 
