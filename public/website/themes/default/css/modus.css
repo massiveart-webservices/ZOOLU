@@ -43,7 +43,7 @@ Modus Container */
 }
 .divShowModusContainer {
   position:fixed; 
-  z-index:40; 
+  z-index:70; 
   top:0; 
   left:40px; 
   height:25px;
