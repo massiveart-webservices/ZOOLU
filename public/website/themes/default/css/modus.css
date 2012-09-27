@@ -56,12 +56,12 @@ Modus Container */
   cursor: pointer;
   left: 0;
   float: left;
-  padding: 6px 0 0 0;  
+  padding: 6px 0 0 10px;  
 }
 
 .divModusLogo {
   float:left; 
-  padding: 6px 0 0 10px;
+  padding: 6px 0 0 0;
 }
 
 .divModusLogo a{
