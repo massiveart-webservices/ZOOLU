@@ -272,8 +272,13 @@ class PageHelper {
     $strReturn = '';
     if(Zend_Auth::getInstance()->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true){
       $strReturn .= '
-      <div class="divShowModusContainer">
-        <img onClick="showModusContainer()" src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/opener.png" alt="Open ZOOLU Toolbar" />
+      <div class="divShowModusContainer" id="zoolu-show-modus-toolbar" onClick="showModusContainer()">
+        <div class="divShowModusContainerArrow">
+          <img src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/opener-arrow.png" alt="Open ZOOLU Toolbar" />
+        </div>
+        <div class="divShowModusContainerO">
+          <img src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/opener-o.gif" alt="Open ZOOLU Toolbar" />
+        </div>
       </div>
       <div class="divModusContainer" id="zoolu-modus-toolbar">
         <div class="divModusLogo">
