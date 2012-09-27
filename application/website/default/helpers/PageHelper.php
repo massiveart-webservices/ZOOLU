@@ -271,8 +271,15 @@ class PageHelper {
   public function getZooluHeader(){
     $strReturn = '';
     if(Zend_Auth::getInstance()->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true){
-      $strReturn .= '<div class="divModusContainer">
+      $strReturn .= '
+      <div class="divShowModusContainer">
+        <img onClick="showModusContainer()" src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/opener.png" alt="Open ZOOLU Toolbar" />
+      </div>
+      <div class="divModusContainer" id="zoolu-modus-toolbar">
         <div class="divModusLogo">
+          <div onClick="hideModusContainer()" class="divHideModusContainer"> 
+            <img style="cursor: pointer;" src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/closer.png" alt="Close ZOOLU Toolbar" />
+          </div>
           <a href="/zoolu/cms" target="_blank">
             <img src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/logo_zoolu_modus.gif" alt="ZOOLU" />
           </a>
