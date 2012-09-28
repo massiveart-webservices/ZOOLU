@@ -1,0 +1,82 @@
+html, body {
+	margin:0;
+	padding:0;
+	font-family:arial,helvetica,sans-serif;
+	font-size:10pt;
+	background-color:#F8F4F4;
+    text-align:center;
+}
+#cat_box {
+	margin-top:30px;
+	margin:30px auto;
+	width:400px;
+   text-align:left;
+	padding:0 5px 0px 12px;
+}
+#cat_box h3{
+	margin:0;
+	font-size:10pt;
+}
+#cat_box .block {
+	margin-bottom:6px;
+}
+#cat_box .block .data {
+	margin:0;
+	background-color:#FFF;
+	border-left:1px solid #CCC;
+	border-bottom:1px solid #CCC;
+	border-right:1px solid #CCC;
+	padding:5px 8px 9px;
+}
+#cat_box .block .data a {
+	font-size:130%;
+	color:#00C;
+}
+ul#catalogue_list {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+ul#catalogue_list li {
+	margin:0;
+	padding:1em 0;
+	border-bottom:1px solid #CCC;
+}
+
+
+#cat_box .block h3 {
+	background:#DFDFDF url('../img/gray-grad.png') repeat-x scroll top left;
+	border:1px solid #CCC;
+	font-size:12pt;
+	margin:0;
+	padding:5px 5px;
+	color:#FFF;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	-webkit-border-top-left-radius:6px;
+	-webkit-border-top-right-radius:6px;
+	border-radius-topleft:6px;
+	border-radius-topright:6px;
+}
+#cat_box .block h3 a {
+	color:#333;
+	text-decoration:none;
+	cursor:default;
+}
+#cat_box .block h3 a:hover {
+	color:#000;
+    font-weight:bold;
+} 
+.progressbar {
+	width:100px;
+	border:1px solid #CCC;
+	height:10px;
+	margin:0 3px;
+	background-color:#A00;
+}
+.progressbar .inner {
+	width:0px;
+	height:100%;
+	background-color:#0A0;
+	float-left;
+}
