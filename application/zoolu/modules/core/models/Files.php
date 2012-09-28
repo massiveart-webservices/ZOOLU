@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-class Model_Files
+class Model_Files extends ModelAbstract
 {
 
     private $intLanguageId;
