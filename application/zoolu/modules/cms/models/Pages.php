@@ -886,7 +886,7 @@ class Model_Pages extends ModelAbstract
                                           (SELECT pages.id, pl.id AS plId, genericForms.genericFormId, genericForms.version,
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl, 
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
-                                            pageProperties.created, pageProperties.changed, pageProperties.published, folders.sortPosition AS folderSortPosition, folders.sortTimestamp AS folderSortTimestamp, pageTargets.target
+                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, folders.sortPosition AS folderSortPosition, pages.sortTimestamp, folders.sortTimestamp AS folderSortTimestamp, pageTargets.target
                                           FROM folders
                                           	INNER JOIN folderProperties ON
                                           	  folderProperties.folderId = folders.folderId AND
