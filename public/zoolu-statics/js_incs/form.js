@@ -1928,7 +1928,7 @@ Massiveart.Form = Class.create({
 
     this.updateSnippetPreviewTitle();
     this.updateSnippetPreviewDesc();
-    this.updateSnippetPreviewUrl();
+    this.updateSnippetPreviewUrl(true);
 
     $('articletitle').observe('keyup', function(event){
         myForm.updateSnippetPreviewTitle();
@@ -1940,6 +1940,12 @@ Massiveart.Form = Class.create({
 
     $('seo_description').observe('keyup', function(event) {
         myForm.updateSnippetPreviewDesc();
+    });
+
+    $('seo_keywords').observe('keyup', function(event) {
+        myForm.updateSnippetPreviewTitle();
+        myForm.updateSnippetPreviewDesc();
+        myForm.updateSnippetPreviewUrl(false);
     });
   },
 
@@ -1981,12 +1987,13 @@ Massiveart.Form = Class.create({
     $('snippet_seo_desc').update( desc );
   },
 
-  updateSnippetPreviewUrl: function () {
-    var url = $('page_url').readAttribute('href');
-
-    url = this.pickOutSeoKeywords(url, true);
-
-    $('snippet_seo_url').insert(url);
+  updateSnippetPreviewUrl: function ( onload ) {
+    var snippet_url = $('snippet_seo_url').innerHTML;
+    if( onload ) {
+        snippet_url += $('page_url').readAttribute('href');
+    }
+    snippet_url = this.pickOutSeoKeywords(snippet_url, true);
+    $('snippet_seo_url').innerHTML = snippet_url;
   },
 
   cleanText: function( text ) {
