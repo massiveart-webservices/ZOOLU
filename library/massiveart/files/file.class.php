@@ -398,6 +398,9 @@ class File
 
                         $this->objModelTags->deletTypeTags('file', $intUploadedFileId, 1); // TODO : version
                         $this->objModelTags->addTypeTags('file', $this->arrNewTagIds, $intUploadedFileId, 1); // TODO : version
+                        
+                        // saveFileFilters
+                        $this->updateFileFilters($intUploadedFileId);
                     }
                 }
             }
@@ -503,10 +506,11 @@ class File
     private function updateFileFilters($intEditFileId) {
         $arrFileFiltersData = array();
         foreach ($this->arrFileDatas as $key => $val) {
-            if (strpos($key, 'fileFilter_') === 0) {
+            if (strpos($key, 'fileFilter' . $intEditFileId . '_') === 0) {
                 foreach ($val as $entry) {
                     if ($entry != '') {
-                        $intCategoryId = substr($key, 11); 
+                        $lenght = strlen('fileFilter' . $intEditFileId . '_');
+                        $intCategoryId = substr($key, $lenght); 
                         $arrFileFiltersData[] = array('idFiles' => $intEditFileId, 'idCategories' => $intCategoryId, 'value' => $entry);
                     }    
                 }
