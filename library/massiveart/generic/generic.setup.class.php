@@ -858,7 +858,7 @@ class GenericSetup
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function setMetaInformation(Zend_Db_Table_Row &$objCurrElement)
+    public function setMetaInformation(Zend_Db_Table_Row $objCurrElement)
     {
 
         if (count($objCurrElement) > 0) {

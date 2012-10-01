@@ -285,7 +285,7 @@ class Model_Pages
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function add(GenericSetup &$objGenericSetup)
+    public function add(GenericSetup $objGenericSetup)
     {
         $this->core->logger->debug('cms->models->Model_Pages->add()');
 
@@ -372,7 +372,7 @@ class Model_Pages
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update(GenericSetup &$objGenericSetup, $objPage)
+    public function update(GenericSetup $objGenericSetup, $objPage)
     {
         $this->core->logger->debug('cms->models->Model_Pages->update()');
 
@@ -536,7 +536,7 @@ class Model_Pages
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function addPageCollectionUrls(Zend_Db_Table_Rowset_Abstract &$objPageCollectionData, $intParentId, $intParentTypeId)
+    public function addPageCollectionUrls(Zend_Db_Table_Rowset_Abstract $objPageCollectionData, $intParentId, $intParentTypeId)
     {
         $this->core->logger->debug('cms->models->Model_Pages->addPageCollectionUrls(Zend_Db_Table_Rowset_Abstract, ' . $intParentId . ', ' . $intParentTypeId . ')');
 

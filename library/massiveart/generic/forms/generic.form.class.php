@@ -493,7 +493,7 @@ class GenericForm extends Zend_Form
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.2
      */
-    protected function addField(GenericElementField &$objField, $intRegionId, $strNameExtension = '', $intRegionInstanceId = null, $blnEmpty = false)
+    protected function addField(GenericElementField $objField, $intRegionId, $strNameExtension = '', $intRegionInstanceId = null, $blnEmpty = false)
     {
         try {
             $sqlStmt = array();
@@ -645,7 +645,7 @@ class GenericForm extends Zend_Form
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function setGenericSetup(GenericSetup &$objGenericSetup)
+    public function setGenericSetup(GenericSetup $objGenericSetup)
     {
         $this->setup = $objGenericSetup;
     }

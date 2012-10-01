@@ -85,7 +85,7 @@ class PluginLoader extends Zend_Loader_PluginLoader
      * Sets the internal PluginLoader
      * @param Zend_Loader_PluginLoader $objPluginLoader
      */
-    public function setPluginLoader(Zend_Loader_PluginLoader &$objPluginLoader)
+    public function setPluginLoader(Zend_Loader_PluginLoader $objPluginLoader)
     {
         $this->objPluginLoader = $objPluginLoader;
     }

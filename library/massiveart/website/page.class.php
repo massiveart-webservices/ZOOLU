@@ -1111,7 +1111,7 @@ class Page
                     $this->arrPageEntries[$objEntryData->idPage] = $counter;
                 }
         
-        $this->arrContainer[$counter] = &$objContainer;
+        $this->arrContainer[$counter] = $objContainer;
 
         /**
          * get data of instance tables
@@ -1374,7 +1374,7 @@ class Page
                     $this->arrPageEntries[$objEntryData->id] = $counter;
                 }
         
-        $this->arrContainer[$counter] = &$objContainer;
+        $this->arrContainer[$counter] = $objContainer;
 
         
         $this->objModel = $this->getModelGlobals();
@@ -1546,7 +1546,7 @@ class Page
                     $this->arrPageEntries[$objEntryData->idPage] = $counter;
                 }
         
-        $this->arrContainer[$counter] = &$objContainer;
+        $this->arrContainer[$counter] = $objContainer;
 
         /**
          * get data of instance tables
@@ -2960,7 +2960,7 @@ class Page
      * @param Page $objChildPage
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function setChildPage(Page &$objChildPage)
+    public function setChildPage(Page $objChildPage)
     {
         $this->objChildPage = $objChildPage;
     }

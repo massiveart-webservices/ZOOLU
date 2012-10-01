@@ -160,7 +160,7 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function add(GenericSetup &$objGenericSetup, $arrData)
+    public function add(GenericSetup $objGenericSetup, $arrData)
     {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->add()');
 
@@ -184,7 +184,7 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update(GenericSetup &$objGenericSetup, $arrData)
+    public function update(GenericSetup $objGenericSetup, $arrData)
     {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->update()');
 

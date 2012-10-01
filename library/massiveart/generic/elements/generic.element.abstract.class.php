@@ -94,7 +94,7 @@ abstract class GenericElementAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function setGenericSetup(GenericSetup &$objGenericSetup)
+    public function setGenericSetup(GenericSetup $objGenericSetup)
     {
         $this->setup = $objGenericSetup;
     }

@@ -62,7 +62,7 @@ class Zip
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public static function createZip(Core &$core, $files = array(), $destination = '', $overwrite = false)
+    public static function createZip(Core $core, $files = array(), $destination = '', $overwrite = false)
     {
         $core->logger->debug('massiveart->utilities->Zip->createZip: ' . var_export($files, true));
 

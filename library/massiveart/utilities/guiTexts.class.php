@@ -59,7 +59,7 @@ class GuiTexts
     /**
      * Constructor
      */
-    protected function __construct(Logger &$logger)
+    protected function __construct(Logger $logger)
     {
         $this->logger = $logger;
         $this->arrGuiTexts = _loadGuiTexts();
@@ -103,7 +103,7 @@ class GuiTexts
      * getInstance
      * @return object instance of the class
      */
-    public static function getInstance(Logger &$logger)
+    public static function getInstance(Logger $logger)
     {
         if (self::$instance == null) {
             self::$instance = new GuiTexts($logger);
