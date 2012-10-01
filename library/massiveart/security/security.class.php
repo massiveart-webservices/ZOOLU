@@ -276,7 +276,7 @@ class Security
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public static function save(Security &$objSecurity)
+    public static function save(Security $objSecurity)
     {
         self::clearInstance();
         $objSecuritySesNam = new Zend_Session_Namespace('Security');

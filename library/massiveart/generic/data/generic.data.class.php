@@ -263,7 +263,7 @@ class GenericData
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function compareGenericFieldValues(GenericSetup &$objGenericSetup)
+    public function compareGenericFieldValues(GenericSetup $objGenericSetup)
     {
         $this->core->logger->debug('massiveart->generic->data->GenericData->compareGenericFieldValues()');
         try {

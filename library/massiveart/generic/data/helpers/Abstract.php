@@ -67,7 +67,7 @@ abstract class GenericDataHelperAbstract
      * setElement
      * @param GenericElementAbstract $objElement
      */
-    public function setElement(GenericElementAbstract &$objElement)
+    public function setElement(GenericElementAbstract $objElement)
     {
         $this->objElement = $objElement;
     }

@@ -69,7 +69,7 @@ class GenericElementTab extends GenericElementAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function addRegion(GenericElementRegion &$objRegion)
+    public function addRegion(GenericElementRegion $objRegion)
     {
         $this->arrRegions[$objRegion->getRegionId()] = $objRegion;
     }

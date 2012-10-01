@@ -72,7 +72,7 @@ abstract class Form_Validator_Abstract implements Zend_Validate_Interface
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function setGenericSetup(GenericSetup &$objGenericSetup)
+    public function setGenericSetup(GenericSetup $objGenericSetup)
     {
         $this->setup = $objGenericSetup;
     }
