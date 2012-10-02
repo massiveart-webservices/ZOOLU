@@ -1,0 +1,261 @@
+# Base file
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <jcampbell1@gmail.com>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SimplePO\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-07-30 17:25-0400\n"
+"PO-Revision-Date: 2008-07-31 16:28-0500\n"
+"Last-Translator: Lionel <leroy.lnl@gmail.fr>\n"
+"Language-Team: FRENCH <jcampbell1@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+
+#: standard input:116 input:1115 input:1205 input:1412 input:1517 input:1763
+#: input:1838 input:1868 input:1904 input:1940 input:2771 input:3173
+msgid "Password"
+msgstr "Mot de passe:"
+
+#: standard input:3299
+msgid "Needs Translation"
+msgstr ""
+
+#: standard input:119 input:1442 input:3176
+msgid "Confirm Password"
+msgstr "Confirmation du Mot de passe:"
+
+#: standard input:122 input:158 input:299 input:1592 input:3179 input:3215
+msgid "submit"
+msgstr "envoyer"
+
+#: standard input:125 input:3182
+msgid "Emails do not match"
+msgstr "Les e-mails ne sont pas identiques"
+
+#: standard input:128 input:326 input:1817 input:3185
+msgid "Email address is invalid"
+msgstr "Adresse e-mail invalide"
+
+#: standard input:131 input:311 input:3188
+msgid "Passwords do not match"
+msgstr "Mot de passe invalide"
+
+#: standard input:134 input:3191
+msgid "Please fill in all fields"
+msgstr "Veuillez remplir tous les champs"
+
+#: standard input:137 input:314 input:3194
+msgid "Password cannot contain punctuation"
+msgstr "Le mot de passe ne peux pas contenir de ponctuation"
+
+#: standard input:140 input:3197
+msgid "Username already exists, please choose a different username"
+msgstr "Le nom d'utilisateur existe déjà, veuillez choisir un autre nom"
+
+#: standard input:143 input:3200
+msgid ""
+"An account with that email address, already exists in our system.  A "
+"username and password reminder has been sent to that email address.  Please "
+"check the email and use the returning user form."
+msgstr ""
+"Un compte avec cette adresse e-mail existe déjà dans notre base de donnée. "
+"Un message avec le nom d'utilisateur et le mot de passe vient d'être envoyé "
+"à cette adresse. Veuillez vérifier l'e-mail, le remplir et nous le renvoyer."
+
+#: standard input:164
+msgid ""
+"You already have a subscription.  You cannot purchase another subscription "
+"until your current subscription expires."
+msgstr ""
+"Vous avez déjà un abonnement. Vous ne pouvez pas contracter un autre "
+"abonnement, tant que celui en cours n'a pas expiré."
+
+#: standard input:212 input:230 input:236 input:242 input:566 input:572
+#: input:620 input:644 input:647 input:2153 input:2165 input:2171 input:2177
+msgid "Choose"
+msgstr "Choisir"
+
+#: standard input:227 input:563 input:1064 input:1091 input:2327 input:2663
+#: input:3320
+msgid "Country:"
+msgstr "Pays:"
+
+#: standard input:278
+msgid "Create New Account"
+msgstr "Créer un Nouveau Compte"
+
+#: standard input:281 input:332 input:734 input:980 input:1004 input:1601
+#: input:1712 input:1778 input:3035
+msgid "Username:"
+msgstr "Nom d'utilisateur:"
+
+#: standard input:287
+msgid "Confirm Password:"
+msgstr "Confirmation Mot de passe:"
+
+#: standard input:290 input:551 input:1772 input:1964
+msgid "First Name:"
+msgstr "Prénom:"
+
+#: standard input:293 input:554 input:1775 input:1967
+msgid "Last Name:"
+msgstr "Nom:"
+
+#: standard input:302
+msgid "Username cannot contain punctuation or spaces"
+msgstr "Le nom d'utilisateur ne peut pas contenir d'espaces ni de ponctuation"
+
+#: standard input:323
+msgid ""
+"A user with that email address already exists.  Did you forget you username "
+"and password?  An existing username and password is associated with "
+"that email address.  An email containing the existing username and password "
+"has been sent to the email address."
+msgstr ""
+"Un utilisateur avec cette adresse e-mail existe déja. Avez-vous oublié votre "
+"nom d'utilisateur et votre mot de passe? Un e-mail contenant le nom "
+"d'utilisateur et le mot de passe vient d'être envoyé à cette adresse e-mail."
+
+#: standard input:341
+msgid "Username/Password is not correct"
+msgstr "Nom d'utilisateur/Mot de passe invalide"
+
+#: standard input:467
+msgid ""
+"* Initial setup fee: $150.00 (one language), $250.00 (two languages) "
+"(Applies to 30 users or more)"
+msgstr ""
+"Frais d'inscription $150.00 (une langue), $250.00 (deux langues) (Valable "
+"pour 30 utilisateurs ou plus)"
+
+#: standard input:653
+msgid ""
+"* The credit card security code is the 3 or 4 digit number located on the "
+"back of the card."
+msgstr ""
+"Le code de securité de la carte de crédit est composé de 3 ou 4 chiffres est "
+"se situe au dos de la carte."
+
+#: standard input:656
+msgid "Credit card number appears to be invalid."
+msgstr "Le numéro de carte de crédit saisi est invalide."
+
+#: standard input:746
+msgid ""
+"We were unable to successfully bill to your %1 card having the last four "
+"digits %2. In order to continue your subscription, please go to  %3 at %4 "
+"and click on the \"SUBSCRIBE\" tab. Choose a billing plan and then submit "
+"your existing username and password under  \"RETURNING USERS\"."
+msgstr ""
+"Nous avons été dans l'impossibilité de débiter votre carte de crédit %1 "
+"comportant les quatre derniers numéros %2. Afin de pouvoir continuer votre "
+"inscription aller dans %3 a %4 et cliquez sur \"S'ABONNER\" tab. Choisissez "
+"un mode de facturation et saisissez vos noms d'utilisateur et mot de passe "
+"en cours sous \"UTILISATEUR DEJA INSCRITS\"."
+
+#: standard input:3278
+msgid "100% Native Speakers"
+msgstr "100% Langue Maternelle"
+
+#: standard input:3281
+msgid "Fun Listening Game"
+msgstr "Jeu d'écoute amusant"
+
+#: standard input:3284
+msgid "Online English Video Immersion"
+msgstr "Immersion Vidéo Anglaise En Ligne"
+
+#: standard input:3287
+msgid ""
+"TvESL is an online video magazine for English learners who wish to improve "
+"their English skills. Authentic English videos include television programs, "
+"music \n"
+"                    videos, interviews, documentaries, and travel. Only "
+"TvESL offers captions in mutiple languages, pitch-correct slow play, "
+"integrated dictionaries and \n"
+"                    listening exercises."
+msgstr ""
+"TvESL est un magasine vidéo en ligne pour les personnes qui apprennent "
+"l'anglais et qui souhaitent améliorer leur niveau. De véritables vidéos en "
+"anglais incluant les programmes T.V, musique, vidéos, interviews "
+"documentaires et reportages. TvESL est le seul site d'apprentissage à offrir "
+"les sous-titres en plusieurs langues, Voix corrigée pendant la lecture "
+"ralentie, dictionnaires intégrés et exercices d'écoutes.  "
+
+#: standard input:3290
+msgid "Instant Demo"
+msgstr "Démo Gratuite"
+
+#: standard input:3296
+msgid "Free Demo Videos"
+msgstr "Démo. Gratuites"
+
+#: standard input:3299
+msgid "click to watch"
+msgstr "Cliquer pour regarder"
+
+#: standard input:3299
+msgid "Test Empty"
+msgstr ""
+
+#: standard input:3323
+#, fuzzy
+#| msgid "Subscriber Profile:"
+msgid "Subscriber Benefits"
+msgstr "Profil Utilisateur:"
+
+#: standard input:3326
+msgid "Subscribers get unlimited access to our growing video library."
+msgstr ""
+"Les adhérents ont un accès illimité a notre librairie vidéos mise à jour."
+
+#~ msgid "MY ACCOUNT"
+#~ msgstr "MON COMPTE"
+
+#~ msgid "LOGIN"
+#~ msgstr "OUVERTURE DE SESSION"
+
+#~ msgid "EDUCATORS"
+#~ msgstr "ENSEIGNANTS"
+
+#~ msgid "INQUIRE"
+#~ msgstr "SE RENSEIGNER"
+
+#, fuzzy
+#~ msgid "MORE VIDEOS"
+#~ msgstr "VIDEOS"
+
+#~ msgid "SPANISH"
+#~ msgstr "ESPAGNOL"
+
+#~ msgid "FRENCH"
+#~ msgstr "FRANÇAIS"
+
+#~ msgid "SERVICES"
+#~ msgstr "SERVICES"
+
+#~ msgid "NEWS"
+#~ msgstr "NOUVELLES"
+
+#~ msgid "LOGOUT"
+#~ msgstr ""
+#~ "SORTIE DE SESSION------it's the best one, I think=Exit of a session---- "
+#~ "(or\" FIN DE SESSION\"=END of session)----(or \"SORTIR\"= TO EXIT)"
+
+#~ msgid "My Info"
+#~ msgstr "Mes informations"
+
+#~ msgid "notes"
+#~ msgstr "notes"
+
+#~ msgid "terms of use"
+#~ msgstr "conditions d'utilisation"
+
+#~ msgid "MAILING LIST"
+#~ msgstr "LISTE DE DIFFUSION"

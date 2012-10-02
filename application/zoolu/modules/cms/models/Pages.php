@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-class Model_Pages
+class Model_Pages extends ModelAbstract
 {
 
     private $intLanguageId;
@@ -110,7 +110,7 @@ class Model_Pages
     /**
      * @var Core
      */
-    private $core;
+    protected $core;
 
     /**
      * Constructor
@@ -201,6 +201,9 @@ class Model_Pages
         $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
         $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = pageProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
         $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = pageProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
+        $objSelect->joinLeft('folders', 'folders.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('idRootLevels'));
+        $objSelect->joinLeft('rootLevels', 'rootLevels.id = folders.idRootLevels', array('languageDefinitionType'));
+        $objSelect->joinLeft(array('rl' => 'rootLevels'), 'rl.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'));
         $objSelect->where('pages.id = ?', $intElementId);
 
         return $this->getPageTable()->fetchAll($objSelect);
@@ -781,7 +784,7 @@ class Model_Pages
         if ($intSortTypeId > 0 && $intSortTypeId != '') {
             switch ($intSortTypeId) {
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $strSqlOrderBy = ' ORDER BY sortPosition ' . $strSortOrder . ', sortTimestamp ' . (($strSortOrder == 'DESC') ? 'ASC' : 'DESC');
+                    $strSqlOrderBy = ' ORDER BY folderSortPosition '.$strSortOrder.', folderSortTimestamp '.$strSortOrder.', sortPosition '.$strSortOrder.', sortTimestamp '.(($strSortOrder == 'DESC') ? 'DESC' : 'DESC');
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
                     $strSqlOrderBy = ' ORDER BY created ' . $strSortOrder;
@@ -878,12 +881,12 @@ class Model_Pages
         }
 
         $sqlStmt = $this->core->dbh->query('SELECT DISTINCT id, plId, genericFormId, version, plGenericFormId, plVersion,
-                                          url, plUrl, title, languageCode, idPageTypes, idDestination, hideInSitemap, sortPosition, sortTimestamp, created, changed, published, target
+                                          url, plUrl, title, languageCode, idPageTypes, folderSortPosition, folderSortTimestamp, idDestination, hideInSitemap, sortPosition, sortTimestamp, created, changed, published, target
                                         FROM
                                           (SELECT pages.id, pl.id AS plId, genericForms.genericFormId, genericForms.version,
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl, 
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
-                                            pageProperties.created, pageProperties.changed, pageProperties.published, folders.sortPosition, folders.sortTimestamp, pageTargets.target
+                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, folders.sortPosition AS folderSortPosition, pages.sortTimestamp, folders.sortTimestamp AS folderSortTimestamp, pageTargets.target
                                           FROM folders
                                           	INNER JOIN folderProperties ON
                                           	  folderProperties.folderId = folders.folderId AND
@@ -967,7 +970,7 @@ class Model_Pages
                                           SELECT pages.id, pl.id AS plId, genericForms.genericFormId, genericForms.version,
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl,
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
-                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, pages.sortTimestamp, pageTargets.target                                            
+                                            pageProperties.created, pageProperties.changed, pageProperties.published, NULL AS folderSortPosition, NULL AS folderSortTimestamp, pages.sortPosition, pages.sortTimestamp, pageTargets.target                                            
                                           FROM pages
                                             INNER JOIN pageProperties ON 
                                               pageProperties.pageId = pages.pageId AND 
@@ -1060,8 +1063,8 @@ class Model_Pages
                                                                                 $this->intLanguageId,
                                                                                 $intParentId,
                                                                                 $this->core->sysConfig->parent_types->folder
-                                                                           ));
-
+                                                                               ));
+                                                                               
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
     }
 
@@ -1454,6 +1457,9 @@ class Model_Pages
         $objSelect->from($this->objPageTable, array('pageId', 'relationId' => 'pageId', 'version', 'isStartpage'))
             ->join('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $intLanguageId . ' AND urls.isMain = 0 AND urls.idParent IS NULL', array('id', 'url'))
             ->join('languages', 'languages.id = urls.idLanguages', array('languageCode'))
+            ->joinLeft('folders', 'folders.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('idRootLevels'))
+            ->joinLeft('rootLevels', 'rootLevels.id = folders.idRootLevels', array('languageDefinitionType'))
+            ->joinLeft(array('rl' => 'rootLevels'), 'rl.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'))
             ->where('pages.id = ?', $intPageId)
             ->where('urls.isLandingPage = ?', (int) $blnLandingPages);
 

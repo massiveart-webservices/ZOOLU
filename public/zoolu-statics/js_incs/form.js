@@ -1477,11 +1477,11 @@ Massiveart.Form = Class.create({
    */
   initVideoChannelObserver: function(elementId){
     if($(elementId+'TypeId')){
-      $(elementId+'TypeId').observe('change', function(event){
+      /*$(elementId+'TypeId').observe('change', function(event){
   	    if(Event.element(event).value != '' && Event.element(event).value > 0){
   	      this.getVideoChannelSelect(elementId, Event.element(event).value);
   	    }
-      }.bind(this));
+      }.bind(this));*/
 	
       if($F(elementId+'TypeId') != '' && $F(elementId+'TypeId') > 0){
   	    channelUserId = ($(elementId+'User') ? $F(elementId+'User') : '');
@@ -1594,6 +1594,7 @@ Massiveart.Form = Class.create({
         var intIndexType = $(elementId+'TypeId').selectedIndex;
         var serviceName = $(elementId+'TypeId').options[intIndexType].text;
         var intIndexUser = $(elementId+'User').selectedIndex;
+        var serviceUserId = $(elementId+'User').options[intIndexUser].value;
         var serviceUser = $(elementId+'User').options[intIndexUser].text;
 
         $(elementId).value = videoId;
@@ -1602,7 +1603,7 @@ Massiveart.Form = Class.create({
         $(elementId+'TypeCur').value = $F(elementId+'TypeId');
         $(elementId+'UserCur').value = $F(elementId+'User');
 			  
-        $(elementId+'SelectedService').update(serviceName+'/'+serviceUser);
+        $(elementId+'SelectedService').update('<strong>' + serviceName + '</strong> &raquo; ' + serviceUserId);
         $('div_selected'+elementId).update($('div_'+elementId+'_'+videoId).innerHTML);      
         $('div_selected'+elementId).down('.buttonSelectVideo').setStyle({display:'none'});
         $('div_selected'+elementId).down('.buttonUnselectVideo').setStyle({display:'inline'});

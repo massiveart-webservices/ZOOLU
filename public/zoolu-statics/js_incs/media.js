@@ -859,6 +859,21 @@ Massiveart.Media = Class.create({
         $(elementId).addClassName('textarea');   
       }    
     }
+  },
+  
+  /**
+   * toggleAllFileFiltes
+   */
+  toggleAllFileFiltes: function(filterId, value, selectAllTitle, deselectAllTitle) {
+      $$('#fileFilter_' + filterId + ' input.checkboxOfSql').each(function (elem) {
+          if (value == true || value == 'true') {
+              $('lbl_selectFileFilterAll_'+filterId).innerHTML = deselectAllTitle;
+              elem.checked = 'checked';
+          } else {
+              $('lbl_selectFileFilterAll_'+filterId).innerHTML = selectAllTitle;
+              elem.checked = '';
+          }
+      });
   }
   
 });

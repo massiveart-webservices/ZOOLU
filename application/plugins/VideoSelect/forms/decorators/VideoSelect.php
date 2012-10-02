@@ -73,7 +73,7 @@ class Plugin_FormDecorator_VideoSelect extends Zend_Form_Decorator_Abstract {
 
     $element = $this->getElement();
     $helper  = $element->helper;
-
+    
     $strOutput = $element->getView()->$helper($element->getName(), $element->getValue(), $element->getAttribs(), $element->options, $element->intVideoTypeId, $element->strVideoUserId, $element->strVideoThumb, $element->strVideoTitle);
 
     return $strOutput;
@@ -120,14 +120,13 @@ class Plugin_FormDecorator_VideoSelect extends Zend_Form_Decorator_Abstract {
     $errors       = $this->buildErrors();
     $desc         = $this->buildDescription();
     
-    $userSelect = $this->buildVideoSelect();
+    //$userSelect = $this->buildVideoSelect();
     
     $strOutput = '<div class="field-12">
                     <input type="hidden" id="'.$element->getName().'TypeCur" name="'.$element->getName().'TypeCur" value="'.$element->intVideoTypeId.'">
                     <input type="hidden" id="'.$element->getName().'UserCur" name="'.$element->getName().'UserCur" value="'.$element->strVideoUserId.'">
-                    <div id="'.$element->getName().'SelectedContainer" class="field ">
-                    
-                      <div id="'.$element->getName().'SelectedService" class="field-12"></div>
+                    <div id="'.$element->getName().'SelectedContainer" class="field ">                    
+                      <div id="'.$element->getName().'SelectedService" class="field-12" style="padding: 0 0 2px 0;"></div>
                       <div class="selectedVideo bg2">
                         <div id="div_selected'.$element->getName().'"></div>
                         <div class="videoItem bg1">
@@ -143,8 +142,7 @@ class Plugin_FormDecorator_VideoSelect extends Zend_Form_Decorator_Abstract {
                      .$errors
                      .'
                     </div>
-                    <div id="div_'.$element->getName().'_users" >
-                     
+                    <div id="div_'.$element->getName().'_users" >                     
                     </div>
                   </div>
                   <div class="field-'.($element->getAttrib('columns')).'">

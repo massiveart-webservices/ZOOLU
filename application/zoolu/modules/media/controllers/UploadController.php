@@ -55,6 +55,11 @@ class Media_UploadController extends AuthControllerAction
      * @var Zend_File_Transfer_Adapter_Http
      */
     protected $objUpload;
+    
+    /**
+     * @var Model_Files
+     */
+    protected $objModelFiles;
 
     const UPLOAD_FIELD = 'Filedata';
 
@@ -98,6 +103,8 @@ class Media_UploadController extends AuthControllerAction
                     } else {
                         $this->handleFileUpload();
                     }
+                    $intFileFiltersCategoryId = (int) $this->core->zooConfig->file_filters->parent_id;
+                    $this->view->assign('arrEmptyFileFilters', $this->getModelFiles()->loadEmptyFileFilters($intFileFiltersCategoryId));
                 }
             }
         } catch (Exception $exc) {
@@ -347,6 +354,23 @@ class Media_UploadController extends AuthControllerAction
         $objFile->setPublicFilePath(GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->documents->path->local->public);
         $objFile->setLanguageId($this->intLanguageId);
         $objFile->addVersion(self::UPLOAD_FIELD);
+    }
+    
+    /**
+     * getModelFiles
+     * @return Model_Files
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFiles()
+    {
+        if (null === $this->objModelFiles) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Files.php';
+            $this->objModelFiles = new Model_Files();
+            $this->objModelFiles->setLanguageId($this->intLanguageId);
+        }
+
+        return $this->objModelFiles;
     }
 }
 

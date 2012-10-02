@@ -411,6 +411,23 @@ input[disabled] {
     margin: -2px 0 0 0;
 }
 
+
+/* FileFilters */
+.fileFilter {
+    float: left;
+    width: 33%;
+}
+
+.fileFilter label {
+    float: left;
+    line-height: 20px;
+}
+
+.fileFilter input {
+    float: left;
+    width: 15px;
+}
+
 /* Message */
 
 .message {

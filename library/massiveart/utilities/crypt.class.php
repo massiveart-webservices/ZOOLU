@@ -53,7 +53,7 @@ class Crypt
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public static function encrypt(Core $core, $key, $plain_text)
+    public static function encrypt($core, $key, $plain_text)
     {
         $core->logger->debug('massiveart->utilities->Crypt->encrypt: ' . $key . ', ' . $plain_text);
         try {
@@ -75,7 +75,7 @@ class Crypt
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public static function decrypt(Core $core, $key, $c_t)
+    public static function decrypt($core, $key, $c_t)
     {
         $core->logger->debug('massiveart->utilities->Crypt->decrypt: ' . $key . ', ' . $c_t);
         try {

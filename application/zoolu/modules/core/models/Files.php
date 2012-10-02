@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-class Model_Files
+class Model_Files extends ModelAbstract
 {
 
     private $intLanguageId;
@@ -55,6 +55,11 @@ class Model_Files
      * @var Model_Table_FileTitles
      */
     protected $objFileTitleTable;
+    
+    /**
+     * @var Model_Table_FileFilters
+     */
+    protected $objFileFiltersTable;
 
     /**
      * @var Model_Table_FileAttributes
@@ -65,6 +70,11 @@ class Model_Files
      * @var Model_Table_FileVersions
      */
     protected $objFileVersionTable;
+    
+    /**
+     * @var Model_Table_Categories
+     */
+    protected $objCategoriesTable;
 
     /**
      * @var Core
@@ -128,8 +138,13 @@ class Model_Files
                 $objSelect->where('idParent = ?', $intFolderId);
             }
             if ($strSearchValue != '') {
-                //$objSelect->where('fileTitles.title LIKE ? OR alternativFileTitles.title LIKE ? OR fallbackFileTitles.title LIKE ?', '%'.$strSearchValue.'%');
-                $objSelect->having('fileTitles.title LIKE ? OR alternativFileTitles.title LIKE ? OR fallbackFileTitles.title LIKE ? OR tags LIKE ?', '%' . $strSearchValue . '%');
+                $objSelect->having('fileTitles.title LIKE ? OR 
+                                    alternativFileTitles.title LIKE ? OR 
+                                    fallbackFileTitles.title LIKE ? OR
+                                    fileTitles.description LIKE ? OR 
+                                    alternativFileTitles.description LIKE ? OR 
+                                    fallbackFileTitles.description LIKE ? OR 
+                                    tags LIKE ?', '%' . $strSearchValue . '%');
             }
             if ($strOrderColumn != '') {
                 $objSelect->order($strOrderColumn . ' ' . $strOrderSort);
@@ -242,6 +257,47 @@ class Model_Files
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
+    }
+    
+    /**
+     * loadFilesByIdForMultiDownload 
+     * @param string $strFileIds
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadFilesByIdForMultiDownload($strFileIds){
+        $this->core->logger->debug('core->models->Model_Files->loadFilesByIdForMultiDownload('.$strFileIds.')');
+        try{
+            $this->getFileTable();
+            
+            $intVersion = 1; //TODO
+            
+            $strTmpFileIds = trim($strFileIds, '[]');
+            $arrFileIds = array();
+            $arrFileIds = explode('][', $strTmpFileIds);
+            
+            $objSelect = $this->getFileTable()->select();   
+            $objSelect->setIntegrityCheck(false);
+            
+            if (count($arrFileIds) > 0 && $strFileIds != '[]') {
+                $strIds = '';
+                foreach($arrFileIds as $intFileId){
+                    $strIds .= $intFileId.',';
+                }
+                
+                $objSelect->from('files', array('id', 'fileId', 'version', 'filename', 'isLanguageSpecific', 'idDestination', 'idGroup', 'isImage', 'created', 'changed', 'path', 'extension', 'mimeType', 'size', 'stream', 'idFiles'));
+              
+                if ($intVersion > 0) {
+                    $objSelect->join('fileVersions', 'fileVersions.idFiles = files.id AND fileVersions.version = ' . $intVersion, array('archiveVersion' => 'version', 'archiveExtension' => 'extension', 'archiveSize' => 'size', 'archived'));
+                }
+          
+                $objSelect->where('files.id IN ('.trim($strIds, ',').')');
+                $objSelect->order('FIND_IN_SET(files.id,\''.trim($strIds, ',').'\')');
+                return $this->getFileTable()->fetchAll($objSelect);
+            }
+          }catch (Exception $exc) {
+          $this->core->logger->err($exc);
+        }  
     }
 
     /**
@@ -695,6 +751,99 @@ class Model_Files
             $this->core->logger->err($exc);
         }
     }
+    
+    /**
+     * loadFileFilters
+     * @param integer $intFileId
+     * @param integer $intFileFiltersCategoryId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function loadFileFilters($intFileId, $intFileFiltersCategoryId = 0) {
+        $this->core->logger->debug('core->models->Model_Files->loadFileFilters(' . $intFileId . ', ' . $intFileFiltersCategoryId . ')');
+        $arrReturn = array();
+        if ($intFileFiltersCategoryId > 0) {
+            $objSelect = $this->getCategoriesTable()->select();
+            $objSelect->setIntegrityCheck(false);
+            $objSelect->from('categories', array('id'));
+            $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+            $objSelect->joinLeft('fileFilters', 'fileFilters.idCategories = categories.id AND fileFilters.idFiles = ' . $intFileId, array('value'));
+            $objSelect->where('categories.idParentCategory = ' . $intFileFiltersCategoryId);
+            $objSelect->order(array('categories.id'));
+            $objResults = $this->getCategoriesTable()->fetchAll($objSelect);
+            if (count($objResults) > 0) {
+                foreach ($objResults as $objResult) {
+                    if (key_exists($objResult->id, $arrReturn)) {
+                        $arrReturn[$objResult->id]->values[] = $objResult->value;
+                    } else {
+                        $objFilter = new stdClass();
+                        $objFilter->id = $objResult->id;
+                        $objFilter->title =  $objResult->title;
+                        $objFilter->values = array($objResult->value);
+                        $arrReturn[$objResult->id] = $objFilter;
+                    }
+                }
+            }
+        }
+        return $arrReturn;
+    }
+    
+        /**
+     * loadEmptyFileFilters
+     * @param integer $intFileFiltersCategoryId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function loadEmptyFileFilters($intFileFiltersCategoryId = 0) {
+        $this->core->logger->debug('core->models->Model_Files->loadEmptyFileFilters(' . $intFileFiltersCategoryId . ')');
+        $arrReturn = array();
+        if ($intFileFiltersCategoryId > 0) {
+            $objSelect = $this->getCategoriesTable()->select();
+            $objSelect->setIntegrityCheck(false);
+            $objSelect->from('categories', array('id'));
+            $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+            $objSelect->where('categories.idParentCategory = ' . $intFileFiltersCategoryId);
+            $objSelect->order(array('categories.id'));
+            $objResults = $this->getCategoriesTable()->fetchAll($objSelect);
+            if (count($objResults) > 0) {
+                foreach ($objResults as $objResult) {
+                    $objFilter = new stdClass();
+                    $objFilter->id = $objResult->id;
+                    $objFilter->title =  $objResult->title;
+                    $objFilter->values = array();
+                    $arrReturn[$objResult->id] = $objFilter;
+                }
+            }
+        }
+        return $arrReturn;
+    }
+    
+    
+    /**
+     * deleteFileFilters
+     * @param integer $intFileId
+     * @return void
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function deleteFileFilters($intFileId) {
+        $this->core->logger->debug('core->models->Model_Files->deleteFileFilters(' . $intFileId . ')');
+        $this->getFileFiltersTable();
+        $strWhere = ' idFiles = ' . $intFileId;
+        $this->objFileFiltersTable->delete($strWhere);   
+    }
+    
+    /**
+     * updateFileFilters
+     * @param array $arrFileFitlersData
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function updateFileFilters($arrFileFitlersData) {
+        $this->core->logger->debug('core->models->Model_Files->updateFileFilters(' . var_export($arrFileFitlersData, true) . ')');
+        $this->getFileFiltersTable();
+        foreach ($arrFileFitlersData as $arrFileFilterData) {
+            $this->objFileFiltersTable->insert($arrFileFilterData);
+        }
+    }
 
     /**
      * getFileTable
@@ -704,12 +853,10 @@ class Model_Files
      */
     public function getFileTable()
     {
-
         if ($this->objFileTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/Files.php';
             $this->objFileTable = new Model_Table_Files();
         }
-
         return $this->objFileTable;
     }
 
@@ -721,13 +868,26 @@ class Model_Files
      */
     public function getFileTitleTable()
     {
-
         if ($this->objFileTitleTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/FileTitles.php';
             $this->objFileTitleTable = new Model_Table_FileTitles();
         }
-
         return $this->objFileTitleTable;
+    }
+    
+    /**
+     * getFileFiltersTable
+     * @return Model_Table_FileFilters
+     * @author Raphael Stocker <rst@massvart.com>
+     * @version 1.0
+     */
+    public function getFileFiltersTable()
+    {
+        if ($this->objFileFiltersTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/FileFilters.php';
+            $this->objFileFiltersTable = new Model_Table_FileFilters();
+        }
+        return $this->objFileFiltersTable;
     }
 
     /**
@@ -798,6 +958,24 @@ class Model_Files
     public function getAlternativLanguageId()
     {
         return $this->intAlternativLanguageId;
+    }
+    
+
+    /**
+     * getCategoriesTable
+     * @return Model_Table_Categories $objCategoriesTable
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getCategoriesTable()
+    {
+
+        if ($this->objCategoriesTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/Categories.php';
+            $this->objCategoriesTable = new Model_Table_Categories();
+        }
+
+        return $this->objCategoriesTable;
     }
 }
 

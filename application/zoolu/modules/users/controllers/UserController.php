@@ -518,9 +518,10 @@ class Users_UserController extends Zend_Controller_Action
         $this->objForm->addElement('select', 'language', array('label' => $this->core->translate->_('system_language', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrLanguageOptions));
         $this->objForm->addElement('text', 'email', array('label' => $this->core->translate->_('email', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text', 'required' => true));
         $this->objForm->addElement('select', 'contentLanguage', array('label' => $this->core->translate->_('content_language', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrLanguageOptions));
+        $this->objForm->addElement('textarea', 'description', array('label' => $this->core->translate->_('description', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'textarea', 'required' => false));
         $this->objForm->addElement('media', 'idFiles', array('label' => $this->core->translate->_('profile_image', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'media', 'required' => false, 'display_option' => ''));
 
-        $this->objForm->addDisplayGroup(array('fname', 'sname', 'username', 'email', 'language', 'contentLanguage', 'idFiles'), 'main-group');
+        $this->objForm->addDisplayGroup(array('fname', 'sname', 'username', 'email', 'language', 'contentLanguage', 'description', 'idFiles'), 'main-group');
         $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information', false));
         $this->objForm->getDisplayGroup('main-group')->setDecorators(array('FormElements', 'Region'));
 
@@ -530,6 +531,14 @@ class Users_UserController extends Zend_Controller_Action
         $this->objForm->addDisplayGroup(array('password', 'passwordConfirmation'), 'password-group');
         $this->objForm->getDisplayGroup('password-group')->setLegend($this->core->translate->_('Reset_password', false));
         $this->objForm->getDisplayGroup('password-group')->setDecorators(array('FormElements', 'Region'));
+        
+        $this->objForm->addElement('text', 'googlePlus', array('label' => $this->core->translate->_('googleplus_id', false), 'decorators' => array('Input'), 'columns' => 4, 'class' => 'text'));
+        $this->objForm->addElement('text', 'facebook', array('label' => $this->core->translate->_('facebook_id', false), 'decorators' => array('Input'), 'columns' => 4, 'class' => 'text'));
+        $this->objForm->addElement('text', 'twitter', array('label' => $this->core->translate->_('twitter_id', false), 'decorators' => array('Input'), 'columns' => 4, 'class' => 'text'));
+
+        $this->objForm->addDisplayGroup(array('googlePlus', 'facebook', 'twitter'), 'socialmedia-group');
+        $this->objForm->getDisplayGroup('socialmedia-group')->setLegend($this->core->translate->_('Social_media', false));
+        $this->objForm->getDisplayGroup('socialmedia-group')->setDecorators(array('FormElements', 'Region'));
 
         if (!$blnSingleEdit) {
             $arrGroups = array();

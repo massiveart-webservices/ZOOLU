@@ -96,11 +96,21 @@ class Media_FileController extends AuthControllerAction
             $objRequest = $this->getRequest();
             $strFileIds = $objRequest->getParam('fileIds');
             $objFiles = $this->objModelFiles->loadFilesById($strFileIds);
+            
 
             $this->view->assign('strEditFormAction', '/zoolu/media/file/edit');
             $this->view->assign('strFileIds', $strFileIds);
             $this->view->assign('objFiles', $objFiles);
-
+            
+            $intFileFiltersCategoryId = (int) $this->core->zooConfig->file_filters->parent_id;
+            $arrFilesFileFilters = array();
+            $strTmpFileIds = trim($strFileIds, '[]');
+            $arrFileIds = array();
+            $arrFileIds = explode('][', $strTmpFileIds);
+            foreach ($arrFileIds as $intFileId) {
+                $arrFilesFileFilters[$intFileId] = $this->getModelFiles()->loadFileFilters($intFileId, $intFileFiltersCategoryId);    
+            }
+            $this->view->assign('arrFilesFileFilters',$arrFilesFileFilters);
             $this->view->assign('languageOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->intLanguageId));
         }
 
@@ -127,7 +137,8 @@ class Media_FileController extends AuthControllerAction
             $this->view->assign('strEditFormAction', '/zoolu/media/file/edit');
             $this->view->assign('strFileIds', $strFileIds);
             $this->view->assign('objFiles', $objFiles);
-
+            $intFileFiltersCategoryId = (int) $this->core->zooConfig->file_filters->parent_id;
+            $this->view->assign('arrEmptyFileFilters', $this->getModelFiles()->loadEmptyFileFilters($intFileFiltersCategoryId));
             $this->view->assign('languageOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->intLanguageId));
         }
 
@@ -164,6 +175,10 @@ class Media_FileController extends AuthControllerAction
             $this->view->assign('destinationOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT categories.id AS VALUE, categoryTitles.title  AS DISPLAY FROM categories INNER JOIN categoryTitles ON categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->core->intZooluLanguageId . ' WHERE categories.idParentCategory = 466 ORDER BY categoryTitles.title', $objFile->current()->idDestination));
             $this->view->assign('groupOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT groups.id AS VALUE, groups.title  AS DISPLAY FROM groups LEFT JOIN groupGroupTypes ON groupGroupTypes.idGroups = groups.id WHERE groupGroupTypes.idGroupTypes = ' . $this->core->sysConfig->group_types->frontend . ' ORDER BY groups.title', $objFile->current()->idGroup));
             $this->view->assign('languageOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->intLanguageId));
+            
+            $intFileFiltersCategoryId = (int) $this->core->zooConfig->file_filters->parent_id;
+            $arrFileFilters = $this->getModelFiles()->loadFileFilters($intFileId, $intFileFiltersCategoryId);
+            $this->view->assign('arrFileFilters', $arrFileFilters);
         }
 
         $this->assignSecurityOptions();

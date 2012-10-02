@@ -85,6 +85,47 @@ class HtmlOutput
 
         return $strHtmlOutput;
     }
+    
+    /**
+     * getCheckboxesOfSql
+     * returns the result of a SQL-Statement in the valid output form
+     * <input value="[VALUE]></input>
+     * <label>[DISPLAY]</label>
+     *
+     * Version history (please keep backward compatible):
+     * 1.0, 2008-11-17: Cornelius Hansjakob
+     *
+     * @param Core $core
+     * @param string $strSQL SQL statment
+     * @param array $arrSelectedValues
+     * @return string $strHtmlOutput
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public static function getCheckboxesOfSql(Core &$core, $strSQL, $strName, $arrSelectedValues = array(), $arrSecurityCheck = array())
+    {
+        $core->logger->debug('massiveart->utilities->HtmlOutput->getCheckboxesOfSql: ' . $strSQL);
+        $strHtmlOutput = '';
+        try {
+            foreach ($core->dbh->query($strSQL)->fetchAll() as $arrSQLRow) {
+                if (count($arrSecurityCheck) == 0 || Security::get()->isAllowed(sprintf($arrSecurityCheck['ResourceKey'], $arrSQLRow['VALUE']), $arrSecurityCheck['Privilege'], $arrSecurityCheck['CheckForAllLanguages'], $arrSecurityCheck['IfResourceNotExists'])) {
+                    if (in_array($arrSQLRow['VALUE'], $arrSelectedValues)) {
+                        $strChecked = ' checked="checked"';
+                    } else {
+                        $strChecked = '';
+                    }
+                    $strHtmlOutput .= '<input class="checkboxOfSql" type="checkbox" name="' . $strName . '[]" id="' . $strName . '_' . $arrSQLRow['VALUE'] . '" value="' . $arrSQLRow['VALUE'] . '"' . $strChecked . '> </input>' . chr(13) .'
+                                       <label for="' . $strName . '_' . $arrSQLRow['VALUE'] . '" >' . $arrSQLRow['DISPLAY'] . '</label>
+                                       <div class="clear"></div>';
+                }
+            }
+
+        } catch (Exception $exc) {
+            $core->logger->err($exc);
+        }
+
+        return $strHtmlOutput;
+    }
 
     /**
      * getFormattedByteSize

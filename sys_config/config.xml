@@ -1023,7 +1023,7 @@
     
     <!-- VIDEO CHANNELS -->
     <video_channels>
-      <vimeo>
+      <!--<vimeo>
         <id>1</id>
         <users>
           <user>
@@ -1031,13 +1031,13 @@
             <name></name>
           </user>
         </users>
-      </vimeo>
+      </vimeo> -->
       <youtube>
         <id>2</id>
         <users>
           <user>
-            <id></id>
-            <name></name>
+            <id>MASSIVEARTWebService</id>
+            <name>MASSIVE ART WebServices</name>
           </user>      	
         </users>
       </youtube>

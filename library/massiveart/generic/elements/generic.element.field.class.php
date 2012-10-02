@@ -148,6 +148,20 @@ class GenericElementField extends GenericElementAbstract
         return $this->arrProperties;
     }
 
+    
+    /**
+     * getProperties
+     * @param String $strPropertyName
+     * @return array
+     */
+    public function getProperty($strPropertyName)
+    {
+        if (key_exists($strPropertyName, $this->arrProperties)) {
+            return $this->arrProperties[$strPropertyName];
+        } 
+    }
+    
+    
     /**
      * getProperties
      * @param integer $intInstanceId

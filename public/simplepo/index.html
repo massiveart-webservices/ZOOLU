@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>Simple PO - Choose Catalogue</title>
+    <link rel="stylesheet" href="incl/css/master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="incl/css/index.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script src="incl/js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="incl/js/json2.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+
+      $.messageService = function(method, params, callback, error_handler){
+        $.post("message_service.php",
+        {
+          request:JSON.stringify({"method":method, "params":params, "id":Math.random()})
+        }, function(obj){
+          if (obj.error){
+            error_handler ? error_handler(obj.error) : $('#errors').text(obj.error.message);
+          } else{
+            callback(obj.result);
+          }
+        }, "json");
+      };
+
+      $( function(){
+        var $container = $('div.data');
+        $.messageService("getCatalogues", [], function(data){
+          var table = $('<table><tbody> </tbody></table>');
+          $container.append(table);
+          for (var i = 0; i<data.length; ++i){
+             var html = ''
+                  + '<tr><td>'
+                  + '<a href="edit.html?cat_id='+data[i].id+'">' + data[i].name + '</a> '
+                  + '</td><td>'
+                  + '<div class="progressbar"> <div class="inner"> </div> </div>'
+                  + '</td><td>'
+                  + '<span class="percent"></span> - <span class="translated" ></span> of <span class="total"></span>'
+                  + '</td></tr>';
+         
+                table.find('tbody').append(html);
+                var $row = table.find('tr:last');
+                
+                $row.find('.inner')
+                  .css( 'width',
+                    $row.find('.progressbar').width()  * 
+                    ( data[i].translated_count / data[i].message_count)
+                  );
+                
+                $row.find('.translated').text(data[i].translated_count);
+                $row.find('.total').text(data[i].message_count);
+                $row.find('.percent').text(parseInt(data[i].translated_count / data[i].message_count *100) + " %");
+              //console.log($row.find('.progressbar').css('width'));
+            }
+            
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="cat_box">
+      <div class="block">
+        <h3><a href="#">Choose from the following Catalogues:</a></h3>
+        <div class="data">
+          
+        </div>
+      </div>
+    </div>
+</body>
+</html>

@@ -126,6 +126,7 @@ class Navigation
     protected $blnHasSegments;
     protected $intSegmentId;
     protected $strSegmentCode;
+    protected $intLanguageDefinitionType;
 
     /**
      * Constructor
@@ -196,10 +197,10 @@ class Navigation
                         $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
                         $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
-                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes) && $this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
+                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes)) {
 
                             $arrFilter = array();
-                            if ($this->objPage->getElementId() == $objNavigationItem->idPage) {
+                            if ($this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
                                 $arrFilter = array(
                                     'CategoryId'  => $this->objPage->getFieldValue('entry_category'),
                                     'LabelId'     => $this->objPage->getFieldValue('entry_label'),
@@ -366,9 +367,9 @@ class Navigation
                         $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
                         $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
-                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes) && $this->objPage instanceof Page) {
+                        if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes)) {
                             $arrFilter = array();
-                            if ($this->objPage->getElementId() == $objNavigationItem->idPage) {
+                            if ($this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
                                 $arrFilter = array(
                                     'CategoryId'  => $this->objPage->getFieldValue('entry_category'),
                                     'LabelId'     => $this->objPage->getFieldValue('entry_label'),
@@ -412,9 +413,9 @@ class Navigation
                             $objTree->setTarget(($objNavigationItem->idPageTypes == $this->core->sysConfig->page_types->external->id) ? $objNavigationItem->target : '');
 
                             $arrPageGlobaLinkTypes = array($this->core->sysConfig->page_types->product_tree->id, $this->core->sysConfig->page_types->press_area->id, $this->core->sysConfig->page_types->courses->id, $this->core->sysConfig->page_types->events->id);
-                            if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes) && $this->objPage instanceof Page) {
+                            if (in_array($objNavigationItem->idPageTypes, $arrPageGlobaLinkTypes)) {
                                 $arrFilter = array();
-                                if ($this->objPage->getElementId() == $objNavigationItem->idPage) {
+                                if ($this->objPage instanceof Page && $this->objPage->getElementId() == $objNavigationItem->idPage) {
                                     $arrFilter = array(
                                         'CategoryId'  => $this->objPage->getFieldValue('entry_category'),
                                         'LabelId'     => $this->objPage->getFieldValue('entry_label'),
@@ -931,9 +932,12 @@ class Navigation
         } else if ($this->blnHasSegments) {
             $strUrl .= '/' . $this->strSegmentCode;
         }
-
-        $strUrl .= '/' . strtolower($strLanguageCode) . '/' . $strItemUrl;
-
+        
+        $strLanguageFolder = '';
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+            $strLanguageFolder = strtolower($strLanguageCode) . '/';
+        } 
+        $strUrl .= '/' .$strLanguageFolder . $strItemUrl;
         return $strUrl;
     }
 
@@ -1146,6 +1150,24 @@ class Navigation
     public function getUrlPrefix()
     {
         return $this->strUrlPrefix;
+    }
+    
+    /**
+     * setLanguageDefinitionType
+     * @param int $intLanguageDefinitionType
+     */
+    public function setLanguageDefinitionType($intLanguageDefinitionType)
+    {
+        $this->intLanguageDefinitionType = $intLanguageDefinitionType;
+    }
+
+    /**
+     * getLanguageDefinitionType
+     * @return int intLanguageDefinitionType
+     */
+    public function getLanguageDefinitionType()
+    {
+        return $this->intLanguageDefinitionType;
     }
 }
 
