@@ -341,6 +341,14 @@ class Page
                     if (isset($objPage->idPageTypes)) {
                         switch ($objPage->idPageTypes) {
                             case $this->core->sysConfig->page_types->external->id:
+                                $strTmpUrl = $this->getFieldValue('external');
+                                if ((bool) preg_match("/https?:\/\//", $strTmpUrl) == true) {
+                                    header('Location: '.$strTmpUrl);
+                                }else {
+                                    header('Location: http://'.$strTmpUrl);
+                                }
+                                exit();
+                                /* PROBLEM : FILTER_VALIDATE_URL not correct, urls with "-" (Bugfix in PHP 5.3.3)
                                 if (filter_var($this->getFieldValue('external'), FILTER_VALIDATE_URL)) {
                                     header('Location: ' . $this->getFieldValue('external'));
                                 } else if (filter_var('http://' . $this->getFieldValue('external'), FILTER_VALIDATE_URL)) {
@@ -348,7 +356,7 @@ class Page
                                 } else {
                                     header('Location: http://' . $_SERVER['HTTP_HOST']);
                                 }
-                                exit();
+                                exit();*/
                             case $this->core->sysConfig->page_types->link->id:
                                 header('Location: http://' . $_SERVER['HTTP_HOST'] . $this->getField('internal_link')->strLinkedPageUrl);
                                 exit();
@@ -671,6 +679,32 @@ class Page
                 if ($strFileIds != '') {
                     $this->getModelFiles();
                     $this->arrFileData[$strFileFieldName] = $this->objModelFiles->loadFilesById($strFileIds);
+                }
+            }
+            return $this->arrFileData[$strFileFieldName];
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+    
+    /**
+     * getCoreFileFieldValue
+     * @param string $strFileFieldName
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getCoreFileFieldValue($strFileFieldName)
+    {
+        try {
+            if (!array_key_exists($strFileFieldName, $this->arrFileData)) {
+                $this->arrFileData[$strFileFieldName] = null;
+                $objField = $this->objGenericData->Setup()->getField($strFileFieldName);
+                if (is_object($objField)) {
+                    $strFileIds = $objField->getValue();
+                    if ($strFileIds != '') {
+                        $this->getModelFiles();
+                        $this->arrFileData[$strFileFieldName] = $this->objModelFiles->loadFilesById($strFileIds);
+                    }
                 }
             }
             return $this->arrFileData[$strFileFieldName];
@@ -1039,9 +1073,9 @@ class Page
                     foreach ($objTmpContainer->getEntries() as $objTmpEntry) {
 
                         $strEventUrl = '';
-                        if (filter_var($objTmpEntry->external, FILTER_VALIDATE_URL)) {
+                        if ((bool) preg_match("/https?:\/\//", $objTmpEntry->external) == true) {
                             $strEventUrl = $objTmpEntry->external;
-                        } else if (filter_var('http://' . $objTmpEntry->external, FILTER_VALIDATE_URL)) {
+                        }else {
                             $strEventUrl = 'http://' . $objTmpEntry->external;
                         }
 
