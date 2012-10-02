@@ -136,7 +136,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
                         
-                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
 
                         $strTmpFileIds = trim($objField->getValue(), '[]');
                         $arrFileIds = array();
@@ -550,7 +550,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
 
                         $strTmpFileIds = trim($objField->getValue(), '[]');
                         $arrFileIds = array();
@@ -563,6 +563,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
+                            $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idFields = ?', $objField->id);
+                            
                             // delete
                             $objGenTable->delete($strWhere);
 
@@ -675,7 +677,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     }
                 } else {
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
                         $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
@@ -1176,12 +1178,12 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 foreach ($this->setup->CoreFields() as $strField => $objField) {
 
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
                         $objSelect = $objGenTable->select();
                         $objSelect->setIntegrityCheck(false);
         
-                        $objSelect->from('pageFiles', array('idFiles', 'sortPosition', 'displayOption'));
-                        $objSelect->join('fields', 'fields.id = pageFiles.idFields', array('name'));
+                        $objSelect->from($strType.'Files', array('idFiles', 'sortPosition', 'displayOption'));
+                        $objSelect->join('fields', 'fields.id = '.$strType.'Files.idFields', array('name'));
                         $objSelect->where($strType . 'Id = ?', $arrTypeProperties['Id']);
                         $objSelect->where('version = ?', $arrTypeProperties['Version']);
                         $objSelect->where('idLanguages = ?', $this->Setup()->getLanguageId());
