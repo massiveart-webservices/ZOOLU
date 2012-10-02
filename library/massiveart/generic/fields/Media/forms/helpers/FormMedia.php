@@ -133,11 +133,18 @@ class Form_Helper_FormMedia extends Zend_View_Helper_FormElement
 
             $arrImagesSizes = Zend_Registry::get('Core')->sysConfig->upload->images->default_sizes->default_size->toArray();
             foreach ($arrImagesSizes as $arrImageSize) {
-                if (isset($arrImageSize['display']) && isset($arrImageSize['display']['text_block'])) {
-                    if ($arrImageSize['display']['text_block'] == 'default' && $objDisplayOption->size == null) $objDisplayOption->size = $arrImageSize['folder'];
-                    $strSelected = ($arrImageSize['folder'] == $objDisplayOption->size) ? ' selected="selected"' : '';
-                    $strOutput .= '
-                         <option value="' . $arrImageSize['folder'] . '"' . $strSelected . '>' . $arrImageSize['folder'] . '</option>';
+                if (isset($arrImageSize['display']) && isset($arrImageSize['display']['text_block']) && $arrImageSize['display']['text_block'] != 'false') {
+                  if ($arrImageSize['display']['text_block'] == 'default' && $objDisplayOption->size == null) $objDisplayOption->size = $arrImageSize['folder'];
+                  $strSelected = ($arrImageSize['folder'] == $objDisplayOption->size) ? ' selected="selected"' : '';          
+                  
+                  $strOutput .= '
+                                 <option value="' . $arrImageSize['folder'] . '"' . $strSelected . '>' . $arrImageSize['folder'] . '</option>';
+                } else if (isset($arrImageSize['display']) && isset($arrImageSize['display']['main_pic']) && $arrImageSize['display']['main_pic'] != 'false') {
+                  if ($arrImageSize['display']['main_pic'] == 'default' && $objDisplayOption->size == null) $objDisplayOption->size = $arrImageSize['folder'];
+                  $strSelected = ($arrImageSize['folder'] == $objDisplayOption->size) ? ' selected="selected"' : '';          
+                  
+                  $strOutput .= '
+                                 <option value="' . $arrImageSize['folder'] . '"' . $strSelected . '>' . $arrImageSize['folder'] . '</option>';
                 }
             }
             $strOutput .= '

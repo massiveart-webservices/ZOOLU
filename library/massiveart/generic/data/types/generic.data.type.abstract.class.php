@@ -304,6 +304,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $strTmpFileIds = trim($objField->getValue(), '[]');
                 $arrFileIds = array();
                 $arrFileIds = explode('][', $strTmpFileIds);
+                
+                $strDisplayOption = $objField->getProperty('display_option');
 
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
@@ -315,6 +317,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'    => $this->setup->getLanguageId(),
                                     'sortPosition'   => $intSortPosition + 1,
                                     'idFiles'        => $intFileId,
+                                    'displayOption'  => $strDisplayOption,
                                     'idFields'       => $intFieldId
                                 );
                             } else {
@@ -322,7 +325,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id'],
                                     'idFiles'                            => $intFileId,
                                     'idFields'                           => $intFieldId,
-                                    'sortPosition'                       => $intSortPosition + 1
+                                    'sortPosition'                       => $intSortPosition + 1,
+                                    'displayOption'                      => $strDisplayOption
                                 );
                             }
 
@@ -727,6 +731,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $strTmpFileIds = trim($objField->getValue(), '[]');
                 $arrFileIds = array();
                 $arrFileIds = explode('][', $strTmpFileIds);
+                
+                $strDisplayOption = $objField->getProperty('display_option');
 
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
@@ -738,6 +744,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'   => $this->setup->getLanguageId(),
                                     'sortPosition'  => $intSortPosition + 1,
                                     'idFiles'       => $intFileId,
+                                    'displayOption' => $strDisplayOption,
                                     'idFields'      => $intFieldId
                                 );
                             } else {
@@ -745,7 +752,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id'],
                                     'idFiles'                            => $intFileId,
                                     'idFields'                           => $intFieldId,
-                                    'sortPosition'                       => $intSortPosition + 1
+                                    'sortPosition'                       => $intSortPosition + 1,
+                                    'displayOption'                      => $strDisplayOption
                                 );
                             }
 
@@ -1273,6 +1281,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         if ($this->setup->getFileField($arrGenRowFormsData['name']) !== null) {
                             $strFileIds = $this->setup->getFileField($arrGenRowFormsData['name'])->getValue() . '[' . $arrGenRowFormsData['idFiles'] . ']';
                             $this->setup->getFileField($arrGenRowFormsData['name'])->setValue($strFileIds);
+                            $this->setup->getFileField($arrGenRowFormsData['name'])->setProperty('display_option', $arrGenRowFormsData['displayOption']);
                         }
                     }
                 }
