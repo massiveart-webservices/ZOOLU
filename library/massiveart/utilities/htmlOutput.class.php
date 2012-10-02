@@ -61,7 +61,7 @@ class HtmlOutput
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public static function getOptionsOfSQL(Core &$core, $strSQL, $strSelectedValue = '', $arrSecurityCheck = array())
+    public static function getOptionsOfSQL(Core $core, $strSQL, $strSelectedValue = '', $arrSecurityCheck = array())
     {
         $core->logger->debug('massiveart->utilities->HtmlOutput->getOptionsOfSQL: ' . $strSQL);
         $strHtmlOutput = '';

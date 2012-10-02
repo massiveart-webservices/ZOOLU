@@ -122,7 +122,7 @@ class Model_Folders
      * @return stdClass Folder
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function add(GenericSetup &$objGenericSetup)
+    public function add(GenericSetup $objGenericSetup)
     {
         $this->core->logger->debug('cms->models->Model_Folders->add()');
 
@@ -202,7 +202,7 @@ class Model_Folders
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update(GenericSetup &$objGenericSetup, $objFolder)
+    public function update(GenericSetup $objGenericSetup, $objFolder)
     {
         $this->core->logger->debug('cms->models->Model_Folders->update()');
 

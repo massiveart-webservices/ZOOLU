@@ -775,7 +775,7 @@ class File
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function setUpload(Zend_File_Transfer_Adapter_Abstract &$objUpload)
+    public function setUpload(Zend_File_Transfer_Adapter_Abstract $objUpload)
     {
         $this->objUpload = $objUpload;
     }

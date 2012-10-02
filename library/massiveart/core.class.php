@@ -115,7 +115,7 @@ class Core
     /**
      * Constructor
      */
-    protected function __construct($blnWithDbh = true, Zend_Config_Xml &$sysConfig, Zend_Config_Xml &$zooConfig, Zend_Config_Xml &$config)
+    protected function __construct($blnWithDbh = true, Zend_Config_Xml $sysConfig, Zend_Config_Xml $zooConfig, Zend_Config_Xml $config)
     {
         // set sys config object
         $this->sysConfig = $sysConfig;
@@ -416,7 +416,7 @@ class Core
      * getInstance
      * @return object instance of the class
      */
-    public static function getInstance($blnWithDbh = true, Zend_Config_Xml &$sysConfig, Zend_Config_Xml &$zooConfig, Zend_Config_Xml &$config)
+    public static function getInstance($blnWithDbh = true, Zend_Config_Xml $sysConfig, Zend_Config_Xml $zooConfig, Zend_Config_Xml $config)
     {
         if (self::$instance == null) {
             self::$instance = new Core($blnWithDbh, $sysConfig, $zooConfig, $config);
