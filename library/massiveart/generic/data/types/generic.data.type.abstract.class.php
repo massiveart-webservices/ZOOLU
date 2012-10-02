@@ -1184,6 +1184,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         $objSelect->where($strType . 'Id = ?', $arrTypeProperties['Id']);
                         $objSelect->where('version = ?', $arrTypeProperties['Version']);
                         $objSelect->where('idLanguages = ?', $this->Setup()->getLanguageId());
+                        $objSelect->where('idFields = ?', $objField->id);
                         $objSelect->order(array('sortPosition ASC'));
         
                         $arrGenFormsData = $objGenTable->fetchAll($objSelect)->toArray();
