@@ -679,6 +679,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
+                        $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idFields = ?', $objField->id);
     
                         /**
                          * delete
