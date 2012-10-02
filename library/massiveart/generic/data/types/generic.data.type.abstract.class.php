@@ -1281,7 +1281,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         if ($this->setup->getFileField($arrGenRowFormsData['name']) !== null) {
                             $strFileIds = $this->setup->getFileField($arrGenRowFormsData['name'])->getValue() . '[' . $arrGenRowFormsData['idFiles'] . ']';
                             $this->setup->getFileField($arrGenRowFormsData['name'])->setValue($strFileIds);
-                            $this->setup->getFileField($arrGenRowFormsData['name'])->setProperty('display_option', $arrGenRowFormsData['displayOption']);
+                            if (array_key_exists('displayOption', $arrGenRowFormsData)) $this->setup->getFileField($arrGenRowFormsData['name'])->setProperty('display_option', $arrGenRowFormsData['displayOption']);
                         }
                     }
                 }
