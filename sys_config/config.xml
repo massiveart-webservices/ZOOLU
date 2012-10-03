@@ -714,6 +714,7 @@
       <companies>16</companies>
       <newsletters>17</newsletters>
       <subscribers>18</subscribers>
+      <customers>19</customers>
     </root_level_types>
     
     <!-- ROOTLEVEL GROUPS -->
@@ -735,6 +736,7 @@
       <tradeinfonet>14</tradeinfonet>
       <newsletter>15</newsletter>
       <subscriber>16</subscriber>
+      <customer>17</customer>
     </root_level_groups>
     
     <!-- FOLDER TYPES -->

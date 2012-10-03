@@ -164,7 +164,12 @@ CREATE  TABLE IF NOT EXISTS `customerLog` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
+insert into rootLevels values('49', '19', '17', '6', '0', '0', '0', '0', '/zoolu/contacts/index/list', '0', '1', '5', '1');
+insert into rootLevelTypes values('19', 'customers');
+insert into rootLevelGroups values('17', 'customers');
+insert into rootLevelTitles values('97', '49', '1', 'Kunden');
+insert into rootLevelTitles values('98', '49', '2', 'Customers');
+insert into rootLevelPermission values('49', '1', '1');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

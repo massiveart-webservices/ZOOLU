@@ -109,6 +109,11 @@ class NavigationHelper
                             $strJsClickFunc = 'myNavigation.selectSubscribers(' . $objNavigation->getId() . ', ' . $objNavigationTree->getTypeId() . ', \'' . $objNavigation->getUrl() . '\', \'' . $strViewType . '\', \'' . $strRootLevelType . '\'); return false;';
                             $strRootLevelIconCss = 'usericon';
                             break;
+                        case $this->core->sysConfig->root_level_types->customers:
+                            $strRootLevelType = 'customer';
+                            $strJsClickFunc = 'myNavigation.selectCustomers(' . $objNavigation->getId() . ', ' . $objNavigationTree->getTypeId() . ', \'' . $objNavigation->getUrl() . '\', \'' . $strViewType . '\', \'' . $strRootLevelType . '\'); return false;';
+                            $strRootLevelIconCss = 'usericon';
+                            break;
                     }
 
                     if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objNavigation->getId(), Security::PRIVILEGE_VIEW, true, false)) {
