@@ -14,9 +14,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `customerSalutation`
+-- Table `customerSalutations`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `customerSalutation` (
+CREATE  TABLE IF NOT EXISTS `customerSalutations` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT ,
   `title` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) ,
@@ -42,7 +42,7 @@ CREATE  TABLE IF NOT EXISTS `customers` (
   `mobile` VARCHAR(255) NULL ,
   `fax` VARCHAR(255) NULL ,
   `idCustomerStatus` BIGINT(20) UNSIGNED NOT NULL ,
-  `idCustomerSalutation` BIGINT(20) UNSIGNED NOT NULL ,
+  `idcustomerSalutations` BIGINT(20) UNSIGNED NOT NULL ,
   `idRootLevels` BIGINT(20) UNSIGNED NOT NULL ,
   `idUsers` INT(10) UNSIGNED NOT NULL ,
   `creator` INT(10) UNSIGNED NOT NULL ,
@@ -51,7 +51,7 @@ CREATE  TABLE IF NOT EXISTS `customers` (
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) ,
   INDEX `fk_customers_customerStatus_idx` (`idCustomerStatus` ASC) ,
-  INDEX `fk_customers_customerSalutation1_idx` (`idCustomerSalutation` ASC) ,
+  INDEX `fk_customers_customerSalutations1_idx` (`idcustomerSalutations` ASC) ,
   INDEX `fk_customers_rootLevels_idx` (`idRootLevels` ASC) ,
   INDEX `fk_customers_users_idx` (`idUsers` ASC) ,
   INDEX `fk_customers_creator_idx` (`creator` ASC),
@@ -61,9 +61,9 @@ CREATE  TABLE IF NOT EXISTS `customers` (
     REFERENCES `customerStatus` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_customers_customerSalutation1`
-    FOREIGN KEY (`idCustomerSalutation` )
-    REFERENCES `customerSalutation` (`id` )
+  CONSTRAINT `fk_customers_customerSalutations1`
+    FOREIGN KEY (`idcustomerSalutations` )
+    REFERENCES `customerSalutations` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_customers_rootLevels`
@@ -104,9 +104,9 @@ CREATE  TABLE IF NOT EXISTS `customerAddresses` (
   `zip` VARCHAR(255) NOT NULL ,
   `city` VARCHAR(255) NOT NULL ,
   `state` VARCHAR(255) NOT NULL ,
-  `idCountries` INT(11) NOT NULL ,
+  `idCountries` INT(11) ,
   `idCustomers` BIGINT(20) UNSIGNED NOT NULL ,
-  `idCustomerAddressTypes` BIGINT(20) UNSIGNED NOT NULL ,
+  `idCustomerAddressTypes` BIGINT(20) UNSIGNED ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_customerAddresses_customers1_idx` (`idCustomers` ASC) ,
   INDEX `fk_customerAddresses_customerAddressTypes1_idx` (`idCustomerAddressTypes` ASC) ,
@@ -160,6 +160,22 @@ CREATE  TABLE IF NOT EXISTS `customerLog` (
   CONSTRAINT `fk_customerLog_customerLogTypes1`
     FOREIGN KEY (`idCustomerLogType` )
     REFERENCES `customerLogTypes` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `customerGroups` (
+  `idCustomers` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `idGroups` BIGINT(20) UNSIGNED NOT NULL ,
+  PRIMARY KEY (`idCustomers`, `idGroups`) ,
+  CONSTRAINT `fk_customerGroups_customers1`
+    FOREIGN KEY (`idCustomers` )
+    REFERENCES `customers` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_customerGroups_groups`
+    FOREIGN KEY (`idGroups` )
+    REFERENCES `groups` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
