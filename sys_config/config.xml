@@ -520,6 +520,9 @@
                 <params>660</params>
               </action>
             </actions>                        
+            <display>
+              <imagemap>true</imagemap>
+            </display>
           </default_size>
           <default_size>
             <folder>420x</folder>
@@ -528,7 +531,10 @@
                 <method>resize</method>
                 <params>420</params>
               </action>
-            </actions>                        
+            </actions>
+            <display>
+              <imagemap>true</imagemap>
+            </display>                        
           </default_size>
           <default_size>
             <folder>220x</folder>

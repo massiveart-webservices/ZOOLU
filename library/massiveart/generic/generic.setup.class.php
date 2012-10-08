@@ -267,6 +267,7 @@ class GenericSetup
     */
     const FIELD_TYPE_ID_TAG = 16;
     const FIELD_TYPE_ID_ARTICLES = 34;
+    const FIELD_TYPE_ID_IMAGEMAP = 35;
 
     /**
      * @var Core

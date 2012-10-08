@@ -656,6 +656,71 @@ Document Chooser Element */
 }
 
 /* ----------------
+Imagemap Element */
+
+.imagemapWrapper {
+    width: 100%;
+}
+
+.imagemapWrapper div {
+
+}
+
+.imagemapWrapper .imagemapTop {
+    background-color: #e4e4e4;
+    height: 22px;
+    margin: 2px 0 0 0;
+    padding: 2px 0 0 0;
+    border: 1px solid #e4e4e4;
+}
+
+.imagemapWrapper .imagemapTop .left {
+    float: left;
+    padding-left: 5px;
+    line-height: 22px;
+}
+
+.imagemapWrapper .imagemapTop .right {
+    float:right;
+    text-align: right;
+    line-height: 22px;
+}
+
+.imagemapWrapper .imagemapTop img {
+    border: 0;
+    vertical-align: middle;
+    margin: 0 5px 0 2px;
+    cursor: pointer;
+}
+
+.imagemapWrapper .imagemapContainer {
+    position: relative;
+    border: 1px solid #e4e4e4;
+    overflow: auto;   
+    min-height: 100px;
+}
+
+.imagemapWrapper .imagemapContainer .imagemap {
+    position: relative;
+    margin: 10px auto; 
+}
+
+.imagemapWrapper .imagemapContainer .imagemap img {
+    position: relative;
+    z-index: 4;  
+    border: 1px solid #e4e4e4;
+}
+
+.imagemapWrapper .imagemapContainer .imagemap .marker {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: url('/zoolu-statics/images/icons/icon_target.png') no-repeat center center;
+    z-index: 5;
+    cursor: pointer;
+}
+
+/* ----------------
 Video Chooser Element */
 
 .vidwrapper {

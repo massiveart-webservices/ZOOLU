@@ -427,15 +427,85 @@ Massiveart.Form = Class.create({
   },
   
   /**
+   * getChangeMediaOverlay
+   */
+  getChangeMediaOverlay: function(areaId, currentImageSize = '', targetFieldtype = '') {    
+      this.getAddMediaOverlay(areaId, true, currentImageSize, targetFieldtype);
+  },
+  
+  /**
+   * removeImagemapValues
+   */
+  removeImagemapValues: function(fieldId) {
+      if ($(fieldId + '_img')) {
+          $(fieldId + '_img').remove();
+      }
+      if ($(fieldId + '_markers')) {
+          $(fieldId + '_markers').innerHTML ='';
+          $(fieldId + '_markers').value = '';
+      }
+      if ($(fieldId + '_remove')) {
+          $(fieldId + '_remove').hide();
+      }
+      $$('#divImagemap_' + fieldId + ' .marker').each(function(m){
+         m.remove(); 
+      });
+  },
+  
+  /**
+   * changeImageSize
+   */
+  changeImageSize: function(fieldId, newImageSize, areaId, fieldType) {
+      if ($(fieldId + '_img')) {
+          var oldsrc = $(fieldId + '_img').src;
+          var newsrc = oldsrc.replace('/' + this.oldImageSize + '/', '/' + newImageSize + '/');
+          $(fieldId + '_img').src = newsrc;
+          $(fieldId + '_img').onload = function() {
+              if ($(areaId)) {
+                  $(areaId).style.width = $(fieldId + '_img').width + 'px';  
+              }
+              if (fieldType = 'imagemap') {
+                  myForm.calcNewMarkerPositions(fieldId);
+              }
+          };
+      }
+  },
+  
+  /**
+   * calcNewMarkerPositions
+   */
+  calcNewMarkerPositions: function(fieldId) {
+      var newWidth = $(fieldId + '_img').width;
+      var newHeight = $(fieldId + '_img').height;
+      var markersId = fieldId + '_markers'
+      try {
+          JSON.parse($F(markersId));
+          var markers = $F(markersId).evalJSON();
+          markers.each(function(m) {
+              markerId = fieldId + '_marker' + '_' + m.region;
+              if ($(markerId)) {
+                  $(markerId).style.left = (m.x * newWidth - 16) + 'px';
+                  $(markerId).style.top = (m.y * newHeight - 16) + 'px';
+              }
+          });
+      } catch (e) {
+          return;
+      }
+  },
+  
+  /**
    * getAddMediaOverlay
    */
-  getAddMediaOverlay: function(areaId){    
+  getAddMediaOverlay: function(areaId, replace = false, currentImageSize = '', targetFieldtype = '') {    
     $(this.updateOverlayContainer).innerHTML = '';
     myCore.putCenter('overlayGenContentWrapper');
     $('overlayGenContentWrapper').show();
     $('overlayGenContent').setStyle({height:'100%'});
     if($(areaId)){
       new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/media', { 
+        parameters: {
+            replace: replace
+        },
         evalScripts: true,
         onComplete: function(){
           $('olContent').addClassName('oldocuments');
@@ -443,7 +513,8 @@ Massiveart.Form = Class.create({
           myOverlay.overlayCounter++;
           myCore.putOverlayCenter('overlayGenContentWrapper');
           myOverlay.areaId = areaId;
-          myOverlay.updateViewTypeIcons();          
+          myOverlay.currentImageSize = currentImageSize;
+          myOverlay.targetFieldtype = targetFieldtype;
         } 
       });
     }    
