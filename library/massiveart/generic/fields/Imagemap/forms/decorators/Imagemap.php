@@ -105,8 +105,9 @@ class Form_Decorator_Imagemap extends Zend_Form_Decorator_Abstract
     public function buildImagemap()
     {
         $element = $this->getElement();
+        
         $helper = $element->helper;
-        $output = $element->getView()->$helper($element->getName(), $element->getValue());
+        $output = $element->getView()->$helper($element->getName(), $element->getValue(), $element->getAttribs());
         return $output;
     }
 

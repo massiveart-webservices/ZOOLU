@@ -322,8 +322,6 @@ class Page
                 $this->objGenericData->Setup()->setParentTypeId($this->getParentTypeId());
                 $this->objGenericData->Setup()->setModelSubPath($this->getModelSubPath());
                 
-                $this->core->logger->debug('huhu');
-
                 $this->objGenericData->loadData();
 
                 if ($this->objGenericData->Setup()->getLanguageFallbackId() > 0 && $this->objGenericData->Setup()->getLanguageFallbackId() != $this->getLanguageId()) {

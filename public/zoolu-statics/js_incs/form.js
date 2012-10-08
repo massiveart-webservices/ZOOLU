@@ -444,6 +444,9 @@ Massiveart.Form = Class.create({
           $(fieldId + '_markers').innerHTML ='';
           $(fieldId + '_markers').value = '';
       }
+      if ($(fieldId + '_file')) {
+          $(fieldId + '_file').value = '';
+      }
       if ($(fieldId + '_remove')) {
           $(fieldId + '_remove').hide();
       }

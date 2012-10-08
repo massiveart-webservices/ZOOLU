@@ -130,18 +130,25 @@ Massiveart.Overlay = Class.create({
           if ($(fieldId + '_img')) {
               $(fieldId + '_img').remove();
           }
-          console.log(fieldId + '_img');
           
           // create new image
           var newImgId = this.areaId.substring(this.areaId.indexOf('_')+1) + '_img';
           var newImg = document.createElement('img');
+          newImg.onload = function() {
+              if (myOverlay.targetFieldtype == 'imagemap') {
+                  myForm.calcNewMarkerPositions(fieldId);
+                  $(myOverlay.areaId).style.width = $(fieldId + '_img').width + 'px';  
+              }
+          }
           newImg.setAttribute('src', file);
           newImg.setAttribute('id', newImgId);
           $(this.areaId).appendChild(newImg);
 
           if (this.targetFieldtype == 'imagemap') {
               $(fieldId + '_file').value = id;
-              myForm.calcNewMarkerPositions(fieldId);
+              if ($(fieldId + '_remove')) {
+                  $(fieldId + '_remove').show();
+              }
           } else {
               if($(fieldId).value.indexOf('[' + id + ']') == -1){
                   $(fieldId).value = $(fieldId).value + '[' + id + ']';

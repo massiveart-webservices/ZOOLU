@@ -886,7 +886,7 @@ class Model_Pages extends ModelAbstract
                                           (SELECT pages.id, pl.id AS plId, genericForms.genericFormId, genericForms.version,
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl, 
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
-                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, pages.sortTimestamp, folders.sortPosition AS folderSortPosition, folders.sortTimestamp AS folderSortTimestamp, pageTargets.target
+                                            pageProperties.created, pageProperties.changed, pageProperties.published, IF(pages.isStartPage = 1, 0, pages.sortPosition) AS sortPosition, pages.sortTimestamp, folders.sortPosition AS folderSortPosition, folders.sortTimestamp AS folderSortTimestamp, pageTargets.target
                                           FROM folders
                                           	INNER JOIN folderProperties ON
                                           	  folderProperties.folderId = folders.folderId AND
@@ -970,7 +970,7 @@ class Model_Pages extends ModelAbstract
                                           SELECT pages.id, pl.id AS plId, genericForms.genericFormId, genericForms.version,
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl,
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
-                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, pages.sortTimestamp, NULL AS folderSortPosition, NULL AS folderSortTimestamp, pageTargets.target                                            
+                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, pages.sortTimestamp, pages.sortPosition AS folderSortPosition, pages.sortTimestamp AS folderSortTimestamp, pageTargets.target                                            
                                           FROM pages
                                             INNER JOIN pageProperties ON 
                                               pageProperties.pageId = pages.pageId AND 

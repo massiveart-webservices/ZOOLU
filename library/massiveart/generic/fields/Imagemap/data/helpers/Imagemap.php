@@ -107,7 +107,71 @@ class GenericDataHelper_Imagemap extends GenericDataHelperAbstract
             $this->core->logger->err($exc);
         }
     }
+    
+    /**
+     * save()
+     * @param integer $intElementId
+     * @param string $strType
+     * @param string $strElementId
+     * @param integet $intVersion
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function save($intElementId, $strType, $strElementId = null, $intVersion = null)
+    {
+        try {
+            $this->strType = $strType;
+            $name = $this->objElement->getProperty('name');
+            
+            $strGenTableName = $strType . 'Imagemaps';
+            $objGenTable = $this->getModelGenericData()->getGenericTable($strType . 'Imagemaps');
+            $strWhere = $strType . 'Id = \'' . $strElementId . '\' AND version = ' . $intVersion . ' AND idLanguages = ' . $this->objElement->Setup()->getLanguageId() . ' AND idFields = ' . $this->objElement->id;
+            $objGenTable->delete($strWhere);
+            
+            $markers = '[]';
+            if (key_exists($name . '_markers',  $_POST)) {
+                $markers = $_POST[$name . '_markers'];                    
+            }
 
+            $size = '';
+            if (key_exists($name . '_size',  $_POST)) {
+                $size = $_POST[$name .'_size'];                    
+            }
+            
+            $idFiles = '';
+            if (key_exists($name . '_file',  $_POST)) {
+                $idFiles = $_POST[$name .'_file'];                    
+            }
+            
+            $idTargetRegion = null;
+            if ($this->objElement->getProperty('fieldOptions')) {
+                $fieldOptions = json_decode($this->objElement->getProperty('fieldOptions'));
+                $idTargetRegion = $fieldOptions->idTargetRegion;
+            }
+            if ($idTargetRegion == null) {
+                throw new Exception('Cannot append a target region to any marker if traget region is not defined. ' . $exc->getMessage());
+            }  
+            
+            if ($idFiles != '') {
+                $arrData = array(
+                    $strType.'Id'     => $strElementId,
+                    'version'         => $intVersion,
+                    'idLanguages'     => $this->objElement->Setup()->getLanguageId(),
+                    'idFields' 	      => $this->objElement->id,
+                    'idFiles' 	      => $idFiles,
+                    'size'		      => $size,
+                    'idTargetRegion'  => $idTargetRegion,
+                    'markers'		  => $markers	
+                );
+                $objGenTable->insert($arrData);
+            }
+            
+            $this->load($intElementId, $strType, $strElementId, $intVersion);
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
 
     /**
      * loadInstanceData

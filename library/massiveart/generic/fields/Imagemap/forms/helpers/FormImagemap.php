@@ -74,8 +74,7 @@ class Form_Helper_FormImagemap extends Zend_View_Helper_FormElement
             			    <div class="imagemapContainer">
                                 <div id="divImagemap_' . $this->view->escape($id) . '" class="imagemap" style="width: ' . ($value != '' ? $value->dimensions[0] : '') . 'px;">';
         if ($value != '') {    
-            $strOutput .= '         <img id="' . $this->view->escape($id) . '_img" src="/website/uploads/images/' . $value->path . $value->size . '/' . $value->filename .'" ' .$endTag . '
-                                    <input type="hidden" value="' . $value->file .  '" name="' . $this->view->escape($id) . '_file" id="' . $this->view->escape($id) . '_file" ' .  $endTag;
+            $strOutput .= '         <img id="' . $this->view->escape($id) . '_img" src="/website/uploads/images/' . $value->path . $value->size . '/' . $value->filename .'" ' .$endTag;
             if ($value->markers != '') {
                 $arrMarkers = json_decode($value->markers);
                 if (is_array($arrMarkers) && count($arrMarkers) > 0 ) {
@@ -90,7 +89,8 @@ class Form_Helper_FormImagemap extends Zend_View_Helper_FormElement
         }
         $strOutput .= '         </div>
             					<textarea style="display:none;" name="' . $this->view->escape($id) . '_markers" id="' . $this->view->escape($id) . '_markers">' . ($value != '' ? $value->markers : '') . '</textarea>		     	  
-            			     	<div class="itemremovethumb" onclick="myForm.removeImagemapValues(\'' . $this->view->escape($id) . '\'); return false;" id="' . $this->view->escape($id) . '_remove"></div>
+                                <input type="hidden" value="' . ($value != '' ? $value->file : '') .  '" name="' . $this->view->escape($id) . '_file" id="' . $this->view->escape($id) . '_file" ' .  $endTag .'
+            					<div class="itemremovethumb" onclick="myForm.removeImagemapValues(\'' . $this->view->escape($id) . '\'); return false;" id="' . $this->view->escape($id) . '_remove" ' . ($value != '' ? '' : 'style="display: none;"') . '></div>
                             </div>
                         </div>';
         return $strOutput;
