@@ -270,6 +270,19 @@ class Core
     }
 
     /**
+     * updateSessionLanguage
+     * @return void
+     */
+    public function updateSessionLanguage()
+    {
+        if ($this->objCoreSession instanceof Zend_Session_Abstract) {
+            // update session language now
+            $this->objCoreSession->languageId = $this->intLanguageId;
+            $this->objCoreSession->languageCode = $this->strLanguageCode;
+        }
+    }
+
+    /**
      * initDisplayEnvironment
      */
     private function initDisplayEnvironment()
