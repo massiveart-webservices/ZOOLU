@@ -87,6 +87,12 @@ try{
     $router->addRoute('zooluWebControllerActionParams', $route);
 
     /**
+     * default customer routings
+     */
+    $route = new Zend_Controller_Router_Route_Static('login', array('controller' => 'Customer', 'action' => 'login'));
+    $router->addRoute('customerWebControllerLogin', $route);
+
+    /**
      * only throw exceptions in developement mode
      */
     if($sysConfig->show_errors === 'false'){
