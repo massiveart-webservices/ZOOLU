@@ -94,6 +94,11 @@ abstract class WebControllerAction extends Zend_Controller_Action
     /**
      * @var integer
      */
+    protected $intLanguageDefinitionType;
+
+    /**
+     * @var integer
+     */
     protected $intSegmentId;
 
     /**
@@ -125,6 +130,8 @@ abstract class WebControllerAction extends Zend_Controller_Action
 
         $this->intLanguageId = $this->core->intLanguageId;
         $this->strLanguageCode = $this->core->strLanguageCode;
+
+        $this->loadTheme();
     }
 
     /**
@@ -495,6 +502,48 @@ abstract class WebControllerAction extends Zend_Controller_Action
             'File',
             $arrFrontendOptions,
             $arrBackendOptions);
+    }
+
+    /**
+     * initNavigation
+     * @return Client_Navigation|Navigation
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    protected function initNavigation()
+    {
+        if (file_exists(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php')) {
+            require_once(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php');
+            $objNavigation = new Client_Navigation();
+        } else {
+            $objNavigation = new Navigation();
+        }
+        $objNavigation->setRootLevelId($this->objTheme->idRootLevels);
+        $objNavigation->setLanguageId($this->intLanguageId);
+
+        // set navigation url prefix properties
+        $objNavigation->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
+        $objNavigation->setUrlPrefix($this->strUrlPrefix);
+        $objNavigation->setLanguageDefinitionType($this->intLanguageDefinitionType);
+
+        // set navigation segmentation properties
+        $objNavigation->setHasSegments($this->objTheme->hasSegments);
+        $objNavigation->setSegmentId($this->intSegmentId);
+        $objNavigation->setSegmentCode($this->strSegmentCode);
+
+        if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php')) {
+            require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php');
+            $strNavigationHelper = ucfirst($this->objTheme->path) . '_NavigationHelper';
+            $objNavigationHelper = new $strNavigationHelper();
+        } else {
+            require_once(dirname(__FILE__) . '/../helpers/NavigationHelper.php');
+            $objNavigationHelper = new NavigationHelper();
+        }
+
+        $objNavigationHelper->setNavigation($objNavigation);
+        $objNavigationHelper->setTranslate($this->translate);
+        Zend_Registry::set('NavigationHelper', $objNavigationHelper);
+        return $objNavigation;
     }
 
     /**
