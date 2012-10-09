@@ -47,6 +47,8 @@ class Form_Helper_FormImagemap extends Zend_View_Helper_FormElement
 {
     protected $core;
     
+    private $arrMarkers;
+    
     /**
      * formImagemap
      * @author Cornelius Hansjakob <cha@massiveart.com>
@@ -76,11 +78,11 @@ class Form_Helper_FormImagemap extends Zend_View_Helper_FormElement
         if ($value != '') {    
             $strOutput .= '         <img id="' . $this->view->escape($id) . '_img" src="/website/uploads/images/' . $value->path . $value->size . '/' . $value->filename .'" ' .$endTag;
             if ($value->markers != '') {
-                $arrMarkers = json_decode($value->markers);
-                if (is_array($arrMarkers) && count($arrMarkers) > 0 ) {
-                    foreach ($arrMarkers as $marker) {
+                $this->arrMarkers = json_decode($value->markers);
+                if (is_array($this->arrMarkers) && count($this->arrMarkers) > 0 ) {
+                    foreach ($this->arrMarkers as $marker) {
                         $xAbsolute = round($value->dimensions[0] * $marker->x - 16);
-                        $yAbsolute = round($value->dimensions[1] * $marker->y -16);
+                        $yAbsolute = round($value->dimensions[1] * $marker->y - 16);
                         $strOutput .= ' 
                                     <div id="' . $this->view->escape($id) . '_marker_' . $marker->region . '" class="marker" style="left: ' . $xAbsolute .'px; top: ' . $yAbsolute . 'px;" ></div>';
                     }
@@ -93,6 +95,26 @@ class Form_Helper_FormImagemap extends Zend_View_Helper_FormElement
             					<div class="itemremovethumb" onclick="myForm.removeImagemapValues(\'' . $this->view->escape($id) . '\'); return false;" id="' . $this->view->escape($id) . '_remove" ' . ($value != '' ? '' : 'style="display: none;"') . '></div>
                             </div>
                         </div>';
+
+        // init dragable markers
+        $strOutput .= '<script type="text/javascript">';
+        
+        if (is_array($this->arrMarkers) && count($this->arrMarkers) > 0 ) {
+            foreach ($this->arrMarkers as $marker) {
+                $strOutput .= ' $(\'divImagemap_' . $this->view->escape($id) .'\').ondblclick = function(event) {
+                            		myForm.getAddMarkerOverlay(event);
+                            	};';
+                $strOutput .= '	new Draggable(\'' . $this->view->escape($id) . '_marker_' . $marker->region . '\', { 
+                			   		onEnd: function(drag) {
+            							myForm.setMarkerPosition(drag, \'' . $this->view->escape($id) . '\', ' . $marker->region . ');
+            						},
+            						onStart: function(drag) {
+            							myForm.originMarkerPos = [drag.element.offsetLeft, drag.element.offsetTop];
+            						}
+                			    }); ';
+            }    
+        }					        
+        $strOutput .= ' </script>';
         return $strOutput;
     }
     

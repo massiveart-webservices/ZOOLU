@@ -156,10 +156,11 @@ class Form_Decorator_Imagemap extends Zend_Form_Decorator_Abstract
 
         switch ($placement) {
             case (self::PREPEND):
-                return $output . $separator . $content;
+                $output = $output . $separator . $content;
             case (self::APPEND):
             default:
-                return $content . $separator . $output;
+                $output = $content . $separator . $output;
         }
+        return $output;
     }
 }

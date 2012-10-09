@@ -46,6 +46,8 @@ Massiveart.Form = Class.create({
     this.selectNavigationItemNow = false;
     
     this.activeTabId = null;
+    
+    this.originMarkerPos = [0,0];
   },
   
   /**
@@ -492,9 +494,59 @@ Massiveart.Form = Class.create({
               }
           });
       } catch (e) {
+          console.log(e);
           return;
       }
   },
+  
+  /**
+   * setMarkerPosition
+   */
+  setMarkerPosition: function(drag, fieldId, region) {
+      
+      var newX = drag.element.offsetLeft + 16;
+      var newY = drag.element.offsetTop + 16;
+      var imageId = fieldId + '_img';
+      var validDrag = false;
+      if (newX < 0 || newX > $(imageId).getWidth()) {
+          validDrag = false;
+      }
+      else if (newY < 0 || newY > $(imageId).getHeight()) {
+          validDrag = false;
+      } else {
+          validDrag = true;
+      }
+      if (validDrag) {
+          this.originMarkerPos[newX, newY];
+          try {
+              var markersId = fieldId + '_markers'; 
+              JSON.parse($F(markersId));
+              var markers = $F(markersId).evalJSON();
+              markers.each(function(m) {
+                  if (m.region == region) {
+                      m.x = newX / $(imageId).getWidth();
+                      m.y = newY / $(imageId).getHeight();
+                  }
+              });
+              $(markersId).innerHTML = markers.toJSON();
+          } catch (e) {
+              console.log(e);
+              return;
+          }
+      } else {
+          drag.element.style.left = this.originMarkerPos[0] + 'px';
+          drag.element.style.top = this.originMarkerPos[1] + 'px';
+      }
+  },
+  
+  /**
+   * getAddMarkerOverlay
+   */
+  getAddMarkerOverlay: function(click) {
+      console.log(click.layerX);
+      console.log(click.layerY);
+  },
+  
   
   /**
    * getAddMediaOverlay
