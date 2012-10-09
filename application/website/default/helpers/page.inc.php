@@ -68,6 +68,10 @@ function get_template_file(){
   return getPageHelperObject()->getTemplateFile();
 }
 
+function get_content($objView) {
+  echo getPageHelperObject()->getContent($objView);
+}
+
 /**
  * get_portal_title
  * @author Cornelius Hansjakob <cha@massiveart.com>

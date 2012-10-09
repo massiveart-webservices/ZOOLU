@@ -34,7 +34,8 @@
       <?php include dirname(__FILE__).'/includes/header.inc.php'; ?>
       
       <!-- Template Content -->
-      <?php include dirname(__FILE__).'/templates/'.get_template_file(); ?>
+      <?php //include dirname(__FILE__).'/templates/'.get_template_file(); ?>
+      <?php get_content($this); ?>
     </div> <!-- /#main -->
   </div> <!-- /#wrap --> 
 

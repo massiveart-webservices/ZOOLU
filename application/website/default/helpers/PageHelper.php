@@ -321,6 +321,10 @@ class PageHelper {
   public function getTemplateFile(){
     return $this->objPage->getTemplateFile();
   }
+
+  public function getContent($objView) {
+    return $objView->render('templates/'.$this->getTemplateFile());
+  }
   
   /**
    * getRootLevelTitle
