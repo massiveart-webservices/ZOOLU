@@ -87,9 +87,6 @@ class CustomerController extends WebControllerAction
         if ($this->getRequest()->getParam('re')) {
             $strRedirectUrl = $this->getRequest()->getParam('re');
         }
-        if ($this->objAuth->hasIdentity()) {
-            $this->redirect($strRedirectUrl);
-        }
 
         if ($strUsername != '' && $strUsername != null) {
             $this->objAuthAdapter->setIdentity($strUsername);
@@ -102,6 +99,10 @@ class CustomerController extends WebControllerAction
                     $this->objAuth->getStorage()->write($objUserData);
                     break;
             }
+        }
+
+        if ($this->objAuth->hasIdentity()) {
+            $this->redirect($strRedirectUrl);
         }
     }
 

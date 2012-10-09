@@ -1,1 +1,21 @@
-<p>Test</p>
+<div class="contentContainer">
+    <div class="inner">
+        <h1>Login</h1>
+
+        <div class="loginContainer">
+            <form action="/login" method="post" id="loginForm">
+                <div class="field">
+                    <label for="username">Benutzername</label>
+                    <input type="text" id="username" name="username" value="<?php echo $this->username ?>"/>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" value="<?php echo $this->username ?>"/>
+                </div>
+
+                <input type="submit" name="submit" id="submit" value="Absenden" />
+            </form>
+        </div>
+    </div>
+</div>
