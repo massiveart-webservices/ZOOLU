@@ -1,5 +1,5 @@
 -- add new field type `seo`
-INSERT INTO `fieldtypes` (`id`, `idDecorator`, `sqlType`, `size`, `title`, `defaultValue`, `idFieldTypeGroup`) VALUES ('35', '0', '', '0', 'seo', '', '4');
+INSERT INTO `fieldtypes` (`id`, `idDecorator`, `sqlType`, `size`, `title`, `defaultValue`, `idFieldTypeGroup`) VALUES ('35', '0', '', '0', 'seo', '', '5');
 
 -- update seo_description, seo_keywords, seo_title, seo_canonical fields types to `seo`
 UPDATE `fields` SET `idFieldTypes` = '35' WHERE `fields`.`id` = 247;
