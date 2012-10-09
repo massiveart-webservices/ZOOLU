@@ -64,9 +64,9 @@ class GenericSubForm extends Zend_Form_SubForm
 
     /**
      * set generic form object
-     * @param GenericForm &$objGenericForm
+     * @param GenericForm $objGenericForm
      */
-    public function setGenericForm(GenericForm &$objGenericForm)
+    public function setGenericForm(GenericForm $objGenericForm)
     {
         $this->objGenericForm = $objGenericForm;
     }
@@ -92,7 +92,8 @@ class GenericSubForm extends Zend_Form_SubForm
         'objItemInternalLinks',
         'objInstanceInternalLinks',
         'objInstanceArticles',
-        'objPageCollection'
+        'objPageCollection',
+        'intLanguageDefinitionType'
     );
 
     /**
@@ -148,7 +149,7 @@ class GenericSubForm extends Zend_Form_SubForm
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.2
      */
-    public function addField(GenericElementField &$objField, $intRegionId, $strNameExtension = '', $intRegionInstanceId = null, $blnEmpty = false)
+    public function addField(GenericElementField $objField, $intRegionId, $strNameExtension = '', $intRegionInstanceId = null, $blnEmpty = false)
     {
         try {
             $sqlStmt = array();
@@ -199,23 +200,24 @@ class GenericSubForm extends Zend_Form_SubForm
              * add field to form
              */
             $this->addElement($objField->type, $objField->name . $strNameExtension, array(
-                                                                                         'value'                    => $mixedValue,
-                                                                                         'label'                    => $objField->title,
-                                                                                         'description'              => $objField->description,
-                                                                                         'decorators'               => array($objField->decorator),
-                                                                                         'fieldId'                  => $objField->id,
-                                                                                         'columns'                  => $objField->columns,
-                                                                                         'class'                    => $objField->type . $strCssClass,
-                                                                                         'height'                   => $objField->height,
-                                                                                         'isGenericSaveField'       => $objField->isSaveField,
-                                                                                         'isCoreField'              => $objField->isCoreField,
-                                                                                         'MultiOptions'             => $arrOptions,
-                                                                                         'LanguageId'               => $this->objGenericForm->Setup()->getLanguageId(),
-                                                                                         'LanguageCode'             => $this->objGenericForm->Setup()->getLanguageCode(),
-                                                                                         'FormLanguageId'           => $this->objGenericForm->Setup()->getFormLanguageId(),
-                                                                                         'isEmptyField'             => (($blnEmpty == true) ? 1 : 0),
-                                                                                         'required'                 => (($objField->isKeyField == 1) ? true : false),
-                                                                                         'RegisterInArrayValidator' => false,
+                                                                                         'value'                        => $mixedValue,
+                                                                                         'label'                        => $objField->title,
+                                                                                         'description'                  => $objField->description,
+                                                                                         'decorators'                   => array($objField->decorator),
+                                                                                         'fieldId'                      => $objField->id,
+                                                                                         'columns'                 	    => $objField->columns,
+                                                                                         'class'                        => $objField->type . $strCssClass,
+                                                                                         'height'                       => $objField->height,
+                                                                                         'isGenericSaveField'           => $objField->isSaveField,
+                                                                                         'isCoreField'                  => $objField->isCoreField,
+                                                                                         'MultiOptions'                 => $arrOptions,
+                                                                                         'LanguageId'                   => $this->objGenericForm->Setup()->getLanguageId(),
+                                                                                         'LanguageCode'                 => $this->objGenericForm->Setup()->getLanguageCode(),
+                                                                                         'FormLanguageId'               => $this->objGenericForm->Setup()->getFormLanguageId(),
+                                                                                         'isEmptyField'            		=> (($blnEmpty == true) ? 1 : 0),
+                                                                                         'required'                 	=> (($objField->isKeyField == 1) ? true : false),
+                                                                                         'RegisterInArrayValidator'     => false,
+                                                                                         'disableLoadDefaultDecorators' => true,
                                                                                     ));
             //Add validators
             $this->getElement($objField->name . $strNameExtension)->addPrefixPath('Form_Validator', GLOBAL_ROOT_PATH . '/library/massiveart/generic/forms/validators', 'validate');

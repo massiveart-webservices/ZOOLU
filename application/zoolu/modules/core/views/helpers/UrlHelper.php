@@ -67,12 +67,22 @@ class UrlHistoryHelper
         $strOutput = '';
 
         if ($strElementId !== "" && $objUrls !== NULL) {
-
+            $intLanguageDefinitionType = 1;
             foreach ($objUrls as $objUrl) {
+                if ($objUrl->languageDefinitionType != '') {
+                    $intLanguageDefinitionType = $objUrl->languageDefinitionType;
+                } elseif ($objUrl->altLanguageDefinitionType != '') {
+                    $intLanguageDefinitionType = $objUrl->altLanguageDefinitionType;
+                }
+                $strLanguageCode = '';
+                if ($intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                    $strLanguageCode = strtolower($objUrl['languageCode']) . '/';   
+                }
+                
                 $strOutput .= '
               <div id="' . $objUrl['id'] . '_' . $strElementId . '" class="urlHistoryEntry">
                <div class="itemremovelist2 itemRemoveUrl" onclick="myForm.removeUrlHistoryEntry(\'' . $objUrl['id'] . '\',\'' . $objUrl['relationId'] . '\',\'' . $strElementId . '\')"></div>
-               <div class="urlHistoryName">/' . strtolower($objUrl['languageCode']) . '/' . $objUrl['url'] . '</div>
+               <div class="urlHistoryName">/' . $strLanguageCode . $objUrl['url'] . '</div>
                <div class="clear"></div>
               </div>  
              ';

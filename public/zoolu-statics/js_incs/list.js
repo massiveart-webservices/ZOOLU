@@ -174,8 +174,11 @@ Massiveart.List = Class.create({
       }      
   	});    
   	if(arrEntries.size() > 0){
-  	  myCore.deleteAlertSingleMessage = myCore.translate['Delete_'];
-      myCore.deleteAlertMultiMessage = myCore.translate['Delete_'];
+  	  if (typeof(myCore.deleteAlertSingleMessage) == 'undefined' || myCore.deleteAlertSingleMessage == '' &&
+          typeof(myCore.deleteAlertMultiMessage) == 'undefined' || myCore.deleteAlertMultiMessage == '' ) {
+        myCore.deleteAlertSingleMessage = myCore.translate['Delete_'];
+        myCore.deleteAlertMultiMessage = myCore.translate['Delete_'];
+      }
       myCore.showDeleteAlertMessage(arrEntries.size());
       $('buttonOk').observe('click', function(event){
         new Ajax.Updater(myNavigation.genListContainer, myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/listdelete', {

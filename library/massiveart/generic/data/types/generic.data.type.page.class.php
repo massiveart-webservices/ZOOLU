@@ -235,6 +235,14 @@ class GenericDataTypePage extends GenericDataTypeAbstract
                 if ($objPage->idPageTypes > 0) $this->setup->setElementTypeId($objPage->idPageTypes);
                 if ($objPage->isStartPage != null) $this->setup->setIsStartElement($objPage->isStartPage);
                 if ($objPage->idParentTypes != null) $this->setup->setParentTypeId($objPage->idParentTypes);
+                
+                if ($objPage->languageDefinitionType != '') {
+                    $this->setup->setLanguageDefinitionType($objPage->languageDefinitionType);
+                } elseif ($objPage->altLanguageDefinitionType != '') {
+                    $this->setup->setLanguageDefinitionType($objPage->altLanguageDefinitionType);
+                } else {
+                    $this->setup->setLanguageDefinitionType(1);
+                }
 
                 parent::loadGenericData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));
 

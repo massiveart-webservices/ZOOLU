@@ -55,7 +55,7 @@ class Acl extends Zend_Acl
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function isAllowed($mixedRole, $strResourceKey, $strPrivilege = null)
+    public function isAllowed($mixedRole = null, $strResourceKey = null, $strPrivilege = null)
     {
         if ($mixedRole instanceof RoleProvider) {
             $blnIsAllowed = false;
@@ -77,7 +77,7 @@ class Acl extends Zend_Acl
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function deny()
+    public function deny($roles = null, $resources = null, $privileges = null, Zend_Acl_Assert_Interface $assert = null)
     {
         throw new Exception('This ACL supports no deny!');
     }

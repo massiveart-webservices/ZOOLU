@@ -60,13 +60,26 @@
       <language>
         <id>2</id>
         <code>en</code>
-      </language>      
+      </language>
       <alternative>
         <id>1</id>
         <code>de</code>
       </alternative>
     </languages>
     
+    <!-- enable_short_subdomains-->
+    <enable_short_subdomains>true</enable_short_subdomains> <!-- true/false, enable to us 2-char long subdomains for portals -->
+
+    <!-- languages definition types-->
+    <language_definition>
+    	<none>0</none>
+    	<folder>1</folder>    
+    	<subdomain>2</subdomain> <!-- only use if enable_language_subdomains is true -->
+    	<subandtld>3</subandtld>
+    </language_definition>
+	
+    
+        
     <!-- portals / languages / segments  -->
     <portals>
       <portal>

@@ -774,4 +774,14 @@ function get_page_similar_page_links($intNumber = 5){
   echo getPageHelperObject()->getPageSimilarPageLinks($intNumber);
 }
 
+/**
+ * get_language_chooser
+ * @return string $strHtmlOutput
+ * @author Raphael Stocker <raphael.stocker@massiveart.com>
+ * @version 1.0
+ */
+function get_language_chooser(){
+  echo getPageHelperObject()->getLanguageChooser();
+}
+
 ?>

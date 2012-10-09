@@ -59,6 +59,12 @@ class Model_Urls
      * @var Model_RootLevels
      */
     protected $objModelRootLevels;
+    
+    /**
+     * @var Model_Table_RootLevelUrls
+     */
+    protected $objRootLevelUrlTable;
+    
 
     protected $objPathReplacers;
 
@@ -159,6 +165,27 @@ class Model_Urls
             ->where('urls.idParent IS NULL');
 
         return $this->core->dbh->query($objSelect->assemble())->fetchAll(Zend_Db::FETCH_OBJ | Zend_Db::FETCH_GROUP);
+    }
+    
+    /**
+     * loadDomainSettings
+     * @param string $strDomain
+     * @return string
+     */
+    public function loadDomainSettings($strDomain, $intEnvironment = null) {
+        $this->core->logger->debug('core->models->Model_Urls->loadDomainSettings(' . $strDomain . ')');
+        
+        $strAppEnv = APPLICATION_ENV;
+        $intEnvironment = ($intEnvironment == null) ? $this->core->sysConfig->environments->$strAppEnv : $intEnvironment;
+        
+        $objSelect = $this->getRootLevelUrlTable()->select(array('hostPrefix', 'idLanguages'));
+        $objSelect->setIntegrityCheck(false);
+        $objSelect->where('url = ?', $strDomain);
+        $objSelect->where('idEnvironments = ?', $intEnvironment);
+        $objSelect->limit(1);
+        
+        $objResult = $this->getRootLevelUrlTable()->fetchAll($objSelect);
+        return $objResult->current();
     }
 
     /**
@@ -746,6 +773,22 @@ class Model_Urls
         }
 
         return $this->objModelRootLevels;
+    }
+    
+    /**
+     * getRootLevelUrlTable
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getRootLevelUrlTable()
+    {
+
+        if ($this->objRootLevelUrlTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/RootLevelUrls.php';
+            $this->objRootLevelUrlTable = new Model_Table_RootLevelUrls();
+        }
+
+        return $this->objRootLevelUrlTable;
     }
 }
 

@@ -35,12 +35,12 @@
  *
  * Version history (please keep backward compatible):
  * 1.0, 2009-12-02: Cornelius Hansjakob
-
  * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  */
 
-class MediaController extends Zend_Controller_Action {
+class MediaController extends Zend_Controller_Action
+{
 
     /**
      * @var Core
@@ -71,7 +71,9 @@ class MediaController extends Zend_Controller_Action {
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function indexAction() { }
+    public function indexAction()
+    {
+    }
 
     /**
      * imageAction
@@ -86,31 +88,31 @@ class MediaController extends Zend_Controller_Action {
 
         $intMediaId = $this->_getParam('id', 0);
 
-        if($intMediaId > 0){
+        if ($intMediaId > 0) {
             $objFile = $this->objModelFiles->loadFileById($intMediaId);
 
-            if(count($objFile) > 0){
+            if (count($objFile) > 0) {
                 $objFileData = $objFile->current();
 
-                $strFilePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->upload->images->path->local->private.$objFileData->path.$objFileData->filename;
+                $strFilePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->images->path->local->private . $objFileData->path . $objFileData->filename;
 
-                if(file_exists($strFilePath)){
-                    if(isset($objFileData->mimeType) && $objFileData->mimeType != ''){
+                if (file_exists($strFilePath)) {
+                    if (isset($objFileData->mimeType) && $objFileData->mimeType != '') {
                         $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                        header('Content-Type: '.$objFileData->mimeType);
+                        header('Content-Type: ' . $objFileData->mimeType);
                         readfile($strFilePath);
-                    }else if(isset($objFileData->extension) && $objFileData->extension != ''){
+                    } else if (isset($objFileData->extension) && $objFileData->extension != '') {
                         $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                        header('Content-Type: image/'.$objFileData->extension);
+                        header('Content-Type: image/' . $objFileData->extension);
                         readfile($strFilePath);
-                    }else{
+                    } else {
                         // no mimetype and no extension
                     }
-                }else{
+                } else {
                     // file doesn't exist
                 }
             }
-        }else{
+        } else {
             // no file id in url
         }
     }
@@ -129,37 +131,37 @@ class MediaController extends Zend_Controller_Action {
         $intMediaId = $this->_getParam('id', 0);
         $intMediaVersion = $this->_getParam('v', 0);
 
-        if($intMediaId > 0){
+        if ($intMediaId > 0) {
             $objFile = $this->objModelFiles->loadFileById($intMediaId, $intMediaVersion);
 
-            if(count($objFile) > 0){
+            if (count($objFile) > 0) {
                 $objFileData = $objFile->current();
 
-                if($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion){
-                    $strFileName =  $objFileData->fileId.'.v'.$objFileData->archiveVersion.'.'.$objFileData->archiveExtension;
+                if ($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion) {
+                    $strFileName = $objFileData->fileId . '.v' . $objFileData->archiveVersion . '.' . $objFileData->archiveExtension;
                     $dblFileSize = $objFileData->archiveSize;
-                }else{
+                } else {
                     $strFileName = $objFileData->filename;
                     $dblFileSize = $objFileData->size;
                 }
 
-                $strFilePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->upload->documents->path->local->private.$objFileData->path.$strFileName;
+                $strFilePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->documents->path->local->private . $objFileData->path . $strFileName;
 
-                if(file_exists($strFilePath)){
-                    if(isset($objFileData->mimeType) && $objFileData->mimeType != ''){
+                if (file_exists($strFilePath)) {
+                    if (isset($objFileData->mimeType) && $objFileData->mimeType != '') {
 
-                        if($objFileData->title != ''){
-                            $strFileName = urlencode(str_replace('.', '-', $objFileData->title)).'.'.$objFileData->extension;
-                        }else if($objFileData->fallbackTitle != ''){
-                            $strFileName = urlencode(str_replace('.', '-', $objFileData->fallbackTitle)).'.'.$objFileData->extension;
-                        }else{
+                        if ($objFileData->title != '') {
+                            $strFileName = urlencode(str_replace('.', '-', $objFileData->title)) . '.' . $objFileData->extension;
+                        } else if ($objFileData->fallbackTitle != '') {
+                            $strFileName = urlencode(str_replace('.', '-', $objFileData->fallbackTitle)) . '.' . $objFileData->extension;
+                        } else {
                             $strFileName = $objFileData->filename;
                         }
-                         
-                        if($objFileData->idGroup != 0){
+
+                        if ($objFileData->idGroup != 0) {
                             // if logged in as zoolu user
                             $objAuth = Zend_Auth::getInstance();
-                            if($objAuth->hasIdentity()){
+                            if ($objAuth->hasIdentity()) {
                                 $this->objModelFiles->increaseDownloadCounter($objFileData->id);
                                 $this->setDocumentHeader($strFileName, array('MimeType' => $objFileData->mimeType, 'Size' => $dblFileSize));
                                 // Datei ausgeben
@@ -170,12 +172,12 @@ class MediaController extends Zend_Controller_Action {
                             $objMemberAuth = Zend_Auth::getInstance();
                             $objMemberAuth->setStorage(new Zend_Auth_Storage_Session('Members'));
 
-                            if($objMemberAuth->hasIdentity()){
+                            if ($objMemberAuth->hasIdentity()) {
                                 $objMember = $objMemberAuth->getIdentity();
-                                if(isset($objMember->groups)){
-                                    foreach($objMember->groups as $arrGroup){
-                                        if(array_key_exists('id', $arrGroup)){
-                                            if($arrGroup['id'] == $objFileData->idGroup){
+                                if (isset($objMember->groups)) {
+                                    foreach ($objMember->groups as $arrGroup) {
+                                        if (array_key_exists('id', $arrGroup)) {
+                                            if ($arrGroup['id'] == $objFileData->idGroup) {
                                                 $this->objModelFiles->increaseDownloadCounter($objFileData->id);
                                                 $this->setDocumentHeader($strFileName, array('MimeType' => $objFileData->mimeType, 'Size' => $dblFileSize));
                                                 // Datei ausgeben
@@ -183,26 +185,26 @@ class MediaController extends Zend_Controller_Action {
                                             }
                                         }
                                     }
-                                }else{
+                                } else {
                                     // user is in no group
                                 }
-                            }else{
+                            } else {
                                 // not logged in
                             }
-                        }else{
+                        } else {
                             $this->objModelFiles->increaseDownloadCounter($objFileData->id);
                             $this->setDocumentHeader($strFileName, array('MimeType' => $objFileData->mimeType, 'Size' => $dblFileSize));
                             // Datei ausgeben
                             readfile($strFilePath);
                         }
-                    }else{
+                    } else {
                         // no mimetype and no extension
                     }
-                }else{
+                } else {
                     // file doesn't exist
                 }
             }
-        }else{
+        } else {
             // no file id in url
         }
     }
@@ -221,143 +223,123 @@ class MediaController extends Zend_Controller_Action {
         $intMediaId = $this->_getParam('id', 0);
         $intMediaVersion = $this->_getParam('v', 0);
 
-        if($intMediaId > 0){
+        if ($intMediaId > 0) {
             $objFile = $this->objModelFiles->loadFileById($intMediaId, $intMediaVersion);
 
-            if(count($objFile) > 0){
+            if (count($objFile) > 0) {
                 $objFileData = $objFile->current();
 
-                if($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion){
-                    $strFileName =  $objFileData->fileId.'.v'.$objFileData->archiveVersion.'.'.$objFileData->archiveExtension;
+                if ($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion) {
+                    $strFileName = $objFileData->fileId . '.v' . $objFileData->archiveVersion . '.' . $objFileData->archiveExtension;
                     $dblFileSize = $objFileData->archiveSize;
-                }else{
+                } else {
                     $strFileName = $objFileData->filename;
                     $dblFileSize = $objFileData->size;
                 }
 
-                if($objFileData->isImage){
-                    $strFileBase = GLOBAL_ROOT_PATH.$this->core->sysConfig->upload->images->path->local->private.$objFileData->path; 
-                    $strFilePath = $strFileBase.$strFileName;
-                }else if (strpos($objFileData->mimeType, 'video/') !== false || $objFileData->mimeType == 'application/x-shockwave-flash'){
-                    $strFileBase = GLOBAL_ROOT_PATH.$this->core->sysConfig->upload->videos->path->local->private.$objFileData->path; 
-                    $strFilePath = $strFileBase.$strFileName;
-                }else{
-                    $strFileBase = GLOBAL_ROOT_PATH.$this->core->sysConfig->upload->documents->path->local->private.$objFileData->path;
-                    $strFilePath = $strFileBase.$strFileName;
+                if ($objFileData->isImage) {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->images->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                } else if (strpos($objFileData->mimeType, 'video/') !== false || $objFileData->mimeType == 'application/x-shockwave-flash') {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->videos->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                } else {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->documents->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
                 }
 
-                if(file_exists($strFilePath)){
-                    $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                     
-                    if($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion){
-                        if($objFileData->title != ''){
-                            $strFileName = urlencode(str_replace('.', '-', $objFileData->title)).'.v'.$objFileData->archiveVersion.'.'.$objFileData->archiveExtension;
-                        }else if($objFileData->fallbackTitle != ''){
-                            $strFileName = urlencode(str_replace('.', '-', $objFileData->fallbackTitle)).'.v'.$objFileData->archiveVersion.'.'.$objFileData->archiveExtension;
-                        }else{
-                            $strFileName = $objFileData->fileId.'.v'.$objFileData->archiveVersion.'.'.$objFileData->archiveExtension;
+                if (file_exists($strFilePath)) {
+
+                    if ($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion) {
+                        if ($objFileData->title != '') {
+                            $strDesiredFileName = urlencode(str_replace('.', '-', $objFileData->title)) . '.v' . $objFileData->archiveVersion . '.' . $objFileData->archiveExtension;
+                        } else if ($objFileData->fallbackTitle != '') {
+                            $strDesiredFileName = urlencode(str_replace('.', '-', $objFileData->fallbackTitle)) . '.v' . $objFileData->archiveVersion . '.' . $objFileData->archiveExtension;
+                        } else {
+                            $strDesiredFileName = $objFileData->fileId . '.v' . $objFileData->archiveVersion . '.' . $objFileData->archiveExtension;
                         }
-                    }else if($objFileData->title != ''){
-                        $strFileName = urlencode(str_replace('.', '-', $objFileData->title)).'.'.$objFileData->extension;
-                    }else if($objFileData->fallbackTitle != ''){
-                        $strFileName = urlencode(str_replace('.', '-', $objFileData->fallbackTitle)).'.'.$objFileData->extension;
-                    }else{
-                        $strFileName = $objFileData->filename;
+                    } else if ($objFileData->title != '') {
+                        $strDesiredFileName = urlencode(str_replace('.', '-', $objFileData->title)) . '.' . $objFileData->extension;
+                    } else if ($objFileData->fallbackTitle != '') {
+                        $strDesiredFileName = urlencode(str_replace('.', '-', $objFileData->fallbackTitle)) . '.' . $objFileData->extension;
+                    } else {
+                        $strDesiredFileName = $objFileData->filename;
                     }
 
-                    if($objFileData->idGroup != 0){
+                    if ($objFileData->idGroup != 0) {
                         // if logged in as zoolu user
                         $objAuth = Zend_Auth::getInstance();
-                        if($objAuth->hasIdentity()){
+                        if ($objAuth->hasIdentity()) {
                             $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                            $result = $this->setDownloadHeader($strFileName, array('Filebase' => $strFileBase, 'Extension' => $objFileData->extension, 'Size' => $dblFileSize));
-                            // Datei ausgeben.
-                            if($result === null){
-                                readfile($strFilePath);
-                            }else{
-                                if(file_exists($result)) readfile($result);    
-                            }
+                            $this->sendDownloadPackage($strFileBase, $strFileName, array('DesiredFileName' => $strDesiredFileName, 'Extension' => $objFileData->extension, 'Size' => $dblFileSize));
                         }
 
                         // if logged in as member
                         $objMemberAuth = Zend_Auth::getInstance();
                         $objMemberAuth->setStorage(new Zend_Auth_Storage_Session('Members'));
 
-                        if($objMemberAuth->hasIdentity()){
+                        if ($objMemberAuth->hasIdentity()) {
                             $objMember = $objMemberAuth->getIdentity();
-                            if(isset($objMember->groups)){
-                                foreach($objMember->groups as $arrGroup){
-                                    if(array_key_exists('id', $arrGroup)){
-                                        if($arrGroup['id'] == $objFileData->idGroup){
+                            if (isset($objMember->groups)) {
+                                foreach ($objMember->groups as $arrGroup) {
+                                    if (array_key_exists('id', $arrGroup)) {
+                                        if ($arrGroup['id'] == $objFileData->idGroup) {
                                             $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                                            $result = $this->setDownloadHeader($strFileName, array('Filebase' => $strFileBase, 'Extension' => $objFileData->extension, 'Size' => $dblFileSize));
-                                            // Datei ausgeben.
-                                            if($result === null){
-                                                readfile($strFilePath);
-                                            }else{
-                                                if(file_exists($result)) readfile($result);    
-                                            }
+                                            $this->sendDownloadPackage($strFileBase, $strFileName, array('DesiredFileName' => $strDesiredFileName, 'Extension' => $objFileData->extension, 'Size' => $dblFileSize));
                                         }
                                     }
                                 }
-                            }else{
+                            } else {
                                 // user is in no group
                             }
-                        }else{
+                        } else {
                             // not logged in
                         }
-                    }else{
+                    } else {
                         $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                        
-                        $result = $this->setDownloadHeader($strFileName, array('Filebase' => $strFileBase, 'Extension' => $objFileData->extension, 'Size' => $dblFileSize));
-                        // Datei ausgeben.
-                        if($result === null){
-                            readfile($strFilePath);
-                        }else{
-                            if(file_exists($result)) readfile($result);    
-                        }
+                        $this->sendDownloadPackage($strFileBase, $strFileName, array('DesiredFileName' => $strDesiredFileName, 'Extension' => $objFileData->extension, 'Size' => $dblFileSize));
                     }
-                }else{
+                } else {
                     // file doesn't exist
                 }
             }
         }
     }
-    
-	/**
+
+    /**
      * videoAction
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
     public function videoAction()
     {
-        $this->core->logger->debug('website->controllers->MediaController->imageAction()');
+        $this->core->logger->debug('website->controllers->MediaController->videoAction()');
 
         $this->getModelFiles();
 
         $intMediaId = $this->_getParam('id', 0);
 
-        if($intMediaId > 0){
+        if ($intMediaId > 0) {
             $objFile = $this->objModelFiles->loadFileById($intMediaId);
 
-            if(count($objFile) > 0){
+            if (count($objFile) > 0) {
                 $objFileData = $objFile->current();
 
-                $strFilePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->upload->videos->path->local->private.$objFileData->path.$objFileData->filename;
+                $strFilePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->videos->path->local->private . $objFileData->path . $objFileData->filename;
 
-                if(file_exists($strFilePath)){
-                    if(isset($objFileData->mimeType) && $objFileData->mimeType != ''){
+                if (file_exists($strFilePath)) {
+                    if (isset($objFileData->mimeType) && $objFileData->mimeType != '') {
                         $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                        header('Content-Type: '.$objFileData->mimeType);
+                        header('Content-Type: ' . $objFileData->mimeType);
                         readfile($strFilePath);
-                    }else{
+                    } else {
                         // no mimetype
                     }
-                }else{
+                } else {
                     // file doesn't exist
                 }
             }
-        }else{
+        } else {
             // no file id in url
         }
     }
@@ -373,11 +355,11 @@ class MediaController extends Zend_Controller_Action {
 
         $strMedia = ((isset($_GET['file'])) ? $_GET['file'] : '');
 
-        if($strMedia != ''){
-            $strFileBasePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->upload->forms->path->local->private;
-            $strFilePath = $strFileBasePath.$strMedia;
+        if ($strMedia != '') {
+            $strFileBasePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->forms->path->local->private;
+            $strFilePath = $strFileBasePath . $strMedia;
 
-            if(file_exists($strFilePath)){
+            if (file_exists($strFilePath)) {
 
                 // fix for IE catching or PHP bug issue
                 header("Pragma: public");
@@ -391,14 +373,14 @@ class MediaController extends Zend_Controller_Action {
                 header("Content-Type: application/download");
 
                 // Passenden Dateinamen im Download-Requester vorgeben,
-                header("Content-Disposition: attachment; filename=\"".$strMedia."\"");
+                header("Content-Disposition: attachment; filename=\"" . $strMedia . "\"");
 
                 header("Content-Transfer-Encoding: binary");
 
                 // Datei ausgeben.
                 readfile($strFilePath);
 
-            }else{
+            } else {
                 // file doesn't exist
             }
         }
@@ -418,68 +400,179 @@ class MediaController extends Zend_Controller_Action {
         // browser must download file from server instead of cache
 
         // Passenden Dateinamen im Download-Requester vorgeben,
-        header("Content-Disposition: attachment; filename=\"".$strFileName."\"");
-         
-        if(array_key_exists('MimeType', $arrProperties)) header('Content-Type: '.$arrProperties['MimeType']);
-        if(array_key_exists('Size', $arrProperties)) header("Content-Length: ".$arrProperties['Size']);
+        header("Content-Disposition: attachment; filename=\"" . $strFileName . "\"");
+
+        if (array_key_exists('MimeType', $arrProperties)) header('Content-Type: ' . $arrProperties['MimeType']);
+        if (array_key_exists('Size', $arrProperties)) header("Content-Length: " . $arrProperties['Size']);
     }
 
     /**
-     * setDownloadHeader
-     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @param string $strFileBase
+     * @param string $strFileName
+     * @param array $arrProperties
+     * @return string
+     */
+    protected function zipFileIfNecessary($strFileBase, $strFileName, $arrProperties = array())
+    {
+        $strExtension = '';
+        if (array_key_exists('Extension', $arrProperties)) {
+            if (!empty($this->core->sysConfig->media->download->zip_extensions)) {
+                $arrZipExtensions = $this->core->sysConfig->media->download->zip_extensions->toArray();
+
+                if (in_array($arrProperties['Extension'], $arrZipExtensions)) {
+
+                    if ($strFileBase) {
+                        // create zip for file
+                        $result = Zip::createZip($this->core, array($strFileName => $strFileBase . $strFileName), $strFileBase . $strFileName . '.zip', true);
+                        if ($result !== true) {
+                            $this->core->logger->err('website->controllers->MediaController->zipFileIfNecessary(): Zip creation failed! ' . $strFileName);
+                        } else {
+                            $strExtension = '.zip';
+                        }
+                    }
+                }
+            }
+        }
+        return $strExtension;
+    }
+
+    /**
+     * @param string $strFileBase
+     * @param string $strFileName
+     * @param array $arrProperties
+     */
+    protected function sendDownloadPackage($strFileBase, $strFileName, $arrProperties = array())
+    {
+        $this->core->logger->debug('website->controllers->MediaController->sendDownloadPackage(' . $strFileBase . ', ' . $strFileName . ')');
+        $strRealPath = realpath($strFileBase . $strFileName);
+        
+        if (file_exists($strRealPath)) {
+
+            // zip file if necessary
+            $strZipExtension = $this->zipFileIfNecessary($strFileBase, $strFileName, $arrProperties);
+            if ($strZipExtension !== '') {
+                $strRealPath = realpath($strFileBase . $strFileName . $strZipExtension);
+            }
+            
+            // overwrite file name
+            if (array_key_exists('DesiredFileName', $arrProperties)) {
+                $strFileName = $arrProperties['DesiredFileName'] . $strZipExtension;
+            }
+
+            // fix for IE catching or PHP bug issue
+            if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE') === false) {
+                header('Pragma: public');
+                header('Expires: 0'); // set expiration time
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                header('Content-Disposition: attachment; filename="' . basename($strFileName) . '";');
+            } else {
+                header('Content-Disposition: attachment; filename=' . urlencode(basename($strFileName)) . ';');
+            }
+
+            // force download dialog
+            header('Content-Type: application/force-download');
+            header('Content-Type: application/octet-stream');
+            header('Content-Type: application/download');
+
+            if ($this->hasXSendFile() && strpos($strFileName, '.zip') == false) {  // Bugfix: file is empty if is zip
+                // Sending file via mod_xsendfile
+                $this->core->logger->info('website->controllers->MediaController->sendDownloadPackage(): X-Sendfile');
+                header('X-Sendfile: ' . $strRealPath);
+            } else {
+                header('Content-Transfer-Encoding: binary');
+
+                if (array_key_exists('Size', $arrProperties)) {
+                    header('Content-Length: ' . $arrProperties['Size']);
+                }
+
+                $this->core->logger->info('website->controllers->MediaController->sendDownloadPackage(): readfile');
+                readfile($strRealPath);
+            }
+        } else {
+            // file doesn't exist
+        }
+    }
+    
+    /**
+     * mulitDownloadAction
+     * @author Raphael Stocker <rst@massiveart.com>
      * @version 1.0
      */
-    private function setDownloadHeader($strFileName, $arrProperties = array())
+    public function multiDownloadAction()
     {
-        $strFilePath = null;
+        $this->_helper->viewRenderer->setNoRender();
+        $this->core->logger->debug('website->controllers->MediaController->multiDownloadAction()');
+        $this->getModelFiles();
+        $strFileIds = '';
+        if (isset($_GET['fileIds'])) {
+           foreach ($_GET['fileIds'] as $strFileId) {
+               $strFileIds .= '[' . $strFileId . ']';
+           }
+        }
+        $arrFileObjects = $this->getModelFiles()->loadFilesByIdForMultiDownload($strFileIds);
         
-        // check if file extension is for zip
-        $blnZip = false;
-        if(array_key_exists('Extension', $arrProperties)){
-            if(!empty($this->core->sysConfig->media->download->zip_extensions)){
-                $arrZipExtensions = array();
-                $arrZipExtensions = $this->core->sysConfig->media->download->zip_extensions->toArray(); 
-                
-                if(in_array($arrProperties['Extension'], $arrZipExtensions)){
-                    $blnZip = true; 
-                    
-                    if(array_key_exists('Filebase', $arrProperties)){
-                        // create zip for file
-                        $result = Zip::createZip($this->core, array($strFileName => $arrProperties['Filebase'].$strFileName), $arrProperties['Filebase'].$strFileName.'.zip', true);
-                        if($result !== true){
-                            $this->core->logger->debug('website->controllers->MediaController->setDownloadHeader(): Zip creation failed! '.$strFileName);  
-                            return false;      
-                        }else{
-                            // overwrite file path and filename for return
-                            $strFileName = $strFileName.'.zip';
-                            $strFilePath = $arrProperties['Filebase'].$strFileName;                              
-                        }    
-                    }
-                    
+        $intMediaVersion = 1; // fix
+        
+        if (count($arrFileObjects) > 1) {
+            $arrFilesToZip = array();
+            foreach ($arrFileObjects as $objFileData) {
+                if ($intMediaVersion > 0 && $objFileData->version != $objFileData->archiveVersion) {
+                    $strFileName = $objFileData->fileId . '.v' . $objFileData->archiveVersion . '.' . $objFileData->archiveExtension;
+                } else {
+                    $strFileName = $objFileData->filename;
                 }
-            }    
+                if ($objFileData->isImage) {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->images->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                } else if (strpos($objFileData->mimeType, 'video/') !== false || $objFileData->mimeType == 'application/x-shockwave-flash') {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->videos->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                } else {
+                    $strFileBase = GLOBAL_ROOT_PATH . $this->core->sysConfig->upload->documents->path->local->private . $objFileData->path;
+                    $strFilePath = $strFileBase . $strFileName;
+                }
+
+                if (file_exists($strFilePath)) {
+                    $arrFilesToZip[$strFileName] = $strFilePath;
+                }
+                 
+            }
+            $strFileSelection = '';
+            foreach ($arrFilesToZip as $file) {
+                $strFileSelection .= $file;
+            } 
+            $strFileSelectionHash = hash('md5', $strFileSelection);
+            $strDestinationZipBase = GLOBAL_ROOT_PATH . 'tmp/cache/zip_downloads/';
+            $strDestinationZipExt =  '.zip';
+            $strDestinationZipFile = $strDestinationZipBase . $strFileSelectionHash . $strDestinationZipExt;
+            $blnZipFileAvailable = false; 
+            if (!file_exists($strDestinationZipFile)) {
+                $blnZipFileAvailable = Zip::createZip($this->core, $arrFilesToZip, $strDestinationZipFile, false);
+            } else {
+                $blnZipFileAvailable = true;
+            }
+            if ($blnZipFileAvailable) {
+                
+            } else {
+                throw new Exception('An error occured by downloading the ziped file: '.$strDestinationZipFile);
+            }
+            $this->sendDownloadPackage($strDestinationZipBase, $strFileSelectionHash.$strDestinationZipExt, array('DesiredFileName' => 'Hoval-Dokumentpackage-' . date('Ymd') . '.zip'));
+                        
+        } else if (count($arrFileObjects) == 1) {
+            $this->_forward('download', 'media', null, array('id' => $arrFileObjects[0]->id));  
         }
         
-        // fix for IE catching or PHP bug issue
-        header("Pragma: public");
-        header("Expires: 0"); // set expiration time
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        // browser must download file from server instead of cache
-
-        // force download dialog
-        header("Content-Type: application/force-download");
-        header("Content-Type: application/octet-stream");
-        header("Content-Type: application/download");
-    
-        // Passenden Dateinamen im Download-Requester vorgeben,
-        header("Content-Disposition: attachment; filename=\"".$strFileName."\"");
-        
-        header("Content-Transfer-Encoding: binary");
-        if(array_key_exists('Size', $arrProperties)) header("Content-Length: ".$arrProperties['Size']); 
-        
-        return $strFilePath;
     }
-  
+
+    /**
+     * @return bool
+     */
+    protected function hasXSendFile()
+    {
+        // this will return false if mod_xsendfile is not loaded as a module
+        return in_array('mod_xsendfile', apache_get_modules());
+    }
+
     /**
      * getModelFiles
      * @author Cornelius Hansjakob <cha@massiveart.com>
@@ -490,15 +583,14 @@ class MediaController extends Zend_Controller_Action {
         if (null === $this->objModelFiles) {
             /**
              * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it 
+             * Since this is an application model, we need to require it
              * from its modules path location.
-             */ 
-            require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Files.php';
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Files.php';
             $this->objModelFiles = new Model_Files();
             $this->objModelFiles->setLanguageId($this->core->intLanguageId); // TODO : get language id
         }
-    
+
         return $this->objModelFiles;
     }
 }
-?>

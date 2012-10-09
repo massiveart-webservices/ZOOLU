@@ -22,6 +22,11 @@
                 <code>de</code>
             </default>
         </languages>
+        
+	    <!-- file filters -->
+	    <file_filters>
+	      <parent_id>666</parent_id>
+	    </file_filters>
     </production>
 
     <!--

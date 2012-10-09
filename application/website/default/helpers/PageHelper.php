@@ -271,8 +271,20 @@ class PageHelper {
   public function getZooluHeader(){
     $strReturn = '';
     if(Zend_Auth::getInstance()->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true){
-      $strReturn .= '<div class="divModusContainer">
+      $strReturn .= '
+      <div class="divShowModusContainer" id="zoolu-show-modus-toolbar" onClick="showModusContainer()">
+        <div class="divShowModusContainerArrow">
+          <img src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/opener-arrow.png" alt="Open ZOOLU Toolbar" />
+        </div>
+        <div class="divShowModusContainerO">
+          <img src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/opener-o.gif" alt="Open ZOOLU Toolbar" />
+        </div>
+      </div>
+      <div class="divModusContainer" id="zoolu-modus-toolbar">
         <div class="divModusLogo">
+          <div onClick="hideModusContainer()" class="divHideModusContainer"> 
+            <img style="cursor: pointer;" src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/closer.png" alt="Close ZOOLU Toolbar" />
+          </div>
           <a href="/zoolu/cms" target="_blank">
             <img src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/logo_zoolu_modus.gif" alt="ZOOLU" />
           </a>
@@ -1739,7 +1751,62 @@ class PageHelper {
    * @return string
    */
   public function getLanguageChooser(){
-    //TODO default product overview
+    $strReturn = '';
+    $intLanguageDefinitionType = $this->objPage->getLanguageDefinitionType();
+    
+    $strProtocol = 'http://';
+    if (isset($_SERVER['HTTPS'])) {
+        $strProtocol = 'https://';    
+    }
+    
+    $strDomain = $_SERVER['HTTP_HOST'];
+    if(strpos($strDomain, 'www.') === 0){
+      $strDomain = str_replace('www.', '', $strDomain);
+    }
+    if ($intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+        $strCode = substr($this->core->strLanguageCode, 0 ,2);
+        if(strpos($strDomain, $strCode.'.') === 0){
+          $strDomain = str_replace($strCode.'.', '', $strDomain);
+        }
+    }
+    $domainSettings = $this->objPage->loadDomainSettings($strDomain);
+    
+    $this->objPage->loadPortalLanguages();
+    $objPortalLanguages = $this->objPage->PortalLanguages();
+    
+    if(count($objPortalLanguages) > 1){
+      
+      $this->objPage->loadPageUrls();
+      $arrPageUrls = $this->objPage->PageUrls();
+      $arrParentUrls = array();
+      if($this->objPage->ParentPage() instanceof Page){
+        $this->objPage->ParentPage()->loadPageUrls();
+        $arrParentUrls = $this->objPage->ParentPage()->PageUrls();        
+      }
+      
+      foreach($objPortalLanguages as $objPortalLanguage){
+          $strUrlAddon = '';
+          if (array_key_exists($objPortalLanguage->id, $arrParentUrls)) {
+              $arrParentUrls[$objPortalLanguage->id][0]->url;
+          }
+        if ($strUrlAddon == '' || $this->objPage->BaseUrl() instanceof Zend_Db_Table_Row_Abstract) {
+            $strUrlAddon .= (array_key_exists($objPortalLanguage->id, $arrPageUrls)) ? $arrPageUrls[$objPortalLanguage->id][0]->url : '';
+        }
+        if ($this->core->strLanguageCode != strtolower($objPortalLanguage->languageCode)) {
+        	$strLink = '/'.strtolower($objPortalLanguage->languageCode).'/'.$strUrlAddon;
+        	if ($intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
+        	    if ($objPortalLanguage->id == $domainSettings->idLanguages && $domainSettings->hostPrefix) {
+            	    $strLink = $strProtocol.$domainSettings->hostPrefix.'.'.$strDomain.'/'.$strUrlAddon;	
+        	    } else {
+        	        $strLink = $strProtocol.strtolower($objPortalLanguage->languageCode).'.'.$strDomain.'/'.$strUrlAddon;
+        	    }
+        	}        
+          $strReturn .= '
+            <a href="'.$strLink.'">'.$objPortalLanguage->languageCode.'</a>';
+        }  
+      }
+    }
+    return $strReturn;
   }
   
   /**

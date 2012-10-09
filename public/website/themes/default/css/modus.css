@@ -23,21 +23,88 @@ Modus Container */
 .divModusContainer {
   position:fixed; 
   z-index:80; 
-  right:0; 
-  top:0; 
-  left:0; 
-  height:40px; 
+  right:40px; 
+  top: -40px;
+  left:40px; 
+  height:32px; 
   background:url(/zoolu-statics/images/modus/bg_modus.gif) repeat-x 0 0;
+  font-family: 'Helvetica Neue', 'Arial', 'Sans-Serif', 'Sans';
+  -webkit-transition: top 0.5s ease-in-out;
+  -moz-transition: top 0.5s ease-in-out;
+  -o-transition: top 0.5s ease-in-out;
+  -ms-transition: top 0.5s ease-in-out;
+  transition: top 0.5s ease-in-out;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -moz-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  box-shadow: 0 2px 5px rgba(0,0,0,.6);
+}
+.divShowModusContainer {
+  background-color: #754480;
+  position:fixed; 
+  z-index:80; 
+  top:0; 
+  left:40px; 
+  height:32px;
+  padding: 0 10px 0 0;
+  cursor: pointer;
+  -webkit-transition: top 0.5s ease-in-out;
+  -moz-transition: top 0.5s ease-in-out;
+  -o-transition: top 0.5s ease-in-out;
+  -ms-transition: top 0.5s ease-in-out;
+  transition: top 0.5s ease-in-out;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -moz-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  box-shadow: 0 2px 5px rgba(0,0,0,.6);
+
+}
+
+.divShowModusContainerArrow {
+  width: 12px;
+  height: 15px;
+  cursor: pointer;
+  left: 0;
+  float: left;
+  padding: 3px 0 0 10px;  
+}
+
+.divShowModusContainerO {
+  float:left; 
+  padding: 6px 0 0 5px;
+}
+
+.divHideModusContainer{
+  width: 12px;
+  height: 15px;
+  cursor: pointer;
+  left: 0;
+  float: left;
+  padding: 6px 0 0 10px;  
 }
 
 .divModusLogo {
   float:left; 
-  padding:10px 0 0 20px;
+  padding: 6px 0 0 0;
+}
+
+.divModusLogo a{
+  padding: 0 0 0 5px;
 }
 
 .divModusAdvice {
   float:left; 
-  padding:16px 0 0 20px; 
+  padding:13px 0 0 20px; 
   color:#fff; 
   font-size:11px;
   line-height:15px;
@@ -45,7 +112,7 @@ Modus Container */
 
 .divModusLogout {
   float:right;
-  padding:16px 20px 0 0; 
+  padding:9px 20px 0 0; 
   color:#fff; 
   font-size:11px;
   line-height:15px;
@@ -67,7 +134,7 @@ Modus Container */
 
 .divModusStatus {
   float:right; 
-  padding:14px 20px 0 0; 
+  padding:6px 20px 0 0; 
   color:#fff; 
   font-weight:bold;
 }
@@ -79,7 +146,7 @@ Modus Container */
 
 .divModusCache {
   float:right; 
-  padding:10px 20px 0 0;
+  padding:3px 20px 0 0;
   font-weight:bold;
   cursor:pointer;
 }
@@ -105,7 +172,7 @@ Modus Container */
 }
 
 .button25centerOn div {
-  padding-top:4px;
+  padding-top:3px;
 }
 
 .divModusCache .busy {  

@@ -20,30 +20,39 @@ $objHelper = new VideoHelper();
             <select id="<?php echo $this->elementId; ?>User" name="<?php echo $this->elementId; ?>User" class="select videoUserSelect">
                 <option value="publicAccess">Public</option>
                 <?php
-                foreach ($this->channelUsers as $channelUser) {
-                    $strSelected = ($this->channelUserId == $channelUser['id']) ? ' selected="selected"' : '';
-                    echo '<option value="' . $channelUser['id'] . '"' . $strSelected . '>' . $channelUser['name'] . '</option>';
-                }
+                    foreach ($this->channelUsers as $channelUser) {
+                        $strSelected = ($this->channelUserId == $channelUser['id']) ? ' selected="selected"' : '';
+                        echo '<option value="' . $channelUser['id'] . '"' . $strSelected . '>' . $channelUser['name'] . '</option>';
+                    }
                 ?>
             </select>
-        </div>
+        </div>        
         <?php endif;?>
-        <div style="width:40%; float:left;">
-            <label class="fieldtitle" for="<?php echo $this->elementId; ?>Search">Video suchen</label><br/>
-            <input type="text" class="videoSearchInp" id="<?php echo $this->elementId; ?>Search" name="<?php echo $this->elementId; ?>Search"/>
-            <!--  <input type="button" id="<?php echo $this->elementId; ?>SearchButton" value="suchen" />
-     -->
-            <div id="<?php echo $this->elementId; ?>SearchButton" style="float:left; padding-left:5px; cursor:pointer">
-                <div class="button25leftOn"></div>
-                <div class="button25centerOn">
-                    <div>Suchen</div>
+        <div class="field-<?php echo ((count($this->channelUsers) > 0) ? '6' : '9'); ?>">
+            <div style="width: 40%; float:left;">
+                <label class="fieldtitle" for="<?php echo $this->elementId; ?>Search">Video suchen</label><br/>
+                <input type="text" class="videoSearchInp" id="<?php echo $this->elementId; ?>Search" name="<?php echo $this->elementId; ?>Search"/>
+            </div>
+            <div style="width: 50%; float:left; margin:15px 0 0 10px;">
+                <div id="<?php echo $this->elementId; ?>SearchButton" style="width: 70px; float:left; margin-right:10px; cursor:pointer;">
+                    <div class="button25leftOn"></div>
+                    <div class="button25centerOn" style="padding-left: 5px; width: 53px;">
+                        <div>Suchen</div>
+                    </div>
+                    <div class="button25rightOn"></div>
+                    <div class="clear"></div>
+                </div> 
+                <div id="<?php echo $this->elementId; ?>SearchReset" style="width: 70px; float:left; cursor:pointer;">
+                    <div class="button25leftOff"></div>
+                    <div class="button25centerOff" style="padding-left: 5px; width: 53px;">
+                        <div>Reset</div>
+                    </div>
+                    <div class="button25rightOff"></div>
+                    <div class="clear"></div>
                 </div>
-                <div class="button25rightOn"></div>
                 <div class="clear"></div>
             </div>
-
-            <?php echo '<span id="' . $this->elementId . 'SearchReset" class="videoSearchReset">reset</a>';?>
-
+            <div class="clear"></div>
         </div>
     </div>
 </div>

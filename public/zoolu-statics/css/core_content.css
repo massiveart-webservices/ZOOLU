@@ -1932,8 +1932,7 @@ video select */
 }
 
 .videoSearchInp {
-    float: left;
-    width: 50%;
+    width: 95%;
 }
 
 .videoSearchReset:hover {

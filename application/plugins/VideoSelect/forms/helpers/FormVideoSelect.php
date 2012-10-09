@@ -38,7 +38,7 @@ class Plugin_FormHelper_FormVideoSelect extends Zend_View_Helper_FormElement {
     if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
       $endTag= '>';
     }
-
+    
     $xhtml = '
     <input type="hidden" value="'.$this->view->escape($value).'" id="'.$this->view->escape($id).'" name="'.$this->view->escape($name).'" '.$endTag.'
     <input type="hidden" value="'.$strVideoThumb.'" id="'.$this->view->escape($id).'Thumb" name="'.$this->view->escape($name).'Thumb" '.$endTag.'
@@ -52,6 +52,7 @@ class Plugin_FormHelper_FormVideoSelect extends Zend_View_Helper_FormElement {
     $xhtml .= '<select'
               . ' name="' . $this->view->escape($name.'TypeId') . '"'
               . ' id="' . $this->view->escape($id.'TypeId') . '"'
+              . ' onchange="myForm.getVideoChannelSelect(\'' . $this->view->escape($id) . '\', this.value); return false;"'
               . $this->_htmlAttribs($attribs)
               . ">\n    ";
 

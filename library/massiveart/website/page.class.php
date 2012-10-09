@@ -220,6 +220,7 @@ class Page
     protected $strLanguageCode;
     protected $blnHasUrlPrefix;
     protected $strUrlPrefix;
+    protected $intLanguageDefinitionType;
     protected $blnHasSegments;
     protected $intSegmentId;
     protected $strSegmentCode;
@@ -320,6 +321,8 @@ class Page
                 $this->objGenericData->Setup()->setParentId($this->getParentId());
                 $this->objGenericData->Setup()->setParentTypeId($this->getParentTypeId());
                 $this->objGenericData->Setup()->setModelSubPath($this->getModelSubPath());
+                
+                $this->core->logger->debug('huhu');
 
                 $this->objGenericData->loadData();
 
@@ -408,6 +411,17 @@ class Page
         }
     }
 
+    /**
+     * loadDomainSettings
+     * @author Raphael Stocker <raphael.stocker@massiveart.com>
+     * @version 1.0
+     */
+    public function loadDomainSettings($strDomain)
+    {
+        return $this->getModelUrls()->loadDomainSettings($strDomain);
+    }
+    
+    
     /**
      * loadPortalLanguages
      * @author Thomas Schedler <tsh@massiveart.com>
@@ -1072,7 +1086,7 @@ class Page
             } else {
                 $objPages = $this->objModel->loadItems(array('id' => $this->intTypeId, 'key' => $this->strType), $this->intParentId, $intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages, $blnOnlyShowInNavigation, $blnFilterDisplayEnvironment);
             }
-
+            
             return $objPages;
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -1111,7 +1125,7 @@ class Page
                     $this->arrPageEntries[$objEntryData->idPage] = $counter;
                 }
         
-        $this->arrContainer[$counter] = &$objContainer;
+        $this->arrContainer[$counter] = $objContainer;
 
         /**
          * get data of instance tables
@@ -1374,7 +1388,7 @@ class Page
                     $this->arrPageEntries[$objEntryData->id] = $counter;
                 }
         
-        $this->arrContainer[$counter] = &$objContainer;
+        $this->arrContainer[$counter] = $objContainer;
 
         
         $this->objModel = $this->getModelGlobals();
@@ -1546,7 +1560,7 @@ class Page
                     $this->arrPageEntries[$objEntryData->idPage] = $counter;
                 }
         
-        $this->arrContainer[$counter] = &$objContainer;
+        $this->arrContainer[$counter] = $objContainer;
 
         /**
          * get data of instance tables
@@ -1937,8 +1951,11 @@ class Page
         } else if ($this->blnHasSegments) {
             $strUrl .= '/' . $this->strSegmentCode;
         }
-
-        $strUrl .= '/' . strtolower($strLanguageCode) . '/' . $strItemUrl;
+        $strLanguageFolder = '';
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+            $strLanguageFolder = strtolower($strLanguageCode) . '/';
+        } 
+        $strUrl .= '/' .$strLanguageFolder . $strItemUrl;
 
         return $strUrl;
     }
@@ -2960,7 +2977,7 @@ class Page
      * @param Page $objChildPage
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function setChildPage(Page &$objChildPage)
+    public function setChildPage(Page $objChildPage)
     {
         $this->objChildPage = $objChildPage;
     }
@@ -2972,6 +2989,24 @@ class Page
     public function setBaseUrl(Zend_Db_Table_Row_Abstract $objBaseUrl)
     {
         $this->objBaseUrl = $objBaseUrl;
+    }
+    
+    /**
+     * setLanguageDefinitionType
+     * @param int $intLanguageDefinitionType
+     */
+    public function setLanguageDefinitionType($intLanguageDefinitionType)
+    {
+        $this->intLanguageDefinitionType = $intLanguageDefinitionType;
+    }
+
+    /**
+     * getLanguageDefinitionType
+     * @return int intLanguageDefinitionType
+     */
+    public function getLanguageDefinitionType()
+    {
+        return $this->intLanguageDefinitionType;
     }
 
 }

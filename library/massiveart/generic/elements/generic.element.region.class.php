@@ -143,7 +143,7 @@ class GenericElementRegion extends GenericElementAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function addField(GenericElementField &$objField)
+    public function addField(GenericElementField $objField)
     {
         $this->arrFields[$objField->name] = $objField;
     }

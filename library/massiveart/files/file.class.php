@@ -398,6 +398,9 @@ class File
 
                         $this->objModelTags->deletTypeTags('file', $intUploadedFileId, 1); // TODO : version
                         $this->objModelTags->addTypeTags('file', $this->arrNewTagIds, $intUploadedFileId, 1); // TODO : version
+                        
+                        // saveFileFilters
+                        $this->updateFileFilters($intUploadedFileId);
                     }
                 }
             }
@@ -468,9 +471,7 @@ class File
                                 $strWhere = $this->objModelFile->getFileTitleTable()->getAdapter()->quoteInto('id = ?', $intEditFileId);
                                 $this->objModelFile->getFileTable()->update(array('isLanguageSpecific' => $intFileIsLanguageSpecific, 'idDestination' => $intFileDestinationId, 'idGroup' => $intFileGroupId, 'changed' => date('Y-m-d H:i:s'), 'idFiles' => (($intFilePreviewId > 0) ? $intFilePreviewId : 'NULL')), $strWhere);
 
-                                /**
-                                 * save tags (quick&dirty solution)
-                                 */
+                                // save tags (quick&dirty solution)
                                 $this->arrNewTags = array();
                                 $this->arrNewTags = explode(',', trim($this->arrFileDatas['FileTags' . $intEditFileId]));
 
@@ -478,6 +479,9 @@ class File
 
                                 $this->objModelTags->deletTypeTags('file', $intEditFileId, 1); // TODO : version
                                 $this->objModelTags->addTypeTags('file', $this->arrNewTagIds, $intEditFileId, 1); // TODO : version
+                                
+                                // saveFileFilters
+                                $this->updateFileFilters($intEditFileId);
                             }
                         } else {
                             $strWhere = $this->objModelFile->getFileTitleTable()->getAdapter()->quoteInto('idFiles = ?', $intEditFileId);
@@ -491,6 +495,30 @@ class File
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
+    }
+    
+    /**
+     * updateFileFilters
+     * @author Raphael Stocker <rst@massiveart.com>
+     * @param integer $intEditFileId
+     * @return void
+     */
+    private function updateFileFilters($intEditFileId) {
+        $arrFileFiltersData = array();
+        foreach ($this->arrFileDatas as $key => $val) {
+            if (strpos($key, 'fileFilter' . $intEditFileId . '_') === 0) {
+                foreach ($val as $entry) {
+                    if ($entry != '') {
+                        $lenght = strlen('fileFilter' . $intEditFileId . '_');
+                        $intCategoryId = substr($key, $lenght); 
+                        $arrFileFiltersData[] = array('idFiles' => $intEditFileId, 'idCategories' => $intCategoryId, 'value' => $entry);
+                    }    
+                }
+                
+            }
+        }
+        $this->objModelFile->deleteFileFilters($intEditFileId);
+        $this->objModelFile->updateFileFilters($arrFileFiltersData) ;
     }
 
     /**
@@ -775,7 +803,7 @@ class File
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function setUpload(Zend_File_Transfer_Adapter_Abstract &$objUpload)
+    public function setUpload(Zend_File_Transfer_Adapter_Abstract $objUpload)
     {
         $this->objUpload = $objUpload;
     }

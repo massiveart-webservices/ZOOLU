@@ -4,11 +4,7 @@
           <div class="logo">Logospace</div>
           <div class="slogan">Slogan Platzhalter</div>
           <div class="languages">
-            <ul>
-              <li><a href="#">English</a></li>
-              <li><a href="#">Deutsch</a></li>
-              <li><a href="#">Franz&ouml;sisch</a></li>
-            </ul>
+            <?php get_language_chooser(); ?>
           </div>
           <div class="search">
             <input type="text" name="iptSearch" id="iptSearch" value="Suche"/>

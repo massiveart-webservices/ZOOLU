@@ -19,7 +19,7 @@ $objHelper = new ViewHelper();
     <input type="hidden" id="mediaFormLanguageId" value="<?php echo $this->languageId; ?>" name="languageId"/>
 
     <div id="overlayMediaWrapper" class="mediawrapper">
-        <?php echo $objHelper->getEditForm($this->objFiles); ?>
+        <?php echo $objHelper->getEditForm($this->objFiles, $this->arrFilesFileFilters); ?>
         <input type="hidden" name="FileIds" id="EditFileIds" value="<?php echo $this->strFileIds; ?>"/>
     </div>
     <div class="clear"></div>

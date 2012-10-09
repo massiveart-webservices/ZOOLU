@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-class Model_Globals
+class Model_Globals extends ModelAbstract
 {
 
     private $intLanguageId;
@@ -99,7 +99,7 @@ class Model_Globals
     /**
      * @var Core
      */
-    private $core;
+    protected $core;
 
 
     /**
@@ -567,7 +567,7 @@ class Model_Globals
         $objSelect1 = $this->core->dbh->select();
 
         if ((isset($this->core->sysConfig->$strType->product_tree) && $intTypeId == $this->core->sysConfig->$strType->product_tree->id) || (isset($this->core->sysConfig->$strType->product_overview) && $intTypeId == $this->core->sysConfig->$strType->product_overview->id)) {
-            $objSelect1->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => 'lP.id', 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'sortPosition' => 'folders.sortPosition', 'sortTimestamp' => 'folders.sortTimestamp', 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
+            $objSelect1->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => 'lP.id', 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'lP.sortPosition', 'folderSortPosition' => 'folders.sortPosition', 'lP.sortTimestamp', 'folderSortTimestamp' => 'folders.sortTimestamp', 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
                 ->join('globalLinks', 'globalLinks.globalId = globals.globalId', array())
                 ->join(array('lP' => 'globals'), 'lP.id = globalLinks.idGlobals', array('plParentId' => 'idParent'))
                 ->join('folders', 'folders.id = lP.idParent AND lP.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array())
@@ -599,9 +599,8 @@ class Model_Globals
                     break;
             }
 
-
             $objSelect2 = $this->core->dbh->select();
-            $objSelect2->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => 'lP.id', 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'sortPosition' => 'lP.sortPosition', 'sortTimestamp' => 'lP.sortTimestamp', 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
+            $objSelect2->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => 'lP.id', 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'lP.sortPosition', 'folderSortPosition' => new Zend_Db_Expr('""'), 'lP.sortTimestamp', 'folderSortTimestamp' => new Zend_Db_Expr('""'), 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
                 ->join('globalLinks', 'globalLinks.globalId = globals.globalId', array())
                 ->join(array('lP' => 'globals'), 'lP.id = globalLinks.idGlobals', array('plParentId' => 'idParent'))
                 ->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array())
@@ -622,7 +621,7 @@ class Model_Globals
                 $objSelect2->where('globalProperties.showInNavigation = 1');
             }
         } else {
-            $objSelect1->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => new Zend_Db_Expr('-1'), 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'sortPosition' => 'folders.sortPosition', 'sortTimestamp' => 'folders.sortTimestamp', 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
+            $objSelect1->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => new Zend_Db_Expr('-1'), 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'sortPosition', 'folderSortPosition' => 'folders.sortPosition', 'sortTimestamp', 'folderSortTimestamp' => 'folders.sortTimestamp', 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
                 ->join('folders', 'folders.id = globals.idParent AND globals.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array())
                 ->join('folders AS parent', 'parent.id = ' . $intParentId, array())
                 ->join('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array())
@@ -653,7 +652,7 @@ class Model_Globals
             }
 
             $objSelect2 = $this->core->dbh->select();
-            $objSelect2->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => new Zend_Db_Expr('-1'), 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'sortPosition' => 'globals.sortPosition', 'sortTimestamp' => 'globals.sortTimestamp', 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
+            $objSelect2->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'plId' => new Zend_Db_Expr('-1'), 'isStartElement' => 'isStartGlobal', 'idParent', 'idParentTypes', 'sortPosition', 'folderSortPosition' => new Zend_Db_Expr('""'), 'sortTimestamp', 'folderSortTimestamp' => new Zend_Db_Expr('""'), 'globalProperties.idGlobalTypes', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.created', 'globalProperties.idStatus'))
                 ->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array())
                 ->join('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'))
                 ->joinLeft(array('ub' => 'users'), 'ub.id = globalProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'))
@@ -707,7 +706,7 @@ class Model_Globals
         if ($intSortTypeId > 0 && $intSortTypeId != '') {
             switch ($intSortTypeId) {
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $objSelect->order(array('sortPosition' . $strSortOrder, 'sortTimestamp' . (($strSortOrder == 'DESC') ? ' ASC' : ' DESC')));
+                    $objSelect->order(array('folderSortPosition' . $strSortOrder, 'folderSortTimestamp' . (($strSortOrder == 'DESC') ? ' ASC' : ' DESC'), 'sortPosition' . $strSortOrder, 'sortTimestamp' . (($strSortOrder == 'DESC') ? ' ASC' : ' DESC')));
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
                     $objSelect->order(array('created' . $strSortOrder));
@@ -941,7 +940,7 @@ class Model_Globals
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function add(GenericSetup &$objGenericSetup)
+    public function add(GenericSetup $objGenericSetup)
     {
         $this->core->logger->debug('global->models->Model_Globals->add()');
 
@@ -1035,7 +1034,7 @@ class Model_Globals
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function addLink(&$objGlobal)
+    public function addLink($objGlobal)
     {
         $this->core->logger->debug('global->models->Model_Globals->addLink()');
 
@@ -1094,7 +1093,7 @@ class Model_Globals
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update(GenericSetup &$objGenericSetup, $objGlobal)
+    public function update(GenericSetup $objGenericSetup, $objGlobal)
     {
         $this->core->logger->debug('global->models->Model_Globals->update()');
 

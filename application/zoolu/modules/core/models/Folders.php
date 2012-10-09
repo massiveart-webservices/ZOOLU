@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-class Model_Folders
+class Model_Folders extends ModelAbstract
 {
 
     private $intLanguageId;
@@ -122,7 +122,7 @@ class Model_Folders
      * @return stdClass Folder
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function add(GenericSetup &$objGenericSetup)
+    public function add(GenericSetup $objGenericSetup)
     {
         $this->core->logger->debug('cms->models->Model_Folders->add()');
 
@@ -202,7 +202,7 @@ class Model_Folders
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update(GenericSetup &$objGenericSetup, $objFolder)
+    public function update(GenericSetup $objGenericSetup, $objFolder)
     {
         $this->core->logger->debug('cms->models->Model_Folders->update()');
 
@@ -269,7 +269,7 @@ class Model_Folders
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function loadAllRootLevels($intRootLevelModule, $intRootLevelType = -1)
+    public function loadAllRootLevels($intRootLevelModule, $intRootLevelType = -1, $intEnvironment = null)
     {
         $this->core->logger->debug('core->models->Folders->loadAllRootLevels(' . $intRootLevelModule . ', ' . $intRootLevelType . ')');
 
@@ -283,8 +283,12 @@ class Model_Folders
          *  AND rootLevels.idModules = ?
          *  AND rootLevels.idRootLevelTypes = ?
          */
-        $objSelect->from('rootLevels', array('id', 'idRootLevelTypes', 'landingPages', 'href', 'order'));
+        $strAppEnv = APPLICATION_ENV;
+        $intEnvironment = ($intEnvironment == null) ? $this->core->sysConfig->environments->$strAppEnv : $intEnvironment;
+        
+        $objSelect->from('rootLevels', array('id', 'idRootLevelTypes', 'landingPages', 'href', 'order', 'languageDefinitionType'));
         $objSelect->join('rootLevelTitles', 'rootLevelTitles.idRootLevels = rootLevels.id', array('title'));
+        $objSelect->joinLeft('rootLevelUrls', 'rootLevelUrls.idRootLevels = rootLevels.id AND idEnvironments = '.$intEnvironment.' AND isMain = 1', array('idLanguages AS idDefaultLanguage'));
         $objSelect->joinLeft('rootLevelLanguages', 'rootLevelLanguages.idRootLevels = rootLevels.id AND rootLevelLanguages.isFallback = 1', array('rootLevelLanguageId' => 'idLanguages'));
         $objSelect->joinLeft(array('rLGuiLanguages' => 'rootLevelLanguages'), 'rLGuiLanguages.idRootLevels = rootLevels.id AND rLGuiLanguages.idLanguages = ' . $this->intContentLanguageId, array('rootLevelGuiLanguageId' => 'rLGuiLanguages.idLanguages'));
         $objSelect->where('rootLevelTitles.idLanguages = ?', $this->intLanguageId);
@@ -295,7 +299,7 @@ class Model_Folders
         }
         $objSelect->order('rootLevels.order');
         $objSelect->order('rootLevels.id');
-
+        
         return $this->getRootLevelTable()->fetchAll($objSelect);
     }
 
@@ -348,24 +352,11 @@ class Model_Folders
 
         $objSelect = $this->getRootLevelUrlTable()->select();
         $objSelect->setIntegrityCheck(false);
-
         if (strpos($strDomain, 'www.') !== false) {
             $strDomain = str_replace('www.', '', $strDomain);
         }
-
-        /**
-         * SELECT rootLevelUrls.id, rootLevelUrls.idRootLevels, rootLevelTitles.title, themes.path
-         * FROM rootLevelUrls
-         *   INNER JOIN rootLevels ON
-         *     rootLevels.id = rootLevelUrls.idRootLevels
-         *   INNER JOIN rootLevelTitles ON
-         *     rootLevelTitles.idRootLevels = rootLevels.id AND rootLevelTitles.idLanguages = ?
-         *   INNER JOIN themes ON
-         *     themes.id = rootLevels.idThemes
-         * WHERE rootLevelUrls.url = ?
-         */
-        $objSelect->from('rootLevelUrls', array('id', 'url', 'isMain', 'urlPath' => 'path', 'idRootLevels', 'idLanguages', 'analyticsKey', 'mapsKey'));
-        $objSelect->join('rootLevels', 'rootLevels.id = rootLevelUrls.idRootLevels', array('idRootLevelGroups', 'isSecure', 'hasPortalGate', 'hasSegments'));
+        $objSelect->from('rootLevelUrls', array('id', 'url', 'isMain', 'urlPath' => 'path', 'hostPrefix', 'idRootLevels', 'idLanguages', 'analyticsKey', 'mapsKey'));
+        $objSelect->join('rootLevels', 'rootLevels.id = rootLevelUrls.idRootLevels', array('idRootLevelGroups', 'isSecure', 'hasPortalGate', 'hasSegments', 'languageDefinitionType'));
         $objSelect->join('languages', 'languages.id = rootLevelUrls.idLanguages', array('languageCode'));
         $objSelect->joinLeft('rootLevelTitles', 'rootLevelTitles.idRootLevels = rootLevels.id AND rootLevelTitles.idLanguages = ' . $this->intLanguageId, array('title'));
         $objSelect->joinLeft(array('rLTDefault' => 'rootLevelTitles'), 'rLTDefault.idRootLevels = rootLevels.id AND rLTDefault.idLanguages = rootLevelUrls.idLanguages', array('defaultTitle' => 'title'));
@@ -1477,7 +1468,8 @@ class Model_Folders
             ->order('isStartPage DESC')
             ->order('sortPosition ASC')
             ->order('sortTimestamp DESC');
-
+            
+            
         return $this->getRootLevelTable()->fetchAll($objSelect);
     }
 
@@ -2324,7 +2316,7 @@ class Model_Folders
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function getRootLevelMainUrl($mixedRootLevelId, $intEnvironment = null, $blnForLanguage = false)
+    public function getRootLevelMainUrl($mixedRootLevelId, $intEnvironment = null, $blnForLanguage = false, $blnAsObject = false)
     {
         $this->core->logger->debug('core->models->Folders->getRootLevelMainUrl()');
 
@@ -2334,7 +2326,7 @@ class Model_Folders
         $strAppEnv = APPLICATION_ENV;
         $intEnvironment = ($intEnvironment == null) ? $this->core->sysConfig->environments->$strAppEnv : $intEnvironment;
 
-        $objSelect->from($this->objRootLevelUrlTable, array('url', 'idRootLevels'))
+        $objSelect->from($this->objRootLevelUrlTable, array('url', 'idRootLevels', 'path', 'hostPrefix', 'idLanguages AS defaultLanguage'))
             ->where('rootLevelUrls.idEnvironments = ?', $intEnvironment)
             ->where('rootLevelUrls.isMain = 1')
             ->limit(1);
@@ -2351,15 +2343,29 @@ class Model_Folders
         }
 
         $objData = $this->objRootLevelUrlTable->fetchAll($objSelect);
-
-        $arrShopRootLevelIds = (!empty($this->core->config->shop)) ? $this->core->config->shop->root_level_ids->id->toArray() : array();
-        if (count($arrShopRootLevelIds) > 0 && $intEnvironment == $this->core->sysConfig->environments->production && in_array($objData->current()->idRootLevels, $arrShopRootLevelIds)) {
-            return 'https://' . $objData->current()->url;
-        } else if (count($objData) == 1) {
-            return 'http://' . $objData->current()->url;
-        } else {
-            return '';
+        $url = '';
+        $arrShopRootLevelIds = (!empty($this->core->config->shop))? $this->core->config->shop->root_level_ids->id->toArray() : array();
+        if(count($arrShopRootLevelIds) > 0 && $intEnvironment == $this->core->sysConfig->environments->production && in_array($objData->current()->idRootLevels, $arrShopRootLevelIds)) {
+            $url =  'https://'.$objData->current()->url;
+        }else if(count($objData) == 1){
+            
+            if($objData->current()->path != ''){
+                $url =  'http://'.$objData->current()->url.'/'.$objData->current()->path;
+            }else{
+                $url =  'http://'.$objData->current()->url;
+            }
         }
+        if (count($objData) == 1) {
+            if ($blnAsObject) {
+                $objReturn = new stdClass(); 
+                $objReturn->url = $url;
+                $objReturn->hostPrefix = $objData->current()->hostPrefix;
+                $objReturn->defaultLanguage = $objData->current()->defaultLanguage;
+                return $objReturn;
+            }
+        }
+        
+        return $url;
     }
 
     /**
