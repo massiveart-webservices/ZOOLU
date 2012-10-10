@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-10 09:05+0100\n"
+"POT-Creation-Date: 2012-10-10 09:45+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -126,25 +126,19 @@ msgstr "Suchergebnis"
 msgid "Searchresults"
 msgstr "Suchergebnisse"
 
-#: application/website/default/controllers/CustomerController.php:108
-msgid "Identity_not_found"
-msgstr "Benutzername nicht gefunden"
-
-#: application/website/default/controllers/CustomerController.php:111
-msgid "Credential_invalid"
-msgstr "Benutzername und Passwort sind nicht gültig"
-
-#: application/website/default/controllers/IndexController.php:514
-msgid "Please_enter_username"
-msgstr "Bitte Benutzername eingeben."
-
+#: application/website/default/controllers/CustomerController.php:105
 #: application/website/default/controllers/IndexController.php:545
 msgid "Username_not_found"
 msgstr "Benutzername nicht gefunden"
 
+#: application/website/default/controllers/CustomerController.php:108
 #: application/website/default/controllers/IndexController.php:552
 msgid "Wrong_password"
 msgstr "Falsches Passwort"
+
+#: application/website/default/controllers/IndexController.php:514
+msgid "Please_enter_username"
+msgstr "Bitte Benutzername eingeben."
 
 #: application/website/default/controllers/IndexController.php:604
 msgid "Login_failed"
@@ -334,6 +328,12 @@ msgstr "Anmelden"
 #: public/website/themes/default/search.php:41
 msgid "Search"
 msgstr "Suche"
+
+#~ msgid "Identity_not_found"
+#~ msgstr "Benutzername nicht gefunden"
+
+#~ msgid "Credential_invalid"
+#~ msgstr "Benutzername und Passwort sind nicht gültig"
 
 #, fuzzy
 #~ msgid "billing_information"

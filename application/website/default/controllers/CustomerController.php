@@ -87,9 +87,6 @@ class CustomerController extends WebControllerAction
             $strUsername = $this->getRequest()->getParam('username');
             $strPassword = md5($this->getRequest()->getParam('password'));
 
-            $this->core->logger->debug('username = ' . $strUsername);
-            $this->core->logger->debug('password = ' . $strPassword);
-
             if ($strUsername != '' && $strUsername != null) {
                 $this->objAuthAdapter->setIdentity($strUsername);
                 $this->objAuthAdapter->setCredential($strPassword);
@@ -105,10 +102,10 @@ class CustomerController extends WebControllerAction
                         $this->redirect($strRedirectUrl);
                         break;
                     case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-                        $this->view->errUsername = $this->core->translate->_('Identity_not_found');
+                        $this->view->errUsername = $this->core->translate->_('Username_not_found');
                         break;
                     case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-                        $this->view->errPassword = $this->core->translate->_('Credential_invalid');
+                        $this->view->errPassword = $this->core->translate->_('Wrong_password');
                         break;
                 }
             }
