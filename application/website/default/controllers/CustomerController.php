@@ -68,47 +68,64 @@ class CustomerController extends WebControllerAction
         $this->objAuthAdapter->setIdentityColumn('username');
         $this->objAuthAdapter->setCredentialColumn('password');
 
-        $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->objTheme->path.'/scripts');
+        $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/scripts');
     }
 
     public function loginAction()
     {
         $this->core->logger->debug('website->controllers->customerController->loginAction()');
 
-        $this->view->addFilter('PageReplacer');
-
-        $this->initPageView();
-
-        $strUsername = $this->getRequest()->getParam('username');
-        $strPassword = $this->getRequest()->getParam('password');
-
         //Redirect to given URL if already signed in
-        $strRedirectUrl = '/';
-        if ($this->getRequest()->getParam('re')) {
-            $strRedirectUrl = $this->getRequest()->getParam('re');
-        }
+        $strRedirectUrl = $this->getRedirectUrl();
+        $this->view->redirectUrl = $strRedirectUrl;
 
-        if ($strUsername != '' && $strUsername != null) {
-            $this->objAuthAdapter->setIdentity($strUsername);
-            $this->objAuthAdapter->setCredential($strPassword);
-            $objResult = $this->objAuth->authenticate($this->objAuthAdapter);
+        if (!$this->objAuth->hasIdentity()) {
+            $this->view->addFilter('PageReplacer');
 
-            switch ($objResult->getCode()) {
-                case Zend_Auth_Result::SUCCESS:
-                    $objUserData = $this->objAuthAdapter->getResultRowObject();
-                    $this->objAuth->getStorage()->write($objUserData);
-                    break;
+            $this->initPageView();
+
+            $strUsername = $this->getRequest()->getParam('username');
+            $strPassword = md5($this->getRequest()->getParam('password'));
+
+            $this->core->logger->debug('username = ' . $strUsername);
+            $this->core->logger->debug('password = ' . $strPassword);
+
+            if ($strUsername != '' && $strUsername != null) {
+                $this->objAuthAdapter->setIdentity($strUsername);
+                $this->objAuthAdapter->setCredential($strPassword);
+                $objResult = $this->objAuth->authenticate($this->objAuthAdapter);
+
+                switch ($objResult->getCode()) {
+                    case Zend_Auth_Result::SUCCESS:
+                        $objUserData = $this->objAuthAdapter->getResultRowObject();
+                        $this->objAuth->getStorage()->write($objUserData);
+                        $this->redirect($strRedirectUrl);
+                        break;
+                }
             }
-        }
-
-        if ($this->objAuth->hasIdentity()) {
+        } else {
             $this->redirect($strRedirectUrl);
         }
     }
 
+    private function getRedirectUrl()
+    {
+        $strRedirectUrl = '/';
+        if ($this->getRequest()->getParam('re')) {
+            $strRedirectUrl = $this->getRequest()->getParam('re');
+            return $strRedirectUrl;
+        }
+        return $strRedirectUrl;
+    }
+
     public function logoutAction()
     {
-        //TODO Implement
+        $this->core->logger->debug('website->controllers->customerController->logoutAction()');
+
+        $strRedirectUrl = $this->getRedirectUrl();
+
+        $this->objAuth->clearIdentity();
+        $this->redirect($strRedirectUrl);
     }
 
     public function registerAction()
@@ -120,7 +137,7 @@ class CustomerController extends WebControllerAction
     {
         Zend_Layout::startMvc(array(
             'layout' => 'master',
-            'layoutPath' => GLOBAL_ROOT_PATH.'public/website/themes/'.$this->objTheme->path
+            'layoutPath' => GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path
         ));
         Zend_Layout::getMvcInstance()->setViewSuffix('php');
 
@@ -129,12 +146,12 @@ class CustomerController extends WebControllerAction
         $this->initNavigation();
 
         // Initialize CommunityHelper
-        if(file_exists(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->objTheme->path.'/helpers/CustomerHelper.php')) {
-            require_once(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->objTheme->path.'/helpers/CustomerHelper.php');
-            $strCommunityHelper = ucfirst($this->objTheme->path).'_CustomerHelper';
+        if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/CustomerHelper.php')) {
+            require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/CustomerHelper.php');
+            $strCommunityHelper = ucfirst($this->objTheme->path) . '_CustomerHelper';
             $objCommunityHelper = new $strCommunityHelper();
         } else {
-            require_once(dirname(__FILE__).'/../helpers/CustomerHelper.php');
+            require_once(dirname(__FILE__) . '/../helpers/CustomerHelper.php');
             $objCommunityHelper = new CustomerHelper();
         }
 

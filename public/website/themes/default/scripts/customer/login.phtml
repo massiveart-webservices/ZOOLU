@@ -4,14 +4,15 @@
 
         <div class="loginContainer">
             <form action="/login" method="post" id="loginForm">
+                <input type="hidden" name="re" id="re" value="<?php echo $this->redirectUrl ?>" />
                 <div class="field">
                     <label for="username">Benutzername</label>
-                    <input type="text" id="username" name="username" value="<?php echo $this->username ?>"/>
+                    <input type="text" id="username" name="username" value="<?php echo $this->username ?>" />
                 </div>
 
                 <div class="field">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" value="<?php echo $this->username ?>"/>
+                    <input type="password" id="password" name="password" value="<?php echo $this->username ?>" />
                 </div>
 
                 <input type="submit" name="submit" id="submit" value="Absenden" />
