@@ -50,7 +50,7 @@ class CustomerHelper
     /**
      * @var string
      */
-    private $strTitle;
+    private $strMetaTitle;
 
     /**
      * @var string
@@ -82,13 +82,24 @@ class CustomerHelper
     {
         $strReturn = '';
 
-        if ($this->strTitle != '') {
+        if ($this->strMetaTitle != '') {
             if ($strTag != '') $strReturn .= '<' . $strTag . '>';
-            $strReturn .= htmlentities($this->strTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default);
+            $strReturn .= htmlentities($this->strMetaTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default);
             if ($strTag != '') $strReturn .= '</' . $strTag . '>';
         }
 
         return $strReturn;
+    }
+
+    /**
+     * setMetaTitle
+     * @param string $strMetaTitle
+     * @author Daniel Rotter
+     * @version 1.0
+     */
+    public function setMetaTitle($strMetaTitle)
+    {
+        $this->strMetaTitle = $strMetaTitle;
     }
 
     /**
@@ -112,18 +123,25 @@ class CustomerHelper
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function getMetaKeywords(){
+    public function getMetaKeywords()
+    {
         $strReturn = '';
 
-        if($this->strMetaKeywords != ''){
-            $strReturn .= '<meta name="keywords" content="'.trim($this->strMetaKeywords, ', ').'"/>';
+        if ($this->strMetaKeywords != '') {
+            $strReturn .= '<meta name="keywords" content="' . trim($this->strMetaKeywords, ', ') . '"/>';
         }
         return $strReturn;
     }
 
+    /**
+     * getContent
+     * @param $objView
+     * @return mixed
+     */
     public function getContent($objView)
     {
         return $objView->layout()->content;
     }
 }
+
 ?>

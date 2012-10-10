@@ -64,6 +64,11 @@ class CustomerController extends WebControllerAction
      */
     protected $objModelUsers;
 
+    /**
+     * init
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
     public function init()
     {
         parent::init();
@@ -81,6 +86,11 @@ class CustomerController extends WebControllerAction
         $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/scripts');
     }
 
+    /**
+     * loginAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
     public function loginAction()
     {
         $this->core->logger->debug('website->controllers->customerController->loginAction()');
@@ -94,6 +104,9 @@ class CustomerController extends WebControllerAction
 
             $strUsername = $this->getRequest()->getParam('username');
             $strPassword = md5($this->getRequest()->getParam('password'));
+
+            $objCustomerHelper = Zend_Registry::get('CustomerHelper');
+            $objCustomerHelper->setMetaTitle('Login');
 
             if ($strUsername != '' && $strUsername != null) {
                 $this->objAuthAdapter->setIdentity($strUsername);
@@ -138,6 +151,12 @@ class CustomerController extends WebControllerAction
         }
     }
 
+    /**
+     * getRedirectUrl
+     * @return string
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
     private function getRedirectUrl()
     {
         $strRedirectUrl = '/';
@@ -148,6 +167,11 @@ class CustomerController extends WebControllerAction
         return $strRedirectUrl;
     }
 
+    /**
+     * logoutAction
+     * @author Daniel Rotter <daniel.rotter@massvieat.com>
+     * @version 1.0
+     */
     public function logoutAction()
     {
         $this->core->logger->debug('website->controllers->customerController->logoutAction()');
@@ -163,6 +187,11 @@ class CustomerController extends WebControllerAction
         //TODO Implement
     }
 
+    /**
+     * initPageView
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
     private function initPageView()
     {
         Zend_Layout::startMvc(array(
@@ -179,13 +208,13 @@ class CustomerController extends WebControllerAction
         if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/CustomerHelper.php')) {
             require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/CustomerHelper.php');
             $strCommunityHelper = ucfirst($this->objTheme->path) . '_CustomerHelper';
-            $objCommunityHelper = new $strCommunityHelper();
+            $objCustomerHelper = new $strCommunityHelper();
         } else {
             require_once(dirname(__FILE__) . '/../helpers/CustomerHelper.php');
-            $objCommunityHelper = new CustomerHelper();
+            $objCustomerHelper = new CustomerHelper();
         }
 
-        Zend_Registry::set('CustomerHelper', $objCommunityHelper);
+        Zend_Registry::set('CustomerHelper', $objCustomerHelper);
 
         Zend_Registry::set('TemplateCss', '');
         Zend_Registry::set('TemplateJs', '');
