@@ -54,6 +54,16 @@ class CustomerController extends WebControllerAction
      */
     protected $objAuthAdapter;
 
+    /**
+     * @var Model_Customers
+     */
+    protected $objModelCustomers;
+
+    /**
+     * @var Model_Users
+     */
+    protected $objModelUsers;
+
     public function init()
     {
         parent::init();
@@ -97,8 +107,24 @@ class CustomerController extends WebControllerAction
 
                 switch ($objResult->getCode()) {
                     case Zend_Auth_Result::SUCCESS:
+                        //Set session value
                         $objUserData = $this->objAuthAdapter->getResultRowObject();
                         $this->objAuth->getStorage()->write($objUserData);
+
+                        //Set Security
+                        $objCustomerRoleProvider = new RoleProvider();
+                        $arrCustomerGroups = $this->getModelCustomers()->loadGroups($objUserData->id);
+                        if (count($arrCustomerGroups) > 0) {
+                            foreach ($arrCustomerGroups as $objCustomerGroup) {
+                                $objCustomerRoleProvider->addRole(new Zend_Acl_Role($objCustomerGroup->key), $objCustomerGroup->key);
+                            }
+                        }
+
+                        $objSecurity = new Security();
+                        $objSecurity->setRoleProvider($objCustomerRoleProvider);
+                        $objSecurity->buildAcl($this->getModelUsers());
+                        Security::save($objSecurity);
+
                         $this->redirect($strRedirectUrl);
                         break;
                     case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
@@ -165,6 +191,47 @@ class CustomerController extends WebControllerAction
 
         Zend_Registry::set('TemplateCss', '');
         Zend_Registry::set('TemplateJs', '');
+    }
+
+    /**
+     * getModelCustomers
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     * @return Model_Customers
+     */
+    protected function getModelCustomers()
+    {
+        if (null === $this->objModelCustomers) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'contacts/models/Customers.php';
+            $this->objModelCustomers = new Model_Customers();
+        }
+
+        return $this->objModelCustomers;
+    }
+
+    /**
+     * getModelUsers
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getModelUsers()
+    {
+        if (null === $this->objModelUsers) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/Users.php';
+            $this->objModelUsers = new Model_Users();
+        }
+
+        return $this->objModelUsers;
     }
 }
 

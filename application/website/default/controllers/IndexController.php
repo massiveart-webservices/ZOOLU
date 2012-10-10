@@ -363,13 +363,13 @@ class IndexController extends WebControllerAction
                             $blnHasIdentity = false;
                         }
                         // for members
-                        $blnHasIdentityMembers = true;
-                        $objAuth->setStorage(new Zend_Auth_Storage_Session('Members'));
+                        $blnHasIdentityCustomer = true;
+                        $objAuth->setStorage(new Zend_Auth_Storage_Session('customer'));
                         if (!$objAuth->hasIdentity()) {
-                            $blnHasIdentityMembers = false;
+                            $blnHasIdentityCustomer = false;
                         }
     
-                        if ($blnHasIdentity == false && $blnHasIdentityMembers == false) {
+                        if ($blnHasIdentity == false && $blnHasIdentityCustomer == false) {
                             $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
                         } else {
                             if (!$objNavigation->checkZonePrivileges()) {

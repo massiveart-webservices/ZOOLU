@@ -179,8 +179,9 @@ class Model_Customers
     {
         $this->core->logger->debug('contacts->models->Model_Customers->load('.$intCustomerId.')');
 
-        $objSelect = $this->getCustomerGroupTable()->select();
-        $objSelect->from('customerGroups', array('idGroups'));
+        $objSelect = $this->getCustomerGroupTable()->select()->setIntegrityCheck(false);
+        $objSelect->from('customerGroups', array('idCustomers', 'idGroups'));
+        $objSelect->join('groups', 'customerGroups.idGroups = groups.id', array('key'));
         $objSelect->where('idCustomers = ?', $intCustomerId);
 
         return $this->getCustomerGroupTable()->fetchAll($objSelect);

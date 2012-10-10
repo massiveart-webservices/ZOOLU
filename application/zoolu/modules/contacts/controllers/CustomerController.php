@@ -273,22 +273,28 @@ class Contacts_CustomerController extends AuthControllerAction
                     $this->objForm->setAction('/zoolu/contacts/customer/edit');
 
                     //Edit customer
-                    $this->getModelCustomers()->edit(array(
-                            'username' => $arrFormData['username'],
-                            'password' => md5($arrFormData['password']),
-                            'email' => $arrFormData['email'],
-                            'title' => $arrFormData['title'],
-                            'fname' => $arrFormData['fname'],
-                            'sname' => $arrFormData['sname'],
-                            'company' => $arrFormData['company'],
-                            'phone' => $arrFormData['phone'],
-                            'mobile' => $arrFormData['mobile'],
-                            'fax' => $arrFormData['fax'],
-                            'idCustomerStatus' => $arrFormData['idCustomerStatus'],
-                            'idCustomerSalutations' => $arrFormData['idCustomerSalutations'],
-                            'idUsers' => Zend_Auth::getInstance()->getIdentity()->id
-                        ), $intCustomerId
+                    $arrCustomerData = array(
+                        'username' => $arrFormData['username'],
+                        'password' => md5($arrFormData['password']),
+                        'email' => $arrFormData['email'],
+                        'title' => $arrFormData['title'],
+                        'fname' => $arrFormData['fname'],
+                        'sname' => $arrFormData['sname'],
+                        'company' => $arrFormData['company'],
+                        'phone' => $arrFormData['phone'],
+                        'mobile' => $arrFormData['mobile'],
+                        'fax' => $arrFormData['fax'],
+                        'idCustomerStatus' => $arrFormData['idCustomerStatus'],
+                        'idCustomerSalutations' => $arrFormData['idCustomerSalutations'],
+                        'idUsers' => Zend_Auth::getInstance()->getIdentity()->id
                     );
+
+                    //Do not update password if it is empty
+                    if($arrFormData['password'] == '') {
+                        unset($arrCustomerData['password']);
+                    }
+
+                    $this->getModelCustomers()->edit($arrCustomerData, $intCustomerId);
 
                     //Edit customer addresses
                     $arrRegionInstanceIds = explode('][', trim($arrFormData['Region_Addresses_Instances'], '[]'));
@@ -581,7 +587,7 @@ class Contacts_CustomerController extends AuthControllerAction
 
     /**
      * getModelCustomers
-     * @author Thomas Schedler <tsh@massiveart.com>
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
     protected function getModelCustomers()
