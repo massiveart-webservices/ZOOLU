@@ -78,10 +78,14 @@ class CustomerController extends WebControllerAction
         $this->objAuth->setStorage(new Zend_Auth_Storage_Session(self::STORAGE_NAME));
 
         //Initialize Authentication Adapter
-        $this->objAuthAdapter = new Zend_Auth_Adapter_DbTable($this->core->dbh);
-        $this->objAuthAdapter->setTableName('customers');
-        $this->objAuthAdapter->setIdentityColumn('username');
-        $this->objAuthAdapter->setCredentialColumn('password');
+        if (ClientHelper::get('Authentication')->isActive()) {
+            $this->objAuthAdapter = ClientHelper::get('Authentication')->getAdapter();
+        } else {
+            $this->objAuthAdapter = new Zend_Auth_Adapter_DbTable($this->core->dbh);
+            $this->objAuthAdapter->setTableName('customers');
+            $this->objAuthAdapter->setIdentityColumn('username');
+            $this->objAuthAdapter->setCredentialColumn('password');
+        }
 
         $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/scripts');
     }
@@ -118,24 +122,29 @@ class CustomerController extends WebControllerAction
 
                 switch ($objResult->getCode()) {
                     case Zend_Auth_Result::SUCCESS:
-                        //Set session value
-                        $objUserData = $this->objAuthAdapter->getResultRowObject();
-                        $this->objAuth->getStorage()->write($objUserData);
+                        if (ClientHelper::get('Authentication')->isActive()) {
+                            $objUserData = ClientHelper::get('Authentication')->getUserData();
+                            $objCustomerRoleProvider = ClientHelper::get('Authentication')->getUserRoleProvider();
+                        } else {
+                            $objUserData = $this->objAuthAdapter->getResultRowObject();
 
-                        //Set Security
-                        $objCustomerRoleProvider = new RoleProvider();
-                        $arrCustomerGroups = $this->getModelCustomers()->loadGroups($objUserData->id);
-                        if (count($arrCustomerGroups) > 0) {
-                            foreach ($arrCustomerGroups as $objCustomerGroup) {
-                                $objCustomerRoleProvider->addRole(new Zend_Acl_Role($objCustomerGroup->key), $objCustomerGroup->key);
+                            $objCustomerRoleProvider = new RoleProvider();
+                            $arrCustomerGroups = $this->getModelCustomers()->loadGroups($objUserData->id);
+                            if (count($arrCustomerGroups) > 0) {
+                                foreach ($arrCustomerGroups as $objCustomerGroup) {
+                                    $objCustomerRoleProvider->addRole(new Zend_Acl_Role($objCustomerGroup->key), $objCustomerGroup->key);
+                                }
                             }
                         }
 
+                        //Set Security
                         $objSecurity = new Security();
                         $objSecurity->setRoleProvider($objCustomerRoleProvider);
                         $objSecurity->buildAcl($this->getModelUsers());
                         Security::save($objSecurity);
 
+                        //Write to session and redirect
+                        $this->objAuth->getStorage()->write($objUserData);
                         $this->redirect($strRedirectUrl);
                         break;
                     case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
