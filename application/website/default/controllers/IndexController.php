@@ -185,9 +185,6 @@ class IndexController extends WebControllerAction
      */
     public function indexAction()
     {
-        $this->view->addFilter('PageReplacer');
-
-        
         // load theme
         $this->loadTheme();
         
@@ -380,12 +377,6 @@ class IndexController extends WebControllerAction
                             }
                         }
                     }
-    
-                    /**
-                     * set values for replacers
-                     */
-                    Zend_Registry::set('TemplateCss', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->portal_startpage_templateId) ? '' : '');
-                    Zend_Registry::set('TemplateJs', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->headquarters_templateId) ? '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $this->view->mapsKey . '" type="text/javascript"></script>' : '');
     
                     if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php')) {
                         require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php');

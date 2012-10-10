@@ -90,8 +90,6 @@ class CustomerController extends WebControllerAction
         $this->view->redirectUrl = $strRedirectUrl;
 
         if (!$this->objAuth->hasIdentity()) {
-            $this->view->addFilter('PageReplacer');
-
             $this->initPageView();
 
             $strUsername = $this->getRequest()->getParam('username');
