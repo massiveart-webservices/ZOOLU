@@ -8,11 +8,17 @@
                 <div class="field">
                     <label for="username">Benutzername</label>
                     <input type="text" id="username" name="username" value="<?php echo $this->username ?>" />
+                    <div class="error">
+                        <?php echo $this->errUsername ?>
+                    </div>
                 </div>
 
                 <div class="field">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" value="<?php echo $this->username ?>" />
+                    <div class="error">
+                        <?php echo $this->errPassword ?>
+                    </div>
                 </div>
 
                 <input type="submit" name="submit" id="submit" value="Absenden" />

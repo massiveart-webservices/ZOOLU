@@ -95,11 +95,20 @@ class CustomerController extends WebControllerAction
                 $this->objAuthAdapter->setCredential($strPassword);
                 $objResult = $this->objAuth->authenticate($this->objAuthAdapter);
 
+                $this->view->username = $strUsername;
+                $this->view->redirectUrl = $strRedirectUrl;
+
                 switch ($objResult->getCode()) {
                     case Zend_Auth_Result::SUCCESS:
                         $objUserData = $this->objAuthAdapter->getResultRowObject();
                         $this->objAuth->getStorage()->write($objUserData);
                         $this->redirect($strRedirectUrl);
+                        break;
+                    case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
+                        $this->view->errUsername = $this->core->translate->_('Identity_not_found');
+                        break;
+                    case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
+                        $this->view->errPassword = $this->core->translate->_('Credential_invalid');
                         break;
                 }
             }
