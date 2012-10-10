@@ -281,8 +281,20 @@ abstract class WebControllerAction extends Zend_Controller_Action
             // deactivate caching
             $this->blnCachingStart = false;
 
+            $blnHasIdentity = true;
             $objAuth = Zend_Auth::getInstance();
-            if (!Zend_Auth::getInstance()->hasIdentity()) {
+            $objAuth->setStorage(new Zend_Auth_Storage_Session());
+            if (!$objAuth->hasIdentity()) {
+                $blnHasIdentity = false;
+            }
+            // for members
+            $blnHasIdentityCustomer = true;
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('customer'));
+            if (!$objAuth->hasIdentity()) {
+                $blnHasIdentityCustomer = false;
+            }
+
+            if (!$objAuth->hasIdentity()) {
                 $this->_redirect('/login?re=' . urlencode($_SERVER['REQUEST_URI']));
             } else {
                 Security::get()->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->cms, Security::ZONE_WEBSITE);

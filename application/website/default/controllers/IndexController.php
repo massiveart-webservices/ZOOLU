@@ -352,19 +352,8 @@ class IndexController extends WebControllerAction
                     if ($objNavigation->secuirtyZoneCheck()) {
                         // deactivate caching
                         $this->blnCachingStart = false;
-    
-                        $blnHasIdentity = true;
-                        $objAuth = Zend_Auth::getInstance();
-                        $objAuth->setStorage(new Zend_Auth_Storage_Session());
-                        if (!$objAuth->hasIdentity()) {
-                            $blnHasIdentity = false;
-                        }
-                        // for members
-                        $blnHasIdentityCustomer = true;
-                        $objAuth->setStorage(new Zend_Auth_Storage_Session('customer'));
-                        if (!$objAuth->hasIdentity()) {
-                            $blnHasIdentityCustomer = false;
-                        }
+
+                        list($blnHasIdentity, $blnHasIdentityCustomer) = $this->isZooluOrCustomerIdentity();
     
                         if ($blnHasIdentity == false && $blnHasIdentityCustomer == false) {
                             $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
@@ -432,6 +421,25 @@ class IndexController extends WebControllerAction
                 $this->_helper->viewRenderer->setNoRender();
             }
         }
+    }
+
+    protected function isZooluOrCustomerIdentity()
+    {
+        $blnHasIdentity = true;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session());
+        if (!$objAuth->hasIdentity()) {
+            $blnHasIdentity = false;
+        }
+        // for members
+        $blnHasIdentityCustomer = true;
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('customer'));
+        if (!$objAuth->hasIdentity()) {
+            $blnHasIdentityCustomer = false;
+        }
+
+        $blnHasIdentity = $blnHasIdentity || $blnHasIdentityCustomer;
+        return array($blnHasIdentity, $blnHasIdentityCustomer);
     }
 
     /**
