@@ -79,10 +79,6 @@ function get_zoolu_header() { }
 
 function get_language_chooser() { }
 
-function get_template_file() {
-    return 'login.phtml';
-}
-
 function get_content($objView) {
     echo getCustomerHelperObject()->getContent($objView);
 }
