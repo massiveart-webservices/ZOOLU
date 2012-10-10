@@ -2222,7 +2222,7 @@ Massiveart.Form = Class.create({
     var field = $( elementId ).getValue();
     var count = maxChars - field.length;
     var str = '';
-    if( count > 0 ) {
+    if( count >= 0 ) {
         str = '<span class="plus">'+count+'</span>';
     } else {
         str = '<span class="minus">'+count+'</span>';
