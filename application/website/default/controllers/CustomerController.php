@@ -30,6 +30,8 @@
  * @version    $Id: version.php
  */
 
+require_once(GLOBAL_ROOT_PATH.'library/massiveart/website/customer/registration.strategy.doubleoptin.class.php');
+
 /**
  * CustomerController
  *
@@ -201,6 +203,12 @@ class CustomerController extends WebControllerAction
         $this->core->logger->debug('website->controllers->customerController->registerAction()');
 
         $this->initPageView();
+
+        if ($this->getRequest()->isPost()) {
+            //TODO Instantiate the correct strategy based on properties
+            $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest());
+            $objRegisterStrategy->register($this->getRequest());
+        }
     }
 
     /**
