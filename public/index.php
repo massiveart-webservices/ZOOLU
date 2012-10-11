@@ -95,6 +95,9 @@ try{
     $route = new Zend_Controller_Router_Route_Static('logout', array('controller' => 'Customer', 'action' => 'logout'));
     $router->addRoute('customerWebControllerLogout', $route);
 
+    $route = new Zend_Controller_Router_Route_Static('register', array('controller' => 'Customer', 'action' => 'register'));
+    $router->addRoute('customerWebControllerRegister', $route);
+
     /**
      * only throw exceptions in developement mode
      */

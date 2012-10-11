@@ -191,9 +191,16 @@ class CustomerController extends WebControllerAction
         $this->redirect($strRedirectUrl);
     }
 
+    /**
+     * registerAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
     public function registerAction()
     {
-        //TODO Implement
+        $this->core->logger->debug('website->controllers->customerController->registerAction()');
+
+        $this->initPageView();
     }
 
     /**
