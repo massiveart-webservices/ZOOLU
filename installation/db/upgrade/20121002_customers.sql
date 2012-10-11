@@ -44,8 +44,8 @@ CREATE  TABLE IF NOT EXISTS `customers` (
   `idCustomerStatus` BIGINT(20) UNSIGNED NOT NULL ,
   `idcustomerSalutations` BIGINT(20) UNSIGNED NOT NULL ,
   `idRootLevels` BIGINT(20) UNSIGNED NOT NULL ,
-  `idUsers` INT(10) UNSIGNED NOT NULL ,
-  `creator` INT(10) UNSIGNED NOT NULL ,
+  `idUsers` INT(10) UNSIGNED ,
+  `creator` INT(10) UNSIGNED ,
   `created` TIMESTAMP NULL ,
   `changed` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`id`) ,
@@ -150,6 +150,7 @@ CREATE  TABLE IF NOT EXISTS `customerLog` (
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `message` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) ,
+
   INDEX `fk_customerLog_customers1_idx` (`idCustomer` ASC) ,
   INDEX `fk_customerLog_customerLogTypes1_idx` (`idCustomerLogType` ASC) ,
   CONSTRAINT `fk_customerLog_customers1`

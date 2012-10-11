@@ -204,7 +204,7 @@ class CustomerController extends WebControllerAction
 
         $this->initPageView();
 
-        if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost() || $this->getRequest()->getParam('key', '') != '') {
             //TODO Instantiate the correct strategy based on properties
             $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest());
             $objRegisterStrategy->register($this->getRequest());

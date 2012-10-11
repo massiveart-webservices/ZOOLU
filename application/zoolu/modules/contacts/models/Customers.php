@@ -126,6 +126,17 @@ class Model_Customers
         return $this->getCustomerTable()->fetchAll($objSelect);
     }
 
+    public function loadByRegistrationKey($strRegistrationKey)
+    {
+        $this->core->logger->debug('contacts->models->Model_Customers->load('.$strRegistrationKey.')');
+
+        $objSelect = $this->getCustomerTable()->select();
+        $objSelect->from('customers');
+        $objSelect->where('customers.registrationKey = ?', $strRegistrationKey);
+
+        return $this->getCustomerTable()->fetchAll($objSelect);
+    }
+
     /**
      * loadAll
      * @param $strSearchValue string
@@ -212,7 +223,6 @@ class Model_Customers
      */
     public function edit($arrData, $intCustomerId)
     {
-        $this->core->logger->debug(json_encode($arrData));
         $strWhere = $this->getCustomerTable()->getAdapter()->quoteInto('id = ?', $intCustomerId);
         return $this->getCustomerTable()->update($arrData, $strWhere);
     }

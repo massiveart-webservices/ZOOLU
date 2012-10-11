@@ -43,10 +43,31 @@
  */
 abstract class RegistrationStrategyAbstract
 {
+    /**
+     * @var Core
+     */
+    protected $core;
+
+    /**
+     * @var Zend_Controller_Request_Abstract
+     */
     private $_objRequest;
 
+    /**
+     * getRequest
+     * @return Zend_Controller_Request_Abstract
+     */
+    public function getRequest()
+    {
+        return $this->_objRequest;
+    }
+
+    /**
+     * @param Zend_Controller_Request_Abstract $objRequest
+     */
     public function __construct(Zend_Controller_Request_Abstract $objRequest)
     {
+        $this->core = Zend_Registry::get('Core');
         $this->_objRequest = $objRequest;
     }
 
@@ -56,12 +77,16 @@ abstract class RegistrationStrategyAbstract
      */
     public abstract function register();
 
+    /**
+     * validate
+     * @return bool
+     */
     protected function validate()
     {
-        return $this->_objRequest->getParam('email', '') != ''
-            && $this->_objRequest->getParam('username', '') != ''
-            && $this->_objRequest->getParam('password', '') != ''
-            && $this->_objRequest->getParam('password') == $this->_objRequest->getParam('passwordConfirm');
+        return $this->getRequest()->getParam('email', '') != ''
+            && $this->getRequest()->getParam('username', '') != ''
+            && $this->getRequest()->getParam('password', '') != ''
+            && $this->getRequest()->getParam('password') == $this->getRequest()->getParam('passwordConfirm');
     }
 }
 

@@ -30,10 +30,11 @@
         <address></address>
       </ma_recipient>
       <params>
-        <host></host>
-        <username></username>
-        <password></password>
+        <host>mailer.massiveart.at</host>
+        <username>zoolu@mailer.massiveart.at</username>
+        <password>w#BmeiLLzoolu</password>
       </params>
+      <transport>smtp</transport>
       <actions>
         <sendmail>
           <client>false</client>
