@@ -76,18 +76,6 @@ abstract class RegistrationStrategyAbstract
      * @return mixed
      */
     public abstract function register();
-
-    /**
-     * validate
-     * @return bool
-     */
-    protected function validate()
-    {
-        return $this->getRequest()->getParam('email', '') != ''
-            && $this->getRequest()->getParam('username', '') != ''
-            && $this->getRequest()->getParam('password', '') != ''
-            && $this->getRequest()->getParam('password') == $this->getRequest()->getParam('passwordConfirm');
-    }
 }
 
 ?>

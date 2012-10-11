@@ -30,7 +30,7 @@
  * @version    $Id: version.php
  */
 
-require_once(GLOBAL_ROOT_PATH.'library/massiveart/website/customer/registration.strategy.doubleoptin.class.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/registration.strategy.doubleoptin.class.php');
 
 /**
  * CustomerController
@@ -205,9 +205,21 @@ class CustomerController extends WebControllerAction
         $this->initPageView();
 
         if ($this->getRequest()->isPost() || $this->getRequest()->getParam('key', '') != '') {
-            //TODO Instantiate the correct strategy based on properties
-            $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest());
-            $objRegisterStrategy->register($this->getRequest());
+            //TODO validate
+            $blnValid = (
+                $this->getRequest()->getParam('email', '') != ''
+                    && $this->getRequest()->getParam('username', '') != ''
+                    && $this->getRequest()->getParam('password', '') != ''
+                    && $this->getRequest()->getParam('password') == $this->getRequest()->getParam('passwordConfirm')
+            ) || $this->getRequest()->getParam('key', '') != '';
+            if ($blnValid) {
+                //TODO Instantiate the correct strategy based on properties
+                $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest());
+                $objRegisterStrategy->register($this->getRequest());
+                $this->redirect('/'); //TODO Find better URL
+            } else {
+
+            }
         }
     }
 

@@ -61,12 +61,10 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                     'idCustomerStatus' => 1 //TODO Do not hardcode, and do not set to active (1)
                 );
                 $this->getModelCustomers()->edit($arrData, $intCustomerId);
-                //TODO Redirect?
             } else {
                 //TODO Throw Exception, Error, ...
             }
-        } elseif ($this->validate()) {
-
+        } else {
             //Generate registrationKey
             $strRegistrationKey = uniqid('', true);
 
@@ -87,8 +85,6 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
             //Send registration link as email
             $this->sendRegistrationMail($arrData);
             return true;
-        } else {
-            return false;
         }
     }
 
