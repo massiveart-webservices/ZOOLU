@@ -27,12 +27,12 @@
       <id>default</id>
       <title>Default Portal</title>
     </client>
-    
+
     <!-- STANDARD -->
     <language>de</language>
     <location>de_AT</location>
     <timezone>Europe/Vienna</timezone>
-        
+
     <!-- Standard web-server user & group -->
     <server>
       <executing>
@@ -40,7 +40,7 @@
         <group>www-data</group>
       </executing>
     </server>
-    
+
     <!-- LANGUAGES -->
     <languages>
       <default>
@@ -48,13 +48,13 @@
         <code>de</code>
       </default>
     </languages>
-        
+
     <!-- VERSION -->
     <version>
       <js>1.0</js>
       <css>1.0</css>
     </version>
-    
+
     <!-- DISPLAY ENVIRONMENTS -->
     <display_type>
        <enabled>false</enabled> <!-- true/false -->
@@ -62,7 +62,7 @@
        <tablet>tablet</tablet>
        <mobile>mobile</mobile>
     </display_type>
-    
+
     <!-- PATHES -->
     <path>
       <cache>
@@ -76,15 +76,15 @@
       <search_index>
         <page>tmp/search_index/pages</page>
         <global>tmp/search_index/globals</global>
-      </search_index>      
-      <zoolu_modules>application/zoolu/modules/</zoolu_modules>      
+      </search_index>
+      <zoolu_modules>application/zoolu/modules/</zoolu_modules>
     </path>
-    
+
     <!-- MINIFY -->
     <minify>
       <debug>false</debug>
     </minify>
-    
+
     <!-- LOGGER / DEBUGGING -->
     <show_errors>false</show_errors>
     <logger>
@@ -92,13 +92,13 @@
       <path>logs/</path>
       <firebug>false</firebug>
     </logger>
-    
+
     <!-- CACHE -->
     <cache>
       <page>true</page>
       <generic_form_structure>true</generic_form_structure>
     </cache>
-    
+
     <!-- DATABASE -->
     <database>
       <adapter>Pdo_Mysql</adapter>
@@ -109,23 +109,23 @@
         <dbname>zo-zoolu</dbname>
       </params>
     </database>
-    
+
     <!-- ENCODING -->
     <encoding>
       <default>UTF-8</default>
       <ajax>UTF-8</ajax>
       <db>UTF8</db>
     </encoding>
-    
+
     <!-- Helpers -->
     <helpers>
       <client>
         <dispatcher>disabled</dispatcher> <!-- enabled/disabled -->
         <init>disabled</init> <!-- enabled/disabled -->
         <datareceiver>disabled</datareceiver> <!-- enabled/disabled -->
-      </client>      
+      </client>
     </helpers>
-    
+
     <!-- Contact  -->
     <contact>
       <replications>
@@ -150,7 +150,7 @@
         </interest_group>
       </interest_groups>
     </contact>
-    
+
     <mail_chimp>
       <api_key>6061ae004265eb4f2e4cdb88d6f7e66d-us2</api_key>
       <list_id>930f4657db</list_id>
@@ -198,7 +198,7 @@
         </interest>
       </interests>
     </mail_chimp>
-        
+
     <!-- Subscriber  -->
     <subscriber>
       <default>
@@ -300,21 +300,21 @@
         </import_field>
       </import_fields>
     </subscriber>
-    
+
     <!-- RESPONSE CODES -->
     <response>
       <ok>200</ok>
       <bad_request>400</bad_request>
       <internal_server_error>500</internal_server_error>
     </response>
-    
+
     <!-- List Config -->
     <list>
       <default>
         <itemsPerPage>100</itemsPerPage>
       </default>
     </list>
-    
+
     <!-- GENERIC -->
     <generic>
       <!-- table: actions -->
@@ -325,16 +325,16 @@
         <change_template_id>4</change_template_id>
       </actions>
     </generic>
-    
+
     <!-- FORM -->
-    <form>      
+    <form>
       <ids>
         <!-- default genericFormIds for folders / table: genericForms -->
         <folders>
           <default>DEFAULT_FOLDER</default>
         </folders>
-        <!-- default genericFormIds for pages / table: genericForms -->        
-        <pages>          
+        <!-- default genericFormIds for pages / table: genericForms -->
+        <pages>
           <tmp1>DEFAULT_PAGE_1</tmp1>
           <overview>DEFAULT_OVERVIEW</overview>
         </pages>
@@ -352,15 +352,15 @@
           <overview>DEFAULT_EVENT_OVERVIEW</overview>
         </events>
         <product>
-          <default>DEFAULT_PRODUCT</default>          
+          <default>DEFAULT_PRODUCT</default>
           <overview>DEFAULT_PRODUCT_OVERVIEW</overview>
         </product>
         <press>
-          <default>DEFAULT_PRESS</default>          
+          <default>DEFAULT_PRESS</default>
           <overview>DEFAULT_PRESS_OVERVIEW</overview>
         </press>
         <course>
-          <default>DEFAULT_COURSE</default>          
+          <default>DEFAULT_COURSE</default>
           <overview>DEFAULT_COURSE_OVERVIEW</overview>
         </course>
         <locations>
@@ -404,14 +404,14 @@
        <default>1</default>
       </status>
     </form>
-    
+
     <!-- FIELDS -->
     <fields>
       <properties>
         <url_field>1</url_field>
       </properties>
     </fields>
-        
+
     <!-- VIEW TYPES -->
     <viewtypes>
       <thumb>1</thumb>
@@ -429,12 +429,12 @@
         </tree>
       </rootLevels>
     </product>
-    
+
     <!-- UPLOAD -->
-    <upload>      
-      <!-- maximum filesize -->      
-      <max_filesize>52428800</max_filesize> <!-- 50 MB (1024*1024*15) for each upload media -->            
-      <!-- excluded extensions -->        
+    <upload>
+      <!-- maximum filesize -->
+      <max_filesize>52428800</max_filesize> <!-- 50 MB (1024*1024*15) for each upload media -->
+      <!-- excluded extensions -->
       <excluded_extensions>
         <extension>com</extension>
         <extension>exe</extension>
@@ -453,20 +453,20 @@
         <extension>pl</extension>
         <extension>scr</extension>
       </excluded_extensions>
-        
+
       <!-- IMAGES -->
       <images>
         <!-- Adapter (Gd2, Imagick) -->
         <adapter>Imagick</adapter>
         <!-- Save destination (local, s3) -->
         <destination>local</destination>
-        
+
         <!-- file system segmenting -->
         <segmenting>
           <enabled>true</enabled>
           <number_of_segments>10</number_of_segments>
         </segmenting>
-        
+
         <!-- upload pathes -->
         <path>
           <local>
@@ -480,10 +480,10 @@
             <public>public/images/</public>
           </s3>
         </path>
-        
-        <!-- maximum filesize -->      
+
+        <!-- maximum filesize -->
         <max_filesize>15728640</max_filesize> <!-- 15 MB (1024*1024*15) for each Image -->
-        <!-- excluded extensions -->        
+        <!-- excluded extensions -->
         <excluded_extensions>
           <extension>exe</extension>
         </excluded_extensions>
@@ -494,11 +494,11 @@
 	            <action>
 	              <method>scale</method>
 	              <params>32,32</params>
-	            </action>              
-            </actions> 
+	            </action>
+            </actions>
             <display>
-              <single_edit>true</single_edit>              
-            </display>                       
+              <single_edit>true</single_edit>
+            </display>
           </default_size>
           <default_size>
             <folder>thumb</folder>
@@ -506,12 +506,12 @@
               <action>
                 <method>resize</method>
                 <params>200</params>
-              </action>             
+              </action>
             </actions>
             <display>
-              <single_edit>true</single_edit>              
-            </display>                        
-          </default_size>          
+              <single_edit>true</single_edit>
+            </display>
+          </default_size>
           <default_size>
             <folder>660x</folder>
             <actions>
@@ -519,7 +519,7 @@
                 <method>resize</method>
                 <params>660</params>
               </action>
-            </actions>                        
+            </actions>
           </default_size>
           <default_size>
             <folder>420x</folder>
@@ -528,7 +528,7 @@
                 <method>resize</method>
                 <params>420</params>
               </action>
-            </actions>                        
+            </actions>
           </default_size>
           <default_size>
             <folder>220x</folder>
@@ -537,7 +537,7 @@
                 <method>resize</method>
                 <params>220</params>
               </action>
-            </actions>                        
+            </actions>
           </default_size>
           <default_size>
             <folder>180x</folder>
@@ -546,7 +546,7 @@
                 <method>resize</method>
                 <params>180</params>
               </action>
-            </actions>                        
+            </actions>
           </default_size>
           <default_size>
             <folder>140x140</folder>
@@ -554,17 +554,17 @@
               <action>
                 <method>scale</method>
                 <params>140,140</params>
-              </action>             
-            </actions>                        
-          </default_size>          
+              </action>
+            </actions>
+          </default_size>
           <default_size>
             <folder>80x80</folder>
             <actions>
               <action>
                 <method>scale</method>
                 <params>80,80</params>
-              </action>             
-            </actions>                        
+              </action>
+            </actions>
           </default_size>
           <default_size>
             <folder>40x40</folder>
@@ -572,23 +572,23 @@
               <action>
                 <method>scale</method>
                 <params>40,40</params>
-              </action>             
-            </actions>                        
+              </action>
+            </actions>
           </default_size>
         </default_sizes>
       </images>
-      
+
       <!-- DOCS -->
       <documents>
         <!-- Save destination (local, S3) -->
         <destination>local</destination>
-        
+
         <!-- file system segmenting -->
         <segmenting>
           <enabled>true</enabled>
           <number_of_segments>10</number_of_segments>
         </segmenting>
-        
+
         <!-- upload pathes -->
         <path>
           <local>
@@ -600,21 +600,21 @@
             <public>public/documents/</public>
           </s3>
         </path>
-        <!-- maximum filesize -->      
-        <max_filesize>52428800</max_filesize> <!-- 50 MB (1024*1024*15) for each upload media -->              
+        <!-- maximum filesize -->
+        <max_filesize>52428800</max_filesize> <!-- 50 MB (1024*1024*15) for each upload media -->
       </documents>
-      
+
       <!-- VIDEOS -->
       <videos>
         <!-- Save destination (local, S3) -->
         <destination>local</destination>
-        
+
         <!-- file system segmenting -->
         <segmenting>
           <enabled>true</enabled>
           <number_of_segments>10</number_of_segments>
         </segmenting>
-        
+
         <!-- upload pathes -->
         <path>
           <local>
@@ -626,10 +626,10 @@
             <public>public/videos/</public>
           </s3>
         </path>
-        <!-- maximum filesize -->      
-        <max_filesize>125829120</max_filesize> <!-- 120 MB (1024*1024*120) for each file -->                      
+        <!-- maximum filesize -->
+        <max_filesize>125829120</max_filesize> <!-- 120 MB (1024*1024*120) for each file -->
       </videos>
-      
+
       <!-- UPLOADED DATA OF FORMS -->
       <forms>
         <!-- upload pathes -->
@@ -639,9 +639,9 @@
           </local>
         </path>
       </forms>
-      
+
     </upload>
-    
+
     <!-- MEDIA OUTPUT PATHS -->
     <media>
       <paths>
@@ -650,37 +650,37 @@
         <vidbase>/website/uploads/videos/</vidbase>
         <thumb>/website/uploads/images/%sthumb/</thumb>
         <icon32>/website/uploads/images/%sicon32/</icon32>
-      </paths>      
+      </paths>
       <download>
         <zip_extensions>
           <extension>dxf</extension>
         </zip_extensions>
       </download>
     </media>
-    
-    <!-- ENVIRONMENT -->    
+
+    <!-- ENVIRONMENT -->
     <zone>
       <zoolu>1</zoolu>
       <website>2</website>
     </zone>
-    
-    <!-- ENVIRONMENTS --> 
-    <!-- table: environments -->   
+
+    <!-- ENVIRONMENTS -->
+    <!-- table: environments -->
     <environments>
       <production>1</production>
       <staging>2</staging>
       <development>3</development>
       <testing>4</testing>
     </environments>
-    
-    
+
+
     <!-- PARENT TYPES -->
     <!-- table: parentTypes -->
     <parent_types>
       <rootlevel>1</rootlevel>
       <folder>2</folder>
     </parent_types>
-    
+
     <!-- MODULES -->
     <!-- table: modules -->
     <modules>
@@ -692,7 +692,7 @@
       <contacts>6</contacts>
       <newsletters>7</newsletters>
     </modules>
-    
+
     <!-- ROOTLEVEL TYPES -->
     <!-- table: rootLevelTypes -->
     <root_level_types>
@@ -716,7 +716,7 @@
       <subscribers>18</subscribers>
       <customers>19</customers>
     </root_level_types>
-    
+
     <!-- ROOTLEVEL GROUPS -->
     <!-- table: rootLevelGroups -->
     <root_level_groups>
@@ -738,14 +738,14 @@
       <subscriber>16</subscriber>
       <customer>17</customer>
     </root_level_groups>
-    
+
     <!-- FOLDER TYPES -->
     <!-- table: folderTypes -->
     <folder_types>
       <folder>1</folder>
       <blog>2</blog>
     </folder_types>
-    
+
     <!-- PAGE TYPES -->
     <!-- table: pageTypes -->
     <page_types>
@@ -768,7 +768,7 @@
       </link>
       <overview>
         <id>3</id>
-        <default_formId>DEFAULT_OVERVIEW</default_formId>        
+        <default_formId>DEFAULT_OVERVIEW</default_formId>
         <default_templateId>4</default_templateId>
         <event_formId>DEFAULT_EVENT_OVERVIEW</event_formId>
         <event_templateId>8</event_templateId>
@@ -789,12 +789,12 @@
       </collection>
       <product_tree>
         <id>7</id>
-        <default_formId>DEFAULT_PRODUCT_TREE</default_formId>        
+        <default_formId>DEFAULT_PRODUCT_TREE</default_formId>
         <default_templateId>13</default_templateId>
       </product_tree>
       <press_area>
         <id>8</id>
-        <default_formId>DEFAULT_PRESS_AREA</default_formId>        
+        <default_formId>DEFAULT_PRESS_AREA</default_formId>
         <default_templateId>19</default_templateId>
       </press_area>
       <iframe>
@@ -804,17 +804,17 @@
       </iframe>
       <courses>
         <id>10</id>
-        <default_formId>DEFAULT_COURSES</default_formId>        
+        <default_formId>DEFAULT_COURSES</default_formId>
         <default_templateId>29</default_templateId>
       </courses>
       <events>
         <id>11</id>
-        <default_formId>DEFAULT_EVENTS</default_formId>        
+        <default_formId>DEFAULT_EVENTS</default_formId>
         <default_templateId>33</default_templateId>
       </events>
       <download_center>
         <id>12</id>
-        <default_formId>DEFAULT_DOWNLOAD_CENTER</default_formId>        
+        <default_formId>DEFAULT_DOWNLOAD_CENTER</default_formId>
         <default_templateId>35</default_templateId>
       </download_center>
       <sitemap>
@@ -828,7 +828,7 @@
         <default_templateId>42</default_templateId>
       </service>
     </page_types>
-    
+
     <!-- GLOBAL TYPES -->
     <!-- table: globalTypes -->
     <global_types>
@@ -838,7 +838,7 @@
         <default_templateId>11</default_templateId>
       </product>
       <product_link>
-        <id>2</id>        
+        <id>2</id>
       </product_link>
       <product_overview>
         <id>3</id>
@@ -886,14 +886,14 @@
         <default_templateId>32</default_templateId>
       </event_overview>
     </global_types>
-    
+
     <!-- REGION TYPES -->
     <!-- table: regionTypes -->
     <region_types>
       <content>1</content>
       <config>2</config>
     </region_types>
-    
+
     <!-- CATEGORY TYPES -->
     <!-- table: categoryTypes -->
     <category_types>
@@ -901,14 +901,14 @@
       <system>2</system>
       <label>3</label>
     </category_types>
-    
+
     <!-- GROUP TYPES -->
     <!-- table: groupTypes -->
     <group_types>
       <frontend>1</frontend>
       <backend>2</backend>
     </group_types>
-    
+
     <!-- TYPES -->
     <!-- table: types -->
     <types>
@@ -951,7 +951,7 @@
       <folders>2</folders>
       <rootLevel>3</rootLevel>
     </filter_types>
-    
+
     <!-- table: categories / idRootCategory=11, idCategoryTypes=2 -->
     <sort>
       <!-- sorttypes -->
@@ -975,7 +975,7 @@
         <published>
           <id>40</id>
           <matchcode>published</matchcode>
-        </published>  
+        </published>
       </types>
       <!-- sortorders -->
       <orders>
@@ -986,7 +986,7 @@
         <desc>
           <id>14</id>
           <matchcode>DESC</matchcode>
-        </desc>   
+        </desc>
       </orders>
     </sort>
     <filter>
@@ -999,22 +999,30 @@
       <one_column>650</one_column>
       <two_column>651</two_column>
     </display>
-    
-    
+
+
     <!-- STATUS -->
     <status>
       <test>1</test>
       <live>2</live>
-      <approval>3</approval> 
+      <approval>3</approval>
     </status>
-    
+
     <!-- ACTIVITY USER STATUS -->
     <activity_user_status>
       <done>1</done>
       <read>2</read>
       <not_read>3</not_read>
     </activity_user_status>
-    
+
+      <!-- table: customerStatus -->
+    <customerstatus>
+        <active>1</active>
+        <inactive>2</inactive>
+        <unapproved>3</unapproved>
+        <unverified>4</unverified>
+    </customerstatus>
+
     <!-- NAVIGATION OPTIONS -->
     <navigation_options>
       <top>1</top>
@@ -1022,7 +1030,7 @@
       <right>3</right>
       <bottom>4</bottom>
     </navigation_options>
-    
+
     <!-- VIDEO CHANNELS -->
     <video_channels>
       <!--<vimeo>
@@ -1040,16 +1048,16 @@
           <user>
             <id>MASSIVEARTWebService</id>
             <name>MASSIVE ART WebServices</name>
-          </user>      	
+          </user>
         </users>
       </youtube>
     </video_channels>
-    
+
     <!-- Plugins / Fields Javascript -->
     <pluginsJs>
       <gmaps>http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key={MAPSKEY}</gmaps>
     </pluginsJs>
-    
+
     <!-- reCAPTCHA - http://www.google.com/recaptcha -->
     <recaptcha>
       <keys>
@@ -1057,11 +1065,11 @@
         <private></private>
       </keys>
     </recaptcha>
-    
+
     <newsletter>
       <theme>default</theme>
     </newsletter>
-    
+
   </production>
 
   <!--
@@ -1070,67 +1078,67 @@
   ***********************************************************
   -->
   <staging extends="production">
-    
+
     <!-- LOGGER / DEBUGGING -->
     <show_errors>false</show_errors>
     <logger>
-      <priority>5</priority>     
+      <priority>5</priority>
       <firebug>false</firebug>
     </logger>
-    
+
     <!-- CACHE -->
     <cache>
       <page>true</page>
       <generic_form_structure>true</generic_form_structure>
     </cache>
-        
+
   </staging>
-  
+
   <!--
   ***********************************************************
   * config for testing evnironment                          *
   ***********************************************************
   -->
   <testing extends="staging">
-      
+
     <!-- LOGGER / DEBUGGING -->
     <show_errors>true</show_errors>
     <logger>
-      <priority>6</priority>     
+      <priority>6</priority>
       <firebug>true</firebug>
     </logger>
-    
+
     <!-- CACHE -->
     <cache>
       <page>false</page>
       <generic_form_structure>true</generic_form_structure>
     </cache>
-    
+
   </testing>
-  
+
   <!--
   ***********************************************************
   * config for development evnironment                      *
   ***********************************************************
   -->
   <development extends="testing">
-    
+
     <!-- MINIFY -->
     <minify>
       <debug>true</debug>
     </minify>
-  
+
     <!-- LOGGER / DEBUGGING -->
     <logger>
-      <priority>7</priority> 
+      <priority>7</priority>
     </logger>
-    
+
     <!-- CACHE -->
     <cache>
       <page>false</page>
       <generic_form_structure>false</generic_form_structure>
     </cache>
-    
+
   </development>
 
 </configdata>
