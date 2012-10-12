@@ -44,11 +44,6 @@ require_once(dirname(__FILE__) . '/registration.strategy.abstract.class.php');
  */
 class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
 {
-    /**
-     * @var Model_Customers
-     */
-    private $objModelCustomers;
-
     public function register()
     {
         if ($this->getRequest()->getParam('key', '') != '') {
@@ -126,27 +121,6 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
         } else {
             $objMail->send();
         }
-    }
-
-    /**
-     * getModelCustomers
-     * @author Daniel Rotter <daniel.rotter@massiveart.com>
-     * @version 1.0
-     * @return Model_Customers
-     */
-    protected function getModelCustomers()
-    {
-        if (null === $this->objModelCustomers) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'contacts/models/Customers.php';
-            $this->objModelCustomers = new Model_Customers();
-        }
-
-        return $this->objModelCustomers;
     }
 }
 
