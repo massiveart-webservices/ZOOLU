@@ -52,7 +52,7 @@ abstract class RegistrationStrategyAbstract
      * @var Zend_Controller_Request_Abstract
      */
     private $_objRequest;
-    
+
     /**
      * @var Model_Customers
      */

@@ -217,15 +217,26 @@ class CustomerController extends WebControllerAction
             $blnValidPassword = $this->getRequest()->getParam('password') == $this->getRequest()->getParam('passwordConfirm');
             $blnValidEmail = $objMailValidator->isValid($this->getRequest()->getParam('email'));
             $blnUniqueUsername = count($objCustomers) == 0;
+            $blnKeySet = $this->getRequest()->getParam('key', '') != '';
             $blnValid = (
                 $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername
-            ) || $this->getRequest()->getParam('key', '') != '';
+            ) || $blnKeySet;
             if ($blnValid) {
+                $this->core->logger->debug('valid');
                 //TODO Instantiate the correct strategy based on properties
                 $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest());
-                $objRegisterStrategy->register($this->getRequest());
-                $this->redirect('/'); //TODO Find better URL
+                if ($blnKeySet) {
+                    if ($objRegisterStrategy->register()) {
+                        $this->view->display = 'keyConfirmation';
+                    } else {
+                        $this->view->display = 'invalidKey';
+                    }
+                } else {
+                    $objRegisterStrategy->register();
+                    $this->view->display = 'confirmation';
+                }
             } else {
+                $this->core->logger->debug('invalid');
                 //Reassign field values
                 $this->view->fname = $this->getRequest()->getParam('fname');
                 $this->view->sname = $this->getRequest()->getParam('sname');
@@ -260,7 +271,8 @@ class CustomerController extends WebControllerAction
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    private function initPageView()
+    private
+    function initPageView()
     {
         Zend_Layout::startMvc(array(
             'layout' => 'master',
@@ -294,7 +306,8 @@ class CustomerController extends WebControllerAction
      * @version 1.0
      * @return Model_Customers
      */
-    protected function getModelCustomers()
+    protected
+    function getModelCustomers()
     {
         if (null === $this->objModelCustomers) {
             /**
@@ -314,7 +327,8 @@ class CustomerController extends WebControllerAction
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function getModelUsers()
+    public
+    function getModelUsers()
     {
         if (null === $this->objModelUsers) {
             /**

@@ -56,8 +56,10 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                     'idCustomerStatus' => 1 //TODO Do not hardcode, and do not set to active (1)
                 );
                 $this->getModelCustomers()->edit($arrData, $intCustomerId);
+                return true;
             } else {
-                //TODO Throw Exception, Error, ...
+                //The registration key is not valid
+                return false;
             }
         } else {
             //Generate registrationKey
@@ -107,7 +109,7 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
         $objMail->setBodyHtml($strBody);
 
         // set mail from address
-        $objMail->setFrom($this->core->config->mail->auctions->from->address, $this->core->config->mail->auctions->from->name);
+        $objMail->setFrom($this->core->config->mail->from->address, $this->core->config->mail->from->name);
 
         // add to address
         $objMail->addTo($arrMailData['email'], $arrMailData['username']);

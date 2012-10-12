@@ -18,8 +18,8 @@
     <!-- mailer -->
     <mail>
       <from>        
-        <name></name>
-        <address></address>
+        <name>zoolu@mailer.massiveat.at</name>
+        <address>zoolu@mailer.massiveat.at</address>
       </from>
       <recipient>        
         <name></name>
