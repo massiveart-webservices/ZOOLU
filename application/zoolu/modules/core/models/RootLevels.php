@@ -350,7 +350,7 @@ class Model_RootLevels
         $this->core->logger->debug('core->models->Model_RootLevels->loadRootLevelById(' . $intRootLevelId . ')');
 
         $objSelect = $this->getRootLevelTable()->select()->setIntegrityCheck(false);
-        $objSelect->from('rootLevels', array('id', 'idRootLevelGroups', 'idRootLevelTypes'))
+        $objSelect->from('rootLevels', array('id', 'idRootLevelGroups', 'idRootLevelTypes', 'idCustomerRegistrationStatus'))
             ->where('id = ?', $intRootLevelId);
 
         return $this->getRootLevelTable()->fetchAll($objSelect);

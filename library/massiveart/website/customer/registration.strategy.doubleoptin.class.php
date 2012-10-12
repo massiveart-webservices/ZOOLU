@@ -48,12 +48,13 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
     {
         if ($this->getRequest()->getParam('key', '') != '') {
             //Update customer to active
+            $objRootLevel = $this->getModelRootLevels()->loadRootLevelById($this->getTheme()->idRootLevels)->current();
             $objCustomers = $this->getModelCustomers()->loadByRegistrationKey($this->getRequest()->getParam('key'));
             if (count($objCustomers) > 0) {
                 $intCustomerId = $objCustomers->current()->id;
                 $arrData = array(
                     'registrationKey' => new Zend_Db_Expr('NULL'),
-                    'idCustomerStatus' => $this->core->sysConfig->active //TODO Parameterize the status
+                    'idCustomerStatus' => $objRootLevel->idCustomerRegistrationStatus //TODO Parameterize the status
                 );
                 $this->getModelCustomers()->edit($arrData, $intCustomerId);
                 return true;
@@ -73,7 +74,7 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                 'email' => $this->getRequest()->getParam('email'),
                 'fname' => $this->getRequest()->getParam('fname'),
                 'sname' => $this->getRequest()->getParam('sname'),
-                'idCustomerStatus' => $this->core->sysConfig->customerstatus->unverifed,
+                'idCustomerStatus' => $this->core->sysConfig->customerstatus->unverified,
                 'idRootLevels' => 19, //TODO Do not hardcode
             );
             $this->getModelCustomers()->add($arrData);

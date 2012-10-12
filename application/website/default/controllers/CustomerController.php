@@ -222,9 +222,8 @@ class CustomerController extends WebControllerAction
                 $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername
             ) || $blnKeySet;
             if ($blnValid) {
-                $this->core->logger->debug('valid');
                 //TODO Instantiate the correct strategy based on properties
-                $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest());
+                $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest(), $this->objTheme);
                 if ($blnKeySet) {
                     if ($objRegisterStrategy->register()) {
                         $this->view->display = 'keyConfirmation';
@@ -236,7 +235,6 @@ class CustomerController extends WebControllerAction
                     $this->view->display = 'confirmation';
                 }
             } else {
-                $this->core->logger->debug('invalid');
                 //Reassign field values
                 $this->view->fname = $this->getRequest()->getParam('fname');
                 $this->view->sname = $this->getRequest()->getParam('sname');
@@ -271,8 +269,7 @@ class CustomerController extends WebControllerAction
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    private
-    function initPageView()
+    private function initPageView()
     {
         Zend_Layout::startMvc(array(
             'layout' => 'master',

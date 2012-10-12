@@ -54,9 +54,19 @@ abstract class RegistrationStrategyAbstract
     private $_objRequest;
 
     /**
+     * @var Zend_Db_Table_Abstract
+     */
+    private $_objTheme;
+
+    /**
      * @var Model_Customers
      */
     private $objModelCustomers;
+
+    /**
+     * @var Model_RootLevels
+     */
+    private $objModelRootLevels;
 
     /**
      * getRequest
@@ -70,10 +80,11 @@ abstract class RegistrationStrategyAbstract
     /**
      * @param Zend_Controller_Request_Abstract $objRequest
      */
-    public function __construct(Zend_Controller_Request_Abstract $objRequest)
+    public function __construct(Zend_Controller_Request_Abstract $objRequest, Zend_Db_Table_Row $objTheme)
     {
         $this->core = Zend_Registry::get('Core');
         $this->_objRequest = $objRequest;
+        $this->_objTheme = $objTheme;
     }
 
     /**
@@ -81,6 +92,11 @@ abstract class RegistrationStrategyAbstract
      * @return mixed
      */
     public abstract function register();
+
+    protected function getTheme()
+    {
+        return $this->_objTheme;
+    }
 
     /**
      * getModelCustomers
@@ -101,6 +117,27 @@ abstract class RegistrationStrategyAbstract
         }
 
         return $this->objModelCustomers;
+    }
+
+    /**
+     * getModelRootLevels
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     * @return Model_RootLevels
+     */
+    protected function getModelRootLevels()
+    {
+        if (null === $this->objModelRootLevels) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/RootLevels.php';
+            $this->objModelRootLevels = new Model_RootLevels();
+        }
+
+        return $this->objModelRootLevels;
     }
 }
 

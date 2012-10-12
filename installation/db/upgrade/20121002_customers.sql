@@ -188,6 +188,19 @@ insert into rootLevelTitles values('97', '49', '1', 'Kunden');
 insert into rootLevelTitles values('98', '49', '2', 'Customers');
 insert into rootLevelPermission values('49', '1', '1');
 
+ALTER TABLE `rootLevels` 
+	ADD COLUMN `idCustomerRegistrationStatus` BIGINT(20) UNSIGNED NOT NULL DEFAULT 1 
+	AFTER `languageDefinitionType` ;
+
+ALTER TABLE `rootLevels`
+	ADD CONSTRAINT `fk_rootLevels_customerStatus`
+	FOREIGN KEY (`idCustomerRegistrationStatus`)
+	REFERENCES `customerStatus` (`id`)
+	ON DELETE NO ACTION
+	ON UPDATE NO ACTION;
+	
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
