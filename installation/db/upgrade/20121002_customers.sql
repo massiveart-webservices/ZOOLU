@@ -42,7 +42,7 @@ CREATE  TABLE IF NOT EXISTS `customers` (
   `mobile` VARCHAR(255) NULL ,
   `fax` VARCHAR(255) NULL ,
   `idCustomerStatus` BIGINT(20) UNSIGNED NOT NULL ,
-  `idcustomerSalutations` BIGINT(20) UNSIGNED NOT NULL ,
+  `idCustomerSalutations` BIGINT(20) UNSIGNED ,
   `idRootLevels` BIGINT(20) UNSIGNED NOT NULL ,
   `idUsers` INT(10) UNSIGNED ,
   `creator` INT(10) UNSIGNED ,

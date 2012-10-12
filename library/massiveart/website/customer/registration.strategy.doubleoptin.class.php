@@ -74,7 +74,6 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                 'fname' => $this->getRequest()->getParam('fname'),
                 'sname' => $this->getRequest()->getParam('sname'),
                 'idCustomerStatus' => 4, //TODO Do not hardcode
-                'idCustomerSalutations' => 1, //TODO Do not hardcode
                 'idRootLevels' => 19, //TODO Do not hardcode
             );
             $this->getModelCustomers()->add($arrData);
