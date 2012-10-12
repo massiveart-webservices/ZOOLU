@@ -205,12 +205,20 @@ class CustomerController extends WebControllerAction
         $this->initPageView();
 
         if ($this->getRequest()->isPost() || $this->getRequest()->getParam('key', '') != '') {
-            //TODO validate
+            $strUsername = $this->getRequest()->getParam('username', '');
+
+            //Validate the data
+            $objMailValidator = new Zend_Validate_EmailAddress();
+            $objCustomers = $this->getModelCustomers()->loadByUsername($strUsername);
+
+            $blnRequiredEmail = $this->getRequest()->getParam('email', '') != '';
+            $blnRequiredUsername = $strUsername != '';
+            $blnRequiredPassword = $this->getRequest()->getParam('password', '') != '';
+            $blnValidPassword = $this->getRequest()->getParam('password') == $this->getRequest()->getParam('passwordConfirm');
+            $blnValidEmail = $objMailValidator->isValid($this->getRequest()->getParam('email'));
+            $blnUniqueUsername = count($objCustomers) == 0;
             $blnValid = (
-                $this->getRequest()->getParam('email', '') != ''
-                    && $this->getRequest()->getParam('username', '') != ''
-                    && $this->getRequest()->getParam('password', '') != ''
-                    && $this->getRequest()->getParam('password') == $this->getRequest()->getParam('passwordConfirm')
+                $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername
             ) || $this->getRequest()->getParam('key', '') != '';
             if ($blnValid) {
                 //TODO Instantiate the correct strategy based on properties
@@ -218,7 +226,31 @@ class CustomerController extends WebControllerAction
                 $objRegisterStrategy->register($this->getRequest());
                 $this->redirect('/'); //TODO Find better URL
             } else {
+                //Reassign field values
+                $this->view->fname = $this->getRequest()->getParam('fname');
+                $this->view->sname = $this->getRequest()->getParam('sname');
+                $this->view->email = $this->getRequest()->getParam('email');
+                $this->view->username = $strUsername;
 
+                //Show validation errors
+                if (!$blnRequiredEmail) {
+                    $this->view->errEmail = $this->core->translate->_('Email_mandatory');
+                }
+                if (!$blnRequiredUsername) {
+                    $this->view->errUsername = $this->core->translate->_('Username_mandatory');
+                }
+                if (!$blnUniqueUsername) {
+                    $this->view->errUsername = $this->core->translate->_('Username_already_exists');
+                }
+                if (!$blnRequiredPassword) {
+                    $this->view->errPassword = $this->core->translate->_('Password_mandatory');
+                }
+                if (!$blnValidPassword) {
+                    $this->view->errPasswordConfirm = $this->core->translate->_('Password_confirm_wrong');
+                }
+                if (!$blnValidEmail && $blnRequiredEmail) {
+                    $this->view->errEmail = $this->core->translate->_('Email_invalid');
+                }
             }
         }
     }

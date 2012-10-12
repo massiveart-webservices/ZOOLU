@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-10 09:45+0100\n"
+"POT-Creation-Date: 2012-10-12 09:14+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -126,21 +126,45 @@ msgstr "Suchergebnis"
 msgid "Searchresults"
 msgstr "Suchergebnisse"
 
-#: application/website/default/controllers/CustomerController.php:105
-#: application/website/default/controllers/IndexController.php:545
+#: application/website/default/controllers/CustomerController.php:153
+#: application/website/default/controllers/IndexController.php:544
 msgid "Username_not_found"
 msgstr "Benutzername nicht gefunden"
 
-#: application/website/default/controllers/CustomerController.php:108
-#: application/website/default/controllers/IndexController.php:552
+#: application/website/default/controllers/CustomerController.php:156
+#: application/website/default/controllers/IndexController.php:551
 msgid "Wrong_password"
 msgstr "Falsches Passwort"
 
-#: application/website/default/controllers/IndexController.php:514
+#: application/website/default/controllers/CustomerController.php:237
+msgid "Email_mandatory"
+msgstr "Email ist ein Pflichtfeld"
+
+#: application/website/default/controllers/CustomerController.php:240
+msgid "Username_mandatory"
+msgstr "Benutzername ist ein Pflichtfeld"
+
+#: application/website/default/controllers/CustomerController.php:243
+msgid "Username_already_exists"
+msgstr "Username bereits vergeben"
+
+#: application/website/default/controllers/CustomerController.php:246
+msgid "Password_mandatory"
+msgstr "Passwort ist ein Pflichtfeld"
+
+#: application/website/default/controllers/CustomerController.php:249
+msgid "Password_confirm_wrong"
+msgstr "Passwörter stimmen nicht überein"
+
+#: application/website/default/controllers/CustomerController.php:252
+msgid "Email_invalid"
+msgstr "Email-Addresse ist ungültig"
+
+#: application/website/default/controllers/IndexController.php:513
 msgid "Please_enter_username"
 msgstr "Bitte Benutzername eingeben."
 
-#: application/website/default/controllers/IndexController.php:604
+#: application/website/default/controllers/IndexController.php:603
 msgid "Login_failed"
 msgstr "Login fehlgeschlagen"
 
@@ -331,9 +355,6 @@ msgstr "Suche"
 
 #~ msgid "Identity_not_found"
 #~ msgstr "Benutzername nicht gefunden"
-
-#~ msgid "Credential_invalid"
-#~ msgstr "Benutzername und Passwort sind nicht gültig"
 
 #, fuzzy
 #~ msgid "billing_information"
