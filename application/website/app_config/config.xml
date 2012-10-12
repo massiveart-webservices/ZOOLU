@@ -164,6 +164,14 @@
         <id>52</id>
       </full> 
     </eventstatus>
+
+    <!-- table: customerStatus -->
+    <customerstatus>
+        <active>1</active>
+        <inactive>2</inactive>
+        <unapproved>3</unapproved>
+        <unverfied>4</unverfied>
+    </customerstatus>
     
     <!-- encrypt/decrypt -->
     <crypt>

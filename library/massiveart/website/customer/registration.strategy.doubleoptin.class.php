@@ -53,7 +53,7 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                 $intCustomerId = $objCustomers->current()->id;
                 $arrData = array(
                     'registrationKey' => new Zend_Db_Expr('NULL'),
-                    'idCustomerStatus' => 1 //TODO Do not hardcode, and do not set to active (1)
+                    'idCustomerStatus' => $this->core->sysConfig->active //TODO Parameterize the status
                 );
                 $this->getModelCustomers()->edit($arrData, $intCustomerId);
                 return true;
@@ -73,7 +73,7 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                 'email' => $this->getRequest()->getParam('email'),
                 'fname' => $this->getRequest()->getParam('fname'),
                 'sname' => $this->getRequest()->getParam('sname'),
-                'idCustomerStatus' => 4, //TODO Do not hardcode
+                'idCustomerStatus' => $this->core->sysConfig->customerstatus->unverifed,
                 'idRootLevels' => 19, //TODO Do not hardcode
             );
             $this->getModelCustomers()->add($arrData);
