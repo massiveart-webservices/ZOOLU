@@ -229,11 +229,13 @@ class CustomerController extends WebControllerAction
                 $objRootLevel = $this->getModelRootLevels()->loadRootLevelById($this->objTheme->idRootLevels)->current();
                 $strRegisterStrategy = 'RegistrationStrategy' . $objRootLevel->registrationStrategy;
 
-                //TODO Add path to strategies overriding these ones
-                if(file_exists(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/' . $strRegisterStrategy . '.php')) {
+                //Load correct strategy and start the registration process
+                if (file_exists(GLOBAL_ROOT_PATH . 'client/website/customer/' . $strRegisterStrategy . '.php')) {
+                    require_once(GLOBAL_ROOT_PATH . 'client/website/customer/' . $strRegisterStrategy . '.php');
+                } elseif (file_exists(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/' . $strRegisterStrategy . '.php')) {
                     require_once(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/' . $strRegisterStrategy . '.php');
                 } else {
-                    throw new Exception('RegisterStrategy with name "'.$strRegisterStrategy.'" not found!');
+                    throw new Exception('RegisterStrategy with name "' . $strRegisterStrategy . '" not found!');
                 }
                 $objRegisterStrategy = new $strRegisterStrategy($this->getRequest(), $this->objTheme);
                 $this->view->display = $objRegisterStrategy->register();
