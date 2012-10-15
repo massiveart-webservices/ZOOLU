@@ -31,6 +31,7 @@
  */
 
 require_once(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/registration.strategy.doubleoptin.class.php');
+require_once(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/registration.strategy.singleoptin.class.php');
 
 /**
  * CustomerController
@@ -223,17 +224,8 @@ class CustomerController extends WebControllerAction
             ) || $blnKeySet;
             if ($blnValid) {
                 //TODO Instantiate the correct strategy based on properties
-                $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest(), $this->objTheme);
-                if ($blnKeySet) {
-                    if ($objRegisterStrategy->register()) {
-                        $this->view->display = 'keyConfirmation';
-                    } else {
-                        $this->view->display = 'invalidKey';
-                    }
-                } else {
-                    $objRegisterStrategy->register();
-                    $this->view->display = 'confirmation';
-                }
+                $objRegisterStrategy = new RegistrationStrategySingleOptIn($this->getRequest(), $this->objTheme);
+                $this->view->display = $objRegisterStrategy->register();
             } else {
                 //Reassign field values
                 $this->view->fname = $this->getRequest()->getParam('fname');

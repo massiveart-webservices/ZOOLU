@@ -57,10 +57,10 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                     'idCustomerStatus' => $objRootLevel->idCustomerRegistrationStatus //TODO Parameterize the status
                 );
                 $this->getModelCustomers()->edit($arrData, $intCustomerId);
-                return true;
+                return 'keyConfirmation';
             } else {
                 //The registration key is not valid
-                return false;
+                return 'invalidKey';
             }
         } else {
             //Generate registrationKey
@@ -81,7 +81,7 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
 
             //Send registration link as email
             $this->sendRegistrationMail($arrData);
-            return true;
+            return 'confirmation';
         }
     }
 
