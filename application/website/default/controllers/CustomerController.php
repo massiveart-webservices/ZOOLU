@@ -88,6 +88,7 @@ class CustomerController extends WebControllerAction
             $this->objAuthAdapter->setTableName('customers');
             $this->objAuthAdapter->setIdentityColumn('username');
             $this->objAuthAdapter->setCredentialColumn('password');
+            $this->objAuthAdapter->getDbSelect()->where('customers.idCustomerStatus = ?', $this->core->sysConfig->customerstatus->active);
         }
 
         $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/scripts');
