@@ -30,9 +30,6 @@
  * @version    $Id: version.php
  */
 
-require_once(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/registration.strategy.doubleoptin.class.php');
-require_once(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/registration.strategy.singleoptin.class.php');
-
 /**
  * CustomerController
  *
@@ -66,6 +63,11 @@ class CustomerController extends WebControllerAction
      * @var Model_Users
      */
     protected $objModelUsers;
+
+    /**
+     * @var Model_RootLevels
+     */
+    protected $objModelRootLevels;
 
     /**
      * init
@@ -224,8 +226,16 @@ class CustomerController extends WebControllerAction
                 $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername
             ) || $blnKeySet;
             if ($blnValid) {
-                //TODO Instantiate the correct strategy based on properties
-                $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest(), $this->objTheme);
+                $objRootLevel = $this->getModelRootLevels()->loadRootLevelById($this->objTheme->idRootLevels)->current();
+                $strRegisterStrategy = 'RegistrationStrategy' . $objRootLevel->registrationStrategy;
+
+                //TODO Add path to strategies overriding these ones
+                if(file_exists(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/' . $strRegisterStrategy . '.php')) {
+                    require_once(GLOBAL_ROOT_PATH . 'library/massiveart/website/customer/' . $strRegisterStrategy . '.php');
+                } else {
+                    throw new Exception('RegisterStrategy with name "'.$strRegisterStrategy.'" not found!');
+                }
+                $objRegisterStrategy = new $strRegisterStrategy($this->getRequest(), $this->objTheme);
                 $this->view->display = $objRegisterStrategy->register();
             } else {
                 //Reassign field values
@@ -331,6 +341,27 @@ class CustomerController extends WebControllerAction
         }
 
         return $this->objModelUsers;
+    }
+
+    /**
+     * getModelRootLevels
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     * @return Model_RootLevels
+     */
+    protected function getModelRootLevels()
+    {
+        if (null === $this->objModelRootLevels) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/RootLevels.php';
+            $this->objModelRootLevels = new Model_RootLevels();
+        }
+
+        return $this->objModelRootLevels;
     }
 }
 
