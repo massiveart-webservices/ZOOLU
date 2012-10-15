@@ -225,7 +225,7 @@ class CustomerController extends WebControllerAction
             ) || $blnKeySet;
             if ($blnValid) {
                 //TODO Instantiate the correct strategy based on properties
-                $objRegisterStrategy = new RegistrationStrategySingleOptIn($this->getRequest(), $this->objTheme);
+                $objRegisterStrategy = new RegistrationStrategyDoubleOptIn($this->getRequest(), $this->objTheme);
                 $this->view->display = $objRegisterStrategy->register();
             } else {
                 //Reassign field values

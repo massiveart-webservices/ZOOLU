@@ -103,7 +103,12 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
         // set mail subject
         $objMail->setSubject('Registrierung');
 
-        $strBody = '<a href="http://' . $_SERVER['HTTP_HOST'] . '/register?key=' . $arrMailData['registrationKey'] . '">Bestätigen</a>';
+        $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/register?key=' . $arrMailData['registrationKey'];
+
+        $objView = new Zend_View();
+        $objView->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->getTheme()->path.'/scripts/');
+        $objView->url = $strUrl;
+        $strBody = $objView->render('customer/registrationMail.phtml');
 
         // set body
         $objMail->setBodyHtml($strBody);
