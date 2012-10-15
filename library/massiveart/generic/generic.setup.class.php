@@ -738,6 +738,10 @@ class GenericSetup
                          */
                         if (array_key_exists('divRegion_' . $objRegion->getRegionId(), $arrRegionOrder)) {
                             foreach ($arrRegionOrder['divRegion_' . $objRegion->getRegionId()] as $intRegionInstanceId) {
+                                
+                                if ($intRegionInstanceId != 'n' && key_exists('divRegion_' .$objRegion->getRegionId().'_'.$intRegionInstanceId.'_regionUniqueId', $arrValues)) {
+                                    $objRegion->addRegionUniqueId($intRegionInstanceId, $arrValues['divRegion_' .$objRegion->getRegionId().'_'.$intRegionInstanceId.'_regionUniqueId']);
+                                }
                                 if (is_numeric($intRegionInstanceId) && $intRegionInstanceId > 0) {
                                     $objRegion->addRegionInstanceId($intRegionInstanceId);
 

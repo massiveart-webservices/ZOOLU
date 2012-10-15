@@ -913,6 +913,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $intRegionPosition = 0;
                             foreach ($objRegion->RegionInstanceIds() as $intRegionInstanceId) {
                                 $intRegionPosition++;
+                                $arrTypeProperties['regionUniqueId'] = $objRegion->getRegionUniqueId($intRegionPosition);
                                 $this->insertMultiplyRegionInstanceData($objRegion, $intRegionInstanceId, $intRegionPosition, $strType, $arrTypeProperties);
                             }
                         }
@@ -966,6 +967,20 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                      'sortPosition' => $intRegionPosition
                 )
             );
+            
+            if ($objRegion->getRegionTypeId() == $this->core->sysConfig->region_types->unique) {
+                $uniqueId = $arrTypeProperties['regionUniqueId'];
+                if ($uniqueId == null) {
+                    $uniqueId = uniqid();
+                    $objRegion->addRegionUniqueId($intRegionInstanceId, $uniqueId);    
+                }
+                $arrInstanceData = array_merge(
+                $arrInstanceData,
+                    array(
+                         'uniqueId' => $uniqueId
+                    )
+                );    
+            }
 
 
             /**
@@ -1434,6 +1449,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     foreach ($objRegion->InstanceFieldNames() as $strField) {
                         $arrSelectFields[] = $strField;
                     }
+                    
+                    if ($objRegion->getRegionTypeId() == $this->core->sysConfig->region_types->unique) {
+                        $arrSelectFields[] = 'uniqueId';
+                    }
 
                     $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), $arrSelectFields);
                     if (isset($arrTypeProperties['Version'])) {
@@ -1457,7 +1476,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
                             $objRegion->addRegionInstanceId($intRegionInstanceCounter);
                             foreach ($arrRowGenFormData as $column => $value) {
-                                if ($column != 'id') {
+                                if ($column == 'uniqueId') {
+                                    $objRegion->addRegionUniqueId($intRegionInstanceCounter, $value);    
+                                } else if ($column != 'id') {
                                     if (is_array(json_decode($value))) {
                                         $objRegion->getField($column)->setInstanceValue($intRegionInstanceCounter, json_decode($value));
                                     } else {
@@ -1467,7 +1488,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             }
                         }
                     }
-
                     /**
                      * generic multipy region file fields
                      */

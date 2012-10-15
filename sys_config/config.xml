@@ -896,6 +896,7 @@
     <region_types>
       <content>1</content>
       <config>2</config>
+      <unique>3</unique>
     </region_types>
     
     <!-- CATEGORY TYPES -->

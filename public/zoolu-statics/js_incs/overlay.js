@@ -918,6 +918,9 @@ Massiveart.Overlay = Class.create({
       if($('overlayUserSettingsWrapper')) $('overlayUserSettingsWrapper').hide();
       if($('overlaySendToDashbaordWrapper')) $('overlaySendToDashbaordWrapper').hide();
       if($('overlayMediaWrapperUpload')) $('overlayMediaWrapperUpload').innerHTML = '';
+
+      // field overlays
+      $$('.fieldOverlayWrapper').each(function(elem) { elem.hide();});
       //this.lastFolderId = null;
       this.overlayCounter = 0;
     }

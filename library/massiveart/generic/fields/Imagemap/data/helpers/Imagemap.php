@@ -86,7 +86,7 @@ class GenericDataHelper_Imagemap extends GenericDataHelperAbstract
                 $objRawData = $objRawDatas->current();
                 $value = new stdClass();
                 $value->size = $objRawData->size;
-                $value->idTargetRegion = $objRawData->idTargetRegion;
+                $value->idTargetRegion = $this->getTargetRegion();
                 if (isset($objRawData->idFiles) && $objRawData->idFiles > 0) {
                     $objFiles = $this->getModelFiles()->loadFileById($objRawData->idFiles);
                     if (count($objFiles) > 0 ) {
@@ -143,14 +143,7 @@ class GenericDataHelper_Imagemap extends GenericDataHelperAbstract
                 $idFiles = $_POST[$name .'_file'];                    
             }
             
-            $idTargetRegion = null;
-            if ($this->objElement->getProperty('fieldOptions')) {
-                $fieldOptions = json_decode($this->objElement->getProperty('fieldOptions'));
-                $idTargetRegion = $fieldOptions->idTargetRegion;
-            }
-            if ($idTargetRegion == null) {
-                throw new Exception('Cannot append a target region to any marker if traget region is not defined. ' . $exc->getMessage());
-            }  
+ 
             
             if ($idFiles != '') {
                 $arrData = array(
@@ -160,7 +153,7 @@ class GenericDataHelper_Imagemap extends GenericDataHelperAbstract
                     'idFields' 	      => $this->objElement->id,
                     'idFiles' 	      => $idFiles,
                     'size'		      => $size,
-                    'idTargetRegion'  => $idTargetRegion,
+                    'idTargetRegion'  => $this->getTargetRegion(),
                     'markers'		  => $markers	
                 );
                 $objGenTable->insert($arrData);
@@ -173,6 +166,21 @@ class GenericDataHelper_Imagemap extends GenericDataHelperAbstract
         }
     }
 
+    /**
+     * getTargetRegion
+     */
+    private function getTargetRegion() {
+        $idTargetRegion = null;
+        if ($this->objElement->getProperty('fieldOptions')) {
+            $fieldOptions = json_decode($this->objElement->getProperty('fieldOptions'));
+            $idTargetRegion = $fieldOptions->idTargetRegion;
+        }
+        if ($idTargetRegion == null) {
+            throw new Exception('Cannot append a target region to any marker if traget region is not defined. ' . $exc->getMessage());
+        }
+        return $idTargetRegion; 
+    }
+    
     /**
      * loadInstanceData
      * @param string $strType

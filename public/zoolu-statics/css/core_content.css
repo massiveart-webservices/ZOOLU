@@ -702,7 +702,8 @@ Imagemap Element */
 
 .imagemapWrapper .imagemapContainer .imagemap {
     position: relative;
-    margin: 10px auto; 
+    margin: 10px auto;
+    cursor: crosshair; 
 }
 
 .imagemapWrapper .imagemapContainer .imagemap img {
@@ -719,6 +720,17 @@ Imagemap Element */
     z-index: 5;
     cursor: move;
 }
+
+.fieldOverlayWrapper .buttoncancel {
+    padding-top: 5px;
+    float: left;
+}
+
+.fieldOverlayButtons .fieldOverlayButton {
+    float: right;
+    cursor: pointer;
+    margin-left: 10px;
+} 
 
 /* ----------------
 Video Chooser Element */
