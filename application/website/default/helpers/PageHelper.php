@@ -407,17 +407,27 @@ class PageHelper {
    */
   public function getMetaRobots() {
     $strReturn = '';
-    $metaIndexField = $this->objPage->getFieldValue('seo_metaindex');
-    $metaFollowField = $this->objPage->getFieldValue('seo_metafollow');
+    $metaRobotsField = $this->objPage->getFieldValue('seo_metarobots');
 
     $metaIndex = 'index';
-    if( !empty($metaIndexField[0]) ) {
-        $metaIndex = 'noindex';
+    $metaFollow = 'follow';
+
+    switch( $metaRobotsField[0] ) {
+        case '677':
+            $metaIndex = 'noindex';
+            break;
+        case '678':
+            $metaFollow = 'nofollow';
+            break;
     }
 
-    $metaFollow = 'follow';
-    if( !empty($metaFollowField[0]) ) {
-        $metaFollow = 'nofollow';
+    switch( $metaRobotsField[1] ) {
+          case '677':
+              $metaIndex = 'noindex';
+              break;
+          case '678':
+              $metaFollow = 'nofollow';
+              break;
     }
 
     $strReturn .= '<meta name="robots" content="'.$metaIndex.','.$metaFollow.'"/>';
