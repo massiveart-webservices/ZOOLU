@@ -429,7 +429,8 @@ Massiveart.Overlay = Class.create({
             viewtype: viewtype,
             languageId: languageId,
             contenttype: contenttype,
-            selectOne: selectOne
+            selectOne: selectOne,
+            replace: replace
           },      
           evalScripts: true,     
           onComplete: function() {

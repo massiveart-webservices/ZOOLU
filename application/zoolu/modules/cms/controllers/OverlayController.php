@@ -415,6 +415,7 @@ class Cms_OverlayController extends AuthControllerAction
         $this->view->assign('viewtype', $viewtype);
         $this->view->assign('contenttype', $contenttype);
         $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
+        $this->view->assign('replace', ($this->getRequest()->getParam('replace') == 'true') ? 'true' : 'false');
     }
 
     /**
