@@ -387,7 +387,10 @@ Massiveart.Overlay = Class.create({
    * getNavItem
    * @param integer folderId, integer viewtype
    */
-  getNavItem: function(folderId, viewtype, contenttype, selectOne, replace = false){
+  getNavItem: function(folderId, viewtype, contenttype, selectOne, replace){
+    if (typeof(replace) == 'undefined') {
+      replace = '';
+    }
     this.resetNavItems();
     
     $('olnavitemtitle'+folderId).addClassName('selected');
@@ -682,7 +685,10 @@ Massiveart.Overlay = Class.create({
    * loadFileFilterContent
    * @param integer viewType
    */
-  loadFileFilterContent: function(viewType, contenttype, selectOne, replace = false){
+  loadFileFilterContent: function(viewType, contenttype, selectOne, replace){
+    if (typeof(replace) == 'undefined') {
+      replace = '';
+    }  
     if($('olContent')){
       if($('mediaFilter_Tags') && $('mediaFilter_Folders') && $('mediaFilter_RootLevel')){    
         $('olContent').update('');

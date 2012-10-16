@@ -431,7 +431,13 @@ Massiveart.Form = Class.create({
   /**
    * getChangeMediaOverlay
    */
-  getChangeMediaOverlay: function(areaId, currentImageSize = '', targetFieldtype = '') {    
+  getChangeMediaOverlay: function(areaId, currentImageSize, targetFieldtype) {
+      if (typeof(currentImageSize) == 'undefined') {
+          currentImageSize = ''
+      }
+      if (typeof(targetFieldtype) == 'undefined') {
+          targetFieldtype = ''
+      }
       this.getAddMediaOverlay(areaId, true, currentImageSize, targetFieldtype);
   },
   
@@ -712,7 +718,16 @@ Massiveart.Form = Class.create({
   /**
    * getAddMediaOverlay
    */
-  getAddMediaOverlay: function(areaId, replace = false, currentImageSize = '', targetFieldtype = '') {    
+  getAddMediaOverlay: function(areaId, replace, currentImageSize, targetFieldtype) {
+    if (typeof(replace) == 'undefined') {
+        replace = false;
+    }
+    if (typeof(currentImageSize) == 'undefined') {
+        currentImageSize = ''
+    }
+    if (typeof(targetFieldtype) == 'undefined') {
+        targetFieldtype = ''
+    }
     $(this.updateOverlayContainer).innerHTML = '';
     myCore.putCenter('overlayGenContentWrapper');
     $('overlayGenContentWrapper').show();
@@ -1063,7 +1078,7 @@ Massiveart.Form = Class.create({
   removeItem: function(fieldId, elementId, id){
     if($(fieldId) && $(elementId)){     
       itemId = $(elementId).readAttribute('fileid');
-      if(itemId == null){
+      if (typeof(itemId) == 'undefined'){
         itemId = $(elementId).readAttribute('itemid');
       }
       if($(fieldId).value.indexOf('[' + itemId + ']') > -1){
