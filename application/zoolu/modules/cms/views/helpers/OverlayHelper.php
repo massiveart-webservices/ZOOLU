@@ -70,7 +70,7 @@ class OverlayHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getNavigationElements($rowset, $viewtype, $intFolderId = 0, $intRootLevelId = 0, $intRootLevelTypeId = 0, $strContentType = null, $blnSelectOne = 'false')
+    public function getNavigationElements($rowset, $viewtype, $intFolderId = 0, $intRootLevelId = 0, $intRootLevelTypeId = 0, $strContentType = null, $blnSelectOne = 'false', $replace = 'false')
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getNavigationElements()');
 
@@ -111,7 +111,7 @@ class OverlayHelper
                 if ($intFolderId == 0) {
                     $strOutput .= '
                         <div id="olnavitem' . $row->id . '" class="olnavrootitem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . '); return false;" style="position:relative;">
+                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . ', '. $replace .'); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>
@@ -119,7 +119,7 @@ class OverlayHelper
                 } else {
                     $strOutput .= '
                         <div id="olnavitem' . $row->id . '" class="olnavchilditem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . '); return false;" style="position:relative;">
+                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . ', '. $replace .'); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>

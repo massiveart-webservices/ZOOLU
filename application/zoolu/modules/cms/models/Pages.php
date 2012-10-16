@@ -784,7 +784,7 @@ class Model_Pages extends ModelAbstract
         if ($intSortTypeId > 0 && $intSortTypeId != '') {
             switch ($intSortTypeId) {
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $strSqlOrderBy = ' ORDER BY folderSortPosition '.$strSortOrder.', folderSortTimestamp '.$strSortOrder.', sortPosition '.$strSortOrder.', sortTimestamp '.(($strSortOrder == 'DESC') ? 'DESC' : 'DESC');
+                    $strSqlOrderBy = ' ORDER BY folderSortPosition '.$strSortOrder.', folderSortTimestamp '.(($strSortOrder == 'DESC') ? 'ASC' : 'DESC').', sortPosition '.$strSortOrder.', sortTimestamp '.(($strSortOrder == 'DESC') ? 'ASC' : 'DESC');
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
                     $strSqlOrderBy = ' ORDER BY created ' . $strSortOrder;

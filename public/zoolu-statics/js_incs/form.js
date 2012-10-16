@@ -46,6 +46,8 @@ Massiveart.Form = Class.create({
     this.selectNavigationItemNow = false;
     
     this.activeTabId = null;
+    
+    this.originMarkerPos = [0,0];
   },
   
   /**
@@ -427,15 +429,299 @@ Massiveart.Form = Class.create({
   },
   
   /**
+   * getChangeMediaOverlay
+   */
+  getChangeMediaOverlay: function(areaId, currentImageSize = '', targetFieldtype = '') {    
+      this.getAddMediaOverlay(areaId, true, currentImageSize, targetFieldtype);
+  },
+  
+  /**
+   * removeImagemapValues
+   */
+  removeImagemapValues: function(fieldId) {
+      if ($(fieldId + '_img')) {
+          $(fieldId + '_img').remove();
+      }
+      if ($(fieldId + '_markers')) {
+          $(fieldId + '_markers').innerHTML ='';
+          $(fieldId + '_markers').value = '';
+      }
+      if ($(fieldId + '_file')) {
+          $(fieldId + '_file').value = '';
+      }
+      if ($(fieldId + '_remove')) {
+          $(fieldId + '_remove').hide();
+      }
+      $$('#divImagemap_' + fieldId + ' .marker').each(function(m){
+         m.remove(); 
+      });
+  },
+  
+  /**
+   * changeImageSize
+   */
+  changeImageSize: function(fieldId, newImageSize, areaId, fieldType) {
+      if ($(fieldId + '_img')) {
+          var oldsrc = $(fieldId + '_img').src;
+          var newsrc = oldsrc.replace('/' + this.oldImageSize + '/', '/' + newImageSize + '/');
+          $(fieldId + '_img').src = newsrc;
+          $(fieldId + '_img').onload = function() {
+              if ($(areaId)) {
+                  $(areaId).style.width = $(fieldId + '_img').width + 'px';  
+              }
+              if (fieldType = 'imagemap') {
+                  myForm.calcNewMarkerPositions(fieldId);
+              }
+          };
+      }
+  },
+  
+  /**
+   * calcNewMarkerPositions
+   */
+  calcNewMarkerPositions: function(fieldId) {
+      var newWidth = $(fieldId + '_img').width;
+      var newHeight = $(fieldId + '_img').height;
+      var markersId = fieldId + '_markers'
+      try {
+          var markers = this.getMarkersfromJson(markersId);
+          markers.each(function(m) {
+              markerId = fieldId + '_marker' + '_' + m.id;
+              if ($(markerId)) {
+                  $(markerId).style.left = (m.x * newWidth - 16) + 'px';
+                  $(markerId).style.top = (m.y * newHeight - 16) + 'px';
+              }
+          });
+      } catch (e) {
+          console.log(e);
+          return;
+      }
+  },
+  
+  /**
+   * setMarkerPosition
+   */
+  setMarkerPosition: function(drag, fieldId, markerId) {
+      
+      var newX = drag.element.offsetLeft + 16;
+      var newY = drag.element.offsetTop + 16;
+      var imageId = fieldId + '_img';
+      var validDrag = false;
+      if (newX < 0 || newX > $(imageId).getWidth()) {
+          validDrag = false;
+      }
+      else if (newY < 0 || newY > $(imageId).getHeight()) {
+          validDrag = false;
+      } else {
+          validDrag = true;
+      }
+      if (validDrag) {
+          this.originMarkerPos[newX, newY];
+          this.updateMarker(fieldId, markerId, {'x': newX, 'y': newY, 'imageId': imageId});
+      } else {
+          drag.element.style.left = this.originMarkerPos[0] + 'px';
+          drag.element.style.top = this.originMarkerPos[1] + 'px';
+      }
+  },
+  
+  updateMarker: function(fieldId, markerId, attributes) {
+      var markersId = fieldId + '_markers';
+      var markers = this.getMarkersfromJson(markersId);
+      markers.each(function(m) {
+          if (m.id == markerId) {
+              if (attributes.x != null && attributes.y != null && attributes.imageId != null) {
+                  m.x = attributes.x / $(attributes.imageId).getWidth();
+                  m.y = attributes.y / $(attributes.imageId).getHeight();
+              }
+              if (attributes.regionUniqueId != null) {
+                  m.region = attributes.regionUniqueId;
+              }
+          }
+      });
+      $(markersId).innerHTML = markers.toJSON();
+  },
+  
+  /**
+   * getMarkers
+   */
+  getMarkersfromJson:function(markersId) {
+      try {
+          if ($F(markersId) != '') {
+              JSON.parse($F(markersId));
+              var markers = $F(markersId).evalJSON();
+              return markers;
+          } else {
+              return [];
+          }
+      } catch (e) {
+          console.log(e);
+          return;
+      }
+  },
+  
+  /**
+   * getEditMarkerOverlay
+   */
+  getEditMarkerOverlay: function(markerId, fieldId, targetregion) {
+      var markersId = fieldId + '_markers';
+      this.openFieldOverlay(fieldId);
+      var regionUniqueId = '';
+      var markers = this.getMarkersfromJson(markersId);
+      markers.each(function(m) {
+          if (m.id == markerId) {
+              regionUniqueId = m.region;
+          }
+      });
+      this.addRegionInstancesToSelect(fieldId, targetregion, regionUniqueId); 
+      $(fieldId + '_btnDeleteMarker').show();
+      $(fieldId + '_btnDeleteMarker').stopObserving('click');
+      $(fieldId + '_btnDeleteMarker').observe('click',function(event) {
+          myForm.deleteMarker(fieldId, markerId);
+          myOverlay.close(fieldId + '_fieldOverlayWrapper');
+      });
+      $(fieldId + '_btnSaveMarker').stopObserving('click');
+      $(fieldId + '_btnSaveMarker').observe('click',function(event) {
+          myForm.updateMarker(fieldId, markerId, {'regionUniqueId': $F(fieldId + '_regionSelect')});
+          myOverlay.close(fieldId + '_fieldOverlayWrapper');
+          event.stop();
+      });
+  },
+  
+  /**
+   * getAddMarkerOverlay
+   */
+  getAddMarkerOverlay: function(event, area, fieldId, targetregion) {
+      this.openFieldOverlay(fieldId);
+      $(fieldId + '_btnDeleteMarker').hide();
+      var regionUniqueId = '';
+      var x = event.layerX
+      var y = event.layerY;
+      this.addRegionInstancesToSelect(fieldId, targetregion, regionUniqueId);
+      $(fieldId + '_btnSaveMarker').stopObserving('click');
+      $(fieldId + '_btnSaveMarker').observe('click',function(event) {
+          myForm.addMarker(area, fieldId, x, y, targetregion);
+          myOverlay.close(fieldId + '_fieldOverlayWrapper');
+          event.stop();
+      }.bind(this));
+  },
+  
+  /**
+   * addMarker
+   */
+  addMarker: function(area, fieldId, x, y, targetregion) {
+      var arrWidgets = [];
+      var instances = $(fieldId + '_markerInstances').value;
+      var id = 1;
+      if (instances != '') {
+          instances.scan(/\[\d*\]/, function(widgets){arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))});
+          id = Number(arrWidgets[arrWidgets.length - 1]) + 1;
+      }
+      var divMarker = new Element('div', {'id' : fieldId + '_marker_' + id, 'class' : 'marker'});
+      divMarker.style.left = x - 16 + 'px';
+      divMarker.style.top  = y - 16 + 'px';
+      divMarker.style.display = 'none';
+      divMarker.ondblclick = function(event) {
+          myForm.getEditMarkerOverlay(id, fieldId, targetregion);
+          event.stop();
+      }
+      $(area).appendChild(divMarker);
+      divMarker.appear({ duration: 0.5 });
+      
+      new Draggable(divMarker.id, { 
+          onEnd: function(drag) {
+              myForm.setMarkerPosition(drag, fieldId, id);
+          },
+          onStart: function(drag) {
+              myForm.originMarkerPos = [drag.element.offsetLeft, drag.element.offsetTop];
+          }
+      }); 
+      
+      var imageId = fieldId + '_img';
+      relativeX = x / $(imageId).getWidth();
+      relativeY = y / $(imageId).getHeight();
+      var objMarker = {'id': id, 'x': relativeX, 'y': relativeY, 'region': $F(fieldId + '_regionSelect')};
+      var markersId = fieldId + '_markers';
+      var markers = this.getMarkersfromJson(markersId);
+      markers.push(objMarker);
+      $(markersId).innerHTML = markers.toJSON();
+      $(fieldId + '_markerInstances').value = instances + '[' + id + ']';
+  },
+  
+  /**
+   * deleteMarker
+   */
+  deleteMarker: function(fieldId, markerId) {
+      var markersId = fieldId + '_markers';
+      var markers = this.getMarkersfromJson(markersId);
+      var spliceIndex = -1;
+      markers.each(function(m) {
+          spliceIndex++;
+          if (m.id == markerId) {
+              markers.splice(spliceIndex, 1);
+              throw $break;
+          }
+      });
+      $(markersId).innerHTML = markers.toJSON();
+      var instances = $(fieldId + '_markerInstances').value;
+      $(fieldId + '_markerInstances').value = instances.replace('[' + markerId + ']', '');
+      $(fieldId + '_marker_' + markerId).puff();
+      window.setTimeout(function(){
+          $(fieldId + '_marker_' + markerId).remove();
+      }, 500);
+  },
+  
+  /**
+   * addRegionInstancesToSelect
+   */
+  addRegionInstancesToSelect: function (fieldId, targetregion, regionUniqueId) {
+      var regionInstances = $$('#divRegion_' + targetregion + ' .regiontitlecopy');
+      $$('#' + fieldId + '_regionSelect option:not(.default)').each(function(e) {e.remove();});
+      var i = 1;
+      regionInstances.each( function(e) {
+          if (e.id.indexOf('REPLACE_n') == -1 ) {
+              var uniqueId = $F('divRegion_' + targetregion + '_' + i + '_regionUniqueId');
+              if (uniqueId != '' && uniqueId != null) {
+                  var title = $('spanRegionTitle_' + targetregion + '_' + i).innerHTML;
+                  var option = new Element('option', {'value' : uniqueId});
+                  if (regionUniqueId == uniqueId) {
+                      option.setAttribute('selected', 'selected');
+                  }
+                  option.innerHTML = title;
+                  $(fieldId + '_regionSelect').appendChild(option);
+              }
+          }
+          i++;
+      });
+  },
+  
+  /**
+   * openFieldOverlay
+   */
+  openFieldOverlay: function(fieldId) {
+      var elemId = fieldId + '_fieldOverlayWrapper';
+      if ($('overlayBlack75')) $('overlayBlack75').show();
+      if ($(elemId)) {
+          $(elemId).addClassName('fieldOverlayWrapper');
+          document.body.appendChild($(elemId));
+          $(elemId).show();
+          myCore.putCenter(elemId);
+      }
+  },
+  
+  
+  /**
    * getAddMediaOverlay
    */
-  getAddMediaOverlay: function(areaId){    
+  getAddMediaOverlay: function(areaId, replace = false, currentImageSize = '', targetFieldtype = '') {    
     $(this.updateOverlayContainer).innerHTML = '';
     myCore.putCenter('overlayGenContentWrapper');
     $('overlayGenContentWrapper').show();
     $('overlayGenContent').setStyle({height:'100%'});
     if($(areaId)){
       new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/media', { 
+        parameters: {
+            replace: replace
+        },
         evalScripts: true,
         onComplete: function(){
           $('olContent').addClassName('oldocuments');
@@ -443,7 +729,8 @@ Massiveart.Form = Class.create({
           myOverlay.overlayCounter++;
           myCore.putOverlayCenter('overlayGenContentWrapper');
           myOverlay.areaId = areaId;
-          myOverlay.updateViewTypeIcons();          
+          myOverlay.currentImageSize = currentImageSize;
+          myOverlay.targetFieldtype = targetFieldtype;
         } 
       });
     }    

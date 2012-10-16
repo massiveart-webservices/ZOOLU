@@ -17,6 +17,8 @@ Massiveart.Overlay = Class.create({
     
     this.areaId;
     this.fieldId;
+    this.currentImageSize;
+    this.targetFieldtype;
     
     this.activeTabId = null;
     
@@ -113,6 +115,49 @@ Massiveart.Overlay = Class.create({
         }
       }
     }    
+  },
+  
+  /**
+   * replaceImageFile
+   * @param string itemId integer id 
+   */
+  replaceImageFile: function(itemId, id, file) {
+      if ($(this.areaId) && $(itemId)) {
+          var fieldId = this.areaId.substring(this.areaId.indexOf('_')+1);
+          file = file.replace('{SIZE}', this.currentImageSize);
+
+          // remove old image
+          if ($(fieldId + '_img')) {
+              $(fieldId + '_img').remove();
+          }
+          
+          // create new image
+          var newImgId = this.areaId.substring(this.areaId.indexOf('_')+1) + '_img';
+          var newImg = document.createElement('img');
+          newImg.onload = function() {
+              if (myOverlay.targetFieldtype == 'imagemap') {
+                  myForm.calcNewMarkerPositions(fieldId);
+                  $(myOverlay.areaId).style.width = $(fieldId + '_img').width + 'px';  
+              }
+          }
+          newImg.setAttribute('src', file);
+          newImg.setAttribute('id', newImgId);
+          $(this.areaId).appendChild(newImg);
+
+          if (this.targetFieldtype == 'imagemap') {
+              $(fieldId + '_file').value = id;
+              if ($(fieldId + '_remove')) {
+                  $(fieldId + '_remove').show();
+              }
+          } else {
+              if($(fieldId).value.indexOf('[' + id + ']') == -1){
+                  $(fieldId).value = $(fieldId).value + '[' + id + ']';
+              }
+          }
+          if ($(fieldId + '_remove')) {
+              $(fieldId + '_remove').show();
+          }
+      }
   },
   
   /**
@@ -342,7 +387,7 @@ Massiveart.Overlay = Class.create({
    * getNavItem
    * @param integer folderId, integer viewtype
    */
-  getNavItem: function(folderId, viewtype, contenttype, selectOne){
+  getNavItem: function(folderId, viewtype, contenttype, selectOne, replace = false){
     this.resetNavItems();
     
     $('olnavitemtitle'+folderId).addClassName('selected');
@@ -352,7 +397,7 @@ Massiveart.Overlay = Class.create({
       // if mediaFilter is active
       if($('mediaFilter_Folders')){
         $('mediaFilter_Folders').value = folderId;
-        this.loadFileFilterContent(viewtype, contenttype, selectOne);
+        this.loadFileFilterContent(viewtype, contenttype, selectOne, replace);
       }else{
         if(typeof(contenttype) == 'undefined'){
           this.getMediaFolderContent(folderId, viewtype);
@@ -388,7 +433,7 @@ Massiveart.Overlay = Class.create({
             // if mediaFilter is active
             if($('mediaFilter_Folders')){
               $('mediaFilter_Folders').value = folderId;
-              this.loadFileFilterContent(viewtype, contenttype, selectOne);
+              this.loadFileFilterContent(viewtype, contenttype, selectOne, replace);
             }else{
               if(typeof(contenttype) == 'undefined'){
                this.getMediaFolderContent(folderId, viewtype);
@@ -598,8 +643,6 @@ Massiveart.Overlay = Class.create({
     
     var fieldname = this.areaId.substring(this.areaId.indexOf('_')+1);
     
-    console.log('getGlobalFolderContent: '+folderId+' // '+$(fieldname).value + ' // ' + languageId + ' // ' + languageCode);
-    
     new Ajax.Updater(this.updateContainer, '/zoolu/global/overlay/listglobal', {
       parameters: {
         folderId: folderId,
@@ -639,7 +682,7 @@ Massiveart.Overlay = Class.create({
    * loadFileFilterContent
    * @param integer viewType
    */
-  loadFileFilterContent: function(viewType, contenttype, selectOne){
+  loadFileFilterContent: function(viewType, contenttype, selectOne, replace = false){
     if($('olContent')){
       if($('mediaFilter_Tags') && $('mediaFilter_Folders') && $('mediaFilter_RootLevel')){    
         $('olContent').update('');
@@ -667,7 +710,7 @@ Massiveart.Overlay = Class.create({
           strAjaxAction = '/zoolu/global/element/getfilteredglobals';
         }
         
-        if(selectOne){
+        if(selectOne || replace){
           params = {
               tagIds: $F('mediaFilter_Tags'),
               folderIds: $F('mediaFilter_Folders'),
@@ -675,10 +718,12 @@ Massiveart.Overlay = Class.create({
               languageId: languageId,
               viewtype: viewType,
               isOverlay: true,
-              selectOne: selectOne
+              selectOne: selectOne,
+              replace: replace
             }
         }else{
           var fieldname = this.areaId.substring(this.areaId.indexOf('_')+1);
+          
           params = {
             tagIds: $F('mediaFilter_Tags'),
             folderIds: $F('mediaFilter_Folders'),
@@ -749,27 +794,26 @@ Massiveart.Overlay = Class.create({
   /**
    * setViewType
    */
-  setViewType: function(viewType, prefix){
+  setViewType: function(viewType, prefix, selectOne, replace){
     if(typeof(prefix) == 'undefined') prefix = '';
     if(typeof(this.areaId) != 'undefined'){
       this.areaViewType[this.areaId] = viewType;
     }
-    
     // if mediaFilter is active
     if($('mediaFilter_Folders')){
       if(this.lastFolderId !== null) $('mediaFilter_Folders').value = this.lastFolderId;
-      this.loadFileFilterContent(viewType);
+      this.loadFileFilterContent(viewType, selectOne, replace);
     }else{
       if(this.lastFolderId !== null) this.getMediaFolderContent(this.lastFolderId, viewType);
     }
-    
     this.updateViewTypeIcons(viewType, prefix)
   },
   
   /**
    * updateViewTypeIcons
    */
-  updateViewTypeIcons: function(viewType, prefix){    
+  updateViewTypeIcons: function(viewType, prefix){
+      
     if(typeof(prefix) == 'undefined') prefix = '';
     if(typeof(viewType) == 'undefined'){
       if(this.areaViewType[this.areaId]){
@@ -778,12 +822,11 @@ Massiveart.Overlay = Class.create({
         viewType = 1;
       }
     }
-    
     if(viewType == 1){
       $(prefix+'divThumbView').removeClassName('iconthumbview_on');
       $(prefix+'divThumbView').addClassName('iconthumbview');      
       $(prefix+'divListView').removeClassName('iconlistview');
-      $(prefix+'divListView').addClassName('iconlistview_on');      
+      $(prefix+'divListView').addClassName('iconlistview_on');    
     }else{
       $(prefix+'divThumbView').removeClassName('iconthumbview');
       $(prefix+'divThumbView').addClassName('iconthumbview_on');     
@@ -875,6 +918,9 @@ Massiveart.Overlay = Class.create({
       if($('overlayUserSettingsWrapper')) $('overlayUserSettingsWrapper').hide();
       if($('overlaySendToDashbaordWrapper')) $('overlaySendToDashbaordWrapper').hide();
       if($('overlayMediaWrapperUpload')) $('overlayMediaWrapperUpload').innerHTML = '';
+
+      // field overlays
+      $$('.fieldOverlayWrapper').each(function(elem) { elem.hide();});
       //this.lastFolderId = null;
       this.overlayCounter = 0;
     }
