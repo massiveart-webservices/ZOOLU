@@ -206,6 +206,7 @@ class Page
      * @var array
      */
     protected $arrFileData = array();
+    protected $arrDisplayOptions = array();
 
     protected $intRootLevelId;
     protected $strRootLevelTitle;
@@ -688,7 +689,7 @@ class Page
     /**
      * getCoreFileFieldValue
      * @param string $strFileFieldName
-     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @author Raphael Stocker <raphael.stocker@massiveart.com>
      * @version 1.0
      */
     public function getCoreFileFieldValue($strFileFieldName)
@@ -702,10 +703,31 @@ class Page
                     if ($strFileIds != '') {
                         $this->getModelFiles();
                         $this->arrFileData[$strFileFieldName] = $this->objModelFiles->loadFilesById($strFileIds);
+                        $this->arrDisplayOptions[$strFileFieldName] = $objField->getProperty('display_option');
                     }
                 }
             }
             return $this->arrFileData[$strFileFieldName];
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+    
+    /**
+     * getCoreFileDisplayOptions
+     * @param string $strFileFieldName
+     * @author Raphael Stocker <raphael.stocker@massiveart.com>
+     * @version 1.0
+     */
+    public function getCoreFileDisplayOptions($strFileFieldName)
+    {
+        try {
+            if (!array_key_exists($strFileFieldName, $this->arrDisplayOptions)) {
+                $this->arrDisplayOptions[$strFileFieldName] = null;
+                $objField = $this->objGenericData->Setup()->getField($strFileFieldName);
+                $this->arrDisplayOptions[$strFileFieldName] = $objField->getProperty('display_option');
+            }
+            return $this->arrDisplayOptions[$strFileFieldName];
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
