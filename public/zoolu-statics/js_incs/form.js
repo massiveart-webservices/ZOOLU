@@ -2032,5 +2032,16 @@ Massiveart.Form = Class.create({
       }
 
       return text;
+  },
+
+  limitKeywords: function(elementId, max) {
+
+      var str = $(elementId).getValue();
+      var commas = str.split(',').length;
+
+      if( commas > max ) {
+          var lastComma = str.lastIndexOf(",");
+          $(elementId).setValue( str.substring(0, lastComma) );
+      }
   }
 });
