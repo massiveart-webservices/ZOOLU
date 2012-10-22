@@ -2037,11 +2037,17 @@ Massiveart.Form = Class.create({
   limitKeywords: function(elementId, max) {
 
       var str = $(elementId).getValue();
-      var commas = str.split(',').length;
+      if( str == '' ) {
+          var commas = 0;
+      } else {
+          var commas = str.split(',').length;
+      }
 
       if( commas > max ) {
           var lastComma = str.lastIndexOf(",");
           $(elementId).setValue( str.substring(0, lastComma) );
       }
+
+      $('seo_keywords_count').update( commas );
   }
 });
