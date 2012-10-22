@@ -84,3 +84,5 @@ function get_content($objView) {
 }
 
 function get_bottom_content() { }
+
+function get_dom_loaded_js() { }
