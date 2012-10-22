@@ -208,6 +208,10 @@ class CustomerController extends WebControllerAction
 
         $this->initPageView();
 
+        //Redirect to given URL if already signed in
+        $strRedirectUrl = $this->getRedirectUrl();
+        $this->view->redirectUrl = $strRedirectUrl;
+
         if ($this->getRequest()->isPost() || $this->getRequest()->getParam('key', '') != '') {
             $strUsername = $this->getRequest()->getParam('username', '');
 
