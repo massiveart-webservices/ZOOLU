@@ -1911,5 +1911,143 @@ Massiveart.Form = Class.create({
    */
   cancleFormSaveLoader: function(){
     $('divFormSaveLoader').hide();    
+  },
+
+  countChars: function(elementId, maxChars) {
+    var field = $( elementId ).getValue();
+    var count = maxChars - field.length;
+    var str = '';
+    if( count >= 0 ) {
+        str = '<span class="plus">'+count+'</span>';
+    } else {
+        str = '<span class="minus">'+count+'</span>';
+    }
+    $( 'chars_count_' + elementId ).update( str );
+  },
+
+  initSnippetPreview: function() {
+
+    this.updateSnippetPreviewTitle();
+    this.updateSnippetPreviewDesc();
+    this.updateSnippetPreviewUrl();
+
+    $('articletitle').observe('keyup', function(event){
+        myForm.updateSnippetPreviewTitle();
+    });
+
+    $('seo_title').observe('keyup', function(event){
+        myForm.updateSnippetPreviewTitle();
+    });
+
+    $('seo_description').observe('keyup', function(event) {
+        myForm.updateSnippetPreviewDesc();
+    });
+
+    $('seo_keywords').observe('keyup', function(event) {
+        myForm.updateSnippetPreviewTitle();
+        myForm.updateSnippetPreviewDesc();
+        myForm.updateSnippetPreviewUrl();
+    });
+  },
+
+  updateSnippetPreviewTitle: function() {
+
+    var title = this.cleanText( $('seo_title').getValue() );
+    if( title == '' ) {
+        title = this.cleanText( $('articletitle').getValue() );
+    }
+
+    if( title == '' ) {
+        title = this.cleanText( $('title').getValue() );
+    }
+
+    if( title.length > 70 ) {
+        var space = title.lastIndexOf( " ", 67 );
+        title = title.substring( 0, space ).concat( ' <strong>...</strong>' );
+    }
+
+    title = this.pickOutSeoKeywords( title, false );
+
+    $('snippet_seo_title').update( title );
+  },
+
+  updateSnippetPreviewDesc: function () {
+    var desc = this.cleanText( $('seo_description').getValue() );
+
+    if( desc == '' ) {
+        desc = this.cleanText( $('description').getValue() );
+    }
+
+    if( desc.length > 170 ) {
+        var space = desc.lastIndexOf( " ", 167 );
+        desc = desc.substring( 0, space ).concat( ' <strong>...</strong>' );
+    }
+
+    desc = this.pickOutSeoKeywords( desc, false );
+
+    $('snippet_seo_desc').update( desc );
+  },
+
+  updateSnippetPreviewUrl: function () {
+    var snippet_url = $('page_url').readAttribute('href');
+    snippet_url = snippet_url.replace('http://', '');
+    snippet_url = this.pickOutSeoKeywords(snippet_url, true);
+    $('snippet_seo_url').innerHTML = snippet_url;
+  },
+
+  cleanText: function( text ) {
+
+      if ( text == '' || text == undefined )
+          return '';
+
+      text = text.replace(/^\s+|\s+$/g, '');
+      text = text.replace(/<\/?[^>]+>/gi, '');
+      text = text.replace(/\[(.+?)\](.+?\[\/\\1\])?/, '');
+      return text;
+  },
+
+  pickOutSeoKeywords: function( text, strip_dashes ) {
+
+      var seo_keywords = $('seo_keywords').getValue();
+      if( seo_keywords == '' )
+          return text;
+
+      if ( seo_keywords.search(' ') != -1 ) {
+          var aKeywords = seo_keywords.split(' ');
+      } else {
+          var aKeywords	= new Array( seo_keywords );
+      }
+
+      for ( var i = 0; i < aKeywords.length; i++) {
+
+          var tKeyword = aKeywords[ i ].replace(',', '');
+          if( strip_dashes ) {
+              var tKeyword 	= tKeyword.replace(' ','-').toLowerCase();
+              var tRegex = new RegExp( "([-/])(" + tKeyword + ")([-/])?" );
+          } else {
+              var tRegex = new RegExp( "(^|[ \s\n\r\t\.,'\(\"\+;!?:\-]+)(" + tKeyword + ")($|[ \s\n\r\t\.,'\)\"\+;!?:\-]+)", 'gim' );
+          }
+
+          text 	= text.replace( tRegex, "$1<strong>$2</strong>$3" );
+      }
+
+      return text;
+  },
+
+  limitKeywords: function(elementId, max) {
+
+      var str = $(elementId).getValue();
+      if( str == '' ) {
+          var commas = 0;
+      } else {
+          var commas = str.split(',').length;
+      }
+
+      if( commas > max ) {
+          var lastComma = str.lastIndexOf(",");
+          $(elementId).setValue( str.substring(0, lastComma) );
+      }
+
+      $('seo_keywords_count').update( commas );
   }
 });

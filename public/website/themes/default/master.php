@@ -3,6 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title><?php get_meta_title(); ?></title>
+  <?php get_meta_robots(); ?>
   <?php get_meta_description(); ?>
   <?php get_meta_keywords(); ?>
   <?php get_canonical_tag(); ?>
