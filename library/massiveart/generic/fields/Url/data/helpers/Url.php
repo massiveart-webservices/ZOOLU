@@ -100,70 +100,77 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
     public function save($intElementId, $strType, $strElementId = null, $intVersion = null)
     {
         try {
-            $this->strType = $strType;
-
-            $this->getModel();
-            $this->getModelUrls();
-
-            $objItemData = $this->objModel->load($intElementId);
-
-            if (count($objItemData) > 0) {
-                $objItem = $objItemData->current();
-
-                $strUrlNew = '';
-
-                // get the new url
-                if (isset($_POST[$this->objElement->name . '_EditableUrl'])) {
-                    $this->strUrl = strtolower($_POST[$this->objElement->name . '_EditableUrl']);
-                }
-                if ($this->strUrl == '' && !($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() == null)) {
-                    $objFieldData = $this->objElement->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->objElement->Setup()->getGenFormId());
-
-                    if (count($objFieldData) > 0) {
-                        foreach ($objFieldData as $objField) {
-                            if ($this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue() != '') {
-                                $this->strUrl .= str_replace('/', '-', $this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue());
-                                break;
+            /*
+             * fix for saving products in "All Products" View 
+             */
+            if (!isset($_POST[$this->objElement->name . '_PreventSaving']) || $_POST[$this->objElement->name . '_PreventSaving'] != 'true') {
+            
+                $this->strType = $strType;
+    
+                $this->getModel();
+                $this->getModelUrls();
+    
+                $objItemData = $this->objModel->load($intElementId);
+    
+                if (count($objItemData) > 0) {
+                    $objItem = $objItemData->current();
+    
+                    $strUrlNew = '';
+    
+                    // get the new url
+                    if (isset($_POST[$this->objElement->name . '_EditableUrl'])) {
+                        $this->strUrl = strtolower($_POST[$this->objElement->name . '_EditableUrl']);
+                    }
+                    if ($this->strUrl == '' && !($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() == null)) {
+                        $objFieldData = $this->objElement->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->objElement->Setup()->getGenFormId());
+    
+                        if (count($objFieldData) > 0) {
+                            foreach ($objFieldData as $objField) {
+                                if ($this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue() != '') {
+                                    $this->strUrl .= str_replace('/', '-', $this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue());
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-
-                if ($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() != null) {
-                    $this->strUrl = rtrim($this->strUrl, '/') . '/';
-                }
-
-                $this->strUrl = $this->getModelUrls()->makeUrlConform($this->strUrl);
-
-                //Check new URL
-                $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-                if (count($objUrlData) > 0) {
-                    $objUrl = $objUrlData->current();
-                    if (strcmp($this->strUrl, $objUrl->url) !== 0) {
-                        // Url have changed
-
+    
+                    if ($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() != null) {
+                        $this->strUrl = rtrim($this->strUrl, '/') . '/';
+                    }
+    
+                    $this->strUrl = $this->getModelUrls()->makeUrlConform($this->strUrl);
+    
+                    //Check new URL
+                    $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                    if (count($objUrlData) > 0) {
+                        $objUrl = $objUrlData->current();
+                        if (strcmp($this->strUrl, $objUrl->url) !== 0) {
+                            // Url have changed
+    
+                            if (!$this->checkUniqueness($this->strUrl)) {
+                                $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+                            }
+    
+                            // set all page urls to isMain 0
+                            $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                            $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                        }
+                    } else {
+    
                         if (!$this->checkUniqueness($this->strUrl)) {
                             $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
                         }
-
+    
                         // set all page urls to isMain 0
                         $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
                         $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
                     }
-                } else {
-
-                    if (!$this->checkUniqueness($this->strUrl)) {
-                        $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
-                    }
-
-                    // set all page urls to isMain 0
-                    $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-                    $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
                 }
-            }
+    
+                $this->load($intElementId, $strType, $strElementId, $intVersion);
 
-            $this->load($intElementId, $strType, $strElementId, $intVersion);
-
+            } // end of dirty fix
+            
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }

@@ -173,7 +173,7 @@ Massiveart.Navigation.Global = Class.create(Massiveart.Navigation, {
     if($('buttondelete')) $('buttondelete').hide(); 
     
     new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + this.rootLevelType + '/geteditform', {
-      parameters: { rootLevelId: this.rootLevelId, id: itemId, languageCodes: languageCodes },      
+      parameters: { rootLevelId: this.rootLevelId, id: itemId, languageCodes: languageCodes, sourceView: 'list' },      
       evalScripts: true,     
       onComplete: function() {        
         $(this.genFormContainer).show();

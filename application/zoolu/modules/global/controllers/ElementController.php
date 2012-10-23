@@ -184,9 +184,8 @@ class Global_ElementController extends AuthControllerAction
             ->joinLeft(array('editor' => 'users'), 'editor.id = globalProperties.idUsers', array('editor' => 'CONCAT(`editor`.`fname`, \' \', `editor`.`sname`)', 'globalProperties.changed'))
             ->where('idParent = ?', $this->getRequest()->getParam('rootLevelId'))
             ->where('idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel)
-            //->where('isStartGlobal = 0')
-            //->where('globalProperties.idGlobalTypes = ? OR globalProperties.idGlobalTypes = ?', array($this->core->sysConfig->global_types->product->id, $this->core->sysConfig->global_types->startpage_product->id ));
-            ->where('globalProperties.idGlobalTypes IN (' . $this->core->sysConfig->global_types->product->id . ', ' . $this->core->sysConfig->global_types->startpage_product->id . ')' );
+            ->where('isStartGlobal = 0')
+            //->where('globalProperties.idGlobalTypes IN (' . $this->core->sysConfig->global_types->product->id . ', ' . $this->core->sysConfig->global_types->startpage_product->id . ')' );
             ;
         if ($strSearchValue != '') {
             $objSelect->where('globalTitles.title LIKE ?', '%' . $strSearchValue . '%');
@@ -395,12 +394,11 @@ class Global_ElementController extends AuthControllerAction
              * output of metainformation to hidden div
              */
             $this->setViewMetaInfos();
-
             
             /*
-             * dirty fix for saving products in "All Products" View 
+             * fix for saving products in "All Products" View 
              */
-            //$this->view->sourceView = $this->getRequest()->getParam('sourceView', null);
+            $this->view->sourceView = $this->getRequest()->getParam('sourceView', null);
             $this->view->form = $this->objForm;
 
             $this->renderScript('element/form.phtml');
