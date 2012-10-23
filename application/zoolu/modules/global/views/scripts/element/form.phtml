@@ -183,7 +183,23 @@ myForm.blnShowFormAlert = <?php echo (($this->blnShowFormAlert == true) ? 'true'
 myForm.selectNavigationItemNow = <?php echo (($this->selectNavigationItemNow && $this->selectNavigationItemNow == true) ? 'true' : 'false') ?>;
 myForm.isAuthorizedToDelete(<?php echo (($this->authorizedDelete && $this->authorizedDelete == true) ? 'true' : 'false') ?>);
 myForm.isAuthorizedToUpdate(<?php echo (($this->authorizedUpdate && $this->authorizedUpdate == true) ? 'true' : 'false') ?>);
+<?php if (isset($this->sourceView)): ?> 
+    myForm.sourceView = '<?php $this->sourceView ?>';
+<?php endif; ?>
 <?php if ($this->itemId): ?>myNavigation.itemId = '<?php echo $this->itemId ?>';<?php endif; ?>
 myGlobal.isStartGlobal = <?php echo (($this->blnIsStartGlobal == true) ? 'true' : 'false') ?>;
+
+
+/*
+ * dirty fix for saving products in "All Products" View 
+ */
+if (myForm.sourceView == 'list') {
+    myForm.preventSavingFields.each(function(field) {
+        $(field).remove();
+        if ($(field + '_preventSaving')) {
+            $(field + '_preventSaving').value = 'true';
+        }
+    });
+}
 //]]>
 </script>

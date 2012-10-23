@@ -48,6 +48,9 @@ Massiveart.Form = Class.create({
     this.activeTabId = null;
     
     this.originMarkerPos = [0,0];
+    
+    this.sourceView = '';
+    this.preventSavingFields = [];
   },
   
   /**
