@@ -888,10 +888,10 @@ class GenericSetup
             $this->setLanguageFallbackId((isset($objCurrElement->idLanguageFallbacks) ? $objCurrElement->idLanguageFallbacks : 0));
             $this->setDestinationId((isset($objCurrElement->idDestination) ? $objCurrElement->idDestination : 0));
             $this->setSegmentId((isset($objCurrElement->idSegments) ? $objCurrElement->idSegments : 0));
-            $this->setHideInSitemap((!is_null($objCurrElement->hideInSitemap) ? $objCurrElement->hideInSitemap : false));
-            $this->setShowInWebsite((!is_null($objCurrElement->showInWebsite) ? $objCurrElement->showInWebsite : true));
-            $this->setShowInTablet((!is_null($objCurrElement->showInTablet) ? $objCurrElement->showInTablet : true));
-            $this->setShowInMobile((!is_null($objCurrElement->showInMobile) ? $objCurrElement->showInMobile : true));
+            $this->setHideInSitemap((isset($objCurrElement->hideInSitemap) ? $objCurrElement->hideInSitemap : false));
+            $this->setShowInWebsite((isset($objCurrElement->showInWebsite) && !is_null($objCurrElement->showInWebsite) ? $objCurrElement->showInWebsite : true));
+            $this->setShowInTablet((isset($objCurrElement->showInTablet) && !is_null($objCurrElement->showInTablet) ? $objCurrElement->showInTablet : true));
+            $this->setShowInMobile((isset($objCurrElement->showInMobile) && !is_null($objCurrElement->showInMobile) ? $objCurrElement->showInMobile : true));
             $this->setElementVersion((isset($objCurrElement->version) ? $objCurrElement->version : 0));
             $this->setStatusId((isset($objCurrElement->idStatus) ? $objCurrElement->idStatus : 0));
         }
