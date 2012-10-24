@@ -3,7 +3,7 @@
         <h1>Login</h1>
 
         <div class="login">
-            <form action="/login" method="post" id="loginForm">
+            <form action="/login?re=<?php echo urlencode($this->redirectUrl) ?>" method="post" id="loginForm">
                 <input type="hidden" name="re" id="re" value="<?php echo $this->redirectUrl ?>" />
                 <div class="element">
                     <label for="username">Benutzername</label>
