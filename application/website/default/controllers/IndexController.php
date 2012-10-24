@@ -189,7 +189,7 @@ class IndexController extends WebControllerAction
         $this->loadTheme();
         
         // get cleaned url
-        $strUrl = $this->getUrl();
+        $strUrl = $this->getUrl($_SERVER['REQUEST_URI']);
         
         // check portal security
         $this->checkPortalSecuirty();

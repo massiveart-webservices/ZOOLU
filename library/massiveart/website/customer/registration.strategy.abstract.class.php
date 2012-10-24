@@ -94,9 +94,10 @@ abstract class RegistrationStrategyAbstract
 
     /**
      * register
+     * @param string $strRedirectUrl
      * @return mixed
      */
-    public abstract function register();
+    public abstract function register($strRedirectUrl = '/');
 
     protected function getTheme()
     {

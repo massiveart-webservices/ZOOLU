@@ -138,10 +138,9 @@ abstract class WebControllerAction extends Zend_Controller_Action
      * getUrl
      * @return string
      */
-    public function getUrl($blnCutLanguage = true)
+    public function getUrl($strUrl, $blnCutLanguage = true)
     {
         $this->blnUrlWithLanguage = true;
-        $strUrl = $_SERVER['REQUEST_URI'];
 
         // check for .rss ending
         $strUrl = $this->validateRss($strUrl);

@@ -44,9 +44,9 @@ require_once(dirname(__FILE__) . '/registration.strategy.abstract.class.php');
  */
 class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
 {
-    public function register()
+    public function register($strRedirectUrl = '/')
     {
-        $arrGroups = $this->getModelPages()->loadAllowedGroups(1, 2, $this->getRequest()->getParam('re')); //TODO Do not hardcode
+        $arrGroups = $this->getModelPages()->loadAllowedGroups(1, 2, $strRedirectUrl); //TODO Do not hardcode
 
         if ($this->getRequest()->getParam('key', '') != '') {
             //Update customer to active

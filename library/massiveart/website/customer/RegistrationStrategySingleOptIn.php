@@ -44,8 +44,10 @@ require_once(dirname(__FILE__) . '/registration.strategy.abstract.class.php');
  */
 class RegistrationStrategySingleOptIn extends RegistrationStrategyAbstract
 {
-    public function register()
+    public function register($strRedirectUrl = '/')
     {
+        $arrGroups = $this->getModelPages()->loadAllowedGroups(1, 2, $strRedirectUrl); //TODO Do not hardcode
+
         //Insert active customer in database
         $objRootLevel = $this->getModelRootLevels()->loadRootLevelById($this->getTheme()->idRootLevels)->current();
         $arrData = array(
@@ -57,7 +59,8 @@ class RegistrationStrategySingleOptIn extends RegistrationStrategyAbstract
             'idCustomerStatus' => $objRootLevel->idCustomerRegistrationStatus,
             'idRootLevels' => 19, //TODO Do not hardcode
         );
-        $this->getModelCustomers()->add($arrData);
+        $intCustomerId = $this->getModelCustomers()->add($arrData);
+        $this->getModelCustomers()->updateGroups($arrGroups, $intCustomerId);
 
         return 'confirmation';
     }

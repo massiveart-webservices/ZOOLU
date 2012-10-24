@@ -242,7 +242,7 @@ class CustomerController extends WebControllerAction
                     throw new Exception('RegisterStrategy with name "' . $strRegisterStrategy . '" not found!');
                 }
                 $objRegisterStrategy = new $strRegisterStrategy($this->getRequest(), $this->objTheme);
-                $this->view->display = $objRegisterStrategy->register();
+                $this->view->display = $objRegisterStrategy->register($this->getUrl($this->getRequest()->getParam('re')));
             } else {
                 //Reassign field values
                 $this->view->fname = $this->getRequest()->getParam('fname');
