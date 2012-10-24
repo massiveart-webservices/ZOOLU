@@ -1,4 +1,4 @@
-<?php
+    <?php
 /**
  * ZOOLU - Content Management System
  * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
@@ -779,5 +779,16 @@ function get_page_similar_page_links($intNumber = 5){
 function get_language_chooser(){
   echo getPageHelperObject()->getLanguageChooser();
 }
+
+/**
+ * get_image_map
+ * @return string $strHtmlOutput
+ * @author Raphael Stocker <raphael.stocker@massiveart.com>
+ * @version 1.0
+ */
+function get_image_map(){
+  echo getPageHelperObject()->getImageMap();
+}
+
 
 ?>
