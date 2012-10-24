@@ -69,6 +69,11 @@ abstract class RegistrationStrategyAbstract
     private $objModelRootLevels;
 
     /**
+     * @var Model_Pages
+     */
+    private $objModelPages;
+
+    /**
      * getRequest
      * @return Zend_Controller_Request_Abstract
      */
@@ -138,6 +143,28 @@ abstract class RegistrationStrategyAbstract
         }
 
         return $this->objModelRootLevels;
+    }
+
+    /**
+     * getModelPages
+     * @return Model_Pages
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelPages()
+    {
+        if (null === $this->objModelPages) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/Pages.php';
+            $this->objModelPages = new Model_Pages();
+            $this->objModelPages->setLanguageId($this->core->intLanguageId);
+        }
+
+        return $this->objModelPages;
     }
 }
 

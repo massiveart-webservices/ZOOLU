@@ -46,6 +46,8 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
 {
     public function register()
     {
+        $arrGroups = $this->getModelPages()->loadAllowedGroups(1, 2, $this->getRequest()->getParam('re')); //TODO Do not hardcode
+
         if ($this->getRequest()->getParam('key', '') != '') {
             //Update customer to active
             $objRootLevel = $this->getModelRootLevels()->loadRootLevelById($this->getTheme()->idRootLevels)->current();
@@ -54,7 +56,7 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                 $intCustomerId = $objCustomers->current()->id;
                 $arrData = array(
                     'registrationKey' => new Zend_Db_Expr('NULL'),
-                    'idCustomerStatus' => $objRootLevel->idCustomerRegistrationStatus //TODO Parameterize the status
+                    'idCustomerStatus' => $objRootLevel->idCustomerRegistrationStatus
                 );
                 $this->getModelCustomers()->edit($arrData, $intCustomerId);
                 return 'keyConfirmation';
@@ -77,7 +79,8 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
                 'idCustomerStatus' => $this->core->sysConfig->customerstatus->unverified,
                 'idRootLevels' => 19, //TODO Do not hardcode
             );
-            $this->getModelCustomers()->add($arrData);
+            $intCustomerId = $this->getModelCustomers()->add($arrData);
+            $this->getModelCustomers()->updateGroups($arrGroups, $intCustomerId);
 
             //Send registration link as email
             $this->sendRegistrationMail($arrData);

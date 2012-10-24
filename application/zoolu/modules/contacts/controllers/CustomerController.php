@@ -293,6 +293,10 @@ class Contacts_CustomerController extends AuthControllerAction
                     if($arrFormData['password'] == '') {
                         unset($arrCustomerData['password']);
                     }
+                    //Do not update salutation if zero
+                    if($arrFormData['idCustomerSalutations'] == 0) {
+                        unset($arrCustomerData['idCustomerSalutations']);
+                    }
 
                     $this->getModelCustomers()->edit($arrCustomerData, $intCustomerId);
 
@@ -491,7 +495,7 @@ class Contacts_CustomerController extends AuthControllerAction
         $this->objForm->addElement('hidden', 'id', array('decorators' => array('Hidden')));
         $this->objForm->addElement('hidden', 'formType', array('value' => 'customer', 'decorators' => array('Hidden')));
 
-        $this->objForm->addElement('select', 'idCustomerSalutations', array('label' => $this->core->translate->_('salutation', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrSalutationOptions));
+        $this->objForm->addElement('select', 'idCustomerSalutations', array('label' => $this->core->translate->_('salutation', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => false, 'MultiOptions' => $arrSalutationOptions));
         $this->objForm->addElement('text', 'title', array('label' => $this->core->translate->_('title', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select'));
         $this->objForm->addElement('text', 'fname', array('label' => $this->core->translate->_('fname', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text keyfield', 'required' => true));
         $this->objForm->addElement('text', 'sname', array('label' => $this->core->translate->_('sname', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text keyfield', 'required' => true));
