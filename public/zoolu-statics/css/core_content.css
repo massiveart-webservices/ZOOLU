@@ -2398,3 +2398,7 @@ Dashboard Overlay */
 .editbox input.missing {
     border: 2px solid #cc0000;
 }
+
+.plus, .minus{font-weight: bold}
+.plus{ color: green; }
+.minus{ color: red; }
