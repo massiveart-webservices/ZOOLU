@@ -2348,11 +2348,11 @@ Massiveart.Form = Class.create({
           var commas = str.split(',').length;
       }
 
-      if( commas > max ) {
-          var lastComma = str.lastIndexOf(",");
-          $(elementId).setValue( str.substring(0, lastComma) );
-      }
+      var classname = (commas > max) ? 'minus' : 'plus';
 
-      $('seo_keywords_count').update( commas );
+      $('seo_keywords_count').update( commas )
+                             .removeClassName('plus')
+                             .removeClassName('minus')
+                             .addClassName( classname );
   }
 });
