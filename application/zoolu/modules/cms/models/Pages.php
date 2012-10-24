@@ -2171,7 +2171,8 @@ class Model_Pages extends ModelAbstract
     {
         $this->core->logger->debug('cms->models->Model_Pages->loadAllowedGroups(' . $intRootLevelId . ', ' . $strUrl . ')');
 
-        $objPage = $this->loadByUrl($intRootLevelId, ltrim($strUrl, '/'))[0];
+        $objPages = $this->loadByUrl($intRootLevelId, ltrim($strUrl, '/'));
+        $objPage = $objPages[0];
         $objParentFolders = $this->loadParentFolders($objPage->id);
 
         $arrGroups = array();
