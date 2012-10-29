@@ -53,6 +53,11 @@ class Contacts_CustomerController extends AuthControllerAction
     private $objModelCustomers;
 
     /**
+     * @var Model_Folders
+     */
+    private $objModelFolders;
+
+    /**
      * @var array
      */
     protected $arrAddresses = array();
@@ -274,6 +279,9 @@ class Contacts_CustomerController extends AuthControllerAction
                 ) {
                     $this->objForm->setAction('/zoolu/contacts/customer/edit');
 
+                    //Get old customer data
+                    $objCustomer = $this->getModelCustomers()->load($intCustomerId)->current();
+
                     //Edit customer
                     $arrCustomerData = array(
                         'username' => $arrFormData['username'],
@@ -321,6 +329,11 @@ class Contacts_CustomerController extends AuthControllerAction
 
                     $this->_forward('list', 'customer', 'contacts');
                     $this->view->assign('blnShowFormAlert', true);
+
+                    //Send an email if the users status has changed and the user should be notified
+                    if($arrFormData['idCustomerStatus'] != $objCustomer->idCustomerStatus) {
+                        $this->sendStatusChangeMail($arrFormData);
+                    }
                 } else {
                     if ($this->getRequest()->getParam('password') != $this->getRequest()->getParam('password_confirm')) {
                         $this->objForm->getElement('password_confirm')->addError('Passwords do not match');
@@ -408,6 +421,57 @@ class Contacts_CustomerController extends AuthControllerAction
         }
 
         return $blnIsValid;
+    }
+
+    private function sendStatusChangeMail($arrMailData)
+    {
+        $this->core->logger->debug('contacts->controllers->CustomerController->sendStatusChangeMail');
+
+        //TODO Check if status has changed
+        $objMail = new Zend_Mail('utf-8');
+
+        $objTransport = null;
+        if (!empty($this->core->config->mail->params->host)) {
+            // config for SMTP with auth
+            $arrConfig = array('auth' => 'login',
+                'username' => $this->core->config->mail->params->username,
+                'password' => $this->core->config->mail->params->password);
+
+            // smtp
+            $objTransport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $arrConfig);
+        }
+
+        $objThemeData = $this->getModelFolders()->getThemeByDomain($_SERVER['SERVER_NAME']);
+        if (count($objThemeData) > 0) {
+            $objTheme = $objThemeData->current();
+        }
+
+        // set mail subject
+        $objMail->setSubject('Statusänderung');
+
+        $objView = new Zend_View();
+        $objView->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$objTheme->path.'/scripts/');
+        $objView->status = $arrMailData['idCustomerStatus'];
+        $strBody = $objView->render('customer/statusChangeMail.phtml');
+
+        // set body
+        $objMail->setBodyHtml($strBody);
+
+        // set mail from address
+        $objMail->setFrom($this->core->config->mail->from->address, $this->core->config->mail->from->name);
+
+        // add to address
+        $objMail->addTo($arrMailData['email'], $arrMailData['username']);
+
+        //set header for sending mail
+        $objMail->addHeader('Sender', $this->core->config->mail->params->username);
+
+        // send mail now
+        if ($this->core->config->mail->transport == 'smtp') {
+            $objMail->send($objTransport);
+        } else {
+            $objMail->send();
+        }
     }
 
     /**
@@ -611,5 +675,28 @@ class Contacts_CustomerController extends AuthControllerAction
         }
 
         return $this->objModelCustomers;
+    }
+
+
+    /**
+     * getModelFolders
+     * @return Model_Folders
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
+        }
+
+        return $this->objModelFolders;
     }
 }
