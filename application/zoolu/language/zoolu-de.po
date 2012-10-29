@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-05 10:24+0100\n"
+"POT-Creation-Date: 2012-10-29 08:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -49,13 +49,13 @@ msgid "name"
 msgstr "Name"
 
 #: application/zoolu/language/addon-language-keys.php:50
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:468
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:500
 #: application/zoolu/modules/users/controllers/UserController.php:515
 msgid "fname"
 msgstr "Vorname"
 
 #: application/zoolu/language/addon-language-keys.php:51
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:469
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:501
 #: application/zoolu/modules/users/controllers/UserController.php:516
 msgid "sname"
 msgstr "Nachname"
@@ -71,7 +71,7 @@ msgid "changed"
 msgstr "Geändert am"
 
 #: application/zoolu/language/addon-language-keys.php:58
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:467
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:499
 #: application/zoolu/modules/global/views/helpers/FolderHelper.php:154
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:166
 #: application/zoolu/modules/users/controllers/GroupController.php:441
@@ -87,17 +87,17 @@ msgid "key"
 msgstr "Schlüssel"
 
 #: application/zoolu/language/addon-language-keys.php:68
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:472
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:504
 msgid "status"
 msgstr "Status"
 
 #: application/zoolu/language/addon-language-keys.php:69
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:471
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:503
 msgid "company"
 msgstr "Firma"
 
 #: application/zoolu/language/addon-language-keys.php:70
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:470
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:502
 #: application/zoolu/modules/users/controllers/UserController.php:517
 msgid "username"
 msgstr "Benutzername"
@@ -107,7 +107,7 @@ msgid "companyStatus"
 msgstr "Firmenstatus"
 
 #: application/zoolu/language/addon-language-keys.php:72
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:525
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:564
 msgid "country"
 msgstr "Land"
 
@@ -116,7 +116,7 @@ msgid "lastLogin"
 msgstr "Letzter Login"
 
 #: application/zoolu/language/addon-language-keys.php:78
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:488
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:527
 #: application/zoolu/modules/users/controllers/UserController.php:519
 msgid "email"
 msgstr "E-Mail"
@@ -390,20 +390,40 @@ msgstr "Erste Zeile importieren"
 msgid "New_Customer"
 msgstr "Neuer Kunde"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:197
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:199
 msgid "New_customer"
 msgstr "Neuer Kunde"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:236
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:317
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:246
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:339
 msgid "Edit_Customer"
 msgstr "Kunde bearbeiten"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:466
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:462
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:469
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:476
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:483
+#: application/zoolu/modules/users/controllers/UserController.php:509
+#: application/zoolu/modules/core/controllers/LandingpageController.php:133
+#: library/massiveart/generic/forms/generic.subform.class.php:166
+#: library/massiveart/generic/forms/generic.form.class.php:510
+#: library/massiveart/generic/fields/Articles/forms/helpers/FormArticles.php:207
+msgid "Please_choose"
+msgstr "Bitte wählen"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:498
 msgid "salutation"
 msgstr "Anrede"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:475
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:505
+msgid "statuschange"
+msgstr "Statusänderung"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:505
+msgid "informUser"
+msgstr "Benutzer informieren"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:508
 #: application/zoolu/modules/users/controllers/UserController.php:525
 #: application/zoolu/modules/users/controllers/GroupController.php:455
 #: application/zoolu/modules/users/controllers/ResourceController.php:368
@@ -411,56 +431,66 @@ msgstr "Anrede"
 msgid "General_information"
 msgstr "Allgemeine Informationen"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:478
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:511
 #: application/zoolu/modules/users/controllers/UserController.php:528
 msgid "password"
 msgstr "Passwort"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:479
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:512
 msgid "confirm_password"
 msgstr "Password wiederholen"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:482
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:515
 msgid "Password"
 msgstr "Passwort"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:485
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:518
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:521
+#: application/zoolu/modules/users/controllers/UserController.php:550
+#: application/zoolu/modules/users/controllers/ResourceController.php:377
+#: application/zoolu/modules/core/views/helpers/FolderHelper.php:387
+#: application/zoolu/modules/core/views/helpers/FolderHelper.php:397
+msgid "groups"
+msgstr "Gruppen"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:524
 msgid "phone"
 msgstr "Telefon"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:486
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:525
 msgid "mobile"
 msgstr "Mobiltelefon"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:487
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:526
 msgid "fax"
 msgstr "Fax"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:491
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:530
 msgid "Contact_details"
 msgstr "Kontaktdetails"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:520
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:559
 msgid "addresstype"
 msgstr "Adresstyp"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:521
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:560
 msgid "street"
 msgstr "Straße"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:522
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:561
 msgid "zip"
 msgstr "PLZ"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:523
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:562
 msgid "city"
 msgstr "Stadt"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:524
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:563
 msgid "state"
 msgstr "Land"
 
-#: application/zoolu/modules/contacts/controllers/CustomerController.php:548
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:571
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:588
 msgid "Addresses"
 msgstr "Adressen"
 
@@ -577,14 +607,6 @@ msgstr "Neuen Benutzer anlegen"
 msgid "Edit_User"
 msgstr "Benutzer bearbeiten"
 
-#: application/zoolu/modules/users/controllers/UserController.php:509
-#: application/zoolu/modules/core/controllers/LandingpageController.php:133
-#: library/massiveart/generic/forms/generic.subform.class.php:166
-#: library/massiveart/generic/forms/generic.form.class.php:510
-#: library/massiveart/generic/fields/Articles/forms/helpers/FormArticles.php:207
-msgid "Please_choose"
-msgstr "Bitte wählen"
-
 #: application/zoolu/modules/users/controllers/UserController.php:518
 msgid "system_language"
 msgstr "Systemsprache"
@@ -625,13 +647,6 @@ msgstr "Twitter ID"
 #: application/zoolu/modules/users/controllers/UserController.php:540
 msgid "Social_media"
 msgstr "Social Media"
-
-#: application/zoolu/modules/users/controllers/UserController.php:550
-#: application/zoolu/modules/users/controllers/ResourceController.php:377
-#: application/zoolu/modules/core/views/helpers/FolderHelper.php:387
-#: application/zoolu/modules/core/views/helpers/FolderHelper.php:397
-msgid "groups"
-msgstr "Gruppen"
 
 #: application/zoolu/modules/users/controllers/UserController.php:553
 msgid "User_groups"
@@ -1126,9 +1141,6 @@ msgstr "Videos hinzufügen "
 
 #~ msgid "Apply"
 #~ msgstr "Übernehmen"
-
-#~ msgid "Last_change"
-#~ msgstr "Letzte Änderung"
 
 #~ msgid "Send_to_dashboard"
 #~ msgstr "Dashboard veröffentlichen"

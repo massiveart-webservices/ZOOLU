@@ -242,6 +242,8 @@ class Contacts_CustomerController extends AuthControllerAction
             }
             $this->objForm->getElement('group')->setValue($arrMultiCheckbox);
 
+            $this->objForm->getElement('idCustomerStatusChange')->setValue(array('informUser'));
+
             $this->view->form = $this->objForm;
             $this->view->formTitle = $this->core->translate->_('Edit_Customer');
 
@@ -491,6 +493,7 @@ class Contacts_CustomerController extends AuthControllerAction
             $arrGroupOptions[$arrSql['id']] = $this->core->translate->_($arrSql['title']);
         }
 
+        $arrStatusChangeOptions = array('informUser' => $this->core->translate->_('informUser'));
 
         $this->objForm->addElement('hidden', 'id', array('decorators' => array('Hidden')));
         $this->objForm->addElement('hidden', 'formType', array('value' => 'customer', 'decorators' => array('Hidden')));
@@ -502,8 +505,9 @@ class Contacts_CustomerController extends AuthControllerAction
         $this->objForm->addElement('text', 'username', array('label' => $this->core->translate->_('username', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text', 'required' => true));
         $this->objForm->addElement('text', 'company', array('label' => $this->core->translate->_('company', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text'));
         $this->objForm->addElement('select', 'idCustomerStatus', array('label' => $this->core->translate->_('status', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrStatusOptions));
+        $this->objForm->addElement('multiCheckbox', 'idCustomerStatusChange', array('label' => $this->core->translate->_('statuschange', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'multiCheckbox', 'MultiOptions' => $arrStatusChangeOptions));
 
-        $this->objForm->addDisplayGroup(array('idCustomerSalutations', 'title', 'fname', 'sname', 'username', 'email', 'company', 'idCustomerStatus'), 'main-group');
+        $this->objForm->addDisplayGroup(array('idCustomerSalutations', 'title', 'fname', 'sname', 'username', 'email', 'company', 'idCustomerStatus', 'idCustomerStatusChange'), 'main-group');
         $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information', false));
         $this->objForm->getDisplayGroup('main-group')->setDecorators(array('FormElements', 'Region'));
 
