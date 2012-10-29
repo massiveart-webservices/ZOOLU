@@ -106,7 +106,8 @@ class RegistrationStrategyDoubleOptIn extends RegistrationStrategyAbstract
         // set mail subject
         $objMail->setSubject('Registrierung');
 
-        $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/register?key=' . $arrMailData['registrationKey'];
+        $strRedirectUrl = $this->getRequest()->getParam('re', '/');
+        $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/register?key=' . $arrMailData['registrationKey'] . '&re=' . urlencode($strRedirectUrl);
 
         $objView = new Zend_View();
         $objView->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->getTheme()->path.'/scripts/');

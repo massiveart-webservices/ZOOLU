@@ -243,6 +243,7 @@ class CustomerController extends WebControllerAction
                 }
                 $objRegisterStrategy = new $strRegisterStrategy($this->getRequest(), $this->objTheme);
                 $this->view->display = $objRegisterStrategy->register($this->getUrl($this->getRequest()->getParam('re')));
+                $this->view->redirect = $this->getRequest()->getParam('re', '/');
             } else {
                 //Reassign field values
                 $this->view->fname = $this->getRequest()->getParam('fname');

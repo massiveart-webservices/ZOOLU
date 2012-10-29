@@ -6,6 +6,8 @@
         <p>Bestätigungsmail verschickt.</p>
         <?php elseif ($this->display == 'keyConfirmation'): ?>
         <p>Registrierung erfolgreich abgeschlossen.</p>
+        <p>Ihr Login muss erst noch freigeschalten werden. Sobald dies geschehen ist werden Sie von uns informiert.</p>
+        <a href="<?php echo $this->redirect ?>">Zurück</a>
         <?php elseif ($this->display == 'invalidKey'): ?>
         <p>Dieser Link ist nicht mehr gültig!</p>
         <?php else: ?>
