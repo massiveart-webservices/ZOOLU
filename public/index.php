@@ -87,6 +87,18 @@ try{
     $router->addRoute('zooluWebControllerActionParams', $route);
 
     /**
+     * default customer routings
+     */
+    $route = new Zend_Controller_Router_Route_Static('login', array('controller' => 'Customer', 'action' => 'login'));
+    $router->addRoute('customerWebControllerLogin', $route);
+
+    $route = new Zend_Controller_Router_Route_Static('logout', array('controller' => 'Customer', 'action' => 'logout'));
+    $router->addRoute('customerWebControllerLogout', $route);
+
+    $route = new Zend_Controller_Router_Route_Static('register', array('controller' => 'Customer', 'action' => 'register'));
+    $router->addRoute('customerWebControllerRegister', $route);
+
+    /**
      * only throw exceptions in developement mode
      */
     if($sysConfig->show_errors === 'false'){

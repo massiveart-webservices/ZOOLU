@@ -39,13 +39,8 @@
  * @version 1.0
  */
 
-class IndexController extends Zend_Controller_Action
+class IndexController extends WebControllerAction
 {
-
-    /**
-     * @var Core
-     */
-    private $core;
 
     /**
      * @var Model_Pages
@@ -53,45 +48,16 @@ class IndexController extends Zend_Controller_Action
     private $objModelPages;
 
     /**
-     * @var Model_Folders
-     */
-    private $objModelFolders;
-
-    /**
-     * @var Model_Urls
-     */
-    private $objModelUrls;
-
-    /**
      * @var Model_Users
      */
     protected $objModelUsers;
-
-    /**
-     * @var Model_Languages
-     */
-    protected $objModelLanguages;
-
-    /**
-     * @var Zend_Cache_Frontend_Output
-     */
-    private $objCache;
-
-    /**
-     * @var Zend_Db_Table_Row_Abstract
-     */
-    private $objTheme;
 
     /**
      * @var Page
      */
     private $objPage;
 
-    private $blnCachingStart = false;
-
     private $blnSearch = false;
-
-    private $blnCachingOutput = false;
 
     private $blnPostDispatch = true;
 
@@ -106,53 +72,8 @@ class IndexController extends Zend_Controller_Action
     /**
      * @var string
      */
-    protected $strCacheId;
-
-    /**
-     * @var integer
-     */
-    private $intLanguageId;
-
-    /**
-     * @var string
-     */
-    private $strLanguageCode;
-    
-    /**
-     * @var integer
-     */
-    private $intLanguageDefinitionType;
-
-    /**
-     * @var integer
-     */
-    private $intSegmentId;
-
-    /**
-     * @var string
-     */
-    private $strSegmentCode;
-    
-    /**
-     * @var string
-     */
-    private $strUrlPrefix;
-
-    /**
-     * @var HtmlTranslate
-     */
-    private $translate;
-
-    /**
-     * @var string
-     */
     private $strClientAction;
-    
-    /**
-     * @var boolean
-     */
-    private $blnUrlWithLanguage;
-    
+
     /**
      * @var boolean
      */
@@ -163,10 +84,7 @@ class IndexController extends Zend_Controller_Action
      */
     public function init()
     {
-        $this->core = Zend_Registry::get('Core');
-
-        $this->intLanguageId = $this->core->intLanguageId;
-        $this->strLanguageCode = $this->core->strLanguageCode;
+        parent::init();
 
         /**
          * reset action
@@ -267,14 +185,11 @@ class IndexController extends Zend_Controller_Action
      */
     public function indexAction()
     {
-        $this->view->addFilter('PageReplacer');
-
-        
         // load theme
         $this->loadTheme();
         
         // get cleaned url
-        $strUrl = $this->getUrl();
+        $strUrl = $this->getUrl($_SERVER['REQUEST_URI']);
         
         // check portal security
         $this->checkPortalSecuirty();
@@ -317,38 +232,8 @@ class IndexController extends Zend_Controller_Action
     
                 $this->getModelUrls(true);
                 $this->getModelPages();
-    
-                if (file_exists(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php')) {
-                    require_once(GLOBAL_ROOT_PATH . 'client/website/navigation.class.php');
-                    $objNavigation = new Client_Navigation();
-                } else {
-                    $objNavigation = new Navigation();
-                }
-                $objNavigation->setRootLevelId($this->objTheme->idRootLevels);
-                $objNavigation->setLanguageId($this->intLanguageId);
 
-                // set navigation url prefix properties
-                $objNavigation->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
-                $objNavigation->setUrlPrefix($this->strUrlPrefix);
-                $objNavigation->setLanguageDefinitionType($this->intLanguageDefinitionType);
-                
-                // set navigation segmentation properties
-                $objNavigation->setHasSegments($this->objTheme->hasSegments);
-                $objNavigation->setSegmentId($this->intSegmentId);
-                $objNavigation->setSegmentCode($this->strSegmentCode);
-    
-                if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php')) {
-                    require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/NavigationHelper.php');
-                    $strNavigationHelper = ucfirst($this->objTheme->path) . '_NavigationHelper';
-                    $objNavigationHelper = new $strNavigationHelper();
-                } else {
-                    require_once(dirname(__FILE__) . '/../helpers/NavigationHelper.php');
-                    $objNavigationHelper = new NavigationHelper();
-                }
-    
-                $objNavigationHelper->setNavigation($objNavigation);
-                $objNavigationHelper->setTranslate($this->translate);
-                Zend_Registry::set('NavigationHelper', $objNavigationHelper);
+                $objNavigation = $this->initNavigation();
     
                 $this->core->logger->debug('loadUrls 1st Approach');
     
@@ -467,21 +352,10 @@ class IndexController extends Zend_Controller_Action
                     if ($objNavigation->secuirtyZoneCheck()) {
                         // deactivate caching
                         $this->blnCachingStart = false;
+
+                        list($blnHasIdentity, $blnHasIdentityCustomer) = $this->isZooluOrCustomerIdentity();
     
-                        $blnHasIdentity = true;
-                        $objAuth = Zend_Auth::getInstance();
-                        $objAuth->setStorage(new Zend_Auth_Storage_Session());
-                        if (!$objAuth->hasIdentity()) {
-                            $blnHasIdentity = false;
-                        }
-                        // for members
-                        $blnHasIdentityMembers = true;
-                        $objAuth->setStorage(new Zend_Auth_Storage_Session('Members'));
-                        if (!$objAuth->hasIdentity()) {
-                            $blnHasIdentityMembers = false;
-                        }
-    
-                        if ($blnHasIdentity == false && $blnHasIdentityMembers == false) {
+                        if ($blnHasIdentity == false && $blnHasIdentityCustomer == false) {
                             $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
                         } else {
                             if (!$objNavigation->checkZonePrivileges()) {
@@ -492,12 +366,6 @@ class IndexController extends Zend_Controller_Action
                             }
                         }
                     }
-    
-                    /**
-                     * set values for replacers
-                     */
-                    Zend_Registry::set('TemplateCss', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->portal_startpage_templateId) ? '' : '');
-                    Zend_Registry::set('TemplateJs', ($this->objPage->getTemplateId() == $this->core->sysConfig->page_types->page->headquarters_templateId) ? '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $this->view->mapsKey . '" type="text/javascript"></script>' : '');
     
                     if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php')) {
                         require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php');
@@ -553,6 +421,25 @@ class IndexController extends Zend_Controller_Action
                 $this->_helper->viewRenderer->setNoRender();
             }
         }
+    }
+
+    protected function isZooluOrCustomerIdentity()
+    {
+        $blnHasIdentity = true;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session());
+        if (!$objAuth->hasIdentity()) {
+            $blnHasIdentity = false;
+        }
+        // for members
+        $blnHasIdentityCustomer = true;
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('customer'));
+        if (!$objAuth->hasIdentity()) {
+            $blnHasIdentityCustomer = false;
+        }
+
+        $blnHasIdentity = $blnHasIdentity || $blnHasIdentityCustomer;
+        return array($blnHasIdentity, $blnHasIdentityCustomer);
     }
 
     /**
@@ -756,66 +643,6 @@ class IndexController extends Zend_Controller_Action
     {
         $this->strClientAction = $strClientAction;
     }
-
-    /**
-     * getUrl
-     * @return string
-     */
-    public function getUrl($blnCutLanguage = true)
-    {
-    	$this->blnUrlWithLanguage = true;
-        $strUrl = $_SERVER['REQUEST_URI'];
-        
-        // check for .rss ending
-        $strUrl = $this->validateRss($strUrl);
-        
-        // cut off url prefix path
-        $strUrl = $this->cutUrlPrefix($strUrl);
-
-        // cut off language & segment prefix of url
-        if       (preg_match('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', $strUrl)) {
-            $strUrl = preg_replace('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', '', $strUrl);
-        } elseif (preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUrl) && $blnCutLanguage) { // cut off language prefix of url
-            $strUrl = preg_replace('/^\/[a-zA-Z\-]{2,5}\//', '', $strUrl);
-        } else {
-            $strUrl = preg_replace('/^\//', '', $strUrl);
-            $this->blnUrlWithLanguage = false;
-        }
-        return $strUrl;
-    }
-
-    /**
-     * loadTheme
-     * @return void
-     */
-    public function loadTheme()
-    {
-        // set domain
-        $strDomain = $_SERVER['SERVER_NAME'];
-        $objThemeData = $this->getModelFolders()->getThemeByDomain($this->core->getMainDomain($strDomain));
-
-        if (count($objThemeData) > 0) {
-            
-            $this->validateUrlPrefix($objThemeData);
-
-            //FIXME : for development
-            if (strpos($strDomain, 'm.') === 0) {
-                $this->objTheme->path = 'mobile';
-            }
-
-            $this->view->analyticsKey = $this->objTheme->analyticsKey;
-            $this->view->analyticsDomain = $strDomain;
-            $this->view->mapsKey = $this->objTheme->mapsKey;
-            $this->view->rootLevelId = $this->objTheme->idRootLevels;
-            $this->view->urlPrefix = $this->strUrlPrefix;
-
-            if ($this->objTheme->localization != '') {
-                Zend_Registry::get('Location')->setLocale($this->objTheme->localization);
-            }
-        } else {
-            throw new Exception('Unable to load theme based on the URL "' . $strDomain . '"');
-        }
-    }
     
    /**
     * getValidatedUrlObject
@@ -921,64 +748,6 @@ class IndexController extends Zend_Controller_Action
             $this->_redirect($strRedirectUrl);    
         }
     }
-    
-    /**
-     * validateUrlPrefix
-     * @param Zend_Db_Table_Rowset $objThemeData
-     */
-    private function validateUrlPrefix($objThemeData)
-    {
-        if (count($objThemeData) > 1) {
-            $strUrl = ltrim($_SERVER['REQUEST_URI'], '/');
-            foreach ($objThemeData as $objTheme) {
-                if (strpos($strUrl, $objTheme->urlPath) !== false && strpos($strUrl, $objTheme->urlPath) == 0) {
-                    $this->objTheme = $objTheme;
-                    break;
-                }
-            }
-            
-            // check if objTheme is null
-            if (!isset($this->objTheme)) {
-                foreach ($objThemeData as $objTheme) {
-                    if ((bool) $objTheme->isMain === true) {
-                        $this->objTheme = $objTheme;
-                        break;
-                    }
-                }  
-            }            
-        } else {
-            $this->objTheme = $objThemeData->current();
-        }
-        $this->strUrlPrefix = $this->objTheme->urlPath;
-    }
-    
-    /**
-     * validateRss
-     * @param string $strUrl
-     * @return void
-     */
-    private function validateRss($strUrl)
-    {        
-        if (strpos($strUrl, '.rss') !== false) {
-            $strUrl = str_replace('.rss', '', $strUrl);
-            $this->blnIsRss = true;
-        }
-        
-        return $strUrl;    
-    }
-    
-    /**
-     * cutUrlPrefix
-     * @param string $strUrl
-     * @return void
-     */
-    private function cutUrlPrefix($strUrl)
-    {
-        if ($this->strUrlPrefix != '') {
-            $strUrl = substr($strUrl, strlen($this->strUrlPrefix) + 1);  
-        }
-        return ($strUrl == '') ? '/' : $strUrl;  
-    }
 
     /**
      * getTheme
@@ -991,240 +760,6 @@ class IndexController extends Zend_Controller_Action
         return $this->objTheme;
     }
 
-    /**
-     * checkPortalSecuirty
-     * @return void
-     */
-    private function checkPortalSecuirty()
-    {
-        /**
-         * check portal security
-         */
-        if (isset($this->objTheme) && (int) $this->objTheme->isSecure === 1) {
-            // deactivate caching
-            $this->blnCachingStart = false;
-
-            $objAuth = Zend_Auth::getInstance();
-            if (!Zend_Auth::getInstance()->hasIdentity()) {
-                $this->_redirect('/login?re=' . urlencode($_SERVER['REQUEST_URI']));
-            } else {
-                Security::get()->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->cms, Security::ZONE_WEBSITE);
-                if (!Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objTheme->idRootLevels, Security::PRIVILEGE_VIEW, false, false, Security::ZONE_WEBSITE) && !Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objTheme->idRootLevels . '_' . $this->intLanguageId, Security::PRIVILEGE_VIEW, false, false, Security::ZONE_WEBSITE)) {
-                    $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-                    $this->getResponse()->setHeader('Status', '403 Forbidden');
-                    $this->getResponse()->setHttpResponseCode(403);
-                    $this->strRenderScript = 'error-403.php';
-                }
-            }
-        }
-    }
-
-    /**
-     * validateLanguage
-     * @return void
-     */
-    private function validateLanguage()
-    {
-        $this->core->logger->debug('get language by: ');
-        $this->intLanguageDefinitionType = $this->objTheme->languageDefinitionType;
-        
-        $this->core->logger->debug('theme');
-        $this->core->intLanguageId = $this->objTheme->idLanguages;
-        $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
-
-        if ($this->intLanguageDefinitionType != $this->core->config->language_definition->none) {
-            $strRequestString = '';
-            $strMatchCode = '';
-            $strTld = '';
-            if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
-                $this->core->logger->debug('folder');
-                $strRequestString = $_SERVER['REQUEST_URI'];
-                $strMatchCode = '/^\/[a-zA-Z\-]{2,5}\//';
-            } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain || $this->core->config->language_definition->subandtld) {
-                $this->core->logger->debug('subdomain');
-                $strRequestString = $_SERVER['HTTP_HOST'];
-                $strMatchCode = '/^[a-zA-Z\-]{2}/';
-                $strTld = strrchr ( $_SERVER['SERVER_NAME'], "." );
-                $strTld = substr ( $strTld, 1 );
-            }
-            if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
-                preg_match($strMatchCode, $strRequestString, $arrMatches);
-                $strCode = trim($arrMatches[0], '/');
-                if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subandtld) {
-                    if ($strTld != '') {
-                        $strTmpCode = $strCode . '-' . $strTld;
-                        foreach($this->core->config->languages->language->toArray() as $arrLanguage){
-                            if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strTmpCode)) {
-                                $this->core->strLanguageCode = $strTmpCode;
-                                $this->core->intLanguageId = $arrLanguage['id'];
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    foreach($this->core->config->languages->language->toArray() as $arrLanguage){
-                        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strCode)) {
-                            $this->core->strLanguageCode = $strCode;
-                            $this->core->intLanguageId = $arrLanguage['id'];
-                            break;
-                        }
-                    }    
-                }
-            }
-        }
-        $this->intLanguageId = $this->core->intLanguageId;
-        $this->strLanguageCode = $this->core->strLanguageCode;
-        $this->view->languageId = $this->intLanguageId;
-        $this->view->languageCode = $this->strLanguageCode;
-    }
-
-    /**
-     * validateSegment
-     * @return void
-     */
-    private function validateSegment()
-    {
-        if ($this->objTheme->hasSegments == 1) {
-
-            if (isset($_SERVER['REQUEST_URI']) && preg_match('/^\/[a-zA-Z]{1}\//', $_SERVER['REQUEST_URI'])) {
-                preg_match('/^\/[a-zA-Z]{1}\//', $_SERVER['REQUEST_URI'], $arrMatches);
-                $this->strSegmentCode = trim($arrMatches[0], '/');
-            }
-
-            $arrPortals = $this->core->config->portals->toArray();
-
-            if (array_key_exists('id', $arrPortals['portal'])) {
-                $arrPortals = array($arrPortals['portal']);
-            } else {
-                $arrPortals = $arrPortals['portal'];
-            }
-
-            foreach ($arrPortals as $arrPortal) {
-                if ($arrPortal['id'] == $this->objTheme->idRootLevels) {
-                    if (array_key_exists('id', $arrPortal['segment'])) {
-                        $arrSegments = array($arrPortal['segment']);
-                    } else {
-                        $arrSegments = $arrPortal['segment'];
-                    }
-
-                    $arrDefaultSegment = null;
-                    foreach ($arrSegments as $arrSegment) {
-                        if (array_key_exists('code', $arrSegment) && $arrSegment['code'] == strtolower($this->strSegmentCode)) {
-                            $this->intSegmentId = $arrSegment['id'];
-                            break;
-                        }
-
-                        if (array_key_exists('default', $arrSegment) && $arrSegment['default'] === 'true') {
-                            $arrDefaultSegment = $arrSegment;
-                        }
-                    }
-
-                    if (empty($this->intSegmentId)) {
-                        if (!empty($arrDefaultSegment)) {
-                            $this->strSegmentCode = $arrDefaultSegment['code'];
-                            $this->intSegmentId = $arrDefaultSegment['id'];
-                        } else {
-                            throw new Exception('No Segment found!');
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            $this->view->segmentId = $this->intSegmentId;
-            $this->view->segmentCode = $this->strSegmentCode;
-        }
-    }
-
-    /**
-     * urlRetryRedirectAndError
-     * @return void
-     */
-    private function urlRetryRedirectAndError($strUrl)
-    {
-        if ($strUrl == '' && $this->getRequest()->getParam('re', 'true') == 'true') {
-            // reset language
-
-            $this->core->intLanguageId = $this->objTheme->idLanguages;
-            $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
-
-            // redirct
-            $this->_redirect($this->getPrefix() . '/?re=false');
-        } else {
-            $strTmpUrl = ((parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
-
-            if (($strTmpUrl[strlen($strTmpUrl) - 1]) == '/') {
-                $strTmpUrl = rtrim($strTmpUrl, '/');
-            } else if (($strTmpUrl[strlen($strTmpUrl) - 1]) != '/') {
-                $strTmpUrl = $strTmpUrl . '/';
-            }
-
-            $objUrl = $this->objModelUrls->loadByUrl($this->objTheme->idRootLevels, $strTmpUrl);
-
-            if (isset($objUrl->url) && count($objUrl->url) > 0) {
-                $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
-                $this->getResponse()->setHeader('Status', '301 Moved Permanently');
-                $this->getResponse()->setHttpResponseCode(301);
-                $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/' . $strTmpUrl);
-            } else {
-                $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
-                $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
-                $this->getResponse()->setHeader('Status', '404 Not Found');
-                $this->getResponse()->setHttpResponseCode(404);
-                $this->renderScript('error-404.php');
-            }
-        }
-    }
-    
-    /**
-     * getPrefix
-     * @return string
-     */
-    private function getPrefix()
-    {
-        $strUrlPrefix = '';
-        
-        // check for url prefix
-        if ($this->strUrlPrefix != '') {
-            $strUrlPrefix .= '/' . $this->strUrlPrefix;  
-        }
-        
-        // check for segmentation
-        if ($this->objTheme->hasSegments == 1) {
-            $strUrlPrefix .= '/' . $this->strSegmentCode;  
-        }  
-        
-        return $strUrlPrefix;
-    }
-
-    /**
-     * setTranslate
-     * @return void
-     */
-    public function setTranslate()
-    {
-        // set up zoolu translate obj
-        if (file_exists(GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->strLanguageCode . '.mo')) {
-            $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->strLanguageCode . '.mo');
-        } else {
-            $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->core->sysConfig->languages->default->code . '.mo');
-        }
-
-        $this->view->translate = $this->translate;
-    }
-
-    /**
-     * getTranslate
-     * @return HtmlTranslate
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function getTranslate()
-    {
-        return $this->translate;
-    }
-    
     /**
      * isPortalGate
      * @return boolean
@@ -1255,42 +790,6 @@ class IndexController extends Zend_Controller_Action
     }
 
     /**
-     * initPageCache
-     * @return void
-     */
-    private function initPageCache($strUrl)
-    {
-        $this->strCacheId = 'page_' . $this->objTheme->idRootLevels;
-        
-        // add url prefix to page cache key
-        if($this->strUrlPrefix != ''){
-            $this->strCacheId .= '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $this->strUrlPrefix);
-        }
-
-        // add segment to page cache key
-        if($this->objTheme->hasSegments == 1){
-            $this->strCacheId .= '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $this->strSegmentCode);
-        }
-
-        $this->strCacheId .= '_' . strtolower(str_replace('-', '_', $this->strLanguageCode)) . '_' . strtolower(str_replace('-', '_', $this->objTheme->path)) . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
-
-        $arrFrontendOptions = array(
-            'lifetime'                => 604800, // cache lifetime (in seconds), if set to null, the cache is valid forever.
-            'automatic_serialization' => true
-        );
-
-        $arrBackendOptions = array(
-            'cache_dir' => GLOBAL_ROOT_PATH . $this->core->sysConfig->path->cache->pages // Directory where to put the cache files
-        );
-
-        // getting a Zend_Cache_Core object
-        $this->objCache = Zend_Cache::factory('Output',
-            'File',
-            $arrFrontendOptions,
-            $arrBackendOptions);
-    }
-
-    /**
      * fontsizeAction
      * @author Michael Trawetzky <mtr@massiveart.com>
      * @version 1.0
@@ -1304,43 +803,6 @@ class IndexController extends Zend_Controller_Action
         $objWebSession->fontSize = $strFontSize;
 
         $this->_helper->viewRenderer->setNoRender();
-    }
-
-    /**
-     * setLanguageId
-     * @param number $intLanguageId
-     * @version 1.0
-     */
-    public function setLanguage($intLanguageId)
-    {
-        $this->intLanguageId = $intLanguageId;
-
-        $objLanguage = $this->getModelLanguages()->loadLanguageById($intLanguageId);
-        if (count($objLanguage) > 0) {
-            $this->strLanguageCode = strtolower($objLanguage->current()->languageCode);
-        }
-    }
-
-    /**
-     * getLanguageId
-     * @return integer
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function getLanguageId()
-    {
-        return $this->intLanguageId;
-    }
-
-    /**
-     * getLanguageCode
-     * @return string
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function getLanguageCode()
-    {
-        return $this->strLanguageCode;
     }
 
     /**
@@ -1366,51 +828,6 @@ class IndexController extends Zend_Controller_Action
     }
 
     /**
-     * getModelFolders
-     * @return Model_Folders
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelFolders()
-    {
-        if (null === $this->objModelFolders) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
-            $this->objModelFolders = new Model_Folders();
-            $this->objModelFolders->setLanguageId($this->intLanguageId);
-        }
-
-        return $this->objModelFolders;
-    }
-
-    /**
-     * getModelUrls
-     * @param $blnForceNewInstance Forces a new instantiation of the model
-     * @return Model_Urls
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelUrls($blnForceNewInstance = false)
-    {
-        if (null === $this->objModelUrls || $blnForceNewInstance) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Urls.php';
-            $this->objModelUrls = new Model_Urls();
-            $this->objModelUrls->setLanguageId($this->intLanguageId);
-        }
-
-        return $this->objModelUrls;
-    }
-
-    /**
      * getModelUsers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -1428,27 +845,6 @@ class IndexController extends Zend_Controller_Action
         }
 
         return $this->objModelUsers;
-    }
-
-    /**
-     * getModelLanguages
-     * @return Model_Languages
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelLanguages()
-    {
-        if (null === $this->objModelLanguages) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Languages.php';
-            $this->objModelLanguages = new Model_Languages();
-        }
-
-        return $this->objModelLanguages;
     }
 }
 

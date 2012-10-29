@@ -66,7 +66,7 @@ Massiveart.Form.Contacts = Class.create(Massiveart.Form, {
             //saved
             this.getFormSaveSucces();
             
-            if(myNavigation.rootLevelType == 'member' || myNavigation.rootLevelType == 'company' || myNavigation.rootLevelType == 'subscriber'){
+            if(myNavigation.rootLevelType == 'member' || myNavigation.rootLevelType == 'company' || myNavigation.rootLevelType == 'subscriber' || myNavigation.rootLevelType == 'customer'){
               
               $(myNavigation.genListContainer).update($(myNavigation.genTmpContainer).innerHTML);
               
@@ -140,7 +140,7 @@ Massiveart.Form.Contacts = Class.create(Massiveart.Form, {
             //deleted
             this.getFormDeleteSucces();
             
-            if(myNavigation.rootLevelType == 'member' || myNavigation.rootLevelType == 'company' || myNavigation.rootLevelType == 'subscriber'){
+            if(myNavigation.rootLevelType == 'member' || myNavigation.rootLevelType == 'company' || myNavigation.rootLevelType == 'subscriber' || myNavigation.rootLevelType == 'customer'){
              
               $(myNavigation.genFormContainer).hide();
               $(myNavigation.genFormFunctions).hide();

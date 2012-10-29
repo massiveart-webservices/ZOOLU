@@ -33,7 +33,7 @@ Massiveart.List = Class.create({
    * getListPage
    */
   getListPage: function(page, rootLevelFilter, hardbounced){ //FIXME hardbounce variable only as quick & dirty solution for subscriber hard bounce list!
-    if(myNavigation){      
+    if(myNavigation){
       
       if(typeof(page) != 'undefined' && page > 0){ 
         this.page = page;
