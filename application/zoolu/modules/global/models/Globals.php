@@ -940,7 +940,7 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function add(GenericSetup &$objGenericSetup)
+    public function add(GenericSetup $objGenericSetup)
     {
         $this->core->logger->debug('global->models->Model_Globals->add()');
 
@@ -1034,7 +1034,7 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function addLink(&$objGlobal)
+    public function addLink($objGlobal)
     {
         $this->core->logger->debug('global->models->Model_Globals->addLink()');
 
@@ -1093,7 +1093,7 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update(GenericSetup &$objGenericSetup, $objGlobal)
+    public function update(GenericSetup $objGenericSetup, $objGlobal)
     {
         $this->core->logger->debug('global->models->Model_Globals->update()');
 

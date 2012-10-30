@@ -64,9 +64,9 @@ class GenericSubForm extends Zend_Form_SubForm
 
     /**
      * set generic form object
-     * @param GenericForm &$objGenericForm
+     * @param GenericForm $objGenericForm
      */
-    public function setGenericForm(GenericForm &$objGenericForm)
+    public function setGenericForm(GenericForm $objGenericForm)
     {
         $this->objGenericForm = $objGenericForm;
     }
@@ -149,7 +149,7 @@ class GenericSubForm extends Zend_Form_SubForm
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.2
      */
-    public function addField(GenericElementField &$objField, $intRegionId, $strNameExtension = '', $intRegionInstanceId = null, $blnEmpty = false)
+    public function addField(GenericElementField $objField, $intRegionId, $strNameExtension = '', $intRegionInstanceId = null, $blnEmpty = false)
     {
         try {
             $sqlStmt = array();

@@ -116,7 +116,7 @@ class Form_Helper_FormMedia extends Zend_View_Helper_FormElement
                     <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . ((array_key_exists('isCoreField', $attribs)) ? $attribs['isCoreField'] : '') . '" fieldId="' . ((array_key_exists('fieldId', $attribs)) ? $attribs['fieldId'] : '') . '" value="' . $this->view->escape($value) . '"/>';
 
         if (array_key_exists('showDisplayOptions', $attribs) && $attribs['showDisplayOptions'] != 0) {
-            $strDisplayOption = (isset($attribs['display_option'])) ? $attribs['display_option'] : '';
+            $strDisplayOption = (isset($attribs['display_option'])) ? $attribs['display_option'] : '{}';
             $objDisplayOption = json_decode(str_replace("'", '"', $strDisplayOption));
 
             if (!isset($objDisplayOption->position)) $objDisplayOption->position = 'LEFT_MIDDLE';

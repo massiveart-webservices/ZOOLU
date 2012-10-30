@@ -490,7 +490,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    final private function saveZooluFallbackTitle($stTitle, $strType, $strTypeId, $intTypeVersion, Model_Table_Generics &$objGenTable)
+    final private function saveZooluFallbackTitle($stTitle, $strType, $strTypeId, $intTypeVersion, Model_Table_Generics $objGenTable)
     {
         try {
             $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
@@ -946,7 +946,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    final protected function insertMultiplyRegionInstanceData(GenericElementRegion &$objRegion, $intRegionInstanceId, $intRegionPosition, $strType, $arrTypeProperties)
+    final protected function insertMultiplyRegionInstanceData(GenericElementRegion $objRegion, $intRegionInstanceId, $intRegionPosition, $strType, $arrTypeProperties)
     {
         try {
             if (isset($arrTypeProperties['Version'])) {
@@ -1764,7 +1764,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      * @return string
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    final protected function indexFieldNow($objField, $strField, $intFieldType, $mixedFieldValue, Zend_Search_Lucene_Document &$objDoc)
+    final protected function indexFieldNow($objField, $strField, $intFieldType, $mixedFieldValue, Zend_Search_Lucene_Document $objDoc)
     {
         try {
             $strValue = '';
@@ -1986,7 +1986,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function setGenericSetup(GenericSetup &$objGenericSetup)
+    public function setGenericSetup(GenericSetup $objGenericSetup)
     {
         $this->setup = $objGenericSetup;
     }

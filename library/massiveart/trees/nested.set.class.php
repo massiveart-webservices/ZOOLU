@@ -90,7 +90,7 @@ class NestedSet
     /**
      * Constructor
      */
-    public function __construct(Zend_Db_Table_Abstract &$objTable)
+    public function __construct(Zend_Db_Table_Abstract $objTable)
     {
         $this->objTable = $objTable;
         $this->core = Zend_Registry::get('Core');

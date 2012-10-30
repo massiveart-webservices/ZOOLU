@@ -283,7 +283,7 @@ class Media_UploadController extends AuthControllerAction
      * @author Cornelius Hansjakob <cha@massiveart.at>
      * @version 1.0
      */
-    private function writeViewData(File &$objFile)
+    private function writeViewData(File $objFile)
     {
         $this->core->logger->debug('media->controllers->UploadController->writeViewData()');
 
