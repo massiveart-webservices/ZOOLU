@@ -267,6 +267,7 @@ class GenericSetup
     */
     const FIELD_TYPE_ID_TAG = 16;
     const FIELD_TYPE_ID_ARTICLES = 34;
+    const FIELD_TYPE_ID_IMAGEMAP = 35;
 
     /**
      * @var Core
@@ -737,6 +738,10 @@ class GenericSetup
                          */
                         if (array_key_exists('divRegion_' . $objRegion->getRegionId(), $arrRegionOrder)) {
                             foreach ($arrRegionOrder['divRegion_' . $objRegion->getRegionId()] as $intRegionInstanceId) {
+                                
+                                if ($intRegionInstanceId != 'n' && key_exists('divRegion_' .$objRegion->getRegionId().'_'.$intRegionInstanceId.'_regionUniqueId', $arrValues)) {
+                                    $objRegion->addRegionUniqueId($intRegionInstanceId, $arrValues['divRegion_' .$objRegion->getRegionId().'_'.$intRegionInstanceId.'_regionUniqueId']);
+                                }
                                 if (is_numeric($intRegionInstanceId) && $intRegionInstanceId > 0) {
                                     $objRegion->addRegionInstanceId($intRegionInstanceId);
 
@@ -884,9 +889,9 @@ class GenericSetup
             $this->setDestinationId((isset($objCurrElement->idDestination) ? $objCurrElement->idDestination : 0));
             $this->setSegmentId((isset($objCurrElement->idSegments) ? $objCurrElement->idSegments : 0));
             $this->setHideInSitemap((isset($objCurrElement->hideInSitemap) ? $objCurrElement->hideInSitemap : false));
-            $this->setShowInWebsite((isset($objCurrElement->showInWebsite) ? $objCurrElement->showInWebsite : true));
-            $this->setShowInTablet((isset($objCurrElement->showInTablet) ? $objCurrElement->showInTablet : true));
-            $this->setShowInMobile((isset($objCurrElement->showInMobile) ? $objCurrElement->showInMobile : true));
+            $this->setShowInWebsite((isset($objCurrElement->showInWebsite) && !is_null($objCurrElement->showInWebsite) ? $objCurrElement->showInWebsite : true));
+            $this->setShowInTablet((isset($objCurrElement->showInTablet) && !is_null($objCurrElement->showInTablet) ? $objCurrElement->showInTablet : true));
+            $this->setShowInMobile((isset($objCurrElement->showInMobile) && !is_null($objCurrElement->showInMobile) ? $objCurrElement->showInMobile : true));
             $this->setElementVersion((isset($objCurrElement->version) ? $objCurrElement->version : 0));
             $this->setStatusId((isset($objCurrElement->idStatus) ? $objCurrElement->idStatus : 0));
         }

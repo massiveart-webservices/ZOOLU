@@ -1462,14 +1462,14 @@ class Model_Folders extends ModelAbstract
         }
 
         $objSelect = $this->getRootLevelTable()->select()
-            ->distinct()
-            ->union(array($objSelect1, $objSelect2))
-            ->order('lft')
-            ->order('isStartPage DESC')
-            ->order('sortPosition ASC')
-            ->order('sortTimestamp DESC');
-            
-            
+        ->distinct()
+        ->union(array($objSelect1, $objSelect2))
+        ->order('lft')
+        ->order('isStartPage DESC')
+        ->order('sortPosition ASC')
+        ->order('sortTimestamp DESC');
+
+
         return $this->getRootLevelTable()->fetchAll($objSelect);
     }
 
@@ -1481,40 +1481,39 @@ class Model_Folders extends ModelAbstract
      * @return Zend_Db_Table_Rowset_Abstract
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function loadWebsiteGlobalTree($intParentId, $arrFilterOptions = array(), $intRootLevelGroupId = 0, $intDepth = 99)
-    {
-        $this->core->logger->debug('core->models->Folders->loadWebsiteGlobalTree(' . $intParentId . ',' . $arrFilterOptions . ', ' . $intRootLevelGroupId . ', ' . $intDepth . ')');
+    public function loadWebsiteGlobalTree($intParentId, $arrFilterOptions = array(), $intRootLevelGroupId = 0, $intDepth = 99){
+        $this->core->logger->debug('core->models->Folders->loadWebsiteGlobalTree('.$intParentId.','.$arrFilterOptions.', '.$intRootLevelGroupId.', '.$intDepth.')');
 
         $strFolderFilter = '';
         $strGlobalFilter = '';
-        if (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)) {
-            $strFolderFilter = 'AND folderProperties.idStatus = ' . $this->core->sysConfig->status->live;
-            $strGlobalFilter = 'AND globalProperties.idStatus = ' . $this->core->sysConfig->status->live;
+        if(!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)){
+            $strFolderFilter = 'AND folderProperties.idStatus = '.$this->core->sysConfig->status->live;
+            $strGlobalFilter = 'AND globalProperties.idStatus = '.$this->core->sysConfig->status->live;
         }
 
         $objSelect = $this->getFolderTable()->select();
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from($this->objFolderTable, array('idFolder' => 'id', 'folderId', 'parentId' => 'idParentFolder', 'depth', 'folderOrder' => 'sortPosition'))
-            ->join(array('parent' => 'folders'), 'parent.id = ' . $this->core->dbh->quote($intParentId, Zend_Db::INT_TYPE), array())
-            ->join('folderProperties', 'folderProperties.folderId = folders.folderId AND
+        ->join(array('parent' => 'folders'), 'parent.id = '.$this->core->dbh->quote($intParentId, Zend_Db::INT_TYPE), array())
+        ->join('folderProperties', 'folderProperties.folderId = folders.folderId AND
                                           folderProperties.version = folders.version AND
-                                          folderProperties.idLanguages = ' . $this->intLanguageId
-            . ' ' . $strFolderFilter, array('folderStatus' => 'idStatus'))
-            ->join('folderTitles', 'folderTitles.folderId = folders.folderId AND
+                                          folderProperties.idLanguages = '.$this->intLanguageId
+        .' '.$strFolderFilter,array('folderStatus' => 'idStatus'))
+        ->join('folderTitles', 'folderTitles.folderId = folders.folderId AND
                                       folderTitles.version = folders.version AND
-                                      folderTitles.idLanguages = ' . $this->intLanguageId, array('folderTitle' => 'title'))
-            ->join('languages', 'languages.id = folderTitles.idLanguages', array('languageCode'));
-        if ($intRootLevelGroupId == $this->core->sysConfig->root_level_groups->product) {
+                                      folderTitles.idLanguages = '.$this->intLanguageId, array('folderTitle' => 'title'))
+        ->join('languages', 'languages.id = folderTitles.idLanguages',array('languageCode'));
+        if($intRootLevelGroupId == $this->core->sysConfig->root_level_groups->product){
             $objSelect->join('globals AS lP', 'lP.idParent = folders.id AND
-                                        lP.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idGlobal' => 'id', 'globalId', 'isStartGlobal', 'globalOrder' => 'sortPosition'))
-                ->join('globalLinks', 'globalLinks.idGlobals = lP.id', array())
-                ->join('globals', 'globals.globalId = globalLinks.globalId', array('id'))
-                ->joinLeft('urls', 'urls.relationId = lP.globalId AND urls.version = lP.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1', array('url'));
-        } else {
+                                        lP.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('idGlobal' => 'id', 'globalId', 'isStartGlobal', 'globalOrder' => 'sortPosition'))
+            ->join('globalLinks', 'globalLinks.idGlobals = lP.id', array())
+            ->join('globals', 'globals.globalId = globalLinks.globalId', array('id'))
+            ->joinLeft('urls', 'urls.relationId = lP.globalId AND urls.version = lP.version AND urls.idUrlTypes = '.$this->core->sysConfig->url_types->global.' AND urls.idLanguages = '.$this->intLanguageId.' AND urls.isMain = 1', array('url'));
+        }else{
             $objSelect->join('globals', 'globals.idParent = folders.id AND
-                                   globals.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('id', 'idGlobal' => 'id', 'globalId', 'isStartGlobal', 'globalOrder' => 'sortPosition'))
-                ->joinLeft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1', array('url'));
+                                   globals.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('id', 'idGlobal' => 'id', 'globalId', 'isStartGlobal', 'globalOrder' => 'sortPosition'))
+            ->joinLeft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = '.$this->core->sysConfig->url_types->global.' AND urls.idLanguages = '.$this->intLanguageId.' AND urls.isMain = 1', array('url'));
 
         }
 
@@ -1523,36 +1522,41 @@ class Model_Folders extends ModelAbstract
             $strShowInNavigation = ' ';
         }
 
+        $strTypeFilter = '';
+        if (array_key_exists('PageType', $arrFilterOptions) && $arrFilterOptions['PageType'] > 0 && $arrFilterOptions['PageType'] != '') {
+            $strTypeFilter = ' AND globalProperties.idGlobalTypes = '.$arrFilterOptions['PageType'].' ';
+        }
+
         $objSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId AND
                                           globalProperties.version = globals.version AND
-                                          globalProperties.idLanguages = ' . $this->intLanguageId .
-            ' ' . $strShowInNavigation . ' ' . $strGlobalFilter, array('globalStatus' => 'idStatus', 'idGlobalTypes', 'idLanguageFallbacks', 'changed', 'published'))
-            ->join('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version'))
-            ->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $this->intLanguageId, array('globalTitle' => 'title'))
-            ->joinLeft(array('fallbackTitles' => 'globalTitles'), 'fallbackTitles.globalId = globals.globalId AND fallbackTitles.version = globals.version AND fallbackTitles.idLanguages = globalProperties.idLanguageFallbacks', array('fallbackTitle' => 'title'))
-            ->joinLeft(array('fallbackProperties' => 'globalProperties'), 'fallbackProperties.globalId = globals.globalId AND fallbackProperties.version = globals.version AND fallbackProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array())
-            ->joinLeft(array('fallbackGenericForms' => 'genericForms'), 'fallbackGenericForms.id = fallbackProperties.idGenericForms', array('fallbackGenericFormId' => 'genericFormId', 'fallbackGenericFormVersion' => 'version', 'fallbackGenericFormTypeId' => 'idGenericFormTypes'))
-            ->where('folders.lft BETWEEN parent.lft AND parent.rgt')
-            ->where('folders.idRootLevels = parent.idRootLevels')
-            ->where('folders.depth < parent.depth + ' . $intDepth)
-            ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
+                                          globalProperties.idLanguages = '.$this->intLanguageId.
+                                          ' '.$strShowInNavigation.' '.$strGlobalFilter.' '.$strTypeFilter, array('globalStatus' => 'idStatus', 'idGlobalTypes', 'idLanguageFallbacks', 'changed', 'published'))              
+        ->join('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version'))
+        ->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->intLanguageId, array('globalTitle' => 'title'))
+        ->joinLeft(array('fallbackTitles' => 'globalTitles'), 'fallbackTitles.globalId = globals.globalId AND fallbackTitles.version = globals.version AND fallbackTitles.idLanguages = globalProperties.idLanguageFallbacks', array('fallbackTitle' => 'title'))
+        ->joinLeft(array('fallbackProperties' => 'globalProperties'), 'fallbackProperties.globalId = globals.globalId AND fallbackProperties.version = globals.version AND fallbackProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array())
+        ->joinLeft(array('fallbackGenericForms' => 'genericForms'), 'fallbackGenericForms.id = fallbackProperties.idGenericForms', array('fallbackGenericFormId' => 'genericFormId', 'fallbackGenericFormVersion' => 'version', 'fallbackGenericFormTypeId' => 'idGenericFormTypes'))
+        ->where('folders.lft BETWEEN parent.lft AND parent.rgt')
+        ->where('folders.idRootLevels = parent.idRootLevels')
+        ->where('folders.depth < parent.depth + ' . $intDepth)
+        ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
 
 
-        if (array_key_exists('CategoryId', $arrFilterOptions) && $arrFilterOptions['CategoryId'] > 0 && $arrFilterOptions['CategoryId'] != '') {
+        if(array_key_exists('CategoryId', $arrFilterOptions) && $arrFilterOptions['CategoryId'] > 0 && $arrFilterOptions['CategoryId'] != ''){
             $objSelect->join('globalCategories', 'globalCategories.globalId = globals.globalId AND globalCategories.version = globals.version AND globalCategories.idLanguages = globalProperties.idLanguages', array())
-                ->where('globalCategories.category = ?', $arrFilterOptions['CategoryId']);
+            ->where('globalCategories.category = ?', $arrFilterOptions['CategoryId']);
         }
 
-        if (array_key_exists('LabelId', $arrFilterOptions) && $arrFilterOptions['LabelId'] > 0 && $arrFilterOptions['LabelId'] != '') {
+        if(array_key_exists('LabelId', $arrFilterOptions) && $arrFilterOptions['LabelId'] > 0 && $arrFilterOptions['LabelId']  != ''){
             $objSelect->join('globalLabels', 'globalLabels.globalId = globals.globalId AND globalLabels.version = globals.version AND globalLabels.idLanguages = globalProperties.idLanguages', array())
-                ->where('globalLabels.label = ?', $arrFilterOptions['LabelId']);
+            ->where('globalLabels.label = ?', $arrFilterOptions['LabelId'] );
         }
 
-        if (array_key_exists('SortType', $arrFilterOptions) && $arrFilterOptions['SortType'] > 0 && $arrFilterOptions['SortType'] != '') {
+        if(array_key_exists('SortType', $arrFilterOptions) && $arrFilterOptions['SortType'] > 0 && $arrFilterOptions['SortType'] != ''){
             $strSortOrder = '';
 
-            if (array_key_exists('SortOrder', $arrFilterOptions) && $arrFilterOptions['SortOrder'] > 0 && $arrFilterOptions['SortOrder'] != '') {
-                switch ($arrFilterOptions['SortOrder']) {
+            if(array_key_exists('SortOrder', $arrFilterOptions) && $arrFilterOptions['SortOrder'] > 0 && $arrFilterOptions['SortOrder'] != ''){
+                switch($arrFilterOptions['SortOrder']){
                     case $this->core->sysConfig->sort->orders->asc->id:
                         $strSortOrder = ' ASC';
                         break;
@@ -1562,37 +1566,37 @@ class Model_Folders extends ModelAbstract
                 }
             }
 
-            switch ($arrFilterOptions['SortType']) {
+            switch($arrFilterOptions['SortType']){
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $objSelect->order(array('folders.sortPosition' . $strSortOrder, 'globals.sortPosition' . $strSortOrder, 'globals.sortTimestamp' . (($strSortOrder == 'DESC') ? ' ASC' : ' DESC')));
+                    $objSelect->order(array('folders.sortPosition'.$strSortOrder, 'globals.sortPosition'.$strSortOrder, 'globals.sortTimestamp'.(($strSortOrder == 'DESC') ? ' ASC' : ' DESC')));
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
-                    $objSelect->order(array('globalProperties.created' . $strSortOrder));
-                    break;
-                case $this->core->sysConfig->sort->types->changed->id:
-                    $objSelect->order(array('globalProperties.changed' . $strSortOrder));
-                    break;
-                case $this->core->sysConfig->sort->types->published->id:
-                    $objSelect->order(array('globalProperties.published' . $strSortOrder));
-                    break;
-                case $this->core->sysConfig->sort->types->alpha->id:
-                    $objSelect->order(array('globalTitles.title' . $strSortOrder));
-                    break;
-            }
-        } else {
-            $objSelect->order('folders.lft')
+          $objSelect->order(array('globalProperties.created'.$strSortOrder));
+          break;
+        case $this->core->sysConfig->sort->types->changed->id:
+          $objSelect->order(array('globalProperties.changed'.$strSortOrder));
+          break;
+        case $this->core->sysConfig->sort->types->published->id:
+          $objSelect->order(array('globalProperties.published'.$strSortOrder));
+          break;
+        case $this->core->sysConfig->sort->types->alpha->id:
+          $objSelect->order(array('globalTitles.title'.$strSortOrder)); 
+          break;
+      }
+    }else{
+      $objSelect->order('folders.lft')
                 ->order('globals.isStartGlobal DESC')
                 ->order('globals.sortPosition ASC')
                 ->order('globals.sortTimestamp DESC')
                 ->order('globals.id ASC');
-        }
-
-        if (array_key_exists('Number', $arrFilterOptions) && $arrFilterOptions['Number'] > 0 && $arrFilterOptions['Number'] != '') {
-            $objSelect->limit($arrFilterOptions['Number']);
-        }
-
-        return $this->objFolderTable->fetchAll($objSelect);
     }
+    
+    if(array_key_exists('Number', $arrFilterOptions) && $arrFilterOptions['Number'] > 0 && $arrFilterOptions['Number'] != ''){
+      $objSelect->limit($arrFilterOptions['Number']);
+    }
+    
+    return $this->objFolderTable->fetchAll($objSelect);    
+  }
 
     /**
      * loadLimitedRootLevelChilds
