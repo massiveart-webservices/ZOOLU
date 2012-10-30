@@ -90,7 +90,7 @@ class PageHelper {
    */
   public function __construct($blnRequireFrunctionWrapper = true){
     $this->core = Zend_Registry::get('Core');
-    
+
     /**
      * function call wrapper for PageHelper
      */
