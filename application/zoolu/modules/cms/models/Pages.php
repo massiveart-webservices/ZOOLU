@@ -1077,7 +1077,7 @@ class Model_Pages extends ModelAbstract
      */
     public function loadPagesByFilter($intParentFolderId, $arrTagIds = array())
     {
-        $this->core->logger->debug('cms->models->Model_Pages->loadPagesByFilter(' . $intParentFolderId . ')');
+        $this->core->logger->debug('cms->models->Model_Pages->loadPagesByFilter(' . json_encode($intParentFolderId) . ')');
 
         $strTagIds = '';
         if (count($arrTagIds) > 0) {

@@ -74,11 +74,6 @@ class OverlayHelper
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getNavigationElements()');
 
-
-        if ($replace == '') {
-            $replace = 'false';
-        }
-
         $strOutput = '';
 
 //        $strType = '';
