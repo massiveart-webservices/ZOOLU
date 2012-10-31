@@ -907,6 +907,10 @@ class PageHelper {
           
           $objFiles = $this->objPage->getFileFieldValueById($objMyMultiRegion->getField('block_pics')->getInstanceValue($intRegionInstanceId));
           $objDisplayOption = json_decode(str_replace("'", '"', $objMyMultiRegion->getField('block_pics')->getInstanceProperty($intRegionInstanceId, 'display_option')));
+
+          if ($objDisplayOption == null) {
+              $objDisplayOption = new stdClass();
+          }
           
           if(!isset($objDisplayOption->position) || $objDisplayOption->position == null) $objDisplayOption->position = 'LEFT_MIDDLE';
           if(!isset($objDisplayOption->size) || $objDisplayOption->size == null) $objDisplayOption->size = $strImageFolder;
