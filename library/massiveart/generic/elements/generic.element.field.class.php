@@ -147,7 +147,19 @@ class GenericElementField extends GenericElementAbstract
     {
         return $this->arrProperties;
     }
-
+    
+    /**
+     * getInstanceProperties
+     * @param integer $intInstanceId
+     * @return array
+     */
+    public function getInstanceProperties($intInstanceId)
+    {
+        if (array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
+            return $this->arrInstanceProperties[$intInstanceId];
+        }
+        return array();
+    }
     
     /**
      * getProperties
@@ -161,18 +173,14 @@ class GenericElementField extends GenericElementAbstract
         } 
     }
     
-    
     /**
-     * getProperties
-     * @param integer $intInstanceId
-     * @return array
+     * setProperty
+     * @param string $strName
+     * @param mixed $mixedValue
      */
-    public function getInstanceProperties($intInstanceId)
+    public function setProperty($strName, $mixedValue) 
     {
-        if (array_key_exists($intInstanceId, $this->arrInstanceProperties)) {
-            return $this->arrInstanceProperties[$intInstanceId];
-        }
-        return array();
+        $this->arrProperties[$strName] = $mixedValue;
     }
 }
 

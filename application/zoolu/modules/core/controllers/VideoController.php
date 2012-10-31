@@ -119,7 +119,7 @@ class Core_VideoController extends AuthControllerAction
                         } else {
                             $objQuery = $objResponse->newVideoQuery();
                             $objQuery->setOrderBy('viewCount');
-                            $objQuery->setSafeSearch('none');
+                            //$objQuery->setSafeSearch('none');
                             $objQuery->setVideoQuery($strSearchQuery);
                             $arrVideos = $objResponse->getVideoFeed($objQuery->getQueryUrl(2));
                         }

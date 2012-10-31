@@ -289,6 +289,17 @@ class GenericForm extends Zend_Form
                         }
                     }
                 }
+                if ($objRegion->getRegionTypeId() == $this->core->sysConfig->region_types->unique) {
+                    foreach ($objRegion->RegionInstanceIds() as $intRegionInstanceId) {
+                        foreach ($this->getSubForms() as $subform) {
+                            $displayGroup = $subform->getDisplayGroup($objRegion->getRegionId() . '_' . $intRegionInstanceId);
+                            if ($displayGroup != null) {
+                                $displayGroup->setAttrib('regionUniqueId', $objRegion->getRegionUniqueId($intRegionInstanceId));    
+                            }
+                        }
+                        
+                    }
+                }
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -425,7 +436,6 @@ class GenericForm extends Zend_Form
 
                             $strRegionInstances = '';
                             $intRegionCounter = 0;
-
                             foreach ($objRegion->RegionInstanceIds() as $intRegionInstanceId) {
                                 $intRegionCounter++;
                                 $objSubForm->addDisplayGroup($arrRegionFieldElements[$objRegion->getRegionId() . '_' . $intRegionInstanceId], $objRegion->getRegionId() . '_' . $intRegionInstanceId, array(
@@ -434,6 +444,7 @@ class GenericForm extends Zend_Form
                                                                                                                                                                                                            'collapsable'   => (($objRegion->getRegionCollapsable() == true) ? 1 : 0),
                                                                                                                                                                                                            'position'      => $objRegion->getRegionPosition(),
                                                                                                                                                                                                            'regionCounter' => $intRegionCounter,
+                                																																										   'regionUniqueId'=> $objRegion->getRegionUniqueId($intRegionInstanceId),
                                                                                                                                                                                                            'style'         => $strRegionStyle,
                                                                                                                                                                                                            'regionId'      => $objRegion->getRegionId(),
                                                                                                                                                                                                            'regionExt'     => $intRegionInstanceId,

@@ -61,6 +61,7 @@ class GenericElementRegion extends GenericElementAbstract
     protected $arrFields = array();
 
     protected $arrRegionInstanceIds = array();
+    public $arrRegionUniqueIds = array();
 
     /**
      * property of the region instance id array
@@ -439,6 +440,28 @@ class GenericElementRegion extends GenericElementAbstract
     public function getRegionMultiplyRegion()
     {
         return $this->blnRegionMultiplyRegion;
+    }
+    
+    /**
+     * addRegionUniqueId
+     * @parma int $intInstanceId
+     * @param string $strUnique
+     */
+    public function addRegionUniqueId($intInstanceId, $strUniqueId)
+    {
+        $this->arrRegionUniqueIds['region_instance_' . $intInstanceId] = $strUniqueId;
+    }
+
+    /**
+     * getRegionUniqueId
+     * @param int $intInstanceId
+     * @return string 
+     */
+    public function getRegionUniqueId($intInstanceId)
+    {
+        if (key_exists('region_instance_' . $intInstanceId, $this->arrRegionUniqueIds)) {
+            return $this->arrRegionUniqueIds['region_instance_' . $intInstanceId];
+        }
     }
 }
 
