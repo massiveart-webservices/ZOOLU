@@ -6,14 +6,14 @@ $objHelper = new OverlayHelper();
 <div class="oltitle"><?php echo $this->overlaytitle; ?></div>
 <div class="spacer1"></div>
 <div class="olnavigationwrapper">
-    <?php echo $objHelper->getNavigationElements($this->elements, $this->viewtype, 0, $this->rootLevelId, $this->rootLevelType, $this->contenttype, $this->selectOne); ?>
+    <?php echo $objHelper->getNavigationElements($this->elements, $this->viewtype, 0, $this->rootLevelId, $this->rootLevelType, $this->contenttype, $this->selectOne, $this->replace); ?>
 </div>
 <?php if ($this->rootLevelType == Zend_Registry::get('Core')->sysConfig->root_level_types->images) : ?>
 <div class="contenthead">
     <?php echo $objHelper->getMediaFilter($this->rootLevelId, $this->viewtype, $this->contenttype); ?>
     <div id="mediaviewtypes">
-        <div onclick="myOverlay.setViewType(1, 'ol_'); return false;" class="iconthumbview" id="ol_divThumbView"></div>
-        <div onclick="myOverlay.setViewType(2, 'ol_'); return false;" class="iconlistview_on" id="ol_divListView"></div>
+        <div onclick="myOverlay.setViewType(1, 'ol_', false, <?php echo $this->replace ?> ); return false;" class="iconthumbview" id="ol_divThumbView"></div>
+        <div onclick="myOverlay.setViewType(2, 'ol_', false, <?php echo $this->replace ?> ); return false;" class="iconlistview_on" id="ol_divListView"></div>
         <div class="clear"></div>
     </div>
     <div class="clear"></div>

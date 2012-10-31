@@ -120,6 +120,45 @@ class Global_ElementController extends AuthControllerAction
     public function indexAction()
     {
     }
+    
+    /**
+     * listdeleteAction
+     */
+    public function listdeleteAction() {
+        $this->core->logger->debug('global->controllers->ElementController->listdeleteAction()');
+        $this->_helper->viewRenderer->setNoRender();
+        try {
+            $this->getModelGlobals();
+
+            $blnGeneralDeleteAuthorization = Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objRequest->getParam("rootLevelId"), Security::PRIVILEGE_DELETE, false, false);
+            $blnDeleteAuthorization = ($blnGeneralDeleteAuthorization == true) ? $blnGeneralDeleteAuthorization : Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objRequest->getParam("rootLevelId") . '_' . $this->objRequest->getParam("languageId"), Security::PRIVILEGE_DELETE, false, false);
+
+            if ($blnDeleteAuthorization == true) {
+                if ($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
+                    if ($this->objRequest->getParam('values') && $this->objRequest->getParam('values') != '') {
+                        $arrValues = explode('][', trim($this->objRequest->getParam('values'), ']['));
+                        foreach ($arrValues as $value) {
+                            $objGlobals = $this->objModelGlobals->load($value);
+                            $objGlobal = $objGlobals->current();
+                            if ($objGlobal['isStartGlobal']) {
+                                $objGlobalLinks = $this->objModelGlobals->loadLinkByGlobalId($objGlobal['globalId']);
+                                foreach ($objGlobalLinks as $objGlobalLink) {
+                                    if ($objGlobalLink['idParentTypes'] == $this->core->sysConfig->parent_types->folder) {
+                                        $this->getModelFolders()->deleteFolder($objGlobalLink['idParent']);
+                                    }
+                                }    
+                            }
+                            $this->objModelGlobals->delete($value); 
+                        }
+                    }
+                }
+            }
+            $this->_forward('list');
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            exit();
+        }
+    }
 
     /**
      * listAction
@@ -145,7 +184,9 @@ class Global_ElementController extends AuthControllerAction
             ->joinLeft(array('editor' => 'users'), 'editor.id = globalProperties.idUsers', array('editor' => 'CONCAT(`editor`.`fname`, \' \', `editor`.`sname`)', 'globalProperties.changed'))
             ->where('idParent = ?', $this->getRequest()->getParam('rootLevelId'))
             ->where('idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel)
-            ->where('isStartGlobal = 0');
+            ->where('isStartGlobal = 0')
+            //->where('globalProperties.idGlobalTypes IN (' . $this->core->sysConfig->global_types->product->id . ', ' . $this->core->sysConfig->global_types->startpage_product->id . ')' );
+            ;
         if ($strSearchValue != '') {
             $objSelect->where('globalTitles.title LIKE ?', '%' . $strSearchValue . '%');
         }
@@ -353,7 +394,11 @@ class Global_ElementController extends AuthControllerAction
              * output of metainformation to hidden div
              */
             $this->setViewMetaInfos();
-
+            
+            /*
+             * fix for saving products in "All Products" View 
+             */
+            $this->view->sourceView = $this->getRequest()->getParam('sourceView', null);
             $this->view->form = $this->objForm;
 
             $this->renderScript('element/form.phtml');
@@ -826,6 +871,7 @@ class Global_ElementController extends AuthControllerAction
             //Set backlink
             $this->objRequest->setParam('backLink', $this->objRequest->getParam('backLink', false));
             $strGroupKey = $this->objRequest->getParam('rootLevelGroupKey');
+            $strGroupKeyStartpage = 'startpage_' . $strGroupKey;
             $strGroupKeyLink = $strGroupKey . '_link';
             $strGroupKeyOverview = $strGroupKey . '_overview';
             if ($this->objRequest->getParam('elementTypeId') != '' && $this->objRequest->getParam('elementTypeId') > 0) {
@@ -839,6 +885,10 @@ class Global_ElementController extends AuthControllerAction
                         } else {
                             $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKey->default_templateId);
                         }
+                        break;
+                    case $this->core->sysConfig->global_types->$strGroupKeyStartpage->id :                        
+                        $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKeyStartpage->default_templateId);
+                        $this->objRequest->setParam('formId', '');
                         break;
                     case $this->core->sysConfig->global_types->$strGroupKeyOverview->id :
                         $this->objRequest->setParam('formId', '');

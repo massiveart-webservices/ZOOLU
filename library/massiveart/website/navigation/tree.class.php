@@ -201,7 +201,7 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
      */
     public function __set($strName, $obj)
     {
-        if ($value instanceof NavigationItem) {
+        if ($obj instanceof NavigationItem) {
             $this->addtem($obj, $strName);
             return;
         } elseif ($obj instanceof NavigationTree) {
