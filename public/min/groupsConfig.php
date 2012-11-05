@@ -38,7 +38,8 @@ return array(
     '//zoolu-statics/js_incs/navigation.js',
     '//zoolu-statics/js_incs/form.js',
     '//zoolu-statics/js_incs/overlay.js',
-    '//zoolu-statics/js_incs/dashboard.js'),
+    '//zoolu-statics/js_incs/dashboard.js',
+    '//zoolu-statics/js_incs/contentchooser.js'),
   'zExtCss' => array(
     '//zoolu-statics/js_incs/ext.js/resources/css/ext-all.css',
     '//zoolu-statics/js_incs/ext.js/resources/css/xtheme-gray.css'),

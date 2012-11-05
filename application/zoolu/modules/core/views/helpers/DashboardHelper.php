@@ -541,7 +541,7 @@ class DashboardHelper
                 if ($intFolderId == 0) {
                     $strReturn .= '
                         <div id="olnavitem' . $row->id . '" class="olnavrootitem">
-                            <div onclick="myDashboard.getNavItem(' . $row->id . ', ' . $intRootLevelTypeId . ', ' . $intRootLevelGroupId . ', ' . $viewtype . $strType . '); return false;" style="position:relative;">
+                            <div onclick="myContentchooser.getNavItem(' . $row->id . ', ' . $intRootLevelTypeId . ', ' . $intRootLevelGroupId . ', ' . $viewtype . $strType . '); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>
@@ -549,7 +549,7 @@ class DashboardHelper
                 } else {
                     $strReturn .= '
                         <div id="olnavitem' . $row->id . '" class="olnavchilditem">
-                            <div onclick="myDashboard.getNavItem(' . $row->id . ', ' . $intRootLevelTypeId . ', ' . $intRootLevelGroupId . ', ' . $viewtype . $strType . '); return false;" style="position:relative;">
+                            <div onclick="myContentchooser.getNavItem(' . $row->id . ', ' . $intRootLevelTypeId . ', ' . $intRootLevelGroupId . ', ' . $viewtype . $strType . '); return false;" style="position:relative;">
                                 <div class="icon img_folder_on"></div>
                                 <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                             </div>
@@ -688,7 +688,7 @@ class DashboardHelper
                     $strStartElement = 'isStart' . ucfirst($strContentType);
 
                     $strOutput .= '
-                        <div class="olpageitem" id="olItem' . $row->id . '" onclick="myDashboard.addItemToListArea(' . $row->id . ((isset($row->linkId) && $row->linkId > 0) ? ',' . $row->linkId : '') . '); return false;"' . $strHidden . '>
+                        <div class="olpageitem" id="olItem' . $row->id . '" onclick="myContentchooser.addItemToListArea(' . $row->id . ((isset($row->linkId) && $row->linkId > 0) ? ',' . $row->linkId : '') . '); return false;"' . $strHidden . '>
                             <div class="olpageleft"></div>
                             <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
                             <div class="icon olpageicon img_' . (($row->$strStartElement == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
@@ -807,7 +807,7 @@ class DashboardHelper
                 // only PORTALS, GLOBAL, MEDIA visible
                 if ($objRow->resourceKey == 'portals' || $objRow->resourceKey == 'global' || $objRow->resourceKey == 'media') { // || $objRow->resourceKey == 'media'
                     $strReturn .= '
-                        <div class="olcontactitem" id="olModuleItem' . $objRow->id . '" onclick="myDashboard.getModule(' . $objRow->id . '); return false;">
+                        <div class="olcontactitem" id="olModuleItem' . $objRow->id . '" onclick="myContentchooser.getModule(' . $objRow->id . '); return false;">
                             <div class="olcontactleft"></div>
                             <div style="display:none;" id="Remove' . $objRow->id . '" class="itemremovelist"></div>
                             <div class="olcontactitemtitle">' . $this->objTranslate->_($objRow->resourceKey) . '</div>
@@ -861,7 +861,7 @@ class DashboardHelper
             foreach ($objElements as $objRow) {
                 if ($objRow->id != $this->core->sysConfig->product->rootLevels->list->id) { // 11 - All Products
                     $strReturn .= '
-                        <div class="olcontactitem" id="olRootLevelItem' . $objRow->id . '" onclick="myDashboard.getRootLevel(' . $objRow->id . ',' . $objRow->idRootLevelTypes . ',' . $objRow->idRootLevelGroups . ((isset($objRow->rootLevelLanguageId) && $objRow->rootLevelLanguageId != '') ? ', ' . $objRow->rootLevelLanguageId : '') . '); return false;">
+                        <div class="olcontactitem" id="olRootLevelItem' . $objRow->id . '" onclick="myContentchooser.getRootLevel(' . $objRow->id . ',' . $objRow->idRootLevelTypes . ',' . $objRow->idRootLevelGroups . ((isset($objRow->rootLevelLanguageId) && $objRow->rootLevelLanguageId != '') ? ', ' . $objRow->rootLevelLanguageId : '') . '); return false;">
                             <div class="olcontactleft"></div>
                             <div style="display:none;" id="Remove' . $objRow->id . '" class="itemremovelist"></div>
                             <div class="olcontactitemtitle">' . $objRow->title . '</div>
