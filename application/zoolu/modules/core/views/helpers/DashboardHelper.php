@@ -779,59 +779,6 @@ class DashboardHelper
     }
 
     /**
-     * getModuleListView
-     * @param object $objElements
-     * @param string $strOverlayTitle
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function getModuleListView($objElements, $strOverlayTitle)
-    {
-        $this->core->logger->debug('core->views->helpers->DashboardHelper->getModuleListView()');
-
-        $strReturn = '';
-
-        if (count($objElements) > 0) {
-            /**
-             * create header of list output
-             */
-            $strReturn .= '
-                <div id="olModules">
-                    <div id="olModules_title" style="display:none;">' . $strOverlayTitle . '</div>
-                    <div class="olcontacttop">
-                        ' . $this->objTranslate->_('Name') . '
-                    </div>
-                    <div class="olcontactitemcontainer">';
-
-            foreach ($objElements as $objRow) {
-                // only PORTALS, GLOBAL, MEDIA visible
-                if ($objRow->resourceKey == 'portals' || $objRow->resourceKey == 'global' || $objRow->resourceKey == 'media') { // || $objRow->resourceKey == 'media'
-                    $strReturn .= '
-                        <div class="olcontactitem" id="olModuleItem' . $objRow->id . '" onclick="myContentchooser.getModule(' . $objRow->id . '); return false;">
-                            <div class="olcontactleft"></div>
-                            <div style="display:none;" id="Remove' . $objRow->id . '" class="itemremovelist"></div>
-                            <div class="olcontactitemtitle">' . $this->objTranslate->_($objRow->resourceKey) . '</div>
-                            <div class="olcontactright"></div>
-                            <div class="clear"></div>
-                        </div>';
-                }
-            }
-
-            /**
-             * list footer
-             */
-            $strReturn .= '
-                        <div class="clear"></div>
-                    </div>
-                    <div class="olcontactbottom">
-                    </div>
-                </div>';
-        }
-
-        return $strReturn;
-    }
-
-    /**
      * getRootLevelListView
      * @param object $objElements
      * @param string $strOverlayTitle

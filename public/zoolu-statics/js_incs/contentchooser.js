@@ -33,7 +33,7 @@ Massiveart.Contentchooser = Class.create({
         if($(areaId)){
             this.areaId = areaId;
             var fieldname = 'dbrd-'+this.areaId.substring(this.areaId.indexOf('_')+1);
-            new Ajax.Updater(this.updateOverlayContainer, '/zoolu/core/dashboard/overlay-modules', {
+            new Ajax.Updater(this.updateOverlayContainer, '/zoolu/core/contentchooser/overlay-modules', {
                 parameters: { relationIds: $F(fieldname) },
                 evalScripts: true,
                 onComplete: function(){

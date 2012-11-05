@@ -80,11 +80,6 @@ class Core_DashboardController extends AuthControllerAction
     protected $objModelUsers;
 
     /**
-     * @var Model_Modules
-     */
-    protected $objModelModules;
-
-    /**
      * @var Model_RootLevels
      */
     protected $objModelRootLevels;
@@ -427,34 +422,6 @@ class Core_DashboardController extends AuthControllerAction
             $this->view->assign('elements', $objUsers);
             $this->view->assign('arrSelectedIds', $arrSelectedIds);
             $this->view->assign('overlaytitle', $this->core->translate->_('Assign_contacts'));
-            $this->view->assign('translate', $this->core->translate);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
-     * overlayModulesAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayModulesAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayModulesAction()');
-        try {
-            $arrSelectedIds = array();
-
-            $strRelationIds = $this->objRequest->getParam('relationIds');
-            if ($strRelationIds != '') {
-                $strTmpRelationIds = trim($strRelationIds, '[]');
-                $arrSelectedIds = explode('][', $strTmpRelationIds);
-            }
-
-            $objModules = $this->getModelModules()->getModules();
-
-            $this->view->assign('elements', $objModules);
-            $this->view->assign('overlaytitle', $this->core->translate->_('Choose_module'));
             $this->view->assign('translate', $this->core->translate);
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -1071,26 +1038,6 @@ class Core_DashboardController extends AuthControllerAction
         }
 
         return $this->objModelUsers;
-    }
-
-    /**
-     * getModelModules
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelModules()
-    {
-        if (null === $this->objModelModules) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Modules.php';
-            $this->objModelModules = new Model_Modules();
-        }
-
-        return $this->objModelModules;
     }
 
     /**
