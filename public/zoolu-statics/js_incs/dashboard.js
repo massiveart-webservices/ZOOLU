@@ -631,32 +631,6 @@ Massiveart.Dashboard = Class.create({
   },
   
   /**
-   * stepBack 
-   */
-  stepBack: function(){
-    $$('#olContent .active').each(function(element){
-      if($(element.id)){
-        this.olCurrContainerId = element.id;
-        var prevElement = $(element.id).previous(); 
-        this.olNewContainerId = prevElement.id;
-        
-        this.moveContainers(this.olCurrContainerId, this.olNewContainerId, 'PREV');        
-        this.toggleContainerStatus('active');
-        
-        if($(this.olNewContainerId+'_title')){
-          if($('dbrdOverlayTitle')) $('dbrdOverlayTitle').update($(this.olNewContainerId+'_title').innerHTML);
-        }
-        
-        if($(prevElement.id).previous() == null){
-          if($('olBack')) $('olBack').hide();
-        }
-        
-        this.olCurrContainerId = this.olNewContainerId; 
-      }
-    }.bind(this));
-  },
-  
-  /**
    * resetForm  
    */
   resetForm: function(){
