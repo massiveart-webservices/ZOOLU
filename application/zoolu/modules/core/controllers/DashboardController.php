@@ -50,11 +50,6 @@ class Core_DashboardController extends AuthControllerAction
     protected $objRequest;
 
     /**
-     * @var Model_Folders
-     */
-    protected $objModelFolders;
-
-    /**
      * @var Model_Pages
      */
     protected $objModelPages;
@@ -425,48 +420,6 @@ class Core_DashboardController extends AuthControllerAction
     }
 
     /**
-     * overlayContentAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayContentAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayContentAction()');
-        try {
-            $intModuleId = $this->objRequest->getParam('moduleId');
-            $intRootLevelId = $this->objRequest->getParam('rootLevelId');
-            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId');
-            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId');
-
-            $this->loadRootNavigation($intModuleId, null, $intRootLevelId);
-
-            $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
-            $this->view->assign('moduleId', $intModuleId);
-            $this->view->assign('rootLevelId', $intRootLevelId);
-
-            $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
-            $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
-
-            switch ($intModuleId) {
-                case $this->core->sysConfig->modules->global:
-                    $this->view->assign('contenttype', 'global');
-                    break;
-                case $this->core->sysConfig->modules->media:
-                    $this->view->assign('contenttype', 'media');
-                    break;
-                default:
-                    $this->view->assign('contenttype', 'page');
-                    break;
-            }
-            $this->view->assign('overlaytitle', $this->core->translate->_('Choose_content'));
-            $this->view->assign('translate', $this->core->translate);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
      * overlayListAction
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
@@ -543,22 +496,6 @@ class Core_DashboardController extends AuthControllerAction
             $this->core->logger->err($exc);
             exit();
         }
-    }
-
-    /**
-     * loadRootNavigation
-     * @param integer $intRootLevelModule
-     * @param integer $intRootLevelType
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function loadRootNavigation($intRootLevelModule, $intRootLevelType = -1, $intRootLevel = null)
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->loadRootNavigation(' . $intRootLevelModule . ', ' . $intRootLevelType . ', ' . $intRootLevel . ')');
-
-        $this->getModelFolders();
-        $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel);
-        $this->view->assign('elements', $objRootLevelElements);
     }
 
     /**

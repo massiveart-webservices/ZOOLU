@@ -57,6 +57,11 @@ class Core_ContentchooserController extends AuthControllerAction
     protected $objModelRootLevels;
 
     /**
+     * @var Model_Folders
+     */
+    protected $objModelFolders;
+
+    /**
      * init
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
@@ -75,7 +80,7 @@ class Core_ContentchooserController extends AuthControllerAction
      */
     public function overlayModulesAction()
     {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayModulesAction()');
+        $this->core->logger->debug('core->controllers->ContentchooserController->overlayModulesAction()');
         try {
             $arrSelectedIds = array();
 
@@ -103,7 +108,7 @@ class Core_ContentchooserController extends AuthControllerAction
      */
     public function overlayRootlevelsAction()
     {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayRootlevelsAction()');
+        $this->core->logger->debug('core->controllers->ContentchooserController->overlayRootlevelsAction()');
         try {
             $intModuleId = $this->objRequest->getParam('moduleId');
             $objRootLevels = $this->getModelRootLevels()->loadRootLevelsByModuleId($intModuleId);
@@ -115,6 +120,68 @@ class Core_ContentchooserController extends AuthControllerAction
             $this->core->logger->err($exc);
             exit();
         }
+    }
+
+    /**
+     * overlayContentAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function overlayContentAction()
+    {
+        $this->core->logger->debug('core->controllers->ContentchooserController->overlayContentAction()');
+        try {
+            $intModuleId = $this->objRequest->getParam('moduleId');
+            $intRootLevelId = $this->objRequest->getParam('rootLevelId');
+            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId');
+            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId');
+
+            $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevelId);
+            $this->view->assign('elements', $objRootLevelElements);
+
+            $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+            $this->view->assign('moduleId', $intModuleId);
+            $this->view->assign('rootLevelId', $intRootLevelId);
+
+            $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
+            $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
+
+            switch ($intModuleId) {
+                case $this->core->sysConfig->modules->global:
+                    $this->view->assign('contenttype', 'global');
+                    break;
+                case $this->core->sysConfig->modules->media:
+                    $this->view->assign('contenttype', 'media');
+                    break;
+                default:
+                    $this->view->assign('contenttype', 'page');
+                    break;
+            }
+            $this->view->assign('overlaytitle', $this->core->translate->_('Choose_content'));
+            $this->view->assign('translate', $this->core->translate);
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            exit();
+        }
+    }
+
+    /**
+     * getItemLanguageId
+     * @param integer $intActionType
+     * @return integer
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getItemLanguageId($intActionType = null)
+    {
+        if ($this->intItemLanguageId == null) {
+            if (!$this->getRequest()->getParam("languageId")) {
+                $this->intItemLanguageId = $this->getRequest()->getParam("rootLevelLanguageId") != '' ? $this->getRequest()->getParam("rootLevelLanguageId") : $this->core->intZooluLanguageId;
+            } else {
+                $this->intItemLanguageId = $this->getRequest()->getParam("languageId");
+            }
+        }
+        return $this->intItemLanguageId;
     }
 
     /**
@@ -156,5 +223,26 @@ class Core_ContentchooserController extends AuthControllerAction
         }
 
         return $this->objModelRootLevels;
+    }
+
+    /**
+     * getModelFolders
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFolders()
+    {
+        if (null === $this->objModelFolders) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
+            $this->objModelFolders = new Model_Folders();
+            $this->objModelFolders->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelFolders;
     }
 }
