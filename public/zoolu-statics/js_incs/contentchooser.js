@@ -57,7 +57,7 @@ Massiveart.Contentchooser = Class.create({
             this.moveContainers(this.olCurrContainerId, this.olNewContainerId);
 
             if($('olModuleId')) $('olModuleId').setValue(moduleId);
-            new Ajax.Updater(this.olNewContainerId, '/zoolu/core/dashboard/overlay-rootlevels', {
+            new Ajax.Updater(this.olNewContainerId, '/zoolu/core/contentchooser/overlay-rootlevels', {
                 parameters: { moduleId: moduleId },
                 evalScripts: true,
                 onComplete: function(){
@@ -93,7 +93,7 @@ Massiveart.Contentchooser = Class.create({
             this.toggleContainerStatus('active');
 
             if($('olRootLevelId')) $('olRootLevelId').setValue(rootLevelId);
-            new Ajax.Updater(this.olNewContainerId, '/zoolu/core/dashboard/overlay-content', {
+            new Ajax.Updater(this.olNewContainerId, '/zoolu/core/contentchooser/overlay-content', {
                 parameters: {
                     rootLevelId: rootLevelId,
                     rootLevelTypeId: rootLevelTypeId,

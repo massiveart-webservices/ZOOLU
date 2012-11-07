@@ -119,6 +119,63 @@ class ContentchooserHelper
     }
 
     /**
+     * getRootLevelListView
+     * @param object $objElements
+     * @param string $strOverlayTitle
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getRootLevelListView($objElements, $strOverlayTitle)
+    {
+        $this->core->logger->debug('core->views->helpers->DashboardHelper->getRootLevelListView()');
+
+        $strReturn = '';
+
+        if (count($objElements) > 0) {
+            /**
+             * create header of list output
+             */
+            $strReturn .= '
+                <div id="olRootLevels_title" style="display:none;">' . $strOverlayTitle . '</div>
+                    <div class="olcontacttop">
+                        <div class="olcontacttopleft"></div>
+                        <div class="olcontacttopitemtitle bold">' . $this->objTranslate->_('Name') . '</div>
+                        <div class="olcontacttopright"></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="olcontactitemcontainer">';
+
+            foreach ($objElements as $objRow) {
+                if ($objRow->id != $this->core->sysConfig->product->rootLevels->list->id) { // 11 - All Products
+                    $strReturn .= '
+                        <div class="olcontactitem" id="olRootLevelItem' . $objRow->id . '" onclick="myContentchooser.getRootLevel(' . $objRow->id . ',' . $objRow->idRootLevelTypes . ',' . $objRow->idRootLevelGroups . ((isset($objRow->rootLevelLanguageId) && $objRow->rootLevelLanguageId != '') ? ', ' . $objRow->rootLevelLanguageId : '') . '); return false;">
+                            <div class="olcontactleft"></div>
+                            <div style="display:none;" id="Remove' . $objRow->id . '" class="itemremovelist"></div>
+                            <div class="olcontactitemtitle">' . $objRow->title . '</div>
+                            <div class="olcontactright"></div>
+                            <div class="clear"></div>
+                        </div>';
+                }
+            }
+
+            /**
+             * list footer
+             */
+            $strReturn .= '
+                    <div class="clear"></div>
+                </div>
+                <div class="olcontactbottom">
+                    <div class="olcontactbottomleft"></div>
+                    <div class="olcontactbottomcenter"></div>
+                    <div class="olcontactbottomright"></div>
+                    <div class="clear"></div>
+                </div>';
+        }
+
+        return $strReturn;
+    }
+
+    /**
      * setTranslate
      * @param object $objTranslate
      * @author Cornelius Hansjakob <cha@massiveart.com>

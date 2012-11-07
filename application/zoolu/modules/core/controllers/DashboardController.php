@@ -80,11 +80,6 @@ class Core_DashboardController extends AuthControllerAction
     protected $objModelUsers;
 
     /**
-     * @var Model_RootLevels
-     */
-    protected $objModelRootLevels;
-
-    /**
      * @var integer
      */
     protected $intItemLanguageId;
@@ -422,27 +417,6 @@ class Core_DashboardController extends AuthControllerAction
             $this->view->assign('elements', $objUsers);
             $this->view->assign('arrSelectedIds', $arrSelectedIds);
             $this->view->assign('overlaytitle', $this->core->translate->_('Assign_contacts'));
-            $this->view->assign('translate', $this->core->translate);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
-     * overlayRootlevelsAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayRootlevelsAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayRootlevelsAction()');
-        try {
-            $intModuleId = $this->objRequest->getParam('moduleId');
-            $objRootLevels = $this->getModelRootLevels()->loadRootLevelsByModuleId($intModuleId);
-
-            $this->view->assign('elements', $objRootLevels);
-            $this->view->assign('overlaytitle', $this->core->translate->_('Choose_main_area'));
             $this->view->assign('translate', $this->core->translate);
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -1038,27 +1012,6 @@ class Core_DashboardController extends AuthControllerAction
         }
 
         return $this->objModelUsers;
-    }
-
-    /**
-     * getModelRootLevels
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelRootLevels()
-    {
-        if (null === $this->objModelRootLevels) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/RootLevels.php';
-            $this->objModelRootLevels = new Model_RootLevels();
-            $this->objModelRootLevels->setLanguageId(1); // TODO Language from user
-        }
-
-        return $this->objModelRootLevels;
     }
 }
 
