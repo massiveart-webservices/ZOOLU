@@ -160,7 +160,7 @@ Massiveart.Contentchooser = Class.create({
                     languageCode = $F('languageCode');
                 }
 
-                new Ajax.Updater('olsubnav'+folderId, '/zoolu/core/dashboard/overlay-childnavigation', {
+                new Ajax.Updater('olsubnav'+folderId, '/zoolu/core/contentchooser/overlay-childnavigation', {
                     parameters: {
                         folderId: folderId,
                         viewtype: viewtype,

@@ -60,6 +60,11 @@ class Core_ContentchooserController extends AuthControllerAction
      * @var Model_Folders
      */
     protected $objModelFolders;
+    
+    /**
+     * @var integer
+     */
+    protected $intItemLanguageId;
 
     /**
      * init
@@ -159,6 +164,39 @@ class Core_ContentchooserController extends AuthControllerAction
             }
             $this->view->assign('overlaytitle', $this->core->translate->_('Choose_content'));
             $this->view->assign('translate', $this->core->translate);
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            exit();
+        }
+    }
+
+    /**
+     * overlayChildnavigationAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function overlayChildnavigationAction()
+    {
+        $this->core->logger->debug('core->controllers->DashboardController->overlayChildnavigationAction()');
+        try {
+            $intFolderId = $this->objRequest->getParam('folderId');
+            $intViewType = $this->objRequest->getParam('viewtype');
+            $intLanguageId = $this->objRequest->getParam('languageId');
+            $strContentType = $this->objRequest->getParam('contenttype');
+            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId', '');
+            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId', '');
+
+            /**
+             * get childfolders
+             */
+            $objChildelements = $this->getModelFolders()->loadChildFolders($intFolderId);
+
+            $this->view->assign('elements', $objChildelements);
+            $this->view->assign('intFolderId', $intFolderId);
+            $this->view->assign('viewtype', $intViewType);
+            $this->view->assign('contenttype', $strContentType);
+            $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
+            $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
             exit();

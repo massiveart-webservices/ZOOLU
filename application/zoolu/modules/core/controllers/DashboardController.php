@@ -466,39 +466,6 @@ class Core_DashboardController extends AuthControllerAction
     }
 
     /**
-     * overlayChildnavigationAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayChildnavigationAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayChildnavigationAction()');
-        try {
-            $intFolderId = $this->objRequest->getParam('folderId');
-            $intViewType = $this->objRequest->getParam('viewtype');
-            $intLanguageId = $this->objRequest->getParam('languageId');
-            $strContentType = $this->objRequest->getParam('contenttype');
-            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId', '');
-            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId', '');
-
-            /**
-             * get childfolders
-             */
-            $objChildelements = $this->getModelFolders()->loadChildFolders($intFolderId);
-
-            $this->view->assign('elements', $objChildelements);
-            $this->view->assign('intFolderId', $intFolderId);
-            $this->view->assign('viewtype', $intViewType);
-            $this->view->assign('contenttype', $strContentType);
-            $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
-            $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
      * getItemLanguageId
      * @param integer $intActionType
      * @return integer
@@ -824,27 +791,6 @@ class Core_DashboardController extends AuthControllerAction
       </html>';
 
         return $strReturn;
-    }
-
-    /**
-     * getModelFolders
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelFolders()
-    {
-        if (null === $this->objModelFolders) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
-            $this->objModelFolders = new Model_Folders();
-            $this->objModelFolders->setLanguageId($this->getItemLanguageId());
-        }
-
-        return $this->objModelFolders;
     }
 
     /**
