@@ -60,7 +60,22 @@ class Core_ContentchooserController extends AuthControllerAction
      * @var Model_Folders
      */
     protected $objModelFolders;
-    
+
+    /**
+     * @var Model_Pages
+     */
+    protected $objModelPages;
+
+    /**
+     * @var Model_Globals
+     */
+    protected $objModelGlobals;
+
+    /**
+     * @var Model_Files
+     */
+    protected $objModelFiles;
+
     /**
      * @var integer
      */
@@ -204,6 +219,52 @@ class Core_ContentchooserController extends AuthControllerAction
     }
 
     /**
+     * overlayListAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function overlayListAction()
+    {
+        $this->core->logger->debug('core->controllers->DashboardController->overlayListAction()');
+        try {
+            $intFolderId = $this->getRequest()->getParam('folderId');
+            $strRelation = $this->getRequest()->getParam('relation', '');
+            $strContentType = $this->getRequest()->getParam('contenttype', '');
+            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId', '');
+            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId', '');
+
+            if ($strContentType != '') {
+                $objRelation = new stdClass();
+                if ($strRelation != '') {
+                    $objRelation = json_decode($strRelation);
+                }
+
+                $objElements = '';
+                switch ($strContentType) {
+                    case 'global':
+                        $objElements = $this->getModelGlobals()->loadGlobalsByFilter($intFolderId, null, $intRootLevelGroupId);
+                        break;
+                    case 'page':
+                        $objElements = $this->getModelPages()->loadPagesByfilter($intFolderId);
+                        break;
+                    case 'media':
+                        $objElements = $this->getModelFiles()->loadFiles($intFolderId);
+                        break;
+                }
+
+                $this->view->assign('elements', $objElements);
+                $this->view->assign('relation', $objRelation);
+                $this->view->assign('contenttype', $strContentType);
+                $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
+                $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+            exit();
+        }
+    }
+
+    /**
      * getItemLanguageId
      * @param integer $intActionType
      * @return integer
@@ -282,5 +343,70 @@ class Core_ContentchooserController extends AuthControllerAction
         }
 
         return $this->objModelFolders;
+    }
+
+
+    /**
+     * getModelPages
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelPages()
+    {
+        if (null === $this->objModelPages) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/Pages.php';
+            $this->objModelPages = new Model_Pages();
+            $this->objModelPages->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelPages;
+    }
+
+    /**
+     * getModelGlobals
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelGlobals()
+    {
+        if (null === $this->objModelGlobals) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'global/models/Globals.php';
+            $this->objModelGlobals = new Model_Globals();
+            $this->objModelGlobals->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelGlobals;
+    }
+
+    /**
+     * getModelFiles
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelFiles()
+    {
+        if (null === $this->objModelFiles) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Files.php';
+            $this->objModelFiles = new Model_Files();
+            $this->objModelFiles->setLanguageId($this->getItemLanguageId());
+            $this->objModelFiles->setAlternativLanguageId(Zend_Auth::getInstance()->getIdentity()->languageId);
+        }
+
+        return $this->objModelFiles;
     }
 }

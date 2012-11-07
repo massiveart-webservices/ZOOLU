@@ -9,7 +9,7 @@
  */
 
 Massiveart.Contentchooser = Class.create({
-    initialize: function() {
+    initialize:function () {
         this.olCurrContainerId = '';
         this.olNewContainerId = '';
 
@@ -24,19 +24,23 @@ Massiveart.Contentchooser = Class.create({
      * getModuleOverlay
      * @param string areaId
      */
-    getModuleOverlay: function(areaId){
+    getModuleOverlay:function (areaId, start) {
+        if (typeof(start) == 'undefined') {
+            start = 'modules';
+        }
+
         $(this.updateOverlayContainer).innerHTML = '';
         myCore.putCenter('overlayGenContentWrapper');
         myCore.addBusyClass(this.updateOverlayContainer);
         $('overlayGenContentWrapper').show();
 
-        if($(areaId)){
+        if ($(areaId)) {
             this.areaId = areaId;
-            var fieldname = 'dbrd-'+this.areaId.substring(this.areaId.indexOf('_')+1);
+            var fieldname = 'dbrd-' + this.areaId.substring(this.areaId.indexOf('_') + 1);
             new Ajax.Updater(this.updateOverlayContainer, '/zoolu/core/contentchooser/overlay-modules', {
-                parameters: { relationIds: $F(fieldname) },
-                evalScripts: true,
-                onComplete: function(){
+                parameters:{ relationIds:$F(fieldname) },
+                evalScripts:true,
+                onComplete:function () {
                     myCore.putOverlayCenter('overlayGenContentWrapper');
                     myCore.removeBusyClass(this.updateOverlayContainer);
                 }.bind(this)
@@ -47,8 +51,8 @@ Massiveart.Contentchooser = Class.create({
     /**
      * getModule
      */
-    getModule: function(moduleId){
-        if($('olModules')){
+    getModule:function (moduleId) {
+        if ($('olModules')) {
             this.olCurrContainerId = 'olModules';
             this.olNewContainerId = 'olRootLevels';
             this.createContainer();
@@ -56,14 +60,14 @@ Massiveart.Contentchooser = Class.create({
             myCore.addBusyClass(this.olNewContainerId);
             this.moveContainers(this.olCurrContainerId, this.olNewContainerId);
 
-            if($('olModuleId')) $('olModuleId').setValue(moduleId);
+            if ($('olModuleId')) $('olModuleId').setValue(moduleId);
             new Ajax.Updater(this.olNewContainerId, '/zoolu/core/contentchooser/overlay-rootlevels', {
-                parameters: { moduleId: moduleId },
-                evalScripts: true,
-                onComplete: function(){
-                    if($('olBack')) $('olBack').show();
-                    if($(this.olNewContainerId+'_title')){
-                        if($('dbrdOverlayTitle')) $('dbrdOverlayTitle').update($(this.olNewContainerId+'_title').innerHTML);
+                parameters:{ moduleId:moduleId },
+                evalScripts:true,
+                onComplete:function () {
+                    if ($('olBack')) $('olBack').show();
+                    if ($(this.olNewContainerId + '_title')) {
+                        if ($('dbrdOverlayTitle')) $('dbrdOverlayTitle').update($(this.olNewContainerId + '_title').innerHTML);
                     }
                     myCore.removeBusyClass(this.olNewContainerId);
 
@@ -79,11 +83,11 @@ Massiveart.Contentchooser = Class.create({
     /**
      * getRootLevel
      */
-    getRootLevel: function(rootLevelId, rootLevelTypeId, rootLevelGroupId, rootLevelLanguageId){
-        if($(this.olCurrContainerId)){
-            if(typeof(rootLevelTypeId) == 'undefined') rootLevelTypeId = '';
-            if(typeof(rootLevelGroupId) == 'undefined') rootLevelGroupId = '';
-            if(typeof(rootLevelLanguageId) == 'undefined') rootLevelLanguageId = '';
+    getRootLevel:function (rootLevelId, rootLevelTypeId, rootLevelGroupId, rootLevelLanguageId) {
+        if ($(this.olCurrContainerId)) {
+            if (typeof(rootLevelTypeId) == 'undefined') rootLevelTypeId = '';
+            if (typeof(rootLevelGroupId) == 'undefined') rootLevelGroupId = '';
+            if (typeof(rootLevelLanguageId) == 'undefined') rootLevelLanguageId = '';
 
             this.olNewContainerId = 'olContentItems';
             this.createContainer();
@@ -92,28 +96,28 @@ Massiveart.Contentchooser = Class.create({
             this.moveContainers(this.olCurrContainerId, this.olNewContainerId);
             this.toggleContainerStatus('active');
 
-            if($('olRootLevelId')) $('olRootLevelId').setValue(rootLevelId);
+            if ($('olRootLevelId')) $('olRootLevelId').setValue(rootLevelId);
             new Ajax.Updater(this.olNewContainerId, '/zoolu/core/contentchooser/overlay-content', {
-                parameters: {
-                    rootLevelId: rootLevelId,
-                    rootLevelTypeId: rootLevelTypeId,
-                    rootLevelGroupId: rootLevelGroupId,
-                    rootLevelLanguageId: rootLevelLanguageId,
-                    moduleId: $F('olModuleId')
+                parameters:{
+                    rootLevelId:rootLevelId,
+                    rootLevelTypeId:rootLevelTypeId,
+                    rootLevelGroupId:rootLevelGroupId,
+                    rootLevelLanguageId:rootLevelLanguageId,
+                    moduleId:$F('olModuleId')
                 },
-                evalScripts: true,
-                onComplete: function(){
-                    if($('olBack')) $('olBack').show();
-                    if($(this.olNewContainerId+'_title')){
-                        if($('dbrdOverlayTitle')) $('dbrdOverlayTitle').update($(this.olNewContainerId+'_title').innerHTML);
+                evalScripts:true,
+                onComplete:function () {
+                    if ($('olBack')) $('olBack').show();
+                    if ($(this.olNewContainerId + '_title')) {
+                        if ($('dbrdOverlayTitle')) $('dbrdOverlayTitle').update($(this.olNewContainerId + '_title').innerHTML);
                     }
                     myCore.removeBusyClass(this.olNewContainerId);
 
                     $(this.olCurrContainerId).removeClassName('active');
                     $(this.olNewContainerId).addClassName('active');
 
-                    if(rootLevelLanguageId != ''){
-                        if($(this.languageField)) $(this.languageField).setValue(rootLevelLanguageId);
+                    if (rootLevelLanguageId != '') {
+                        if ($(this.languageField)) $(this.languageField).setValue(rootLevelLanguageId);
                     }
 
                     this.olCurrContainerId = this.olNewContainerId;
@@ -126,62 +130,62 @@ Massiveart.Contentchooser = Class.create({
      * getNavItem
      * @param integer folderId, integer viewtype
      */
-    getNavItem: function(folderId, rootLevelTypeId, rootLevelGroupId, viewtype, contenttype){
+    getNavItem:function (folderId, rootLevelTypeId, rootLevelGroupId, viewtype, contenttype) {
         this.resetNavItems();
 
-        $('olnavitemtitle'+folderId).addClassName('selected');
+        $('olnavitemtitle' + folderId).addClassName('selected');
 
-        if($('olsubnav'+folderId)){
+        if ($('olsubnav' + folderId)) {
             this.toggleSubNavItem(folderId);
             // if mediaFilter is active
             /*if($('mediaFilter_Folders')){
              $('mediaFilter_Folders').value = folderId;
              this.loadFileFilterContent(viewtype, contenttype);
              }else{*/
-            if(typeof(contenttype) != 'undefined'){
+            if (typeof(contenttype) != 'undefined') {
                 this.getFolderContent(folderId, rootLevelTypeId, rootLevelGroupId, contenttype);
             }
             //}
-        }else{
-            if(folderId != ''){
-                var subNavContainer = '<div id="olsubnav'+folderId+'" class="olsubnav" style="display:none;"></div>';
-                new Insertion.Bottom('olnavitem'+folderId, subNavContainer);
+        } else {
+            if (folderId != '') {
+                var subNavContainer = '<div id="olsubnav' + folderId + '" class="olsubnav" style="display:none;"></div>';
+                new Insertion.Bottom('olnavitem' + folderId, subNavContainer);
 
                 var blnVisible = this.toggleSubNavItem(folderId);
-                myCore.addBusyClass('olsubnav'+folderId);
+                myCore.addBusyClass('olsubnav' + folderId);
 
                 var languageId = null;
-                if($('languageId')) {
+                if ($('languageId')) {
                     languageId = $F('languageId');
                 }
 
                 var languageCode = null;
-                if($('languageCode')) {
+                if ($('languageCode')) {
                     languageCode = $F('languageCode');
                 }
 
-                new Ajax.Updater('olsubnav'+folderId, '/zoolu/core/contentchooser/overlay-childnavigation', {
-                    parameters: {
-                        folderId: folderId,
-                        viewtype: viewtype,
-                        languageId: languageId,
-                        languageCode: languageCode,
-                        contenttype: contenttype,
-                        rootLevelTypeId: rootLevelTypeId,
-                        rootLevelGroupId: rootLevelGroupId
+                new Ajax.Updater('olsubnav' + folderId, '/zoolu/core/contentchooser/overlay-childnavigation', {
+                    parameters:{
+                        folderId:folderId,
+                        viewtype:viewtype,
+                        languageId:languageId,
+                        languageCode:languageCode,
+                        contenttype:contenttype,
+                        rootLevelTypeId:rootLevelTypeId,
+                        rootLevelGroupId:rootLevelGroupId
                     },
-                    evalScripts: true,
-                    onComplete: function() {
+                    evalScripts:true,
+                    onComplete:function () {
                         // if mediaFilter is active
                         /*if($('mediaFilter_Folders')){
                          $('mediaFilter_Folders').value = folderId;
                          this.loadFileFilterContent(viewtype, contenttype);
                          }else{*/
-                        if(typeof(contenttype) != 'undefined'){
+                        if (typeof(contenttype) != 'undefined') {
                             this.getFolderContent(folderId, rootLevelTypeId, rootLevelGroupId, contenttype);
                         }
                         //}
-                        myCore.removeBusyClass('olsubnav'+folderId);
+                        myCore.removeBusyClass('olsubnav' + folderId);
                     }.bind(this)
                 });
             }
@@ -191,50 +195,50 @@ Massiveart.Contentchooser = Class.create({
     /**
      * addItemToListArea
      */
-    addItemToListArea: function(itemId, linkId){
-        if(typeof(linkId) == 'undefined') linkId = null;
-        if($(this.areaId) && $('olItem'+itemId)){
+    addItemToListArea:function (itemId, linkId) {
+        if (typeof(linkId) == 'undefined') linkId = null;
+        if ($(this.areaId) && $('olItem' + itemId)) {
             var moduleId = 0;
-            if($('olModuleId') && $F('olModuleId') != '') moduleId = $F('olModuleId');
+            if ($('olModuleId') && $F('olModuleId') != '') moduleId = $F('olModuleId');
             var rootLevelId = 0;
-            if($('olRootLevelId') && $F('olRootLevelId') != '') rootLevelId = $F('olRootLevelId');
+            if ($('olRootLevelId') && $F('olRootLevelId') != '') rootLevelId = $F('olRootLevelId');
 
-            var fieldId = 'dbrd-'+this.areaId.substring(this.areaId.indexOf('_')+1);
-            var iconRemoveId = fieldId+'_remove'+itemId;
+            var fieldId = 'dbrd-' + this.areaId.substring(this.areaId.indexOf('_') + 1);
+            var iconRemoveId = fieldId + '_remove' + itemId;
 
             // create new item container
-            var itemContainer = '<div id="'+fieldId+'_item'+itemId+'" moduleid="'+moduleId+'" rootlevelid="'+rootLevelId+'" relationid="'+itemId+'" class="elementitem" style="display:none;">' + $('olItem'+itemId).innerHTML + '</div>';
-            if($('divClear_'+fieldId)) $('divClear_'+fieldId).remove();
-            new Insertion.Bottom(this.areaId, itemContainer + '<div id="divClear_'+fieldId+'" class="clear"></div>');
+            var itemContainer = '<div id="' + fieldId + '_item' + itemId + '" moduleid="' + moduleId + '" rootlevelid="' + rootLevelId + '" relationid="' + itemId + '" class="elementitem" style="display:none;">' + $('olItem' + itemId).innerHTML + '</div>';
+            if ($('divClear_' + fieldId)) $('divClear_' + fieldId).remove();
+            new Insertion.Bottom(this.areaId, itemContainer + '<div id="divClear_' + fieldId + '" class="clear"></div>');
 
-            if($('Remove'+itemId)) $('Remove'+itemId).writeAttribute('id', iconRemoveId);
+            if ($('Remove' + itemId)) $('Remove' + itemId).writeAttribute('id', iconRemoveId);
 
             // insert file id to hidden field - only 1 insert is possible
-            var addToField = '{"moduleId":'+moduleId+',"rootLevelId":'+rootLevelId+',"relationId":'+itemId;
-            if(linkId != null && linkId != itemId){
-                addToField += ',"linkId":'+linkId+'}';
-            }else{
+            var addToField = '{"moduleId":' + moduleId + ',"rootLevelId":' + rootLevelId + ',"relationId":' + itemId;
+            if (linkId != null && linkId != itemId) {
+                addToField += ',"linkId":' + linkId + '}';
+            } else {
                 addToField += '}';
             }
 
-            if(addToField.isJSON()){
-                if($(fieldId).value.indexOf(addToField) == -1){
-                    if($F(fieldId) == ''){
+            if (addToField.isJSON()) {
+                if ($(fieldId).value.indexOf(addToField) == -1) {
+                    if ($F(fieldId) == '') {
                         $(fieldId).setValue('[' + addToField + ']');
-                    }else if($(fieldId).value.indexOf('}]') != -1){
-                        $(fieldId).setValue($F(fieldId).replace('}]', '},'+addToField+']'));
+                    } else if ($(fieldId).value.indexOf('}]') != -1) {
+                        $(fieldId).setValue($F(fieldId).replace('}]', '},' + addToField + ']'));
                     }
                 }
             }
 
-            $(fieldId+'_item'+itemId).appear({duration: 0.5});
-            $('olItem'+itemId).fade({duration: 0.5});
+            $(fieldId + '_item' + itemId).appear({duration:0.5});
+            $('olItem' + itemId).fade({duration:0.5});
 
             // add remove method to remove icon
-            if($(iconRemoveId)){
+            if ($(iconRemoveId)) {
                 $(iconRemoveId).show();
-                $(iconRemoveId).onclick = function(){
-                    myDashboard.removeRelationItem(fieldId, fieldId+'_item'+itemId, itemId, linkId);
+                $(iconRemoveId).onclick = function () {
+                    myDashboard.removeRelationItem(fieldId, fieldId + '_item' + itemId, itemId, linkId);
                 }
             }
         }
@@ -243,32 +247,32 @@ Massiveart.Contentchooser = Class.create({
     /**
      * getFolderContent
      */
-    getFolderContent: function(folderId, rootLevelTypeId, rootLevelGroupId, contenttype){
+    getFolderContent:function (folderId, rootLevelTypeId, rootLevelGroupId, contenttype) {
         $(this.folderUpdateContainer).innerHTML = '';
         myCore.addBusyClass(this.folderUpdateContainer);
 
         var languageId = null;
-        if($('languageId')){
+        if ($('languageId')) {
             languageId = $F('languageId');
         }
         var languageCode = null;
-        if($('languageCode')){
+        if ($('languageCode')) {
             languageCode = $F('languageCode');
         }
 
-        var fieldname = 'dbrd-'+this.areaId.substring(this.areaId.indexOf('_')+1);
-        new Ajax.Updater(this.folderUpdateContainer, '/zoolu/core/dashboard/overlay-list', {
-            parameters: {
-                folderId: folderId,
-                relation: $(fieldname).value,
-                languageId: languageId,
-                languageCode: languageCode,
-                contenttype: contenttype,
-                rootLevelTypeId: rootLevelTypeId,
-                rootLevelGroupId: rootLevelGroupId
+        var fieldname = 'dbrd-' + this.areaId.substring(this.areaId.indexOf('_') + 1);
+        new Ajax.Updater(this.folderUpdateContainer, '/zoolu/core/contentchooser/overlay-list', {
+            parameters:{
+                folderId:folderId,
+                relation:$(fieldname).value,
+                languageId:languageId,
+                languageCode:languageCode,
+                contenttype:contenttype,
+                rootLevelTypeId:rootLevelTypeId,
+                rootLevelGroupId:rootLevelGroupId
             },
-            evalScripts: true,
-            onComplete: function(){
+            evalScripts:true,
+            onComplete:function () {
                 myCore.removeBusyClass(this.folderUpdateContainer);
             }.bind(this)
         });
@@ -277,12 +281,12 @@ Massiveart.Contentchooser = Class.create({
     /**
      * createContainer
      */
-    createContainer: function(){
-        if(!$(this.olNewContainerId)){
+    createContainer:function () {
+        if (!$(this.olNewContainerId)) {
             $(this.olCurrContainerId).insert({
-                after: '<div id="'+this.olNewContainerId+'" style="left: '+this.offsetX+'px;"></div>'
+                after:'<div id="' + this.olNewContainerId + '" style="left: ' + this.offsetX + 'px;"></div>'
             });
-        }else{
+        } else {
             $(this.olNewContainerId).update('');
         }
     },
@@ -290,33 +294,33 @@ Massiveart.Contentchooser = Class.create({
     /**
      * moveContainers
      */
-    moveContainers: function(currContainer, newContainer, direction){
-        if(typeof(direction) == 'undefined') direction = 'NEXT';
+    moveContainers:function (currContainer, newContainer, direction) {
+        if (typeof(direction) == 'undefined') direction = 'NEXT';
 
         var offsetX = this.offsetX;
-        if(direction == 'NEXT'){
+        if (direction == 'NEXT') {
             offsetX = -430;
         }
-        if($(currContainer)) new Effect.Move(currContainer, { x: offsetX, y: 0, mode: 'absolute', duration: 0.3, transition: Effect.Transitions.linear });
-        if($(newContainer)) new Effect.Move(newContainer, { x: 0, y: 0, mode: 'absolute', duration: 0.3, transition: Effect.Transitions.linear });
+        if ($(currContainer)) new Effect.Move(currContainer, { x:offsetX, y:0, mode:'absolute', duration:0.3, transition:Effect.Transitions.linear });
+        if ($(newContainer)) new Effect.Move(newContainer, { x:0, y:0, mode:'absolute', duration:0.3, transition:Effect.Transitions.linear });
     },
 
     /**
      * toggleContainerStatus
      */
-    toggleContainerStatus: function(cssClassName){
-        if($(this.olCurrContainerId)) $(this.olCurrContainerId).removeClassName(cssClassName);
-        if($(this.olNewContainerId)) $(this.olNewContainerId).addClassName(cssClassName);
+    toggleContainerStatus:function (cssClassName) {
+        if ($(this.olCurrContainerId)) $(this.olCurrContainerId).removeClassName(cssClassName);
+        if ($(this.olNewContainerId)) $(this.olNewContainerId).addClassName(cssClassName);
     },
 
     /**
      * resetNavItems
      */
-    resetNavItems: function(){
-        $$('.olnavigationwrapper .olnavchilditem span.selected').each(function(element, index){
+    resetNavItems:function () {
+        $$('.olnavigationwrapper .olnavchilditem span.selected').each(function (element, index) {
             element.removeClassName('selected');
         });
-        $$('.olnavigationwrapper .olnavrootitem span.selected').each(function(element, index){
+        $$('.olnavigationwrapper .olnavrootitem span.selected').each(function (element, index) {
             element.removeClassName('selected');
         });
     },
@@ -325,16 +329,16 @@ Massiveart.Contentchooser = Class.create({
      * toggleSubNavItem
      * @param integer itemId
      */
-    toggleSubNavItem: function(itemId){
-        if($('olsubnav'+itemId)){
-            $('olsubnav'+itemId).toggle();
+    toggleSubNavItem:function (itemId) {
+        if ($('olsubnav' + itemId)) {
+            $('olsubnav' + itemId).toggle();
 
-            if($('olnavitem'+itemId)){
-                if($('olnavitem'+itemId).down('.icon').hasClassName('img_folder_on_open')){
-                    $('olnavitem'+itemId).down('.icon').removeClassName('img_folder_on_open');
+            if ($('olnavitem' + itemId)) {
+                if ($('olnavitem' + itemId).down('.icon').hasClassName('img_folder_on_open')) {
+                    $('olnavitem' + itemId).down('.icon').removeClassName('img_folder_on_open');
                     return false;
-                }else{
-                    $('olnavitem'+itemId).down('.icon').addClassName('img_folder_on_open');
+                } else {
+                    $('olnavitem' + itemId).down('.icon').addClassName('img_folder_on_open');
                     return true;
                 }
             }
@@ -344,9 +348,9 @@ Massiveart.Contentchooser = Class.create({
     /**
      * stepBack
      */
-    stepBack: function(){
-        $$('#olContent .active').each(function(element){
-            if($(element.id)){
+    stepBack:function () {
+        $$('#olContent .active').each(function (element) {
+            if ($(element.id)) {
                 this.olCurrContainerId = element.id;
                 var prevElement = $(element.id).previous();
                 this.olNewContainerId = prevElement.id;
@@ -354,12 +358,12 @@ Massiveart.Contentchooser = Class.create({
                 this.moveContainers(this.olCurrContainerId, this.olNewContainerId, 'PREV');
                 this.toggleContainerStatus('active');
 
-                if($(this.olNewContainerId+'_title')){
-                    if($('dbrdOverlayTitle')) $('dbrdOverlayTitle').update($(this.olNewContainerId+'_title').innerHTML);
+                if ($(this.olNewContainerId + '_title')) {
+                    if ($('dbrdOverlayTitle')) $('dbrdOverlayTitle').update($(this.olNewContainerId + '_title').innerHTML);
                 }
 
-                if($(prevElement.id).previous() == null){
-                    if($('olBack')) $('olBack').hide();
+                if ($(prevElement.id).previous() == null) {
+                    if ($('olBack')) $('olBack').hide();
                 }
 
                 this.olCurrContainerId = this.olNewContainerId;

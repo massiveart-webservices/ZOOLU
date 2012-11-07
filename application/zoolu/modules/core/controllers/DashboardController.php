@@ -420,52 +420,6 @@ class Core_DashboardController extends AuthControllerAction
     }
 
     /**
-     * overlayListAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayListAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayListAction()');
-        try {
-            $intFolderId = $this->getRequest()->getParam('folderId');
-            $strRelation = $this->getRequest()->getParam('relation', '');
-            $strContentType = $this->getRequest()->getParam('contenttype', '');
-            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId', '');
-            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId', '');
-
-            if ($strContentType != '') {
-                $objRelation = new stdClass();
-                if ($strRelation != '') {
-                    $objRelation = json_decode($strRelation);
-                }
-
-                $objElements = '';
-                switch ($strContentType) {
-                    case 'global':
-                        $objElements = $this->getModelGlobals()->loadGlobalsByFilter($intFolderId, null, $intRootLevelGroupId);
-                        break;
-                    case 'page':
-                        $objElements = $this->getModelPages()->loadPagesByfilter($intFolderId);
-                        break;
-                    case 'media':
-                        $objElements = $this->getModelFiles()->loadFiles($intFolderId);
-                        break;
-                }
-
-                $this->view->assign('elements', $objElements);
-                $this->view->assign('relation', $objRelation);
-                $this->view->assign('contenttype', $strContentType);
-                $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
-                $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
-            }
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
      * getItemLanguageId
      * @param integer $intActionType
      * @return integer

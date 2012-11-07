@@ -249,6 +249,162 @@ class ContentchooserHelper
     }
 
     /**
+     * getListView
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getListView($rowset, $arrFileIds)
+    {
+        $this->core->logger->debug('core->views->helpers->DashboardHelper->getListView()');
+
+        $this->objViewHelper = new ViewHelper();
+
+        /**
+         * create header of list output
+         */
+        $strOutputTop = '
+            <div class="olcontacttop">
+                <div class="olfiletopleft"></div>
+                <div class="olfiletopitemicon"></div>
+                <div class="olfiletopitemtitle bold">Titel</div>
+                <div class="olfiletopright"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="olcontactitemcontainer">';
+
+        /**
+         * output of list rows (elements)
+         */
+        $strOutput = '';
+        if ($rowset != '' && count($rowset) > 0) {
+            foreach ($rowset as $row) {
+
+                $strHidden = '';
+                /*if(array_search($row->id, $arrFileIds) !== false){
+               $strHidden = ' style="display:none;"';
+              }*/
+                if ($row->isImage) {
+                    if ($row->xDim < $row->yDim) {
+                        $strMediaSize = 'height="32"';
+                    } else {
+                        $strMediaSize = 'width="32"';
+                    }
+                    $strOutput .= '
+                        <div class="olfileitem" id="olItem' . $row->id . '" onclick="myDashboard.addItemToListArea(' . $row->id . '); return false;"' . $strHidden . '>
+                            <div class="olfileleft"></div>
+                            <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
+                            <div class="olfileitemicon"><img ' . $strMediaSize . ' id="File' . $row->id . '" src="' . sprintf($this->core->sysConfig->media->paths->icon32, $row->path) . $row->filename . '?v=' . $row->version . '" alt="' . $row->description . '"/></div>
+                            <div class="olfileitemtitle">' . htmlentities((($row->title == '' && (isset($row->alternativeTitle) || isset($row->fallbackTitle))) ? ((isset($row->alternativeTitle) && $row->alternativeTitle != '') ? $row->alternativeTitle : $row->fallbackTitle) : $row->title), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
+                            <div class="olfileright"></div>
+                            <div class="clear"></div>
+                        </div>';
+                } else {
+                    $strOutput .= '
+                        <div class="olfileitem" id="olItem' . $row->id . '" onclick="myDashboard.addItemToListArea(' . $row->id . '); return false;"' . $strHidden . '>
+                            <div class="olfileleft"></div>
+                            <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
+                            <div class="olfileitemicon"><img width="32" height="32" id="File' . $row->id . '" src="' . $this->objViewHelper->getDocIcon($row->extension, 32) . '" alt="' . $row->description . '"/></div>
+                            <div class="olfileitemtitle">' . htmlentities((($row->title == '' && (isset($row->alternativeTitle) || isset($row->fallbackTitle))) ? ((isset($row->alternativeTitle) && $row->alternativeTitle != '') ? $row->alternativeTitle : $row->fallbackTitle) : $row->title), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
+                            <div class="olfileright"></div>
+                            <div class="clear"></div>
+                        </div>';
+                }
+            }
+            $strOutput .= '
+                <div class="clear"></div>';
+        }
+
+        /**
+         * list footer
+         */
+        $strOutputBottom = '
+            </div>
+            <div class="olcontactbottom">
+                <div class="olfilebottomleft"></div>
+                <div class="olfilebottomcenter"></div>
+                <div class="olfilebottomright"></div>
+                <div class="clear"></div>
+            </div>';
+
+        /**
+         * return html output
+         */
+        if ($strOutput != '') {
+            return $strOutputTop . $strOutput . $strOutputBottom . '<div class="clear"></div>';
+        }
+    }
+
+    /**
+     * getListElements
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function getListElements($rowset, $arrElements, $strContentType = '')
+    {
+        $this->core->logger->debug('core->views->helpers->DashboardHelper->getListElements()');
+
+        /**
+         * create header of list output
+         */
+        $strOutputTop = '
+            <div class="olcontacttop">
+                <div class="olcontacttopleft"></div>
+                <div class="olcontacttopitemtitle bold">Titel</div>
+                <div class="olcontacttopright"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="olcontactitemcontainer">';
+
+        /**
+         * output of list rows (elements)
+         */
+        $strOutput = '';
+        if ($rowset != '' && count($rowset) > 0) {
+            foreach ($rowset as $row) {
+                $strHidden = '';
+                // TODO : check if element is in object
+                /*if(array_search($row->id, $arrElements) !== false){
+                 $strHidden = ' style="display:none;"';
+                }*/
+
+                $strStartElement = '';
+                if ($strContentType != '') {
+                    $strStartElement = 'isStart' . ucfirst($strContentType);
+
+                    $strOutput .= '
+                        <div class="olpageitem" id="olItem' . $row->id . '" onclick="myContentchooser.addItemToListArea(' . $row->id . ((isset($row->linkId) && $row->linkId > 0) ? ',' . $row->linkId : '') . '); return false;"' . $strHidden . '>
+                            <div class="olpageleft"></div>
+                            <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
+                            <div class="icon olpageicon img_' . (($row->$strStartElement == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>
+                            <div class="olpageitemtitle">' . htmlentities((($row->title == '' && (isset($row->alternativeTitle) || isset($row->fallbackTitle))) ? ((isset($row->alternativeTitle) && $row->alternativeTitle != '') ? $row->alternativeTitle : $row->fallbackTitle) : $row->title), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
+                            <div class="olpageright"></div>
+                            <div class="clear"></div>
+                        </div>';
+                }
+            }
+            $strOutput .= '
+                <div class="clear"></div>';
+        }
+
+        /**
+         * list footer
+         */
+        $strOutputBottom = '
+            </div>
+            <div class="olcontactbottom">
+                <div class="olcontactbottomleft"></div>
+                <div class="olcontactbottomcenter"></div>
+                <div class="olcontactbottomright"></div>
+                <div class="clear"></div>
+            </div>';
+
+        /**
+         * return html output
+         */
+        return $strOutputTop . $strOutput . $strOutputBottom . '<div class="clear"></div>';
+    }
+
+    /**
      * setTranslate
      * @param object $objTranslate
      * @author Cornelius Hansjakob <cha@massiveart.com>
