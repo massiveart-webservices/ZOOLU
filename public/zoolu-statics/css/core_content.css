@@ -1476,7 +1476,7 @@ Overlay Inner */
 
 /* --- overlay navigation --- */
 .olnavigationwrapper, .olnavigationwrapper2, .olcontainerwrapper,
-.olcontentnavigationwrapper{
+.olnavigationwrappercontent {
     position: relative;
     background-color: #fff;
     height: 200px;
@@ -1493,7 +1493,8 @@ Overlay Inner */
 }
 
 .olnavigationwrapper .olnavrootitem,
-.olnavigationwrapper2 .olnavrootitem {
+.olnavigationwrapper2 .olnavrootitem,
+.olnavigationwrappercontent .olnavrootitem {
     padding: 5px 0 0 0;
     cursor: default;
 }
@@ -1509,7 +1510,8 @@ Overlay Inner */
     float: left;
 }
 
-.olnavigationwrapper .olnavchilditem {
+.olnavigationwrapper .olnavchilditem,
+.olnavigationwrappercontent .olnavchilditem{
     padding: 5px 0 0 22px;
     cursor: default;
 }
@@ -1912,8 +1914,13 @@ Overlay Inner */
     height: 400px;
 }
 
-.olcontentnavigationwrapper {
+.olnavigationwrappercontent {
     height: 150px;
+}
+
+.spacercontent {
+    height: 10px;
+    background-color: #cccccc;
 }
 
 /*-----------------
