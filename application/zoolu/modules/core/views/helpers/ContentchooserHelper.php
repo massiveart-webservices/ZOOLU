@@ -137,12 +137,7 @@ class ContentchooserHelper
              */
             $strReturn .= '
                 <div id="olRootLevels_title" style="display:none;">' . $strOverlayTitle . '</div>
-                    <div class="olcontacttop">
-                        <div class="olcontacttopleft"></div>
-                        <div class="olcontacttopitemtitle bold">' . $this->objTranslate->_('Name') . '</div>
-                        <div class="olcontacttopright"></div>
-                        <div class="clear"></div>
-                    </div>
+                    <div class="olcontacttop">' . $this->objTranslate->_('Name') . '</div>
                     <div class="olcontactitemcontainer">';
 
             foreach ($objElements as $objRow) {
