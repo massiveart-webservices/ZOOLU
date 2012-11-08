@@ -16,36 +16,69 @@ Massiveart.Contentchooser = Class.create({
         this.updateOverlayContainer = 'overlayGenContent';
         this.folderUpdateContainer = 'olFolderContent';
         this.areaId = '';
+        this.start = '';
 
         this.offsetX = 430;
     },
 
+    removeUnusedContainer:function () {
+        if (this.start == 'rootLevel') {
+            $('olModules').remove();
+            $('olBack').hide();
+        }
+        if (this.start == 'content') {
+            $('olModules').remove();
+            $('olBack').hide();
+        }
+    },
+
     /**
-     * getModuleOverlay
+     * getContentchooser
      * @param string areaId
      */
-    getModuleOverlay:function (areaId, start) {
+    getContentchooser:function (start, areaId) {
         if (typeof(start) == 'undefined') {
             start = 'modules';
         }
+        if (typeof(areaId) == 'undefined') {
+            areaId = null;
+        }
+        this.start = start;
 
         $(this.updateOverlayContainer).innerHTML = '';
         myCore.putCenter('overlayGenContentWrapper');
         myCore.addBusyClass(this.updateOverlayContainer);
         $('overlayGenContentWrapper').show();
 
-        if ($(areaId)) {
-            this.areaId = areaId;
+        this.areaId = areaId;
+
+        var parameters = {};
+        if (this.areaId != null) {
             var fieldname = 'dbrd-' + this.areaId.substring(this.areaId.indexOf('_') + 1);
-            new Ajax.Updater(this.updateOverlayContainer, '/zoolu/core/contentchooser/overlay-modules', {
-                parameters:{ relationIds:$F(fieldname) },
-                evalScripts:true,
-                onComplete:function () {
-                    myCore.putOverlayCenter('overlayGenContentWrapper');
-                    myCore.removeBusyClass(this.updateOverlayContainer);
-                }.bind(this)
-            });
+            parameters = { relationIds:$F(fieldname) };
         }
+
+        new Ajax.Updater(this.updateOverlayContainer, '/zoolu/core/contentchooser/overlay-modules', {
+            parameters:parameters,
+            evalScripts:true,
+            onComplete:function () {
+                myCore.putOverlayCenter('overlayGenContentWrapper');
+                myCore.removeBusyClass(this.updateOverlayContainer);
+                this.olCurrContainerId = 'olModules';
+                //go to desired start location
+                if (this.start != 'modules') {
+                    switch (this.start) {
+                        case 'rootLevel':
+                            this.getModule(myNavigation.module);
+                            break;
+                        case 'content':
+                            $('olModuleId').setValue(myNavigation.module);
+                            this.getRootLevel(myNavigation.rootLevelId, myNavigation.rootLevelTypeId, myNavigation.rootLevelGroupId); //TODO Add rootLevelLanguage
+                            break;
+                    }
+                }
+            }.bind(this)
+        });
     },
 
     /**
@@ -75,6 +108,7 @@ Massiveart.Contentchooser = Class.create({
                     $(this.olNewContainerId).addClassName('active');
 
                     this.olCurrContainerId = this.olNewContainerId;
+                    this.removeUnusedContainer();
                 }.bind(this)
             });
         }
@@ -121,6 +155,8 @@ Massiveart.Contentchooser = Class.create({
                     }
 
                     this.olCurrContainerId = this.olNewContainerId;
+
+                    this.removeUnusedContainer();
                 }.bind(this)
             });
         }
