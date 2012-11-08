@@ -144,10 +144,6 @@ Overlay User */
     height: 150px;
 }
 
-.olnavigationwrapper2 {
-    overflow: hidden;
-}
-
 .contenthead {
     height: 10px !important;
     background: #ccc !important;
@@ -157,11 +153,6 @@ Overlay User */
     overflow: hidden;
     padding: 0 0 26px 0;
     min-height: 214px;
-}
-
-.olcontacttop, .olcontactbottom {
-    font-weight:bold;
-    width: 398px;
 }
 
 .olfiletopitemtitle {
@@ -187,13 +178,6 @@ Overlay User */
 .olcontentwrapper .olcontactitemcontainer {
     height: 188px;
     min-height: 188px;
-}
-
-.olcontactbottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    z-index: 50;
 }
 
 .contactitem {
@@ -223,33 +207,6 @@ Overlay User */
 
 /* ----------------
 Overlay Pages, Globals, ... */
-
-#dbrdOverlayTitle {
-    float: left;
-    line-height: 25px;
-}
-
-#olBack {
-    float: right;
-    padding: 13px 0 0 0;
-    cursor: pointer;
-}
-
-#olModules {
-    background-color:#c6c6c6;
-    position: absolute;
-    top: 0;
-    width: 430px;
-    height: 400px;
-}
-
-#olRootLevels {
-    background-color:#c6c6c6;
-    position: absolute;
-    top: 0;
-    width: 430px;
-    height: 400px;
-}
 
 .elementitem {
     cursor: default;

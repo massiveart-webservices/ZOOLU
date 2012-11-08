@@ -85,14 +85,14 @@ class ContentchooserHelper
             $strReturn .= '
                 <div id="olModules">
                     <div id="olModules_title" style="display:none;">' . $strOverlayTitle . '</div>
-                    <div class="olcontacttop">
+                    <div class="olcontentchoosertop">
                         ' . $this->objTranslate->_('Name') . '
                     </div>
-                    <div class="olcontactitemcontainer">';
+                    <div class="olcontentitemcontainer">';
 
             foreach ($objElements as $objRow) {
                 // only PORTALS, GLOBAL, MEDIA visible
-                if ($objRow->resourceKey == 'portals' || $objRow->resourceKey == 'global' || $objRow->resourceKey == 'media') { // || $objRow->resourceKey == 'media'
+                if ($objRow->resourceKey == 'portals' || $objRow->resourceKey == 'global' || $objRow->resourceKey == 'media') {
                     $strReturn .= '
                         <div class="olcontactitem" id="olModuleItem' . $objRow->id . '" onclick="myContentchooser.getModule(' . $objRow->id . '); return false;">
                             <div class="olcontactleft"></div>
@@ -110,7 +110,7 @@ class ContentchooserHelper
             $strReturn .= '
                         <div class="clear"></div>
                     </div>
-                    <div class="olcontactbottom">
+                    <div class="olcontentchooserbottom">
                     </div>
                 </div>';
         }
@@ -137,8 +137,8 @@ class ContentchooserHelper
              */
             $strReturn .= '
                 <div id="olRootLevels_title" style="display:none;">' . $strOverlayTitle . '</div>
-                    <div class="olcontacttop">' . $this->objTranslate->_('Name') . '</div>
-                    <div class="olcontactitemcontainer">';
+                    <div class="olcontentchoosertop">' . $this->objTranslate->_('Name') . '</div>
+                    <div class="olcontentitemcontainer">';
 
             foreach ($objElements as $objRow) {
                 if ($objRow->id != $this->core->sysConfig->product->rootLevels->list->id) { // 11 - All Products
@@ -159,11 +159,7 @@ class ContentchooserHelper
             $strReturn .= '
                     <div class="clear"></div>
                 </div>
-                <div class="olcontactbottom">
-                    <div class="olcontactbottomleft"></div>
-                    <div class="olcontactbottomcenter"></div>
-                    <div class="olcontactbottomright"></div>
-                    <div class="clear"></div>
+                <div class="olcontentchooserbottom">
                 </div>';
         }
 
@@ -258,13 +254,7 @@ class ContentchooserHelper
          * create header of list output
          */
         $strOutputTop = '
-            <div class="olcontacttop">
-                <div class="olfiletopleft"></div>
-                <div class="olfiletopitemicon"></div>
-                <div class="olfiletopitemtitle bold">Titel</div>
-                <div class="olfiletopright"></div>
-                <div class="clear"></div>
-            </div>
+            <div class="olcontentchoosertop">Titel</div>
             <div class="olcontactitemcontainer">';
 
         /**
@@ -314,12 +304,7 @@ class ContentchooserHelper
          */
         $strOutputBottom = '
             </div>
-            <div class="olcontactbottom">
-                <div class="olfilebottomleft"></div>
-                <div class="olfilebottomcenter"></div>
-                <div class="olfilebottomright"></div>
-                <div class="clear"></div>
-            </div>';
+            <div class="olcontentchooserbottom"></div>';
 
         /**
          * return html output
@@ -342,12 +327,7 @@ class ContentchooserHelper
          * create header of list output
          */
         $strOutputTop = '
-            <div class="olcontacttop">
-                <div class="olcontacttopleft"></div>
-                <div class="olcontacttopitemtitle bold">Titel</div>
-                <div class="olcontacttopright"></div>
-                <div class="clear"></div>
-            </div>
+            <div class="olcontentchoosertop">Titel</div>
             <div class="olcontactitemcontainer">';
 
         /**
@@ -386,12 +366,7 @@ class ContentchooserHelper
          */
         $strOutputBottom = '
             </div>
-            <div class="olcontactbottom">
-                <div class="olcontactbottomleft"></div>
-                <div class="olcontactbottomcenter"></div>
-                <div class="olcontactbottomright"></div>
-                <div class="clear"></div>
-            </div>';
+            <div class="olcontentchooserbottom"></div>';
 
         /**
          * return html output
