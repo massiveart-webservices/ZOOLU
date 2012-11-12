@@ -296,11 +296,17 @@ Massiveart.Contentchooser = Class.create({
             languageCode = $F('languageCode');
         }
 
-        var fieldname = 'dbrd-' + this.areaId.substring(this.areaId.indexOf('_') + 1);
+        var relation;
+        if (this.areaId != null) {
+            var fieldname = 'dbrd-' + this.areaId.substring(this.areaId.indexOf('_') + 1);
+            relation = $(fieldname).value;
+        } else {
+            relation = null;
+        }
         new Ajax.Updater(this.folderUpdateContainer, '/zoolu/core/contentchooser/overlay-list', {
             parameters:{
                 folderId:folderId,
-                relation:$(fieldname).value,
+                relation:relation,
                 languageId:languageId,
                 languageCode:languageCode,
                 contenttype:contenttype,
