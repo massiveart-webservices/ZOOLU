@@ -162,6 +162,7 @@ class Core_ContentchooserController extends AuthControllerAction
             $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
             $this->view->assign('moduleId', $intModuleId);
             $this->view->assign('rootLevelId', $intRootLevelId);
+            $this->view->assign('type', $this->objRequest->getParam('type'));
 
             $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
             $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);

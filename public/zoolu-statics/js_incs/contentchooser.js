@@ -17,6 +17,7 @@ Massiveart.Contentchooser = Class.create({
         this.folderUpdateContainer = 'olFolderContent';
         this.areaId = '';
         this.start = '';
+        this.type = '';
 
         this.offsetX = 430;
     },
@@ -36,14 +37,18 @@ Massiveart.Contentchooser = Class.create({
      * getContentchooser
      * @param string areaId
      */
-    getContentchooser:function (start, areaId) {
+    getContentchooser:function (start, type, areaId) {
         if (typeof(start) == 'undefined') {
             start = 'modules';
+        }
+        if (typeof(type) == 'undefined') {
+            type = 'content';
         }
         if (typeof(areaId) == 'undefined') {
             areaId = null;
         }
         this.start = start;
+        this.type = type;
 
         $(this.updateOverlayContainer).innerHTML = '';
         myCore.putCenter('overlayGenContentWrapper');
@@ -137,7 +142,8 @@ Massiveart.Contentchooser = Class.create({
                     rootLevelTypeId:rootLevelTypeId,
                     rootLevelGroupId:rootLevelGroupId,
                     rootLevelLanguageId:rootLevelLanguageId,
-                    moduleId:$F('olModuleId')
+                    moduleId:$F('olModuleId'),
+                    type:this.type
                 },
                 evalScripts:true,
                 onComplete:function () {
@@ -178,7 +184,7 @@ Massiveart.Contentchooser = Class.create({
              $('mediaFilter_Folders').value = folderId;
              this.loadFileFilterContent(viewtype, contenttype);
              }else{*/
-            if (typeof(contenttype) != 'undefined') {
+            if (typeof(contenttype) != 'undefined' && this.type != 'folder') {
                 this.getFolderContent(folderId, rootLevelTypeId, rootLevelGroupId, contenttype);
             }
             //}
@@ -217,7 +223,7 @@ Massiveart.Contentchooser = Class.create({
                          $('mediaFilter_Folders').value = folderId;
                          this.loadFileFilterContent(viewtype, contenttype);
                          }else{*/
-                        if (typeof(contenttype) != 'undefined') {
+                        if (typeof(contenttype) != 'undefined' && this.type != 'folder') {
                             this.getFolderContent(folderId, rootLevelTypeId, rootLevelGroupId, contenttype);
                         }
                         //}

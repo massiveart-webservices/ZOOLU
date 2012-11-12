@@ -2,14 +2,16 @@
 require_once (dirname(__FILE__) . '/../../helpers/ContentchooserHelper.php');
 $objHelper = new ContentchooserHelper();
 $objHelper->setTranslate($this->translate);
-//echo $objHelper->getContentView($this->elements, $this->viewtype, $this->overlaytitle);
 ?>
 
-<div class="olnavigationwrappercontent">
+<div class="olnavigationwrappercontent" <?php if($this->type == 'folder') echo 'style="height:400px;"' ?>>
     <?php echo $objHelper->getNavigationElements($this->elements, $this->viewtype, 0, $this->rootLevelId, $this->rootLevelTypeId, $this->rootLevelGroupId, $this->contenttype, $this->overlaytitle); ?>
 </div>
+<?php if($this->type == 'folder'): ?>
+<?php else: ?>
 <div class="spacercontent">
 </div>
 <div id="olFolderContent" class="olcontentchoosercontentwrapper">
 </div>
+<?php endif; ?>
 <input type="hidden" id="languageId" name="languageId" value=""/>
