@@ -22,6 +22,7 @@ class Form_Helper_FormSeoKeywords extends Zend_View_Helper_FormElement
                             . $this->view->escape($value) .
                       '</textarea>';
         $strOutput .= 'Keywords count: <span id="seo_keywords_count" class="plus">'.$keywords_count.'</span>';
+        $strOutput .= '<script type="text/javascript">myForm.limitKeywords(\''.$name.'\', '.$max_keywords.');</script>';
 
         return $strOutput;
     }
