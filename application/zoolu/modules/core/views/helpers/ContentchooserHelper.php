@@ -255,7 +255,7 @@ class ContentchooserHelper
          */
         $strOutputTop = '
             <div class="olcontentchoosertop">Titel</div>
-            <div class="olcontactitemcontainer">';
+            <div class="olcontentchoosercontentcontainer">';
 
         /**
          * output of list rows (elements)
@@ -328,7 +328,7 @@ class ContentchooserHelper
          */
         $strOutputTop = '
             <div class="olcontentchoosertop">Titel</div>
-            <div class="olcontactitemcontainer">';
+            <div class="olcontentchoosercontentcontainer">';
 
         /**
          * output of list rows (elements)

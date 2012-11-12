@@ -148,13 +148,6 @@ Overlay User */
     height: 10px !important;
     background: #ccc !important;
 }
-
-.olcontentwrapper {
-    overflow: hidden;
-    padding: 0 0 26px 0;
-    min-height: 214px;
-}
-
 .olfiletopitemtitle {
     width: 356px;
 }
@@ -173,11 +166,6 @@ Overlay User */
     min-height: 348px;
     height: 348px;
     width: 430px;
-}
-
-.olcontentwrapper .olcontactitemcontainer {
-    height: 188px;
-    min-height: 188px;
 }
 
 .contactitem {

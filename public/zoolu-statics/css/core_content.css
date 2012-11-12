@@ -1534,7 +1534,7 @@ Overlay Inner */
     background-color: #fff;
 }
 
-.olcontentwrapper, .olcontentwrappertab {
+.olcontentwrapper, .olcontentwrappertab, .olcontentchoosercontentwrapper {
     background-color: #ccc;
     overflow: hidden;
     overflow-y: scroll;
@@ -1795,7 +1795,8 @@ Overlay Inner */
     width: 339px;
 }
 
-.olcontactitemcontainer {
+.olcontactitemcontainer,
+.olcontentchoosercontentcontainer{
     min-height: 148px;
     background-color: #fff;
     width: 413px;
@@ -1921,6 +1922,27 @@ Overlay Inner */
 .spacercontent {
     height: 10px;
     background-color: #cccccc;
+}
+
+
+.olcontentchoosercontentwrapper {
+    overflow: hidden;
+    padding: 0 0 26px 0;
+    min-height: 214px;
+}
+
+.olcontentwrapper .olcontactitemcontainer,
+.olcontentchoosercontentwrapper .olcontentchoosercontentcontainer {
+    height: 188px;
+    min-height: 188px;
+}
+
+.olcontentchoosercontentcontainer {
+    overflow: hidden;
+    overflow-y: scroll;
+    min-height: 348px;
+    height: 348px;
+    width: 430px;
 }
 
 /*-----------------
