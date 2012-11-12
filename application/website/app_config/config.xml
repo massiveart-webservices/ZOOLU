@@ -18,8 +18,8 @@
     <!-- mailer -->
     <mail>
       <from>        
-        <name>zoolu@mailer.massiveat.at</name>
-        <address>zoolu@mailer.massiveat.at</address>
+        <name></name>
+        <address></address>
       </from>
       <recipient>        
         <name></name>
@@ -30,11 +30,11 @@
         <address></address>
       </ma_recipient>
       <params>
-        <host>mailer.massiveart.at</host>
-        <username>zoolu@mailer.massiveart.at</username>
-        <password>w#BmeiLLzoolu</password>
+        <host></host>
+        <username></username>
+        <password></password>
       </params>
-      <transport>smtp</transport>
+      <transport></transport>
       <actions>
         <sendmail>
           <client>false</client>
