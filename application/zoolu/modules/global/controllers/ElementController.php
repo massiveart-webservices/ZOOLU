@@ -872,6 +872,15 @@ class Global_ElementController extends AuthControllerAction
             $this->objRequest->setParam('backLink', $this->objRequest->getParam('backLink', false));
             $strGroupKey = $this->objRequest->getParam('rootLevelGroupKey');
             $strGroupKeyStartpage = 'startpage_' . $strGroupKey;
+<<<<<<< HEAD
+=======
+
+            $strStartpageTypeId = '';
+            if (isset($this->core->sysConfig->global_types->$strGroupKeyStartpage)) {
+                $strStartpageTypeId = $this->core->sysConfig->global_types->$strGroupKeyStartpage->id;
+            }
+
+>>>>>>> a82c0a5... added url layout tree & short; some minor bugfixes
             $strGroupKeyLink = $strGroupKey . '_link';
             $strGroupKeyOverview = $strGroupKey . '_overview';
             if ($this->objRequest->getParam('elementTypeId') != '' && $this->objRequest->getParam('elementTypeId') > 0) {
@@ -886,7 +895,12 @@ class Global_ElementController extends AuthControllerAction
                             $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKey->default_templateId);
                         }
                         break;
+<<<<<<< HEAD
                     case $this->core->sysConfig->global_types->$strGroupKeyStartpage->id :                        
+=======
+
+                    case $strStartpageTypeId:
+>>>>>>> a82c0a5... added url layout tree & short; some minor bugfixes
                         $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKeyStartpage->default_templateId);
                         $this->objRequest->setParam('formId', '');
                         break;
@@ -1099,6 +1113,7 @@ class Global_ElementController extends AuthControllerAction
             $this->objForm->Setup()->setRootLevelGroupId((($this->objRequest->getParam("rootLevelGroupId") != '') ? $this->objRequest->getParam("rootLevelGroupId") : 0));
             $this->objForm->Setup()->setParentId((($this->objRequest->getParam("parentFolderId") != '') ? $this->objRequest->getParam("parentFolderId") : null));
             $this->objForm->Setup()->setIsStartElement((($this->objRequest->getParam("isStartGlobal") != '') ? $this->objRequest->getParam("isStartGlobal") : 0));
+            $this->objForm->Setup()->setLanguageDefinitionType((($this->objRequest->getParam("languageDefinitionType") != '') ? $this->objRequest->getParam("languageDefinitionType") : $this->core->config->language_definition->folder));
             $this->objForm->Setup()->setPublishDate((($this->objRequest->getParam("publishDate") != '') ? $this->objRequest->getParam("publishDate") : date('Y-m-d H:i:s')));
             $this->objForm->Setup()->setShowInNavigation((($this->objRequest->getParam("showInNavigation") != '') ? $this->objRequest->getParam("showInNavigation") : 0));
             $this->objForm->Setup()->setLanguageFallbackId((($this->objRequest->getParam("languageFallback") != '') ? $this->objRequest->getParam("languageFallback") : 0));
@@ -1142,6 +1157,7 @@ class Global_ElementController extends AuthControllerAction
             $this->objForm->addElement('hidden', 'parentFolderId', array('value' => $this->objForm->Setup()->getParentId(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'elementTypeId', array('value' => $this->objForm->Setup()->getElementTypeId(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'isStartGlobal', array('value' => $this->objForm->Setup()->getIsStartElement(), 'decorators' => array('Hidden')));
+            $this->objForm->addElement('hidden', 'languageDefinitionType', array('value' => $this->objForm->Setup()->getLanguageDefinitionType(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'publishDate', array('value' => $this->objForm->Setup()->getPublishDate('Y-m-d H:i:s'), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'showInNavigation', array('value' => $this->objForm->Setup()->getShowInNavigation(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'languageFallback', array('value' => $this->objForm->Setup()->getLanguageFallbackId(), 'decorators' => array('Hidden')));

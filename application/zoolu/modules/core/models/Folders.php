@@ -2373,6 +2373,57 @@ class Model_Folders extends ModelAbstract
     }
 
     /**
+     * @param $intFolderId
+     * @param $blnIsStartElement
+     * @return null|Zend_Db_Table_Row_Abstract
+     */
+    public function loadStartElementUrl($intFolderId, $blnIsStartElement)
+    {
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array());
+
+        if ($blnIsStartElement) {
+            $objSelect->joinInner('pages', 'pages.idParent = folders.idParentFolder AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND pages.isStartPage = 1', array());
+        } else {
+            $objSelect->joinInner('pages', 'pages.idParent = folders.id AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND pages.isStartPage = 1', array());
+        }
+
+        $objSelect->joinInner('urls', 'urls.relationId = pages.pageId AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1', array('url'))
+            ->where('folders.id = ?', $intFolderId)
+            ->order(array('urls.version DESC'));
+
+        return $this->objFolderTable->fetchRow($objSelect);
+    }
+
+    /**
+     * @param $intFolderId
+     * @param $blnIsStartElement
+     * @param $intRootLevelGroupId
+     * @return null|Zend_Db_Table_Row_Abstract
+     */
+    public function loadGlobalStartElementUrl($intFolderId, $blnIsStartElement, $intRootLevelGroupId)
+    {
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array());
+
+        if ($blnIsStartElement) {
+            $objSelect->joinInner('globals', 'globals.idParent = folders.idParentFolder AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND globals.isStartGlobal = 1', array());
+        } else {
+            $objSelect->joinInner('globals', 'globals.idParent = folders.id AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND globals.isStartGlobal = 1', array());
+        }
+
+        $objSelect->joinInner('urls', 'urls.relationId = globals.globalId AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1', array('url'))
+            ->where('folders.id = ?', $intFolderId)
+            ->order(array('urls.version DESC'));
+
+        return $this->objFolderTable->fetchRow($objSelect);
+    }
+
+    /**
      * getFolderTable
      * @return Model_Table_Folders
      * @author Cornelius Hansjakob <cha@massiveart.com>
