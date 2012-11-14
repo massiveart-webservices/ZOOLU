@@ -1302,7 +1302,7 @@ msgstr "Neue Nachricht"
 #: application/zoolu/layouts/newsletters-list.phtml:290
 #: application/zoolu/layouts/cms-list.phtml:302
 msgid "Ok"
-msgstr "Ok"
+msgstr "OK"
 
 #: application/zoolu/layouts/cms.phtml:394
 #: application/zoolu/layouts/index.phtml:294
