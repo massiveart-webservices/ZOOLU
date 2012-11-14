@@ -26,13 +26,10 @@ Massiveart.Contentchooser = Class.create({
     },
 
     removeUnusedContainer:function () {
-        if (this.start == 'rootLevel') {
-            $('olModules').remove();
-            $('olBack').hide();
-        }
-        if (this.start == 'content') {
-            $('olModules').remove();
-            $('olBack').hide();
+        if (this.start == 'rootLevel' || this.start == 'content') {
+            if ($('olModules')) {
+                $('olModules').remove();
+            }
         }
     },
 
@@ -167,6 +164,10 @@ Massiveart.Contentchooser = Class.create({
                     this.olCurrContainerId = this.olNewContainerId;
 
                     this.removeUnusedContainer();
+
+                    $('buttonCancel').observe('click', function () {
+                        myOverlay.close('overlayGenContentWrapper');
+                    });
                 }.bind(this)
             });
         }
