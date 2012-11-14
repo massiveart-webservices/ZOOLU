@@ -1911,8 +1911,10 @@ Overlay Inner */
 }
 
 .olcontainerwrapper {
+    background-color: transparent;
     overflow: hidden;
     height: 400px;
+    margin-bottom: -10px;
 }
 
 .olnavigationwrappercontent {
@@ -1923,7 +1925,6 @@ Overlay Inner */
     height: 10px;
     background-color: #cccccc;
 }
-
 
 .olcontentchoosercontentwrapper {
     overflow: hidden;
