@@ -347,7 +347,7 @@ class ContentchooserHelper
                     $strStartElement = 'isStart' . ucfirst($strContentType);
 
                     $strOutput .= '
-                        <div class="olpageitem" id="olItem' . $row->id . '" onclick="myContentchooser.addItemToListArea(' . $row->id . ((isset($row->linkId) && $row->linkId > 0) ? ',' . $row->linkId : '') . '); return false;"' . $strHidden . '>
+                        <div class="olpageitem" id="olItem' . $row->id . '" onclick="myContentchooser.callback(' . $row->id . ((isset($row->linkId) && $row->linkId > 0) ? ',' . $row->linkId : '') . '); return false;"' . $strHidden . '>
                             <div class="olpageleft"></div>
                             <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
                             <div class="icon olpageicon img_' . (($row->$strStartElement == 1) ? 'startpage' : 'page') . '_' . (($row->idStatus == $this->core->sysConfig->status->live) ? 'on' : 'off') . '"></div>

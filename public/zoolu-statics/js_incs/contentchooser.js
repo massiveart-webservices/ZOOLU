@@ -20,6 +20,9 @@ Massiveart.Contentchooser = Class.create({
         this.type = '';
 
         this.offsetX = 430;
+
+        this.callback = function () {
+        };
     },
 
     removeUnusedContainer:function () {
@@ -37,7 +40,7 @@ Massiveart.Contentchooser = Class.create({
      * getContentchooser
      * @param string areaId
      */
-    getContentchooser:function (start, type, areaId) {
+    getContentchooser:function (start, type, areaId, callback) {
         if (typeof(start) == 'undefined') {
             start = 'modules';
         }
@@ -49,6 +52,7 @@ Massiveart.Contentchooser = Class.create({
         }
         this.start = start;
         this.type = type;
+        this.callback = callback;
 
         $(this.updateOverlayContainer).innerHTML = '';
         myCore.putCenter('overlayGenContentWrapper');
@@ -220,58 +224,6 @@ Massiveart.Contentchooser = Class.create({
                         myCore.removeBusyClass('olsubnav' + folderId);
                     }.bind(this)
                 });
-            }
-        }
-    },
-
-    /**
-     * addItemToListArea
-     */
-    addItemToListArea:function (itemId, linkId) {
-        if (typeof(linkId) == 'undefined') linkId = null;
-        if ($(this.areaId) && $('olItem' + itemId)) {
-            var moduleId = 0;
-            if ($('olModuleId') && $F('olModuleId') != '') moduleId = $F('olModuleId');
-            var rootLevelId = 0;
-            if ($('olRootLevelId') && $F('olRootLevelId') != '') rootLevelId = $F('olRootLevelId');
-
-            var fieldId = 'dbrd-' + this.areaId.substring(this.areaId.indexOf('_') + 1);
-            var iconRemoveId = fieldId + '_remove' + itemId;
-
-            // create new item container
-            var itemContainer = '<div id="' + fieldId + '_item' + itemId + '" moduleid="' + moduleId + '" rootlevelid="' + rootLevelId + '" relationid="' + itemId + '" class="elementitem" style="display:none;">' + $('olItem' + itemId).innerHTML + '</div>';
-            if ($('divClear_' + fieldId)) $('divClear_' + fieldId).remove();
-            new Insertion.Bottom(this.areaId, itemContainer + '<div id="divClear_' + fieldId + '" class="clear"></div>');
-
-            if ($('Remove' + itemId)) $('Remove' + itemId).writeAttribute('id', iconRemoveId);
-
-            // insert file id to hidden field - only 1 insert is possible
-            var addToField = '{"moduleId":' + moduleId + ',"rootLevelId":' + rootLevelId + ',"relationId":' + itemId;
-            if (linkId != null && linkId != itemId) {
-                addToField += ',"linkId":' + linkId + '}';
-            } else {
-                addToField += '}';
-            }
-
-            if (addToField.isJSON()) {
-                if ($(fieldId).value.indexOf(addToField) == -1) {
-                    if ($F(fieldId) == '') {
-                        $(fieldId).setValue('[' + addToField + ']');
-                    } else if ($(fieldId).value.indexOf('}]') != -1) {
-                        $(fieldId).setValue($F(fieldId).replace('}]', '},' + addToField + ']'));
-                    }
-                }
-            }
-
-            $(fieldId + '_item' + itemId).appear({duration:0.5});
-            $('olItem' + itemId).fade({duration:0.5});
-
-            // add remove method to remove icon
-            if ($(iconRemoveId)) {
-                $(iconRemoveId).show();
-                $(iconRemoveId).onclick = function () {
-                    myDashboard.removeRelationItem(fieldId, fieldId + '_item' + itemId, itemId, linkId);
-                }
             }
         }
     },
