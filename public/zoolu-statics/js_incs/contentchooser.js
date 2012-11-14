@@ -173,21 +173,17 @@ Massiveart.Contentchooser = Class.create({
      * @param integer folderId, integer viewtype
      */
     getNavItem:function (folderId, rootLevelTypeId, rootLevelGroupId, viewtype, contenttype) {
-        this.resetNavItems();
-
-        $('olnavitemtitle' + folderId).addClassName('selected');
+        //set selected class only if folder type is active
+        if (this.type == 'folder') {
+            this.resetNavItems();
+            $('olnavitemtitle' + folderId).addClassName('selected');
+        }
 
         if ($('olsubnav' + folderId)) {
             this.toggleSubNavItem(folderId);
-            // if mediaFilter is active
-            /*if($('mediaFilter_Folders')){
-             $('mediaFilter_Folders').value = folderId;
-             this.loadFileFilterContent(viewtype, contenttype);
-             }else{*/
             if (typeof(contenttype) != 'undefined' && this.type != 'folder') {
                 this.getFolderContent(folderId, rootLevelTypeId, rootLevelGroupId, contenttype);
             }
-            //}
         } else {
             if (folderId != '') {
                 var subNavContainer = '<div id="olsubnav' + folderId + '" class="olsubnav" style="display:none;"></div>';
@@ -218,15 +214,9 @@ Massiveart.Contentchooser = Class.create({
                     },
                     evalScripts:true,
                     onComplete:function () {
-                        // if mediaFilter is active
-                        /*if($('mediaFilter_Folders')){
-                         $('mediaFilter_Folders').value = folderId;
-                         this.loadFileFilterContent(viewtype, contenttype);
-                         }else{*/
                         if (typeof(contenttype) != 'undefined' && this.type != 'folder') {
                             this.getFolderContent(folderId, rootLevelTypeId, rootLevelGroupId, contenttype);
                         }
-                        //}
                         myCore.removeBusyClass('olsubnav' + folderId);
                     }.bind(this)
                 });
@@ -365,10 +355,10 @@ Massiveart.Contentchooser = Class.create({
      * resetNavItems
      */
     resetNavItems:function () {
-        $$('.olnavigationwrapper .olnavchilditem span.selected').each(function (element, index) {
+        $$('.olnavigationwrappercontent .olnavchilditem span.selected').each(function (element, index) {
             element.removeClassName('selected');
         });
-        $$('.olnavigationwrapper .olnavrootitem span.selected').each(function (element, index) {
+        $$('.olnavigationwrappercontent .olnavrootitem span.selected').each(function (element, index) {
             element.removeClassName('selected');
         });
     },

@@ -1945,6 +1945,11 @@ Overlay Inner */
     width: 430px;
 }
 
+.olnavrootitem .selected,
+.olnavchilditem .selected {
+    background-color: #ffd300;
+}
+
 /*-----------------
  * importPreview
  */
