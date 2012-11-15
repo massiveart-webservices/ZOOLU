@@ -1,4 +1,4 @@
-    <?php
+<?php
 /**
  * ZOOLU - Content Management System
  * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
