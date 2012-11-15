@@ -5,7 +5,6 @@ INSERT INTO `fieldTypes` (`id`, `idDecorator`, `sqlType`, `size`, `title`, `defa
 UPDATE `fields` SET `idFieldTypes` = '35' WHERE `name` = 'seo_description';
 UPDATE `fields` SET `idFieldTypes` = '35' WHERE `name` = 'seo_keywords';
 UPDATE `fields` SET `idFieldTypes` = '35' WHERE `name` = 'seo_title';
-UPDATE `fields` SET `idFieldTypes` = '35' WHERE `name` = 'seo_canonical';
 
 -- update seo fields `options`
 UPDATE `fields` SET `options` = '{"textbox":"textarea", "seoname":"meta description", "charslimit":"156"}' WHERE `name` = 'seo_description';
@@ -13,5 +12,3 @@ UPDATE `fields` SET `options` = '{"textbox":"textarea", "seoname":"meta descript
 UPDATE `fields` SET `options` = '{"textbox":"textarea", "seoname":"meta keywords", "charslimit":"156"}' WHERE `name` = 'seo_keywords';
 
 UPDATE `fields` SET `options` = '{"textbox":"text", "seoname":"page title", "charslimit":"70"}' WHERE `name` = 'seo_title';
-
-UPDATE `fields` SET `options` = '{"textbox":"text", "seoname":"canonical page", "charslimit":"100"}' WHERE `name` = 'seo_canonical';
