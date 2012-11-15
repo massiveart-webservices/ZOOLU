@@ -1975,7 +1975,7 @@ Massiveart.Form = Class.create({
     var desc = this.cleanText( $('seo_description').getValue() );
 
     if( desc == '' ) {
-        desc = this.cleanText( $('description').getValue() );
+        desc = this.cleanText( $('shortdescription').getValue() );
     }
 
     if( desc.length > 170 ) {
