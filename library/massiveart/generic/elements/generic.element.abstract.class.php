@@ -160,7 +160,7 @@ abstract class GenericElementAbstract
     {
         try {
             if (!$this->_helper instanceof GenericDataHelper) {
-                
+
                 try {
                     $class = $this->getPluginLoader()->load($this->type);
                 } catch (Zend_Loader_PluginLoader_Exception $e) {

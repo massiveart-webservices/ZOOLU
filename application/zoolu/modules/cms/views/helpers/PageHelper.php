@@ -130,9 +130,9 @@ class PageHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getOverlayFilesOutput($rowset, $strFieldName, $intViewType, $arrCurrFileIds = array(), $replace)
+    public function getOverlayFilesOutput($rowset, $strFieldName, $intViewType, $arrCurrFileIds = array())
     {
-        $this->core->logger->debug('cms->views->helpers->PageHelper->getOverlayFilesOutput(fieldname: ' . $strFieldName . ' - viewtype: ' . $intViewType . ', ' . $replace . ')');
+        $this->core->logger->debug('cms->views->helpers->PageHelper->getOverlayFilesOutput(fieldname: ' . $strFieldName . ' - viewtype: ' . $intViewType . ')');
 
         $strReturn = '';
 
@@ -160,16 +160,12 @@ class PageHelper
                         $strHidden = ' style="display:none;"';
                     }
 
-                    $onclickEvent = 'myOverlay.addItemToThumbArea(\'olMediaItem' . $row->id . '\', ' . $row->id . '); ';
-                    if ($replace) {
-                        $onclickEvent = 'myOverlay.replaceImageFile(\'olMediaItem' . $row->id . '\', ' . $row->id . ', \'' .$this->core->sysConfig->media->paths->imgbase .$row->path . '{SIZE}/' . $row->filename . '?v=' . $row->version . '\'); ';                            
-                    }
                     $strOutput .= '<div id="olMediaItem' . $row->id . '" class="olmediaitem" fileid="' . $row->id . '"' . $strHidden . '>
                            <table>
                              <tbody>
                                <tr>
                                  <td>
-                                   <img onclick="' . $onclickEvent .' return false;" id="Img' . $row->id . '" alt="' . $row->title . '" title="' . $row->title . '" src="' . sprintf($this->core->sysConfig->media->paths->thumb, $row->path) . $row->filename . '?v=' . $row->version . '" ' . $strMediaSize . '/>
+                                   <img onclick="myOverlay.addItemToThumbArea(\'olMediaItem' . $row->id . '\', ' . $row->id . '); return false;" id="Img' . $row->id . '" alt="' . $row->title . '" title="' . $row->title . '" src="' . sprintf($this->core->sysConfig->media->paths->thumb, $row->path) . $row->filename . '?v=' . $row->version . '" ' . $strMediaSize . '/>
                                  </td>
                                </tr>
                              </tbody>
@@ -221,13 +217,8 @@ class PageHelper
                             } else {
                                 $strMediaSize = 'width="32"';
                             }
-                            $onclickEvent = 'myOverlay.addItemToThumbArea(\'olFileItem' . $row->id . '\', ' . $row->id . '); ';
-                            if ($replace) {
-                                $onclickEvent = 'myOverlay.replaceImageFile(\'olFileItem' . $row->id . '\', ' . $row->id . ', \'' .$this->core->sysConfig->media->paths->imgbase .$row->path . '{SIZE}/' . $row->filename . '?v=' . $row->version . '\'); ';                            
-                            }
-                            
                             $strOutputMedia .= '
-                  <div class="olfileitem" id="olFileItem' . $row->id . '" onclick="' . $onclickEvent .' return false;">
+                  <div class="olfileitem" id="olFileItem' . $row->id . '" onclick="myOverlay.addItemToThumbArea(\'olFileItem' . $row->id . '\', ' . $row->id . '); return false;">
                     <div class="olfileleft"></div>
                     <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
                     <div class="olfileitemicon"><img ' . $strMediaSize . ' id="File' . $row->id . '" src="' . sprintf($this->core->sysConfig->media->paths->icon32, $row->path) . $row->filename . '?v=' . $row->version . '" alt="' . $row->description . '"/></div>

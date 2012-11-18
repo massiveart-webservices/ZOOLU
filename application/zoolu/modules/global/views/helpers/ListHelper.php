@@ -114,7 +114,7 @@ class ListHelper
 
                 if ($intColumCounter == 1) {
                     $strTbody .= '
-              <td class="row'.$column.'"'.$strColspan.'><a href="#" onclick="myNavigation.getListEditForm('.$objItem->id.',\''.$strLanguageCodes.'\'); return false;">'.htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a></td>';
+              <td class="row' . $column . '"' . $strColspan . '><a href="#" onclick="myNavigation.getEditForm(' . $objItem->id . '); return false;">' . htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a></td>';
                 } else {
                     $strTbody .= '
               <td class="row' . $column . '"' . $strColspan . '>' . htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</td>';

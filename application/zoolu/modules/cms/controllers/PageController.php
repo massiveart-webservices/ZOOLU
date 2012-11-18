@@ -516,7 +516,6 @@ class Cms_PageController extends AuthControllerAction
             $this->view->assign('fieldname', $this->objRequest->getParam('fileFieldId'));
             $this->view->assign('viewtype', $this->objRequest->getParam('viewtype'));
             $this->view->assign('isOverlay', (bool) $this->objRequest->getParam('isOverlay', false));
-            $this->view->assign('replace', (bool) $this->objRequest->getParam('replace', false));
             $this->view->assign('arrCurrFileIds', $arrCurrFileIds);
 
             if ($intRootLevelId > 0 || $arrFolderIds[0] > 0) {

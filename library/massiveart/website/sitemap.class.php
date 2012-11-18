@@ -86,7 +86,6 @@ class Sitemap
                         $objNavigation = new Navigation();
                         $objNavigation->setRootLevelId($objRootLevel->id);
                         $objNavigation->setLanguageId($objRootLevelLanguage->id);
-                        $objNavigation->setLanguageDefinitionType($objRootLevel->languageDefinitionType);
                         $this->addXmlUrlsetChilds($objNavigation->loadSitemap(), $strUrl, strtolower($objRootLevelLanguage->languageCode));
                         
                         // save xml for every langauge per rootLevel, cause language is specified in subdomain
@@ -125,7 +124,7 @@ class Sitemap
                 $strMainUrl = 'www.' . $strMainUrl;
               }   
         }
-        return 'http://' . $strMainUrl;
+        return $strMainUrl;
     }
 
     /**

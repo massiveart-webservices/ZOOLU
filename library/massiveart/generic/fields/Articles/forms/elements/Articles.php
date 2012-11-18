@@ -46,4 +46,5 @@
 class Form_Element_Articles extends FormElementXhtmlAbstract
 {
     public $helper = 'formArticles';
+
 }

@@ -110,7 +110,6 @@ class Cms_OverlayController extends AuthControllerAction
         $this->view->assign('overlaytitle', $this->core->translate->_('Assign_medias'));
         $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->thumb);
         $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
-        $this->view->assign('replace', ($this->getRequest()->getParam('replace') == 'true') ? 'true' : 'false');
         $this->renderScript('overlay/overlay.phtml');
     }
 
@@ -415,7 +414,6 @@ class Cms_OverlayController extends AuthControllerAction
         $this->view->assign('viewtype', $viewtype);
         $this->view->assign('contenttype', $contenttype);
         $this->view->assign('selectOne', ($this->getRequest()->getParam('selectOne') == 'true') ? 'true' : 'false');
-        $this->view->assign('replace', ($this->getRequest()->getParam('replace') == 'true') ? 'true' : 'false');
     }
 
     /**

@@ -206,7 +206,6 @@ class Page
      * @var array
      */
     protected $arrFileData = array();
-    protected $arrDisplayOptions = array();
 
     protected $intRootLevelId;
     protected $strRootLevelTitle;
@@ -323,6 +322,8 @@ class Page
                 $this->objGenericData->Setup()->setParentTypeId($this->getParentTypeId());
                 $this->objGenericData->Setup()->setModelSubPath($this->getModelSubPath());
                 
+                $this->core->logger->debug('huhu');
+
                 $this->objGenericData->loadData();
 
                 if ($this->objGenericData->Setup()->getLanguageFallbackId() > 0 && $this->objGenericData->Setup()->getLanguageFallbackId() != $this->getLanguageId()) {
@@ -340,14 +341,6 @@ class Page
                     if (isset($objPage->idPageTypes)) {
                         switch ($objPage->idPageTypes) {
                             case $this->core->sysConfig->page_types->external->id:
-                                $strTmpUrl = $this->getFieldValue('external');
-                                if ((bool) preg_match("/https?:\/\//", $strTmpUrl) == true) {
-                                    header('Location: '.$strTmpUrl);
-                                }else {
-                                    header('Location: http://'.$strTmpUrl);
-                                }
-                                exit();
-                                /* PROBLEM : FILTER_VALIDATE_URL not correct, urls with "-" (Bugfix in PHP 5.3.3)
                                 if (filter_var($this->getFieldValue('external'), FILTER_VALIDATE_URL)) {
                                     header('Location: ' . $this->getFieldValue('external'));
                                 } else if (filter_var('http://' . $this->getFieldValue('external'), FILTER_VALIDATE_URL)) {
@@ -355,7 +348,7 @@ class Page
                                 } else {
                                     header('Location: http://' . $_SERVER['HTTP_HOST']);
                                 }
-                                exit();*/
+                                exit();
                             case $this->core->sysConfig->page_types->link->id:
                                 header('Location: http://' . $_SERVER['HTTP_HOST'] . $this->getField('internal_link')->strLinkedPageUrl);
                                 exit();
@@ -681,53 +674,6 @@ class Page
                 }
             }
             return $this->arrFileData[$strFileFieldName];
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-        }
-    }
-    
-    /**
-     * getCoreFileFieldValue
-     * @param string $strFileFieldName
-     * @author Raphael Stocker <raphael.stocker@massiveart.com>
-     * @version 1.0
-     */
-    public function getCoreFileFieldValue($strFileFieldName)
-    {
-        try {
-            if (!array_key_exists($strFileFieldName, $this->arrFileData)) {
-                $this->arrFileData[$strFileFieldName] = null;
-                $objField = $this->objGenericData->Setup()->getField($strFileFieldName);
-                if (is_object($objField)) {
-                    $strFileIds = $objField->getValue();
-                    if ($strFileIds != '') {
-                        $this->getModelFiles();
-                        $this->arrFileData[$strFileFieldName] = $this->objModelFiles->loadFilesById($strFileIds);
-                        $this->arrDisplayOptions[$strFileFieldName] = $objField->getProperty('display_option');
-                    }
-                }
-            }
-            return $this->arrFileData[$strFileFieldName];
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-        }
-    }
-    
-    /**
-     * getCoreFileDisplayOptions
-     * @param string $strFileFieldName
-     * @author Raphael Stocker <raphael.stocker@massiveart.com>
-     * @version 1.0
-     */
-    public function getCoreFileDisplayOptions($strFileFieldName)
-    {
-        try {
-            if (!array_key_exists($strFileFieldName, $this->arrDisplayOptions)) {
-                $this->arrDisplayOptions[$strFileFieldName] = null;
-                $objField = $this->objGenericData->Setup()->getField($strFileFieldName);
-                $this->arrDisplayOptions[$strFileFieldName] = $objField->getProperty('display_option');
-            }
-            return $this->arrDisplayOptions[$strFileFieldName];
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -1093,9 +1039,9 @@ class Page
                     foreach ($objTmpContainer->getEntries() as $objTmpEntry) {
 
                         $strEventUrl = '';
-                        if ((bool) preg_match("/https?:\/\//", $objTmpEntry->external) == true) {
+                        if (filter_var($objTmpEntry->external, FILTER_VALIDATE_URL)) {
                             $strEventUrl = $objTmpEntry->external;
-                        }else {
+                        } else if (filter_var('http://' . $objTmpEntry->external, FILTER_VALIDATE_URL)) {
                             $strEventUrl = 'http://' . $objTmpEntry->external;
                         }
 

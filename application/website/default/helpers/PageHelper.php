@@ -90,7 +90,7 @@ class PageHelper {
    */
   public function __construct($blnRequireFrunctionWrapper = true){
     $this->core = Zend_Registry::get('Core');
-
+    
     /**
      * function call wrapper for PageHelper
      */
@@ -396,6 +396,47 @@ class PageHelper {
       $strReturn .= $this->objPage->getFieldValue('description');
       if($blnContainer) $strReturn .= '</div>';
     }
+    return $strReturn;
+  }
+
+  /**
+   * getMetaRobots()
+   * @return string $strReturn
+   * @author Nurbek Chymbaev
+   * @version 1.0
+   */
+  public function getMetaRobots() {
+    $strReturn = '';
+    $metaRobotsField = $this->objPage->getFieldValue('seo_metarobots');
+
+    $metaIndex = 'index';
+    $metaFollow = 'follow';
+
+    if( !empty($metaRobotsField[0]) ) {
+        switch( $metaRobotsField[0] ) {
+            case '677':
+                $metaIndex = 'noindex';
+                break;
+            case '678':
+                $metaFollow = 'nofollow';
+                break;
+        }
+    }
+
+    if( !empty($metaRobotsField[1]) ) {
+          switch( $metaRobotsField[1] ) {
+              case '677':
+                  $metaIndex = 'noindex';
+                  break;
+              case '678':
+                  $metaFollow = 'nofollow';
+                  break;
+          }
+    }
+
+
+    $strReturn .= '<meta name="robots" content="'.$metaIndex.','.$metaFollow.'"/>';
+
     return $strReturn;
   }
   
@@ -907,10 +948,6 @@ class PageHelper {
           
           $objFiles = $this->objPage->getFileFieldValueById($objMyMultiRegion->getField('block_pics')->getInstanceValue($intRegionInstanceId));
           $objDisplayOption = json_decode(str_replace("'", '"', $objMyMultiRegion->getField('block_pics')->getInstanceProperty($intRegionInstanceId, 'display_option')));
-
-          if ($objDisplayOption == null) {
-              $objDisplayOption = new stdClass();
-          }
           
           if(!isset($objDisplayOption->position) || $objDisplayOption->position == null) $objDisplayOption->position = 'LEFT_MIDDLE';
           if(!isset($objDisplayOption->size) || $objDisplayOption->size == null) $objDisplayOption->size = $strImageFolder;

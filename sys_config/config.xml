@@ -520,9 +520,6 @@
                 <params>660</params>
               </action>
             </actions>                        
-            <display>
-              <imagemap>true</imagemap>
-            </display>
           </default_size>
           <default_size>
             <folder>420x</folder>
@@ -531,10 +528,7 @@
                 <method>resize</method>
                 <params>420</params>
               </action>
-            </actions>
-            <display>
-              <imagemap>true</imagemap>
-            </display>                        
+            </actions>                        
           </default_size>
           <default_size>
             <folder>220x</folder>
@@ -896,7 +890,6 @@
     <region_types>
       <content>1</content>
       <config>2</config>
-      <unique>3</unique>
     </region_types>
     
     <!-- CATEGORY TYPES -->

@@ -136,7 +136,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
                         
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
 
                         $strTmpFileIds = trim($objField->getValue(), '[]');
                         $arrFileIds = array();
@@ -304,8 +304,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $strTmpFileIds = trim($objField->getValue(), '[]');
                 $arrFileIds = array();
                 $arrFileIds = explode('][', $strTmpFileIds);
-                
-                $strDisplayOption = $objField->getProperty('display_option');
 
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
@@ -317,7 +315,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'    => $this->setup->getLanguageId(),
                                     'sortPosition'   => $intSortPosition + 1,
                                     'idFiles'        => $intFileId,
-                                    'displayOption'  => $strDisplayOption,
                                     'idFields'       => $intFieldId
                                 );
                             } else {
@@ -325,8 +322,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id'],
                                     'idFiles'                            => $intFileId,
                                     'idFields'                           => $intFieldId,
-                                    'sortPosition'                       => $intSortPosition + 1,
-                                    'displayOption'                      => $strDisplayOption
+                                    'sortPosition'                       => $intSortPosition + 1
                                 );
                             }
 
@@ -550,7 +546,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
 
                         $strTmpFileIds = trim($objField->getValue(), '[]');
                         $arrFileIds = array();
@@ -563,8 +559,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
-                            $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idFields = ?', $objField->id);
-                            
                             // delete
                             $objGenTable->delete($strWhere);
 
@@ -677,11 +671,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     }
                 } else {
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
                         $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
-                        $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idFields = ?', $objField->id);
     
                         /**
                          * delete
@@ -734,8 +727,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $strTmpFileIds = trim($objField->getValue(), '[]');
                 $arrFileIds = array();
                 $arrFileIds = explode('][', $strTmpFileIds);
-                
-                $strDisplayOption = $objField->getProperty('display_option');
 
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
@@ -747,7 +738,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'   => $this->setup->getLanguageId(),
                                     'sortPosition'  => $intSortPosition + 1,
                                     'idFiles'       => $intFileId,
-                                    'displayOption' => $strDisplayOption,
                                     'idFields'      => $intFieldId
                                 );
                             } else {
@@ -755,8 +745,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id'],
                                     'idFiles'                            => $intFileId,
                                     'idFields'                           => $intFieldId,
-                                    'sortPosition'                       => $intSortPosition + 1,
-                                    'displayOption'                      => $strDisplayOption
+                                    'sortPosition'                       => $intSortPosition + 1
                                 );
                             }
 
@@ -913,7 +902,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $intRegionPosition = 0;
                             foreach ($objRegion->RegionInstanceIds() as $intRegionInstanceId) {
                                 $intRegionPosition++;
-                                $arrTypeProperties['regionUniqueId'] = $objRegion->getRegionUniqueId($intRegionPosition);
                                 $this->insertMultiplyRegionInstanceData($objRegion, $intRegionInstanceId, $intRegionPosition, $strType, $arrTypeProperties);
                             }
                         }
@@ -967,20 +955,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                      'sortPosition' => $intRegionPosition
                 )
             );
-            
-            if ($objRegion->getRegionTypeId() == $this->core->sysConfig->region_types->unique) {
-                $uniqueId = $arrTypeProperties['regionUniqueId'];
-                if ($uniqueId == null) {
-                    $uniqueId = uniqid();
-                    $objRegion->addRegionUniqueId($intRegionInstanceId, $uniqueId);    
-                }
-                $arrInstanceData = array_merge(
-                $arrInstanceData,
-                    array(
-                         'uniqueId' => $uniqueId
-                    )
-                );    
-            }
 
 
             /**
@@ -1193,16 +1167,15 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 foreach ($this->setup->CoreFields() as $strField => $objField) {
 
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable('pageFiles');
                         $objSelect = $objGenTable->select();
                         $objSelect->setIntegrityCheck(false);
         
-                        $objSelect->from($strType.'Files', array('idFiles', 'sortPosition', 'displayOption'));
-                        $objSelect->join('fields', 'fields.id = '.$strType.'Files.idFields', array('name'));
+                        $objSelect->from('pageFiles', array('idFiles', 'sortPosition', 'displayOption'));
+                        $objSelect->join('fields', 'fields.id = pageFiles.idFields', array('name'));
                         $objSelect->where($strType . 'Id = ?', $arrTypeProperties['Id']);
                         $objSelect->where('version = ?', $arrTypeProperties['Version']);
                         $objSelect->where('idLanguages = ?', $this->Setup()->getLanguageId());
-                        $objSelect->where('idFields = ?', $objField->id);
                         $objSelect->order(array('sortPosition ASC'));
         
                         $arrGenFormsData = $objGenTable->fetchAll($objSelect)->toArray();
@@ -1300,7 +1273,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         if ($this->setup->getFileField($arrGenRowFormsData['name']) !== null) {
                             $strFileIds = $this->setup->getFileField($arrGenRowFormsData['name'])->getValue() . '[' . $arrGenRowFormsData['idFiles'] . ']';
                             $this->setup->getFileField($arrGenRowFormsData['name'])->setValue($strFileIds);
-                            if (array_key_exists('displayOption', $arrGenRowFormsData)) $this->setup->getFileField($arrGenRowFormsData['name'])->setProperty('display_option', $arrGenRowFormsData['displayOption']);
                         }
                     }
                 }
@@ -1449,10 +1421,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     foreach ($objRegion->InstanceFieldNames() as $strField) {
                         $arrSelectFields[] = $strField;
                     }
-                    
-                    if ($objRegion->getRegionTypeId() == $this->core->sysConfig->region_types->unique) {
-                        $arrSelectFields[] = 'uniqueId';
-                    }
 
                     $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), $arrSelectFields);
                     if (isset($arrTypeProperties['Version'])) {
@@ -1476,9 +1444,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
                             $objRegion->addRegionInstanceId($intRegionInstanceCounter);
                             foreach ($arrRowGenFormData as $column => $value) {
-                                if ($column == 'uniqueId') {
-                                    $objRegion->addRegionUniqueId($intRegionInstanceCounter, $value);    
-                                } else if ($column != 'id') {
+                                if ($column != 'id') {
                                     if (is_array(json_decode($value))) {
                                         $objRegion->getField($column)->setInstanceValue($intRegionInstanceCounter, json_decode($value));
                                     } else {
@@ -1488,6 +1454,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             }
                         }
                     }
+
                     /**
                      * generic multipy region file fields
                      */

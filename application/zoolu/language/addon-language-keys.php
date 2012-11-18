@@ -82,7 +82,6 @@ $core->translate->_('all');
 $core->translate->_('subscribed');
 $core->translate->_('dirty');
 
-
 /**
  * navigation mehtods
  */

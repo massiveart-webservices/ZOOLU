@@ -104,6 +104,10 @@ function get_meta_description(){
   echo getPageHelperObject()->getMetaDescription();
 }
 
+function get_meta_robots(){
+  echo getPageHelperObject()->getMetaRobots();
+}
+
 /**
  * get_zoolu_header
  * @author Cornelius Hansjakob <cha@massiveart.com>
@@ -779,16 +783,5 @@ function get_page_similar_page_links($intNumber = 5){
 function get_language_chooser(){
   echo getPageHelperObject()->getLanguageChooser();
 }
-
-/**
- * get_image_map
- * @return string $strHtmlOutput
- * @author Raphael Stocker <raphael.stocker@massiveart.com>
- * @version 1.0
- */
-function get_image_map(){
-  echo getPageHelperObject()->getImageMap();
-}
-
 
 ?>

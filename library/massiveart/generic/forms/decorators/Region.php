@@ -74,7 +74,6 @@ class Form_Decorator_Region extends Zend_Form_Decorator_Fieldset
         $intRegionCounter = $objElement->getAttrib('regionCounter');
         $strRegionTitle = $objElement->getAttrib('regionTitle');
         $intRegionTypeId = $objElement->getAttrib('regionTypeId');
-        $intRegionUniqueId = $objElement->getAttrib('regionUniqueId');
 
         $strBoxStyle = '';
         if ($blnIsEmptyWidget == true) {
@@ -115,12 +114,7 @@ class Form_Decorator_Region extends Zend_Form_Decorator_Fieldset
                      </div>';
         }
 
-        $strOutput .= '<div id="divRegion_' . $strId . '" class="' . $strCssPos . 'box-' . $intColumns . $strAddonCssClass . '"' . $strBoxStyle . '>';
-        if ($blnIsMultiply && $intRegionTypeId) {
-            $strOutput .= '<input type="hidden" id="divRegion_' . $strId . '_regionUniqueId" name="divRegion_' . $strId . '_regionUniqueId" value="' . $intRegionUniqueId . '" />';            
-        }
-        
-        $strOutput .= '
+        $strOutput .= '<div id="divRegion_' . $strId . '" class="' . $strCssPos . 'box-' . $intColumns . $strAddonCssClass . '"' . $strBoxStyle . '>
           <div id="editbox' . $strId . '" class="' . $strEditboxClass . $strTypeCss . '">
             <div class="cornertl"';
         if ($objElement->getAttrib('collapsable')) {

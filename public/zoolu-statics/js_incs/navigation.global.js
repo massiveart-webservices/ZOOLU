@@ -155,32 +155,6 @@ Massiveart.Navigation.Global = Class.create(Massiveart.Navigation, {
         }.bind(this)
       });
     }
-  },
-  
-  /**
-   * getListEditForm
-   */
-  getListEditForm: function(itemId, languageCodes){
-    
-    if($(this.genTableListContainer)) $(this.genTableListContainer).hide();
-    if($(this.genListContainer)) $(this.genListContainer).hide();
-    if($(this.genListFunctions)) $(this.genListFunctions).hide();
-    
-    if(typeof(languageCodes) == 'undefined'){       
-      languageCodes = null;
-    }
-    
-    if($('buttondelete')) $('buttondelete').hide(); 
-    
-    new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + this.rootLevelType + '/geteditform', {
-      parameters: { rootLevelId: this.rootLevelId, id: itemId, languageCodes: languageCodes, sourceView: 'list' },      
-      evalScripts: true,     
-      onComplete: function() {        
-        $(this.genFormContainer).show();
-        $(this.genFormFunctions).show();
-        $(this.genFormContainer).scrollTo($('widgetfunctions'));
-      }.bind(this)
-    });
   }
 
 });

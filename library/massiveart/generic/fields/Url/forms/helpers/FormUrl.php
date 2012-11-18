@@ -104,7 +104,6 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
                     <input type="hidden" value="' . $value . '" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" ' . $endTag . '
                     <input type="hidden" value="' . $strUrlEditable . '" id="' . $this->view->escape($id) . '_EditableUrl" name="' . $this->view->escape($name) . '_EditableUrl" ' . $endTag . '
                     <input type="hidden" value="' . $strUrlShown . '" id="' . $this->view->escape($id) . '_ShownUrl" name="' . $this->view->escape($name) . '_ShownUrl" ' . $endTag . '
-                    <input type="hidden" value="" id="' . $this->view->escape($id) . '_preventSaving" name="' . $this->view->escape($name) . '_PreventSaving" ' . $endTag . '
                   </div>';
 
                     if ($blnSuggestion) {
@@ -124,15 +123,9 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
                     <input type="hidden" value="' . $strTmpLanguageCode . '" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" ' . $endTag . '
                     <input type="hidden" value="" id="' . $this->view->escape($id) . '_EditableUrl" name="' . $this->view->escape($name) . '_EditableUrl" ' . $endTag . '
                     <input type="hidden" value="' . $strTmpLanguageCode . '" id="' . $this->view->escape($id) . '_ShownUrl" name="' . $this->view->escape($name) . '_ShownUrl" ' . $endTag . '
-                    <input type="hidden" value="" id="' . $this->view->escape($id) . '_preventSaving" name="' . $this->view->escape($name) . '_PreventSaving" ' . $endTag . '
                   </div>';
             }
         }
-        
-        $strOutput .='
-        		  <script type="text/javascript">
-                      myForm.preventSavingFields.push(\'' . $this->view->escape($id) . '\');
-                  </script>';
         
         return $strOutput;
     }

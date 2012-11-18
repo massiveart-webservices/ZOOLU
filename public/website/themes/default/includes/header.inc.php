@@ -3,6 +3,9 @@
         <div class="inner">
           <div class="logo">Logospace</div>
           <div class="slogan">Slogan Platzhalter</div>
+          <div class="languages">
+            <?php get_language_chooser(); ?>
+          </div>
           <div class="search">
             <input type="text" name="iptSearch" id="iptSearch" value="Suche"/>
           </div>

@@ -784,7 +784,7 @@ class Model_Pages extends ModelAbstract
         if ($intSortTypeId > 0 && $intSortTypeId != '') {
             switch ($intSortTypeId) {
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $strSqlOrderBy = ' ORDER BY folderSortPosition '.$strSortOrder.', folderSortTimestamp '.(($strSortOrder == 'DESC') ? 'ASC' : 'DESC').', sortPosition '.$strSortOrder.', sortTimestamp '.(($strSortOrder == 'DESC') ? 'ASC' : 'DESC');
+                    $strSqlOrderBy = ' ORDER BY folderSortPosition '.$strSortOrder.', folderSortTimestamp '.$strSortOrder.', sortPosition '.$strSortOrder.', sortTimestamp '.(($strSortOrder == 'DESC') ? 'DESC' : 'DESC');
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
                     $strSqlOrderBy = ' ORDER BY created ' . $strSortOrder;
@@ -881,12 +881,12 @@ class Model_Pages extends ModelAbstract
         }
 
         $sqlStmt = $this->core->dbh->query('SELECT DISTINCT id, plId, genericFormId, version, plGenericFormId, plVersion,
-                                          url, plUrl, title, languageCode, idPageTypes, idDestination, hideInSitemap, sortPosition, sortTimestamp, folderSortPosition, folderSortTimestamp, created, changed, published, target
+                                          url, plUrl, title, languageCode, idPageTypes, folderSortPosition, folderSortTimestamp, idDestination, hideInSitemap, sortPosition, sortTimestamp, created, changed, published, target
                                         FROM
                                           (SELECT pages.id, pl.id AS plId, genericForms.genericFormId, genericForms.version,
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl, 
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
-                                            pageProperties.created, pageProperties.changed, pageProperties.published, IF(pages.isStartPage = 1, 0, pages.sortPosition) AS sortPosition, pages.sortTimestamp, folders.sortPosition AS folderSortPosition, folders.sortTimestamp AS folderSortTimestamp, pageTargets.target
+                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, folders.sortPosition AS folderSortPosition, pages.sortTimestamp, folders.sortTimestamp AS folderSortTimestamp, pageTargets.target
                                           FROM folders
                                           	INNER JOIN folderProperties ON
                                           	  folderProperties.folderId = folders.folderId AND
@@ -970,7 +970,7 @@ class Model_Pages extends ModelAbstract
                                           SELECT pages.id, pl.id AS plId, genericForms.genericFormId, genericForms.version,
                                             plGenForm.genericFormId AS plGenericFormId, plGenForm.version AS plVersion, urls.url, lUrls.url AS plUrl,
                                             IF(pageProperties.idPageTypes = ?, plTitle.title, pageTitles.title) as title, languageCode, pageProperties.idPageTypes, pageProperties.idDestination, pageProperties.hideInSitemap,
-                                            pageProperties.created, pageProperties.changed, pageProperties.published, pages.sortPosition, pages.sortTimestamp, pages.sortPosition AS folderSortPosition, pages.sortTimestamp AS folderSortTimestamp, pageTargets.target                                            
+                                            pageProperties.created, pageProperties.changed, pageProperties.published, NULL AS folderSortPosition, NULL AS folderSortTimestamp, pages.sortPosition, pages.sortTimestamp, pageTargets.target                                            
                                           FROM pages
                                             INNER JOIN pageProperties ON 
                                               pageProperties.pageId = pages.pageId AND 
@@ -1077,7 +1077,7 @@ class Model_Pages extends ModelAbstract
      */
     public function loadPagesByFilter($intParentFolderId, $arrTagIds = array())
     {
-        $this->core->logger->debug('cms->models->Model_Pages->loadPagesByFilter(' . json_encode($intParentFolderId) . ')');
+        $this->core->logger->debug('cms->models->Model_Pages->loadPagesByFilter(' . $intParentFolderId . ')');
 
         $strTagIds = '';
         if (count($arrTagIds) > 0) {
