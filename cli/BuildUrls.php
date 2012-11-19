@@ -73,7 +73,7 @@ try {
     if (isset($objOpts->d)) {
         echo "Deleting old URLs...\n";
         $objModelUrls = new Model_Urls();
-        $objModelUrls->deleteUrlsByRootLevelId($objRootLevel->id);
+        $objModelUrls->deleteUrlsByRootLevelIdAndLanguage($objRootLevel->id, $objOpts->languageId);
         echo "Done!\n";
     }
 
