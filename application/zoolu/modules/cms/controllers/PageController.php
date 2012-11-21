@@ -391,51 +391,64 @@ class Cms_PageController extends AuthControllerAction
         $this->_helper->viewRenderer->setNoRender();
 
         $intParentId = $this->getRequest()->getParam('newParentFolderId');
+        $intPageIdSrc = $this->getRequest()->getParam('id');
+        $intPageIdDest = null;
 
-        //Build Form
-        $objForm = new GenericForm();
-        $objForm->Setup()->setElementId($this->getRequest()->getParam('id'));
-        $objForm->Setup()->setFormId($this->getRequest()->getParam('formId'));
-        $objForm->Setup()->setTemplateId($this->getRequest()->getParam('templateId'));
-        $objForm->Setup()->setFormVersion($this->getRequest()->getParam('formVersion'));
-        $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
-        $objForm->Setup()->setLanguageId($this->getRequest()->getParam('languageId'));
-        $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
-        $objForm->Setup()->setIsStartElement($this->getRequest()->getParam('isStartPage'));
-        $objForm->Setup()->setParentId($this->getRequest()->getParam('parentFolderId'));
-        $objForm->Setup()->setRootLevelId($this->getRequest()->getParam('rootLevelId'));
+        $objLanguages = $this->getModelPages()->loadLanguages($intPageIdSrc);
 
-        $objForm->Setup()->setModelSubPath('cms/models/');
-        $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->page);
+        foreach ($objLanguages as $objLanguage) {
 
-        // load basic generic form
-        $objForm->Setup()->loadGenericForm();
+            //Build Form
+            $objForm = new GenericForm();
+            $objForm->Setup()->setElementId($intPageIdSrc);
+            $objForm->Setup()->setFormId($this->getRequest()->getParam('formId'));
+            $objForm->Setup()->setTemplateId($this->getRequest()->getParam('templateId'));
+            $objForm->Setup()->setFormVersion($this->getRequest()->getParam('formVersion'));
+            $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+            $objForm->Setup()->setLanguageId($objLanguage->idLanguages);
+            $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
+            $objForm->Setup()->setIsStartElement($this->getRequest()->getParam('isStartPage'));
+            $objForm->Setup()->setParentId($this->getRequest()->getParam('parentFolderId'));
+            $objForm->Setup()->setRootLevelId($this->getRequest()->getParam('rootLevelId'));
 
-        // load generic form structure
-        $objForm->Setup()->loadGenericFormStructure();
+            $objForm->Setup()->setModelSubPath('cms/models/');
+            $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->page);
 
-        // init data type object
-        $objForm->initDataTypeObject();
+            // load basic generic form
+            $objForm->Setup()->loadGenericForm();
 
-        // load data
-        $objForm->loadFormData();
+            // load generic form structure
+            $objForm->Setup()->loadGenericFormStructure();
 
-        // get new rootlevel
-        $objFolder = $this->getModelFolders()->load($intParentId)->current();
-        $intRootLevelId = $objFolder->idRootLevels;
+            // init data type object
+            $objForm->initDataTypeObject();
 
-        // copy page
-        $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
-        $objForm->Setup()->setElementId(null);
-        $objForm->Setup()->setParentId($intParentId);
-        $objForm->Setup()->setRootLevelId($intRootLevelId);
+            // load data
+            $objForm->loadFormData();
 
-        // reset loaded flag
-        foreach($objForm->Setup()->CoreFields() as $objField){
-            $objField->blnHasLoadedData = false;
+            // get new rootlevel
+            $objFolder = $this->getModelFolders()->load($intParentId)->current();
+            $intRootLevelId = $objFolder->idRootLevels;
+
+            // copy page
+            if ($intPageIdDest == null) {
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+            } else {
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+            }
+            $objForm->Setup()->setElementId($intPageIdDest);
+            $objForm->Setup()->setParentId($intParentId);
+            $objForm->Setup()->setRootLevelId($intRootLevelId);
+
+            // reset loaded flag
+            foreach ($objForm->Setup()->CoreFields() as $objField) {
+                $objField->blnHasLoadedData = false;
+            }
+
+            $objForm->saveFormData();
+
+            $intPageIdDest = $objForm->Setup()->getElementId();
         }
-
-        $objForm->saveFormData();
     }
 
     /**

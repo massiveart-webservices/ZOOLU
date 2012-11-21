@@ -172,10 +172,10 @@ class Model_Pages extends ModelAbstract
 
             $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
             $arrData = array(
-                'pageId'      => $objPage->pageId,
-                'version'     => $objPage->version,
+                'pageId' => $objPage->pageId,
+                'version' => $objPage->version,
                 'idLanguages' => $this->intLanguageId,
-                'creator'     => $intUserId
+                'creator' => $intUserId
             );
             $arrData = array_merge($arrData, $arrValues);
             return $objSelect = $objPagePluginTable->insert($arrData);
@@ -201,9 +201,9 @@ class Model_Pages extends ModelAbstract
         $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
         $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = pageProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
         $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = pageProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
-        $objSelect->joinLeft('folders', 'folders.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('idRootLevels'));
+        $objSelect->joinLeft('folders', 'folders.id = pages.idParent AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idRootLevels'));
         $objSelect->joinLeft('rootLevels', 'rootLevels.id = folders.idRootLevels', array('languageDefinitionType'));
-        $objSelect->joinLeft(array('rl' => 'rootLevels'), 'rl.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'));
+        $objSelect->joinLeft(array('rl' => 'rootLevels'), 'rl.id = pages.idParent AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'));
         $objSelect->where('pages.id = ?', $intElementId);
 
         return $this->getPageTable()->fetchAll($objSelect);
@@ -326,17 +326,17 @@ class Model_Pages extends ModelAbstract
          * insert main data
          */
         $arrMainData = array(
-            'idParent'         => $objPage->parentId,
-            'idParentTypes'    => $objPage->parentTypeId,
-            'isStartPage'      => $objPage->isStartElement,
-            'idUsers'          => $intUserId,
-            'sortPosition'     => $objPage->sortPosition,
-            'sortTimestamp'    => date('Y-m-d H:i:s'),
-            'pageId'           => $objPage->pageId,
-            'version'          => $objPage->version,
-            'idSegments'       => $objGenericSetup->getSegmentId(),
-            'creator'          => $objGenericSetup->getCreatorId(),
-            'created'          => date('Y-m-d H:i:s')
+            'idParent' => $objPage->parentId,
+            'idParentTypes' => $objPage->parentTypeId,
+            'isStartPage' => $objPage->isStartElement,
+            'idUsers' => $intUserId,
+            'sortPosition' => $objPage->sortPosition,
+            'sortTimestamp' => date('Y-m-d H:i:s'),
+            'pageId' => $objPage->pageId,
+            'version' => $objPage->version,
+            'idSegments' => $objGenericSetup->getSegmentId(),
+            'creator' => $objGenericSetup->getCreatorId(),
+            'created' => date('Y-m-d H:i:s')
         );
         $objPage->id = $this->getPageTable()->insert($arrMainData);
 
@@ -344,24 +344,24 @@ class Model_Pages extends ModelAbstract
          * insert language specific properties
          */
         $arrProperties = array(
-            'pageId'           => $objPage->pageId,
-            'version'          => $objPage->version,
-            'idLanguages'      => $this->intLanguageId,
-            'idGenericForms'   => $objGenericSetup->getGenFormId(),
-            'idTemplates'      => $objGenericSetup->getTemplateId(),
-            'idPageTypes'      => $objGenericSetup->getElementTypeId(),
+            'pageId' => $objPage->pageId,
+            'version' => $objPage->version,
+            'idLanguages' => $this->intLanguageId,
+            'idGenericForms' => $objGenericSetup->getGenFormId(),
+            'idTemplates' => $objGenericSetup->getTemplateId(),
+            'idPageTypes' => $objGenericSetup->getElementTypeId(),
             'showInNavigation' => $objGenericSetup->getShowInNavigation(),
-            'idDestination'    => $objGenericSetup->getDestinationId(),
-            'hideInSitemap'    => $objGenericSetup->getHideInSitemap(),
-            'showInWebsite'    => $objGenericSetup->getShowInWebsite(),
-            'showInTablet'     => $objGenericSetup->getShowInTablet(),
-            'showInMobile'     => $objGenericSetup->getShowInMobile(),
-            'idUsers'          => $intUserId,
-            'creator'          => $objGenericSetup->getCreatorId(),
-            'publisher'        => $intUserId,
-            'created'          => date('Y-m-d H:i:s'),
-            'published'        => $objGenericSetup->getPublishDate(),
-            'idStatus'         => $objGenericSetup->getStatusId()
+            'idDestination' => $objGenericSetup->getDestinationId(),
+            'hideInSitemap' => $objGenericSetup->getHideInSitemap(),
+            'showInWebsite' => $objGenericSetup->getShowInWebsite(),
+            'showInTablet' => $objGenericSetup->getShowInTablet(),
+            'showInMobile' => $objGenericSetup->getShowInMobile(),
+            'idUsers' => $intUserId,
+            'creator' => $objGenericSetup->getCreatorId(),
+            'publisher' => $intUserId,
+            'created' => date('Y-m-d H:i:s'),
+            'published' => $objGenericSetup->getPublishDate(),
+            'idStatus' => $objGenericSetup->getStatusId()
         );
         $this->getPagePropertyTable()->insert($arrProperties);
 
@@ -385,54 +385,54 @@ class Model_Pages extends ModelAbstract
         $strWhere .= $this->getPageTable()->getAdapter()->quoteInto(' AND version = ?', $objPage->version);
 
         $this->getPageTable()->update(array(
-                                           'idSegments'    => $objGenericSetup->getSegmentId(),
-                                           'idUsers'       => $intUserId,
-                                           'changed'       => date('Y-m-d H:i:s')
-                                      ), $strWhere);
+            'idSegments' => $objGenericSetup->getSegmentId(),
+            'idUsers' => $intUserId,
+            'changed' => date('Y-m-d H:i:s')
+        ), $strWhere);
         /**
          * update language specific page properties
          */
         $strWhere .= $this->getPageTable()->getAdapter()->quoteInto(' AND idLanguages = ?', $this->intLanguageId);
         $intNumOfEffectedRows = $this->getPagePropertyTable()->update(array(
-                                                                           'idGenericForms'      => $objGenericSetup->getGenFormId(),
-                                                                           'idTemplates'         => $objGenericSetup->getTemplateId(),
-                                                                           'idPageTypes'         => $objGenericSetup->getElementTypeId(),
-                                                                           'showInNavigation'    => $objGenericSetup->getShowInNavigation(),
-                                                                           'idDestination'       => $objGenericSetup->getDestinationId(),
-                                                                           'hideInSitemap'       => $objGenericSetup->getHideInSitemap(),
-                                                                           'showInWebsite'       => $objGenericSetup->getShowInWebsite(),
-                                                                           'showInTablet'        => $objGenericSetup->getShowInTablet(),
-                                                                           'showInMobile'        => $objGenericSetup->getShowInMobile(),
-                                                                           'idUsers'             => $intUserId,
-                                                                           'creator'             => $objGenericSetup->getCreatorId(),
-                                                                           'idStatus'            => $objGenericSetup->getStatusId(),
-                                                                           'published'           => $objGenericSetup->getPublishDate(),
-                                                                           'changed'             => date('Y-m-d H:i:s')
-                                                                      ), $strWhere);
+            'idGenericForms' => $objGenericSetup->getGenFormId(),
+            'idTemplates' => $objGenericSetup->getTemplateId(),
+            'idPageTypes' => $objGenericSetup->getElementTypeId(),
+            'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+            'idDestination' => $objGenericSetup->getDestinationId(),
+            'hideInSitemap' => $objGenericSetup->getHideInSitemap(),
+            'showInWebsite' => $objGenericSetup->getShowInWebsite(),
+            'showInTablet' => $objGenericSetup->getShowInTablet(),
+            'showInMobile' => $objGenericSetup->getShowInMobile(),
+            'idUsers' => $intUserId,
+            'creator' => $objGenericSetup->getCreatorId(),
+            'idStatus' => $objGenericSetup->getStatusId(),
+            'published' => $objGenericSetup->getPublishDate(),
+            'changed' => date('Y-m-d H:i:s')
+        ), $strWhere);
 
         /**
          * insert language specific page properties
          */
         if ($intNumOfEffectedRows == 0) {
             $arrProperties = array(
-                'pageId'              => $objPage->pageId,
-                'version'             => $objPage->version,
-                'idLanguages'         => $this->intLanguageId,
-                'idGenericForms'      => $objGenericSetup->getGenFormId(),
-                'idTemplates'         => $objGenericSetup->getTemplateId(),
-                'idPageTypes'         => $objGenericSetup->getElementTypeId(),
-                'showInNavigation'    => $objGenericSetup->getShowInNavigation(),
-                'idDestination'       => $objGenericSetup->getDestinationId(),
-                'hideInSitemap'       => $objGenericSetup->getHideInSitemap(),
-                'showInWebsite'       => $objGenericSetup->getShowInWebsite(),
-                'showInTablet'        => $objGenericSetup->getShowInTablet(),
-                'showInMobile'        => $objGenericSetup->getShowInMobile(),
-                'idUsers'             => $intUserId,
-                'creator'             => $objGenericSetup->getCreatorId(),
-                'publisher'           => $intUserId,
-                'created'             => date('Y-m-d H:i:s'),
-                'published'           => $objGenericSetup->getPublishDate(),
-                'idStatus'            => $objGenericSetup->getStatusId()
+                'pageId' => $objPage->pageId,
+                'version' => $objPage->version,
+                'idLanguages' => $this->intLanguageId,
+                'idGenericForms' => $objGenericSetup->getGenFormId(),
+                'idTemplates' => $objGenericSetup->getTemplateId(),
+                'idPageTypes' => $objGenericSetup->getElementTypeId(),
+                'showInNavigation' => $objGenericSetup->getShowInNavigation(),
+                'idDestination' => $objGenericSetup->getDestinationId(),
+                'hideInSitemap' => $objGenericSetup->getHideInSitemap(),
+                'showInWebsite' => $objGenericSetup->getShowInWebsite(),
+                'showInTablet' => $objGenericSetup->getShowInTablet(),
+                'showInMobile' => $objGenericSetup->getShowInMobile(),
+                'idUsers' => $intUserId,
+                'creator' => $objGenericSetup->getCreatorId(),
+                'publisher' => $intUserId,
+                'created' => date('Y-m-d H:i:s'),
+                'published' => $objGenericSetup->getPublishDate(),
+                'idStatus' => $objGenericSetup->getStatusId()
             );
             $this->getPagePropertyTable()->insert($arrProperties);
         }
@@ -451,7 +451,7 @@ class Model_Pages extends ModelAbstract
         $this->core->logger->debug('cms->models->Model_Pages->addPageLink(' . $strPageId . ', ' . $intElementId . ')');
         $arrData = array(
             'idPages' => $intElementId,
-            'pageId'  => $strPageId
+            'pageId' => $strPageId
         );
         return $this->getPageLinksTable()->insert($arrData);
     }
@@ -473,13 +473,13 @@ class Model_Pages extends ModelAbstract
         $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
         $arrData = array(
-            'pageId'      => $strElementId,
-            'version'     => $intVersion,
+            'pageId' => $strElementId,
+            'version' => $intVersion,
             'idLanguages' => $this->intLanguageId,
-            'idFields'    => $intFieldId,
-            'idUsers'     => $intUserId,
-            'creator'     => $intUserId,
-            'created'     => date('Y-m-d H:i:s')
+            'idFields' => $intFieldId,
+            'idUsers' => $intUserId,
+            'creator' => $intUserId,
+            'created' => date('Y-m-d H:i:s')
         );
 
         $strTmpLinkedPageIds = trim($strLinkedPageIds, '[]');
@@ -510,12 +510,12 @@ class Model_Pages extends ModelAbstract
         $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
         $arrData = array(
-            'pageId'      => $strElementId,
-            'version'     => $intVersion,
+            'pageId' => $strElementId,
+            'version' => $intVersion,
             'idLanguages' => $this->intLanguageId,
-            'idUsers'     => $intUserId,
-            'creator'     => $intUserId,
-            'created'     => date('Y-m-d H:i:s')
+            'idUsers' => $intUserId,
+            'creator' => $intUserId,
+            'created' => date('Y-m-d H:i:s')
         );
 
         $strTmpCollectedPageIds = trim($strCollectedPageIds, '[]');
@@ -546,12 +546,12 @@ class Model_Pages extends ModelAbstract
         $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
         $arrData = array(
-            'idLanguages'    => $this->intLanguageId,
-            'idUsers'        => $intUserId,
-            'idParent'       => $intParentId,
-            'idParentTypes'  => $intParentTypeId,
-            'creator'        => $intUserId,
-            'created'        => date('Y-m-d H:i:s')
+            'idLanguages' => $this->intLanguageId,
+            'idUsers' => $intUserId,
+            'idParent' => $intParentId,
+            'idParentTypes' => $intParentTypeId,
+            'creator' => $intUserId,
+            'created' => date('Y-m-d H:i:s')
         );
 
         if (count($objPageCollectionData) > 0) {
@@ -784,7 +784,7 @@ class Model_Pages extends ModelAbstract
         if ($intSortTypeId > 0 && $intSortTypeId != '') {
             switch ($intSortTypeId) {
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $strSqlOrderBy = ' ORDER BY folderSortPosition '.$strSortOrder.', folderSortTimestamp '.$strSortOrder.', sortPosition '.$strSortOrder.', sortTimestamp '.(($strSortOrder == 'DESC') ? 'DESC' : 'DESC');
+                    $strSqlOrderBy = ' ORDER BY folderSortPosition ' . $strSortOrder . ', folderSortTimestamp ' . $strSortOrder . ', sortPosition ' . $strSortOrder . ', sortTimestamp ' . (($strSortOrder == 'DESC') ? 'DESC' : 'DESC');
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
                     $strSqlOrderBy = ' ORDER BY created ' . $strSortOrder;
@@ -1042,29 +1042,29 @@ class Model_Pages extends ModelAbstract
                                             ' . $strSqlLabel . '
                                             ' . $strSqlPageIds . ') AS tbl
                                         ' . $strSqlOrderBy . $strSqlLimit, array(
-                                                                                $this->core->sysConfig->page_types->link->id,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->core->sysConfig->parent_types->folder,
-                                                                                $intParentId,
-                                                                                $this->core->sysConfig->page_types->link->id,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $this->intLanguageId,
-                                                                                $intParentId,
-                                                                                $this->core->sysConfig->parent_types->folder
-                                                                               ));
-                                                                               
+            $this->core->sysConfig->page_types->link->id,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->core->sysConfig->parent_types->folder,
+            $intParentId,
+            $this->core->sysConfig->page_types->link->id,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $this->intLanguageId,
+            $intParentId,
+            $this->core->sysConfig->parent_types->folder
+        ));
+
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
     }
 
@@ -1457,11 +1457,11 @@ class Model_Pages extends ModelAbstract
         $objSelect->from($this->objPageTable, array('pageId', 'relationId' => 'pageId', 'version', 'isStartpage'))
             ->join('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $intLanguageId . ' AND urls.isMain = 0 AND urls.idParent IS NULL', array('id', 'url'))
             ->join('languages', 'languages.id = urls.idLanguages', array('languageCode'))
-            ->joinLeft('folders', 'folders.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array('idRootLevels'))
+            ->joinLeft('folders', 'folders.id = pages.idParent AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idRootLevels'))
             ->joinLeft('rootLevels', 'rootLevels.id = folders.idRootLevels', array('languageDefinitionType'))
-            ->joinLeft(array('rl' => 'rootLevels'), 'rl.id = pages.idParent AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'))
+            ->joinLeft(array('rl' => 'rootLevels'), 'rl.id = pages.idParent AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'))
             ->where('pages.id = ?', $intPageId)
-            ->where('urls.isLandingPage = ?', (int) $blnLandingPages);
+            ->where('urls.isLandingPage = ?', (int)$blnLandingPages);
 
         return $this->objPageTable->fetchAll($objSelect);
     }
@@ -1567,15 +1567,15 @@ class Model_Pages extends ModelAbstract
                                               urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND
                                               urls.idLanguages = ? AND
                                               rootLevels.id = ?', array(
-                                                                       $this->core->sysConfig->parent_types->folder,
-                                                                       $strUrl,
-                                                                       $this->intLanguageId,
-                                                                       $intRootLevelId,
-                                                                       $this->core->sysConfig->parent_types->rootlevel,
-                                                                       $strUrl,
-                                                                       $this->intLanguageId,
-                                                                       $intRootLevelId
-                                                                  ));
+            $this->core->sysConfig->parent_types->folder,
+            $strUrl,
+            $this->intLanguageId,
+            $intRootLevelId,
+            $this->core->sysConfig->parent_types->rootlevel,
+            $strUrl,
+            $this->intLanguageId,
+            $intRootLevelId
+        ));
 
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
     }
@@ -1655,15 +1655,15 @@ class Model_Pages extends ModelAbstract
             if ($mixedVideoId != '') {
                 $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
                 $arrData = array(
-                    'pageId'       => $objPage->pageId,
-                    'version'      => $objPage->version,
-                    'idLanguages'  => $this->intLanguageId,
-                    'userId'       => $strVideoUserId,
-                    'videoId'      => $mixedVideoId,
+                    'pageId' => $objPage->pageId,
+                    'version' => $objPage->version,
+                    'idLanguages' => $this->intLanguageId,
+                    'userId' => $strVideoUserId,
+                    'videoId' => $mixedVideoId,
                     'idVideoTypes' => $intVideoTypeId,
-                    'thumb'        => $strVideoThumb,
-                    'title'        => $strVideoTitle,
-                    'creator'      => $intUserId
+                    'thumb' => $strVideoThumb,
+                    'title' => $strVideoTitle,
+                    'creator' => $intUserId
                 );
                 return $objSelect = $this->objPageVideosTable->insert($arrData);
             }
@@ -1757,6 +1757,26 @@ class Model_Pages extends ModelAbstract
     }
 
     /**
+     * Loads all the languages in which the page with the given id exists
+     * @param $intElementId The id of the page
+     * @return Zend_Db_Table_Select
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadLanguages($intElementId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadLanguages('.$intElementId.')');
+
+        $objSelect = $this->getPageTable()->select()->setIntegrityCheck(false);
+        $objSelect->from($this->getPageTable(), array());
+        $objSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId', array('idLanguages'));
+        $objSelect->where('idLanguages != ?', 0);
+        $objSelect->where('pages.id = ?', $intElementId);
+
+        return $this->getPageTable()->fetchAll($objSelect);
+    }
+
+    /**
      * addContact
      * @param  integer $intElementId
      * @param  string $strContactIds
@@ -1788,13 +1808,13 @@ class Model_Pages extends ModelAbstract
 
             foreach ($arrContactIds as $sortPosition => $intContactId) {
                 $arrData = array(
-                    'pageId'       => $objPage->pageId,
-                    'version'      => $objPage->version,
-                    'idLanguages'  => $this->intLanguageId,
+                    'pageId' => $objPage->pageId,
+                    'version' => $objPage->version,
+                    'idLanguages' => $this->intLanguageId,
                     'sortPosition' => $sortPosition + 1,
-                    'idContacts'   => $intContactId,
-                    'idFields'     => $intFieldId,
-                    'creator'      => $intUserId
+                    'idContacts' => $intContactId,
+                    'idFields' => $intFieldId,
+                    'creator' => $intUserId
                 );
                 $this->objPageContactsTable->insert($arrData);
             }
@@ -1834,13 +1854,13 @@ class Model_Pages extends ModelAbstract
 
             foreach ($arrGroupIds as $sortPosition => $intGroupId) {
                 $arrData = array(
-                    'pageId'       => $objPage->pageId,
-                    'version'      => $objPage->version,
-                    'idLanguages'  => $this->intLanguageId,
+                    'pageId' => $objPage->pageId,
+                    'version' => $objPage->version,
+                    'idLanguages' => $this->intLanguageId,
                     'sortPosition' => $sortPosition + 1,
-                    'idGroups'     => $intGroupId,
-                    'idFields'     => $intFieldId,
-                    'creator'      => $intUserId
+                    'idGroups' => $intGroupId,
+                    'idFields' => $intFieldId,
+                    'creator' => $intUserId
                 );
                 $this->objPageGroupsTable->insert($arrData);
             }
@@ -2051,12 +2071,12 @@ class Model_Pages extends ModelAbstract
                                         ' . $strPublishedFilter . '
                                         ' . $strSqlOrderBy . '
                                         ' . $strSqlLimit, array(
-                                                               $this->intLanguageId,
-                                                               $this->intLanguageId,
-                                                               $this->intLanguageId,
-                                                               $this->core->sysConfig->page_types->link->default_formId,
-                                                               $intRootLevelId
-                                                          ));
+                $this->intLanguageId,
+                $this->intLanguageId,
+                $this->intLanguageId,
+                $this->core->sysConfig->page_types->link->default_formId,
+                $intRootLevelId
+            ));
 
             return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
         }
@@ -2111,7 +2131,7 @@ class Model_Pages extends ModelAbstract
         if (strpos($strElementIds, ',') !== false) {
             $objSelect->where('pages.id IN (' . $strElementIds . ')');
         } else {
-            $objSelect->where('pages.id = ?', (int) $strElementIds);
+            $objSelect->where('pages.id = ?', (int)$strElementIds);
         }
 
         return $this->objPageTable->fetchAll($objSelect);

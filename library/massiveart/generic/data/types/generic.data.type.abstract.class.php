@@ -264,8 +264,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'created'       => date('Y-m-d H:i:s')
                                 );
 
-                                $this->core->logger->debug(json_encode($arrCoreData));
-
                                 $objGenTable->insert($arrCoreData);
                             }
                         }
