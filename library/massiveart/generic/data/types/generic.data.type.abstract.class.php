@@ -132,9 +132,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
                 $objGenTable = $this->getModelGenericData()->getGenericTable($strType . str_replace('_', '', ((substr($strField, strlen($strField) - 1) == 'y') ? ucfirst(rtrim($strField, 'y')) . 'ies' : ucfirst($strField) . 's')));
 
-                $this->core->logger->debug('copy language: '.$this->setup->getLanguageId());
-                $this->core->logger->debug('value: '.$objField->getValue());
-
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
                         
@@ -234,7 +231,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $strField     => $objField->getValue(),
                                     'idUsers'     => $intUserId
                                 );
-    
+
                                 $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());

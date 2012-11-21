@@ -430,6 +430,11 @@ class Cms_PageController extends AuthControllerAction
         $objForm->Setup()->setParentId($intParentId);
         $objForm->Setup()->setRootLevelId($intRootLevelId);
 
+        // reset loaded flag
+        foreach($objForm->Setup()->CoreFields() as $objField){
+            $objField->blnHasLoadedData = false;
+        }
+
         $objForm->saveFormData();
     }
 
