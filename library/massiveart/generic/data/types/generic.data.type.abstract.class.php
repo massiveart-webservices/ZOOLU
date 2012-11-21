@@ -121,7 +121,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      */
     final protected function insertCoreData($strType, $strTypeId, $intTypeVersion)
     {
-
         if (count($this->setup->CoreFields()) > 0) {
 
             $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
@@ -132,6 +131,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
             foreach ($this->setup->CoreFields() as $strField => $objField) {
 
                 $objGenTable = $this->getModelGenericData()->getGenericTable($strType . str_replace('_', '', ((substr($strField, strlen($strField) - 1) == 'y') ? ucfirst(rtrim($strField, 'y')) . 'ies' : ucfirst($strField) . 's')));
+
+                $this->core->logger->debug('copy language: '.$this->setup->getLanguageId());
+                $this->core->logger->debug('value: '.$objField->getValue());
 
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
@@ -198,7 +200,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                      * delete data
                                      */
                                     $objGenTable->delete($strWhere);
-    
+
                                     /**
                                      * insert data
                                      */
@@ -264,7 +266,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'creator'       => $intUserId,
                                     'created'       => date('Y-m-d H:i:s')
                                 );
-    
+
+                                $this->core->logger->debug(json_encode($arrCoreData));
+
                                 $objGenTable->insert($arrCoreData);
                             }
                         }

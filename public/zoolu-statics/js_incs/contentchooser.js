@@ -37,7 +37,7 @@ Massiveart.Contentchooser = Class.create({
      * getContentchooser
      * @param string areaId
      */
-    getContentchooser:function (start, type, areaId, callback) {
+    getContentchooser:function (start, type, callback, areaId) {
         if (typeof(start) == 'undefined') {
             start = 'modules';
         }
@@ -178,10 +178,16 @@ Massiveart.Contentchooser = Class.create({
      * @param integer folderId, integer viewtype
      */
     getNavItem:function (folderId, rootLevelTypeId, rootLevelGroupId, viewtype, contenttype) {
-        //set selected class only if folder type is active
         if (this.type == 'folder') {
+            //set selected class only if folder type is active
             this.resetNavItems();
             $('olnavitemtitle' + folderId).addClassName('selected');
+
+            //Set Click Handler for OK Button
+            $('buttonOk').stopObserving('click');
+            $('buttonOk').observe('click', function(event){
+                this.callback(folderId);
+            }.bind(this));
         }
 
         if ($('olsubnav' + folderId)) {
