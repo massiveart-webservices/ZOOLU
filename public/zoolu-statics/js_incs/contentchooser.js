@@ -186,6 +186,7 @@ Massiveart.Contentchooser = Class.create({
             //Set Click Handler for OK Button
             $('buttonOk').stopObserving('click');
             $('buttonOk').observe('click', function(event){
+                $('buttonOk').addClassName('busy');
                 this.callback(folderId);
             }.bind(this));
         }
