@@ -97,7 +97,7 @@ class Media_FileController extends AuthControllerAction
             $strFileIds = $objRequest->getParam('fileIds');
             $objFiles = $this->objModelFiles->loadFilesById($strFileIds);
             
-
+            $this->view->assign('imagesSizes', $this->core->sysConfig->upload->images->default_sizes->default_size->toArray());
             $this->view->assign('strEditFormAction', '/zoolu/media/file/edit');
             $this->view->assign('strFileIds', $strFileIds);
             $this->view->assign('objFiles', $objFiles);
@@ -134,11 +134,20 @@ class Media_FileController extends AuthControllerAction
             $strFileIds = $objRequest->getParam('fileIds');
             $objFiles = $this->objModelFiles->loadFilesById($strFileIds);
 
+            $this->view->assign('imagesSizes', $this->core->sysConfig->upload->images->default_sizes->default_size->toArray());
             $this->view->assign('strEditFormAction', '/zoolu/media/file/edit');
             $this->view->assign('strFileIds', $strFileIds);
             $this->view->assign('objFiles', $objFiles);
+            
             $intFileFiltersCategoryId = (int) $this->core->zooConfig->file_filters->parent_id;
-            $this->view->assign('arrEmptyFileFilters', $this->getModelFiles()->loadEmptyFileFilters($intFileFiltersCategoryId));
+            $arrFilesFileFilters = array();
+            $strTmpFileIds = trim($strFileIds, '[]');
+            $arrFileIds = array();
+            $arrFileIds = explode('][', $strTmpFileIds);
+            foreach ($arrFileIds as $intFileId) {
+                $arrFilesFileFilters[$intFileId] = $this->getModelFiles()->loadEmptyFileFilters($intFileFiltersCategoryId);    
+            }
+            $this->view->assign('arrEmptyFileFilters',$arrFilesFileFilters);
             $this->view->assign('languageOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->intLanguageId));
         }
 

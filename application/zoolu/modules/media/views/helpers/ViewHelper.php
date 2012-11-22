@@ -300,7 +300,7 @@ class ViewHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getEditForm($rowset, $arrFilesFileFilters)
+    public function getEditForm($rowset, $arrFilesFileFilters, $arrImagesSizes)
     {
         $this->core->logger->debug('media->views->helpers->ViewHelper->getEditForm()');
 
@@ -309,9 +309,22 @@ class ViewHelper
         foreach ($rowset as $row) {
 
             if (strpos($row->mimeType, 'image/') !== false) {
-                $strFileIconSrc = sprintf($this->core->sysConfig->media->paths->icon32, $row->path) . $row->filename . '?v=' . $row->version;
+                $blnIsImage = true;
+                $strFileIconSrc = sprintf($this->core->sysConfig->media->paths->thumb, $row->path) . $row->filename . '?v=' . $row->version;
+                $strDownloadLink = '/zoolu-website/media/image/' . $row->id . '/' . urlencode(str_replace('.', '-', $row->title));
+                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->imgbase . $row->path;
+            } else if (strpos($row->mimeType, 'video/') !== false) {
+                $blnIsImage = false;
+                $strMediaType = 'video';
+                $strFileIconSrc = $this->getDocIcon($row->extension, 128);
+                $strDownloadLink = '/zoolu-website/media/video/' . $row->id . '/' . urlencode(str_replace('.', '-', $row->title));
+                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->vidbase . $row->path;
             } else {
-                $strFileIconSrc = $this->getDocIcon($row->extension, 32);
+                $blnIsImage = false;
+                $strMediaType = 'document';
+                $strFileIconSrc = $this->getDocIcon($row->extension, 128);
+                $strDownloadLink = '/zoolu-website/media/document/' . $row->id . '/' . urlencode(str_replace('.', '-', $row->title));
+                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->docbase . $row->path;
             }
 
             if ($row->description != '') {
@@ -367,7 +380,37 @@ class ViewHelper
                            <div class="field">
                              <label for="FileIsLanguageSpecific' . $row->id . '"><input type="checkbox"' . $strLanguageSpecificChecked . ' class="multiCheckbox" value="1" id="FileIsLanguageSpecific' . $row->id . '" name="FileIsLanguageSpecific' . $row->id . '"> ' . $this->core->translate->_('Medium_is_language_specific') . '</label>
                            </div>
+                         </div>';
+            
+            $strMediaUrl = '';
+            if ($blnIsImage == true) {
+                $strOutput .= '
+                       <div class="mediasizes">
+                         <select id="mediaSizes' . $row->id . '" onchange="$(\'singleMediaUrl' . $row->id . '\').value = $F(\'singleFileBasePath' . $row->id . '\') + this.value + $F(\'singleFileName' . $row->id . '\')">';
+                foreach ($arrImagesSizes as $arrImageSize) {
+                    if (isset($arrImageSize['display']) && isset($arrImageSize['display']['single_edit'])) {
+                        if ($strMediaUrl == '') $strMediaUrl = $strBasePath . $arrImageSize['folder'] . '/' . $row->filename . '?v=' . $row->version;
+                        $strOutput .= '
+                           <option value="' . $arrImageSize['folder'] . '/">' . $arrImageSize['folder'] . '</option>';
+                    }
+                }
+                $strOutput .= '
+                         </select>
+                       </div>';
+            } else {
+                $strMediaUrl = 'http://' . $_SERVER['HTTP_HOST'] . $strDownloadLink;
+            }
+            $strOutput .= '
+                       <div class="medialink">
+                         <input type="text" id="singleMediaUrl' . $row->id . '" readonly="readonly" value="' . $strMediaUrl . '" onclick="this.select()"/><br/>
+                         <div id="d_clip_container' . $row->id . '" style="float:right; margin:0 10px 0 0; position:relative;">
+                           <div id="d_clip_button' . $row->id . '" class="d_clip_button">[copy to clipboard]</div>
                          </div>
+                         <div class="clear"></div> 
+                         <input type="hidden" id="singleFileName' . $row->id . '" value="' . $row->filename . '?v=' . $row->version . '"/>
+                         <input type="hidden" id="singleFileBasePath' . $row->id . '" value="' . $strBasePath . '"/>
+                       </div>                       
+                       <div class="clear"></div>
                          ' . $this->getFileFilters($arrFilesFileFilters[$row->id], $row->id) . '
                          <div class="clear"></div>
                        </div>
@@ -543,7 +586,7 @@ class ViewHelper
                        <div class="medialink">
                          <input type="text" id="singleMediaUrl" readonly="readonly" value="' . $strMediaUrl . '" onclick="this.select()"/><br/>
                          <div id="d_clip_container" style="float:right; margin:0 10px 0 0; position:relative;">
-                           <div id="d_clip_button">[copy to clipboard]</div>
+                           <div id="d_clip_button" class="d_clip_button">[copy to clipboard]</div>
                          </div>
                          <div class="clear"></div> 
                          <input type="hidden" id="singleFileName" value="' . $objFile->filename . '?v=' . $objFile->version . '"/>
