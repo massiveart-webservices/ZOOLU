@@ -415,7 +415,7 @@ input[disabled] {
 /* FileFilters */
 .fileFilter {
     float: left;
-    width: 33%;
+    width: 50%;
 }
 
 .fileFilter label {
@@ -426,6 +426,13 @@ input[disabled] {
 .fileFilter input {
     float: left;
     width: 15px;
+}
+
+.allfilterSubline {
+    background: none repeat scroll 0 0 #bbb;
+    float: left;
+    height: 1px;
+    width: 90%;
 }
 
 /* Message */

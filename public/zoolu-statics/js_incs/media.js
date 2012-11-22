@@ -25,6 +25,8 @@ Massiveart.Media = Class.create({
     this.lastFileId = 0;
     this.lastFileIds = '';
     this.fileCounter = 0;
+    
+    this.checkedFilters = [];
 
     this.intFolderId = 0;
     this.currViewType = 0;
@@ -621,6 +623,9 @@ Massiveart.Media = Class.create({
           this.iniZeroClipboard();
           // load medias
           this.loadFileFieldsContent('media');
+          myMedia.checkedFilters.each( function(id) {
+              $(id).checked = true; 
+          });
         }.bind(this)
       });
     }   
@@ -703,6 +708,31 @@ Massiveart.Media = Class.create({
   },
   
   /**
+   * iniZeroClipboardMultiEdit
+   */
+  iniZeroClipboardMultiEdit: function(){
+    $$('.contentview .selected').each(function(element){
+        var fileId = element.readAttribute('fileid');
+        clip = new ZeroClipboard.Client();
+        
+        clip.setText(''); // will be set later on mouseDown
+        clip.setHandCursor(true);
+        clip.setCSSEffects(false);
+        
+        clip.addEventListener('load', function(client){
+          //alert("movie is loaded");      
+        });
+        
+        clip.addEventListener('mouseDown', function(client){ 
+          //set text to copy here
+          clip.setText($F('singleMediaUrl' + fileId));
+        });
+
+        clip.glue('d_clip_button' + fileId, 'd_clip_container' + fileId);    
+    });
+  },
+  
+  /**
    * editFiles
    */
   editFiles: function(isSingleEdit){
@@ -746,6 +776,11 @@ Massiveart.Media = Class.create({
    */
   changeAddFormLanguage: function(newLanguageId){
     $('addMediaFormLanguageId').value = newLanguageId;
+    $$('.fileFilters .checkboxOfSql').each(function(elem){
+        if (elem.checked) {
+            myMedia.checkedFilters.push(elem.id);
+        }
+    });
     this.getFilesAddEditForm();
   },
   
@@ -774,6 +809,10 @@ Massiveart.Media = Class.create({
           myCore.calcMaxOverlayHeight('overlayMediaWrapperUpload', true);
           myCore.putOverlayCenter('overlayUpload');          
           myCore.removeBusyClass('overlayMediaWrapperUpload');
+          myMedia.checkedFilters.each( function(id) {
+            $(id).checked = true; 
+          });
+          myMedia.checkedFilters = [];
         }.bind(this)
       });
     }   
@@ -784,6 +823,11 @@ Massiveart.Media = Class.create({
    */
   changeEditFormLanguage: function(newLanguageId){
     $('mediaFormLanguageId').value = newLanguageId;
+    $$('.fileFilters .checkboxOfSql').each(function(elem){
+        if (elem.checked) {
+            myMedia.checkedFilters.push(elem.id);
+        }
+    });
     if(this.lastFileIds != '' && this.lastFileId == 0){
       this.getFilesEditForm();
     }else{
