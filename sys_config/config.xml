@@ -300,6 +300,11 @@
         </import_field>
       </import_fields>
     </subscriber>
+
+    <seo_tab>
+        <noindex>689</noindex>
+        <nofollow>690</nofollow>
+    </seo_tab>
     
     <!-- RESPONSE CODES -->
     <response>

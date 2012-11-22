@@ -414,10 +414,10 @@ class PageHelper {
 
     if( !empty($metaRobotsField[0]) ) {
         switch( $metaRobotsField[0] ) {
-            case '677':
+            case $this->core->sysConfig->seo_tab->noindex:
                 $metaIndex = 'noindex';
                 break;
-            case '678':
+            case $this->core->sysConfig->seo_tab->nofollow:
                 $metaFollow = 'nofollow';
                 break;
         }
@@ -425,10 +425,10 @@ class PageHelper {
 
     if( !empty($metaRobotsField[1]) ) {
           switch( $metaRobotsField[1] ) {
-              case '677':
+              case $this->core->sysConfig->seo_tab->noindex:
                   $metaIndex = 'noindex';
                   break;
-              case '678':
+              case $this->core->sysConfig->seo_tab->nofollow:
                   $metaFollow = 'nofollow';
                   break;
           }
