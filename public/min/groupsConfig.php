@@ -77,11 +77,9 @@ return array(
     '//zoolu-statics/js_incs/navigation.cms.js',
     '//zoolu-statics/js_incs/form.js',
     '//zoolu-statics/js_incs/page.js',
-		'//zoolu-statics/js_incs/list.js',
     '//zoolu-statics/js_incs/folder.js',
     '//zoolu-statics/js_incs/overlay.js',
-    '//zoolu-statics/js_incs/tags.js',
-    '//zoolu-statics/js_incs/dashboard.js'),
+    '//zoolu-statics/js_incs/tags.js'),
   'zMediaCss' => array(
     '//zoolu-statics/css/core_main.css',
     '//zoolu-statics/css/core_navigation.css',

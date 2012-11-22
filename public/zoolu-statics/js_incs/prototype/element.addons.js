@@ -32,7 +32,7 @@ Object.extend(Object.extend(Effect.Scroll.prototype, Effect.Base.prototype), {
   setup: function() {
     var scrollOffsets = (this.element == window) 
                 ? document.viewport.getScrollOffsets() 
-                : Element._returnOffset(this.element.scrollLeft, this.element.scrollTop) ;
+                : new Element.Offset(this.element.scrollLeft, this.element.scrollTop) ;
     this.originalScrollLeft = scrollOffsets.left;
     this.originalScrollTop  = scrollOffsets.top;
   },
