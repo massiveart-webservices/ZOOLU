@@ -1,7 +1,6 @@
-// script.aculo.us dragdrop.js v1.8.2, Tue Nov 18 18:30:58 +0100 2008
+// script.aculo.us dragdrop.js v1.9.0, Thu Dec 23 16:54:48 -0500 2010
 
-// Copyright (c) 2005-2008 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005-2008 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
+// Copyright (c) 2005-2010 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 //
 // script.aculo.us is freely distributable under the terms of an MIT-style license.
 // For details, see the script.aculo.us web site: http://script.aculo.us/
@@ -71,7 +70,7 @@ var Droppables = {
       ((!drop.accept) ||
         (Element.classNames(element).detect(
           function(v) { return drop.accept.include(v) } ) )) &&
-      Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]) );
+          Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]) );
   },
 
   deactivate: function(drop) {
@@ -100,7 +99,7 @@ var Droppables = {
 
     if(this.last_active && this.last_active != drop) this.deactivate(this.last_active);
     if (drop) {
-      Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]);
+        Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]);
       if(drop.onHover)
         drop.onHover(element, drop.element, Position.overlap(drop.overlap, drop.element));
 
@@ -313,7 +312,8 @@ var Draggable = Class.create({
         tag_name=='TEXTAREA')) return;
 
       var pointer = [Event.pointerX(event), Event.pointerY(event)];
-      var pos     = Position.cumulativeOffset(this.element);
+      var pos     = this.element.cumulativeOffset();
+      //var pos     = Position.cumulativeOffset(this.element)
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
 
       Draggables.activate(this);
@@ -322,6 +322,9 @@ var Draggable = Class.create({
   },
 
   startDrag: function(event) {
+    
+    //  console.log('startDrag');
+      
     this.dragging = true;
     if(!this.delta)
       this.delta = this.currentDelta();
@@ -375,6 +378,7 @@ var Draggable = Class.create({
       if (this.options.scroll == window) {
         with(this._getWindowScroll(this.options.scroll)) { p = [ left, top, left+width, top+height ]; }
       } else {
+        //p = Position.page(this.options.scroll).toArray();
         p = Position.page(this.options.scroll);
         p[0] += this.options.scroll.scrollLeft + Position.deltaX;
         p[1] += this.options.scroll.scrollTop + Position.deltaY;
@@ -456,7 +460,7 @@ var Draggable = Class.create({
   },
 
   draw: function(point) {
-    var pos = Position.cumulativeOffset(this.element);
+    var pos = this.element.cumulativeOffset();
     if(this.options.ghosting) {
       var r   = Position.realOffset(this.element);
       pos[0] += r[0] - Position.deltaX; pos[1] += r[1] - Position.deltaY;
@@ -732,7 +736,7 @@ var Sortable = {
     }
 
     // keep reference
-    this.sortables[element.id] = options;
+    this.sortables[element.identify()] = options;
 
     // for onupdate
     Draggables.addObserver(new SortableObserver(element, options.onUpdate));
@@ -760,9 +764,9 @@ var Sortable = {
       if(dropon.previousSibling != element) {
         var oldParentNode = element.parentNode;
         element.style.visibility = "hidden"; // fix gecko rendering
-        myForm.removeTinyMCEControl(element.id); // remove tinyMCE controls
+        myForm.removeTinyMCEControl(element.id); // remove tinyMCE controls MASSIVE ART
         dropon.parentNode.insertBefore(element, dropon);
-        myForm.addTinyMCEControl(element.id); // add tinyMCE controls
+        myForm.addTinyMCEControl(element.id); // add tinyMCE controls MASSIVE ART
         if(dropon.parentNode!=oldParentNode)
           Sortable.options(oldParentNode).onChange(element);
         Sortable.options(dropon.parentNode).onChange(element);
@@ -773,9 +777,9 @@ var Sortable = {
       if(nextElement != element) {
         var oldParentNode = element.parentNode;
         element.style.visibility = "hidden"; // fix gecko rendering
-        myForm.removeTinyMCEControl(element.id); // remove tinyMCE controls
+        myForm.removeTinyMCEControl(element.id); // remove tinyMCE controls MASSIVE ART
         dropon.parentNode.insertBefore(element, nextElement);
-        myForm.addTinyMCEControl(element.id); // add tinyMCE controls
+        myForm.addTinyMCEControl(element.id); // add tinyMCE controls MASSIVE ART
         if(dropon.parentNode!=oldParentNode)
           Sortable.options(oldParentNode).onChange(element);
         Sortable.options(dropon.parentNode).onChange(element);
@@ -831,7 +835,7 @@ var Sortable = {
           hide().addClassName('dropmarker').setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
-    var offsets = Position.cumulativeOffset(dropon);
+    var offsets = dropon.cumulativeOffset();
     Sortable._marker.setStyle({left: offsets[0]+'px', top: offsets[1] + 'px'});
 
     if(position=='after')

@@ -263,7 +263,7 @@ var FacebookList = Class.create(TextboxList, {
     this.autoholder = $(autoholder).setOpacity(this.loptions.get('autocomplete').opacity);
     this.autoholder.observe('mouseover',function() {this.curOn = true;}.bind(this)).observe('mouseout',function() {this.curOn = false;}.bind(this));
     this.autoresults = this.autoholder.select('ul').first();
-	  var children = this.autoresults.select('li');
+    var children = this.autoresults.select('li');
     children.each(function(el) { this.add({value:el.readAttribute('value'),caption:el.innerHTML}); }, this);
 
     // Loading the options list only once at initialize. 
@@ -273,16 +273,24 @@ var FacebookList = Class.create(TextboxList, {
         method: this.options.get('fetchMethod'),
         onSuccess: function(transport) {
           transport.responseText.evalJSON(true).each(function(t) { 
-            this.autoFeed(t) }.bind(this));
-          }.bind(this)
-        }
-      );
+            this.autoFeed(t); 
+          }.bind(this));
+        }.bind(this)
+      });
     }
   },
   
   autoShow: function(search) {
+    
+//    console.debug(this.autoholder.id);
+    
     this.autoholder.setStyle({'display': 'block'});
-    this.autoholder.descendants().each(function(e) { e.hide() });
+//    var top = this.autoholder.up().positionedOffset()[1];
+//    
+//    console.debug(top);
+//    
+//    this.autoholder.setStyle({'top': (43+top)+'px'});
+    this.autoholder.descendants().each(function(e) { e.hide(); });
     if(! search || ! search.strip() || (! search.length || search.length < this.loptions.get('autocomplete').minchars)) {
       this.autoholder.select('.default').first().setStyle({'display': 'block'});
       this.resultsshown = false;
@@ -454,7 +462,7 @@ var FacebookList = Class.create(TextboxList, {
                 this.current_input = keep_input.escapeHTML().strip();
                 this.autoAdd(new_value_el);
                 input.value = keep_input;
-                this.update();			
+                this.update();      
               }
             }
           }
@@ -491,7 +499,7 @@ var FacebookList = Class.create(TextboxList, {
     li.observe('mouseover',function() { 
       this.addClassName('bit-hover');
     }).observe('mouseout',function() { 
-      this.removeClassName('bit-hover') 
+      this.removeClassName('bit-hover'); 
     });
     var a = new Element('a', {
       'href': '#',
@@ -510,9 +518,9 @@ var FacebookList = Class.create(TextboxList, {
 Element.addMethods({
   onBoxDispose: function(item,obj) { 
   // Set to not to "add back" values in the drop-down upon delete if they were new values
-	item = item.retrieveData('text').evalJSON(true);
-	if(!item.newValue)
-    	obj.autoFeed(item); 
+  item = item.retrieveData('text').evalJSON(true);
+  if(!item.newValue)
+      obj.autoFeed(item); 
   },
   onInputFocus: function(el,obj) { obj.autoShow(); },    
   onInputBlur: function(el,obj) { 
