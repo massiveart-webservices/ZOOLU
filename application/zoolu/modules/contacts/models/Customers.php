@@ -138,6 +138,23 @@ class Model_Customers
     }
 
     /**
+     * Load by reset password key
+     * @param $strKey string
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadByResetPasswordKey($strKey)
+    {
+        $this->core->logger->debug('contacts->models->Model_Customers->loadByResetPasswordKey('.$strKey.')');
+
+        $objSelect = $this->getCustomerTable()->select();
+        $objSelect->from('customers');
+        $objSelect->where('customers.resetPasswordKey = ?', $strKey);
+
+        return $this->getCustomerTable()->fetchAll($objSelect);
+    }
+
+    /**
      * loadAll
      * @param $strSearchValue string
      * @param $strSortOrder string

@@ -166,10 +166,51 @@ class CustomerController extends WebControllerAction
         }
     }
 
-    public function resetAction() {
+    /**
+     * Action for resetting the customer password
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function resetAction()
+    {
         $this->core->logger->debug('website->controllers->customerController->resetAction()');
 
         $this->initPageView();
+        $strEmail = $this->getRequest()->getParam('email', '');
+        $strKey = $this->getRequest()->getParam('key', '');
+        $strPassword = $this->getRequest()->getParam('password', '');
+
+        $objCustomerHelper = Zend_Registry::get('CustomerHelper');
+        $objCustomerHelper->setMetaTitle('Reset Password');
+
+        if ($strKey == '') {
+            if ($strEmail != '') {
+                //send email and show confirmation
+                $objCustomers = $this->getModelCustomers()->loadByEmail($strEmail);
+                if (count($objCustomers) > 0) {
+                    $objCustomer = $objCustomers->current();
+                    $strKey = uniqid('', true);
+
+                    $this->getModelCustomers()->edit(array('resetPasswordKey' => $strKey), $objCustomer->id);
+
+                    $this->view->display = 'confirmation';
+                }
+            }
+        } else {
+            if ($strPassword != '') {
+                //set the new password, if the key matches the key in the database
+                $objCustomers = $this->getModelCustomers()->loadByResetPasswordKey($strKey);
+                if (count($objCustomers) > 0) {
+                    $objCustomer = $objCustomers->current();
+                    $this->getModelCustomers()->edit(array('resetPasswordKey' => null, 'password' => md5($strPassword)), $objCustomer->id);
+                }
+                $this->view->display = 'changeConfirmation';
+            } else {
+                //Show change password formular
+                $this->view->key = $strKey;
+                $this->view->display = 'changePassword';
+            }
+        }
     }
 
     /**
