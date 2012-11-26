@@ -191,7 +191,9 @@ class CustomerController extends WebControllerAction
                     $objCustomer = $objCustomers->current();
                     $strKey = uniqid('', true);
 
+                    //insert generated key and inform user via email
                     $this->getModelCustomers()->edit(array('resetPasswordKey' => $strKey), $objCustomer->id);
+                    $this->sendResetPasswordMail($objCustomer);
 
                     $this->view->display = 'confirmation';
                 }
@@ -210,6 +212,57 @@ class CustomerController extends WebControllerAction
                 $this->view->key = $strKey;
                 $this->view->display = 'changePassword';
             }
+        }
+    }
+
+    /**
+     * Sends the email with the key for resetting the password
+     * @param $objCustomer
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    private function sendResetPasswordMail($objCustomer)
+    {
+        $objMail = new Zend_Mail('utf-8');
+
+        $objTransport = null;
+        if (!empty($this->core->config->mail->params->host)) {
+            // config for SMTP with auth
+            $arrConfig = array('auth' => 'login',
+                'username' => $this->core->config->mail->params->username,
+                'password' => $this->core->config->mail->params->password);
+
+            // smtp
+            $objTransport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $arrConfig);
+        }
+
+        // set mail subject
+        $objMail->setSubject('Registrierung');
+
+        $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/reset?key=' . $objCustomer->resetPasswordKey;
+
+        $objView = new Zend_View();
+        $objView->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->getTheme()->path.'/scripts/');
+        $objView->url = $strUrl;
+        $strBody = $objView->render('customer/passwordChangeMail.phtml');
+
+        // set body
+        $objMail->setBodyHtml($strBody);
+
+        // set mail from address
+        $objMail->setFrom($this->core->config->mail->from->address, $this->core->config->mail->from->name);
+
+        // add to address
+        $objMail->addTo($objCustomer->email, $objCustomer->fname . ' ' . $objCustomer->sname);
+
+        //set header for sending mail
+        $objMail->addHeader('Sender', $this->core->config->mail->params->username);
+
+        // send mail now
+        if ($this->core->config->mail->transport == 'smtp') {
+            $objMail->send($objTransport);
+        } else {
+            $objMail->send();
         }
     }
 
