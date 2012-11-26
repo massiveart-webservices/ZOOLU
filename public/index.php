@@ -98,6 +98,9 @@ try{
     $route = new Zend_Controller_Router_Route_Static('register', array('controller' => 'Customer', 'action' => 'register'));
     $router->addRoute('customerWebControllerRegister', $route);
 
+    $route = new Zend_Controller_Router_Route_Static('reset', array('controller' => 'Customer', 'action' => 'reset'));
+    $router->addRoute('customerWebControllerReset', $route);
+
     /**
      * only throw exceptions in developement mode
      */

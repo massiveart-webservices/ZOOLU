@@ -166,6 +166,12 @@ class CustomerController extends WebControllerAction
         }
     }
 
+    public function resetAction() {
+        $this->core->logger->debug('website->controllers->customerController->resetAction()');
+
+        $this->initPageView();
+    }
+
     /**
      * getRedirectUrl
      * @return string
