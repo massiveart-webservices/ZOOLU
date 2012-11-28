@@ -582,7 +582,7 @@ class Cms_PageController extends AuthControllerAction
 
             $arrTagIds = explode(',', $this->objRequest->getParam('tagIds'));
             $arrFolderIds = explode('][', trim($this->objRequest->getParam('folderIds'), '[]'));
-            $intRootLevelId = (int)$this->objRequest->getParam('rootLevelId', -1);
+            $intRootLevelId = (int) $this->objRequest->getParam('rootLevelId', -1);
             $arrCurrFileIds = explode('][', trim($this->objRequest->getParam('fileIds'), '[]'));
 
             $this->view->assign('fieldname', $this->objRequest->getParam('fileFieldId'));
@@ -621,7 +621,7 @@ class Cms_PageController extends AuthControllerAction
 
             $arrTagIds = explode(',', $this->objRequest->getParam('tagIds'));
             $arrFolderIds = explode('][', trim($this->objRequest->getParam('folderIds'), '[]'));
-            $intRootLevelId = (int)$this->objRequest->getParam('rootLevelId', -1);
+            $intRootLevelId = (int) $this->objRequest->getParam('rootLevelId', -1);
             $arrCurrFileIds = explode('][', trim($this->objRequest->getParam('fileIds'), '[]'));
 
             $this->view->assign('fieldname', $this->objRequest->getParam('fileFieldId'));
@@ -834,7 +834,7 @@ class Cms_PageController extends AuthControllerAction
 
         $objAdapter = new Zend_Paginator_Adapter_DbSelect($objEntries);
         $objPaginator = new Zend_Paginator($objAdapter);
-        $objPaginator->setItemCountPerPage((int)$this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
+        $objPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
         $objPaginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
         $objPaginator->setView($this->view);
 
@@ -938,7 +938,7 @@ class Cms_PageController extends AuthControllerAction
                 $objPageData = $this->getModelPages()->loadFormAndTemplateById($this->objRequest->getParam('id'));
                 if (count($objPageData) == 1) {
                     $objPage = $objPageData->current();
-                    if ((int)$objPage->idTemplates > 0) $this->objRequest->setParam('templateId', $objPage->idTemplates);
+                    if ((int) $objPage->idTemplates > 0) $this->objRequest->setParam('templateId', $objPage->idTemplates);
                     if ($objPage->genericFormId != '') $this->objRequest->setParam('formId', $objPage->genericFormId);
                 }
                 $this->_forward('geteditform');

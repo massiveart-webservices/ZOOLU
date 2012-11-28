@@ -1461,7 +1461,7 @@ class Model_Pages extends ModelAbstract
             ->joinLeft('rootLevels', 'rootLevels.id = folders.idRootLevels', array('languageDefinitionType'))
             ->joinLeft(array('rl' => 'rootLevels'), 'rl.id = pages.idParent AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'))
             ->where('pages.id = ?', $intPageId)
-            ->where('urls.isLandingPage = ?', (int)$blnLandingPages);
+            ->where('urls.isLandingPage = ?', (int) $blnLandingPages);
 
         return $this->objPageTable->fetchAll($objSelect);
     }
@@ -2131,7 +2131,7 @@ class Model_Pages extends ModelAbstract
         if (strpos($strElementIds, ',') !== false) {
             $objSelect->where('pages.id IN (' . $strElementIds . ')');
         } else {
-            $objSelect->where('pages.id = ?', (int)$strElementIds);
+            $objSelect->where('pages.id = ?', (int) $strElementIds);
         }
 
         return $this->objPageTable->fetchAll($objSelect);
