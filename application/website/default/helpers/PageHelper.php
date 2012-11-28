@@ -722,7 +722,7 @@ class PageHelper {
         $strReturn .= '<div class="'.$strItemCss.'">
                 <div class="'.$strIconCss.'"><img src="/website/themes/'.$strTheme.'/images/icons/'.$strIcon.'" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>
                 <div class="'.$strTitleCss.'">
-                  <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" onmousedown="clickTracker(\'/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'\');" target="_blank">'.$objFile->title.'</a>                
+                  <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" target="_blank">'.$objFile->title.'</a>
                 </div>
                 <div class="clear"></div>
               </div>';
@@ -779,7 +779,7 @@ class PageHelper {
                     <div class="item">
                       <div class="icon"><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/icons/'.$strIcon.'" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>
                       <div class="text">
-                        <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" onmousedown="clickTracker(\'/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'\');" target="_blank">'.htmlentities((($objFile->title == '' && (isset($objFile->alternativTitle) || isset($objFile->fallbackTitle))) ? ((isset($objFile->alternativTitle) && $objFile->alternativTitle != '') ? $objFile->alternativTitle : $objFile->fallbackTitle) : $objFile->title), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>
+                        <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" target="_blank">'.htmlentities((($objFile->title == '' && (isset($objFile->alternativTitle) || isset($objFile->fallbackTitle))) ? ((isset($objFile->alternativTitle) && $objFile->alternativTitle != '') ? $objFile->alternativTitle : $objFile->fallbackTitle) : $objFile->title), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>
                       </div>
                       <div class="clear"></div>
                     </div>';
@@ -1077,7 +1077,7 @@ class PageHelper {
                 $strHtmlOutputContent .= '<div class="item">
                         <div class="icon"><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/icons/icon_document.gif" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>
                         <div class="text">
-                          <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" onmousedown="clickTracker(\'/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'\');" target="_blank">'.$objFile->title.'</a>
+                          <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" target="_blank">'.$objFile->title.'</a>
                         </div>
                         <div class="clear"></div>
                       </div>';
