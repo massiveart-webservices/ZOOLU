@@ -1081,7 +1081,7 @@ Massiveart.Form = Class.create({
   removeItem: function(fieldId, elementId, id){
     if($(fieldId) && $(elementId)){     
       itemId = $(elementId).readAttribute('fileid');
-      if (typeof(itemId) == 'undefined'){
+      if (itemId == null || typeof(itemId) == 'undefined'){
         itemId = $(elementId).readAttribute('itemid');
       }
       if($(fieldId).value.indexOf('[' + itemId + ']') > -1){
