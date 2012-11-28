@@ -806,6 +806,41 @@ a:hover {
 }
 
 /* -----------------------
+    Register */
+.register {
+    width: 206px;
+}
+
+.register .missing{
+    color: #cc0000;
+    font-size: 12px;
+}
+
+.register .element {
+    margin: 0 0 10px 0;
+}
+
+.register .element input {
+    width: 200px;
+    border: 1px solid #000;
+    padding: 2px;
+}
+
+.register .submit {
+    margin: 10px 0 0 0;
+}
+
+.register .submit input {
+    border: 1px solid #000;
+    background-color: #ebebeb;
+    padding: 2px;
+}
+
+.register .button {
+    float: right;
+}
+
+/* -----------------------
     Floats */
 
 .left {

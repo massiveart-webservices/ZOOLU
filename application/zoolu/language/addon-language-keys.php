@@ -93,4 +93,9 @@ $core->translate->_('New_Press');
 $core->translate->_('New_Course');
 $core->translate->_('New_Event');
 
+/*
+ * customers
+ */
+$core->translate->_('private');
+$core->translate->_('work');
 ?>

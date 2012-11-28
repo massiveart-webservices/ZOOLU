@@ -11,11 +11,8 @@
 
   <!-- SCREEN CSS -->
   <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/min/b=website/themes/default&amp;f=css/reset.css,css/screen.css,lightbox/css/lightbox.css" />
-  
-  <%template_css%>
-  <%plugin_css%>
 
-  <?php if(Zend_Auth::getInstance()->hasIdentity()) : ?>
+  <?php if(Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session())->hasIdentity()) : ?>
   <link rel="stylesheet" type="text/css" media="screen" href="<?php get_static_component_domain() ?>/website/themes/default/css/modus.css"></link>
   <script type="text/javascript" src="<?php get_static_component_domain() ?>/website/themes/default/js_incs/modus.js"></script>
   <?php endif; ?>
@@ -23,8 +20,6 @@
   <link rel="shortcut icon" href="<?php get_static_component_domain() ?>/website/themes/default/favicon.ico" type="image/x-icon"></link>
   
   <script type="text/javascript" src="<?php get_static_component_domain() ?>/min/b=website/themes/default&amp;f=js_incs/prototype/prototype.js,js_incs/script.aculous/builder.js,js_incs/script.aculous/effects.js,js_incs/script.aculous/controls.js,js_incs/script.aculous/fader.js,lightbox/js/lightbox.js,js_incs/default.js,flowplayer/flowplayer-3.2.2.min.js"></script>
-  <%plugin_js%>
-  <%template_js%>
 </head>
 
 <body>
@@ -35,7 +30,7 @@
       <?php include dirname(__FILE__).'/includes/header.inc.php'; ?>
       
       <!-- Template Content -->
-      <?php include dirname(__FILE__).'/templates/'.get_template_file(); ?>
+      <?php get_content($this); ?>
     </div> <!-- /#main -->
   </div> <!-- /#wrap --> 
 

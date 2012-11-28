@@ -31,7 +31,7 @@ Massiveart.List = Class.create({
    * getListPage
    */
   getListPage: function(page){
-    if(myNavigation){      
+    if(myNavigation){
       
       if(typeof(page) != 'undefined' && page > 0){ 
         this.page = page;
@@ -52,11 +52,11 @@ Massiveart.List = Class.create({
       	},      
         evalScripts: true,     
         onComplete: function(transport) {
-      	  if($(myNavigation.genFormContainer)) $(myNavigation.genFormContainer).hide();
-          if($(myNavigation.genFormFunctions)) $(myNavigation.genFormFunctions).hide();
-          if($(myNavigation.genFormSaveContainer)) $(myNavigation.genFormSaveContainer).hide();
-          if($(myNavigation.genListContainer)) $(myNavigation.genListContainer).show();
-          if($(myNavigation.genListFunctions)) $(myNavigation.genListFunctions).show();
+      	    if($(myNavigation.genFormContainer)) $(myNavigation.genFormContainer).hide();
+            if($(myNavigation.genFormFunctions)) $(myNavigation.genFormFunctions).hide();
+            if($(myNavigation.genFormSaveContainer)) $(myNavigation.genFormSaveContainer).hide();
+            if($(myNavigation.genListContainer)) $(myNavigation.genListContainer).show();
+            if($(myNavigation.genListFunctions)) $(myNavigation.genListFunctions).show();
     	    myCore.initSelectAll();
     	    myCore.initListHover();
         }.bind(this)

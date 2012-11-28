@@ -270,6 +270,7 @@ class PageHelper {
    */
   public function getZooluHeader(){
     $strReturn = '';
+      Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
     if(Zend_Auth::getInstance()->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true){
       $strReturn .= '
       <div class="divShowModusContainer" id="zoolu-show-modus-toolbar" onClick="showModusContainer()">
@@ -320,6 +321,10 @@ class PageHelper {
    */
   public function getTemplateFile(){
     return $this->objPage->getTemplateFile();
+  }
+
+  public function getContent($objView) {
+    return $objView->render('templates/'.$this->getTemplateFile());
   }
   
   /**
