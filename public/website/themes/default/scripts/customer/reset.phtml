@@ -14,6 +14,10 @@
                 <div class="element">
                     <label for="passwordConfirmation">Password wiederholen</label>
                     <input type="password" id="passwordConfirmation" name="passwordConfirmation"/>
+
+                    <div class="error">
+                        <?php echo $this->errPassword ?>
+                    </div>
                 </div>
 
                 <input type="submit" name="submit" id="submit" class="button" value="Absenden"/>
@@ -27,6 +31,10 @@
                 <div class="element">
                     <label for="email">Email-Adresse</label>
                     <input type="text" id="email" name="email"/>
+
+                    <div class="error">
+                        <?php echo $this->errEmail ?>
+                    </div>
                 </div>
 
                 <input type="submit" name="submit" id="submit" class="button" value="Absenden"/>

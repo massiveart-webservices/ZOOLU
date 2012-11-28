@@ -175,16 +175,22 @@ class CustomerController extends WebControllerAction
     {
         $this->core->logger->debug('website->controllers->customerController->resetAction()');
 
+        $objMailValidator = new Zend_Validate_EmailAddress();
+
         $this->initPageView();
         $strEmail = $this->getRequest()->getParam('email', '');
         $strKey = $this->getRequest()->getParam('key', '');
         $strPassword = $this->getRequest()->getParam('password', '');
+        $strPasswordConfirmation = $this->getRequest()->getParam('passwordConfirmation', '');
+
+        $blnValidEmail = $objMailValidator->isValid($strEmail);
+        $blnPasswordMatch = $strPassword == $strPasswordConfirmation;
 
         $objCustomerHelper = Zend_Registry::get('CustomerHelper');
         $objCustomerHelper->setMetaTitle('Reset Password');
 
         if ($strKey == '') {
-            if ($strEmail != '') {
+            if ($blnValidEmail) {
                 //send email and show confirmation
                 $objCustomers = $this->getModelCustomers()->loadByEmail($strEmail);
                 if (count($objCustomers) > 0) {
@@ -197,9 +203,11 @@ class CustomerController extends WebControllerAction
 
                     $this->view->display = 'confirmation';
                 }
+            } else {
+                $this->view->errEmail = 'Geben Sie eine gültige Email-Adresse ein.';
             }
         } else {
-            if ($strPassword != '') {
+            if ($strPassword != '' && $blnPasswordMatch) {
                 //set the new password, if the key matches the key in the database
                 $objCustomers = $this->getModelCustomers()->loadByResetPasswordKey($strKey);
                 if (count($objCustomers) > 0) {
@@ -207,9 +215,14 @@ class CustomerController extends WebControllerAction
                     $this->getModelCustomers()->edit(array('resetPasswordKey' => null, 'password' => md5($strPassword)), $objCustomer->id);
                 }
                 $this->view->display = 'changeConfirmation';
+            } elseif(!$blnPasswordMatch) {
+                $this->view->key = $strKey;
+                $this->view->errPassword = 'Die Passwörter stimmen nicht überein.';
+                $this->view->display = 'changePassword';
             } else {
                 //Show change password formular
                 $this->view->key = $strKey;
+                $this->view->errPassword = 'Geben Sie ein neues Passwort ein.';
                 $this->view->display = 'changePassword';
             }
         }
@@ -242,7 +255,7 @@ class CustomerController extends WebControllerAction
         $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/reset?key=' . $objCustomer->resetPasswordKey;
 
         $objView = new Zend_View();
-        $objView->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->getTheme()->path.'/scripts/');
+        $objView->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->getTheme()->path . '/scripts/');
         $objView->url = $strUrl;
         $strBody = $objView->render('customer/passwordChangeMail.phtml');
 
