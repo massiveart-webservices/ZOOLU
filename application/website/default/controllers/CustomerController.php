@@ -153,7 +153,7 @@ class CustomerController extends WebControllerAction
 
                         //Write to session and redirect
                         $this->objAuth->getStorage()->write($objUserData);
-                        $this->redirect($strRedirectUrl);
+                        $this->_redirect($strRedirectUrl);
                         break;
                     case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
                         $this->view->errUsername = $this->translate->_('Username_not_found', false);
@@ -164,7 +164,7 @@ class CustomerController extends WebControllerAction
                 }
             }
         } else {
-            $this->redirect($strRedirectUrl);
+            $this->_redirect($strRedirectUrl);
         }
     }
 
@@ -309,7 +309,7 @@ class CustomerController extends WebControllerAction
         $strRedirectUrl = $this->getRedirectUrl();
 
         $this->objAuth->clearIdentity();
-        $this->redirect($strRedirectUrl);
+        $this->_redirect($strRedirectUrl);
     }
 
     /**
