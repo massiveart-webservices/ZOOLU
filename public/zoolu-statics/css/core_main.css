@@ -691,7 +691,8 @@ td.contentright {
 }
 
 .busy.propertywrapper div,
-.busy.propertywrapper span {
+.busy.propertywrapper span,
+#buttonOk.busy div {
     visibility: hidden;
 }
 

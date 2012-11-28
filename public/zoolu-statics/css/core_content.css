@@ -1552,7 +1552,8 @@ Corners */
 Overlay Inner */
 
 /* --- overlay navigation --- */
-.olnavigationwrapper, .olnavigationwrapper2 {
+.olnavigationwrapper, .olnavigationwrapper2, .olcontainerwrapper,
+.olnavigationwrappercontent {
     position: relative;
     background-color: #fff;
     height: 200px;
@@ -1569,7 +1570,8 @@ Overlay Inner */
 }
 
 .olnavigationwrapper .olnavrootitem,
-.olnavigationwrapper2 .olnavrootitem {
+.olnavigationwrapper2 .olnavrootitem,
+.olnavigationwrappercontent .olnavrootitem {
     padding: 5px 0 0 0;
     cursor: default;
 }
@@ -1585,7 +1587,8 @@ Overlay Inner */
     float: left;
 }
 
-.olnavigationwrapper .olnavchilditem {
+.olnavigationwrapper .olnavchilditem,
+.olnavigationwrappercontent .olnavchilditem{
     padding: 5px 0 0 22px;
     cursor: default;
 }
@@ -1608,7 +1611,7 @@ Overlay Inner */
     background-color: #fff;
 }
 
-.olcontentwrapper, .olcontentwrappertab {
+.olcontentwrapper, .olcontentwrappertab, .olcontentchoosercontentwrapper {
     background-color: #ccc;
     overflow: hidden;
     overflow-y: scroll;
@@ -1853,7 +1856,7 @@ Overlay Inner */
     float: left;
 }
 
-.olcontacttop {
+.olcontacttop, .olcontentchoosertop {
     background-color:#e4e4e4;
     border-top:1px #fff solid;
     border-left:1px #fff solid;
@@ -1869,7 +1872,8 @@ Overlay Inner */
     width: 339px;
 }
 
-.olcontactitemcontainer {
+.olcontactitemcontainer,
+.olcontentchoosercontentcontainer{
     min-height: 148px;
     background-color: #fff;
     width: 413px;
@@ -1916,7 +1920,8 @@ Overlay Inner */
     width: auto;
 }
 
-.olcontactbottom {
+.olcontactbottom,
+.olcontentchooserbottom{
     background-color:#e4e4e4;
     border-bottom:1px #fff solid;
     border-left:1px #fff solid;
@@ -1930,6 +1935,97 @@ Overlay Inner */
     text-align: left;
     float: left;
     width: 339px;
+}
+
+/* --- content chooser --- */
+
+#dbrdOverlayTitle {
+    float: left;
+    line-height: 25px;
+}
+
+#olBack {
+    float: right;
+    padding: 13px 0 0 0;
+    cursor: pointer;
+}
+
+#olModules {
+    background-color:#c6c6c6;
+    position: absolute;
+    top: 0;
+    width: 430px;
+    height: 400px;
+}
+
+#olRootLevels {
+    background-color:#c6c6c6;
+    position: absolute;
+    top: 0;
+    width: 430px;
+    height: 400px;
+}
+
+.olcontentchoosertop,
+.olcontentchooserbottom{
+    font-weight: bold;
+    width: 398px;
+}
+
+.olcontentchooserbottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+}
+
+.olcontentitemcontainer {
+    background-color: #fff;
+    height: 348px;
+    overflow: hidden;
+    overflow-y: scroll;
+    width: 430px;
+}
+
+.olcontainerwrapper {
+    background-color: transparent;
+    overflow: hidden;
+    height: 400px;
+    margin-bottom: -10px;
+}
+
+.olnavigationwrappercontent {
+    height: 150px;
+}
+
+.spacercontent {
+    height: 10px;
+    background-color: #cccccc;
+}
+
+.olcontentchoosercontentwrapper {
+    overflow: hidden;
+    padding: 0 0 26px 0;
+    min-height: 214px;
+}
+
+.olcontentwrapper .olcontactitemcontainer,
+.olcontentchoosercontentwrapper .olcontentchoosercontentcontainer {
+    height: 188px;
+    min-height: 188px;
+}
+
+.olcontentchoosercontentcontainer {
+    overflow: hidden;
+    overflow-y: scroll;
+    min-height: 348px;
+    height: 348px;
+    width: 430px;
+}
+
+.olnavrootitem .selected,
+.olnavchilditem .selected {
+    background-color: #ffd300;
 }
 
 /*-----------------

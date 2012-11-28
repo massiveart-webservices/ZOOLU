@@ -1757,6 +1757,26 @@ class Model_Pages extends ModelAbstract
     }
 
     /**
+     * Loads all the languages in which the page with the given id exists
+     * @param $intElementId The id of the page
+     * @return Zend_Db_Table_Select
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadLanguages($intElementId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadLanguages('.$intElementId.')');
+
+        $objSelect = $this->getPageTable()->select()->setIntegrityCheck(false);
+        $objSelect->from($this->getPageTable(), array());
+        $objSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId', array('idLanguages'));
+        $objSelect->where('idLanguages != ?', 0);
+        $objSelect->where('pages.id = ?', $intElementId);
+
+        return $this->getPageTable()->fetchAll($objSelect);
+    }
+
+    /**
      * addContact
      * @param  integer $intElementId
      * @param  string $strContactIds

@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-18 11:28+0100\n"
+"POT-Creation-Date: 2012-11-28 18:05+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: rs <raphael.stocker@massiveart.com>\n"
+"Last-Translator: Cornelius Hansjakob <cornelius.hansjakob@massiveart.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -121,29 +121,37 @@ msgstr "Newsletter"
 msgid "dirty"
 msgstr "Changed"
 
-#: application/zoolu/language/addon-language-keys.php:88
+#: application/zoolu/language/addon-language-keys.php:89
 msgid "New_Content"
 msgstr "New Content"
 
-#: application/zoolu/language/addon-language-keys.php:89
+#: application/zoolu/language/addon-language-keys.php:90
 msgid "New_Product"
 msgstr "New Product"
 
-#: application/zoolu/language/addon-language-keys.php:90
+#: application/zoolu/language/addon-language-keys.php:91
 msgid "New_Product_Link"
 msgstr "New Product Link"
 
-#: application/zoolu/language/addon-language-keys.php:91
+#: application/zoolu/language/addon-language-keys.php:92
 msgid "New_Press"
 msgstr "New Press"
 
-#: application/zoolu/language/addon-language-keys.php:92
+#: application/zoolu/language/addon-language-keys.php:93
 msgid "New_Course"
 msgstr "New Course"
 
-#: application/zoolu/language/addon-language-keys.php:93
+#: application/zoolu/language/addon-language-keys.php:94
 msgid "New_Event"
 msgstr "New Event"
+
+#: application/zoolu/language/addon-language-keys.php:99
+msgid "private"
+msgstr "Private"
+
+#: application/zoolu/language/addon-language-keys.php:100
+msgid "work"
+msgstr "Work"
 
 #: application/zoolu/modules/properties/controllers/OverlayController.php:79
 #: application/zoolu/modules/cms/controllers/OverlayController.php:110
@@ -151,7 +159,7 @@ msgid "Assign_medias"
 msgstr "Assign medias"
 
 #: application/zoolu/modules/properties/controllers/OverlayController.php:93
-#: application/zoolu/modules/cms/controllers/OverlayController.php:126
+#: application/zoolu/modules/cms/controllers/OverlayController.php:127
 msgid "Assign_documents"
 msgstr "Assign documents"
 
@@ -169,27 +177,27 @@ msgstr "No search results for \"%s\""
 msgid "Reset"
 msgstr "Reset"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:141
+#: application/zoolu/modules/cms/controllers/OverlayController.php:142
 msgid "Assign_internal_links"
 msgstr "Assign internal links"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:157
+#: application/zoolu/modules/cms/controllers/OverlayController.php:158
 msgid "Assign_sitemaplink"
 msgstr "Choose content page"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:195
+#: application/zoolu/modules/cms/controllers/OverlayController.php:196
 msgid "Assign_videos"
 msgstr "Assign videos"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:212
+#: application/zoolu/modules/cms/controllers/OverlayController.php:213
 msgid "Assign_contacts"
 msgstr "Assign contacts"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:232
+#: application/zoolu/modules/cms/controllers/OverlayController.php:233
 msgid "Assign_groups"
 msgstr "Assign groups"
 
-#: application/zoolu/modules/cms/controllers/OverlayController.php:271
+#: application/zoolu/modules/cms/controllers/OverlayController.php:272
 msgid "Select_page"
 msgstr "Select page"
 
@@ -213,43 +221,43 @@ msgstr "Widgets"
 msgid "Settings"
 msgstr "Settings"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:88
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:92
 msgid "All_Images"
 msgstr "All images"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:91
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:95
 msgid "All_Documents"
 msgstr "All documents"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:94
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:98
 msgid "All_Videos"
 msgstr "All videos"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:97
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:101
 msgid "All"
 msgstr "All"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:103
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:107
 msgid "Only_with_filter"
 msgstr "only with filter"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:187
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:191
 msgid "Conatcts"
 msgstr "Contacts"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:512
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:516
 msgid "Pagetitle"
 msgstr "Pagetitle"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:722
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:726
 msgid "Search_tags"
 msgstr "Search tags"
 
-#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:764
+#: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:768
 msgid "Search"
 msgstr "Search"
 
-#: application/zoolu/modules/cms/views/helpers/PageHelper.php:396
+#: application/zoolu/modules/cms/views/helpers/PageHelper.php:405
 msgid "created"
 msgstr "Created"
 
@@ -258,7 +266,7 @@ msgid "Add_description_"
 msgstr "Add a description ..."
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:169
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:484
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:528
 msgid "Tags"
 msgstr "Tags"
 
@@ -267,7 +275,7 @@ msgid "Languages"
 msgstr "Languages"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:175
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:451
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:495
 msgid "Language_specific"
 msgstr "language specific"
 
@@ -287,50 +295,55 @@ msgstr "yes"
 msgid "no"
 msgstr "no"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:353
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:489
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:366
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:533
 msgid "Search_or_add_tags"
 msgstr "Search or add tags"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:368
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:381
 msgid "Medium_is_language_specific"
 msgstr "Medium is language specific"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:457
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:501
 msgid "Region_specific"
 msgstr "Region specific"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:468
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:512
 msgid "Group_specific"
 msgstr "Group specific"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:481
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:525
 msgid "Title"
 msgstr "Title"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:506
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:550
 msgid "Preview_image"
 msgstr "Preview image"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:508
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:552
 msgid "Add_medias"
 msgstr "Add medias"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:557
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:601
 msgid "New_version"
 msgstr "New version"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:581
-msgid "Please_choose"
-msgstr "Please choose"
-
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:599
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:623
 msgid "Version_list"
 msgstr "Version list"
 
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:606
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:630
 msgid "Version"
 msgstr "Version"
+
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:657
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:658
+msgid "Select all"
+msgstr "Select all"
+
+#: application/zoolu/modules/media/views/helpers/ViewHelper.php:657
+msgid "Deselect all"
+msgstr "Deselect all"
 
 #: application/zoolu/modules/newsletters/views/helpers/OverlayHelper.php:63
 msgid "send_newsletter"
@@ -437,6 +450,96 @@ msgstr "Country Statistics"
 msgid "No_search_result"
 msgstr "No search result"
 
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:118
+msgid "New_Customer"
+msgstr "New customer"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:204
+msgid "New_customer"
+msgstr "New customer"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:253
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:354
+msgid "Edit_Customer"
+msgstr "Edit customer"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:528
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:535
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:542
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:549
+msgid "Please_choose"
+msgstr "Please choose"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:560
+msgid "informUser"
+msgstr "Inform user"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:565
+msgid "salutation"
+msgstr "Salutation"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:572
+msgid "statuschange"
+msgstr "Status change"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:578
+msgid "password"
+msgstr "Password"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:579
+msgid "confirm_password"
+msgstr "Confirm password"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:582
+msgid "Password"
+msgstr "Password"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:585
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:588
+msgid "groups"
+msgstr "Groups"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:591
+msgid "phone"
+msgstr "Phone"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:592
+msgid "mobile"
+msgstr "Mobile"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:593
+msgid "fax"
+msgstr "Fax"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:597
+msgid "Contact_details"
+msgstr "Contact details"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:626
+msgid "addresstype"
+msgstr "Address type"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:627
+msgid "street"
+msgstr "Street"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:628
+msgid "zip"
+msgstr "ZIP"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:629
+msgid "city"
+msgstr "City"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:630
+msgid "state"
+msgstr "State"
+
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:638
+#: application/zoolu/modules/contacts/controllers/CustomerController.php:655
+msgid "Addresses"
+msgstr "Addresses"
+
 #: application/zoolu/modules/contacts/controllers/SubscriberController.php:515
 msgid "Import_success_message"
 msgstr "%s contacts added, %t contacts updated"
@@ -508,10 +611,6 @@ msgstr "New Resource"
 msgid "Edit_Resource"
 msgstr "Edit Resource"
 
-#: application/zoolu/modules/users/controllers/ResourceController.php:377
-msgid "groups"
-msgstr "Groups"
-
 #: application/zoolu/modules/users/controllers/ResourceController.php:380
 msgid "Resource_groups"
 msgstr "Resource groups"
@@ -575,10 +674,6 @@ msgstr "Preferred content language"
 msgid "profile_image"
 msgstr "Profile image"
 
-#: application/zoolu/modules/users/controllers/UserController.php:528
-msgid "password"
-msgstr "Password"
-
 #: application/zoolu/modules/users/controllers/UserController.php:529
 msgid "Confirm_password"
 msgstr "Confirm password"
@@ -630,18 +725,6 @@ msgstr "Select product"
 #: application/zoolu/modules/core/controllers/LanguageController.php:80
 msgid "language_copy"
 msgstr "Copy Language"
-
-#: application/zoolu/modules/core/controllers/DashboardController.php:457
-msgid "Choose_module"
-msgstr "Choose module"
-
-#: application/zoolu/modules/core/controllers/DashboardController.php:478
-msgid "Choose_main_area"
-msgstr "Choose main area"
-
-#: application/zoolu/modules/core/controllers/DashboardController.php:520
-msgid "Choose_content"
-msgstr "Choose content"
 
 #: application/zoolu/modules/core/controllers/FolderController.php:549
 #: application/zoolu/modules/core/controllers/FolderController.php:606
@@ -699,6 +782,18 @@ msgstr "New Landingpage"
 msgid "Edit_Landingpage"
 msgstr "Edit Landingpage"
 
+#: application/zoolu/modules/core/controllers/ContentchooserController.php:116
+msgid "Choose_module"
+msgstr "Choose module"
+
+#: application/zoolu/modules/core/controllers/ContentchooserController.php:137
+msgid "Choose_main_area"
+msgstr "Choose main area"
+
+#: application/zoolu/modules/core/controllers/ContentchooserController.php:181
+msgid "Choose_content"
+msgstr "Choose content"
+
 #: application/zoolu/modules/core/views/helpers/DashboardHelper.php:136
 msgid "Checked"
 msgstr "completed"
@@ -740,47 +835,47 @@ msgstr "others"
 msgid "show_all_%s_comments"
 msgstr "Show all %s comments"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:743
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:802
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:855
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:514
+#: application/zoolu/modules/core/views/helpers/ContentchooserHelper.php:89
+#: application/zoolu/modules/core/views/helpers/ContentchooserHelper.php:140
 msgid "Name"
 msgstr "Name"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:762
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:533
 msgid "no_email"
 msgstr "no e-mail address"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:943
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:604
 msgid "second"
 msgstr "second"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:944
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:605
 msgid "minute"
 msgstr "minute"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:945
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:606
 msgid "hour"
 msgstr "hour"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:946
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:969
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:607
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:630
 msgid "day"
 msgstr "day"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:947
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:608
 msgid "week"
 msgstr "week"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:948
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:970
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:609
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:631
 msgid "month"
 msgstr "month"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:949
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:610
 msgid "year"
 msgstr "year"
 
-#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:982
+#: application/zoolu/modules/core/views/helpers/DashboardHelper.php:643
 #, php-format
 msgid "time_difference"
 msgstr "%d %s ago"
@@ -813,10 +908,28 @@ msgid "err_no_unique_url"
 msgstr "The suggested URL is not unique."
 
 #: library/massiveart/generic/fields/InternalLinks/forms/helpers/FormInternalLinks.php:98
-#: library/massiveart/generic/fields/CollapsableInternalLinks/forms/helpers/FormCollapsableInternalLinks.php:101
-#: library/massiveart/generic/fields/CollapsableInternalLinks/forms/helpers/FormCollapsableInternalLinks.php:113
 msgid "Add_internal_links"
 msgstr "Add internal links"
+
+#: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:74
+msgid "Size"
+msgstr "Size"
+
+#: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:75
+msgid "Edit backgorund image"
+msgstr ""
+
+#: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:187
+msgid "Corresponding region"
+msgstr ""
+
+#: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:194
+msgid "Cancel"
+msgstr "Cancel"
+
+#: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:198
+msgid "OK"
+msgstr "OK"
 
 #: library/massiveart/generic/fields/LandingPageUrl/forms/helpers/FormLandingPageUrl.php:77
 msgid "Landing_page"
@@ -838,7 +951,7 @@ msgstr "Address"
 msgid "Edit"
 msgstr "Edit"
 
-#: library/massiveart/generic/fields/Url/forms/helpers/FormUrl.php:115
+#: library/massiveart/generic/fields/Url/forms/helpers/FormUrl.php:116
 msgid "Url_history"
 msgstr "Url history"
 
@@ -853,10 +966,6 @@ msgstr "Add documents"
 #: library/massiveart/generic/fields/Contact/forms/helpers/FormContact.php:72
 msgid "Add_contacts"
 msgstr "Add contacts"
-
-#: library/massiveart/generic/fields/Articles/forms/helpers/FormArticles.php:164
-msgid "Size"
-msgstr "Size"
 
 #: library/massiveart/generic/fields/Articles/forms/helpers/FormArticles.php:169
 msgid "Price"
@@ -919,6 +1028,10 @@ msgstr "Change parent folder"
 #: application/zoolu/modules/cms/views/scripts/navigation/index.phtml:68
 msgid "Load_content_as_list"
 msgstr "Load content as list"
+
+#: application/zoolu/modules/cms/views/scripts/navigation/tree.phtml:84
+msgid "Copy_page"
+msgstr "Copy page"
 
 #: application/zoolu/modules/cms/views/scripts/navigation/childnavigation.phtml:23
 #: application/zoolu/modules/cms/views/scripts/navigation/rootnavigation.phtml:23
@@ -1053,14 +1166,9 @@ msgid "Edit_media"
 msgstr "Edit media"
 
 #: application/zoolu/modules/media/views/scripts/file/singleform.phtml:36
-#: application/zoolu/modules/media/views/scripts/file/form.phtml:33
+#: application/zoolu/modules/media/views/scripts/file/form.phtml:32
 msgid "Save"
 msgstr "Save"
-
-#: application/zoolu/modules/media/views/scripts/file/singleform.phtml:42
-#: application/zoolu/modules/media/views/scripts/file/form.phtml:26
-msgid "Cancel"
-msgstr "Cancel"
 
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/list.phtml:13
 msgid "Delete_products"
@@ -1129,6 +1237,14 @@ msgstr "Do you want to delete these %i companies?"
 msgid "Delete_company"
 msgstr "Do you want to delete this company?"
 
+#: application/zoolu/modules/contacts/views/scripts/customer/list.phtml:13
+msgid "Delete_customers"
+msgstr "Do you want to delete these %i customers?"
+
+#: application/zoolu/modules/contacts/views/scripts/customer/list.phtml:14
+msgid "Delete_customer"
+msgstr "Do you want to delete this customer?"
+
 #: application/zoolu/modules/contacts/views/scripts/subscriber/list.phtml:15
 msgid "Delete_subscribers"
 msgstr "Do you want to delete these %i contacts?<br /><br /><strong>All Information about these contacts will be lost!</strong>"
@@ -1170,10 +1286,6 @@ msgstr "Login"
 msgid "Username"
 msgstr "Username"
 
-#: application/zoolu/modules/users/views/scripts/user/login.phtml:52
-msgid "Password"
-msgstr "Password"
-
 #: application/zoolu/modules/users/views/scripts/user/login.phtml:60
 #: application/zoolu/modules/users/views/scripts/user/login.phtml:80
 msgid "Password_forgotten"
@@ -1184,7 +1296,6 @@ msgid "Back_to_website"
 msgstr "Back to website"
 
 #: application/zoolu/modules/global/views/scripts/navigation/childnavigation.phtml:15
-#: application/zoolu/modules/global/views/scripts/navigation/rootnavigation.phtml:24
 msgid "Show_Add_Menu"
 msgstr "Add"
 
@@ -1194,6 +1305,14 @@ msgstr "Add"
 #: application/zoolu/modules/global/views/scripts/navigation/childnavigation.phtml:34
 msgid "New_"
 msgstr "New"
+
+#: application/zoolu/modules/core/views/scripts/contentchooser/overlay-modules.phtml:8
+msgid "back"
+msgstr "back"
+
+#: application/zoolu/modules/core/views/scripts/contentchooser/overlay-content.phtml:15
+msgid "Ok"
+msgstr "Ok"
 
 #: application/zoolu/modules/core/views/scripts/folder/security.phtml:15
 msgid "Website"
@@ -1210,10 +1329,6 @@ msgstr "Do you want to delete these %i landingpages?"
 #: application/zoolu/modules/core/views/scripts/landingpage/list.phtml:13
 msgid "Delete_landingpage"
 msgstr "Do you want to delete this page?"
-
-#: application/zoolu/modules/core/views/scripts/dashboard/overlay-modules.phtml:8
-msgid "back"
-msgstr "back"
 
 #: application/zoolu/modules/core/views/scripts/dashboard/form.phtml:21
 msgid "Message"
@@ -1239,6 +1354,11 @@ msgstr "Add contents"
 #: application/zoolu/layouts/cms.phtml:28
 #: application/zoolu/layouts/media.phtml:28
 #: application/zoolu/layouts/index.phtml:26
+#: application/zoolu/layouts/contacts-tree.phtml:28
+#: application/zoolu/layouts/global-tree.phtml:28
+#: application/zoolu/layouts/properties.phtml:28
+#: application/zoolu/layouts/newsletters-list.phtml:28
+#: application/zoolu/layouts/users.phtml:27
 msgid "Open_website"
 msgstr "Open website"
 
@@ -1246,6 +1366,11 @@ msgstr "Open website"
 #: application/zoolu/layouts/cms.phtml:31
 #: application/zoolu/layouts/media.phtml:31
 #: application/zoolu/layouts/index.phtml:29
+#: application/zoolu/layouts/contacts-tree.phtml:31
+#: application/zoolu/layouts/global-tree.phtml:31
+#: application/zoolu/layouts/properties.phtml:31
+#: application/zoolu/layouts/newsletters-list.phtml:31
+#: application/zoolu/layouts/users.phtml:30
 msgid "Report_bugs"
 msgstr "Report a bug"
 
@@ -1253,50 +1378,68 @@ msgstr "Report a bug"
 #: application/zoolu/layouts/cms.phtml:32
 #: application/zoolu/layouts/media.phtml:32
 #: application/zoolu/layouts/index.phtml:30
+#: application/zoolu/layouts/contacts-tree.phtml:32
+#: application/zoolu/layouts/global-tree.phtml:32
+#: application/zoolu/layouts/properties.phtml:32
+#: application/zoolu/layouts/newsletters-list.phtml:32
+#: application/zoolu/layouts/users.phtml:31
 msgid "Help_and_FAQ"
 msgstr "Help & FAQ"
 
 #: application/zoolu/layouts/global-list.phtml:67
 #: application/zoolu/layouts/cms.phtml:78
 #: application/zoolu/layouts/media.phtml:82
+#: application/zoolu/layouts/contacts-tree.phtml:133
+#: application/zoolu/layouts/global-tree.phtml:78
+#: application/zoolu/layouts/properties.phtml:139
+#: application/zoolu/layouts/newsletters-list.phtml:67
+#: application/zoolu/layouts/users.phtml:66
 msgid "Saved"
 msgstr "Saved"
 
 #: application/zoolu/layouts/global-list.phtml:68
 #: application/zoolu/layouts/cms.phtml:79
 #: application/zoolu/layouts/media.phtml:83
+#: application/zoolu/layouts/contacts-tree.phtml:134
+#: application/zoolu/layouts/global-tree.phtml:79
+#: application/zoolu/layouts/properties.phtml:140
+#: application/zoolu/layouts/newsletters-list.phtml:68
+#: application/zoolu/layouts/users.phtml:67
 msgid "Can_not_Save"
 msgstr "Can not save"
 
 #: application/zoolu/layouts/global-list.phtml:69
 #: application/zoolu/layouts/cms.phtml:80
 #: application/zoolu/layouts/media.phtml:84
+#: application/zoolu/layouts/contacts-tree.phtml:135
+#: application/zoolu/layouts/global-tree.phtml:80
+#: application/zoolu/layouts/properties.phtml:141
+#: application/zoolu/layouts/newsletters-list.phtml:69
+#: application/zoolu/layouts/users.phtml:68
 msgid "Deleted"
 msgstr "Deleted"
 
-#: application/zoolu/layouts/global-list.phtml:243
-#: application/zoolu/layouts/cms.phtml:311
-#: application/zoolu/layouts/media.phtml:347
-#: application/zoolu/layouts/media.phtml:471
-#: application/zoolu/layouts/index.phtml:192
-#: application/zoolu/layouts/index.phtml:250
-msgid "Ok"
-msgstr "Ok"
-
 #: application/zoolu/layouts/global-list.phtml:293
-#: application/zoolu/layouts/cms.phtml:396
+#: application/zoolu/layouts/cms.phtml:397
 #: application/zoolu/layouts/media.phtml:528
-#: application/zoolu/layouts/index.phtml:297
+#: application/zoolu/layouts/index.phtml:298
+#: application/zoolu/layouts/contacts-tree.phtml:318
+#: application/zoolu/layouts/global-tree.phtml:343
+#: application/zoolu/layouts/properties.phtml:316
+#: application/zoolu/layouts/newsletters-list.phtml:390
+#: application/zoolu/layouts/users.phtml:294
 msgid "Delete_"
 msgstr "Delete?"
 
 #: application/zoolu/layouts/global-list.phtml:294
-#: application/zoolu/layouts/cms.phtml:397
+#: application/zoolu/layouts/cms.phtml:398
 #: application/zoolu/layouts/media.phtml:529
+#: application/zoolu/layouts/global-tree.phtml:344
 msgid "Delete_folder"
 msgstr "Do you want to delete this folder?"
 
 #: application/zoolu/layouts/global-list.phtml:305
+#: application/zoolu/layouts/global-tree.phtml:363
 msgid "Global"
 msgstr "Global"
 
@@ -1307,22 +1450,39 @@ msgstr "Maintenance properties"
 #: application/zoolu/layouts/cms.phtml:252
 #: application/zoolu/layouts/media.phtml:288
 #: application/zoolu/layouts/index.phtml:55
+#: application/zoolu/layouts/global-tree.phtml:199
 msgid "New_message"
 msgstr "New message"
 
-#: application/zoolu/layouts/cms.phtml:398
+#: application/zoolu/layouts/cms.phtml:399
 msgid "Delete_page"
 msgstr "Do you want to delete this page?"
 
-#: application/zoolu/layouts/cms.phtml:399
-msgid "Copy_language_override"
-msgstr "Would you like to override the existing data?"
+#: application/zoolu/layouts/cms.phtml:400
+msgid "None"
+msgstr "None"
 
-#: application/zoolu/layouts/cms.phtml:412
+#: application/zoolu/layouts/cms.phtml:401
+msgid "Copy_folder_text"
+msgstr ""
+
+#: application/zoolu/layouts/cms.phtml:402
+msgid "Move_folder_text"
+msgstr ""
+
+#: application/zoolu/layouts/cms.phtml:403
+msgid "Move_page_text"
+msgstr ""
+
+#: application/zoolu/layouts/cms.phtml:418
 msgid "Portals"
 msgstr "Portals"
 
 #: application/zoolu/layouts/media.phtml:135
+#: application/zoolu/layouts/contacts-tree.phtml:67
+#: application/zoolu/layouts/properties.phtml:73
+#: application/zoolu/layouts/newsletters-list.phtml:78
+#: application/zoolu/layouts/users.phtml:77
 msgid "New"
 msgstr "New"
 
@@ -1386,7 +1546,7 @@ msgstr "My messages"
 msgid "Completed_tasks"
 msgstr "Completed tasks"
 
-#: application/zoolu/layouts/index.phtml:296
+#: application/zoolu/layouts/index.phtml:297
 msgid "Delete_Activity"
 msgstr "Do you want to delete this message/task?"
 
@@ -1411,6 +1571,10 @@ msgstr "Do you want to delete this course?"
 #: application/zoolu/layouts/global-tree.phtml:348
 msgid "Delete_event"
 msgstr "Do you want to delete this event?"
+
+#: application/zoolu/layouts/global-tree.phtml:349
+msgid "Copy_language_override"
+msgstr "Would you like to override the existing data?"
 
 #: application/zoolu/layouts/properties.phtml:317
 msgid "Delete_category"

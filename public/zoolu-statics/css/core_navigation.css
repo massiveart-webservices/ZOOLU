@@ -329,6 +329,14 @@ Inner */
     margin: 0 0 5px 0;
 }
 
+#divNaviRightInner div#divPageRapper div#divPageInfo div#divPageActions div.icon_page {
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 2px -187px;
+    width: 25px;
+    height: 16px;
+    float: left;
+    margin: 0 0 5px 0;
+}
+
 /* ----------------
 Navigtion left */
 

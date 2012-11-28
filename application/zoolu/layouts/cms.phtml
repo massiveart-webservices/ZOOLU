@@ -381,7 +381,7 @@
     <?php echo $this->jsPlugins; ?>
 
     <script type="text/javascript">//<![CDATA[
-      var myCore, myNavigation, myForm, myPage, myFolder, myOverlay, myList;
+      var myCore, myNavigation, myForm, myPage, myFolder, myOverlay, myList, myDashboard, myContentchooser;
 
       //document.observe('dom:loaded', function() {
       Event.observe(window, 'load', function() {
@@ -410,6 +410,9 @@
         myOverlay = new Massiveart.Overlay();
         myList = new Massiveart.List();
         myList.ItemsPerPage = <?php echo Zend_Registry::get('Core')->sysConfig->list->default->itemsPerPage; ?>;
+
+        myDashboard = new Massiveart.Dashboard();
+        myContentchooser = new Massiveart.Contentchooser();
 
         myNavigation.initPortalHover();
         myNavigation.topNaviTitle = '<?php echo $this->translate->_('Portals'); ?>';
