@@ -182,8 +182,8 @@ class CustomerController extends WebControllerAction
         $this->initPageView();
         $strEmail = $this->getRequest()->getParam('email', '');
         $strKey = $this->getRequest()->getParam('key', '');
-        $strPassword = $this->getRequest()->getParam('password', '');
-        $strPasswordConfirmation = $this->getRequest()->getParam('passwordConfirmation', '');
+        $strPassword = $this->getRequest()->getParam('password', null);
+        $strPasswordConfirmation = $this->getRequest()->getParam('passwordConfirmation', null);
 
         $blnValidEmail = $objMailValidator->isValid($strEmail);
         $blnPasswordMatch = $strPassword == $strPasswordConfirmation;
@@ -205,11 +205,11 @@ class CustomerController extends WebControllerAction
 
                     $this->view->display = 'confirmation';
                 }
-            } else {
+            } elseif($strEmail != '') {
                 $this->view->errEmail = $this->translate->_('Email_invalid');
             }
         } else {
-            if ($strPassword != '' && $blnPasswordMatch) {
+            if ($strPassword != null && $blnPasswordMatch) {
                 //set the new password, if the key matches the key in the database
                 $objCustomers = $this->getModelCustomers()->loadByResetPasswordKey($strKey);
                 if (count($objCustomers) > 0) {
@@ -217,14 +217,13 @@ class CustomerController extends WebControllerAction
                     $this->getModelCustomers()->edit(array('resetPasswordKey' => null, 'password' => md5($strPassword)), $objCustomer->id);
                 }
                 $this->view->display = 'changeConfirmation';
-            } elseif(!$blnPasswordMatch) {
+            } elseif (!$blnPasswordMatch) {
                 $this->view->key = $strKey;
                 $this->view->errPassword = $this->translate->_('Password_confirm_wrong');
                 $this->view->display = 'changePassword';
             } else {
                 //Show change password formular
                 $this->view->key = $strKey;
-                $this->view->errPassword = $this->translate->_('Enter_new_password');
                 $this->view->display = 'changePassword';
             }
         }
@@ -392,7 +391,7 @@ class CustomerController extends WebControllerAction
                 if (!$blnValidEmail && $blnRequiredEmail) {
                     $this->view->errEmail = $this->translate->_('Email_invalid');
                 }
-                if(!$blnUniqueEmail) {
+                if (!$blnUniqueEmail) {
                     $this->view->errEmail = $this->translate->_('Email_not_unique');
                 }
             }
@@ -438,8 +437,7 @@ class CustomerController extends WebControllerAction
      * @version 1.0
      * @return Model_Customers
      */
-    protected
-    function getModelCustomers()
+    protected function getModelCustomers()
     {
         if (null === $this->objModelCustomers) {
             /**
