@@ -78,6 +78,8 @@ class CustomerController extends WebControllerAction
     {
         parent::init();
 
+        $this->setTranslate();
+
         //Initialize Authentication
         $this->objAuth = Zend_Auth::getInstance();
         $this->objAuth->setStorage(new Zend_Auth_Storage_Session(self::STORAGE_NAME));
@@ -116,7 +118,7 @@ class CustomerController extends WebControllerAction
             $strPassword = md5($this->getRequest()->getParam('password'));
 
             $objCustomerHelper = Zend_Registry::get('CustomerHelper');
-            $objCustomerHelper->setMetaTitle('Login');
+            $objCustomerHelper->setMetaTitle($this->translate->_('Login'));
 
             if ($strUsername != '' && $strUsername != null) {
                 $this->objAuthAdapter->setIdentity($strUsername);
@@ -154,10 +156,10 @@ class CustomerController extends WebControllerAction
                         $this->redirect($strRedirectUrl);
                         break;
                     case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-                        $this->view->errUsername = $this->core->translate->_('Username_not_found');
+                        $this->view->errUsername = $this->translate->_('Username_not_found');
                         break;
                     case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-                        $this->view->errPassword = $this->core->translate->_('Wrong_password');
+                        $this->view->errPassword = $this->translate->_('Wrong_password');
                         break;
                 }
             }
@@ -187,7 +189,7 @@ class CustomerController extends WebControllerAction
         $blnPasswordMatch = $strPassword == $strPasswordConfirmation;
 
         $objCustomerHelper = Zend_Registry::get('CustomerHelper');
-        $objCustomerHelper->setMetaTitle('Reset Password');
+        $objCustomerHelper->setMetaTitle($this->translate->_('Reset_password'));
 
         if ($strKey == '') {
             if ($blnValidEmail) {
@@ -204,7 +206,7 @@ class CustomerController extends WebControllerAction
                     $this->view->display = 'confirmation';
                 }
             } else {
-                $this->view->errEmail = 'Geben Sie eine gültige Email-Adresse ein.';
+                $this->view->errEmail = $this->translate->_('Email_invalid');
             }
         } else {
             if ($strPassword != '' && $blnPasswordMatch) {
@@ -217,12 +219,12 @@ class CustomerController extends WebControllerAction
                 $this->view->display = 'changeConfirmation';
             } elseif(!$blnPasswordMatch) {
                 $this->view->key = $strKey;
-                $this->view->errPassword = 'Die Passwörter stimmen nicht überein.';
+                $this->view->errPassword = $this->translate->_('Password_confirm_wrong');
                 $this->view->display = 'changePassword';
             } else {
                 //Show change password formular
                 $this->view->key = $strKey;
-                $this->view->errPassword = 'Geben Sie ein neues Passwort ein.';
+                $this->view->errPassword = $this->translate->_('Enter_new_password');
                 $this->view->display = 'changePassword';
             }
         }
@@ -250,7 +252,7 @@ class CustomerController extends WebControllerAction
         }
 
         // set mail subject
-        $objMail->setSubject('Registrierung');
+        $objMail->setSubject($this->translate->_('Registration'));
 
         $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/reset?key=' . $objCustomer->resetPasswordKey;
 
@@ -325,23 +327,30 @@ class CustomerController extends WebControllerAction
         $strRedirectUrl = $this->getRedirectUrl();
         $this->view->redirectUrl = $strRedirectUrl;
 
+        $objCustomerHelper = Zend_Registry::get('CustomerHelper');
+        $objCustomerHelper->setMetaTitle($this->translate->_('Registration'));
+
         if ($this->getRequest()->isPost() || $this->getRequest()->getParam('key', '') != '') {
             $strUsername = $this->getRequest()->getParam('username', '');
+            $strEmail = $this->getRequest()->getParam('email', '');
 
             //Validate the data
             $objMailValidator = new Zend_Validate_EmailAddress();
-            $objCustomers = $this->getModelCustomers()->loadByUsername($strUsername);
+            $objCustomersUsername = $this->getModelCustomers()->loadByUsername($strUsername);
+            $objCustomersEmail = $this->getModelCustomers()->loadByEmail($strEmail);
 
             $blnRequiredEmail = $this->getRequest()->getParam('email', '') != '';
             $blnRequiredUsername = $strUsername != '';
             $blnRequiredPassword = $this->getRequest()->getParam('password', '') != '';
             $blnValidPassword = $this->getRequest()->getParam('password') == $this->getRequest()->getParam('passwordConfirm');
-            $blnValidEmail = $objMailValidator->isValid($this->getRequest()->getParam('email'));
-            $blnUniqueUsername = count($objCustomers) == 0;
+            $blnValidEmail = $objMailValidator->isValid($strEmail);
+            $blnUniqueUsername = count($objCustomersUsername) == 0;
+            $blnUniqueEmail = count($objCustomersEmail) == 0;
             $blnKeySet = $this->getRequest()->getParam('key', '') != '';
             $blnValid = (
-                $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername
+                $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername && $blnUniqueEmail
             ) || $blnKeySet;
+
             if ($blnValid) {
                 $objRootLevel = $this->getModelRootLevels()->loadRootLevelById($this->objTheme->idRootLevels)->current();
                 $strRegisterStrategy = 'RegistrationStrategy' . $objRootLevel->registrationStrategy;
@@ -366,22 +375,25 @@ class CustomerController extends WebControllerAction
 
                 //Show validation errors
                 if (!$blnRequiredEmail) {
-                    $this->view->errEmail = $this->core->translate->_('Email_mandatory');
+                    $this->view->errEmail = $this->translate->_('Email_mandatory');
                 }
                 if (!$blnRequiredUsername) {
-                    $this->view->errUsername = $this->core->translate->_('Username_mandatory');
+                    $this->view->errUsername = $this->translate->_('Username_mandatory');
                 }
                 if (!$blnUniqueUsername) {
-                    $this->view->errUsername = $this->core->translate->_('Username_already_exists');
+                    $this->view->errUsername = $this->translate->_('Username_already_exists');
                 }
                 if (!$blnRequiredPassword) {
-                    $this->view->errPassword = $this->core->translate->_('Password_mandatory');
+                    $this->view->errPassword = $this->translate->_('Password_mandatory');
                 }
                 if (!$blnValidPassword) {
-                    $this->view->errPasswordConfirm = $this->core->translate->_('Password_confirm_wrong');
+                    $this->view->errPasswordConfirm = $this->translate->_('Password_confirm_wrong');
                 }
                 if (!$blnValidEmail && $blnRequiredEmail) {
-                    $this->view->errEmail = $this->core->translate->_('Email_invalid');
+                    $this->view->errEmail = $this->translate->_('Email_invalid');
+                }
+                if(!$blnUniqueEmail) {
+                    $this->view->errEmail = $this->translate->_('Email_not_unique');
                 }
             }
         }
