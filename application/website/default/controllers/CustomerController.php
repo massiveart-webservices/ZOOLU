@@ -201,7 +201,7 @@ class CustomerController extends WebControllerAction
 
                     //insert generated key and inform user via email
                     $this->getModelCustomers()->edit(array('resetPasswordKey' => $strKey), $objCustomer->id);
-                    $this->sendResetPasswordMail($objCustomer);
+                    $this->sendResetPasswordMail($objCustomer, $strKey);
 
                     $this->view->display = 'confirmation';
                 }
@@ -232,10 +232,11 @@ class CustomerController extends WebControllerAction
     /**
      * Sends the email with the key for resetting the password
      * @param $objCustomer
+     * @param $strKey
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    private function sendResetPasswordMail($objCustomer)
+    private function sendResetPasswordMail($objCustomer, $strKey)
     {
         $objMail = new Zend_Mail('utf-8');
 
@@ -253,7 +254,7 @@ class CustomerController extends WebControllerAction
         // set mail subject
         $objMail->setSubject($this->translate->_('Registration'), false);
 
-        $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/reset?key=' . $objCustomer->resetPasswordKey;
+        $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/reset?key=' . $strKey;
 
         $objView = new Zend_View();
         $objView->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->getTheme()->path . '/scripts/');
