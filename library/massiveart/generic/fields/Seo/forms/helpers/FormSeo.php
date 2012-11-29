@@ -49,7 +49,7 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
                           '</textarea>';
         }
 
-        $strOutput .= str_replace('%s', $fieldOptions->seoname, str_replace('%t', $maxChars, str_replace('%u', $name, str_replace('%v', $chars_left, $core->translate->_('Seo_max_chars', false)))));
+        $strOutput .= str_replace('%s', $core->translate->_($fieldOptions->seoname), str_replace('%t', $maxChars, str_replace('%u', $name, str_replace('%v', $chars_left, $core->translate->_('Seo_max_chars', false)))));
 
         return $strOutput;
     }

@@ -4,8 +4,8 @@ UPDATE `zo-zoolu`.`fieldTitles` SET `title`='Titel' WHERE `id`='397';
 UPDATE `zo-zoolu`.`fieldTitles` SET `title`='Canonical URL (Canonical Tag)' WHERE `id`='398';
 UPDATE `zo-zoolu`.`fieldTitles` SET `title`='Robots Einstellungen (robots.txt)' WHERE `id`='420';
 
-UPDATE `zo-zoolu`.`fields` SET `options`='{\"textbox\":\"textarea\", \"seoname\":\"Die Meta Beschreibung\", \"charslimit\":\"156\"}' WHERE `id`='247';
-UPDATE `zo-zoolu`.`fields` SET `options`='{\"textbox\":\"text\", \"seoname\":\"Der Meta Titel\", \"charslimit\":\"70\"}' WHERE `id`='250';
+UPDATE `zo-zoolu`.`fields` SET `options`='{\"textbox\":\"textarea\", \"seoname\":\"Meta_description\", \"charslimit\":\"156\"}' WHERE `id`='247';
+UPDATE `zo-zoolu`.`fields` SET `options`='{\"textbox\":\"text\", \"seoname\":\"Meta_title\", \"charslimit\":\"70\"}' WHERE `id`='250';
 
 UPDATE `zo-zoolu`.`categoryTitles` SET `title`='no-index (Seite wird nicht von der Suchmaschine indiziert)' WHERE `id`='5449';
 UPDATE `zo-zoolu`.`categoryTitles` SET `title`='no-follow (Verlinkungen auf der Seite werden nicht vom Suchmaschinen Bot verfolgt)' WHERE `id`='5450';
