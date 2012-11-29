@@ -98,4 +98,10 @@ $core->translate->_('New_Event');
  */
 $core->translate->_('private');
 $core->translate->_('work');
+
+/*
+ * seo tab
+ */
+$core->translate->_('Meta_description');
+$core->translate->_('Meta_title');
 ?>

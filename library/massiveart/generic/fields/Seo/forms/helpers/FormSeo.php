@@ -1,11 +1,13 @@
 <?php
 
 class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
-{    
+{
 
     function formSeo($name, $value = null, $attribs = null, $options = null)
     {
         $strOutput = '';
+
+        $core = Zend_Registry::get('Core');
 
         $info = $this->_getInfo($name, $value, $attribs, $options);
         extract($info); // name, value, attribs, options
@@ -47,9 +49,7 @@ class Form_Helper_FormSeo extends Zend_View_Helper_FormElement
                           '</textarea>';
         }
 
-        $strOutput .= '<p>The ' . $fieldOptions->seoname . ' will be limited to ' . $maxChars . ' chars
-                                <span id="chars_count_'. $name .'">' . $chars_left . '</span> chars left.
-                           </p>';
+        $strOutput .= str_replace('%s', $core->translate->_($fieldOptions->seoname), str_replace('%t', $maxChars, str_replace('%u', $name, str_replace('%v', $chars_left, $core->translate->_('Seo_max_chars', false)))));
 
         return $strOutput;
     }
