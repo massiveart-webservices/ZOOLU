@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-29 15:27+0100\n"
+"POT-Creation-Date: 2012-11-29 15:45+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -187,6 +187,14 @@ msgstr "Privat"
 #: application/zoolu/language/addon-language-keys.php:100
 msgid "work"
 msgstr "Geschäftlich"
+
+#: application/zoolu/language/addon-language-keys.php:105
+msgid "Meta_description"
+msgstr "Die Meta Beschreibung"
+
+#: application/zoolu/language/addon-language-keys.php:106
+msgid "Meta_title"
+msgstr "Der Meta TItel"
 
 #: application/zoolu/modules/cms/views/helpers/NavigationHelper.php:105
 #: application/zoolu/modules/global/controllers/ElementController.php:554
