@@ -121,7 +121,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      */
     final protected function insertCoreData($strType, $strTypeId, $intTypeVersion)
     {
-
         if (count($this->setup->CoreFields()) > 0) {
 
             $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
@@ -198,7 +197,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                      * delete data
                                      */
                                     $objGenTable->delete($strWhere);
-    
+
                                     /**
                                      * insert data
                                      */
@@ -232,7 +231,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $strField     => $objField->getValue(),
                                     'idUsers'     => $intUserId
                                 );
-    
+
                                 $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
@@ -264,7 +263,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'creator'       => $intUserId,
                                     'created'       => date('Y-m-d H:i:s')
                                 );
-    
+
                                 $objGenTable->insert($arrCoreData);
                             }
                         }

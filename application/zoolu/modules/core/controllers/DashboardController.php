@@ -50,11 +50,6 @@ class Core_DashboardController extends AuthControllerAction
     protected $objRequest;
 
     /**
-     * @var Model_Folders
-     */
-    protected $objModelFolders;
-
-    /**
      * @var Model_Pages
      */
     protected $objModelPages;
@@ -78,16 +73,6 @@ class Core_DashboardController extends AuthControllerAction
      * @var Model_Users
      */
     protected $objModelUsers;
-
-    /**
-     * @var Model_Modules
-     */
-    protected $objModelModules;
-
-    /**
-     * @var Model_RootLevels
-     */
-    protected $objModelRootLevels;
 
     /**
      * @var integer
@@ -435,192 +420,6 @@ class Core_DashboardController extends AuthControllerAction
     }
 
     /**
-     * overlayModulesAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayModulesAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayModulesAction()');
-        try {
-            $arrSelectedIds = array();
-
-            $strRelationIds = $this->objRequest->getParam('relationIds');
-            if ($strRelationIds != '') {
-                $strTmpRelationIds = trim($strRelationIds, '[]');
-                $arrSelectedIds = explode('][', $strTmpRelationIds);
-            }
-
-            $objModules = $this->getModelModules()->getModules();
-
-            $this->view->assign('elements', $objModules);
-            $this->view->assign('overlaytitle', $this->core->translate->_('Choose_module'));
-            $this->view->assign('translate', $this->core->translate);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
-     * overlayRootlevelsAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayRootlevelsAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayRootlevelsAction()');
-        try {
-            $intModuleId = $this->objRequest->getParam('moduleId');
-            $objRootLevels = $this->getModelRootLevels()->loadRootLevelsByModuleId($intModuleId);
-
-            $this->view->assign('elements', $objRootLevels);
-            $this->view->assign('overlaytitle', $this->core->translate->_('Choose_main_area'));
-            $this->view->assign('translate', $this->core->translate);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
-     * overlayContentAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayContentAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayContentAction()');
-        try {
-            $intModuleId = $this->objRequest->getParam('moduleId');
-            $intRootLevelId = $this->objRequest->getParam('rootLevelId');
-            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId');
-            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId');
-
-            $this->loadRootNavigation($intModuleId, null, $intRootLevelId);
-
-            $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
-            $this->view->assign('moduleId', $intModuleId);
-            $this->view->assign('rootLevelId', $intRootLevelId);
-
-            $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
-            $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
-
-            switch ($intModuleId) {
-                case $this->core->sysConfig->modules->global:
-                    $this->view->assign('contenttype', 'global');
-                    break;
-                case $this->core->sysConfig->modules->media:
-                    $this->view->assign('contenttype', 'media');
-                    break;
-                default:
-                    $this->view->assign('contenttype', 'page');
-                    break;
-            }
-            $this->view->assign('overlaytitle', $this->core->translate->_('Choose_content'));
-            $this->view->assign('translate', $this->core->translate);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
-     * overlayListAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayListAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayListAction()');
-        try {
-            $intFolderId = $this->getRequest()->getParam('folderId');
-            $strRelation = $this->getRequest()->getParam('relation', '');
-            $strContentType = $this->getRequest()->getParam('contenttype', '');
-            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId', '');
-            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId', '');
-
-            if ($strContentType != '') {
-                $objRelation = new stdClass();
-                if ($strRelation != '') {
-                    $objRelation = json_decode($strRelation);
-                }
-
-                $objElements = '';
-                switch ($strContentType) {
-                    case 'global':
-                        $objElements = $this->getModelGlobals()->loadGlobalsByFilter($intFolderId, null, $intRootLevelGroupId);
-                        break;
-                    case 'page':
-                        $objElements = $this->getModelPages()->loadPagesByfilter($intFolderId);
-                        break;
-                    case 'media':
-                        $objElements = $this->getModelFiles()->loadFiles($intFolderId);
-                        break;
-                }
-
-                $this->view->assign('elements', $objElements);
-                $this->view->assign('relation', $objRelation);
-                $this->view->assign('contenttype', $strContentType);
-                $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
-                $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
-            }
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
-     * overlayChildnavigationAction
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    public function overlayChildnavigationAction()
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->overlayChildnavigationAction()');
-        try {
-            $intFolderId = $this->objRequest->getParam('folderId');
-            $intViewType = $this->objRequest->getParam('viewtype');
-            $intLanguageId = $this->objRequest->getParam('languageId');
-            $strContentType = $this->objRequest->getParam('contenttype');
-            $intRootLevelTypeId = $this->objRequest->getParam('rootLevelTypeId', '');
-            $intRootLevelGroupId = $this->objRequest->getParam('rootLevelGroupId', '');
-
-            /**
-             * get childfolders
-             */
-            $objChildelements = $this->getModelFolders()->loadChildFolders($intFolderId);
-
-            $this->view->assign('elements', $objChildelements);
-            $this->view->assign('intFolderId', $intFolderId);
-            $this->view->assign('viewtype', $intViewType);
-            $this->view->assign('contenttype', $strContentType);
-            $this->view->assign('rootLevelTypeId', $intRootLevelTypeId);
-            $this->view->assign('rootLevelGroupId', $intRootLevelGroupId);
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-            exit();
-        }
-    }
-
-    /**
-     * loadRootNavigation
-     * @param integer $intRootLevelModule
-     * @param integer $intRootLevelType
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function loadRootNavigation($intRootLevelModule, $intRootLevelType = -1, $intRootLevel = null)
-    {
-        $this->core->logger->debug('core->controllers->DashboardController->loadRootNavigation(' . $intRootLevelModule . ', ' . $intRootLevelType . ', ' . $intRootLevel . ')');
-
-        $this->getModelFolders();
-        $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel);
-        $this->view->assign('elements', $objRootLevelElements);
-    }
-
-    /**
      * getItemLanguageId
      * @param integer $intActionType
      * @return integer
@@ -949,27 +748,6 @@ class Core_DashboardController extends AuthControllerAction
     }
 
     /**
-     * getModelFolders
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelFolders()
-    {
-        if (null === $this->objModelFolders) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
-            $this->objModelFolders = new Model_Folders();
-            $this->objModelFolders->setLanguageId($this->getItemLanguageId());
-        }
-
-        return $this->objModelFolders;
-    }
-
-    /**
      * getModelPages
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
@@ -1071,47 +849,6 @@ class Core_DashboardController extends AuthControllerAction
         }
 
         return $this->objModelUsers;
-    }
-
-    /**
-     * getModelModules
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelModules()
-    {
-        if (null === $this->objModelModules) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Modules.php';
-            $this->objModelModules = new Model_Modules();
-        }
-
-        return $this->objModelModules;
-    }
-
-    /**
-     * getModelRootLevels
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function getModelRootLevels()
-    {
-        if (null === $this->objModelRootLevels) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/RootLevels.php';
-            $this->objModelRootLevels = new Model_RootLevels();
-            $this->objModelRootLevels->setLanguageId(1); // TODO Language from user
-        }
-
-        return $this->objModelRootLevels;
     }
 }
 

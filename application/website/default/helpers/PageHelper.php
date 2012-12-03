@@ -270,6 +270,7 @@ class PageHelper {
    */
   public function getZooluHeader(){
     $strReturn = '';
+      Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
     if(Zend_Auth::getInstance()->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true){
       $strReturn .= '
       <div class="divShowModusContainer" id="zoolu-show-modus-toolbar" onClick="showModusContainer()">
@@ -320,6 +321,10 @@ class PageHelper {
    */
   public function getTemplateFile(){
     return $this->objPage->getTemplateFile();
+  }
+
+  public function getContent($objView) {
+    return $objView->render('templates/'.$this->getTemplateFile());
   }
   
   /**
@@ -396,6 +401,47 @@ class PageHelper {
       $strReturn .= $this->objPage->getFieldValue('description');
       if($blnContainer) $strReturn .= '</div>';
     }
+    return $strReturn;
+  }
+
+  /**
+   * getMetaRobots()
+   * @return string $strReturn
+   * @author Nurbek Chymbaev
+   * @version 1.0
+   */
+  public function getMetaRobots() {
+    $strReturn = '';
+    $metaRobotsField = $this->objPage->getFieldValue('seo_metarobots');
+
+    $metaIndex = 'index';
+    $metaFollow = 'follow';
+
+    if( !empty($metaRobotsField[0]) ) {
+        switch( $metaRobotsField[0] ) {
+            case $this->core->sysConfig->seo_tab->noindex:
+                $metaIndex = 'noindex';
+                break;
+            case $this->core->sysConfig->seo_tab->nofollow:
+                $metaFollow = 'nofollow';
+                break;
+        }
+    }
+
+    if( !empty($metaRobotsField[1]) ) {
+          switch( $metaRobotsField[1] ) {
+              case $this->core->sysConfig->seo_tab->noindex:
+                  $metaIndex = 'noindex';
+                  break;
+              case $this->core->sysConfig->seo_tab->nofollow:
+                  $metaFollow = 'nofollow';
+                  break;
+          }
+    }
+
+
+    $strReturn .= '<meta name="robots" content="'.$metaIndex.','.$metaFollow.'"/>';
+
     return $strReturn;
   }
   
@@ -681,7 +727,7 @@ class PageHelper {
         $strReturn .= '<div class="'.$strItemCss.'">
                 <div class="'.$strIconCss.'"><img src="/website/themes/'.$strTheme.'/images/icons/'.$strIcon.'" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>
                 <div class="'.$strTitleCss.'">
-                  <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" onmousedown="clickTracker(\'/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'\');" target="_blank">'.$objFile->title.'</a>                
+                  <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" target="_blank">'.$objFile->title.'</a>
                 </div>
                 <div class="clear"></div>
               </div>';
@@ -738,7 +784,7 @@ class PageHelper {
                     <div class="item">
                       <div class="icon"><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/icons/'.$strIcon.'" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>
                       <div class="text">
-                        <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" onmousedown="clickTracker(\'/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'\');" target="_blank">'.htmlentities((($objFile->title == '' && (isset($objFile->alternativTitle) || isset($objFile->fallbackTitle))) ? ((isset($objFile->alternativTitle) && $objFile->alternativTitle != '') ? $objFile->alternativTitle : $objFile->fallbackTitle) : $objFile->title), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>
+                        <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" target="_blank">'.htmlentities((($objFile->title == '' && (isset($objFile->alternativTitle) || isset($objFile->fallbackTitle))) ? ((isset($objFile->alternativTitle) && $objFile->alternativTitle != '') ? $objFile->alternativTitle : $objFile->fallbackTitle) : $objFile->title), ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>
                       </div>
                       <div class="clear"></div>
                     </div>';
@@ -1036,7 +1082,7 @@ class PageHelper {
                 $strHtmlOutputContent .= '<div class="item">
                         <div class="icon"><img src="'.$this->core->config->domains->static->components.'/website/themes/default/images/icons/icon_document.gif" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>
                         <div class="text">
-                          <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" onmousedown="clickTracker(\'/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'\');" target="_blank">'.$objFile->title.'</a>
+                          <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" target="_blank">'.$objFile->title.'</a>
                         </div>
                         <div class="clear"></div>
                       </div>';

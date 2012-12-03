@@ -17,9 +17,8 @@ $objHelper = new ViewHelper();
 <div class="clear spacer1"></div>
 <form id="editForm" name="editForm" method="post" action="<?php echo $this->strEditFormAction; ?>" onsubmit="return false;">
     <input type="hidden" id="mediaFormLanguageId" value="<?php echo $this->languageId; ?>" name="languageId"/>
-
     <div id="overlayMediaWrapper" class="mediawrapper">
-        <?php echo $objHelper->getEditForm($this->objFiles, $this->arrFilesFileFilters); ?>
+        <?php echo $objHelper->getEditForm($this->objFiles, $this->arrFilesFileFilters, $this->imagesSizes); ?>
         <input type="hidden" name="FileIds" id="EditFileIds" value="<?php echo $this->strFileIds; ?>"/>
     </div>
     <div class="clear"></div>

@@ -656,6 +656,41 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
       }
     }
   },
+
+    /**
+     * selectCustomers
+     */
+  selectCustomers: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType){
+      if(typeof(viewType) == 'undefined'){
+          viewType = 'tree';
+      }
+       if(typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType != 'list')){
+          this.changeViewType(rootLevelId, rootLevelGroupId, url);
+      }else{
+          this.rootLevelId = rootLevelId;
+          this.rootLevelGroupId = rootLevelGroupId;
+          this.rootLevelType = rootLevelType;
+          $(this.genFormContainer).hide();
+          $(this.genFormFunctions).hide();
+          if($('naviitem'+rootLevelId)){
+              this.makeSelected('naviitem'+rootLevelId);
+              if($(this.preSelectedNaviItem) && ('naviitem'+rootLevelId) != this.preSelectedNaviItem){
+                  this.makeDeselected(this.preSelectedNaviItem);
+                  this.makeDeselected(this.preSelectedSubNaviItem);
+              }
+              this.preSelectedNaviItem = 'naviitem'+rootLevelId;
+          }else if($('subnaviitem'+rootLevelId)){
+              this.makeSelected('subnaviitem'+rootLevelId);
+              if($(this.preSelectedSubNaviItem) && ('subnaviitem'+rootLevelId) != this.preSelectedSubNaviItem){
+                  this.makeDeselected(this.preSelectedSubNaviItem);
+              }
+              this.preSelectedSubNaviItem = 'subnaviitem'+rootLevelId;
+          }
+          myList.sortColumn = '';
+          myList.sortOrder = '';
+          myList.resetSearch();
+      }
+   },
   
   /**
    * selectSubscribers

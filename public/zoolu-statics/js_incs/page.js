@@ -130,5 +130,28 @@ Massiveart.Page = Class.create({
   exportDynFormEntries: function(idPage, from, to, headline, startdate, enddate){
     var url = '/zoolu/cms/page/exportdynformentries?pageId='+idPage+'&from='+from+'&to='+to+'&headline='+headline+'&startdate='+startdate+'&enddate='+enddate;
     location.href = url;
+  },
+
+    /**
+     * copyPage
+     * @param folderId
+     */
+  copyPage: function(folderId) {
+    new Ajax.Request('/zoolu/cms/page/copy', {
+        parameters: {
+            id: $F('id'),
+            formId: $F('formId'),
+            templateId: $F('templateId'),
+            formVersion: $F('formVersion'),
+            languageId: $F('languageId'),
+            isStartPage: $F('isStartPage'),
+            parentFolderId: $F('parentFolderId'),
+            rootLevelId: $F('rootLevelId'),
+            newParentFolderId: folderId
+        },
+        onComplete: function() {
+            myOverlay.close('')
+        }
+    })
   }
 });

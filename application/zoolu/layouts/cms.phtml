@@ -372,33 +372,37 @@
         </table>
     </div>
 
-    <!-- libaries -->
-    <script type="text/javascript" src="/min/g=zJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>
+<!-- libaries -->
+    <script type="text/javascript" src="/min/g=zJs?v=<?php echo $this->jsVersion; ?>"></script>
     <script type="text/javascript" src="/min/g=zCmsJs?v=<?php echo $this->jsVersion; ?>&debug=1"></script>
     <script type="text/javascript" src="/zoolu-statics/tinymce/jscripts/tiny_mce/tiny_mce.js?v=<?php echo $this->jsVersion; ?>"></script>
-
+    <script type="text/javascript" src="/zoolu-statics/js_incs/list.js?v=<?php echo $this->jsVersion; ?>"></script>
+        
     <?php echo $this->jsPlugins; ?>
 
     <script type="text/javascript">//<![CDATA[
-    var myCore, myNavigation, myForm, myPage, myFolder, myOverlay, myList, myDashboard;
+      var myCore, myNavigation, myForm, myPage, myFolder, myOverlay, myList, myDashboard, myContentchooser;
 
-    //document.observe('dom:loaded', function() {
-    Event.observe(window, 'load', function() {
+      //document.observe('dom:loaded', function() {
+      Event.observe(window, 'load', function() {
         myCore = new Massiveart.Core();
-
+        
         myCore.languageId = <?php echo Zend_Registry::get('Core')->intZooluLanguageId; ?>;
         myCore.languageCode = '<?php echo Zend_Registry::get('Core')->strZooluLanguageCode; ?>';
         myCore.translate = {
-            Save: '<?php echo $this->translate->_('Save'); ?>',
-            Cancel: '<?php echo $this->translate->_('Cancel'); ?>',
-            Apply: '<?php echo $this->translate->_('Apply'); ?>',
-            Edit: '<?php echo $this->translate->_('Edit'); ?>',
-            Delete_: '<?php echo $this->translate->_('Delete_'); ?>',
-            Delete_folder: '<?php echo $this->translate->_('Delete_folder'); ?>',
-            Delete_page: '<?php echo $this->translate->_('Delete_page'); ?>',
-            Copy_language_override: '<?php echo $this->translate->_('Copy_language_override'); ?>'
+          Save: '<?php echo $this->translate->_('Save'); ?>', 
+          Cancel: '<?php echo $this->translate->_('Cancel'); ?>', 
+          Apply: '<?php echo $this->translate->_('Apply'); ?>', 
+          Edit: '<?php echo $this->translate->_('Edit'); ?>',
+          Delete_: '<?php echo $this->translate->_('Delete_'); ?>',
+          Delete_folder: '<?php echo $this->translate->_('Delete_folder'); ?>',
+          Delete_page: '<?php echo $this->translate->_('Delete_page'); ?>',
+          None: '<?php echo $this->translate->_('None'); ?>',
+          Copy_folder_text: '<?php echo $this->translate->_('Copy_folder_text', false); ?>',
+          Move_folder_text: '<?php echo $this->translate->_('Move_folder_text', false); ?>',
+          Move_page_text: '<?php echo $this->translate->_('Move_page_text', false); ?>'          
         };
-
+        
         myNavigation = new Massiveart.Navigation.Cms();
         myForm = new Massiveart.Form();
         myPage = new Massiveart.Page();
@@ -406,29 +410,19 @@
         myOverlay = new Massiveart.Overlay();
         myList = new Massiveart.List();
         myList.ItemsPerPage = <?php echo Zend_Registry::get('Core')->sysConfig->list->default->itemsPerPage; ?>;
+
         myDashboard = new Massiveart.Dashboard();
+        myContentchooser = new Massiveart.Contentchooser();
 
         myNavigation.initPortalHover();
         myNavigation.topNaviTitle = '<?php echo $this->translate->_('Portals'); ?>';
         myNavigation.rootLevelTypeId = <?php echo $this->rootLevelTypeId; ?>;
         myNavigation.module = <?php echo $this->module; ?>;
-
-        <?php
-            $intRootLevelId = '';
-            if (isset(Zend_Registry::get('Core')->objCoreSession->selectItem)) {
-                $objSelectItem = Zend_Registry::get('Core')->objCoreSession->selectItem;
-                if (isset($objSelectItem->rootLevelId) && $objSelectItem->rootLevelId != '') {
-                    $intRootLevelId = $objSelectItem->rootLevelId;
-                }
-            }
-        ?>
-
-        if (!Prototype.Browser.IE) myNavigation.initModuleCMS(<?php echo $intRootLevelId; ?>);
+        if(!Prototype.Browser.IE) myNavigation.initModuleCMS();
 
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
-        new Draggable('overlayGenContentWrapper2', {handle: 'handle', scroll: window });
-        new Draggable('overlaySendToDashbaordWrapper', {handle: 'handle', scroll: window });
-    });
+      });
+
     //]]>
     </script>
 </body>
