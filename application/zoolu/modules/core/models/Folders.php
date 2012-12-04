@@ -291,7 +291,7 @@ class Model_Folders extends ModelAbstract
         $objSelect->joinLeft('rootLevelUrls', 'rootLevelUrls.idRootLevels = rootLevels.id AND idEnvironments = '.$intEnvironment.' AND isMain = 1', array('idLanguages AS idDefaultLanguage'));
         $objSelect->joinLeft('rootLevelLanguages', 'rootLevelLanguages.idRootLevels = rootLevels.id AND rootLevelLanguages.isFallback = 1', array('rootLevelLanguageId' => 'idLanguages'));
         $objSelect->joinLeft(array('rLGuiLanguages' => 'rootLevelLanguages'), 'rLGuiLanguages.idRootLevels = rootLevels.id AND rLGuiLanguages.idLanguages = ' . $this->intContentLanguageId, array('rootLevelGuiLanguageId' => 'rLGuiLanguages.idLanguages'));
-        $objSelect->where('rootLevelTitles.idLanguages = ?', $this->intLanguageId);
+        $objSelect->where('rootLevelTitles.idLanguages = ?', $this->core->intZooluLanguageId);
         $objSelect->where('rootLevels.idModules = ?', $intRootLevelModule);
         $objSelect->where('rootLevels.active = 1');
         if ($intRootLevelType != -1) {
