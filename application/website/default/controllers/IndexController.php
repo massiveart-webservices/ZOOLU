@@ -216,7 +216,7 @@ class IndexController extends WebControllerAction
             // init page cache
             $this->initPageCache($strUrl);
         
-            /**
+            /*
              * check if "q" param is in the url for the search
              */
             if (strpos($strUrl, '?q=') !== false) {
@@ -299,7 +299,7 @@ class IndexController extends WebControllerAction
                             break;
                     }
     
-                    /**
+                    /*
                      * preset navigation parent properties
                      * e.g. is a collection page
                      */
@@ -308,7 +308,7 @@ class IndexController extends WebControllerAction
                         $this->objPage->setNavParentTypeId($objUrlData->idParentTypes);
                     }
     
-                    /**
+                    /*
                      * has base url object
                      * e.g. prduct tree
                      */
@@ -320,7 +320,7 @@ class IndexController extends WebControllerAction
     
                     $this->objPage->loadPage();
     
-                    /**
+                    /*
                      * check status
                      */
                     if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
@@ -346,7 +346,7 @@ class IndexController extends WebControllerAction
                         $this->strRenderScript = $this->objPage->getTemplateRenderScript();
                     }
     
-                    /**
+                    /*
                      * check page security
                      */
                     if ($objNavigation->secuirtyZoneCheck()) {
@@ -401,7 +401,7 @@ class IndexController extends WebControllerAction
                                                                    'theme' => $this->objTheme
                                                               ));
                     } else {
-                        /**
+                        /*
                          * get page template filename
                          */
                         $this->view->template = $this->objPage->getTemplateFile();
