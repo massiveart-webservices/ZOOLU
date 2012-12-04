@@ -169,11 +169,10 @@ abstract class WebControllerAction extends Zend_Controller_Action
     {
         // set domain
         $strDomain = $_SERVER['SERVER_NAME'];
-
-        $objThemeData = $this->getModelFolders()->getThemeByDomain($strDomain);
+        $objThemeData = $this->getModelFolders()->getThemeByDomain($this->core->getMainDomain($strDomain));
 
         if (count($objThemeData) > 0) {
-
+            
             $this->validateUrlPrefix($objThemeData);
 
             //FIXME : for development
@@ -313,18 +312,55 @@ abstract class WebControllerAction extends Zend_Controller_Action
      */
     protected function validateLanguage()
     {
-        if ($this->core->blnIsDefaultLanguage === true) {
+        $this->core->logger->debug('get language by: ');
+        $this->intLanguageDefinitionType = $this->objTheme->languageDefinitionType;
+        
+        $this->core->logger->debug('theme');
+        $this->core->intLanguageId = $this->objTheme->idLanguages;
+        $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
 
-            $this->core->intLanguageId = $this->objTheme->idLanguages;
-            $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
-
-            // update session language
-            $this->core->updateSessionLanguage();
-
-            $this->intLanguageId = $this->core->intLanguageId;
-            $this->strLanguageCode = $this->core->strLanguageCode;
+        if ($this->intLanguageDefinitionType != $this->core->config->language_definition->none) {
+            $strRequestString = '';
+            $strMatchCode = '';
+            $strTld = '';
+            if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                $this->core->logger->debug('folder');
+                $strRequestString = $_SERVER['REQUEST_URI'];
+                $strMatchCode = '/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//';
+            } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain || $this->core->config->language_definition->subandtld) {
+                $this->core->logger->debug('subdomain');
+                $strRequestString = $_SERVER['HTTP_HOST'];
+                $strMatchCode = '/^[a-zA-Z]{2}/';
+                $strTld = strrchr ( $_SERVER['SERVER_NAME'], "." );
+                $strTld = substr ( $strTld, 1 );
+            }
+            if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
+                preg_match($strMatchCode, $strRequestString, $arrMatches);
+                $strCode = trim($arrMatches[0], '/');
+                if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subandtld) {
+                    if ($strTld != '') {
+                        $strTmpCode = $strCode . '-' . $strTld;
+                        foreach($this->core->config->languages->language->toArray() as $arrLanguage){
+                            if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strTmpCode)) {
+                                $this->core->strLanguageCode = $strTmpCode;
+                                $this->core->intLanguageId = $arrLanguage['id'];
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    foreach($this->core->config->languages->language->toArray() as $arrLanguage){
+                        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strCode)) {
+                            $this->core->strLanguageCode = $strCode;
+                            $this->core->intLanguageId = $arrLanguage['id'];
+                            break;
+                        }
+                    }
+                }
+            }
         }
-
+        $this->intLanguageId = $this->core->intLanguageId;
+        $this->strLanguageCode = $this->core->strLanguageCode;
         $this->view->languageId = $this->intLanguageId;
         $this->view->languageCode = $this->strLanguageCode;
     }
@@ -420,7 +456,11 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
                 $this->getResponse()->setHeader('Status', '301 Moved Permanently');
                 $this->getResponse()->setHttpResponseCode(301);
-                $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/' . $strTmpUrl);
+                $strLanguageFolder = '';
+                if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                    $strLanguageFolder =  $this->strLanguageCode . '/';
+                }
+                $this->_redirect($this->getPrefix() . '/' . $strLanguageFolder . $strTmpUrl);
             } else {
                 $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
                 $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
