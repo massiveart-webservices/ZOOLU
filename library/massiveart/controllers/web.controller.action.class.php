@@ -185,6 +185,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
             $this->view->mapsKey = $this->objTheme->mapsKey;
             $this->view->rootLevelId = $this->objTheme->idRootLevels;
             $this->view->urlPrefix = $this->strUrlPrefix;
+            $this->view->theme = $this->objTheme->path;
 
             if ($this->objTheme->localization != '') {
                 Zend_Registry::get('Location')->setLocale($this->objTheme->localization);
