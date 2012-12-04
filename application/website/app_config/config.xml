@@ -69,7 +69,7 @@
     </languages>
     
     <!-- enable_short_subdomains-->
-    <enable_short_subdomains>true</enable_short_subdomains> <!-- true/false, enable to us 2-char long subdomains for portals -->
+    <enable_short_subdomains>false</enable_short_subdomains> <!-- true/false, enable to us 2-char long subdomains for portals -->
 
     <!-- languages definition types-->
     <language_definition>
