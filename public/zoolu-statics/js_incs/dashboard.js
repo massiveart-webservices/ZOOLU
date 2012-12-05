@@ -689,7 +689,7 @@ Massiveart.Dashboard = Class.create({
     getSendToDashboard:function () {
         if ($('overlayBlack75')) $('overlayBlack75').show();
         $('overlaySendToDashboardContent').innerHTML = '';
-        if ($('overlaySingleEdit')) $('overlaySingleEdit').setStyle({zIndex:'802'});
+        if ($('overlayMediaEdit')) $('overlayMediaEdit').setStyle({zIndex:'802'});
 
         this.mode = 'OVERLAY';
 
@@ -784,7 +784,7 @@ Massiveart.Dashboard = Class.create({
 
                         myCore.removeBusyClass('overlaySendToDashboardContent');
                         // close overlays
-                        if ($('overlaySingleEdit')) myOverlay.close('overlaySingleEdit');
+                        if ($('overlayMediaEdit')) myOverlay.close('overlayMediaEdit');
                         this.closeSendToDashboardOverlay();
                     }.bind(this)
                 });

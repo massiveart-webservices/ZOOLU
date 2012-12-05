@@ -601,23 +601,23 @@ Massiveart.Media = Class.create({
       this.lastFileIds = '';
       
       var blnShow = true;
-      if($('overlaySingleEdit').visible() == true) {
+      if($('overlayMediaEdit').visible() == true) {
         blnShow = false;
       }
-      myCore.addBusyClass('overlaySingleEditContent');
-      myCore.putCenter('overlaySingleEdit');
+      myCore.addBusyClass('overlayMediaEditContent');
+      myCore.putCenter('overlayMediaEdit');
       
       $('overlayBlack75').show();
-      $('overlaySingleEdit').show();
+      $('overlayMediaEdit').show();
                   
-      new Ajax.Updater('overlaySingleEditContent', '/zoolu/media/file/getsingleeditform', {
+      new Ajax.Updater('overlayMediaEditContent', '/zoolu/media/file/getsingleeditform', {
         parameters: { fileId: fileId, rootLevelId: myNavigation.rootLevelId, languageId: intLanguageId },
         evalScripts: true,
         onComplete: function() {
           if($('spanButtonPlaceholder')) this.initSingleSWFUpload(fileId);
           myCore.calcMaxOverlayHeight(this.constOverlayMediaWrapper, true);
-          myCore.putOverlayCenter('overlaySingleEdit');          
-          myCore.removeBusyClass('overlaySingleEditContent');       
+          myCore.putOverlayCenter('overlayMediaEdit');
+          myCore.removeBusyClass('overlayMediaEditContent');
           if(blnShow) myOverlay.overlayCounter++;
           this.toggleMediaEditMenu('buttonmediaedittitle', true);
           this.iniZeroClipboard();
