@@ -545,7 +545,8 @@ Massiveart.Media = Class.create({
           myCore.calcMaxOverlayHeight(this.constOverlayMediaWrapper, true);
           myCore.putOverlayCenter('overlayMediaEdit');
           myCore.removeBusyClass('overlayMediaEditContent');
-          this.toggleMediaEditMenu('buttonmediaedittitle', true);                   
+          this.toggleMediaEditMenu('buttonmediaedittitle', true);
+          this.iniZeroClipboardMultiEdit();
         }.bind(this)
       });
     }   

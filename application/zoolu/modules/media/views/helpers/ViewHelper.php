@@ -310,7 +310,7 @@ class ViewHelper
             // build the element
             $arrDestinationOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT categories.id AS VALUE, categoryTitles.title  AS DISPLAY FROM categories INNER JOIN categoryTitles ON categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->core->intZooluLanguageId . ' WHERE categories.idParentCategory = 466 ORDER BY categoryTitles.title', $row->idDestination);
             $arrGroupOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT groups.id AS VALUE, groups.title  AS DISPLAY FROM groups LEFT JOIN groupGroupTypes ON groupGroupTypes.idGroups = groups.id WHERE groupGroupTypes.idGroupTypes = ' . $this->core->sysConfig->group_types->frontend . ' ORDER BY groups.title', $row->idGroup);
-            $strOutput .= $this->getSingleEditForm($row, $arrImagesSizes, $arrDestinationOptions, $arrGroupOptions);
+            $strOutput .= $this->getSingleEditForm($row, $arrImagesSizes, $arrDestinationOptions, $arrGroupOptions, null, true, null, false);
         }
         return $strOutput;
     }
@@ -321,7 +321,7 @@ class ViewHelper
      * @param array $arrImagesSizes
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function getSingleEditForm(Zend_Db_Table_Row $objFile, $arrImagesSizes, $strDestinationOptions, $strGroupOptions, $objFileVersions = null, $blnAuthorizedToUpdate = true, $arrFileFilters = null)
+    public function getSingleEditForm(Zend_Db_Table_Row $objFile, $arrImagesSizes, $strDestinationOptions, $strGroupOptions, $objFileVersions = null, $blnAuthorizedToUpdate = true, $arrFileFilters = null, $blnSingleEdit = true)
     {
         $this->core->logger->debug('media->views->helpers->ViewHelper->getSingleEditForm()');
 
@@ -474,11 +474,13 @@ class ViewHelper
             $strMediaUrl = 'http://' . $_SERVER['HTTP_HOST'] . $strDownloadLink;
         }
 
+        $strFileId = ($blnSingleEdit) ? '' : $objFile->id;
+
         $strOutput .= '
                        <div class="medialink">
-                         <input type="text" id="singleMediaUrl" readonly="readonly" value="' . $strMediaUrl . '" onclick="this.select()"/><br/>
-                         <div id="d_clip_container" style="float:right; margin:0 10px 0 0; position:relative;">
-                           <div id="d_clip_button" class="d_clip_button">[copy to clipboard]</div>
+                         <input type="text" id="singleMediaUrl'.$strFileId.'" readonly="readonly" value="' . $strMediaUrl . '" onclick="this.select()"/><br/>
+                         <div id="d_clip_container'.$strFileId.'" style="float:right; margin:0 10px 0 0; position:relative;">
+                           <div id="d_clip_button'.$strFileId.'" class="d_clip_button">[copy to clipboard]</div>
                          </div>
                          <div class="clear"></div> 
                          <input type="hidden" id="singleFileName" value="' . $objFile->filename . '?v=' . $objFile->version . '"/>
