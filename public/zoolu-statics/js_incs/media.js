@@ -520,7 +520,7 @@ Massiveart.Media = Class.create({
       intLanguageId = $F('mediaFormLanguageId');
     }
     
-    $(this.constOverlayGenContent).innerHTML = '';
+    $('overlayMediaEditContent').innerHTML = '';
     
     var strFileIds = this.getStringFileIds();
     
@@ -531,20 +531,20 @@ Massiveart.Media = Class.create({
     if(strFileIds != ''){
       this.lastFileId = 0;
       this.lastFileIds = strFileIds;
-      myCore.addBusyClass(this.constOverlayGenContent);
+      myCore.addBusyClass('overlayMediaEditContent');
       
-      myCore.putCenter('overlayGenContentWrapper');
+      myCore.putCenter('overlayMediaEdit');
       
       $('overlayBlack75').show();
-      $('overlayGenContentWrapper').show();
+      $('overlayMediaEdit').show();
             
-      new Ajax.Updater(this.constOverlayGenContent, '/zoolu/media/file/geteditform', {
+      new Ajax.Updater('overlayMediaEditContent', '/zoolu/media/file/geteditform', {
         parameters: { fileIds: strFileIds, rootLevelId: myNavigation.rootLevelId, languageId: intLanguageId },
         evalScripts: true,
         onComplete: function() {
           myCore.calcMaxOverlayHeight(this.constOverlayMediaWrapper, true);
-          myCore.putOverlayCenter('overlayGenContentWrapper');          
-          myCore.removeBusyClass(this.constOverlayGenContent);                    
+          myCore.putOverlayCenter('overlayMediaEdit');
+          myCore.removeBusyClass('overlayMediaEditContent');
           this.toggleMediaEditMenu('buttonmediaedittitle', true);                   
         }.bind(this)
       });
