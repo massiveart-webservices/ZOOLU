@@ -494,10 +494,10 @@ class ViewHelper
             $strOutput .= '
                          <label for="txtFileName" class="gray666 bold">' . $this->core->translate->_('New_version') . '</label><br/>
                          <div>
-                           <input type="text" id="txtFileName" disabled="true" />
-                           <span id="spanButtonPlaceholder"></span>
+                           <input type="text" id="txtFileName'.$objFile->id.'" disabled="true" />
+                           <span id="spanButtonPlaceholder'.$objFile->id.'"></span>
                          </div>
-                         <div id="fsUploadProgress"></div>';
+                         <div id="fsUploadProgress'.$objFile->id.'"></div>';
         }
 
         if ($blnIsImage == false) {

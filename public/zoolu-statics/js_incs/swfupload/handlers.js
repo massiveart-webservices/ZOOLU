@@ -240,12 +240,14 @@ function doSubmit(e) {
   e.cancelBubble = true;
   
   try {
-    var stats = swfu.getStats();
-    if(stats.files_queued > 0){
-      swfu.startUpload();
-    }else{
-      myMedia.editFiles(true);
-    }
+    swfu.each(function(element){
+        var stats = element.getStats();
+        if(stats.files_queued > 0){
+            element.startUpload();
+        }
+    });
+      var isSingleEdit = swfu.length == 1;
+      myMedia.editFiles(isSingleEdit);
   } catch (ex) { }
   
   return false;
@@ -261,7 +263,7 @@ function singleUploadDone() {
 }
 
 function singleFileDialogStart() {
-  $('txtFileName').value = '';
+  $(this.customSettings.filename_placeholder_id).value = '';
   this.cancelUpload();
 }
 
@@ -294,7 +296,7 @@ function singleFileQueueError(file, errorCode, message)  {
 
 function singleFileQueued(file) {
   try {
-    var txtFileName = document.getElementById("txtFileName");
+    var txtFileName = document.getElementById(this.customSettings.filename_placeholder_id);
     txtFileName.value = file.name;
   } catch (e) { }
 }
@@ -340,7 +342,7 @@ function singleUploadComplete(file) {
       progress.setStatus("File rejected");
       progress.toggleCancel(false);
       
-      var txtFileName = document.getElementById("txtFileName");
+      var txtFileName = document.getElementById(this.customSettings.filename_placeholder_id);
       txtFileName.value = "";
       
       alert("There was a problem with the upload.\nThe server did not accept it.");
@@ -356,7 +358,7 @@ function singleUploadError(file, errorCode, message) {
       return;
     }
     
-    var txtFileName = document.getElementById("txtFileName");
+    var txtFileName = document.getElementById(this.customSettings.filename_placeholder_id);
     txtFileName.value = "";
     validateForm();
     

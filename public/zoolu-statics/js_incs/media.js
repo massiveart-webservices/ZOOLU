@@ -359,6 +359,8 @@ Massiveart.Media = Class.create({
      */
     initSWFUpload:function () {
 
+        swfu = [];
+
         $('divSWFUploadUI').update(this.constSWFUploadUI);
 
         var settings = {
@@ -405,7 +407,7 @@ Massiveart.Media = Class.create({
             swfupload_load_failed_handler:swfUploadLoadFailed
         };
 
-        swfu = new SWFUpload(settings);
+        swfu.push(new SWFUpload(settings));
 
         myCore.calcMaxOverlayHeight('overlayMediaWrapperUpload', true);
         myCore.putOverlayCenter('overlayUpload');
@@ -431,14 +433,15 @@ Massiveart.Media = Class.create({
             file_upload_limit:"0",
             file_queue_limit:"1",
             custom_settings:{
-                progress_target:"fsUploadProgress",
-                upload_successful:false
+                progress_target:"fsUploadProgress" + fileId,
+                upload_successful:false,
+                filename_placeholder_id:"txtFileName" + fileId
             },
             debug:false,
 
             // Button Settings
             button_image_url:"/zoolu-statics/images/buttons/button_selectfiles_" + myCore.languageCode + ".png",
-            button_placeholder_id:"spanButtonPlaceholder",
+            button_placeholder_id:"spanButtonPlaceholder" + fileId,
             button_width:113,
             button_height:25,
             button_cursor:-2,
@@ -462,7 +465,17 @@ Massiveart.Media = Class.create({
             minimum_flash_version:"9.0.28"
         };
 
-        swfu = new SWFUpload(settings);
+        swfu.push(new SWFUpload(settings));
+    },
+
+    /**
+     * initMultiSWFUpload
+     */
+    initMultiSWFUpload:function (strFileIds) {
+        swfu = [];
+        strFileIds.substring(1, strFileIds.length - 1).split('][').each(function (fileId) {
+            this.initSingleSWFUpload(fileId);
+        }.bind(this));
     },
 
     /**
@@ -542,7 +555,7 @@ Massiveart.Media = Class.create({
                 parameters:{ fileIds:strFileIds, rootLevelId:myNavigation.rootLevelId, languageId:intLanguageId },
                 evalScripts:true,
                 onComplete:function () {
-                    //if($('spanButtonPlaceholder')) this.initSingleSWFUpload(fileId);
+                    this.initMultiSWFUpload(strFileIds);
                     myCore.calcMaxOverlayHeight(this.constOverlayMediaWrapper, true);
                     myCore.putOverlayCenter('overlayMediaEdit');
                     myCore.removeBusyClass('overlayMediaEditContent');
@@ -616,7 +629,7 @@ Massiveart.Media = Class.create({
                 parameters:{ fileId:fileId, rootLevelId:myNavigation.rootLevelId, languageId:intLanguageId },
                 evalScripts:true,
                 onComplete:function () {
-                    if ($('spanButtonPlaceholder')) this.initSingleSWFUpload(fileId);
+                    if ($('spanButtonPlaceholder' + fileId)) this.initMultiSWFUpload('[' + fileId + ']'); //initMultiSWFUpload needs the argument this way
                     myCore.calcMaxOverlayHeight(this.constOverlayMediaWrapper, true);
                     myCore.putOverlayCenter('overlayMediaEdit');
                     myCore.removeBusyClass('overlayMediaEditContent');
