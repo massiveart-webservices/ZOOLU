@@ -2231,7 +2231,6 @@ Massiveart.Form = Class.create({
   },
 
   initSnippetPreview: function() {
-
     this.updateSnippetPreviewTitle();
     this.updateSnippetPreviewDesc();
     this.updateSnippetPreviewUrl();
@@ -2294,10 +2293,14 @@ Massiveart.Form = Class.create({
   },
 
   updateSnippetPreviewUrl: function () {
-    var snippet_url = $('page_url').readAttribute('href');
-    snippet_url = snippet_url.replace('http://', '');
-    snippet_url = this.pickOutSeoKeywords(snippet_url, true);
-    $('snippet_seo_url').innerHTML = snippet_url;
+      if ($('page_url') != null && typeof $('page_url') != 'undefined') {  
+          var snippet_url = $('page_url').readAttribute('href');
+          snippet_url = snippet_url.replace('http://', '');
+          snippet_url = this.pickOutSeoKeywords(snippet_url, true);
+          $('snippet_seo_url').innerHTML = snippet_url;
+      } else {
+          $('snippet_seo_url').innerHTML = '';
+      }
   },
 
   cleanText: function( text ) {
