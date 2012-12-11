@@ -649,6 +649,27 @@ class Core_FolderController extends AuthControllerAction
 
         $this->_helper->viewRenderer->setNoRender();
     }
+    
+    /**
+     * copylanguageversionAction
+     */
+    public function copylanguageversionAction() {
+        $this->core->logger->debug('core->controllers->FolderController->copylanguageversionAction()');
+        $id = $this->objRequest->getParam('id');
+        $intSrcLanguage = $this->objRequest->getParam('srcLanguage');
+        $intDstLanguage = $this->objRequest->getParam('dstLanguage');
+        if ($id > 0 && $intSrcLanguage > 0 && $intDstLanguage > 0) {
+            $this->intItemLanguageId = $intSrcLanguage;
+            $this->getForm($this->core->sysConfig->generic->actions->edit);
+            $this->objForm->loadFormData();
+            $this->addFolderSpecificFormElements();
+            $this->objForm->Setup()->setLanguageId($intDstLanguage); 
+            $this->objForm->prepareForm();
+            $this->objForm->setAction('/zoolu/core/folder/edit');
+            $this->objForm->saveFormData();
+        }
+        $this->_helper->viewRenderer->setNoRender();
+    }
 
     /**
      * loadFolderTreeForPortal

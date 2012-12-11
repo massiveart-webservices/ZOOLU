@@ -2107,11 +2107,17 @@ Massiveart.Form = Class.create({
    * copyLanguage
    */
   copyLanguage: function(dstLanguage, userId){
+    var srcLanguage = $('languageId').value;
     var strAjaxRequest = '';
     if(myNavigation.module == 1){ //cms
       strAjaxRequest = '/zoolu/cms/page/getpropertiescount';
     }else if(myNavigation.module == 5) { //global
       strAjaxRequest = '/zoolu/global/element/getpropertiescount';
+    }
+    strAjaxRequestCopyParent = '/zoolu/core/folder/copylanguageversion';
+    var isStart = false;
+    if ($('isStartPage') != null && $('isStartPage').value == 1 || $('isStartGlobal') != null && $('isStartGlobal').value == 1) {
+        isStart = true;
     }
     new Ajax.Request(strAjaxRequest, {
       parameters: {
@@ -2128,6 +2134,9 @@ Massiveart.Form = Class.create({
             myOverlay.close('overlayGenContentWrapper2');
             this.setCopyValues(dstLanguage, userId);
             myForm.save();
+            if (isStart) {
+                myForm.copyParent(strAjaxRequestCopyParent, $('parentFolderId').value, srcLanguage, dstLanguage);
+            }
           }.bind(this));
           
           $('buttonCancel').observe('click', function(){
@@ -2137,9 +2146,28 @@ Massiveart.Form = Class.create({
           myOverlay.close('overlayGenContentWrapper2');
           this.setCopyValues(dstLanguage, userId);
           myForm.save();
+          if (isStart) {
+              myForm.copyParent(strAjaxRequestCopyParent, $('parentFolderId').value, srcLanguage, dstLanguage);
+          }
         }
       }.bind(this)
     });
+  },
+  
+  
+  /**
+   * copyParent
+   */
+  copyParent: function(strAjaxRequestCopyParent, parentFolderId, srcLanguage, dstLanguage) {
+      new Ajax.Request(strAjaxRequestCopyParent, {
+          parameters: {
+              id: $F('parentFolderId'),
+              srcLanguage: srcLanguage,
+              dstLanguage: dstLanguage,
+              formId: 'DEFAULT_FOLDER',
+              formVersion: $('formVersion').value
+          },
+      });
   },
   
   /**
@@ -2231,7 +2259,6 @@ Massiveart.Form = Class.create({
   },
 
   initSnippetPreview: function() {
-
     this.updateSnippetPreviewTitle();
     this.updateSnippetPreviewDesc();
     this.updateSnippetPreviewUrl();
@@ -2294,10 +2321,14 @@ Massiveart.Form = Class.create({
   },
 
   updateSnippetPreviewUrl: function () {
-    var snippet_url = $('page_url').readAttribute('href');
-    snippet_url = snippet_url.replace('http://', '');
-    snippet_url = this.pickOutSeoKeywords(snippet_url, true);
-    $('snippet_seo_url').innerHTML = snippet_url;
+      if ($('page_url') != null && typeof $('page_url') != 'undefined') {  
+          var snippet_url = $('page_url').readAttribute('href');
+          snippet_url = snippet_url.replace('http://', '');
+          snippet_url = this.pickOutSeoKeywords(snippet_url, true);
+          $('snippet_seo_url').innerHTML = snippet_url;
+      } else {
+          $('snippet_seo_url').innerHTML = '';
+      }
   },
 
   cleanText: function( text ) {
