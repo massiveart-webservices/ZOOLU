@@ -228,11 +228,12 @@ function queueComplete(numFilesUploaded) {
  *------------------------------*/
 
 function singleSWFUploadLoaded() {
-  $('btnSingleEditSubmit').onclick = doSubmit;  
+  if($('btnMediaEditSubmit')) $('btnMediaEditSubmit').onclick = doSubmit;
+  if($('buttoneditsave')) $('buttoneditsave').onclick = doSubmit;
 }
 
 // Called by the submit button to start the upload
-function doSubmit(e) {    
+function doSubmit(e) {
   e = e || window.event;
   if (e.stopPropagation) {
     e.stopPropagation();
@@ -241,13 +242,8 @@ function doSubmit(e) {
   
   try {
     swfu.each(function(element){
-        var stats = element.getStats();
-        if(stats.files_queued > 0){
-            element.startUpload();
-        }
+      element.startUpload();
     });
-      var isSingleEdit = swfu.length == 1;
-      myMedia.editFiles(isSingleEdit);
   } catch (ex) { }
   
   return false;
@@ -256,7 +252,14 @@ function doSubmit(e) {
  // Called by the queue complete handler to submit the form
 function singleUploadDone() {
   try {
-    myMedia.editFiles(true);
+    var count = 0;
+    swfu.each(function(element){
+      count += element.getStats().files_queued;
+      console.log(element.getStats());
+    });
+    if(count == 0) {
+      myMedia.editFiles(true);
+    }
   } catch (ex) {
     alert("Error submitting form");
   }
@@ -307,16 +310,20 @@ function singleUploadProgress(file, bytesLoaded, bytesTotal) {
   try {
     var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
 
-    file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+    //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setProgress(percent, "progressContainer");
     progress.setStatus("Uploading...");
+
+    if (this.customSettings.progress_target == 'fsUploadProgress13') {
+      console.log(progress);
+    }
   } catch (e) { }
 }
 
 function singleUploadSuccess(file, serverData) {
   try {
-    file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+    //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setComplete();
     progress.setStatus("Complete.");
@@ -336,7 +343,7 @@ function singleUploadComplete(file) {
       //this.setButtonDisabled(true);
       singleUploadDone();
     } else {
-      file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+      //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
       var progress = new FileProgress(file, this.customSettings.progress_target);
       progress.setError();
       progress.setStatus("File rejected");
@@ -381,7 +388,7 @@ function singleUploadError(file, errorCode, message) {
       return;
     }
 
-    file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+    //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setError();
     progress.toggleCancel(false);
