@@ -476,6 +476,78 @@ class Global_ElementController extends AuthControllerAction
     }
 
     /**
+     * copyAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function copyAction()
+    {
+        $this->core->logger->debug('global->controllers->ElementController->copyAction()');
+
+        $this->_helper->viewRenderer->setNoRender();
+
+        $intParentId = $this->getRequest()->getParam('newParentFolderId');
+        $intElementIdSrc = $this->getRequest()->getParam('id');
+        $intElementIdDest = null;
+
+        $objLanguages = $this->getModelGlobals()->loadLanguages($intElementIdSrc);
+
+        foreach ($objLanguages as $objLanguage) {
+
+            //Build Form
+            $objForm = new GenericForm();
+            $objForm->Setup()->setElementId($intElementIdSrc);
+            $objForm->Setup()->setFormId($this->getRequest()->getParam('formId'));
+            $objForm->Setup()->setTemplateId($this->getRequest()->getParam('templateId'));
+            $objForm->Setup()->setFormVersion($this->getRequest()->getParam('formVersion'));
+            $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+            $objForm->Setup()->setLanguageId($objLanguage->idLanguages);
+            $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
+            $objForm->Setup()->setIsStartElement($this->getRequest()->getParam('isStartPage'));
+            $objForm->Setup()->setParentId($this->getRequest()->getParam('parentFolderId'));
+            $objForm->Setup()->setRootLevelId($this->getRequest()->getParam('rootLevelId'));
+
+            $objForm->Setup()->setModelSubPath('global/models/');
+            $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->global);
+
+            // load basic generic form
+            $objForm->Setup()->loadGenericForm();
+
+            // load generic form structure
+            $objForm->Setup()->loadGenericFormStructure();
+
+            // init data type object
+            $objForm->initDataTypeObject();
+
+            // load data
+            $objForm->loadFormData();
+
+            // get new rootlevel
+            $objFolder = $this->getModelFolders()->load($intParentId)->current();
+            $intRootLevelId = $objFolder->idRootLevels;
+
+            // copy page
+            if ($intElementIdDest == null) {
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+            } else {
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+            }
+            $objForm->Setup()->setElementId($intElementIdDest);
+            $objForm->Setup()->setParentId($intParentId);
+            $objForm->Setup()->setRootLevelId($intRootLevelId);
+
+            // reset loaded flag
+            foreach ($objForm->Setup()->CoreFields() as $objField) {
+                $objField->blnHasLoadedData = false;
+            }
+
+            $objForm->saveFormData();
+
+            $intElementIdDest = $objForm->Setup()->getElementId();
+        }
+    }
+
+    /**
      * copylanguageAction
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0

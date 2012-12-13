@@ -327,7 +327,7 @@
     <?php echo $this->jsPlugins; ?>
 
     <script type="text/javascript">//<![CDATA[
-    var myCore, myNavigation, myForm, myGlobal, myFolder, myOverlay, myList, myDashboard;
+    var myCore, myNavigation, myForm, myGlobal, myFolder, myOverlay, myList, myDashboard, myContentchooser;
 
     //document.observe('dom:loaded', function() {
     Event.observe(window, 'load', function() {
@@ -357,6 +357,7 @@
         myList = new Massiveart.List();
         myList.ItemsPerPage = <?php echo Zend_Registry::get('Core')->sysConfig->list->default->itemsPerPage; ?>;
         myDashboard = new Massiveart.Dashboard();
+        myContentchooser = new Massiveart.Contentchooser();
 
         myNavigation.constRequestRootNav = '/zoolu/global/navigation/rootnavigation';
         myNavigation.constRequestChildNav = '/zoolu/global/navigation/childnavigation';
