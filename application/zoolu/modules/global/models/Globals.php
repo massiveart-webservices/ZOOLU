@@ -1299,6 +1299,26 @@ class Model_Globals extends ModelAbstract
     }
 
     /**
+     * Loads all the languages in which the global with the given id exists
+     * @param $intElementId The id of the page
+     * @return Zend_Db_Table_Select
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadLanguages($intElementId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadLanguages('.$intElementId.')');
+
+        $objSelect = $this->getGlobalTable()->select()->setIntegrityCheck(false);
+        $objSelect->from($this->getGlobalTable(), array());
+        $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId', array('idLanguages'));
+        $objSelect->where('idLanguages != ?', 0);
+        $objSelect->where('globals.id = ?', $intElementId);
+
+        return $this->getGlobalTable()->fetchAll($objSelect);
+    }
+
+    /**
      * addContact
      * @param  integer $intElementId
      * @param  string $strContactIds
