@@ -180,5 +180,9 @@ Massiveart.Global = Class.create({
         }.bind(this)
       });
     }
+  },
+
+  copyElement: function(folderId) {
+      alert('copy element');
   }
 });
