@@ -726,24 +726,26 @@ Massiveart.Media = Class.create({
      * iniZeroClipboardMultiEdit
      */
     iniZeroClipboardMultiEdit:function () {
+        clip = [];
         $$('.contentview .selected').each(function (element) {
             var fileId = element.readAttribute('fileid');
-            clip = new ZeroClipboard.Client();
+            var tmpClip = new ZeroClipboard.Client();
 
-            clip.setText(''); // will be set later on mouseDown
-            clip.setHandCursor(true);
-            clip.setCSSEffects(false);
+            tmpClip.setText(''); // will be set later on mouseDown
+            tmpClip.setHandCursor(true);
+            tmpClip.setCSSEffects(false);
 
-            clip.addEventListener('load', function (client) {
+            tmpClip.addEventListener('load', function (client) {
                 //alert("movie is loaded");
             });
 
-            clip.addEventListener('mouseDown', function (client) {
+            tmpClip.addEventListener('mouseDown', function (client) {
                 //set text to copy here
-                clip.setText($F('singleMediaUrl' + fileId));
+                tmpClip.setText($F('singleMediaUrl' + fileId));
             });
 
-            clip.glue('d_clip_button' + fileId, 'd_clip_container' + fileId);
+            tmpClip.glue('d_clip_button' + fileId, 'd_clip_container' + fileId);
+            clip.push(tmpClip);
         });
     },
 
