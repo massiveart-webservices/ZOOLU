@@ -13,7 +13,7 @@ Massiveart.Global = Class.create({
   initialize: function() {
     this.isStartGlobal = false;
   },
-  
+
     /**
    * selectParentFolder
    */
@@ -22,27 +22,27 @@ Massiveart.Global = Class.create({
       this.linkId = $F('linkId'); //assume that linkId == id if the element is no link
       this.elementId = $F('id');
       myCore.addBusyClass('overlayGenContent');
-      
+
       new Ajax.Request('/zoolu/global/element/changeparentfolder', {
-        parameters: { 
+        parameters: {
          elementId: this.linkId,
          parentFolderId: parentFolderId
-        },      
-        evalScripts: true,     
-        onComplete: function() {  
-          $('overlayGenContentWrapper').hide(); 
+        },
+        evalScripts: true,
+        onComplete: function() {
+          $('overlayGenContentWrapper').hide();
           $('overlayBlack75').hide();
-          
+
           new Effect.Highlight('global'+this.elementId, {startcolor: '#ffd300', endcolor: '#ffffff'});
           $('global'+this.elementId).fade({duration: 0.5});
           $('global'+this.elementId).remove();
-                  
+
           myCore.removeBusyClass('overlayGenContent');
         }.bind(this)
       });
     }
   },
-  
+
   /**
    * selectParentRootFolder
    */
@@ -50,34 +50,34 @@ Massiveart.Global = Class.create({
     if($('id')){
       this.elementId = $F('linkId'); //assume that linkId == id if the element is no link
       myCore.addBusyClass('overlayGenContent');
-      
+
       new Ajax.Request('/zoolu/global/element/changeparentrootfolder', {
-        parameters: { 
+        parameters: {
          elementId: this.elementId,
          rootFolderId: rootFolderId
-        },      
-        evalScripts: true,     
-        onComplete: function() {  
-          $('overlayGenContentWrapper').hide(); 
+        },
+        evalScripts: true,
+        onComplete: function() {
+          $('overlayGenContentWrapper').hide();
           $('overlayBlack75').hide();
-          
+
           new Effect.Highlight('global'+this.elementId, {startcolor: '#ffd300', endcolor: '#ffffff'});
           $('global'+this.elementId).fade({duration: 0.5});
-          $('global'+this.elementId).remove();        
-                  
+          $('global'+this.elementId).remove();
+
           myCore.removeBusyClass('overlayGenContent');
         }.bind(this)
       });
     }
   },
-  
+
   /**
    * changeType
    */
   changeType: function(typeId, backLink){
     //check if backLink is assigned
     backLink = (typeof(backLink) != 'undefined' || backLink == null) ? backLink : false;
-	  
+
     params = $H({elementTypeId: typeId,
                  templateId: $F('templateId'),
                  formId: $F('formId'),
@@ -97,27 +97,27 @@ Massiveart.Global = Class.create({
                  isStartGlobal: this.isStartGlobal,
                  backLink: backLink
                  });
-    
+
     $(myNavigation.genFormContainer).innerHTML = '';
-    
+
     // loader
     myCore.addBusyClass(myNavigation.genFormContainer);
-    myCore.addBusyClass('tdChangeType');    
+    myCore.addBusyClass('tdChangeType');
     myForm.getFormSaveLoader();
-    
+
     myCore.resetTinyMCE(true);
-    
+
     new Ajax.Updater(myForm.updateContainer, '/zoolu/global/element/changeType', {
       parameters: params,
       evalScripts: true,
-      onComplete: function() { 
+      onComplete: function() {
         // load medias
         myForm.loadFileFieldsContent('media');
         // load documents
         myForm.loadFileFieldsContent('document');
         // load videos
         myForm.loadFileFieldsContent('video');
-        
+
         $('divMetaInfos').innerHTML = '';
         myCore.removeBusyClass(myNavigation.genFormContainer);
         myCore.removeBusyClass('tdChangeType');
@@ -161,7 +161,7 @@ Massiveart.Global = Class.create({
       currLevel = $F('elementSearchCurrLevel');
 
       myCore.resetTinyMCE(true);
-      
+
       new Ajax.Request('/zoolu/global/element/addelementlink', {
         parameters: {
             templateId: elementTemplateDefaultId,
@@ -186,21 +186,31 @@ Massiveart.Global = Class.create({
    * copyElement
    */
   copyElement: function(folderId) {
-      new Ajax.Request('/zoolu/global/element/copy', {
-          parameters: {
-              id: $F('id'),
-              formId: $F('formId'),
-              templateId: $F('templateId'),
-              formVersion: $F('formVersion'),
-              languageId: $F('languageId'),
-              isStartPage: $F('isStartGlobal'),
-              parentFolderId: $F('parentFolderId'),
-              rootLevelId: $F('rootLevelId'),
-              newParentFolderId: folderId
-          },
-          onComplete: function() {
-              myOverlay.close('')
-          }
-      });
+      if($F('isStartGlobal') == "1") {
+          myCore.showDynamicMessage();
+          new Ajax.Updater('overlayGenContent2', '/zoolu/global/element/copy-text', {
+              parameters: {
+
+              }
+          });
+          //myOverlay.close('');
+      } else {
+          new Ajax.Request('/zoolu/global/element/copy', {
+              parameters: {
+                  id: $F('id'),
+                  formId: $F('formId'),
+                  templateId: $F('templateId'),
+                  formVersion: $F('formVersion'),
+                  languageId: $F('languageId'),
+                  isStartPage: $F('isStartGlobal'),
+                  parentFolderId: $F('parentFolderId'),
+                  rootLevelId: $F('rootLevelId'),
+                  newParentFolderId: folderId
+              },
+              onComplete: function() {
+                  myOverlay.close('');
+              }
+          });
+      }
   }
 });
