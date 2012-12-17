@@ -190,7 +190,8 @@ Massiveart.Global = Class.create({
           myCore.showDynamicMessage();
           new Ajax.Updater('overlayGenContent2', '/zoolu/global/element/copy-text', {
               parameters: {
-
+                  src: $F('id'),
+                  dest: folderId
               }
           });
           //myOverlay.close('');

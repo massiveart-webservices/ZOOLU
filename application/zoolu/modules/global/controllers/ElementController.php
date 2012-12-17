@@ -548,6 +548,23 @@ class Global_ElementController extends AuthControllerAction
     }
 
     /**
+     * copyTextAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function copyTextAction() {
+        $intSrcId = $this->getRequest()->getParam('src', '');
+        $intDestId = $this->getRequest()->getParam('dest', '');
+
+        $objGlobal = $this->getModelGlobals()->load($intSrcId)->current();
+        $objFolder = $this->getModelFolders()->load($intDestId)->current();
+
+        $this->view->message = str_replace('%s', $objFolder->title, str_replace('%t', $objGlobal->title, $this->core->translate->_('Copy_startpage_message')));
+        $this->view->yes = $this->core->translate->_('Override');
+        $this->view->no = $this->core->translate->_('Create_subfolder');
+    }
+
+    /**
      * copylanguageAction
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0

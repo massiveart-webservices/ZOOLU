@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-29 15:45+0100\n"
+"POT-Creation-Date: 2012-12-17 08:38+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -197,7 +197,7 @@ msgid "Meta_title"
 msgstr "Der Meta TItel"
 
 #: application/zoolu/modules/cms/views/helpers/NavigationHelper.php:105
-#: application/zoolu/modules/global/controllers/ElementController.php:554
+#: application/zoolu/modules/global/controllers/ElementController.php:643
 msgid "Shop"
 msgstr "Shop"
 
@@ -262,7 +262,7 @@ msgstr "Tags suchen"
 
 #: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:768
 #: application/zoolu/modules/global/views/helpers/OverlayHelper.php:309
-#: application/zoolu/modules/global/controllers/ElementController.php:998
+#: application/zoolu/modules/global/controllers/ElementController.php:1087
 #: application/zoolu/modules/newsletters/controllers/NewsletterController.php:922
 #: application/zoolu/layouts/users.phtml:109
 #: application/zoolu/layouts/contacts-list.phtml:115
@@ -540,7 +540,7 @@ msgstr "Adressen"
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:178
 #: application/zoolu/modules/core/views/helpers/FolderHelper.php:309
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:184
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:136
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:138
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:44
 #: application/zoolu/modules/core/views/scripts/folder/folderlist.phtml:16
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:123
@@ -556,6 +556,20 @@ msgstr "Ihre Suche nach \"%s\" ergab leider keinen Treffer."
 #: application/zoolu/modules/global/controllers/OverlayController.php:94
 msgid "Select_product"
 msgstr "Produkt wählen"
+
+#: application/zoolu/modules/global/controllers/ElementController.php:562
+msgid "Copy_startpage_message"
+msgstr ""
+"Wollen Sie die Startseite des Ordners \"%s\" überschreiben, oder einen neuen "
+"Unterordner namens \"%t\" erzeugen?"
+
+#: application/zoolu/modules/global/controllers/ElementController.php:563
+msgid "Override"
+msgstr "Überschreiben"
+
+#: application/zoolu/modules/global/controllers/ElementController.php:564
+msgid "Create_subfolder"
+msgstr "Neuer Unterordner"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:169
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:528
@@ -628,14 +642,14 @@ msgstr "Medien hinzufügen"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:601
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:201
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:153
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:155
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:140
 msgid "New_version"
 msgstr "Neue Version"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:623
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:218
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:170
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:172
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:157
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:157
 msgid "Version_list"
@@ -643,7 +657,7 @@ msgstr "Versionsliste"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:630
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:194
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:146
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:148
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:132
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:133
 msgid "Version"
@@ -958,7 +972,7 @@ msgstr "Landingpage editieren"
 
 #: application/zoolu/modules/core/controllers/LanguageController.php:80
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:138
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:79
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:80
 msgid "language_copy"
 msgstr "Sprachversion kopieren"
 
@@ -1454,7 +1468,7 @@ msgstr "OK"
 #: application/zoolu/layouts/newsletters-list.phtml:388
 #: application/zoolu/layouts/cms-list.phtml:385
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:167
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:108
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:110
 #: application/zoolu/modules/core/views/scripts/folder/documentcheckboxtree.phtml:20
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:95
 msgid "Apply"
@@ -1655,7 +1669,7 @@ msgstr "Wollen Sie diese Veranstaltung löschen?"
 msgid "Copy_language_override"
 msgstr "Wollen Sie die bereits bestehenden Daten überschreiben?"
 
-#: application/zoolu/layouts/global-tree.phtml:363
+#: application/zoolu/layouts/global-tree.phtml:364
 #: application/zoolu/layouts/global-list.phtml:305
 msgid "Global"
 msgstr "Global"
@@ -1941,21 +1955,21 @@ msgid "show_in_mobile"
 msgstr "auf Mobile"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:142
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:83
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:85
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:35
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:70
 msgid "Published"
 msgstr "Veröffentlicht"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:211
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:163
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:165
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:150
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:150
 msgid "Last_change"
 msgstr "Letzte Änderung"
 
 #: application/zoolu/modules/cms/views/scripts/page/form.phtml:224
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:176
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:178
 #: application/zoolu/modules/media/views/scripts/file/singleform.phtml:28
 msgid "Send_to_dashboard"
 msgstr "Dashboard veröffentlichen"
@@ -1980,6 +1994,7 @@ msgid "Load_content_as_list"
 msgstr "Inhalt als Liste laden"
 
 #: application/zoolu/modules/cms/views/scripts/navigation/tree.phtml:84
+#: application/zoolu/modules/global/views/scripts/navigation/tree.phtml:85
 msgid "Copy_page"
 msgstr "Seite kopieren"
 
@@ -2038,12 +2053,12 @@ msgstr "Wollen Sie diese %i Standorte löschen?"
 msgid "New_Contact"
 msgstr "Neuer Kontakt"
 
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:65
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:66
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:58
 msgid "enable_language_fallback"
 msgstr "Sprach-Fallback aktivieren"
 
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:126
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:128
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:113
 msgid "Security"
 msgstr "Sicherheit"

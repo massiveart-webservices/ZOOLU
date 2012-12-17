@@ -109,6 +109,7 @@ class Model_Folders extends ModelAbstract
 
         $objSelect->from('folders', array('id', 'folderId', 'relationId' => 'folderId', 'idSegments', 'idRootLevels', 'version'));
         $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = ' . $this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
+        $objSelect->joinLeft('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
         $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = folderProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
         $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = folderProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
         $objSelect->where('folders.id = ?', $intElementId);
