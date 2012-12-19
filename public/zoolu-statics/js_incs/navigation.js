@@ -1061,6 +1061,7 @@ Massiveart.Navigation = Class.create({
          rootLevelGroupKey: ($('rootLevelGroupKey'+this.rootLevelGroupId)) ? $F('rootLevelGroupKey'+this.rootLevelGroupId) : '',
          parentFolderId: $('navlevel'+currLevel).readAttribute('parentid'),
          elementType: elType,
+         elementTypeId: elementTypeDefaultId,
          zoolu_module: this.module,
          rootLevelTypeId: this.rootLevelTypeId,
          backLink: backLink
