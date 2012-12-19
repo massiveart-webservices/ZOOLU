@@ -1047,6 +1047,10 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
     
+    if (typeof(elementTypeDefaultId) != 'undefined') {
+        elementTypeDefaultId = '';
+    }
+    
     new Ajax.Updater(this.genFormContainer, strAjaxAction, {
        parameters: { 
          id: itemId,
