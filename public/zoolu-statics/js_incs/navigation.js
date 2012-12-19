@@ -1047,7 +1047,7 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
     
-    if (typeof(elementTypeDefaultId) != 'undefined') {
+    if (typeof(elementTypeDefaultId) == 'undefined') {
         elementTypeDefaultId = '';
     }
     
