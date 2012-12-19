@@ -702,7 +702,7 @@ class Model_Pages extends ModelAbstract
         $objSelect->join('pageInternalLinks', 'pageInternalLinks.linkedPageId = pages.pageId AND pageInternalLinks.pageId = \'' . $strElementId . '\' AND pageInternalLinks.version = ' . $intVersion . ' AND pageInternalLinks.idFields = ' . $intFieldId . ' AND pageInternalLinks.idLanguages = ' . $this->intLanguageId, array('sortPosition'));
         $objSelect->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
         $objSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = ' . $this->intLanguageId, array('title'));
-        $objSelect->joinleft('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
+        $objSelect->joinleft('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1 AND urls.isLandingPage =  0 AND urls.idParent IS NULL', array('url'));
         $objSelect->joinleft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
         $objSelect->where('pages.id = (SELECT p.id FROM pages AS p WHERE pages.pageId = p.pageId ORDER BY p.version DESC LIMIT 1)');
         $objSelect->order('pageInternalLinks.sortPosition ASC');
