@@ -6,8 +6,8 @@
 <!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Lech Zürs Tourismus am Arlberg</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Lech Zürs Tourismus am Arlberg</title>
 
     <meta name="publisher" content="MASSIVE ART WebServices GmbH" />
     <meta name="author" content="ZOOLU Default Theme" />

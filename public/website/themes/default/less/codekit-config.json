@@ -15,15 +15,15 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/client\/mixins.less" : {
-      "ignoreWasSetByUser" : 0,
+    "\/client\/main.less" : {
+      "ignoreWasSetByUser" : 1,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/client\/mixins.less",
+      "inputAbbreviatedPath" : "\/client\/main.less",
       "outputStyle" : 0,
       "shouldRunBless" : 0,
-      "outputAbbreviatedPath" : "\/css\/mixins.css",
+      "outputAbbreviatedPath" : "\/css\/main.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -41,15 +41,15 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/client\/main.less" : {
-      "ignoreWasSetByUser" : 1,
+    "\/client\/mixins.less" : {
+      "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/client\/main.less",
+      "inputAbbreviatedPath" : "\/client\/mixins.less",
       "outputStyle" : 0,
       "shouldRunBless" : 0,
-      "outputAbbreviatedPath" : "\/css\/main.css",
+      "outputAbbreviatedPath" : "\/css\/mixins.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -86,9 +86,9 @@
       "hidden" : 0,
       "outputPathIsSetByUser" : 1,
       "inputAbbreviatedPath" : "\/style.less",
-      "outputStyle" : 0,
+      "outputStyle" : 1,
       "shouldRunBless" : 0,
-      "outputAbbreviatedPath" : "\/Volumes\/massive-bazinga\/websites\/zoolu.bazinga.at\/public\/website\/themes\/default\/css\/style.css",
+      "outputAbbreviatedPath" : "\/Volumes\/massive-bazinga-1\/websites\/zoolu.bazinga.at\/public\/website\/themes\/default\/css\/style.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
