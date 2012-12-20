@@ -39,15 +39,6 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/lightbox\/css\/lightbox.css" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 1,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/lightbox\/css\/lightbox.css",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 16
-    },
     "\/lightbox\/images\/image-1.jpg" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
@@ -58,6 +49,15 @@
       "outputAbbreviatedPath" : "\/lightbox\/images\/image-1.jpg",
       "initialSize" : 37587,
       "fileType" : 4096
+    },
+    "\/lightbox\/css\/lightbox.css" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/lightbox\/css\/lightbox.css",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 16
     },
     "\/lightbox\/js\/lightbox.js" : {
       "ignoreWasSetByUser" : 1,
