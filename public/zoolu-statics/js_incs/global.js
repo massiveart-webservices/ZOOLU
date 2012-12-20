@@ -203,6 +203,7 @@ Massiveart.Global = Class.create({
                           },
                           onComplete: function() {
                               myOverlay.close();
+                              myCore.hideDynamicMessage();
                           }
                       });
 
@@ -219,6 +220,7 @@ Massiveart.Global = Class.create({
                           },
                           onComplete: function() {
                               myOverlay.close();
+                              myCore.hideDynamicMessage();
                           }
                       });
 

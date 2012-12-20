@@ -196,6 +196,10 @@ Massiveart.Core = Class.create({
       myOverlay.overlayCounter++;
   },
 
+  hideDynamicMessage: function() {
+      $('overlayGenContentWrapper2').hide();
+  },
+
   /**
    * check
    */
