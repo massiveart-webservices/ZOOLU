@@ -1,0 +1,184 @@
+/**
+ * Modus
+ *
+ * @author Cornelius Hansjakob <cha@massiveart.com>
+ * @version 1.0
+ */
+
+/* ----------------
+Main (overwrite core.css) */
+ 
+body {
+  padding:0 0 0 0;   
+}
+
+/* ----------------
+Modus Container */
+
+.divModusContainer {
+  position:fixed; 
+  z-index:1500; 
+  right:40px; 
+  top: -40px;
+  left:40px; 
+  height:32px; 
+  background:url(/zoolu-statics/images/modus/bg_modus.gif) repeat-x 0 0;
+  font-family: 'Helvetica Neue', 'Arial', 'Sans-Serif', 'Sans';
+  -webkit-transition: top 0.5s ease-in-out;
+  -moz-transition: top 0.5s ease-in-out;
+  -o-transition: top 0.5s ease-in-out;
+  -ms-transition: top 0.5s ease-in-out;
+  transition: top 0.5s ease-in-out;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -moz-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+
+.divShowModusContainer {
+  background-color: #754480;
+  position:fixed; 
+  z-index:1500; 
+  top:0; 
+  left:40px; 
+  height:32px;
+  padding: 0 10px 0 0;
+  cursor: pointer;
+  -webkit-transition: top 0.5s ease-in-out;
+  -moz-transition: top 0.5s ease-in-out;
+  -o-transition: top 0.5s ease-in-out;
+  -ms-transition: top 0.5s ease-in-out;
+  transition: top 0.5s ease-in-out;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -moz-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  box-shadow: 0 2px 5px rgba(0,0,0,.6);
+
+}
+
+.divShowModusContainerArrow {
+  width: 12px;
+  height: 15px;
+  cursor: pointer;
+  left: 0;
+  float: left;
+  padding: 3px 0 0 10px;  
+}
+
+.divShowModusContainerO {
+  float:left; 
+  padding: 6px 0 0 5px;
+}
+
+.divHideModusContainer{
+  width: 12px;
+  height: 15px;
+  cursor: pointer;
+  left: 0;
+  float: left;
+  padding: 6px 0 0 10px;  
+}
+
+.divModusLogo {
+  float:left; 
+  padding: 6px 0 0 0;
+}
+
+.divModusLogo a{
+  padding: 0 0 0 5px;
+}
+
+.divModusAdvice {
+  float:left; 
+  padding:13px 0 0 20px; 
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+}
+
+.divModusLogout {
+  float:right;
+  padding:9px 20px 0 0; 
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+}
+
+.divModusLogout a {
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+  text-decoration:underline;
+}
+
+.divModusLogout a:hover {
+  color:#fff; 
+  font-size:11px;
+  line-height:15px;
+  text-decoration:none;
+}
+
+.divModusStatus {
+  float:right; 
+  padding:6px 20px 0 0; 
+  color:#fff; 
+  font-weight:bold;
+}
+
+.divModusStatus select {
+  padding:0 0 0 5px;
+  font-weight:bold;
+}
+
+.divModusCache {
+  float:right; 
+  padding:3px 20px 0 0;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.button25leftOn {
+  background: url(/zoolu-statics/images/buttons/button_yellow_left.png) no-repeat;
+  width: 6px !important;  
+  height: 25px;
+  float:left;
+}
+
+.button25rightOn {
+  background: url(/zoolu-statics/images/buttons/button_yellow_right.png) no-repeat;
+  width: 6px !important;
+  height: 25px;
+  float:left;
+}
+
+.button25centerOn {
+  background: url(/zoolu-statics/images/buttons/button_yellow_center.png) repeat-x;
+  height:25px;
+  float:left;
+}
+
+.button25centerOn div {
+  padding-top:3px;
+}
+
+.divModusCache .busy {  
+  background-image: url(/zoolu-statics/images/main/loader_small_purple.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.divModusCache .busy div {  
+  visibility: hidden;
+} 
+ 

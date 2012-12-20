@@ -1,9 +1,9 @@
-var LZ = LZ || {};
+var Web = Web || {};
 
-(function(window,document, LZ, undefined) {
+(function(window, document, Web, undefined) {
 
-    LZ.scripts = {
+    Web.scripts = {
 
     };
 
-})(window, document, LZ);
+})(window, document, Web);

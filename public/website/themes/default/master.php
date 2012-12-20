@@ -14,7 +14,7 @@
 
   <?php if(Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session())->hasIdentity()) : ?>
   <link rel="stylesheet" type="text/css" media="screen" href="<?php get_static_component_domain() ?>/website/themes/default/css/modus.css"></link>
-  <script type="text/javascript" src="<?php get_static_component_domain() ?>/website/themes/default/js_incs/modus.js"></script>
+  <script type="text/javascript" src="<?php get_static_component_domain() ?>/website/themes/default/js/modus.js"></script>
   <?php endif; ?>
 
   <link rel="shortcut icon" href="<?php get_static_component_domain() ?>/website/themes/default/favicon.ico" type="image/x-icon"></link>

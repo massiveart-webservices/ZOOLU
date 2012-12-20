@@ -1,7 +1,7 @@
-var LZ = LZ || {};
+var Web = Web || {};
 
-(function(window, LZ) {
-    LZ.Modus = {
+(function(window, Web) {
+    Web.Modus = {
         /**
          * expireCache
          */
@@ -53,4 +53,4 @@ var LZ = LZ || {};
             }
         }
     };
-})(window, LZ);
+})(window, Web);

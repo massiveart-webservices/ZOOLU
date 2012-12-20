@@ -2,26 +2,83 @@
   "CodeKitInfo" : "This is a CodeKit project configuration file. It is designed to sync project settings across multiple machines. Modifying the contents of this file can be a poor life decision if you don't know what you're doing. This file is not useful unless accompanied by the project that created it in CodeKit. For more information, see: http:\/\/incident57.com\/codekit",
   "creatorBuild" : "7978",
   "files" : {
-    "\/scripts.js" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 1,
-      "inputAbbreviatedPath" : "\/scripts.js",
-      "outputStyle" : 1,
-      "syntaxCheckerStyle" : 1,
-      "outputAbbreviatedPath" : "\/Volumes\/massive-bazinga\/websites\/zoolu.bazinga.at\/public\/website\/themes\/default\/js\/scripts.min.js",
-      "fileType" : 64
-    },
-    "\/modus.js" : {
+    "\/plugins.less" : {
       "ignoreWasSetByUser" : 1,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/modus.js",
+      "inputAbbreviatedPath" : "\/plugins.less",
+      "outputStyle" : 0,
+      "shouldRunBless" : 0,
+      "outputAbbreviatedPath" : "\/css\/plugins.css",
+      "strictImports" : 0,
+      "fileType" : 1,
+      "debugStyle" : 0
+    },
+    "\/lightbox\/images\/thumb-1.jpg" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 1,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/lightbox\/images\/thumb-1.jpg",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/lightbox\/images\/thumb-1.jpg",
+      "initialSize" : 2874,
+      "fileType" : 4096
+    },
+    "\/lightbox\/less\/lightbox.less" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/lightbox\/less\/lightbox.less",
+      "outputStyle" : 0,
+      "shouldRunBless" : 0,
+      "outputAbbreviatedPath" : "\/lightbox\/css\/lightbox.css",
+      "strictImports" : 0,
+      "fileType" : 1,
+      "debugStyle" : 0
+    },
+    "\/lightbox\/css\/lightbox.css" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/lightbox\/css\/lightbox.css",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 16
+    },
+    "\/lightbox\/images\/image-1.jpg" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 1,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/lightbox\/images\/image-1.jpg",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/lightbox\/images\/image-1.jpg",
+      "initialSize" : 37587,
+      "fileType" : 4096
+    },
+    "\/lightbox\/js\/lightbox.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 1,
+      "inputAbbreviatedPath" : "\/lightbox\/js\/lightbox.js",
       "outputStyle" : 1,
       "syntaxCheckerStyle" : 1,
-      "outputAbbreviatedPath" : "\/modus.min.js",
+      "outputAbbreviatedPath" : "\/lightbox.min.js",
+      "fileType" : 64
+    },
+    "\/plugins.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 1,
+      "inputAbbreviatedPath" : "\/plugins.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 1,
+      "outputAbbreviatedPath" : "\/Volumes\/massive-bazinga\/websites\/zoolu.bazinga.at\/public\/website\/themes\/default\/js\/plugins.min.js",
       "fileType" : 64
     }
   },
@@ -29,8 +86,8 @@
     {
       "type" : 1,
       "position" : 0,
-      "linkedFileAbbreviatedPath" : "\/modus.js",
-      "baseFileAbbreviatedPath" : "\/scripts.js",
+      "linkedFileAbbreviatedPath" : "\/lightbox\/js\/lightbox.js",
+      "baseFileAbbreviatedPath" : "\/plugins.js",
       "followForSyntaxChecking" : 1
     }
   ],
@@ -209,7 +266,7 @@
   },
   "projectAttributes" : {
     "bourbonEnabled" : 0,
-    "displayValue" : "zoolu\/client",
+    "displayValue" : "zoolu\/plugins",
     "displayValueWasSetByUser" : 1,
     "compassEnabled" : 0
   }
