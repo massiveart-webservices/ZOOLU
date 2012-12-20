@@ -137,21 +137,66 @@ Massiveart.Page = Class.create({
      * @param folderId
      */
   copyPage: function(folderId) {
-    new Ajax.Request('/zoolu/cms/page/copy', {
-        parameters: {
-            id: $F('id'),
-            formId: $F('formId'),
-            templateId: $F('templateId'),
-            formVersion: $F('formVersion'),
-            languageId: $F('languageId'),
-            isStartPage: $F('isStartPage'),
-            parentFolderId: $F('parentFolderId'),
-            rootLevelId: $F('rootLevelId'),
-            newParentFolderId: folderId
-        },
-        onComplete: function() {
-            myOverlay.close('')
-        }
-    })
+      if($F('isStartPage') == '1') {
+          myCore.showDynamicMessage();
+          new Ajax.Updater('overlayGenContent2', '/zoolu/cms/page/copy-text', {
+              parameters: {
+                  src: $F('id'),
+                  dest: folderId
+              },
+              onComplete: function() {
+                  $('btnYes').observe('click', function() {
+                      new Ajax.Request('/zoolu/cms/page/copystartpage', {
+                          parameters: {
+                              src: $F('id'),
+                              dest: folderId,
+                              override: true
+                          },
+                          onComplete: function() {
+                              myOverlay.close();
+                          }
+                      });
+                      myCore.hideDynamicMessage();
+
+                      $('btnYes').stopObserving();
+                      $('btnNo').stopObserving();
+                  });
+
+                  $('btnNo').observe('click', function() {
+                      new Ajax.Request('/zoolu/cms/page/copystartpage', {
+                          parameters: {
+                              src: $F('id'),
+                              dest: folderId,
+                              override: false
+                          },
+                          onComplete: function() {
+                              myOverlay.close();
+                          }
+                      });
+                      myCore.hideDynamicMessage();
+
+                      $('btnYes').stopObserving();
+                      $('btnNo').stopObserving();
+                  });
+              }
+          });
+      } else {
+          new Ajax.Request('/zoolu/cms/page/copy', {
+              parameters: {
+                  id: $F('id'),
+                  formId: $F('formId'),
+                  templateId: $F('templateId'),
+                  formVersion: $F('formVersion'),
+                  languageId: $F('languageId'),
+                  isStartPage: $F('isStartPage'),
+                  parentFolderId: $F('parentFolderId'),
+                  rootLevelId: $F('rootLevelId'),
+                  newParentFolderId: folderId
+              },
+              onComplete: function() {
+                  myOverlay.close('')
+              }
+          });
+      }
   }
 });
