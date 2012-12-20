@@ -645,9 +645,6 @@ class Global_ElementController extends AuthControllerAction
                 }
                 //Override the destination id
                 $intDestId = $intFolderDestId;
-            } else {
-                $objElementDest = $this->getModelGlobals()->loadStartelementByParentId($intDestId)->current();
-                $intElementIdDest = $objElementDest->id;
             }
 
             //Copy the element itself
@@ -688,7 +685,9 @@ class Global_ElementController extends AuthControllerAction
 
                 //set new title, if current page get override
                 if($strOverride == 'true') {
-                    $objForm->Setup()->setFieldValues();
+                    $objElementDest = $this->getModelGlobals()->loadStartelementByParentId($intDestId)->current();
+                    $intElementIdDest = $objElementDest->id;
+                    $objForm->Setup()->getField('title')->setValue($objElementDest->title);
                 }
 
                 // copy page
