@@ -13,17 +13,6 @@
       "outputAbbreviatedPath" : "\/libs\/modernizr-2.5.3.min.min.js",
       "fileType" : 64
     },
-    "\/libs.min.js" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 1,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/libs.min.js",
-      "outputStyle" : 1,
-      "syntaxCheckerStyle" : 1,
-      "outputAbbreviatedPath" : "\/libs.min.min.js",
-      "fileType" : 64
-    },
     "\/modus.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
@@ -44,6 +33,17 @@
       "outputStyle" : 1,
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/script.min.min.js",
+      "fileType" : 64
+    },
+    "\/libs.min.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/libs.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 1,
+      "outputAbbreviatedPath" : "\/libs.min.min.js",
       "fileType" : 64
     },
     "\/libs.js" : {
