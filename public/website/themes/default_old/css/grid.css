@@ -1,0 +1,245 @@
+/* ---------------------------------------------------------------
+Style Sheet
+
+Site:       Default Grid Desgin - relativ
+Author:     Michael E. Trawetzky - MASSIVE ART www.massiveart.com
+Version:    1.0
+--------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------
+Reset-File */
+@import url(reset.css);
+/* --------------------------------------------------------------- */
+
+/* ==========================
+@start, General Definition */
+
+body {
+  background: #FFF 0 0;
+  color: #333;
+  font-family: Arial, Sans-Serif;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 15px;
+  text-align: left;
+  letter-spacing: normal;  
+}
+
+img {
+	behavior: url(/website/themes/default/css/iepngfix/iepngfix.htc);
+}
+
+.float {
+  float: left;
+}
+
+.clear {
+  clear:both;
+  height:0;
+  line-height:0;
+  font-size:0;
+}
+
+.wrapper {  
+  margin: 0 auto;
+  text-align: left;
+  min-height: 605px;
+}
+
+/* @end, General Definition */
+
+
+/* ========================
+@start, basic font sizes */
+
+p, ul, ol, dl, table, address, blockquote, fieldset, pre, form div {
+	font-size: 1em;  /* 12px */
+}
+
+/* deal with likely (but certainly not all) inherited shrinkage */
+
+ul p, ol p, table p, dl p, ul ul, ol ol, ul ol, ol ul, address p, blockquote p, form div div, form div p, fieldset div, table form div {
+	font-size: 1em;
+}
+/* @end, basic font sizes */
+
+/* ===============
+@start, Margins */
+
+p, ul, ol, dl, address, table, blockquote, pre, fieldset {
+	margin-bottom: 0.8333em; /* 10px */
+}
+p {
+	margin: 0.8571em 0 1.4286em 0;
+}
+form {
+	margin-bottom: 1.517em; /* 18px */
+}
+ul ul, ol ol, ol ul, ul ol {
+	margin-bottom: 0;
+}
+
+/* @end Margins */
+
+
+/* =============
+@start, Links */
+
+a:link,
+button.link span {
+	color: #8fa52d;
+	text-decoration: none;
+	font-weight: bold;;
+	border-bottom: 1px solid #8fa52d;
+}
+
+a:visited {
+	color: #8fa52d;
+	text-decoration: none;
+	font-weight: bold;;
+	border-bottom: 1px solid #8fa52d;
+}
+
+a:hover,
+a:focus,
+button.link:hover,
+button.link:focus span {
+	color: #fff; 
+	text-decoration: none;
+	font-weight: bold;
+	border-bottom: 1px solid #8fa52d;
+	background-color: #8fa52d;
+}
+a:active,
+button.link:active span {
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;;
+	border-bottom: 1px solid #8fa52d;
+	background-color: #8fa52d;
+}
+/* @end, Links */
+
+/* ================
+@start, Headings */
+
+h1 {
+	font-size: 1.5em; 				/* 18px */
+  line-height: 1.6667; 			/* 20px */
+	margin-bottom: 0.4167em; 	/* 5px */
+  color: #000;
+}
+h2 {
+	font-size: 1.1667em;   		/* 14px */
+	line-height: 1.25; 				/* 15px */
+	margin-bottom: 0.4167em; 	/* 5px */
+  color: #999;
+}
+h3 {
+	font-size: 1.4167em;			/* 17px */
+	line-height: 1.25; 				/* 15px */
+	margin-bottom: 0.4167em; 	/* 5px */
+	color: #000;
+}
+h4 {
+	font-size: 0.9167em;   		/* 11px */
+	line-height: 1.25; 				/* 15px */
+	margin-bottom: 0.4167em; 	/* 5px */
+}
+h5, h6 {
+	font-size: 1em;  			/* 12px */
+}
+/* @end, Headings */
+
+
+/* =========================
+@start, Header Definition */
+
+.headerContainer {
+	background: #ccc 0 0;
+	border-top: 5px solid #006699;
+	margin: 0 0 10px 0;
+}
+
+.headerContainer .content {
+	background: #FF9999 0 0;
+	height: 9.1667em; /* 130px - padding = 110px */
+	padding: 10px;
+	margin: 0 auto;
+	width: 80em; /* 980px - padding = 960px */
+	overflow: hidden;
+	text-align: left;
+}
+/* @end, Header Definition */
+
+/* ==========================
+@start, Content Definition */
+
+.contentContainer {
+	margin: 0 auto 10px auto;
+	width: 81.6667em; /* 980px */
+}
+
+.contentContainer .subnavi {
+	float: left;
+	width: 14.1667em; /* 190px - padding = 170px */
+	min-width: 14.1667em;
+	max-width: 14.1667em;
+	height: 23.3333em; /* 300px - padding = 280px */
+	margin: 0 10px 0 0;
+	padding: 10px;
+	background: #FF9999 0 0;
+}
+
+.contentContainer .content {
+	float: left;
+	width: 46.6667em; /* 580px - padding = 560px */
+	min-width: 46.6667em;
+	max-width: 46.6667em;
+	height: 23.3333em; /* 300px - padding = 280px */
+	margin: 0 10px 0 0;
+	padding: 10px;
+	background: #FF9999 0 0;
+}
+
+.contentContainer .sidebar {
+	float: left;
+	width: 14.1667em; /* 190px - padding = 170px */
+	min-width: 14.1667em;
+	max-width: 14.1667em;
+	height: 23.3333em; /* 300px - padding = 280px */
+	padding: 10px;
+	background: #FF9999 0 0;
+}
+
+/* @end, Content Definition */
+
+/* ============================
+@start, Carousell Definition */
+
+.carousellContainer {
+	margin: 0 auto 10px auto;
+	width: 81.6667em; /* 980px */
+}
+
+.carousellContainer .content {
+	background: #FF9999 0 0;
+	height: 7.5em; /* 110px - padding = 90px */
+	padding: 10px;
+}
+/* @end, Carousell Definition */
+
+/* =========================
+@start, Footer Definition */
+
+.footerContainer {
+  margin: 0 auto 10px auto;
+	width: 81.6667em; /* 980px */
+}
+
+.footerContainer .content {
+  background: #FF9999 0 0;
+  height: 3.3333em; /* 60px - padding = 40px */
+	padding: 10px;
+}
+/* @end, Footer Definition */
