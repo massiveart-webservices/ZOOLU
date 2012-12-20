@@ -1047,6 +1047,10 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
     
+    if (typeof(elementTypeDefaultId) == 'undefined') {
+        elementTypeDefaultId = '';
+    }
+    
     new Ajax.Updater(this.genFormContainer, strAjaxAction, {
        parameters: { 
          id: itemId,
@@ -1061,6 +1065,7 @@ Massiveart.Navigation = Class.create({
          rootLevelGroupKey: ($('rootLevelGroupKey'+this.rootLevelGroupId)) ? $F('rootLevelGroupKey'+this.rootLevelGroupId) : '',
          parentFolderId: $('navlevel'+currLevel).readAttribute('parentid'),
          elementType: elType,
+         elementTypeId: elementTypeDefaultId,
          zoolu_module: this.module,
          rootLevelTypeId: this.rootLevelTypeId,
          backLink: backLink
