@@ -307,7 +307,7 @@ class PageHelper
         /**
          * add the scriptaculous sortable funcionality
          */
-        $strOutput .= '<script type="text/javascript" language="javascript"//<![CDATA[
+        $strOutput .= '<script type="text/javascript" language="javascript">//<![CDATA[
                       myForm.initSortable(\'' . $strFieldName . '\', \'divContactContainer_' . $strFieldName . '\', \'contactitem\', \'div\', \'itemid\', \'vertical\');
                     //]]></script>';
 
