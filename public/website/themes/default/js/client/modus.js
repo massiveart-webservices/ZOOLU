@@ -1,0 +1,56 @@
+var LZ = LZ || {};
+
+(function(window, LZ) {
+    LZ.Modus = {
+        /**
+         * expireCache
+         */
+        expireCache: function(elId) {
+            this.addBusyClass(elId, true);
+            $.ajax({
+                url: "/zoolu-website/content/expire-cache",
+                type: "GET",
+                success: function() {
+                    this.removeBusyClass(elId, true);
+                    window.location.reload();
+                }.bind(this)
+            });
+        },
+
+        /**
+         * changeTestMode
+         */
+        changeTestMode: function(status) {
+            $.ajax({
+                url: "/zoolu-website/testmode/change",
+                type: "GET",
+                data: {TestMode: status},
+                success: function() {
+                    window.location.reload();
+                }.bind(this)
+            });
+        },
+
+        /**
+         * addBusyClass
+         */
+        addBusyClass: function(busyElement, blnDisplay) {
+            if ($(busyElement)) {
+                if (blnDisplay) {
+                    $(busyElement).addClass('busy').show();
+                }
+            }
+        },
+
+        /**
+         * removeBusyClass
+         */
+        removeBusyClass: function(busyElement, blnDisplay) {
+            if ($(busyElement)) {
+                if (blnDisplay) {
+                    $(busyElement).removeClass('busy').hide();
+                }
+            }
+        }
+    };
+})(window, LZ);
