@@ -1821,7 +1821,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
             if (is_string($strValue) && $strValue != '') {
 
-                if ($intFieldType == GenericSetup::FILE_FIELD) {
+                if ($intFieldType == GenericSetup::FILE_FIELD || $intFieldType == GenericSetup::CORE_FIELD && $objField->getProperty('type') == 'media') {
                     $objFiles = $this->getModelFiles()->loadFilesById($strValue);
                     $arrValues = array();
                     if (count($objFiles) > 0) {
