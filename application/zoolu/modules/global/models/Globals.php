@@ -215,6 +215,7 @@ class Model_Globals extends ModelAbstract
         $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = globalProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
         $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
         $objSelect->where('globals.idParent = ?', $intFolderId);
+        $objSelect->where('globals.isStartGlobal = ?', 1);
 
         return $this->getGlobalTable()->fetchAll($objSelect);
     }
