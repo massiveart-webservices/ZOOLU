@@ -204,6 +204,21 @@ class Model_Globals extends ModelAbstract
         return $this->getGlobalTable()->fetchAll($objSelect);
     }
 
+    public function loadStartelementByParentId($intFolderId) {
+        $this->core->logger->debug('global->models->Model_Globals->loadLinkGlobal('.$intFolderId.')');
+
+        $objSelect = $this->getGlobalTable()->select()->setIntegrityCheck(false);
+
+        $objSelect->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'version', 'isStartGlobal', 'idParent', 'idParentTypes', 'globalProperties.idGenericForms', 'globalProperties.idTemplates', 'globalProperties.idGlobalTypes', 'globalProperties.showInNavigation', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.idStatus', 'globalProperties.creator', 'globalTitles.title'));
+        $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
+        $objSelect->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '. $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
+        $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = globalProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
+        $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = globalProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
+        $objSelect->where('globals.idParent = ?', $intFolderId);
+
+        return $this->getGlobalTable()->fetchAll($objSelect);
+    }
+
     /**
      * loadProperties
      * @param integer $intElementId

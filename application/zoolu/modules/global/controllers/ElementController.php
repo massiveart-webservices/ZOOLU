@@ -575,6 +575,8 @@ class Global_ElementController extends AuthControllerAction
 
         $this->_helper->viewRenderer->setNoRender();
 
+        $strOverride = $this->getRequest()->getParam('override');
+
         try {
             $intSrcId = $this->getRequest()->getParam('src');
             $intDestId = $this->getRequest()->getParam('dest');
@@ -582,12 +584,15 @@ class Global_ElementController extends AuthControllerAction
             $objElementSrc = $this->getModelGlobals()->load($intSrcId)->current();
             $objElementSrcLink = $this->getModelGlobals()->loadLinkGlobal($intSrcId)->current();
 
-            if ($this->getRequest()->getParam('override') == 'false') {
+            $objFolderSrc = $this->getModelFolders()->load($objElementSrc->idParent)->current();
+            $objLanguages = $this->getModelFolders()->loadLanguages($objFolderSrc->id);
+
+            $intElementIdDest = null;
+
+            if ($strOverride == 'false') {
                 //Copy parent folder if new subfolder should be created
                 $intFolderDestId = null;
-                $objFolderSrc = $this->getModelFolders()->load($objElementSrc->idParent)->current();
                 $objGenericForm = $this->getModelGenericForm()->load($objFolderSrc->idGenericForms)->current();
-                $objLanguages = $this->getModelFolders()->loadLanguages($objFolderSrc->id);
 
                 foreach ($objLanguages as $objLanguage) {
 
@@ -640,16 +645,15 @@ class Global_ElementController extends AuthControllerAction
                 }
                 //Override the destination id
                 $intDestId = $intFolderDestId;
+            } else {
+                $objElementDest = $this->getModelGlobals()->loadStartelementByParentId($intDestId)->current();
+                $intElementIdDest = $objElementDest->id;
             }
 
             //Copy the element itself
-            $intElementIdDest = null;
             $objGenericForm = $this->getModelGenericForm()->load($objElementSrcLink->idGenericForms)->current();
 
             foreach ($objLanguages as $objLanguage) {
-                $this->core->logger->debug('language:');
-                $this->core->logger->debug($objLanguage->idLanguages);
-
                 //Build Form
                 $objForm = new GenericForm();
                 $objForm->Setup()->setElementId($objElementSrcLink->id);
@@ -682,12 +686,18 @@ class Global_ElementController extends AuthControllerAction
                 $objFolder = $this->getModelFolders()->load($intDestId)->current();
                 $intRootLevelId = $objFolder->idRootLevels;
 
+                //set new title, if current page get override
+                if($strOverride == 'true') {
+                    $objForm->Setup()->setFieldValues();
+                }
+
                 // copy page
                 if ($intElementIdDest == null) {
                     $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
                 } else {
                     $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
                 }
+
                 $objForm->Setup()->setElementId($intElementIdDest);
                 $objForm->Setup()->setParentId($intDestId);
                 $objForm->Setup()->setRootLevelId($intRootLevelId);
