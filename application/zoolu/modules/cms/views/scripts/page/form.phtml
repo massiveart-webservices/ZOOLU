@@ -132,12 +132,14 @@
                 </td>
             </tr>
             <?php endif; ?>
+        <?php endif; ?>
         <tr>
             <td class="tdNormal">&nbsp;</td>
             <td>
                 <a href="#" onclick="myForm.getCopyLanguageChooser(); return false;"><?php echo $this->translate->_('language_copy') ?></a>
             </td>
         </tr>
+        <?php if (!$this->blnIsStartPage) : ?>
         <tr>
             <td class="tdNormal"><?php echo $this->translate->_('Published'); ?>:</td>
             <td>

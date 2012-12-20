@@ -164,7 +164,8 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
   addUnit: function(currLevel){
     if($('buttondelete')) $('buttondelete').hide();   
     myNavigation.showFormContainer();
-    
+    $(this.genListContainer).hide();
+    $(this.genListFunctions).hide();
     $(this.genFormContainer).innerHTML = '';
     $(this.genFormContainer).show();
     $(this.genFormSaveContainer).show();
@@ -174,13 +175,13 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
         
     new Ajax.Updater(this.genFormContainer, '/zoolu/contacts/contact/unit-addform', {
       parameters: {
-        formId: unitFormDefaultId,
+        formId: 'DEFAULT_UNIT',
         rootLevelId: this.rootLevelId,
         parentId: $('navlevel'+currLevel).readAttribute('parentid'),
         currLevel: currLevel         
       },      
       evalScripts: true,     
-      onComplete: function() {       
+      onComplete: function() {
         $('levelmenu'+currLevel).hide();
         $('addmenu'+currLevel).fade({duration: 0.5});
         myCore.removeBusyClass(this.genFormContainer);             
