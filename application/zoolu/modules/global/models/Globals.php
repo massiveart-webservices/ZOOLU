@@ -126,7 +126,7 @@ class Model_Globals extends ModelAbstract
         $objSelect = $this->getGlobalTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'version', 'isStartGlobal', 'idParent', 'idParentTypes', 'globalProperties.idGlobalTypes', 'globalProperties.showInNavigation', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.idStatus', 'globalProperties.creator', 'globalTitles.title'));
+        $objSelect->from('globals', array('id', 'globalId', 'relationId' => 'globalId', 'version', 'isStartGlobal', 'idParent', 'idParentTypes', 'globalProperties.idGenericForms', 'globalProperties.idTemplates', 'globalProperties.idGlobalTypes', 'globalProperties.showInNavigation', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.idStatus', 'globalProperties.creator', 'globalTitles.title'));
         $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
         $objSelect->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '. $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
         $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = globalProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
@@ -167,7 +167,7 @@ class Model_Globals extends ModelAbstract
         $objSelect = $this->getGlobalTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from(array('origin' => 'globals'), array('globals.id', 'globals.globalId', 'relationId' => 'globals.globalId', 'globals.version', 'globals.isStartGlobal', 'globals.idParent', 'globals.idParentTypes', 'globalProperties.idGlobalTypes', 'globalProperties.showInNavigation', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.idStatus', 'globalProperties.creator'));
+        $objSelect->from(array('origin' => 'globals'), array('globals.id', 'globals.globalId', 'relationId' => 'globals.globalId', 'globals.version', 'globals.isStartGlobal', 'globals.idParent', 'globals.idParentTypes', 'globalProperties.idGenericForms', 'globalProperties.idGlobalTypes', 'globalProperties.showInNavigation', 'globalProperties.idLanguageFallbacks', 'globalProperties.published', 'globalProperties.changed', 'globalProperties.idStatus', 'globalProperties.creator'));
         $objSelect->joinLeft('globalLinks', 'globalLinks.globalId = origin.globalId', array());
         $objSelect->joinLeft('globals', 'globalLinks.idGlobals = globals.id', array());
         $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
@@ -194,8 +194,9 @@ class Model_Globals extends ModelAbstract
 
         $objSelect->from(array('origin' => 'globals'), array('originId' => 'id'));
         $objSelect->join('globalLinks', 'globalLinks.idGlobals = origin.id', array());
-        $objSelect->join('globals', 'globals.globalId = globalLinks.globalId', array('id', 'globalId', 'version'));
+        $objSelect->join('globals', 'globals.globalId = globalLinks.globalId', array('id', 'globalId', 'version', 'isStartGlobal', 'idParent'));
         $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+        $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->intLanguageId, array('idGenericForms', 'idTemplates'));
         $objSelect->joinleft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
         $objSelect->joinleft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
         $objSelect->where('origin.id = ?', $intElementId);
@@ -1312,7 +1313,7 @@ class Model_Globals extends ModelAbstract
 
         $objSelect = $this->getGlobalTable()->select()->setIntegrityCheck(false);
         $objSelect->from($this->getGlobalTable(), array());
-        $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId', array('idLanguages'));
+        $objSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId', array('idLanguages'));
         $objSelect->where('idLanguages != ?', 0);
         $objSelect->where('globals.id = ?', $intElementId);
 

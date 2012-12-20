@@ -192,9 +192,41 @@ Massiveart.Global = Class.create({
               parameters: {
                   src: $F('id'),
                   dest: folderId
+              },
+              onComplete: function() {
+                  $('btnYes').observe('click', function() {
+                      new Ajax.Request('/zoolu/global/element/copystartelement', {
+                          parameters: {
+                              src: $F('linkId'),
+                              dest: folderId,
+                              override: true
+                          },
+                          onComplete: function() {
+                              myOverlay.close();
+                          }
+                      });
+
+                      $('btnYes').stopObserving();
+                      $('btnNo').stopObserving();
+                  });
+
+                  $('btnNo').observe('click', function() {
+                      new Ajax.Request('/zoolu/global/element/copystartelement', {
+                          parameters: {
+                              src: $F('linkId'),
+                              dest: folderId,
+                              override: false
+                          },
+                          onComplete: function() {
+                              myOverlay.close();
+                          }
+                      });
+
+                      $('btnYes').stopObserving();
+                      $('btnNo').stopObserving();
+                  });
               }
           });
-          //myOverlay.close('');
       } else {
           new Ajax.Request('/zoolu/global/element/copy', {
               parameters: {
