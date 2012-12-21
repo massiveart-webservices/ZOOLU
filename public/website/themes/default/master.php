@@ -75,7 +75,6 @@
                 url: '/zoolu-website/search/livesearch?theme=default&rootLevelId=<?php echo $this->rootLevelId; ?>&languageId=<?php echo $this->languageId; ?>&q='
             });
             Web.scripts.ausgabe();
-            Web.script.ausgabe();
             <?php get_dom_loaded_js(); ?>
         });
 
