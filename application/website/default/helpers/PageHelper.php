@@ -273,7 +273,7 @@ class PageHelper {
       Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
     if(Zend_Auth::getInstance()->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true){
       $strReturn .= '
-      <div class="divShowModusContainer" id="zoolu-show-modus-toolbar" onClick="showModusContainer()">
+      <div class="divShowModusContainer" id="zoolu-show-modus-toolbar" onClick="Web.Modus.showModusContainer()">
         <div class="divShowModusContainerArrow">
           <img src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/opener-arrow.png" alt="Open ZOOLU Toolbar" />
         </div>
@@ -283,7 +283,7 @@ class PageHelper {
       </div>
       <div class="divModusContainer" id="zoolu-modus-toolbar">
         <div class="divModusLogo">
-          <div onClick="hideModusContainer()" class="divHideModusContainer"> 
+          <div onClick="Web.Modus.hideModusContainer()" class="divHideModusContainer"> 
             <img style="cursor: pointer;" src="'.$this->core->config->domains->static->components.'/zoolu-statics/images/modus/closer.png" alt="Close ZOOLU Toolbar" />
           </div>
           <a href="/zoolu/cms" target="_blank">
@@ -293,13 +293,13 @@ class PageHelper {
         <div class="divModusAdvice">Hinweis: Im Moment werden auch Seiten mit dem <strong>Status "Test"</strong> dargestellt.</div>
         <div class="divModusLogout"><a href="/zoolu/users/user/logout">Abmelden</a></div>
         <div class="divModusStatus">Test/Live-Modus:
-          <select id="selTestMode" name="selTestMode" onchange="myDefault.changeTestMode(this.options[this.selectedIndex].value);">
+          <select id="selTestMode" name="selTestMode" onchange="Web.Modus.changeTestMode(this.options[this.selectedIndex].value);">
             <option value="on" '.((isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == true) ? ' selected="selected"' : '').'>Aktiv</option>
             <option value="off" '.((isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == true) ? '' : ' selected="selected"').'>Inaktiv</option>
           </select>
         </div>
         <div class="divModusCache">
-          <div onclick="myDefault.expireCache(this.id); return false;" id="expireCache">
+          <div onclick="Web.Modus.expireCache(this.id); return false;" id="expireCache">
             <div class="button25leftOn"></div>
             <div class="button25centerOn">
               <div>Expire Cache</div>

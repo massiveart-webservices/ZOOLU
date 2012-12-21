@@ -72,9 +72,10 @@
     
         $(document).ready(function() {
             jQuery('#searchField').liveSearch({
-                url: '/zoolu-website/search/livesearch?theme=hoval&rootLevelId=<?php echo $this->rootLevelId; ?>&languageId=<?php echo $this->languageId; ?>&q='
+                url: '/zoolu-website/search/livesearch?theme=default&rootLevelId=<?php echo $this->rootLevelId; ?>&languageId=<?php echo $this->languageId; ?>&q='
             });
-
+            Web.scripts.ausgabe();
+            Web.script.ausgabe();
             <?php get_dom_loaded_js(); ?>
         });
 

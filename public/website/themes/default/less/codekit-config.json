@@ -88,7 +88,7 @@
       "inputAbbreviatedPath" : "\/style.less",
       "outputStyle" : 1,
       "shouldRunBless" : 0,
-      "outputAbbreviatedPath" : "\/Volumes\/massive-bazinga-1\/websites\/zoolu.bazinga.at\/public\/website\/themes\/default\/css\/style.css",
+      "outputAbbreviatedPath" : "\/Volumes\/massive-bazinga\/websites\/zoolu.bazinga.at\/public\/website\/themes\/default\/css\/style.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -129,7 +129,7 @@
     "javascriptOutputSuffix" : "-ck",
     "jadeOutputStyle" : 0,
     "coffeeAutoOutputPathStyle" : 0,
-    "autoSyncProjectSettingsFile" : 1,
+    "autoSyncProjectSettingsFile" : 0,
     "lessAutoOutputPathReplace1" : "less",
     "jadeAutoOutputPathReplace1" : "",
     "lessAutoOutputPathRelativePath" : "..\/css",
