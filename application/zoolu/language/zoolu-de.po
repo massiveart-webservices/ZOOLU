@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-20 16:51+0100\n"
+"POT-Creation-Date: 2013-01-07 08:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -1521,6 +1521,7 @@ msgid "Move_page_text"
 msgstr ""
 
 #: application/zoolu/layouts/cms.phtml:404
+#: application/zoolu/layouts/global-tree.phtml:350
 msgid "Override_startpage"
 msgstr "Wollen Sie diese Startseite wirklich überschreiben?"
 
@@ -1676,7 +1677,7 @@ msgstr "Wollen Sie diese Veranstaltung löschen?"
 msgid "Copy_language_override"
 msgstr "Wollen Sie die bereits bestehenden Daten überschreiben?"
 
-#: application/zoolu/layouts/global-tree.phtml:364
+#: application/zoolu/layouts/global-tree.phtml:365
 #: application/zoolu/layouts/global-list.phtml:305
 msgid "Global"
 msgstr "Global"
@@ -2177,6 +2178,9 @@ msgstr "Details"
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:141
 msgid "Click"
 msgstr "Klicks"
+
+#~ msgid "Override_startelement"
+#~ msgstr "Wollen Sie diese Startseite wirklich überschreiben?"
 
 #~ msgid "targetpage"
 #~ msgstr "Zielseite"

@@ -187,48 +187,70 @@ Massiveart.Global = Class.create({
    */
   copyElement: function(folderId) {
       if($F('isStartGlobal') == "1") {
-          myCore.showDynamicMessage();
-          new Ajax.Updater('overlayGenContent2', '/zoolu/global/element/copy-text', {
-              parameters: {
-                  src: $F('id'),
-                  dest: folderId
-              },
-              onComplete: function() {
-                  $('btnYes').observe('click', function() {
-                      new Ajax.Request('/zoolu/global/element/copystartelement', {
-                          parameters: {
-                              src: $F('linkId'),
-                              dest: folderId,
-                              override: true
-                          },
-                          onComplete: function() {
-                              myOverlay.close();
-                          }
-                      });
-                      myCore.hideDynamicMessage();
-
-                      $('btnYes').stopObserving();
-                      $('btnNo').stopObserving();
-                  });
-
-                  $('btnNo').observe('click', function() {
-                      new Ajax.Request('/zoolu/global/element/copystartelement', {
-                          parameters: {
-                              src: $F('linkId'),
-                              dest: folderId,
-                              override: false
-                          },
-                          onComplete: function() {
-                              myOverlay.close();
-                          }
-                      });
-                      myCore.hideDynamicMessage();
-
-                      $('btnYes').stopObserving();
-                      $('btnNo').stopObserving();
-                  });
-              }
+          myCore.showAlertMessage(myCore.translate.Override_startpage);
+          $('buttonOk').observe('click', function () {
+              $('buttonOk').addClassName('busy');
+              new Ajax.Request('/zoolu/global/element/copystartelement', {
+                  parameters:{
+                      src:$F('linkId'),
+                      dest:folderId,
+                      override:true
+                  },
+                  onComplete:function () {
+                      myOverlay.close();
+                      $('overlayButtons').hide();
+                      $('buttonOk').removeClassName('busy');
+                  }
+              });
+              $('buttonOk').stopObserving();
+              $('buttonCancel').stopObserving();
           });
+          $('buttonCancel').observe('click', function () {
+              myOverlay.close();
+              $('overlayButtons').hide();
+          });
+//          myCore.showDynamicMessage();
+//          new Ajax.Updater('overlayGenContent2', '/zoolu/global/element/copy-text', {
+//              parameters: {
+//                  src: $F('id'),
+//                  dest: folderId
+//              },
+//              onComplete: function() {
+//                  $('btnYes').observe('click', function() {
+//                      new Ajax.Request('/zoolu/global/element/copystartelement', {
+//                          parameters: {
+//                              src: $F('linkId'),
+//                              dest: folderId,
+//                              override: true
+//                          },
+//                          onComplete: function() {
+//                              myOverlay.close();
+//                          }
+//                      });
+//                      myCore.hideDynamicMessage();
+//
+//                      $('btnYes').stopObserving();
+//                      $('btnNo').stopObserving();
+//                  });
+//
+//                  $('btnNo').observe('click', function() {
+//                      new Ajax.Request('/zoolu/global/element/copystartelement', {
+//                          parameters: {
+//                              src: $F('linkId'),
+//                              dest: folderId,
+//                              override: false
+//                          },
+//                          onComplete: function() {
+//                              myOverlay.close();
+//                          }
+//                      });
+//                      myCore.hideDynamicMessage();
+//
+//                      $('btnYes').stopObserving();
+//                      $('btnNo').stopObserving();
+//                  });
+//              }
+//          });
       } else {
           new Ajax.Request('/zoolu/global/element/copy', {
               parameters: {
