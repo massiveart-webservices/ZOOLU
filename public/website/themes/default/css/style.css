@@ -97,6 +97,8 @@ a,a:hover{font-weight:bold;text-decoration:underline;color:#000;font-size:14px;}
 .languages li a:hover{text-decoration:underline;}
 .search{position:absolute;top:40px;right:0;width:220px;}
 .search input{width:210px;font-size:12px;line-height:16px;background-color:#000;color:#fff;border:medium none;padding-left:5px;padding-right:5px;}
+.jquery-live-search{background-color:rgba(210, 210, 210, 0.5);}.jquery-live-search ul{list-style-type:none;}.jquery-live-search ul li{padding:10px 0;}
+.jquery-live-search .detailSearch{padding:0 20px 20px 20px;}
 #footer .inner{font-size:12px;line-height:30px;}
 #footer .left{float:left;}
 #footer .right{float:right;}
@@ -175,6 +177,8 @@ a,a:hover{font-weight:bold;text-decoration:underline;color:#000;font-size:14px;}
 .buttonBox .left{float:left;background:url(/website/themes/default/images/bttn_left.gif) no-repeat 0 0;width:9px;height:38px;}
 .buttonBox .center{float:left;background:url(/website/themes/default/images/bttn_center.gif) repeat-x 0 0;padding:7px 30px 0 30px;height:31px;text-align:center;color:#FFF;line-height:25px;cursor:pointer;}
 .buttonBox .right{float:left;background:url(/website/themes/default/images/bttn_right.gif) no-repeat 0 0;width:9px;height:38px;}
+[type="submit"]{margin:0 0 20px 0;width:220px;height:28px;color:#fff;margin-top:15px;background:#d00018;background:-moz-linear-gradient(top, #aaaaaa 0%, #333333 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #aaaaaa), color-stop(100%, #333333));background:-webkit-linear-gradient(top, #aaaaaa 0%, #333333 100%);background:-o-linear-gradient(top, #aaaaaa 0%, #333333 100%);background:-ms-linear-gradient(top, #aaaaaa 0%, #333333 100%);background:linear-gradient(to bottom, #aaaaaa 0%, #333333 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#AAAAAA', endColorstr='#333333', GradientType=0);border:none;border-radius:2px;}[type="submit"]:hover{cursor:pointer;}
+[type="submit"][disabled]{background:#ccc;filter:none;}[type="submit"][disabled]:hover{cursor:default;}
 .imgLeft{float:left;padding:0 20px 0 0;}
 .imgLeft img{padding:0 0 10px 0;}
 .imgRight{float:right;padding:0 0 0 20px;}

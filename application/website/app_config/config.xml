@@ -37,12 +37,12 @@
       <transport></transport>
       <actions>
         <sendmail>
-          <client>false</client>
-          <confirmation>false</confirmation>
+          <client>true</client>
+          <confirmation>true</confirmation>
         </sendmail>
-        <database>false</database>
+        <database>true</database>
       </actions>
-      <database>pageRegistrations</database>
+      <database>pageDynForm</database>
     </mail>
     
     <rss>

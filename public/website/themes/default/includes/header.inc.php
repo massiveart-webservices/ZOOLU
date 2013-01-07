@@ -6,7 +6,7 @@
             <div class="search">
                 <form id="searchForm" name="searchForm">
                     <a class="button" href="#" onclick="myDefault.search(); return false;"><div class='sprite loupe'></div></a>
-                    <input id="searchField" type="text" name="q" class="" onclick="this.value='';this.onclick=function(){return false;}" autocomplete="off" value="<?php echo $this->translate->_('Search', false); ?>"/>
+                    <input id="searchField" type="text" name="q" class="" onclick="this.placeholder='';this.onclick=function(){return false;}" value="" autocomplete="off" placeholder="<?php echo $this->translate->_('Search', false); ?>"/>
                 </form>
             </div>
             <!--  

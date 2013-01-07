@@ -2046,6 +2046,7 @@ class PageHelper {
       $counter = 0;
       foreach($arrFormFields as $objField){
         $strFieldId = htmlentities(urlencode($objField->title).'_'.uniqid(), ENT_COMPAT, $this->core->sysConfig->encoding->default);
+        $strCleanedFieldId = str_replace(array('%', '+', '%2F'), '', $strFieldId);
         
         $strMandatory = '';
         $strMandatoryCssClass = '';
@@ -2069,13 +2070,13 @@ class PageHelper {
             <div class="'.$strClass.'">';
         if($objField->type->code != 'headline' && $objField->type->code != 'text' && $objField->type->code != 'divider'){
           $strFields .= '
-          	<input type="hidden" id="'.$strFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">';
+          	<input type="hidden" id="'.$strCleanedFieldId.'_type" name="'.$strFieldId.'_type" value="'.$objField->type->code.'">';
           if ($objField->type->code != 'recaptcha_response_field') {
             $strFields .= '
-          	<label id="lbl_'.$strFieldId.'" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
+          	<label id="lbl_'.$strCleanedFieldId.'" for="'.$strCleanedFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';
           } else {
             $strFields .= '
-          	<label id="lbl_recaptcha_response_field" for="'.$strFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';  
+          	<label id="lbl_recaptcha_response_field" for="'.$strCleanedFieldId.'">'.htmlentities($objField->title, ENT_COMPAT, $this->core->sysConfig->encoding->default).$strMandatory.'</label><br/>';  
           }
           if($objField->description != ''){
             $strFields .= '<p class="desc">'.htmlentities($objField->description, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</p>';    
@@ -2085,7 +2086,7 @@ class PageHelper {
         switch($objField->type->code){
           case 'salutation' :
             $strFields .= '              
-              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+              <select id="'.$strCleanedFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
                 <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>
                 <option value="'.$this->objTranslate->_('Mr.').'">'.$this->objTranslate->_('Mr.').'</option>
                 <option value="'.$this->objTranslate->_('Ms.').'">'.$this->objTranslate->_('Ms.').'</option>
@@ -2094,7 +2095,7 @@ class PageHelper {
             
           case 'type' :
             $strFields .= '              
-              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+              <select id="'.$strCleanedFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
                 <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>     
                 <option value="'.$this->objTranslate->_('Dental_office').'">'.$this->objTranslate->_('Dental_office').'</option>
                 <option value="'.$this->objTranslate->_('Dental_office_laboratory').'">'.$this->objTranslate->_('Dental_office_laboratory').'</option>
@@ -2107,21 +2108,22 @@ class PageHelper {
             
           case 'country' :
             $strFields .= '
-              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
-                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>   
-                '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC').'             
+              <select id="'.$strCleanedFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+                <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>
+                                
+                '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth) != 1 ORDER BY categoryTitles.title ASC').'             
               </select>';
             break;
             
           case 'message' :
             $strFields .= '
-              <textarea id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMandatoryCssClass.'></textarea>';
+              <textarea id="'.$strCleanedFieldId.'" name="'.$strFieldId.'"'.$strMandatoryCssClass.'></textarea>';
             break;
             
           case 'attachment' :
             $blnHasFileUpload = true;
             $strFields .= '
-              <input type="file" id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMandatoryCssClass.'/>';
+              <input type="file" id="'.$strCleanedFieldId.'" name="'.$strFieldId.'"'.$strMandatoryCssClass.'/>';
             break;
             
           case 'recaptcha_response_field' :
@@ -2130,7 +2132,7 @@ class PageHelper {
             
           case 'select':
             $strFields .= '
-              <select id="'.$strFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
+              <select id="'.$strCleanedFieldId.'" name="'.$strFieldId.'" size="1"'.$strMandatoryCssClass.'>
               	<option value="">'.$this->objTranslate->_('Please_choose', false).'</option>';
             
             foreach($objField->options as $strOption){
@@ -2146,11 +2148,11 @@ class PageHelper {
             $i = 1;
             foreach($objField->options as $strOption){
               $strFields .= '
-             		<input class="rd '.(($objField->mandatory && $i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
+             		<input class="rd '.(($objField->mandatory && $i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'" id="'.$strCleanedFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'" /><label for="'.$strCleanedFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
               $strFields .= '
-              	<input class="rd" name="'.$strFieldId.'" id="'.$strFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
+              	<input class="rd" name="'.$strFieldId.'" id="'.$strCleanedFieldId.'_'.$i++.'" type="radio" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
             }
             break;
             
@@ -2158,11 +2160,11 @@ class PageHelper {
             $i = 1;
             foreach($objField->options as $strOption){              
               $strFields .= '
-             		<input class="chbx'.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'" /><label for="'.$strFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
+             		<input class="chbx'.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'[]" id="'.$strCleanedFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'" /><label for="'.$strCleanedFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
               $strFields .= '
-              	<input class="chbx" name="'.$strFieldId.'[]" id="'.$strFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
+              	<input class="chbx" name="'.$strFieldId.'[]" id="'.$strCleanedFieldId.'_'.$i++.'" type="checkbox" value="other"><input name="'.$strFieldId.'_other" type="text" class="other" />';
             }
             break;
             
@@ -2201,11 +2203,11 @@ class PageHelper {
             switch($objField->type->code){                              
               case 'textarea':
                 $strFields .= '
-              		<textarea id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.$strClass.'></textarea>';
+              		<textarea id="'.$strCleanedFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.$strClass.'></textarea>';
                 break;              
               default :
                 $strFields .= '
-              		<input type="text" id="'.$strFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.' value=""'.$strClass.'/>';
+              		<input type="text" id="'.$strCleanedFieldId.'" name="'.$strFieldId.'"'.$strMaxLength.' value=""'.$strClass.'/>';
                 break;
             }           
             break;
@@ -2223,14 +2225,6 @@ class PageHelper {
           <div class="field-2 required">
             <span>'.$this->objTranslate->_('Fields_with_*_are_mandatory').'</span>  
           </div>
-          <div class="field-2 buttonContainer">
-            <div class="buttonBox" onclick="myDefault.submitForm(\''.$strFormId.'\');">
-              <div class="left">&nbsp;</div>
-              <div class="center">'.$this->objTranslate->_('Send').'</div>
-              <div class="right">&nbsp;</div>
-              <div class="clear"></div>
-            </div>
-          </div>
           <div class="clear"></div>
           <div class="legalNotes"><input type="checkbox" id="checkLegalnotes" name="checkLegalnotes"> <label for="checkLegalnotes">'.$this->objTranslate->_('LegalNotes', false).'</label></div>
           <input type="hidden" id="idRootLevels" name="idRootLevels" value="'.$intRootLevelId.'"/>
@@ -2243,6 +2237,9 @@ class PageHelper {
           <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
           <input type="hidden" id="success_message_mail" name="success_message_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('success_message_mail')).'"/>
           <input type="hidden" id="blnDynForm" name="blnDynForm" value="true" />
+          <div class="submit" onclick="Web.submitForm(\'' . $strFormId . '\');">
+              <input type="submit" value="' . $this->objTranslate->_('Send') . '" />
+          </div>
         </form>';  
     }
     

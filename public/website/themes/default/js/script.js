@@ -13,7 +13,7 @@ var Web = Web || {};
             if($('#searchField') && selectedElement.childNodes[0] && selectedElement.childElements().length > 0){
                 var link = selectedElement.childNodes[0].readAttribute('href');
                 if(link != ''){
-                    return self.location.href = link;  
+                    return self.location.href = link;
                 }
             }
         },
@@ -105,13 +105,13 @@ var Web = Web || {};
                             success: function(transport){
                                 if(transport.status == 'ok'){
 
-                                    $('#recaptcha_response_field').removeClass('missinginput');
+                                    $('#lbl_recaptcha_response_field').removeClass('missing');
                                     this.validForm = true;
                                     $('#'+formId)[0].submit();
                                 }else{
                                     Recaptcha.reload();
                                     this.validForm = false;
-                                    $('#recaptcha_response_field').addClass('missinginput');
+                                    $('#lbl_recaptcha_response_field').addClass('missing');
                                     window.scrollTo($('.missinginput'),0);
                                 }
                             }
