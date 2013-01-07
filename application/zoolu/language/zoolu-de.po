@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-17 08:38+0100\n"
+"POT-Creation-Date: 2012-12-20 16:51+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -197,7 +197,7 @@ msgid "Meta_title"
 msgstr "Der Meta TItel"
 
 #: application/zoolu/modules/cms/views/helpers/NavigationHelper.php:105
-#: application/zoolu/modules/global/controllers/ElementController.php:643
+#: application/zoolu/modules/global/controllers/ElementController.php:795
 msgid "Shop"
 msgstr "Shop"
 
@@ -262,7 +262,7 @@ msgstr "Tags suchen"
 
 #: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:768
 #: application/zoolu/modules/global/views/helpers/OverlayHelper.php:309
-#: application/zoolu/modules/global/controllers/ElementController.php:1087
+#: application/zoolu/modules/global/controllers/ElementController.php:1239
 #: application/zoolu/modules/newsletters/controllers/NewsletterController.php:922
 #: application/zoolu/layouts/users.phtml:109
 #: application/zoolu/layouts/contacts-list.phtml:115
@@ -330,6 +330,23 @@ msgstr "Rollen zuweisen"
 #: library/massiveart/generic/fields/SitemapLink/forms/helpers/FormSitemapLink.php:50
 msgid "Select_page"
 msgstr "Seite wählen"
+
+#: application/zoolu/modules/cms/controllers/PageController.php:467
+#: application/zoolu/modules/global/controllers/ElementController.php:562
+msgid "Copy_startpage_message"
+msgstr ""
+"Wollen Sie die Startseite des Ordners \"%s\" überschreiben, oder einen neuen "
+"Unterordner namens \"%t\" erzeugen?"
+
+#: application/zoolu/modules/cms/controllers/PageController.php:468
+#: application/zoolu/modules/global/controllers/ElementController.php:563
+msgid "Override"
+msgstr "Überschreiben"
+
+#: application/zoolu/modules/cms/controllers/PageController.php:469
+#: application/zoolu/modules/global/controllers/ElementController.php:564
+msgid "Create_subfolder"
+msgstr "Neuer Unterordner"
 
 #: application/zoolu/modules/contacts/views/helpers/ViewHelper.php:172
 msgid "Hardbounces"
@@ -556,20 +573,6 @@ msgstr "Ihre Suche nach \"%s\" ergab leider keinen Treffer."
 #: application/zoolu/modules/global/controllers/OverlayController.php:94
 msgid "Select_product"
 msgstr "Produkt wählen"
-
-#: application/zoolu/modules/global/controllers/ElementController.php:562
-msgid "Copy_startpage_message"
-msgstr ""
-"Wollen Sie die Startseite des Ordners \"%s\" überschreiben, oder einen neuen "
-"Unterordner namens \"%t\" erzeugen?"
-
-#: application/zoolu/modules/global/controllers/ElementController.php:563
-msgid "Override"
-msgstr "Überschreiben"
-
-#: application/zoolu/modules/global/controllers/ElementController.php:564
-msgid "Create_subfolder"
-msgstr "Neuer Unterordner"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:169
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:528
@@ -1517,7 +1520,11 @@ msgstr ""
 msgid "Move_page_text"
 msgstr ""
 
-#: application/zoolu/layouts/cms.phtml:418
+#: application/zoolu/layouts/cms.phtml:404
+msgid "Override_startpage"
+msgstr "Wollen Sie diese Startseite wirklich überschreiben?"
+
+#: application/zoolu/layouts/cms.phtml:419
 #: application/zoolu/layouts/cms-list.phtml:402
 msgid "Portals"
 msgstr "Portale"
