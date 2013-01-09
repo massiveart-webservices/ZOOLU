@@ -2065,7 +2065,6 @@ class PageHelper {
         
         $strClearRight = 'last';
         if($counter % 2 == 1) $strClass .= ' '.$strClearRight;
-        
         $strFields .= '    
             <div class="'.$strClass.'">';
         if($objField->type->code != 'headline' && $objField->type->code != 'text' && $objField->type->code != 'divider'){
@@ -2148,7 +2147,7 @@ class PageHelper {
             $i = 1;
             foreach($objField->options as $strOption){
               $strFields .= '
-             		<input class="rd '.(($objField->mandatory && $i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'" id="'.$strCleanedFieldId.'_'.$i++.'" type="radio" value="'.$strOption.'" /><label for="'.$strCleanedFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
+             		<input class="rd '.(($objField->mandatory && $i - 1 == 0) ? $strClassNameMandatory : '').'" name="'.$strFieldId.'" id="'.$strCleanedFieldId.'_'.$i.'" type="radio" value="'.$strOption.'" /><label for="'.$strCleanedFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
               $strFields .= '
@@ -2160,7 +2159,7 @@ class PageHelper {
             $i = 1;
             foreach($objField->options as $strOption){              
               $strFields .= '
-             		<input class="chbx'.(($i - 1 == 0) ? $strClassNameMandatory.'-radio' : '').'" name="'.$strFieldId.'[]" id="'.$strCleanedFieldId.'_'.$i++.'" type="checkbox" value="'.$strOption.'" /><label for="'.$strCleanedFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
+             		<input class="chbx'.(($i - 1 == 0) ? $strClassNameMandatory : '').'" name="'.$strFieldId.'[]" id="'.$strCleanedFieldId.'_'.$i.'" type="checkbox" value="'.$strOption.'" /><label for="'.$strCleanedFieldId.'_'.$i++.'">'.$strOption.'</label><br/>';
             }
             if(isset($objField->other) && $objField->other->code == 'allowed'){
               $strFields .= '

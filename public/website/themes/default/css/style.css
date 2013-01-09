@@ -160,9 +160,9 @@ a,a:hover{font-weight:bold;text-decoration:underline;color:#000;font-size:14px;}
 .movies .item{padding:0 0 20px 0;}
 .formContainer{padding:0 0 20px 0;}
 .formContainer .success{padding:15px 0 0 10px;background-color:#ccff99;border-top:2px solid #99CC00;border-bottom:2px solid #99CC00;color:#000;}
-.formContainer .field-1{clear:both;margin-bottom:5px;}
+.formContainer .field-1{clear:both;margin-bottom:10px;}
 .formContainer .field-1 input,.formContainer .field-1 select,.formContainer .field-1 textarea{width:520px;}
-.formContainer .field-2{float:left;height:50px;margin-bottom:10px;width:265px;}
+.formContainer .field-2{float:left;height:auto;margin-bottom:10px;width:265px;}
 .formContainer .field-2 input,.formContainer .field-2 select,.formContainer .field-2 textarea{margin-right:10px;width:255px;}
 .formContainer .fieldLeft{float:left;width:280px;padding:0 20px 10px 0;}
 .formContainer .fieldRight{float:left;width:280px;padding:0 0 10px 0;}
@@ -174,6 +174,7 @@ a,a:hover{font-weight:bold;text-decoration:underline;color:#000;font-size:14px;}
 .formContainer .required span{font-size:11px;}
 .formContainer .legalNotes input{margin:0 5px 0 0;}
 .formContainer .missing{color:#ff0000;}
+.formContainer .field-1 .rd,.formContainer .field-2 .rd,.formContainer .field-1 .chbx,.formContainer .field-2 .chbx{width:auto;}
 .buttonBox .left{float:left;background:url(/website/themes/default/images/bttn_left.gif) no-repeat 0 0;width:9px;height:38px;}
 .buttonBox .center{float:left;background:url(/website/themes/default/images/bttn_center.gif) repeat-x 0 0;padding:7px 30px 0 30px;height:31px;text-align:center;color:#FFF;line-height:25px;cursor:pointer;}
 .buttonBox .right{float:left;background:url(/website/themes/default/images/bttn_right.gif) no-repeat 0 0;width:9px;height:38px;}

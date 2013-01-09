@@ -139,7 +139,7 @@ var Web = Web || {};
             }
 
             $(formId + '.mandatory').each(function(element){
-                Web.validateInput($(this).attr('id'));
+                Web.validateInput(formId, $(this).attr('id'));
             });
 
             $(formId + '.val_email').each(function(element){
@@ -158,32 +158,26 @@ var Web = Web || {};
         /**
          * validateInput
          */
-        validateInput: function(element, baseValue) {
+        validateInput: function(formId, element, baseValue) {
             //Radio buttons and checkboxes
-            if($(element).type == 'radio' || $(element).type == 'checkbox'){
-                var elementname = $(element).name;
-                var form = $('contactForm'); //TODO Load correct form
-                //checks if there is any item checked
-                if(typeof(form.getInputs($(element).type,elementname).find(function(radio){return radio.checked})) == 'undefined'){
-                    //checkboxes have [] at the end of the name, but labels not
-                    if($(element).type == 'checkbox'){
-                        elementname = elementname.substr(0,elementname.length - 2);
+            var elementtype = $(formId+' #'+element).attr('type');
+            if(elementtype == 'radio' || elementtype == 'checkbox'){
+                var elementname = $(formId+' #'+element).attr('name');
+                var form = $('#contactForm'); //TODO Load correct form
+                //Radio buttons and checkboxes
+                if (!$(formId+" input[name='"+elementname+"']:checked").val()) {
+                    if(elementtype == 'checkbox'){
+                        elementname = elementname.substr(0, elementname.length - 2);
                     }
-                    if($('#lbl_'+elementname)) {
-                        $('#lbl_'+elementname).addClass('missing');
-                        $('#'+elementname).addClass('error');
-                        window.scrollTo($('.error'),0);
-                        $('#empty-field').show();
-                    }
-                    this.retValue = false;
+                        $(formId+' #lbl_'+elementname).addClass('missing');
+                        $(formId+' #'+elementname).addClass('missing-input');
+                        this.retValue = false;
                 }else{
-                    if($(element).type == 'checkbox'){
-                        elementname = elementname.substr(0,elementname.length - 2);
+                    if(elementtype == 'checkbox'){
+                        elementname = elementname.substr(0, elementname.length - 2);
                     }
-                    if($('#lbl_'+elementname)) {
-                        $('#lbl_'+elementname).removeClass('missing');
-                        $('#'+elementname).removeClass('error');
-                    }
+                    $(formId+' #lbl_'+elementname).removeClass('missing');
+                    $(formId+' #'+elementname).removeClass('missing-input');
                 }
             }
             //Everything else
