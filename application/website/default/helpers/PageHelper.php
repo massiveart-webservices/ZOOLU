@@ -535,9 +535,11 @@ class PageHelper {
       
       foreach($objFiles as $objFile){
         if($intLimitNumber > 0 && $counter == $intLimitNumber){
+          $strImageGalleryHiddenImages = 'imageGalleryHiddenImages';
+          
           $strReturn .= '
-            <div id="showAll"><a onclick="myDefault.galleryShowAll(this.id); return false;" href="#">'.$this->objTranslate->_('Show_all_images').'</a></div>
-            <div id="imageGallery" style="display:none;">';
+            <div id="showAll"><a onclick="Web.galleryShowAll(this.id, ' . $strImageGalleryHiddenImages . '); return false;" href="#">'.$this->objTranslate->_('Show_all_images').'</a></div>
+            <div id="' . $strImageGalleryHiddenImages . '" style="display:none;">';
         }
         
         if($intColNumber > 0 && ($counter % $intColNumber == ($intColNumber-1))) {
@@ -648,21 +650,22 @@ class PageHelper {
         /*
          * Vimeo Service
          */
-        if($arrFieldProperties['intVideoTypeId'] == $this->core->sysConfig->video_channels->vimeo->id) {
-          $strReturn .= '
-                   <div class="item">
-                     <object width="'.$intVideoWidth.'" height="'.$intVideoHeight.'">
-                        <param value="true" name="allowfullscreen"/>
-                        <param value="always" name="allowscriptaccess"/>
-                        <param value="http://vimeo.com/moogaloop.swf?clip_id='.$mixedVideoId.'&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=bf000a&amp;fullscreen=1" name="movie"/>
-                        <embed width="'.$intVideoWidth.'" height="'.$intVideoHeight.'" allowscriptaccess="always" allowfullscreen="true" type="application/x-shockwave-flash" src="http://vimeo.com/moogaloop.swf?clip_id='.$mixedVideoId.'&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=bf000a&amp;fullscreen=1"></embed>
-                      </object>
-                    </div>';
-        }
+//         if($arrFieldProperties['intVideoTypeId'] == $this->core->sysConfig->video_channels->vimeo->id) {
+//           $strReturn .= '
+//                    <div class="item">
+//                      <object width="'.$intVideoWidth.'" height="'.$intVideoHeight.'">
+//                         <param value="true" name="allowfullscreen"/>
+//                         <param value="always" name="allowscriptaccess"/>
+//                         <param value="http://vimeo.com/moogaloop.swf?clip_id='.$mixedVideoId.'&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=bf000a&amp;fullscreen=1" name="movie"/>
+//                         <embed width="'.$intVideoWidth.'" height="'.$intVideoHeight.'" allowscriptaccess="always" allowfullscreen="true" type="application/x-shockwave-flash" src="http://vimeo.com/moogaloop.swf?clip_id='.$mixedVideoId.'&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=bf000a&amp;fullscreen=1"></embed>
+//                       </object>
+//                     </div>';
+//         }
         /*
          * Youtube Service
          */
-        else if($arrFieldProperties['intVideoTypeId'] == $this->core->sysConfig->video_channels->youtube->id) {
+       // else 
+       if($arrFieldProperties['intVideoTypeId'] == $this->core->sysConfig->video_channels->youtube->id) {
           $strReturn .= '
             <div class="item">
               <object width="'.$intVideoWidth.'" height="'.$intVideoHeight.'">

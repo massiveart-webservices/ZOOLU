@@ -27,11 +27,11 @@
 			// Configuration related to navigation
 			fixedNavigation:		false,		// (boolean) Boolean that informs if the navigation (next and prev button) will be fixed or not in the interface.
 			// Configuration related to images
-			imageLoading:			'/website/themes/default/lightbox/images/lightbox-ico-loading.gif',		// (string) Path and the name of the loading icon
-			imageBtnPrev:			'/website/themes/default/lightbox/images/lightbox-btn-prev.gif',			// (string) Path and the name of the prev button image
-			imageBtnNext:			'/website/themes/default/lightbox/images/lightbox-btn-next.gif',			// (string) Path and the name of the next button image
-			imageBtnClose:			'/website/themes/default/lightbox/images/lightbox-btn-close.gif',		// (string) Path and the name of the close btn
-			imageBlank:				'/website/themes/default/lightbox/images/lightbox-blank.gif',			// (string) Path and the name of a blank image (one pixel)
+			imageLoading:			'/website/themes/default/plugins/lightbox/images/lightbox-ico-loading.gif',		// (string) Path and the name of the loading icon
+			imageBtnPrev:			'/website/themes/default/plugins/lightbox/images/lightbox-btn-prev.gif',			// (string) Path and the name of the prev button image
+			imageBtnNext:			'/website/themes/default/plugins/lightbox/images/lightbox-btn-next.gif',			// (string) Path and the name of the next button image
+			imageBtnClose:			'/website/themes/default/plugins/lightbox/images/lightbox-btn-close.gif',		// (string) Path and the name of the close btn
+			imageBlank:				'/website/themes/default/plugins/lightbox/images/lightbox-blank.gif',			// (string) Path and the name of a blank image (one pixel)
 			// Configuration related to container image box
 			containerBorderSize:	10,			// (integer) If you adjust the padding in the CSS for the container, #lightbox-container-image-box, you will need to update this value
 			containerResizeSpeed:	400,		// (integer) Specify the resize duration of container image. These number are miliseconds. 400 is default.

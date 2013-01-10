@@ -232,6 +232,18 @@ var Web = Web || {};
                 }
             }
         },
+        
+        /**
+         * galleryShowAll
+         */
+        galleryShowAll: function(elementHide, hiddenImages){
+          if($(hiddenImages)){
+            var images = $(hiddenImages).html();
+            $(hiddenImages).remove();
+            if($(elementHide)) $('#showAll').hide();
+            $(images).insertAfter($('#showAll'));
+          }
+        },
     });
 
 })(window, document, Web);
