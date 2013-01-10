@@ -658,6 +658,9 @@ class IndexController extends WebControllerAction
         }else{
             //Load landingpage if there is no language in the url
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
+            if($objUrl->url->current()->external != ''){
+                $this->_redirect($objUrl->url->current()->external);
+            }
             if (!isset($objUrl->url) || count($objUrl->url) == 0) {
                 //If there is no landingpage, try normal page with default language 
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
