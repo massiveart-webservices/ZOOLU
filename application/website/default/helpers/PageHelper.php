@@ -536,9 +536,10 @@ class PageHelper {
       foreach($objFiles as $objFile){
         if($intLimitNumber > 0 && $counter == $intLimitNumber){
           $strImageGalleryHiddenImages = 'imageGalleryHiddenImages';
+          $strShowAllImages = 'showAll';
           
           $strReturn .= '
-            <div id="showAll"><a onclick="Web.galleryShowAll(this.id, ' . $strImageGalleryHiddenImages . '); return false;" href="#">'.$this->objTranslate->_('Show_all_images').'</a></div>
+            <div id="' . $strShowAllImages . '"><a onclick="Web.galleryShowAll(' . $strShowAllImages . ', ' . $strImageGalleryHiddenImages . '); return false;" href="#">'.$this->objTranslate->_('Show_all_images').'</a></div>
             <div id="' . $strImageGalleryHiddenImages . '" style="display:none;">';
         }
         
@@ -727,8 +728,13 @@ class PageHelper {
       
       foreach($objFiles as $objFile){
         $strIcon = (strpos($objFile->mimeType, 'image') !== false) ? 'icon_img.gif' : 'icon_'.$objFile->extension.'.gif';
+        if (file_exists(GLOBAL_ROOT_PATH . '/public/website/themes/default/images/icons/icon_'.$objFile->extension.'.gif')) {
+            $strIconFile = '<div class="'.$strIconCss.'"><img src="/website/themes/'.$strTheme.'/images/icons/'.$strIcon.'" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>';
+        } else {
+            $strIconFile = '<div class="'.$strIconCss.'"></div>';
+        }
         $strReturn .= '<div class="'.$strItemCss.'">
-                <div class="'.$strIconCss.'"><img src="/website/themes/'.$strTheme.'/images/icons/'.$strIcon.'" alt="'.$objFile->title.'" title="'.$objFile->title.'"/></div>
+                ' . $strIconFile . '
                 <div class="'.$strTitleCss.'">
                   <a href="/zoolu-website/media/document/'.$objFile->id.'/'.urlencode(str_replace('.', '-', $objFile->title)).'" target="_blank">'.$objFile->title.'</a>
                 </div>
@@ -1938,8 +1944,8 @@ class PageHelper {
             $strFields .= '
               <select id="'.$objField->code.'" name="'.$objField->code.'" size="1"'.$strMandatoryCssClass.'>
                 <option value="">'.$this->objTranslate->_('Please_choose', false).'</option>                
+                '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth) > 1 ORDER BY categoryTitles.title ASC').'
               </select>';
-            // '.HtmlOutput::getOptionsOfSQL($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idRootCategory = 268 AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC').'
             break;
             
           case 'message' :
@@ -2007,15 +2013,11 @@ class PageHelper {
           '.$strFields.'
           <div class="fieldLeft required">
             <span>'.$this->objTranslate->_('Fields_with_*_are_mandatory').'</span>  
-          </div>          
-          <div class="fieldRight buttonContainer">
-            <div class="buttonBox" onclick="myDefault.submitForm(\''.$strFormId.'\');">
-              <div class="left">&nbsp;</div>
-              <div class="center">'.$this->objTranslate->_('Send').'</div>
-              <div class="right">&nbsp;</div>
-              <div class="clear"></div>
-            </div>
-          </div>
+          </div>         
+          <div class="clear"></div>
+          <div class="submit" onclick="Web.submitForm(\'' . $strFormId . '\');">
+              <input type="submit" value="' . $this->objTranslate->_('Send') . '" />
+          </div> 
           <div class="clear"></div>
           <div class="legalNotes"><input type="checkbox" id="checkLegalnotes" name="checkLegalnotes"> <label for="checkLegalnotes">'.$this->objTranslate->_('LegalNotes', false).'</label></div>
           <input type="hidden" id="idRootLevels" name="idRootLevels" value="'.$intRootLevelId.'"/>
@@ -2026,6 +2028,8 @@ class PageHelper {
           <input type="hidden" id="sender_mail" name="sender_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('sender_mail')).'"/>
           <input type="hidden" id="receiver_name" name="receiver_name" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_name')).'"/>
           <input type="hidden" id="receiver_mail" name="receiver_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('receiver_mail')).'"/>
+          <input type="hidden" id="success_message_mail" name="success_message_mail" value="'.Crypt::encrypt($this->core, $this->core->config->crypt->key, $this->objPage->getFieldValue('success_message_mail')).'"/>
+                          
         </form>';  
     }
     

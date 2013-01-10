@@ -240,8 +240,9 @@ var Web = Web || {};
           if($(hiddenImages)){
             var images = $(hiddenImages).html();
             $(hiddenImages).remove();
-            if($(elementHide)) $('#showAll').hide();
-            $(images).insertAfter($('#showAll'));
+            if($(elementHide)) $(elementHide).hide();
+            $(images).insertAfter($(elementHide));
+            lightBox()
           }
         },
     });

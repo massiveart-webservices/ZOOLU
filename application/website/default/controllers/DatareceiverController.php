@@ -513,16 +513,21 @@ class DatareceiverController extends Zend_Controller_Action {
         $this->core->logger->debug('website->controllers->DatareceiverController->insertDatabase()');
 
         if(count($this->arrFormData) > 0){
-            if(isset($this->core->config->mail->database) && $this->core->config->mail->database != ''){
+            if(isset($this->core->config->mail->database->default) && $this->core->config->mail->database->default != ''){
+
+                $arrTableData = array();
+                $arrFormData = $this->arrFormData;
 
                 if($strDB != ''){
                     $objGenTable = $this->getModelGenericData()->getGenericTable($strDB);
                 }else{
-                    $objGenTable = $this->getModelGenericData()->getGenericTable($this->core->config->mail->database);
+                    if ($this->arrFormData['blnDynForm'] == 'true') {
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($this->core->config->mail->database->dynform);
+                    } else {
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($this->core->config->mail->database->default);
+                    }
                 }
 
-                $arrTableData = array();
-                $arrFormData = $this->arrFormData;
                 //Delete unneeded files
                 unset($arrFormData['receiver_mail']);
                 unset($arrFormData['receiver_name']);

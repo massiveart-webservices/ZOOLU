@@ -42,7 +42,10 @@
         </sendmail>
         <database>true</database>
       </actions>
-      <database>pageDynForm</database>
+      <database>
+        <default>pageRegistrations</default>
+        <dynform>pageDynForm</dynform>
+      </database>
     </mail>
     
     <rss>

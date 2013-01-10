@@ -236,7 +236,7 @@ a,a:hover{font-weight:bold;text-decoration:underline;color:#000;font-size:14px;}
 .gridContainer{display:none;}
 #divGrid12{position:absolute;width:940px;height:100%;z-index:1000;top:0;left:50%;margin:0 0 0 -470px;}
 .grid{position:absolute;z-index:1000;top:0;background:url(/website/themes/default/images/tmp/grid.png) 0 0;bottom:0;width:40px;height:100%;}
-#jquery-overlay{position:absolute;top:0;left:0;z-index:90;width:100%;height:500px;background:url("/website/themes/default/img/1pixelblue.png") repeat scroll 0 0 transparent !important;}
+#jquery-overlay{position:absolute;top:0;left:0;z-index:90;width:100%;height:500px;}
 #jquery-lightbox{position:absolute;top:0;left:0;width:100%;z-index:100;text-align:center;line-height:0;}
 #jquery-lightbox a img{border:none;}
 #lightbox-container-image-box{position:relative;background-color:#fff;width:250px;height:250px;margin:0 auto;}
