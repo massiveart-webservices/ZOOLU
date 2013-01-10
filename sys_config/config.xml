@@ -954,6 +954,7 @@
     <url_types>
       <page>1</page>
       <global>2</global>
+      <external>3</external>
     </url_types>
 
     <!-- FILTER TYPES-->
