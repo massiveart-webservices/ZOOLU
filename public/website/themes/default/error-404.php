@@ -7,7 +7,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Lech Zürs Tourismus am Arlberg</title>
+    <title>Zoolu 404</title>
 
     <meta name="publisher" content="MASSIVE ART WebServices GmbH" />
     <meta name="author" content="ZOOLU Default Theme" />
@@ -28,11 +28,11 @@
 
     <!-- SCREEN CSS -->
     <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/website/themes/default/css/style.css"/>
-    <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/website/themes/lechzuers&amp;f=lightbox/css/jquery.lightbox-0.5.css,css/bootstrap.css,js/datepicker/css/custom-theme/jquery-ui-1.8.23.custom.css"/>
-
+    <!-- <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/website/themes/lechzuers&amp;f=lightbox/css/jquery.lightbox-0.5.css,css/bootstrap.css,js/datepicker/css/custom-theme/jquery-ui-1.8.23.custom.css"/>
+-->
     <link rel="shortcut icon" href="<?php get_static_component_domain() ?>favicon.ico" type="image/x-icon"></link>
 
-    <script src="/website/themes/default/js/libs/modernizr-2.5.3.min.js"></script>
+    <script src="/website/themes/default/js/libs/modernizr-2.5.3.min.js?v=<?php echo getCoreObject()->sysConfig->version->js; ?>"></script>
 </head>
 
 <body>  

@@ -186,7 +186,7 @@ class Core
             $this->strLanguageCode = $this->sysConfig->languages->default->code;
         }
         
-        Zend_Session::setOptions(array('cookie_domain' => 'zoolu.area51.at'));
+        Zend_Session::setOptions(array('cookie_domain' => 'bazinga.at'));
         // set up zoolu translate obj
         $this->intZooluLanguageId = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageId : $this->intLanguageId;
         $this->strZooluLanguageCode = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageCode : $this->strLanguageCode;
