@@ -620,7 +620,7 @@ class Model_Urls
      */
     public function editUrl($intUrlId, $arrData)
     {
-        $this->core->logger->debug('core->models->Model_Urls->editUrl(' . $intUrlId . ', ' . $arrData . ')');
+        $this->core->logger->debug('core->models->Model_Urls->editUrl(' . $intUrlId . ')');
 
         try {
             $strWhere = $this->getUrlTable()->getAdapter()->quoteInto('id = ?', $intUrlId);
