@@ -329,6 +329,7 @@ class Core_LandingpageController extends AuthControllerAction
                 $intUrlId = $this->getRequest()->getParam('id');
                 $arrFormData = $this->getRequest()->getPost();
                 $intRootLevelId = $arrFormData['rootLevelId'];
+                $intLanguageId = $arrFormData['languageId'];
                 unset($arrFormData['rootLevelId']);
                 unset($arrFormData['languageId']);
                 $arrFormData['relationId'] = $arrFormData['sitemapLinkRelation_link'];
@@ -349,7 +350,8 @@ class Core_LandingpageController extends AuthControllerAction
                     $arrFormData['idParentTypes'] = $this->core->sysConfig->parent_types->rootlevel;
                 }
                 unset($arrFormData['sitemapLinkType_link']);
-                if ($this->objForm->isValid($arrFormData) && $this->checkUnqiueUrl($arrFormData['url'], $intRootLevelId, $intUrlId)) {
+                $blnUniqueLink = $this->checkUnqiueUrl($arrFormData['url'], $intRootLevelId, $intUrlId);
+                if ($this->objForm->isValid($arrFormData) && $blnUniqueLink) {
                     //Save and show list again
 
                     $this->getModelUrls()->editUrl($intUrlId, $arrFormData);
@@ -358,7 +360,14 @@ class Core_LandingpageController extends AuthControllerAction
                     $this->view->assign('blnShowFormAlert', true);
                 } else {
                     //Show Form with errors
+                    if (!$blnUniqueLink) {
+                        $this->objForm->getElement('url')->addError('URL already exists');
+                    }
                     $this->objForm->setAction('/zoolu/core/landingpage/edit');
+                    //Set required values
+                    $this->objForm->getElement('rootLevelId')->setValue($intRootLevelId);
+                    $this->objForm->getElement('languageId')->setValue($intLanguageId);
+                    $this->objForm->getElement('idParent')->setValue($arrFormData['idParent']);
                     $this->view->assign('blnShowFormAlert', false);
 
                     $this->initSitemap($arrFormData['relationId'], $arrFormData['idUrlTypes']);

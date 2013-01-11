@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-10 11:30+0100\n"
+"POT-Creation-Date: 2013-01-11 14:10+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,26 @@ msgstr "The meta description"
 #: application/zoolu/language/addon-language-keys.php:106
 msgid "Meta_title"
 msgstr "The meta title"
+
+#: application/zoolu/language/addon-language-keys.php:111
+msgid "targetpage"
+msgstr "Target page"
+
+#: application/zoolu/language/addon-language-keys.php:112
+msgid "url"
+msgstr "Landingpage URL"
+
+#: application/zoolu/language/addon-language-keys.php:113
+msgid "targetlanguage"
+msgstr "Language"
+
+#: application/zoolu/language/addon-language-keys.php:114
+msgid "redirect"
+msgstr "active redirect"
+
+#: application/zoolu/language/addon-language-keys.php:115
+msgid "changeUser"
+msgstr "Last change of"
 
 #: application/zoolu/modules/cms/views/helpers/NavigationHelper.php:105
 #: application/zoolu/modules/global/controllers/ElementController.php:554
@@ -952,20 +972,20 @@ msgstr "External page"
 msgid "General_information_landingpage"
 msgstr "General information for configure a landing page"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:183
-#: application/zoolu/modules/core/controllers/LandingpageController.php:437
+#: application/zoolu/modules/core/controllers/LandingpageController.php:184
+#: application/zoolu/modules/core/controllers/LandingpageController.php:467
 #: application/zoolu/layouts/newsletters-list.phtml:392
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:145
 msgid "Link"
 msgstr "Link"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:210
-#: application/zoolu/modules/core/controllers/LandingpageController.php:254
+#: application/zoolu/modules/core/controllers/LandingpageController.php:212
+#: application/zoolu/modules/core/controllers/LandingpageController.php:265
 msgid "New_Landingpage"
 msgstr "New Landingpage"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:296
-#: application/zoolu/modules/core/controllers/LandingpageController.php:346
+#: application/zoolu/modules/core/controllers/LandingpageController.php:309
+#: application/zoolu/modules/core/controllers/LandingpageController.php:376
 msgid "Edit_Landingpage"
 msgstr "Edit Landingpage"
 
@@ -2165,18 +2185,6 @@ msgstr "Details"
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:141
 msgid "Click"
 msgstr "Click"
-
-#~ msgid "targetpage"
-#~ msgstr "Target page"
-
-#~ msgid "url"
-#~ msgstr "Landingpage URL"
-
-#~ msgid "redirect"
-#~ msgstr "active redirect"
-
-#~ msgid "changeUser"
-#~ msgstr "Last change of"
 
 #~ msgid "Publish"
 #~ msgstr "Publish"
