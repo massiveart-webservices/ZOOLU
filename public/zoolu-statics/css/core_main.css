@@ -297,7 +297,8 @@ Content List View */
 .rowusername,
 .rowcompany,
 .rowcountry,
-.rowtags {
+.rowtags,
+.rowdownloadcounter {
     height: 30px;
     padding: 0 11px 0 11px;
 }
