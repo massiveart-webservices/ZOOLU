@@ -165,7 +165,8 @@ Massiveart.Folder = Class.create({
   updateFolderSecurity: function(){
         
     if($('folderSecurityForm')){
-      
+
+      $$('#overlayGenContent #buttonsave')[0].addClassName('busy');
       myCore.addBusyClass(myForm.updateOverlayContainer);
       
       /**
@@ -177,7 +178,7 @@ Massiveart.Folder = Class.create({
         parameters: serializedForm,
         evalScripts: true,
         onComplete: function() {         
-          myCore.removeBusyClass(myForm.updateOverlayContainer);
+          $$('#overlayGenContent #buttonsave')[0].removeClassName('busy');
         }.bind(this)
       });
     }
