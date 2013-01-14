@@ -179,6 +179,7 @@ Massiveart.Folder = Class.create({
         evalScripts: true,
         onComplete: function() {         
           $$('#overlayGenContent #buttonsave')[0].removeClassName('busy');
+          myOverlay.close('overlayGenContentWrapper');
         }.bind(this)
       });
     }
