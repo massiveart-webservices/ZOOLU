@@ -189,7 +189,8 @@ Content List View */
 
 .topauthor,
 .topeditor,
-.topcreator {
+.topcreator,
+.topdownloadcounter {
     width: 160px;
     background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
     height: 26px;
