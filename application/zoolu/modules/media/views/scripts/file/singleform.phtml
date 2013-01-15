@@ -19,7 +19,7 @@ $objHelper = new ViewHelper();
     <input type="hidden" id="mediaFormLanguageId" value="<?php echo $this->languageId; ?>" name="languageId"/>
 
     <div id="overlayMediaWrapper" class="mediawrapper">
-        <?php echo $objHelper->getSingleEditForm($this->objFile, $this->imagesSizes, $this->destinationOptions, $this->groupOptions, $this->objFileVersions, $this->authorizedUpdate, $this->arrFileFilters); ?>
+        <?php echo $objHelper->getSingleEditForm($this->objFile->current(), $this->imagesSizes, $this->destinationOptions, $this->groupOptions, $this->objFileVersions, $this->authorizedUpdate, $this->arrFileFilters); ?>
         <input type="hidden" name="FileIds" id="EditFileIds" value="<?php echo $this->intFileId; ?>"/>
         <input type="hidden" name="IsSingleEdit" id="EditIsSingleEdit" value="true"/>
     </div>
@@ -28,7 +28,7 @@ $objHelper = new ViewHelper();
         <a href="#" onclick="myDashboard.getSendToDashboard(); return false;"><?php echo $this->translate->_('Send_to_dashboard'); ?></a>
     </div>
     <?php if ($this->authorizedUpdate == true): ?>
-    <div onclick="myMedia.editFiles();" class="buttoneditsave" id="btnSingleEditSubmit">
+    <div onclick="myMedia.editFiles();" class="buttoneditsave" id="btnMediaEditSubmit">
         <div class="button25leftOn"></div>
         <div class="button25centerOn">
             <img width="13" height="13" src="/zoolu-statics/images/icons/icon_save_black.png" class="iconsave"/>

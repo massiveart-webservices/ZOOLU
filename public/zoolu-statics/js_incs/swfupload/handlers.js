@@ -228,11 +228,12 @@ function queueComplete(numFilesUploaded) {
  *------------------------------*/
 
 function singleSWFUploadLoaded() {
-  $('btnSingleEditSubmit').onclick = doSubmit;  
+  if($('btnMediaEditSubmit')) $('btnMediaEditSubmit').onclick = doSubmit;
+  if($('buttoneditsave')) $('buttoneditsave').onclick = doSubmit;
 }
 
 // Called by the submit button to start the upload
-function doSubmit(e) {    
+function doSubmit(e) {
   e = e || window.event;
   if (e.stopPropagation) {
     e.stopPropagation();
@@ -240,12 +241,9 @@ function doSubmit(e) {
   e.cancelBubble = true;
   
   try {
-    var stats = swfu.getStats();
-    if(stats.files_queued > 0){
-      swfu.startUpload();
-    }else{
-      myMedia.editFiles(true);
-    }
+    swfu.each(function(element){
+      element.startUpload();
+    });
   } catch (ex) { }
   
   return false;
@@ -254,14 +252,21 @@ function doSubmit(e) {
  // Called by the queue complete handler to submit the form
 function singleUploadDone() {
   try {
-    myMedia.editFiles(true);
+    var count = 0;
+    swfu.each(function(element){
+      count += element.getStats().files_queued;
+      console.log(element.getStats());
+    });
+    if(count == 0) {
+      myMedia.editFiles(true);
+    }
   } catch (ex) {
     alert("Error submitting form");
   }
 }
 
 function singleFileDialogStart() {
-  $('txtFileName').value = '';
+  $(this.customSettings.filename_placeholder_id).value = '';
   this.cancelUpload();
 }
 
@@ -294,7 +299,7 @@ function singleFileQueueError(file, errorCode, message)  {
 
 function singleFileQueued(file) {
   try {
-    var txtFileName = document.getElementById("txtFileName");
+    var txtFileName = document.getElementById(this.customSettings.filename_placeholder_id);
     txtFileName.value = file.name;
   } catch (e) { }
 }
@@ -305,16 +310,20 @@ function singleUploadProgress(file, bytesLoaded, bytesTotal) {
   try {
     var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
 
-    file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+    //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setProgress(percent, "progressContainer");
     progress.setStatus("Uploading...");
+
+    if (this.customSettings.progress_target == 'fsUploadProgress13') {
+      console.log(progress);
+    }
   } catch (e) { }
 }
 
 function singleUploadSuccess(file, serverData) {
   try {
-    file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+    //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setComplete();
     progress.setStatus("Complete.");
@@ -334,13 +343,13 @@ function singleUploadComplete(file) {
       //this.setButtonDisabled(true);
       singleUploadDone();
     } else {
-      file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+      //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
       var progress = new FileProgress(file, this.customSettings.progress_target);
       progress.setError();
       progress.setStatus("File rejected");
       progress.toggleCancel(false);
       
-      var txtFileName = document.getElementById("txtFileName");
+      var txtFileName = document.getElementById(this.customSettings.filename_placeholder_id);
       txtFileName.value = "";
       
       alert("There was a problem with the upload.\nThe server did not accept it.");
@@ -356,7 +365,7 @@ function singleUploadError(file, errorCode, message) {
       return;
     }
     
-    var txtFileName = document.getElementById("txtFileName");
+    var txtFileName = document.getElementById(this.customSettings.filename_placeholder_id);
     txtFileName.value = "";
     validateForm();
     
@@ -379,7 +388,7 @@ function singleUploadError(file, errorCode, message) {
       return;
     }
 
-    file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
+    //file.id = "singlefile"; // This makes it so FileProgress only makes a single UI element, instead of one for each file
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setError();
     progress.toggleCancel(false);
