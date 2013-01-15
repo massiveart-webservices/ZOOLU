@@ -2262,7 +2262,7 @@ Massiveart.Form = Class.create({
     this.updateSnippetPreviewTitle();
     this.updateSnippetPreviewDesc();
     this.updateSnippetPreviewUrl();
-
+    
     $('articletitle').observe('keyup', function(event){
         myForm.updateSnippetPreviewTitle();
     });
@@ -2286,7 +2286,9 @@ Massiveart.Form = Class.create({
 
     var title = this.cleanText( $('seo_title').getValue() );
     if( title == '' ) {
-        title = this.cleanText( $('articletitle').getValue() );
+        if ($('articletitle')) {
+            title = this.cleanText( $('articletitle').getValue() );
+        }
     }
 
     if( title == '' ) {
@@ -2307,7 +2309,9 @@ Massiveart.Form = Class.create({
     var desc = this.cleanText( $('seo_description').getValue() );
 
     if( desc == '' ) {
-        desc = this.cleanText( $('shortdescription').getValue() );
+        if ($('shortdescription')) {
+            desc = this.cleanText( $('shortdescription').getValue() );
+        }
     }
 
     if( desc.length > 170 ) {
