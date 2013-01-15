@@ -1628,7 +1628,8 @@ Massiveart.Form = Class.create({
    */
   updateMediaDisplaySize: function(elementId, size){
     if($(elementId)){
-      obj = $F(elementId).evalJSON();
+      val = $F(elementId).replace(/\'/g, '"');
+      obj = val.evalJSON();
       obj.size = size;
       this.updateMediaDisplayOption(elementId, obj);
     }
@@ -1639,7 +1640,8 @@ Massiveart.Form = Class.create({
    */
   updateMediaDisplayPosition: function(elementId, position){
     if($(elementId)){
-      obj = $F(elementId).evalJSON();
+      val = $F(elementId).replace(/\'/g, '"');
+      obj = val.evalJSON();
       
       if($(elementId+'_'+obj.position)){
         $(elementId+'_'+obj.position).setStyle({backgroundImage: $(elementId+'_'+obj.position).getStyle('backgroundImage').replace('selected', 'active') }); 
