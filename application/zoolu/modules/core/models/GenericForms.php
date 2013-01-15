@@ -83,6 +83,22 @@ class Model_GenericForms
     }
 
     /**
+     * load
+     * @param $intElementId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function load($intElementId) {
+        $this->core->logger->debug('core->models->GenericForms->load('.$intElementId.')');
+
+        $objSelect = $this->getGenericFormTable()->select()->setIntegrityCheck(false);
+        $objSelect->from('genericForms', array('id', 'genericFormId', 'version'));
+        $objSelect->where('id = ?', $intElementId);
+        return $this->getGenericFormTable()->fetchAll($objSelect);
+    }
+
+    /**
      * loadForm
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @param string $strGenFormId, integer $intActionType, integer $intGenFormVersion

@@ -108,9 +108,30 @@ class Model_Folders extends ModelAbstract
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('folders', array('id', 'folderId', 'relationId' => 'folderId', 'idSegments', 'idRootLevels', 'version'));
-        $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = ' . $this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
+        $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = ' . $this->intLanguageId, array('idGenericForms', 'idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
+        $objSelect->joinLeft('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
         $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = folderProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
         $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = folderProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
+        $objSelect->where('folders.id = ?', $intElementId);
+
+        return $this->getFolderTable()->fetchAll($objSelect);
+    }
+
+    /**
+     * Loads all the languages in which the folder with the given id exists
+     * @param $intElementId The id of the folder
+     * @return Zend_Db_Table_Select
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadLanguages($intElementId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadLanguages('.$intElementId.')');
+
+        $objSelect = $this->getFolderTable()->select()->setIntegrityCheck(false);
+        $objSelect->from($this->getFolderTable(), array());
+        $objSelect->join('folderTitles', 'folderTitles.folderId = folders.folderId', array('idLanguages'));
+        $objSelect->where('idLanguages != ?', 0);
         $objSelect->where('folders.id = ?', $intElementId);
 
         return $this->getFolderTable()->fetchAll($objSelect);
