@@ -872,15 +872,11 @@ class Global_ElementController extends AuthControllerAction
             $this->objRequest->setParam('backLink', $this->objRequest->getParam('backLink', false));
             $strGroupKey = $this->objRequest->getParam('rootLevelGroupKey');
             $strGroupKeyStartpage = 'startpage_' . $strGroupKey;
-<<<<<<< HEAD
-=======
-
             $strStartpageTypeId = '';
             if (isset($this->core->sysConfig->global_types->$strGroupKeyStartpage)) {
                 $strStartpageTypeId = $this->core->sysConfig->global_types->$strGroupKeyStartpage->id;
             }
 
->>>>>>> a82c0a5... added url layout tree & short; some minor bugfixes
             $strGroupKeyLink = $strGroupKey . '_link';
             $strGroupKeyOverview = $strGroupKey . '_overview';
             if ($this->objRequest->getParam('elementTypeId') != '' && $this->objRequest->getParam('elementTypeId') > 0) {
@@ -895,12 +891,7 @@ class Global_ElementController extends AuthControllerAction
                             $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKey->default_templateId);
                         }
                         break;
-<<<<<<< HEAD
-                    case $this->core->sysConfig->global_types->$strGroupKeyStartpage->id :                        
-=======
-
                     case $strStartpageTypeId:
->>>>>>> a82c0a5... added url layout tree & short; some minor bugfixes
                         $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKeyStartpage->default_templateId);
                         $this->objRequest->setParam('formId', '');
                         break;

@@ -1818,6 +1818,7 @@ class Model_Folders extends ModelAbstract
     public function loadGlobalParentFolders($intFolderId, $intRootLevelGroupId = 0)
     {
         $this->core->logger->debug('core->models->Folders->loadGlobalParentFolders(' . $intFolderId . ',' . $intRootLevelGroupId . ')');
+        $this->core->logger->debug('core->models->Folders->loadGlobalParentFolders Language : ' . $this->intLanguageId . ')');
 
         $objSelect = $this->getFolderTable()->select();
         $objSelect->setIntegrityCheck(false);

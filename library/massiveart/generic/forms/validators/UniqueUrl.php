@@ -138,8 +138,11 @@ class Form_Validator_UniqueUrl extends Form_Validator_Abstract
             $resourceLocator->setPrefix($this->getParentUrl($this->Setup()->getParentId()));
         }
 
-        $resourceLocator->setPath(str_replace($resourceLocator->getPrefix(), '', $pathWithoutLanguage));
-
+        if ($this->core->config->url_layout == UniformResourceLocator::LAYOUT_TREE) {
+            $resourceLocator->setPath(str_replace($resourceLocator->getPrefix(), '', $pathWithoutLanguage));
+        } else {
+            $resourceLocator->setPath($pathWithoutLanguage);
+        }
         //Check if the url existed and has changed
         if (isset($objItemData) && count($objItemData) > 0) {
             $objItem = $objItemData->current();
