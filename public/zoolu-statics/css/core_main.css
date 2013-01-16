@@ -692,7 +692,8 @@ td.contentright {
 
 .busy.propertywrapper div,
 .busy.propertywrapper span,
-#buttonOk.busy div {
+#buttonOk.busy div,
+#buttonsave.busy div {
     visibility: hidden;
 }
 

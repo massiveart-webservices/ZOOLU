@@ -725,7 +725,7 @@ class IndexController extends WebControllerAction
             //check if language not contained in uri
             if (!preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)) {
                 //add langauge if not in uri
-                $strRedirectUri = '/' . $strRedirectLanguage . '/' . $strUrl;         
+                $strRedirectUri = $this->getPrefix() . '/' . $strRedirectLanguage . '/' . $strUrl;         
             }
             if ($strRedirectUri != $strUri || $strRedirectDomain != $strDomain || $strRedirectLanguage != $this->strLanguageCode) {
                 $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $this->core->getMainDomain($strDomain) . $strRedirectUri;

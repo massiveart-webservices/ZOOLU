@@ -6784,7 +6784,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     try {
       document.documentElement.doScroll('left');
     } catch (e) {
-      TIMER = pollDoScroll.defer();
+      TIMER = pollDoScroll.delay(0.01); // MASSIVE ART FIX FOR USING WITH EXT JS
       return;
     }
 
@@ -6795,7 +6795,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
   } else {
     document.attachEvent('onreadystatechange', checkReadyState);
-    if (window == top) TIMER = pollDoScroll.defer();
+    if (window == top) TIMER = pollDoScroll.delay(0.01); // MASSIVE ART FIX FOR USING WITH EXT JS
   }
 
   Event.observe(window, 'load', fireContentLoadedEvent);
