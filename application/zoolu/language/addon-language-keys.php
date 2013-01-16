@@ -104,4 +104,13 @@ $core->translate->_('work');
  */
 $core->translate->_('Meta_description');
 $core->translate->_('Meta_title');
+
+/*
+ * landing pages
+ */
+$core->translate->_('targetpage');
+$core->translate->_('url');
+$core->translate->_('targetlanguage');
+$core->translate->_('redirect');
+$core->translate->_('changeUser');
 ?>

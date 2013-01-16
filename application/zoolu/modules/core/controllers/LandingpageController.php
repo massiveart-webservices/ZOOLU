@@ -137,6 +137,7 @@ class Core_LandingpageController extends AuthControllerAction
         }
 
         $this->objForm->addElement('text', 'url', array('label' => $this->core->translate->_('Landingpage_url', false), 'description' => $this->core->translate->_('Landingpage_url_desc', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text', 'required' => true));
+        $this->objForm->addElement('text', 'external', array('label' => $this->core->translate->_('External_url', false), 'description' => $this->core->translate->_('External_url_desc', false), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'text'));
         $this->objForm->addElement('sitemapLink', 'link', array('label' => $this->core->translate->_('Landingpage_link', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'text'));
         $this->objForm->addElement('select', 'idLanguages', array('label' => $this->core->translate->_('Landingpage_language', false), 'description' => $this->core->translate->_('Landingpage_language_desc'), 'decorators' => array('Input'), 'columns' => 3, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrLanguageOptions));
         $this->objForm->addElement('checkbox', 'isMain', array('decorators' => array('Input'), 'columns' => 12, 'class' => 'checkbox', 'label' => $this->core->translate->_('Landingpage_redirect', false), 'description' => $this->core->translate->_('Landingpage_redirect_desc')));
@@ -144,6 +145,10 @@ class Core_LandingpageController extends AuthControllerAction
         $this->objForm->addDisplayGroup(array('link'), 'link-group');
         $this->objForm->getDisplayGroup('link-group')->setLegend($this->core->translate->_('Contentpage', false));
         $this->objForm->getDisplayGroup('link-group')->setDecorators(array('FormElements', 'Region'));
+
+        $this->objForm->addDisplayGroup(array('external'), 'external-group');
+        $this->objForm->getDisplayGroup('external-group')->setLegend($this->core->translate->_('External_page', false));
+        $this->objForm->getDisplayGroup('external-group')->setDecorators(array('FormElements', 'Region'));
 
         $this->objForm->addDisplayGroup(array('url', 'isMain', 'idLanguages'), 'main-group');
         $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information_landingpage', false));
@@ -166,26 +171,28 @@ class Core_LandingpageController extends AuthControllerAction
         }
 
         $objLinkedElement = null;
-        if ($strType == 'page') {
-            $objLinkedElement = $this->getModelPages()->loadByPageId($strRelationId);
-        } elseif ($strType == 'global') {
-            $objLinkedElement = $this->getModelGlobals()->loadLinkByGlobalId($strRelationId);
+        if (!empty($strRelationId)) {
+            if ($strType == 'page') {
+                $objLinkedElement = $this->getModelPages()->loadByPageId($strRelationId);
+            } elseif ($strType == 'global') {
+                $objLinkedElement = $this->getModelGlobals()->loadLinkByGlobalId($strRelationId);
+            }
+
+            $arrData = $this->buildSitemapFieldData($objLinkedElement->current()->id, $strType);
+
+            $this->objForm->getElement('link')->setOptions(array(
+                'label' => $this->core->translate->_('Link', false),
+                'decorators' => array('Input'),
+                'columns' => 12,
+                'class' => 'text',
+                'strLinkedPageBreadcrumb' => ltrim($arrData['breadcrumb'], ' » ') . ' » ',
+                'strLinkedPageTitle' => $arrData['title'],
+                'strLinkedPageUrl' => $arrData['url'],
+                'intParentId' => $arrData['parentId'],
+                'relationId' => $arrData['relationId'],
+                'strType' => $strType
+            ));
         }
-
-        $arrData = $this->buildSitemapFieldData($objLinkedElement->current()->id, $strType);
-
-        $this->objForm->getElement('link')->setOptions(array(
-                                                            'label'                   => $this->core->translate->_('Link', false),
-                                                            'decorators'              => array('Input'),
-                                                            'columns'                 => 12,
-                                                            'class'                   => 'text',
-                                                            'strLinkedPageBreadcrumb' => ltrim($arrData['breadcrumb'], ' » ') . ' » ',
-                                                            'strLinkedPageTitle'      => $arrData['title'],
-                                                            'strLinkedPageUrl'        => $arrData['url'],
-                                                            'intParentId'             => $arrData['parentId'],
-                                                            'relationId'              => $arrData['relationId'],
-                                                            'strType'                 => $strType
-                                                       ));
     }
 
     /**
@@ -227,6 +234,15 @@ class Core_LandingpageController extends AuthControllerAction
                     $arrFormData['idParent'] = $arrFormData['sitemapLinkParent_link'];
                 } else {
                     $arrFormData['idParent'] = null;
+                }
+                //Apply url type
+                if (isset($arrFormData['sitemapLinkType_link']) && $arrFormData['sitemapLinkType_link'] != '') {
+                    $arrFormData['idUrlTypes'] = $this->core->sysConfig->url_types->$arrFormData['sitemapLinkType_link'];
+                } else {
+                    //FIXME Not a very nice solution
+                    $arrFormData['idUrlTypes'] = $this->core->sysConfig->url_types->external;
+                    $arrFormData['idParent'] = $intRootLevelId;
+                    $arrFormData['idParentTypes'] = $this->core->sysConfig->parent_types->rootlevel;
                 }
                 unset($arrFormData['sitemapLinkType_link']);
                 unset($arrFormData['sitemapLinkParent_link']);
@@ -281,7 +297,9 @@ class Core_LandingpageController extends AuthControllerAction
 
             $this->objForm->getElement('idLanguages')->setValue($objLandingPage->idLanguages);
 
-            $this->initSitemap($objLandingPage->relationId, $objLandingPage->idUrlTypes);
+            if (isset($objLandingPage->relationId) && $objLandingPage->relationId != '') {
+                $this->initSitemap($objLandingPage->relationId, $objLandingPage->idUrlTypes, $objLandingPage->idParent);
+            }
 
             $objRootLevelUrl = $this->getModelRootLevels()->loadRootLevelUrl($this->getRequest()->getParam('rootLevelId'));
 
@@ -297,7 +315,7 @@ class Core_LandingpageController extends AuthControllerAction
     }
 
     /**
-     * editformAction
+     * editAction
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
@@ -311,6 +329,7 @@ class Core_LandingpageController extends AuthControllerAction
                 $intUrlId = $this->getRequest()->getParam('id');
                 $arrFormData = $this->getRequest()->getPost();
                 $intRootLevelId = $arrFormData['rootLevelId'];
+                $intLanguageId = $arrFormData['languageId'];
                 unset($arrFormData['rootLevelId']);
                 unset($arrFormData['languageId']);
                 $arrFormData['relationId'] = $arrFormData['sitemapLinkRelation_link'];
@@ -321,9 +340,18 @@ class Core_LandingpageController extends AuthControllerAction
                     $arrFormData['idParent'] = null;
                 }
                 unset($arrFormData['sitemapLinkParent_link']);
-                $arrFormData['idUrlTypes'] = $this->core->sysConfig->url_types->$arrFormData['sitemapLinkType_link'];
+                //Apply url type
+                if (isset($arrFormData['sitemapLinkType_link']) && $arrFormData['sitemapLinkType_link'] != '') {
+                    $arrFormData['idUrlTypes'] = $this->core->sysConfig->url_types->$arrFormData['sitemapLinkType_link'];
+                } else {
+                    //FIXME Not a very nice solution
+                    $arrFormData['idUrlTypes'] = $this->core->sysConfig->url_types->external;
+                    $arrFormData['idParent'] = $intRootLevelId;
+                    $arrFormData['idParentTypes'] = $this->core->sysConfig->parent_types->rootlevel;
+                }
                 unset($arrFormData['sitemapLinkType_link']);
-                if ($this->objForm->isValid($arrFormData) && $this->checkUnqiueUrl($arrFormData['url'], $intRootLevelId, $intUrlId)) {
+                $blnUniqueLink = $this->checkUnqiueUrl($arrFormData['url'], $intRootLevelId, $intUrlId);
+                if ($this->objForm->isValid($arrFormData) && $blnUniqueLink) {
                     //Save and show list again
 
                     $this->getModelUrls()->editUrl($intUrlId, $arrFormData);
@@ -332,7 +360,14 @@ class Core_LandingpageController extends AuthControllerAction
                     $this->view->assign('blnShowFormAlert', true);
                 } else {
                     //Show Form with errors
+                    if (!$blnUniqueLink) {
+                        $this->objForm->getElement('url')->addError('URL already exists');
+                    }
                     $this->objForm->setAction('/zoolu/core/landingpage/edit');
+                    //Set required values
+                    $this->objForm->getElement('rootLevelId')->setValue($intRootLevelId);
+                    $this->objForm->getElement('languageId')->setValue($intLanguageId);
+                    $this->objForm->getElement('idParent')->setValue($arrFormData['idParent']);
                     $this->view->assign('blnShowFormAlert', false);
 
                     $this->initSitemap($arrFormData['relationId'], $arrFormData['idUrlTypes']);
@@ -399,7 +434,7 @@ class Core_LandingpageController extends AuthControllerAction
 
         $objAdapter = new Zend_Paginator_Adapter_DbTableSelect($objSelect);
         $objLandingPagesPaginator = new Zend_Paginator($objAdapter);
-        $objLandingPagesPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
+        $objLandingPagesPaginator->setItemCountPerPage((int)$this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
         $objLandingPagesPaginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
         $objLandingPagesPaginator->setView($this->view);
 
@@ -429,17 +464,17 @@ class Core_LandingpageController extends AuthControllerAction
         $objElement = new Form_Element_SitemapLink($strFieldId);
         $objElement->addPrefixPath('Form_Decorator', GLOBAL_ROOT_PATH . 'library/massiveart/generic/forms/decorators/', 'decorator');
         $objElement->setOptions(array(
-                                     'label'                   => $this->core->translate->_('Link', false),
-                                     'decorators'              => array('Input'),
-                                     'columns'                 => 12,
-                                     'class'                   => 'text',
-                                     'strLinkedPageBreadcrumb' => ltrim($arrData['breadcrumb'], ' » ') . ' » ',
-                                     'strLinkedPageTitle'      => $arrData['title'],
-                                     'strLinkedPageUrl'        => $arrData['url'],
-                                     'intParentId'             => $arrData['parentId'],
-                                     'relationId'              => $arrData['relationId'],
-                                     'strType'                 => $strType
-                                ));
+            'label' => $this->core->translate->_('Link', false),
+            'decorators' => array('Input'),
+            'columns' => 12,
+            'class' => 'text',
+            'strLinkedPageBreadcrumb' => ltrim($arrData['breadcrumb'], ' » ') . ' » ',
+            'strLinkedPageTitle' => $arrData['title'],
+            'strLinkedPageUrl' => $arrData['url'],
+            'intParentId' => $arrData['parentId'],
+            'relationId' => $arrData['relationId'],
+            'strType' => $strType
+        ));
 
         $objDecorator = $objElement->getDecorator('Input');
         $objDecorator->setElement($objElement);
