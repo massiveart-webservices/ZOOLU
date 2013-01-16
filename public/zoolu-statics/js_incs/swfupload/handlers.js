@@ -234,16 +234,25 @@ function singleSWFUploadLoaded() {
 
 // Called by the submit button to start the upload
 function doSubmit(e) {
+    console.log('doSubmit');
   e = e || window.event;
   if (e.stopPropagation) {
     e.stopPropagation();
   }
   e.cancelBubble = true;
-  
+
+    console.log('before try');
   try {
+    var count = 0;
+    console.log('before each');
     swfu.each(function(element){
+      count += element.getStats().files_queued;
       element.startUpload();
     });
+      console.log('count: ' + count);
+    if(count == 0) {
+      myMedia.editFiles();
+    }
   } catch (ex) { }
   
   return false;
