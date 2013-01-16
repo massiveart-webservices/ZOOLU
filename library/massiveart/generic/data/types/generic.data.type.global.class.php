@@ -250,6 +250,9 @@ class GenericDataTypeGlobal extends GenericDataTypeAbstract
                 if ($objGlobal->isStartGlobal != null) $this->setup->setIsStartElement($objGlobal->isStartGlobal);
                 if ($objGlobal->idParentTypes != null) $this->setup->setParentTypeId($objGlobal->idParentTypes);
 
+                // Fixed to language definition folder
+                $this->setup->setLanguageDefinitionType($this->core->config->language_definition->folder);
+
                 parent::loadGenericData('global', array('Id' => $objGlobal->globalId, 'Version' => $objGlobal->version));
 
                 /**

@@ -582,6 +582,56 @@ class Model_Urls
     }
 
     /**
+     * deleteUrlsByRootLevelIdAndLanguage
+     * @param number $intRootLevelId
+     * @param number $intLanguagesId
+     * @return number
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteUrlsByRootLevelIdAndLanguage($intRootLevelId, $intLanguagesId)
+    {
+        $this->core->logger->debug('core->models->Model_Urls->deleteUrlsByRootLevelId');
+
+        $objRootLevels = $this->getModelRootLevels()->loadRootLevelById($intRootLevelId);
+        if (count($objRootLevels) > 0) {
+            $objRootLevel = $objRootLevels->current();
+
+            $objSubSelect = $this->core->dbh->select();
+            switch ($objRootLevel->idRootLevelTypes) {
+                case $this->core->sysConfig->root_level_types->portals:
+                    $objPageSelect = $this->core->dbh->select();
+                    $objPageSelect->from('pages', array('relationId' => 'pageId'))
+                        ->join('folders', 'folders.id = pages.idParent', array())
+                        ->where('folders.idRootLevels = ?', $intRootLevelId)
+                        ->where('idParentTypes = ?', $this->core->sysConfig->parent_types->folder);
+
+                    $objRootPageSelect = $this->core->dbh->select();
+                    $objRootPageSelect->from('pages', array('relationId' => 'pageId'))
+                        ->where('idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel)
+                        ->where('idParent = ?', $intRootLevelId);
+                    $objSubSelect->union(array($objPageSelect, $objRootPageSelect));
+                    break;
+                case $this->core->sysConfig->root_level_types->global:
+                    $objGlobalSelect = $this->core->dbh->select();
+                    $objGlobalSelect->from('globals', array('relationId' => 'globalId'))
+                        ->join('folders', 'folders.id = globals.idParent', array())
+                        ->where('folders.idRootLevels = ?', $intRootLevelId)
+                        ->where('idParentTypes = ?', $this->core->sysConfig->parent_types->folder);
+
+                    $objRootGlobalSelect = $this->core->dbh->select();
+                    $objRootGlobalSelect->from('globals', array('relationId' => 'globalId'))
+                        ->where('idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel)
+                        ->where('idParent = ?', $intRootLevelId);
+                    $objSubSelect->union(array($objGlobalSelect, $objRootGlobalSelect));
+                    break;
+            }
+            $strSelect = new Zend_Db_Expr($objSubSelect);
+            return $this->getUrlTable()->delete('relationId IN (' . $strSelect . ') AND idLanguages = ' . $intLanguagesId);
+        }
+    }
+    
+    /**
      * Adds a new URL to the system
      * @param The data of the URL $arrData
      * @return int The id of the added row in the database
