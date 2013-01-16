@@ -234,22 +234,18 @@ function singleSWFUploadLoaded() {
 
 // Called by the submit button to start the upload
 function doSubmit(e) {
-    console.log('doSubmit');
   e = e || window.event;
   if (e.stopPropagation) {
     e.stopPropagation();
   }
   e.cancelBubble = true;
 
-    console.log('before try');
   try {
     var count = 0;
-    console.log('before each');
     swfu.each(function(element){
       count += element.getStats().files_queued;
       element.startUpload();
     });
-      console.log('count: ' + count);
     if(count == 0) {
       myMedia.editFiles();
     }
@@ -264,7 +260,6 @@ function singleUploadDone() {
     var count = 0;
     swfu.each(function(element){
       count += element.getStats().files_queued;
-      console.log(element.getStats());
     });
     if(count == 0) {
       myMedia.editFiles(true);
@@ -323,10 +318,6 @@ function singleUploadProgress(file, bytesLoaded, bytesTotal) {
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setProgress(percent, "progressContainer");
     progress.setStatus("Uploading...");
-
-    if (this.customSettings.progress_target == 'fsUploadProgress13') {
-      console.log(progress);
-    }
   } catch (e) { }
 }
 
