@@ -497,7 +497,7 @@ Effect.Highlight = Class.create(Effect.Base, {
     this._delta = $R(0,2).map(function(i){ return parseInt(this.options.endcolor.slice(i*2+1,i*2+3),16)-this._base[i] }.bind(this));
   },
   update: function(position) {
-    this.element.setStyle({backgroundColor: $R(0,2).inject('#',function(m,v,i){
+      this.element.setStyle({backgroundColor: [0,1,2].inject('#',function(m,v,i){ // MASSIVE ART FIX: https://prototype.lighthouseapp.com/projects/8886/tickets/1379-scriptaculous-effecthighlight-no-longer-works-with-prototype-171
       return m+((this._base[i]+(this._delta[i]*position)).round().toColorPart()); }.bind(this)) });
   },
   finish: function() {
