@@ -37,6 +37,13 @@ define('APPLICATION_ENV', 'development');
  */
 require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 require_once GLOBAL_ROOT_PATH . 'library/massiveart/generic/forms/validators/UniqueUrl.php';
+
+//
+// update before running script
+// UPDATE `pages` SET `sortPosition` = 0 WHERE `isStartPage` = 1;
+// UPDATE `globals` SET `sortPosition` = 0 WHERE `isStartGlobal` = 1 AND `sortPosition` = 999999;
+//
+
 try {
     //Load Options
     $objOpts = new Zend_Console_Getopt(
@@ -134,16 +141,19 @@ try {
                 }
             }
         }
+
         //Output
         $strOutput = '';
         for ($i = 0; $i < ($objOpts->level * 2); $i++) {
             $strOutput .= "-";
         }
+
         if ($blnUnique) {
             $strOutput .= $strTitle;
         } else {
             $strOutput .= $strTitle . ': No unique URL found!';
         }
+
         $this->core->logger->info($strOutput);
         unset($validator);
     }

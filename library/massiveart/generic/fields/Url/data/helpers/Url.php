@@ -47,9 +47,8 @@ require_once(dirname(__FILE__) . '/../../../../data/helpers/Abstract.php');
 
 class GenericDataHelper_Url extends GenericDataHelperAbstract
 {
-
     /**
-     * @var Model_Pages|Model_Products
+     * @var Model_Pages|Model_Globals
      */
     private $objModel;
 
@@ -74,14 +73,14 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
     private $objModelUtilities;
 
     /**
-     * @var Zend_Db_Table_Rowset_Abstract
+     * @var string
      */
-    private $objPathReplacers;
+    private $strUrl;
 
     /**
      * @var string
      */
-    private $strUrl;
+    private $strUrlPrefix;
 
     /**
      * @var string
@@ -93,7 +92,7 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
      * @param integer $intElementId
      * @param string $strType
      * @param string $strElementId
-     * @param integet $intVersion
+     * @param int $intVersion
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -104,73 +103,82 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
              * fix for saving products in "All Products" View 
              */
             if (!isset($_POST[$this->objElement->name . '_PreventSaving']) || $_POST[$this->objElement->name . '_PreventSaving'] != 'true') {
-            
+
                 $this->strType = $strType;
-    
+
                 $this->getModel();
                 $this->getModelUrls();
-    
+
                 $objItemData = $this->objModel->load($intElementId);
-    
+
                 if (count($objItemData) > 0) {
                     $objItem = $objItemData->current();
-    
-                    $strUrlNew = '';
-    
-                    // get the new url
-                    if (isset($_POST[$this->objElement->name . '_EditableUrl'])) {
-                        $this->strUrl = strtolower($_POST[$this->objElement->name . '_EditableUrl']);
-                    }
-                    if ($this->strUrl == '' && !($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() == null)) {
-                        $objFieldData = $this->objElement->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->objElement->Setup()->getGenFormId());
-    
-                        if (count($objFieldData) > 0) {
-                            foreach ($objFieldData as $objField) {
-                                if ($this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue() != '') {
-                                    $this->strUrl .= str_replace('/', '-', $this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue());
-                                    break;
+
+                    $resourceLocator = new UniformResourceLocator($this->core->config->url_layout, $this->getModelUrls());
+                    $resourceLocator->setReplacers($this->getModelUtilities()->loadPathReplacers())
+                        ->setRootLevelId($this->objElement->Setup()->getRootLevelId())
+                        ->setFormType($this->objElement->Setup()->getFormType())
+                        ->setParents($this->getParentFolders($objItem))
+                        ->setPrefix($this->getParentUrl($objItem))
+                        ->setIsStartElement($this->objElement->Setup()->getIsStartElement(false))
+                        ->setParentId($this->objElement->Setup()->getParentId());
+
+                    $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+
+                    // update url
+                    if (count($objUrlData) > 0) {
+                        // new desired url
+                        if (isset($_POST[$this->objElement->name . '_EditableUrl'])) {
+                            $resourceLocator->setPath(strtolower($_POST[$this->objElement->name . '_EditableUrl']));
+
+                            $objUrl = $objUrlData->current();
+
+                            if (strcmp($resourceLocator->get(false), $objUrl->url) !== 0) {
+
+                                // set all page urls to isMain 0
+                                $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                                $this->objModelUrls->insertUrl($resourceLocator->get(), $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+
+                                // change child urls if url layout is tree
+                                if ($this->core->config->url_layout == UniformResourceLocator::LAYOUT_TREE) {
+                                    var_dump($this->objElement->Setup()->getIsStartElement(false));
+                                    if ($this->objElement->Setup()->getIsStartElement(false) == true) {
+                                        $arrChildData = $this->getModel()->getChildUrls($this->objElement->Setup()->getParentId());
+                                        if (count($arrChildData) > 0) {
+                                            foreach ($arrChildData as $objChild) {
+                                                if ($objChild->relationId != $objItem->relationId) {
+                                                    $this->objModelUrls->resetIsMainUrl($objChild->relationId, $objChild->version, $this->core->sysConfig->url_types->$strType);
+                                                    $this->objModelUrls->insertUrl($resourceLocator->makeUnique(str_replace($objUrl->url, $resourceLocator->get(), $objChild->url)), $objChild->relationId, $objChild->version, $this->core->sysConfig->url_types->$strType);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-    
-                    if ($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() != null) {
-                        $this->strUrl = rtrim($this->strUrl, '/') . '/';
-                    }
-    
-                    $this->strUrl = $this->getModelUrls()->makeUrlConform($this->strUrl);
-    
-                    //Check new URL
-                    $objUrlData = $this->objModelUrls->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-                    if (count($objUrlData) > 0) {
-                        $objUrl = $objUrlData->current();
-                        if (strcmp($this->strUrl, $objUrl->url) !== 0) {
-                            // Url have changed
-    
-                            if (!$this->checkUniqueness($this->strUrl)) {
-                                $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
+
+                    } else { // new url
+                        if (!($this->objElement->Setup()->getIsStartElement(false) && $this->objElement->Setup()->getParentId() === null)) {
+                            $objFieldData = $this->objElement->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->objElement->Setup()->getGenFormId());
+
+                            if (count($objFieldData) > 0) {
+                                foreach ($objFieldData as $objField) {
+                                    if ($this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue() != '') {
+                                        $resourceLocator->setPath(str_replace('/', '-', $this->objElement->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue()));
+                                        break;
+                                    }
+                                }
                             }
-    
-                            // set all page urls to isMain 0
-                            $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-                            $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
                         }
-                    } else {
-    
-                        if (!$this->checkUniqueness($this->strUrl)) {
-                            $this->strUrl = $this->makeUrlUnique($this->strUrl, $objItem);
-                        }
-    
-                        // set all page urls to isMain 0
-                        $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
-                        $this->objModelUrls->insertUrl($this->strUrl, $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+
+                        $this->objModelUrls->insertUrl($resourceLocator->get(), $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
                     }
                 }
-    
+
                 $this->load($intElementId, $strType, $strElementId, $intVersion);
 
             } // end of dirty fix
-            
+
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -201,13 +209,12 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
         }
     }
 
-
     /**
      * load()
      * @param integer $intElementId
      * @param string $strType
      * @param string $strElementId
-     * @param integet $intVersion
+     * @param int $intVersion
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -228,17 +235,15 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
 
                 if (count($objUrlData) > 0) {
                     $objUrl = $objUrlData->current();
+
                     if ($this->objElement->Setup()->getLanguageDefinitionType() == $this->core->config->language_definition->folder) {
                         $this->objElement->setValue('/' . strtolower($objUrl->languageCode) . '/' . $objUrl->url);
                     } else {
                         $this->objElement->setValue('/' . $objUrl->url);
                     }
+
                     $this->objElement->url = $objUrl->url;
                     $this->objElement->languageCode = $objUrl->languageCode;
-                    $this->objElement->intLanguageDefinitionType = $this->objElement->Setup()->getLanguageDefinitionType();
-
-                    $this->objElement->blnIsStartElement = $this->objElement->Setup()->getIsStartElement(false);
-                    $this->objElement->intParentId = $this->objElement->Setup()->getParentId();
                 }
             }
 
@@ -248,32 +253,11 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
     }
 
     /**
-     * checkUniqueness
-     * @param string $strUrl
-     * @return boolean
-     * @author Daniel Rotter <daniel.rotter@massiveart.com>
-     * @version 1.0
+     * @param $objItem
+     * @return array
      */
-    protected function checkUniqueness($strUrl)
+    protected function getParentFolders($objItem)
     {
-        $blnReturn = true;
-        $objUrls = $this->getModelUrls()->loadByUrl($this->objElement->Setup()->getRootLevelId(), $strUrl, $this->objElement->Setup()->getFormType());
-        if (isset($objUrls->url) && count($objUrls->url) > 0) {
-            $blnReturn = false;
-        }
-        return $blnReturn;
-    }
-
-    /**
-     * makeUrlUnique
-     * @param string $strUrl
-     * @param Zend_Db_Table_Rowset_Abstract $objItem
-     * @return Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
-     */
-    protected function makeUrlUnique($strUrl, $objItem)
-    {
-
         $objParentFolders = array();
         if ($objItem->idParentTypes == $this->core->sysConfig->parent_types->folder) {
             switch ($this->objElement->Setup()->getFormTypeId()) {
@@ -282,50 +266,39 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
                     break;
                 case $this->core->sysConfig->form->types->global:
                     $objParentFolders = $this->getModelFolders()->loadGlobalParentFolders($objItem->idParent, $this->objElement->Setup()->getRootLevelGroupId());
+
+                    // convention: remove last (top) folder
+                    $arrTmpParentFolders = array();
+                    foreach ($objParentFolders as $objParentFolder) {
+                        $arrTmpParentFolders[] = $objParentFolder;
+                    }
+                    array_pop($arrTmpParentFolders);
+                    $objParentFolders = $arrTmpParentFolders;
                     break;
             }
         }
 
-        $blnFirst = true;
-
-        foreach ($objParentFolders as $objParentFolder) {
-            if (!($blnFirst && $this->objElement->Setup()->getIsStartElement(false))) {
-                $strUrl = $this->getModelUrls()->makeUrlConform(strtolower($objParentFolder->title)) . '/' . $strUrl;
-                if ($this->checkUniqueness($strUrl)) {
-                    break;
-                }
-            }
-            $blnFirst = false;
-        }
-
-        if (!$this->checkUniqueness($strUrl)) {
-            $strUrl = $this->makeUrlUniqueIndeed($strUrl);
-        }
-
-        return $strUrl;
+        return $objParentFolders;
     }
 
     /**
-     * makeUrlUniqueIndeed()
-     * @param string $strUrl
-     * @param integer $intUrlAddon = 0
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @param $objItem
+     * @return array
      */
-    public function makeUrlUniqueIndeed($strUrl, $intUrlAddon = 0)
+    protected function getParentUrl($objItem)
     {
+        $strParentUrl = '';
 
-        if (rtrim($strUrl, '/') != $strUrl) {
-            $strNewUrl = ($intUrlAddon > 0) ? rtrim($strUrl, '/') . '-' . $intUrlAddon . '/' : $strUrl;
-        } else {
-            $strNewUrl = ($intUrlAddon > 0) ? $strUrl . '-' . $intUrlAddon : $strUrl;
+        if ($objItem->idParentTypes == $this->core->sysConfig->parent_types->folder) {
+            $objParentFolderData = $this->objModel->loadParentUrl($objItem->id, $this->objElement->Setup()->getIsStartElement(false));
+
+            if (count($objParentFolderData) > 0) {
+                $objParentFolderUrl = $objParentFolderData->current();
+                $strParentUrl = $objParentFolderUrl->url;
+            }
         }
 
-        if (!$this->checkUniqueness($strNewUrl)) {
-            return $this->makeUrlUniqueIndeed($strUrl, $intUrlAddon + 1);
-        } else {
-            return $strNewUrl;
-        }
+        return $strParentUrl;
     }
 
     /**
@@ -340,10 +313,8 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
     }
 
     /**
-     * getModel
-     * @return type Model
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @return Model_Pages|Model_Products
+     * @throws Exception
      */
     protected function getModel()
     {
@@ -368,10 +339,7 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
     }
 
     /**
-     * getModelUrls
      * @return Model_Urls
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
      */
     protected function getModelUrls()
     {
@@ -390,9 +358,7 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
     }
 
     /**
-     * getModelFolders
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
+     * @return Model_Folders
      */
     protected function getModelFolders()
     {
@@ -409,6 +375,26 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
 
         return $this->objModelFolders;
     }
-}
 
-?>
+    /**
+     * getModelUtilities
+     * @return Model_Utilities
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelUtilities()
+    {
+        if (null === $this->objModelUtilities) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Utilities.php';
+            $this->objModelUtilities = new Model_Utilities();
+            $this->objModelUtilities->setLanguageId($this->objElement->Setup()->getLanguageId());
+        }
+
+        return $this->objModelUtilities;
+    }
+}

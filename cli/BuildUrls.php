@@ -63,17 +63,17 @@ try {
     $objModelRootLevels->setLanguageId($objOpts->languageId);
 
     $objRootLevels = $objModelRootLevels->loadRootLevelById($objOpts->rootLevelId);
-    $objRootLevel;
+    $objRootLevel = null;
     if (count($objRootLevels) > 0) {
         $objRootLevel = $objRootLevels->current();
     } else {
-        throw new Exception('Rootlevel not found!');
+        throw new Exception('RootLevel not found!');
     }
 
     if (isset($objOpts->d)) {
         echo "Deleting old URLs...\n";
         $objModelUrls = new Model_Urls();
-        $objModelUrls->deleteUrlsByRootLevelId($objRootLevel->id);
+        $objModelUrls->deleteUrlsByRootLevelIdAndLanguage($objRootLevel->id, $objOpts->languageId);
         echo "Done!\n";
     }
 
@@ -81,7 +81,7 @@ try {
     $objModelFolders = new Model_Folders();
     $objModelFolders->setLanguageId($objOpts->languageId);
 
-    $objElements;
+    $objElements = null;
     switch ($objRootLevel->idRootLevelTypes) {
         case $core->sysConfig->root_level_types->portals:
             if (isset($objOpts->folderId) && $objOpts->folderId > 0) {
@@ -100,12 +100,14 @@ try {
     }
 
     echo "Start building URLs...\n";
+
     //Build the URLs by traversing the tree
     if (isset($objOpts->folderId)) {
         buildTree($objElements, 0, $objOpts->folderId);
     } else {
         buildTree($objElements, 0);
     }
+
     echo "Finished!\n";
 
 } catch (Zend_Console_Getopt_Exception $exc) {
@@ -118,7 +120,6 @@ try {
 /**
  * Functions for building the URLs
  */
-
 function buildTree($objElements, $intLevel, $intParentId = null)
 {
     global $core, $objRootLevel, $objModelFolders, $objOpts;
@@ -127,7 +128,7 @@ function buildTree($objElements, $intLevel, $intParentId = null)
         switch ($objElement->elementType) {
             case 'folder':
                 //Recursive Call if folder
-                $objNewElements;
+                $objNewElements = null;
                 switch ($objRootLevel->idRootLevelTypes) {
                     case $core->sysConfig->root_level_types->portals:
                         $objNewElements = $objModelFolders->loadChildNavigation($objElement->id);
@@ -141,9 +142,9 @@ function buildTree($objElements, $intLevel, $intParentId = null)
                 break;
             default:
                 //Build URL
-                $strPath = GLOBAL_ROOT_PATH . 'cli/BuildUrl.php';
-                exec('php ' . $strPath . ' --elementid=' . $objElement->id . ' --genericformid=' . $objElement->genericFormId . ' --templateid=' . $objElement->templateId . ' --version=' . $objElement->version . ' --languageid=' . $objOpts->languageId . ' --isstartelement=' . $objElement->isStartElement . ' --parentid=' . $intParentId . ' --rootlevelid=' . $objRootLevel->id . ' --rootleveltypeid=' . $objRootLevel->idRootLevelTypes . ' --rootlevelgroupid=' . $objRootLevel->idRootLevelGroups . ' ' . ((isset($objElement->linkGlobalId)) ? '--linkglobalid=' . $objElement->linkGlobalId : ' ') . ' --level=' . $intLevel);
-                //buildUrl($objElement, $intParentId, $objRootLevel->id, $intLevel);
+                //$strPath = GLOBAL_ROOT_PATH . 'cli/BuildUrl.php';
+                //exec('php ' . $strPath . ' --elementid=' . $objElement->id . ' --genericformid=' . $objElement->genericFormId . ' --templateid=' . $objElement->templateId . ' --version=' . $objElement->version . ' --languageid=' . $objOpts->languageId . ' --isstartelement=' . $objElement->isStartElement . ' --parentid=' . $intParentId . ' --rootlevelid=' . $objRootLevel->id . ' --rootleveltypeid=' . $objRootLevel->idRootLevelTypes . ' --rootlevelgroupid=' . $objRootLevel->idRootLevelGroups . ' ' . ((isset($objElement->linkGlobalId)) ? '--linkglobalid=' . $objElement->linkGlobalId : ' ') . ' --level=' . $intLevel);
+                buildUrl($objElement, $intParentId, $objRootLevel->id, $intLevel);
                 break;
         }
     }
@@ -225,15 +226,18 @@ function buildUrl($objElement, $intParentId, $intRootLevelId, $intLevel)
                 }
             }
         }
+
         //Output
         for ($i = 0; $i < ($intLevel * 2); $i++) {
             echo "-";
         }
+
         if ($blnUnique) {
             echo $strTitle . "\n";
         } else {
             echo $strTitle . ': No unique URL found!' . "\n";
         }
+
         unset($validator);
     }
     unset($objElement);

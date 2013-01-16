@@ -64,6 +64,11 @@ class Form_Validator_UniqueUrl extends Form_Validator_Abstract
     protected $objModelFolders;
 
     /**
+     * @var Model_Utilities
+     */
+    protected $objModelUtilities;
+
+    /**
      * @var array
      */
     protected $_arrMessages;
@@ -99,12 +104,9 @@ class Form_Validator_UniqueUrl extends Form_Validator_Abstract
      */
     public function isValid($value)
     {
-        $strValue = strtolower($value);
-
         $isValid = true;
-
-        //Cut language
-        $strValueWithoutLanguage = preg_replace('/^\/[a-zA-Z\-]{2,5}\//', '', $strValue);
+        $path = strtolower($value);
+        $pathWithoutLanguage = ltrim(preg_replace('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', '', $value), '/');
 
         //Load data
         $objItemData = null;
@@ -123,105 +125,159 @@ class Form_Validator_UniqueUrl extends Form_Validator_Abstract
             }
         }
 
-        if ($this->Setup()->getIsStartElement(false) && $strValueWithoutLanguage != '') $strValueWithoutLanguage = rtrim($strValueWithoutLanguage, '/') . '/';
+        $resourceLocator = new UniformResourceLocator($this->core->config->url_layout, $this->getModelUrls());
+        $resourceLocator->setReplacers($this->getModelUtilities()->loadPathReplacers())
+            ->setRootLevelId($this->Setup()->getRootLevelId())
+            ->setFormType($this->Setup()->getFormType())
+            ->setParents($this->getParentFolders($this->Setup()->getParentId()))
+            ->setIsStartElement($this->Setup()->getIsStartElement(false))
+            ->setParentId($this->Setup()->getParentId());
 
+
+        if (count($resourceLocator->getParents()) > 0) {
+            $resourceLocator->setPrefix($this->getParentUrl($this->Setup()->getParentId()));
+        }
+
+        if ($this->core->config->url_layout == UniformResourceLocator::LAYOUT_TREE) {
+            $resourceLocator->setPath(str_replace($resourceLocator->getPrefix(), '', $pathWithoutLanguage));
+        } else {
+            $resourceLocator->setPath($pathWithoutLanguage);
+        }
         //Check if the url existed and has changed
         if (isset($objItemData) && count($objItemData) > 0) {
             $objItem = $objItemData->current();
             $objUrlData = $this->getModelUrls()->loadUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
 
+            // update url
             if (count($objUrlData) > 0) {
+
                 $objUrl = $objUrlData->current();
-                if (strcmp($strValueWithoutLanguage, $objUrl->url) !== 0) {
-                    //If changed, check if new url is free
-                    $isValid = $this->checkUniqueness($strValueWithoutLanguage);
+
+                // url has changed?
+                if (strcmp($resourceLocator->get(false), $objUrl->url) !== 0) {
+                    $isValid = $resourceLocator->checkUniqueness($resourceLocator->get(false));
+                } else {
+                    $isValid = true;
                 }
+
             } else {
-                //Page without URL, check with title as URL
-                $isValid = $this->checkPageWithoutUrl($strValueWithoutLanguage);
+                if (!empty($pathWithoutLanguage)) {
+                    $isValid = $resourceLocator->checkUniqueness($resourceLocator->get(false));
+                } else {
+                    $isValid = $this->validateNewNodeUrl($resourceLocator);
+                }
             }
+
         } else {
-            //New Page, check with title as URL
-            $isValid = $this->checkPageWithoutUrl($strValueWithoutLanguage);
+            if (!empty($pathWithoutLanguage)) {
+                $isValid = $resourceLocator->checkUniqueness($resourceLocator->get(false));
+            } else {
+                $isValid = $this->validateNewNodeUrl($resourceLocator);
+            }
         }
-        //If url is not valid, make a suggestion
+
+        // if url is not valid, make a suggestion
         if (!$isValid) {
             $this->addMessage('errMessage', $this->core->translate->_('Err_existing_url'));
-            //Build suggestion
-            $strSuggestion = $this->buildUniqueUrl($_POST['parentFolderId'], $strValueWithoutLanguage);
-            $this->addMessage('suggestion', $strSuggestion);
+            if ($this->Setup()->getLanguageDefinitionType() == $this->core->config->language_definition->folder) {
+                //$resourceLocator->setLanguageCode($this->getLanguageCode());
+                $this->addMessage('suggestion', $resourceLocator->get(true));
+            } else {
+                $this->addMessage('suggestion', $resourceLocator->get(true));
+            }
         }
 
         return $isValid;
     }
 
     /**
-     * checkpageWithoutUrl
-     * @param string $strValue
-     * @return boolean
+     * @param UniformResourceLocator $resourceLocator
+     * @return bool
      */
-    private function checkPageWithoutUrl(&$strValue)
+    private function validateNewNodeUrl(UniformResourceLocator $resourceLocator)
     {
-        $strValue = ($strValue == '') ? str_replace('/', '-', $_POST['title']) : $strValue;
-        if ($this->Setup()->getIsStartElement(false)) {
-            $strValue = rtrim($strValue, '/') . '/';
+        if (!($this->Setup()->getIsStartElement(false) && $this->Setup()->getParentId() === null)) {
+            $objFieldData = $this->Setup()->getModelGenericForm()->loadFieldsWithPropery($this->core->sysConfig->fields->properties->url_field, $this->Setup()->getGenFormId());
+
+            if (count($objFieldData) > 0) {
+                foreach ($objFieldData as $objField) {
+                    if ($this->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue() != '') {
+                        $resourceLocator->setPath(str_replace('/', '-', $this->Setup()->getRegion($objField->regionId)->getField($objField->name)->getValue()));
+                        break;
+                    }
+                }
+            }
         }
-        return $this->checkUniqueness($strValue);
+
+        return $resourceLocator->checkUniqueness($resourceLocator->get(false));
     }
 
     /**
-     * checkUniqueness
-     * @param string $strUrl
-     * @return boolean
-     * @author Daniel Rotter <daniel.rotter@massiveart.com>
-     * @version 1.0
+     * @param $intParentFolderId
+     * @return array
      */
-    protected function checkUniqueness($strUrl)
+    protected function getParentFolders($intParentFolderId)
     {
-        $blnReturn = true;
-        $objUrls = $this->getModelUrls()->loadByUrl($this->Setup()->getRootLevelId(), $this->getModelUrls()->makeUrlConform($strUrl), $this->Setup()->getFormType());
-        if (isset($objUrls->url) && count($objUrls->url) > 0) {
-            $blnReturn = false;
-        }
-        return $blnReturn;
-    }
-
-    /**
-     * buildUniqueUrl
-     * @param number $intParentFolderId
-     * @param string $strValue
-     * @return Daniel Rotter <daniel.rotter@massiveart.com>
-     * @version 1.0
-     */
-    protected function buildUniqueUrl($intParentFolderId, $strValue)
-    {
-        $strUrl = $this->getModelUrls()->makeUrlConform(strtolower($strValue));
-
         $objParentFolders = array();
+
         switch ($this->Setup()->getFormTypeId()) {
             case $this->core->sysConfig->form->types->page:
                 $objParentFolders = $this->getModelFolders()->loadParentFolders($intParentFolderId);
                 break;
+
             case $this->core->sysConfig->form->types->global:
                 $objParentFolders = $this->getModelFolders()->loadGlobalParentFolders($intParentFolderId, $this->Setup()->getRootLevelGroupId());
+
+                // convention: remove last (top) folder
+                $arrTmpParentFolders = array();
+                foreach ($objParentFolders as $objParentFolder) {
+                    $arrTmpParentFolders[] = $objParentFolder;
+                }
+                array_pop($arrTmpParentFolders);
+                $objParentFolders = $arrTmpParentFolders;
                 break;
         }
 
-        $blnFirst = true;
+        return $objParentFolders;
+    }
 
-        foreach ($objParentFolders as $objParentFolder) {
-            if (!($blnFirst && $this->Setup()->getIsStartElement(false))) {
-                $strUrl = $this->getModelUrls()->makeUrlConform(strtolower($objParentFolder->title)) . '/' . $strUrl;
-                if ($this->checkUniqueness($strUrl)) {
-                    break;
-                }
+    /**
+     * @param $intFolderId
+     * @return string
+     */
+    protected function getParentUrl($intFolderId)
+    {
+
+        //var_dump($this->getModelFolders());
+        $objParentUrl = null;
+
+        switch ($this->Setup()->getFormTypeId()) {
+            case $this->core->sysConfig->form->types->page:
+                $objParentUrl = $this->getModelFolders()->loadStartElementUrl($intFolderId, $this->Setup()->getIsStartElement(false));
+                break;
+
+            case $this->core->sysConfig->form->types->global:
+                $objParentUrl = $this->getModelFolders()->loadGlobalStartElementUrl($intFolderId, $this->Setup()->getIsStartElement(false), $this->Setup()->getRootLevelGroupId());
+                break;
+        }
+
+        if (!empty($objParentUrl)) {
+            return $objParentUrl->url;
+        } else {
+            return '';
+        }
+    }
+
+    protected function getLanguageCode()
+    {
+        $languages = $this->core->config->languages->language->toArray();
+        foreach ($languages as $language) {
+            if ($language['id'] == $this->Setup()->getLanguageId()) {
+                return $language['code'];
             }
-            $blnFirst = false;
         }
-        if (!$this->checkUniqueness($strUrl)) {
-            $this->addMessage('buildMessage', $this->core->translate->_('err_no_unique_url'));
-        }
-        return $strUrl;
+
+        return null;
     }
 
     /**
@@ -309,6 +365,26 @@ class Form_Validator_UniqueUrl extends Form_Validator_Abstract
 
         return $this->objModelFolders;
     }
-}
 
-?>
+    /**
+     * getModelUtilities
+     * @return Model_Utilities
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelUtilities()
+    {
+        if (null === $this->objModelUtilities) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Utilities.php';
+            $this->objModelUtilities = new Model_Utilities();
+            $this->objModelUtilities->setLanguageId($this->Setup()->getLanguageId());
+        }
+
+        return $this->objModelUtilities;
+    }
+}
