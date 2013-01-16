@@ -2198,7 +2198,7 @@ class Model_Folders extends ModelAbstract
      */
     public function updateFolderSecurity($intFolderId, $arrGroups, $intZone)
     {
-        $this->core->logger->debug('core->models->Folders->updateFolderSecurity(' . $intFolderId . ', ' . $arrGroups . ', ' . $intZone . ')');
+        $this->core->logger->debug('core->models->Folders->updateFolderSecurity(' . $intFolderId . ', array , ' . $intZone . ')');
 
         try {
             $this->getFolderPermissionTable();
