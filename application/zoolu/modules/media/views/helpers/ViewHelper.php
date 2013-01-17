@@ -307,196 +307,88 @@ class ViewHelper
         $strOutput = '';
 
         foreach ($rowset as $row) {
-
-            if (strpos($row->mimeType, 'image/') !== false) {
-                $blnIsImage = true;
-                $strFileIconSrc = sprintf($this->core->sysConfig->media->paths->thumb, $row->path) . $row->filename . '?v=' . $row->version;
-                $strDownloadLink = '/zoolu-website/media/image/' . $row->id . '/' . urlencode(str_replace('.', '-', $row->title));
-                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->imgbase . $row->path;
-            } else if (strpos($row->mimeType, 'video/') !== false) {
-                $blnIsImage = false;
-                $strMediaType = 'video';
-                $strFileIconSrc = $this->getDocIcon($row->extension, 128);
-                $strDownloadLink = '/zoolu-website/media/video/' . $row->id . '/' . urlencode(str_replace('.', '-', $row->title));
-                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->vidbase . $row->path;
-            } else {
-                $blnIsImage = false;
-                $strMediaType = 'document';
-                $strFileIconSrc = $this->getDocIcon($row->extension, 128);
-                $strDownloadLink = '/zoolu-website/media/document/' . $row->id . '/' . urlencode(str_replace('.', '-', $row->title));
-                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->docbase . $row->path;
-            }
-
-            if ($row->description != '') {
-                $strDescription = $row->description;
-                $strTextareaCss = ' class="textarea"';
-            } else {
-                $strDescription = $this->core->translate->_('Add_description_');
-                $strTextareaCss = '';
-            }
-
             // build the element
-            $strTags = '';
-
-            if ($row->idLanguages != '') {
-                require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Tags.php'; // FIXME : quick and dirty solution
-                $objModelTags = new Model_Tags();
-                $objModelTags->setLanguageId($row->idLanguages);
-                $objTags = $objModelTags->loadTypeTags('file', $row->id, 1); // TODO : version
-
-                if (count($objTags) > 0) {
-                    foreach ($objTags as $objTag) {
-                        $strTags .= '<li value="' . $objTag->id . '">' . htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</li>';
-                    }
-                }
-            }
-
-            $strLanguageSpecificChecked = ($row->isLanguageSpecific == 1) ? ' checked="checked"' : '';
-
-            $strOutput .= '<div class="mediacontainer">
-                       <div class="mediaicon"><img width="32" height="32" src="' . $strFileIconSrc . '"/></div>
-                       <div class="mediainfos">
-                         <div class="mediainfotitle"><input type="text" value="' . $row->title . '" id="FileTitle' . $row->id . '" name="FileTitle' . $row->id . '"/></div>
-                         <div class="mediainfodescription"><textarea onfocus="myMedia.setFocusTextarea(this.id); return false;" id="FileDescription' . $row->id . '" name="FileDescription' . $row->id . '"' . $strTextareaCss . '>' . $strDescription . '</textarea></div>
-                         <div class="mediainfotags">
-                           <ol>        
-                             <li class="autocompletList input-text">
-                               <input type="text" value="" id="FileTags' . $row->id . '" name="FileTags' . $row->id . '"/>
-                               <div id="FileTags' . $row->id . '_autocompleter" class="autocompleter">
-                                 <div class="default">' . $this->core->translate->_('Search_or_add_tags') . '</div>
-                                 <ul class="feed">
-                                   ' . $strTags . '
-                                 </ul>
-                               </div>
-                             </li>
-                           </ol>
-                           <script type="text/javascript" language="javascript">//<![CDATA[
-                             FileTags' . $row->id . '_list = new FacebookList(\'FileTags' . $row->id . '\', \'FileTags' . $row->id . '_autocompleter\',{ newValues: true, regexSearch: true });
-                             ' . $this->getAllTagsForAutocompleter('FileTags' . $row->id) . '
-                             //]]>
-                           </script>                           
-                         </div>
-                         <div class="mediainfolanguagespecific">
-                           <div class="field">
-                             <label for="FileIsLanguageSpecific' . $row->id . '"><input type="checkbox"' . $strLanguageSpecificChecked . ' class="multiCheckbox" value="1" id="FileIsLanguageSpecific' . $row->id . '" name="FileIsLanguageSpecific' . $row->id . '"> ' . $this->core->translate->_('Medium_is_language_specific') . '</label>
-                           </div>
-                         </div>';
-            
-            $strMediaUrl = '';
-            if ($blnIsImage == true) {
-                $strOutput .= '
-                       <div class="mediasizes">
-                         <select id="mediaSizes' . $row->id . '" onchange="$(\'singleMediaUrl' . $row->id . '\').value = $F(\'singleFileBasePath' . $row->id . '\') + this.value + $F(\'singleFileName' . $row->id . '\')">';
-                foreach ($arrImagesSizes as $arrImageSize) {
-                    if (isset($arrImageSize['display']) && isset($arrImageSize['display']['single_edit'])) {
-                        if ($strMediaUrl == '') $strMediaUrl = $strBasePath . $arrImageSize['folder'] . '/' . $row->filename . '?v=' . $row->version;
-                        $strOutput .= '
-                           <option value="' . $arrImageSize['folder'] . '/">' . $arrImageSize['folder'] . '</option>';
-                    }
-                }
-                $strOutput .= '
-                         </select>
-                       </div>';
-            } else {
-                $strMediaUrl = 'http://' . $_SERVER['HTTP_HOST'] . $strDownloadLink;
-            }
-            $strOutput .= '
-                       <div class="medialink">
-                         <input type="text" id="singleMediaUrl' . $row->id . '" readonly="readonly" value="' . $strMediaUrl . '" onclick="this.select()"/><br/>
-                         <div id="d_clip_container' . $row->id . '" style="float:right; margin:0 10px 0 0; position:relative;">
-                           <div id="d_clip_button' . $row->id . '" class="d_clip_button">[copy to clipboard]</div>
-                         </div>
-                         <div class="clear"></div> 
-                         <input type="hidden" id="singleFileName' . $row->id . '" value="' . $row->filename . '?v=' . $row->version . '"/>
-                         <input type="hidden" id="singleFileBasePath' . $row->id . '" value="' . $strBasePath . '"/>
-                       </div>                       
-                       <div class="clear"></div>
-                         ' . $this->getFileFilters($arrFilesFileFilters[$row->id], $row->id) . '
-                         <div class="clear"></div>
-                       </div>
-                       <div class="clear"></div> 
-                     </div>';
+            $arrDestinationOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT categories.id AS VALUE, categoryTitles.title  AS DISPLAY FROM categories INNER JOIN categoryTitles ON categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->core->intZooluLanguageId . ' WHERE categories.idParentCategory = 466 ORDER BY categoryTitles.title', $row->idDestination);
+            $arrGroupOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT groups.id AS VALUE, groups.title  AS DISPLAY FROM groups LEFT JOIN groupGroupTypes ON groupGroupTypes.idGroups = groups.id WHERE groupGroupTypes.idGroupTypes = ' . $this->core->sysConfig->group_types->frontend . ' ORDER BY groups.title', $row->idGroup);
+            $strOutput .= $this->getSingleEditForm($row, $arrImagesSizes, $arrDestinationOptions, $arrGroupOptions, null, true, null, false);
         }
         return $strOutput;
     }
 
     /**
      * getSingleEditForm
-     * @param Zend_Db_Table_Rowset_Abstract $objFileData
+     * @param Zend_Db_Table_Rowset_Abstract $objFile
      * @param array $arrImagesSizes
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    public function getSingleEditForm(Zend_Db_Table_Rowset_Abstract $objFileData, $arrImagesSizes, $strDestinationOptions, $strGroupOptions, $objFileVersions = null, $blnAuthorizedToUpdate = true, $arrFileFilters = null)
+    public function getSingleEditForm(Zend_Db_Table_Row $objFile, $arrImagesSizes, $strDestinationOptions, $strGroupOptions, $objFileVersions = null, $blnAuthorizedToUpdate = true, $arrFileFilters = null, $blnSingleEdit = true)
     {
         $this->core->logger->debug('media->views->helpers->ViewHelper->getSingleEditForm()');
 
         $strOutput = '';
         $strMediaType = '';
 
-        if (count($objFileData) == 1) {
-            $objFile = $objFileData->current();
+        if (strpos($objFile->mimeType, 'image/') !== false) {
+            $blnIsImage = true;
+            $strFileIconSrc = sprintf($this->core->sysConfig->media->paths->thumb, $objFile->path) . $objFile->filename . '?v=' . $objFile->version;
+            $strDownloadLink = '/zoolu-website/media/image/' . $objFile->id . '/' . urlencode(str_replace('.', '-', $objFile->title));
+            $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->imgbase . $objFile->path;
+        } else if (strpos($objFile->mimeType, 'video/') !== false) {
+            $blnIsImage = false;
+            $strMediaType = 'video';
+            $strFileIconSrc = $this->getDocIcon($objFile->extension, 128);
+            $strDownloadLink = '/zoolu-website/media/video/' . $objFile->id . '/' . urlencode(str_replace('.', '-', $objFile->title));
+            $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->vidbase . $objFile->path;
+        } else {
+            $blnIsImage = false;
+            $strMediaType = 'document';
+            $strFileIconSrc = $this->getDocIcon($objFile->extension, 128);
+            $strDownloadLink = '/zoolu-website/media/document/' . $objFile->id . '/' . urlencode(str_replace('.', '-', $objFile->title));
+            $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->docbase . $objFile->path;
+        }
 
-            if (strpos($objFile->mimeType, 'image/') !== false) {
-                $blnIsImage = true;
-                $strFileIconSrc = sprintf($this->core->sysConfig->media->paths->thumb, $objFile->path) . $objFile->filename . '?v=' . $objFile->version;
-                $strDownloadLink = '/zoolu-website/media/image/' . $objFile->id . '/' . urlencode(str_replace('.', '-', $objFile->title));
-                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->imgbase . $objFile->path;
-            } else if (strpos($objFile->mimeType, 'video/') !== false) {
-                $blnIsImage = false;
-                $strMediaType = 'video';
-                $strFileIconSrc = $this->getDocIcon($objFile->extension, 128);
-                $strDownloadLink = '/zoolu-website/media/video/' . $objFile->id . '/' . urlencode(str_replace('.', '-', $objFile->title));
-                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->vidbase . $objFile->path;
-            } else {
-                $blnIsImage = false;
-                $strMediaType = 'document';
-                $strFileIconSrc = $this->getDocIcon($objFile->extension, 128);
-                $strDownloadLink = '/zoolu-website/media/document/' . $objFile->id . '/' . urlencode(str_replace('.', '-', $objFile->title));
-                $strBasePath = (($this->core->config->domains->static->components != '') ? $this->core->config->domains->static->components : 'http://' . $_SERVER['HTTP_HOST']) . $this->core->sysConfig->media->paths->docbase . $objFile->path;
-            }
+        if ($objFile->description != '') {
+            $strDescription = $objFile->description;
+            $strTextareaCss = ' class="textarea"';
+        } else {
+            $strDescription = $this->core->translate->_('Add_description_');
+            $strTextareaCss = '';
+        }
 
-            if ($objFile->description != '') {
-                $strDescription = $objFile->description;
-                $strTextareaCss = ' class="textarea"';
-            } else {
-                $strDescription = $this->core->translate->_('Add_description_');
-                $strTextareaCss = '';
-            }
+        // build the element
+        $strTags = '';
 
-            // build the element
-            $strTags = '';
+        if ($objFile->idLanguages != '') {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Tags.php'; // FIXME : quick and dirty solution
+            $objModelTags = new Model_Tags();
+            $objModelTags->setLanguageId($objFile->idLanguages);
+            $objTags = $objModelTags->loadTypeTags('file', $objFile->id, 1); // TODO : version
 
-            if ($objFile->idLanguages != '') {
-                require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Tags.php'; // FIXME : quick and dirty solution
-                $objModelTags = new Model_Tags();
-                $objModelTags->setLanguageId($objFile->idLanguages);
-                $objTags = $objModelTags->loadTypeTags('file', $objFile->id, 1); // TODO : version
-
-                if (count($objTags) > 0) {
-                    foreach ($objTags as $objTag) {
-                        $strTags .= '<li value="' . $objTag->id . '">' . htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</li>';
-                    }
+            if (count($objTags) > 0) {
+                foreach ($objTags as $objTag) {
+                    $strTags .= '<li value="' . $objTag->id . '">' . htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</li>';
                 }
             }
+        }
 
-            $strLanguageSpecificChecked = ($objFile->isLanguageSpecific == 1) ? ' checked="checked"' : '';
-            $strDestinationeSpecificChecked = ($objFile->idDestination > 0) ? ' checked="checked"' : '';
-            $strGroupSpecificChecked = ($objFile->idGroup > 0) ? ' checked="checked"' : '';
+        $strLanguageSpecificChecked = ($objFile->isLanguageSpecific == 1) ? ' checked="checked"' : '';
+        $strDestinationeSpecificChecked = ($objFile->idDestination > 0) ? ' checked="checked"' : '';
+        $strGroupSpecificChecked = ($objFile->idGroup > 0) ? ' checked="checked"' : '';
 
-            $strOutput .= '<div class="mediacontainer">
+        $strOutput .= '<div class="mediacontainer">
                        <div class="mediaicon">
                           <a href="' . $strDownloadLink . '" target="_blank"><img width="128" src="' . $strFileIconSrc . '"/></a><br/>';
-            if ($blnIsImage == false) {
-                $strOutput .= '<div class="spacer2" style="text-align:center">' . $objFile->downloadCounter . ' Downloads</div>';
-            }
+        if ($blnIsImage == false) {
+            $strOutput .= '<div class="spacer2" style="text-align:center">' . $objFile->downloadCounter . ' Downloads</div>';
+        }
 
-            $strOutput .= '
+        $strOutput .= '
                          <div class="field">
                            <label for="FileIsLanguageSpecific' . $objFile->id . '"><input type="checkbox"' . $strLanguageSpecificChecked . ' class="multiCheckbox" value="1" id="FileIsLanguageSpecific' . $objFile->id . '" name="FileIsLanguageSpecific' . $objFile->id . '"> ' . $this->core->translate->_('Language_specific') . '</label>
                          </div>';
 
-            if ($blnIsImage == false) {
-                $strOutput .= '
+        if ($blnIsImage == false) {
+            $strOutput .= '
                          <div class="field">
                            <label for="FileIsDestinationSpecific' . $objFile->id . '"><input type="checkbox"' . $strDestinationeSpecificChecked . ' onclick="myMedia.toggleDestinationOptions(this, \'' . $objFile->id . '\');" class="multiCheckbox" value="1" id="FileIsDestinationSpecific' . $objFile->id . '" name="FileIsDestinationSpecific' . $objFile->id . '"> ' . $this->core->translate->_('Region_specific') . '</label>
                            <div id="shownDestinationOptions' . $objFile->id . '"' . (($objFile->idDestination == 0) ? ' style="display:none;"' : '') . '>
@@ -507,7 +399,7 @@ class ViewHelper
                            </div>
                          </div>';
 
-                $strOutput .= '
+            $strOutput .= '
                          <div class="field">
                            <label for="FileIsGroupSpecific' . $objFile->id . '"><input type="checkbox"' . $strGroupSpecificChecked . ' onclick="myMedia.toggleGroupOptions(this, \'' . $objFile->id . '\');" class="multiCheckbox" value="1" id="FileIsGroupSpecific' . $objFile->id . '" name="FileIsGroupSpecific' . $objFile->id . '"> ' . $this->core->translate->_('Group_specific') . '</label>
                            <div id="shownGroupOptions' . $objFile->id . '"' . (($objFile->idGroup == 0) ? ' style="display:none;"' : '') . '>
@@ -517,9 +409,9 @@ class ViewHelper
                              </select>                          
                            </div>
                          </div>';
-            }
+        }
 
-            $strOutput .= '
+        $strOutput .= '
                        </div>
                        <div class="mediainfos">
                          <div class="mediainfotitle"><label for="FileTitle' . $objFile->id . '" class="gray666 bold">' . $this->core->translate->_('Title') . '</label><br/><input type="text" value="' . $objFile->title . '" id="FileTitle' . $objFile->id . '" name="FileTitle' . $objFile->id . '"/></div>
@@ -544,8 +436,8 @@ class ViewHelper
                            </script>                           
                          </div>                         
                          <div class="clear"></div>';
-            if ($blnIsImage == false) {
-                $strOutput .= '
+        if ($blnIsImage == false) {
+            $strOutput .= '
                          <div class="mediafield">
                            <label class="gray666 bold">' . $this->core->translate->_('Preview_image') . '</label>
                            <div class="mediatop">
@@ -555,38 +447,40 @@ class ViewHelper
                            </div>
                            <input type="hidden" name="' . $strMediaType . 'pic" id="' . $strMediaType . 'pic" value="' . (($objFile->idFiles != null && $objFile->idFiles > 0) ? '[' . $objFile->idFiles . ']' : '') . '" />
                          </div>'; //FIXME: use syntax for applying one file
-            }
-            if ($blnIsImage == true) {
-                $strOutput .= '
+        }
+        if ($blnIsImage == true) {
+            $strOutput .= '
                        </div>
                        <div class="clear"></div>
                        <div class="spacer1"></div>';
-            }
+        }
 
-            $strMediaUrl = '';
-            if ($blnIsImage == true) {
-                $strOutput .= '
+        $strMediaUrl = '';
+        if ($blnIsImage == true) {
+            $strOutput .= '
                        <div class="mediasizes">
                          <select id="mediaSizes" onchange="$(\'singleMediaUrl\').value = $F(\'singleFileBasePath\') + this.value + $F(\'singleFileName\')">';
-                foreach ($arrImagesSizes as $arrImageSize) {
-                    if (isset($arrImageSize['display']) && isset($arrImageSize['display']['single_edit'])) {
-                        if ($strMediaUrl == '') $strMediaUrl = $strBasePath . $arrImageSize['folder'] . '/' . $objFile->filename . '?v=' . $objFile->version;
-                        $strOutput .= '
+            foreach ($arrImagesSizes as $arrImageSize) {
+                if (isset($arrImageSize['display']) && isset($arrImageSize['display']['single_edit'])) {
+                    if ($strMediaUrl == '') $strMediaUrl = $strBasePath . $arrImageSize['folder'] . '/' . $objFile->filename . '?v=' . $objFile->version;
+                    $strOutput .= '
                            <option value="' . $arrImageSize['folder'] . '/">' . $arrImageSize['folder'] . '</option>';
-                    }
                 }
-                $strOutput .= '
+            }
+            $strOutput .= '
                          </select>
                        </div>';
-            } else {
-                $strMediaUrl = 'http://' . $_SERVER['HTTP_HOST'] . $strDownloadLink;
-            }
+        } else {
+            $strMediaUrl = 'http://' . $_SERVER['HTTP_HOST'] . $strDownloadLink;
+        }
 
-            $strOutput .= '
+        $strFileId = ($blnSingleEdit) ? '' : $objFile->id;
+
+        $strOutput .= '
                        <div class="medialink">
-                         <input type="text" id="singleMediaUrl" readonly="readonly" value="' . $strMediaUrl . '" onclick="this.select()"/><br/>
-                         <div id="d_clip_container" style="float:right; margin:0 10px 0 0; position:relative;">
-                           <div id="d_clip_button" class="d_clip_button">[copy to clipboard]</div>
+                         <input type="text" id="singleMediaUrl'.$strFileId.'" readonly="readonly" value="' . $strMediaUrl . '" onclick="this.select()"/><br/>
+                         <div id="d_clip_container'.$strFileId.'" style="float:right; margin:0 10px 0 0; position:relative;">
+                           <div id="d_clip_button'.$strFileId.'" class="d_clip_button">[copy to clipboard]</div>
                          </div>
                          <div class="clear"></div> 
                          <input type="hidden" id="singleFileName" value="' . $objFile->filename . '?v=' . $objFile->version . '"/>
@@ -596,54 +490,54 @@ class ViewHelper
                        
                        <div class="spacer1"></div>
                        <div class="mediasingleupload">';
-            if ($blnAuthorizedToUpdate == true) {
-                $strOutput .= '
+        if ($blnAuthorizedToUpdate == true) {
+            $strOutput .= '
                          <label for="txtFileName" class="gray666 bold">' . $this->core->translate->_('New_version') . '</label><br/>
                          <div>
-                           <input type="text" id="txtFileName" disabled="true" />
-                           <span id="spanButtonPlaceholder"></span>
+                           <input type="text" id="txtFileName'.$objFile->id.'" disabled="true" />
+                           <span id="spanButtonPlaceholder'.$objFile->id.'"></span>
                          </div>
-                         <div id="fsUploadProgress"></div>';
-            }
+                         <div id="fsUploadProgress'.$objFile->id.'"></div>';
+        }
 
-            if ($blnIsImage == false) {
-                $strOutput .= '
+        if ($blnIsImage == false) {
+            $strOutput .= '
                        </div> <!-- mediasingleupload -->';
-            }
-            
-            $strOutput .= $this->getFileFilters($arrFileFilters, $objFile->id);
-                    
-            if ($objFileVersions != null && $objFileVersions instanceof Zend_Db_Table_Rowset_Abstract) {
-                
-                $objCreated = DateTimeHelper::getDateObject();
-                $objArchived = DateTimeHelper::getDateObject();
+        }
 
-                $strOutput .= '
+        $strOutput .= $this->getFileFilters($arrFileFilters, $objFile->id);
+
+        if ($objFileVersions != null && $objFileVersions instanceof Zend_Db_Table_Rowset_Abstract) {
+
+            $objCreated = DateTimeHelper::getDateObject();
+            $objArchived = DateTimeHelper::getDateObject();
+
+            $strOutput .= '
                          <div class="spacer1"></div>
                          <label for="txtFileName" class="gray666 bold">' . $this->core->translate->_('Version_list') . '</label><br/>
                          <div class="mediaversions">';
-                foreach ($objFileVersions as $objFileVersion) {
-                    if ($objFileVersion->created != null && $objFileVersion->archived != null) {
-                        $objCreated->set($objFileVersion->created);
-                        $objArchived->set($objFileVersion->archived);
-                        $strOutput .= '
+            foreach ($objFileVersions as $objFileVersion) {
+                if ($objFileVersion->created != null && $objFileVersion->archived != null) {
+                    $objCreated->set($objFileVersion->created);
+                    $objArchived->set($objFileVersion->archived);
+                    $strOutput .= '
                            <div class="version"><a href="/zoolu-website/media/download/' . $objFileVersion->idFiles . '/' . urlencode(str_replace('.', '-', $objFileVersion->title)) . '?v=' . $objFileVersion->version . '" target="_blank">' . $this->core->translate->_('Version') . ' ' . $objFileVersion->version . '</a> (' . $objCreated->get(Zend_Date::DATETIME_MEDIUM) . ' - ' . $objArchived->get(Zend_Date::DATETIME_MEDIUM) . ')</div>';
-                    }
                 }
-
-                $strOutput .= '
-                       </div>';
             }
 
             $strOutput .= '
+                       </div>';
+        }
+
+        $strOutput .= '
                        </div>
                        <div class="clear"></div>
                      </div>';
-        }
         return $strOutput;
     }
-    
-    public function getFileFilters($arrFileFilters, $intFileId) {
+
+    public function getFileFilters($arrFileFilters, $intFileId)
+    {
         $strOutput = '';
         if (count($arrFileFilters) > 0) {
             $strOutput .= '
@@ -658,9 +552,9 @@ class ViewHelper
                            <label class="gray666 bold" id="lbl_selectFileFilterAll_' . $objFileFilter->id . '" for="selectFileFilterAll_' . $objFileFilter->id . '">' . $this->core->translate->_('Select all') . '</label>
                            <div class="allfilterSubline"></div>
 						   <div class="clear" style=""></div>
-                           ';    
-                $strOutput .=  
-                           HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = '.$this->core->intLanguageId.' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter'. $intFileId .'_' . $objFileFilter->id, $objFileFilter->values);             
+                           ';
+                $strOutput .=
+                    HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = ' . $this->core->intLanguageId . ' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter' . $intFileId . '_' . $objFileFilter->id, $objFileFilter->values);
                 $strOutput .= '
                        </div> <!--fileFilter -->';
             }

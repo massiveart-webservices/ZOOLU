@@ -917,10 +917,10 @@ Massiveart.Overlay = Class.create({
         $('overlayGenContentWrapper').setStyle({width: '460px'});
       }
       if($('overlayUpload')) $('overlayUpload').hide();
-      if($('overlaySingleEdit')) $('overlaySingleEdit').hide();
+      if($('overlayMediaEdit')) $('overlayMediaEdit').hide();
       if($('overlayBlack75')) $('overlayBlack75').hide();
       if($('overlayGenContent')) $('overlayGenContent').innerHTML = '';
-      if($('overlaySingleEditContent')) $('overlaySingleEditContent').innerHTML = '';
+      if($('overlayMediaEditContent')) $('overlayMediaEditContent').innerHTML = '';
       if($('overlayMaintenanceWrapper')) $('overlayMaintenanceWrapper').hide();
       if($('overlayUserSettingsWrapper')) $('overlayUserSettingsWrapper').hide();
       if($('overlaySendToDashbaordWrapper')) $('overlaySendToDashbaordWrapper').hide();
