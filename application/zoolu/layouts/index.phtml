@@ -219,7 +219,7 @@
     <!-- END overlay for generated content -->
 
     <!-- overlay single edit -->
-    <div id="overlaySingleEdit" class="overlaycontentwrapper" style="display:none;">
+    <div id="overlayMediaEdit" class="overlaycontentwrapper" style="display:none;">
         <table>
             <thead>
             <tr>
@@ -230,7 +230,7 @@
             <tr>
                 <td class="headerleft"></td>
                 <td class="headercenter handle">
-                    <div class="headerclose" onclick="myOverlay.close('overlaySingleEdit'); return false;"></div>
+                    <div class="headerclose" onclick="myOverlay.close('overlayMediaEdit'); return false;"></div>
                     <div class="clear"></div>
                 </td>
                 <td class="headerright"></td>
@@ -241,9 +241,9 @@
                 <td class="contentleft"></td>
                 <td class="contentcenter">
                     <!-- cotnent -->
-                    <div id="overlaySingleEditContent" class="overlaycontent"></div>
+                    <div id="overlayMediaEditContent" class="overlaycontent"></div>
                     <!-- buttons -->
-                    <div id="overlaySingleEditButtons" class="overlaycontent" style="display:none;">
+                    <div id="overlayMediaEditButtons" class="overlaycontent" style="display:none;">
                         <div id="buttonOk">
                             <div class="button25leftOn"></div>
                             <div class="button25centerOn">
@@ -305,7 +305,7 @@
         }
 
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
-        new Draggable('overlaySingleEdit', {handle: 'handle', scroll: window });
+        new Draggable('overlayMediaEdit', {handle: 'handle', scroll: window });
     });
     //]]>
     </script>
