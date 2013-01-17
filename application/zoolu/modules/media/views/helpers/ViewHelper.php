@@ -174,6 +174,9 @@ class ViewHelper
           <th class="toplanguagespecific' . (('isLanguageSpecific' == $strOrderColumn) ? ' sort' : '') . '" onclick="myList.sort(\'isLanguageSpecific\'' . (('isLanguageSpecific' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'') . ')">
             <div' . (('isLanguageSpecific' == $strOrderColumn) ? ' class="' . $strOrderSort . '"' : '') . '>' . $this->core->translate->_('Language_specific') . '</div>
           </th>
+          <th class="topdownloadcounter' . (('downloadcounter' == $strOrderColumn) ? ' sort' : '') . '" onclick="myList.sort(\'downloadcounter\'' . (('downloadcounter' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'') . ')">
+            <div' . (('downloadcounter' == $strOrderColumn) ? ' class="' . $strOrderSort . '"' : '') . '>' . $this->core->translate->_('Downloadcounter') . '</div>
+          </th>
           <th class="topauthor' . (('creator' == $strOrderColumn) ? ' sort' : '') . '" onclick="myList.sort(\'creator\'' . (('creator' == $strOrderColumn && $strOrderSort == 'asc') ? ', \'desc\'' : ', \'asc\'') . ')">
             <div' . (('creator' == $strOrderColumn) ? ' class="' . $strOrderSort . '"' : '') . '>' . $this->core->translate->_('Author') . '</div>
           </th>
@@ -252,6 +255,7 @@ class ViewHelper
                   <td class="rowtags">' . $objRow->tags . '</td>
                   <td class="rowlanguages">' . $objRow->languages . '</td>
                   <td class="rowlanguagespecific">' . ($objRow->isLanguageSpecific ? $this->core->translate->_('yes') : $this->core->translate->_('no')) . '</td>
+                  <td class="rowdownloadcounter">' . $objRow->downloadCounter . '</td>
                   <td class="rowauthor">' . $objRow->creator . '</td>
                   <td colspan="2" class="rowcreated">' . $created->format('d.m.y, H:i') . '</td>
                 </tr>';
