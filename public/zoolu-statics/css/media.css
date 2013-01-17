@@ -357,7 +357,7 @@ input[disabled] {
 .mediacontainer .field input.checkbox,
 .mediacontainer .field input.multiCheckbox,
 .mediacontainer .field input.multiCheckboxTree {
-    width: 26px;
+    width: 20px;
 }
 
 .overlaycontentwrapper .buttoncancel,
