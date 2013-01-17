@@ -239,11 +239,16 @@ function doSubmit(e) {
     e.stopPropagation();
   }
   e.cancelBubble = true;
-  
+
   try {
+    var count = 0;
     swfu.each(function(element){
+      count += element.getStats().files_queued;
       element.startUpload();
     });
+    if(count == 0) {
+      myMedia.editFiles();
+    }
   } catch (ex) { }
   
   return false;
@@ -255,7 +260,6 @@ function singleUploadDone() {
     var count = 0;
     swfu.each(function(element){
       count += element.getStats().files_queued;
-      console.log(element.getStats());
     });
     if(count == 0) {
       myMedia.editFiles(true);
@@ -314,10 +318,6 @@ function singleUploadProgress(file, bytesLoaded, bytesTotal) {
     var progress = new FileProgress(file, this.customSettings.progress_target);
     progress.setProgress(percent, "progressContainer");
     progress.setStatus("Uploading...");
-
-    if (this.customSettings.progress_target == 'fsUploadProgress13') {
-      console.log(progress);
-    }
   } catch (e) { }
 }
 

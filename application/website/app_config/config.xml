@@ -13,7 +13,10 @@
         <!-- http://developer.yahoo.com/performance/rules.html#split -->
         <components></components>
       </static>
-    </domains>    
+    </domains> 
+    
+    <!-- url -->
+    <url_layout>short</url_layout> <!-- short|tree -->   
     
     <!-- mailer -->
     <mail>

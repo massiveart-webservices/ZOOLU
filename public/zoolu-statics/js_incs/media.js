@@ -783,6 +783,7 @@ Massiveart.Media = Class.create({
                         myMedia.getFilesEditForm();
                         myCore.removeBusyClass('overlayMediaWrapper');
                     }
+                    myOverlay.close('overlayMediaEdit');
                     this.getMediaFolderContent(this.intFolderId);
                 }.bind(this)
             });
