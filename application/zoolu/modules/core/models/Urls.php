@@ -243,8 +243,17 @@ class Model_Urls
         $objGlobalLinksSelect->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
         $objGlobalLinksSelect->where('urls.isLandingPage = ?', $blnLandingPage);
 
+        $objExternalSelect = $this->core->dbh->select();
+        $objExternalSelect->from('urls', array('id', 'targetpage' => 'external', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objExternalSelect->join('languages', 'languages.id = urls.idLanguages', array());
+        $objExternalSelect->join('users', 'users.id = urls.idUsers', array());
+        $objExternalSelect->where('urls.idParent = ?', $intRootLevelId);
+        $objExternalSelect->where('urls.idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel);
+        $objExternalSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->external);
+        $objExternalSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+
         $objSelect = $this->getUrlTable()->select()
-            ->union(array($objFolderPageSelect, $objRootLevelPageSelect, $objGlobalSelect, $objGlobalLinksSelect));
+            ->union(array($objFolderPageSelect, $objRootLevelPageSelect, $objGlobalSelect, $objGlobalLinksSelect, $objExternalSelect));
 
         if ($blnReturnSelect) {
             return $objSelect;
@@ -267,7 +276,7 @@ class Model_Urls
         $objUrlData = new stdClass();
 
         $objFolderPageSelect = $this->core->dbh->select();
-        $objFolderPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+        $objFolderPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objFolderPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array());
         $objFolderPageSelect->join('folders', 'folders.id = pages.idParent', array());
         $objFolderPageSelect->where('urls.url = ?', $strUrl)
@@ -282,11 +291,11 @@ class Model_Urls
 
 
         $objRootLevelPageSelect = $this->core->dbh->select();
-        $objRootLevelPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+        $objRootLevelPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objRootLevelPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->rootlevel, array());
         $objRootLevelPageSelect->join('rootLevels', ' rootLevels.id = pages.idParent', array());
         $objRootLevelPageSelect->where('urls.url = ?', $strUrl)
-            ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page);
+                               ->where('urls.idUrlTypes IN ('.$this->core->sysConfig->url_types->page.','.$this->core->sysConfig->url_types->external.')');
         if ($blnLanguage) {
             $objRootLevelPageSelect->where('urls.idLanguages = ?', $this->intLanguageId);
         }
@@ -296,7 +305,7 @@ class Model_Urls
         $objRootLevelPageSelect->where('urls.isLandingPage = ?', $blnLandingPage);
 
         $objGlobalSelect = $this->core->dbh->select();
-        $objGlobalSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+        $objGlobalSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objGlobalSelect->join('globals', 'globals.globalId = urls.relationId AND globals.version = urls.version', array());
         $objGlobalSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = urls.idLanguages', array());
         $objGlobalSelect->where('urls.url = ?', $strUrl)
@@ -308,7 +317,7 @@ class Model_Urls
         $objGlobalSelect->where('urls.isLandingPage = ?', $blnLandingPage);
 
         $objGlobalLinksSelect = $this->core->dbh->select();
-        $objGlobalLinksSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => 'lG.id', 'linkId' => 'lG.globalId', 'idLinkParent' => 'lG.idParent'));
+        $objGlobalLinksSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => 'lG.id', 'linkId' => 'lG.globalId', 'idLinkParent' => 'lG.idParent'));
         $objGlobalLinksSelect->join(array('lG' => 'globals'), 'lG.globalId = urls.relationId AND lG.version = urls.version', array());
         $objGlobalLinksSelect->join('globalLinks', 'globalLinks.idGlobals = lG.id', array());
         $objGlobalLinksSelect->join('globals', 'globals.globalId = globalLinks.globalId', array());
@@ -661,7 +670,7 @@ class Model_Urls
      */
     public function editUrl($intUrlId, $arrData)
     {
-        $this->core->logger->debug('core->models->Model_Urls->editUrl(' . $intUrlId . ', ' . $arrData . ')');
+        $this->core->logger->debug('core->models->Model_Urls->editUrl(' . $intUrlId . ')');
 
         try {
             $strWhere = $this->getUrlTable()->getAdapter()->quoteInto('id = ?', $intUrlId);

@@ -2,16 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-29 15:45+0100\n"
+"POT-Creation-Date: 2013-01-11 14:09+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
+"Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
 "Language: de_AT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Basepath: /home/daniel/Workspaces/PHPStorm/ZOOLU\n"
+"X-Poedit-Basepath: /Volumes/massive-brunello/websites/testing.zoolu.bazing.at/\n"
 "X-Poedit-KeywordsList: _\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: application/zoolu\n"
 "X-Poedit-SearchPath-1: public/zoolu-statics\n"
 "X-Poedit-SearchPath-2: library/massiveart\n"
@@ -195,6 +196,26 @@ msgstr "Die Meta Beschreibung"
 #: application/zoolu/language/addon-language-keys.php:106
 msgid "Meta_title"
 msgstr "Der Meta TItel"
+
+#: application/zoolu/language/addon-language-keys.php:111
+msgid "targetpage"
+msgstr "Zielseite"
+
+#: application/zoolu/language/addon-language-keys.php:112
+msgid "url"
+msgstr "Landingpage URL"
+
+#: application/zoolu/language/addon-language-keys.php:113
+msgid "targetlanguage"
+msgstr "Sprache"
+
+#: application/zoolu/language/addon-language-keys.php:114
+msgid "redirect"
+msgstr "Weiterleitung"
+
+#: application/zoolu/language/addon-language-keys.php:115
+msgid "changeUser"
+msgstr "Letzte Änderung von"
 
 #: application/zoolu/modules/cms/views/helpers/NavigationHelper.php:105
 #: application/zoolu/modules/global/controllers/ElementController.php:554
@@ -392,9 +413,7 @@ msgstr "%s Kontakte hinzugefügt, %t Kontakte geändert"
 
 #: application/zoolu/modules/contacts/controllers/SubscriberController.php:518
 msgid "Missing_email"
-msgstr ""
-"<strong>Es wurden keine Kontakte importiert, da keine E-Mail Adresse "
-"zugewiesen wurde!</strong>"
+msgstr "<strong>Es wurden keine Kontakte importiert, da keine E-Mail Adresse zugewiesen wurde!</strong>"
 
 #: application/zoolu/modules/contacts/controllers/SubscriberController.php:631
 msgid "Encoding"
@@ -539,8 +558,8 @@ msgstr "Adressen"
 #: application/zoolu/modules/global/views/helpers/FolderHelper.php:157
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:178
 #: application/zoolu/modules/core/views/helpers/FolderHelper.php:309
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:184
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:136
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:186
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:138
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:44
 #: application/zoolu/modules/core/views/scripts/folder/folderlist.phtml:16
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:123
@@ -627,23 +646,23 @@ msgid "Add_medias"
 msgstr "Medien hinzufügen"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:601
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:201
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:153
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:203
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:155
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:140
 msgid "New_version"
 msgstr "Neue Version"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:623
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:218
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:170
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:220
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:172
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:157
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:157
 msgid "Version_list"
 msgstr "Versionsliste"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:630
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:194
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:146
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:196
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:148
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:132
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:133
 msgid "Version"
@@ -783,6 +802,7 @@ msgstr "Ressourcengruppen"
 #: application/zoolu/modules/core/models/Urls.php:214
 #: application/zoolu/modules/core/models/Urls.php:224
 #: application/zoolu/modules/core/models/Urls.php:235
+#: application/zoolu/modules/core/models/Urls.php:247
 msgid "deactivated"
 msgstr "deaktiviert"
 
@@ -790,6 +810,7 @@ msgstr "deaktiviert"
 #: application/zoolu/modules/core/models/Urls.php:214
 #: application/zoolu/modules/core/models/Urls.php:224
 #: application/zoolu/modules/core/models/Urls.php:235
+#: application/zoolu/modules/core/models/Urls.php:247
 msgid "active"
 msgstr "aktiviert"
 
@@ -906,59 +927,68 @@ msgstr "Landing Page URL"
 
 #: application/zoolu/modules/core/controllers/LandingpageController.php:139
 msgid "Landingpage_url_desc"
-msgstr ""
-"(relativer Pfad z.B. für Wunsch URL: www.meineseite.com/meineZielURL nur "
-"meineZielURL eingeben)"
+msgstr "(relativer Pfad z.B. für Wunsch URL: www.meineseite.com/meineZielURL nur meineZielURL eingeben)"
 
 #: application/zoolu/modules/core/controllers/LandingpageController.php:140
+msgid "External_url"
+msgstr "Url"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:140
+msgid "External_url_desc"
+msgstr "(z.B. http://www.einedomain.com/de/kontakt oder /de/info/kontakt)"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:141
 msgid "Landingpage_link"
 msgstr "Darzustellende Inhaltsseite"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:141
+#: application/zoolu/modules/core/controllers/LandingpageController.php:142
 msgid "Landingpage_language"
 msgstr "Sprache"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:141
+#: application/zoolu/modules/core/controllers/LandingpageController.php:142
 msgid "Landingpage_language_desc"
 msgstr "in der die gewählte Inhaltsseite angezeigt werden soll"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:142
+#: application/zoolu/modules/core/controllers/LandingpageController.php:143
 msgid "Landingpage_redirect"
-msgstr ""
-"Landing Page soll als URL sichtbar bleiben und nicht auf Zielseite umleiten."
+msgstr "Landing Page soll als URL sichtbar bleiben und nicht auf Zielseite umleiten."
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:142
+#: application/zoolu/modules/core/controllers/LandingpageController.php:143
 msgid "Landingpage_redirect_desc"
 msgstr "(Achtung: Gefahr für 'Duplikate Content')"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:145
+#: application/zoolu/modules/core/controllers/LandingpageController.php:146
 msgid "Contentpage"
 msgstr "Inhaltsseite"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:149
+#: application/zoolu/modules/core/controllers/LandingpageController.php:150
+msgid "External_page"
+msgstr "Externe Seite"
+
+#: application/zoolu/modules/core/controllers/LandingpageController.php:154
 msgid "General_information_landingpage"
 msgstr "Informationen zur Konfiguration einer Landing Page"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:178
-#: application/zoolu/modules/core/controllers/LandingpageController.php:432
+#: application/zoolu/modules/core/controllers/LandingpageController.php:184
+#: application/zoolu/modules/core/controllers/LandingpageController.php:467
 #: application/zoolu/layouts/newsletters-list.phtml:392
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:145
 msgid "Link"
 msgstr "Link"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:205
-#: application/zoolu/modules/core/controllers/LandingpageController.php:249
+#: application/zoolu/modules/core/controllers/LandingpageController.php:212
+#: application/zoolu/modules/core/controllers/LandingpageController.php:265
 msgid "New_Landingpage"
 msgstr "Neue Landingpage"
 
-#: application/zoolu/modules/core/controllers/LandingpageController.php:291
-#: application/zoolu/modules/core/controllers/LandingpageController.php:341
+#: application/zoolu/modules/core/controllers/LandingpageController.php:309
+#: application/zoolu/modules/core/controllers/LandingpageController.php:376
 msgid "Edit_Landingpage"
 msgstr "Landingpage editieren"
 
 #: application/zoolu/modules/core/controllers/LanguageController.php:80
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:138
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:79
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:139
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:80
 msgid "language_copy"
 msgstr "Sprachversion kopieren"
 
@@ -1112,10 +1142,7 @@ msgstr "Die gewählte URL existiert bereits!"
 
 #: library/massiveart/generic/fields/SeoKeywords/forms/helpers/FormSeoKeywords.php:26
 msgid "Seo_max_keywords"
-msgstr ""
-"Verwenden Sie maximal 5 Meta Keywords abhängig vom Inhalt ihrer Seite, "
-"getrennt durch Kommas. Anzahl der Keywords: <span id=\"seo_keywords_count\" "
-"class=\"plus\">%s</span>"
+msgstr "Verwenden Sie maximal 5 Meta Keywords abhängig vom Inhalt ihrer Seite, getrennt durch Kommas. Anzahl der Keywords: <span id=\"seo_keywords_count\" class=\"plus\">%s</span>"
 
 #: library/massiveart/generic/fields/Group/forms/helpers/FormGroup.php:72
 msgid "Add_groups"
@@ -1134,9 +1161,7 @@ msgstr "Kontakte hinzufügen"
 
 #: library/massiveart/generic/fields/Seo/forms/helpers/FormSeo.php:52
 msgid "Seo_max_chars"
-msgstr ""
-"<p>%s ist begrenzt auf %t Zeichen. Sie haben noch <span id=\"chars_count_%u"
-"\">%v</span> Zeichen übrig.</p>"
+msgstr "<p>%s ist begrenzt auf %t Zeichen. Sie haben noch <span id=\"chars_count_%u\">%v</span> Zeichen übrig.</p>"
 
 #: library/massiveart/generic/fields/Collection/forms/helpers/FormCollection.php:86
 msgid "Add_page"
@@ -1453,8 +1478,8 @@ msgstr "OK"
 #: application/zoolu/layouts/contacts-tree.phtml:316
 #: application/zoolu/layouts/newsletters-list.phtml:388
 #: application/zoolu/layouts/cms-list.phtml:385
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:167
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:108
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:169
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:110
 #: application/zoolu/modules/core/views/scripts/folder/documentcheckboxtree.phtml:20
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:95
 msgid "Apply"
@@ -1569,30 +1594,20 @@ msgstr "Vorschau"
 #: application/zoolu/layouts/contacts-list.phtml:443
 #: application/zoolu/modules/contacts/views/scripts/subscriber/list.phtml:16
 msgid "Delete_subscriber"
-msgstr ""
-"Wollen Sie diesen Kontakt löschen?<br /><br /><strong>Dabei gehen alle Daten "
-"dieses Kontaktes verloren!</strong>"
+msgstr "Wollen Sie diesen Kontakt löschen?<br /><br /><strong>Dabei gehen alle Daten dieses Kontaktes verloren!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:444
 #: application/zoolu/modules/contacts/views/scripts/subscriber/list.phtml:15
 msgid "Delete_subscribers"
-msgstr ""
-"Wollen Sie diese %i Kontakte löschen?<br /><br /><strong>Dabei gehen alle "
-"Statistikdaten dieser Kontakte verloren!</strong>"
+msgstr "Wollen Sie diese %i Kontakte löschen?<br /><br /><strong>Dabei gehen alle Statistikdaten dieser Kontakte verloren!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:445
 msgid "Unsubscribe_subscriber"
-msgstr ""
-"Wollen Sie das Abonnement dieses Kontaktes wirklich kündigen?<br /><br /"
-"><strong>Der Kontakt wird per E-Mail über diese Kündigung informiert!</"
-"strong>"
+msgstr "Wollen Sie das Abonnement dieses Kontaktes wirklich kündigen?<br /><br /><strong>Der Kontakt wird per E-Mail über diese Kündigung informiert!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:446
 msgid "Unsubscribe_subscribers"
-msgstr ""
-"Wollen Sie das Abonnement dieser %i Kontakte wirklich kündigen?<br /><br /"
-"><strong>Die Kontakte werden per E-Mail über diese Kündigung informierti!</"
-"strong>"
+msgstr "Wollen Sie das Abonnement dieser %i Kontakte wirklich kündigen?<br /><br /><strong>Die Kontakte werden per E-Mail über diese Kündigung informierti!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:447
 msgid "Add_new_Filter"
@@ -1940,22 +1955,22 @@ msgstr "auf Tablet"
 msgid "show_in_mobile"
 msgstr "auf Mobile"
 
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:142
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:83
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:144
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:85
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:35
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:70
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:211
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:163
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:213
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:165
 #: application/zoolu/modules/core/views/scripts/folder/form.phtml:150
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:150
 msgid "Last_change"
 msgstr "Letzte Änderung"
 
-#: application/zoolu/modules/cms/views/scripts/page/form.phtml:224
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:176
+#: application/zoolu/modules/cms/views/scripts/page/form.phtml:226
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:178
 #: application/zoolu/modules/media/views/scripts/file/singleform.phtml:28
 msgid "Send_to_dashboard"
 msgstr "Dashboard veröffentlichen"
@@ -2038,12 +2053,12 @@ msgstr "Wollen Sie diese %i Standorte löschen?"
 msgid "New_Contact"
 msgstr "Neuer Kontakt"
 
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:65
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:66
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:58
 msgid "enable_language_fallback"
 msgstr "Sprach-Fallback aktivieren"
 
-#: application/zoolu/modules/global/views/scripts/element/form.phtml:126
+#: application/zoolu/modules/global/views/scripts/element/form.phtml:128
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/form.phtml:113
 msgid "Security"
 msgstr "Sicherheit"
@@ -2155,18 +2170,6 @@ msgstr "Details"
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:141
 msgid "Click"
 msgstr "Klicks"
-
-#~ msgid "targetpage"
-#~ msgstr "Zielseite"
-
-#~ msgid "url"
-#~ msgstr "Landingpage URL"
-
-#~ msgid "redirect"
-#~ msgstr "Weiterleitung"
-
-#~ msgid "changeUser"
-#~ msgstr "Letzte Änderung von"
 
 #~ msgid "Publish"
 #~ msgstr "Sicherheit"

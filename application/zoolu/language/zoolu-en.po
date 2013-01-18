@@ -4,14 +4,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-20 16:51+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
+"Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
 "Language: en_AT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /home/daniel/Workspaces/PHPStorm/ZOOLU\n"
+"X-Poedit-Basepath: /Volumes/massive-brunello/websites/testing.zoolu.bazing.at/\n"
 "X-Poedit-SearchPath-0: application/zoolu\n"
 "X-Poedit-SearchPath-1: public/zoolu-statics\n"
 "X-Poedit-SearchPath-2: library/massiveart\n"
@@ -334,9 +334,7 @@ msgstr "Select page"
 #: application/zoolu/modules/cms/controllers/PageController.php:467
 #: application/zoolu/modules/global/controllers/ElementController.php:562
 msgid "Copy_startpage_message"
-msgstr ""
-"Do you want to override the startpage for the folder \"%s\" or should a new "
-"subfolder named \"%t\" be created?"
+msgstr "Do you want to override the startpage for the folder \"%s\" or should a new subfolder named \"%t\" be created?"
 
 #: application/zoolu/modules/cms/controllers/PageController.php:468
 #: application/zoolu/modules/global/controllers/ElementController.php:563
@@ -409,9 +407,7 @@ msgstr "%s contacts added, %t contacts updated"
 
 #: application/zoolu/modules/contacts/controllers/SubscriberController.php:518
 msgid "Missing_email"
-msgstr ""
-"<strong>No contacts were imported, because there was no assignments for an E-"
-"Mail Address</strong>"
+msgstr "<strong>No contacts were imported, because there was no assignments for an E-Mail Address</strong>"
 
 #: application/zoolu/modules/contacts/controllers/SubscriberController.php:631
 msgid "Encoding"
@@ -923,8 +919,7 @@ msgstr "Landing Page URL"
 
 #: application/zoolu/modules/core/controllers/LandingpageController.php:139
 msgid "Landingpage_url_desc"
-msgstr ""
-"(relative path e.g. for URL: www.mysite.com/myTargetURL only myTargetURL)"
+msgstr "(relative path e.g. for URL: www.mysite.com/myTargetURL only myTargetURL)"
 
 #: application/zoolu/modules/core/controllers/LandingpageController.php:140
 msgid "Landingpage_link"
@@ -1127,9 +1122,7 @@ msgstr "The chosen URL already exists!"
 
 #: library/massiveart/generic/fields/SeoKeywords/forms/helpers/FormSeoKeywords.php:26
 msgid "Seo_max_keywords"
-msgstr ""
-"Use maximal 5 meta keywords based on your page content, separated by commas. "
-"Keyword count: <span id=\"seo_keywords_count\" class=\"plus\">%s</span>"
+msgstr "Use maximal 5 meta keywords based on your page content, separated by commas. Keyword count: <span id=\"seo_keywords_count\" class=\"plus\">%s</span>"
 
 #: library/massiveart/generic/fields/Group/forms/helpers/FormGroup.php:72
 msgid "Add_groups"
@@ -1148,9 +1141,7 @@ msgstr "Add contacts"
 
 #: library/massiveart/generic/fields/Seo/forms/helpers/FormSeo.php:52
 msgid "Seo_max_chars"
-msgstr ""
-"<p>%s is limited to %t characters. You have <span id=\"chars_count_%u\">%v</"
-"span> characters left.</p>"
+msgstr "<p>%s is limited to %t characters. You have <span id=\"chars_count_%u\">%v</span> characters left.</p>"
 
 #: library/massiveart/generic/fields/Collection/forms/helpers/FormCollection.php:86
 msgid "Add_page"
@@ -1587,28 +1578,20 @@ msgstr "Preview"
 #: application/zoolu/layouts/contacts-list.phtml:443
 #: application/zoolu/modules/contacts/views/scripts/subscriber/list.phtml:16
 msgid "Delete_subscriber"
-msgstr ""
-"Do you want to delete this contact?<br /><br /><strong>You will also lose "
-"all the statistics about this contact!</strong>"
+msgstr "Do you want to delete this contact?<br /><br /><strong>You will also lose all the statistics about this contact!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:444
 #: application/zoolu/modules/contacts/views/scripts/subscriber/list.phtml:15
 msgid "Delete_subscribers"
-msgstr ""
-"Do you want to delete these %i contacts?<br /><br /><strong>All Information "
-"about these contacts will be lost!</strong>"
+msgstr "Do you want to delete these %i contacts?<br /><br /><strong>All Information about these contacts will be lost!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:445
 msgid "Unsubscribe_subscriber"
-msgstr ""
-"Do you want to unsubscribe this contact?<br /><br /><strong>The contact will "
-"be informed via email!</strong>"
+msgstr "Do you want to unsubscribe this contact?<br /><br /><strong>The contact will be informed via email!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:446
 msgid "Unsubscribe_subscribers"
-msgstr ""
-"Do you want to unsubscribe this contact?<br /><br /><strong>The contact will "
-"be informed via email!</strong>"
+msgstr "Do you want to unsubscribe this contact?<br /><br /><strong>The contact will be informed via email!</strong>"
 
 #: application/zoolu/layouts/contacts-list.phtml:447
 msgid "Add_new_Filter"
