@@ -206,9 +206,9 @@ Massiveart.Form = Class.create({
       /**
        * serialize generic form
        */
-      var serializedForm = $(this.formId).serialize();
-      
-      new Ajax.Updater('overlayUserSettingsContent', $(this.formId).readAttribute('action'), {
+      var serializedForm = $$('#overlayUserSettingsContent #'+this.formId)[0].serialize();
+
+      new Ajax.Updater('overlayUserSettingsContent', $$('#overlayUserSettingsContent #'+this.formId)[0].readAttribute('action'), {
         parameters: serializedForm,
         evalScripts: true,
         onComplete: function(transport) {
