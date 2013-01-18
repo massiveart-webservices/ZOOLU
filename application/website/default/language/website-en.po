@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-10-10 09:45+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
+"Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
 "Language: en_AT\n"
 "MIME-Version: 1.0\n"
@@ -151,11 +151,11 @@ msgstr "Legal notes"
 
 #: application/website/default/controllers/DatareceiverController.php:429
 msgid "Dear"
-msgstr ""
+msgstr "Dear"
 
 #: application/website/default/controllers/DatareceiverController.php:434
 msgid "Success_message"
-msgstr ""
+msgstr "Success message"
 
 #: application/website/default/controllers/SweepstakeController.php:313
 msgid "Firstname"
@@ -236,21 +236,21 @@ msgstr "Ms."
 #: application/website/default/helpers/PageHelper.php:2223
 #: application/website/default/helpers/PageHelper.php:2224
 msgid "Get_a_new_challenge"
-msgstr ""
+msgstr "Neue Aufgabe"
 
 #: application/website/default/helpers/PageHelper.php:1920
 #: application/website/default/helpers/PageHelper.php:1921
 #: application/website/default/helpers/PageHelper.php:2226
 #: application/website/default/helpers/PageHelper.php:2227
 msgid "Get_an_audio_challenge"
-msgstr ""
+msgstr "Höraufgabe"
 
 #: application/website/default/helpers/PageHelper.php:1923
 #: application/website/default/helpers/PageHelper.php:1924
 #: application/website/default/helpers/PageHelper.php:2229
 #: application/website/default/helpers/PageHelper.php:2230
 msgid "Get_a_visual_challenge"
-msgstr ""
+msgstr "Visuell Aufgabe"
 
 #: application/website/default/helpers/PageHelper.php:1926
 #: application/website/default/helpers/PageHelper.php:1927
@@ -272,13 +272,7 @@ msgstr "Send"
 #: application/website/default/helpers/PageHelper.php:1971
 #: application/website/default/helpers/PageHelper.php:2189
 msgid "LegalNotes"
-msgstr ""
-"I agree that the above personal data are stored, processed and used by "
-"Ivoclar Vivadent AG and the companies of the Ivoclar Vivadent Group to "
-"provide me with information about products, services, or activities of the "
-"Ivoclar Vivadent Group in writing, by fax, phone, or e-mail. I can revoke my "
-"consent completely or partially with immediate effect by sending a "
-"corresponding notification to info@ivoclarvivadent.com."
+msgstr "I agree that the above personal data are stored, processed and used by Ivoclar Vivadent AG and the companies of the Ivoclar Vivadent Group to provide me with information about products, services, or activities of the Ivoclar Vivadent Group in writing, by fax, phone, or e-mail. I can revoke my consent completely or partially with immediate effect by sending a corresponding notification to info@ivoclarvivadent.com."
 
 #: application/website/default/helpers/PageHelper.php:2053
 msgid "Dental_office"

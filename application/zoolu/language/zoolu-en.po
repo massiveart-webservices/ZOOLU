@@ -1209,11 +1209,11 @@ msgstr "Add videos"
 
 #: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:75
 msgid "Edit backgorund image"
-msgstr ""
+msgstr "Edit backgorund image"
 
 #: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:187
 msgid "Corresponding region"
-msgstr ""
+msgstr "Corresponding region"
 
 #: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:194
 #: application/zoolu/layouts/cms.phtml:75

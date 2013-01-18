@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-28 08:11+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Daniel Rotter <daniel.rotter@gmail.com>\n"
+"Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
 "Language: de_AT\n"
 "MIME-Version: 1.0\n"
@@ -199,11 +199,11 @@ msgstr "Rechtliche Hinweise"
 
 #: application/website/default/controllers/DatareceiverController.php:429
 msgid "Dear"
-msgstr ""
+msgstr "Lieber/r"
 
 #: application/website/default/controllers/DatareceiverController.php:434
 msgid "Success_message"
-msgstr ""
+msgstr "Erfolgsmeldung"
 
 #: application/website/default/controllers/SweepstakeController.php:313
 msgid "Firstname"
@@ -223,24 +223,24 @@ msgstr "PLZ"
 
 #: application/website/default/helpers/PageHelper.php:471
 msgid "Image_gallery"
-msgstr ""
+msgstr "Bilderhgalerie"
 
 #: application/website/default/helpers/PageHelper.php:498
 msgid "Show_all_images"
-msgstr ""
+msgstr "Alle Bilder anzeigen"
 
 #: application/website/default/helpers/PageHelper.php:572
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: application/website/default/helpers/PageHelper.php:663
 msgid "Brochures"
-msgstr ""
+msgstr "Dokumente"
 
 #: application/website/default/helpers/PageHelper.php:826
 #: application/website/default/helpers/PageHelper.php:850
 msgid "Internal_links"
-msgstr ""
+msgstr "Interne Links"
 
 #: application/website/default/helpers/PageHelper.php:1175
 #: application/website/default/helpers/PageHelper.php:1329
@@ -253,11 +253,11 @@ msgstr "Mehr Information"
 
 #: application/website/default/helpers/PageHelper.php:1257
 msgid "Similar_pages"
-msgstr ""
+msgstr "Ähnliche Seiten"
 
 #: application/website/default/helpers/PageHelper.php:1267
 msgid "Created_at"
-msgstr ""
+msgstr "Erstell am"
 
 #: application/website/default/helpers/PageHelper.php:1876
 #: application/website/default/helpers/PageHelper.php:1885
@@ -284,28 +284,28 @@ msgstr "Frau"
 #: application/website/default/helpers/PageHelper.php:2224
 #: application/website/default/helpers/PageHelper.php:2225
 msgid "Get_a_new_challenge"
-msgstr ""
+msgstr "Get a new challenge"
 
 #: application/website/default/helpers/PageHelper.php:1921
 #: application/website/default/helpers/PageHelper.php:1922
 #: application/website/default/helpers/PageHelper.php:2227
 #: application/website/default/helpers/PageHelper.php:2228
 msgid "Get_an_audio_challenge"
-msgstr ""
+msgstr "Get a audio challenge"
 
 #: application/website/default/helpers/PageHelper.php:1924
 #: application/website/default/helpers/PageHelper.php:1925
 #: application/website/default/helpers/PageHelper.php:2230
 #: application/website/default/helpers/PageHelper.php:2231
 msgid "Get_a_visual_challenge"
-msgstr ""
+msgstr "Get a visual challenge"
 
 #: application/website/default/helpers/PageHelper.php:1927
 #: application/website/default/helpers/PageHelper.php:1928
 #: application/website/default/helpers/PageHelper.php:2233
 #: application/website/default/helpers/PageHelper.php:2234
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: application/website/default/helpers/PageHelper.php:1961
 #: application/website/default/helpers/PageHelper.php:2179
@@ -320,14 +320,7 @@ msgstr "Senden"
 #: application/website/default/helpers/PageHelper.php:1972
 #: application/website/default/helpers/PageHelper.php:2190
 msgid "LegalNotes"
-msgstr ""
-"Ich bin damit einverstanden, dass meine oben eingegebenen Daten von der "
-"Ivoclar Vivadent AG und den Gesellschaften der Ivoclar Vivadent Gruppe "
-"gespeichert, verarbeitet und genutzt werden, um mich mit Informationen über "
-"Produkte, Dienstleistungen oder Aktivitäten der Ivoclar Vivadent Gruppe "
-"schriftlich, per Telefax, telefonisch oder per E-mail zu versorgen. Meine "
-"Einwilligung kann ich jederzeit ganz oder teilweise mit Wirkung für die "
-"Zukunft durch eine Mitteilung an info@ivoclarvivadent.com widerrufen."
+msgstr "Ich bin damit einverstanden, dass meine oben eingegebenen Daten von der Ivoclar Vivadent AG und den Gesellschaften der Ivoclar Vivadent Gruppe gespeichert, verarbeitet und genutzt werden, um mich mit Informationen über Produkte, Dienstleistungen oder Aktivitäten der Ivoclar Vivadent Gruppe schriftlich, per Telefax, telefonisch oder per E-mail zu versorgen. Meine Einwilligung kann ich jederzeit ganz oder teilweise mit Wirkung für die Zukunft durch eine Mitteilung an info@ivoclarvivadent.com widerrufen."
 
 #: application/website/default/helpers/PageHelper.php:2054
 msgid "Dental_office"

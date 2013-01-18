@@ -1229,11 +1229,11 @@ msgstr "Videos hinzufügen "
 
 #: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:75
 msgid "Edit backgorund image"
-msgstr ""
+msgstr "Hintergrundbild editieren"
 
 #: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:187
 msgid "Corresponding region"
-msgstr ""
+msgstr "Dazugehörige Region"
 
 #: library/massiveart/generic/fields/Imagemap/forms/helpers/FormImagemap.php:194
 #: application/zoolu/layouts/cms.phtml:75
@@ -1518,7 +1518,7 @@ msgstr "Keine"
 
 #: application/zoolu/layouts/cms.phtml:401
 msgid "Copy_folder_text"
-msgstr ""
+msgstr "Ordnertext kopieren"
 
 #: application/zoolu/layouts/cms.phtml:402
 msgid "Move_folder_text"
