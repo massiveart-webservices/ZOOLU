@@ -276,7 +276,7 @@ class Model_Urls
         $objUrlData = new stdClass();
 
         $objFolderPageSelect = $this->core->dbh->select();
-        $objFolderPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+        $objFolderPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objFolderPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array());
         $objFolderPageSelect->join('folders', 'folders.id = pages.idParent', array());
         $objFolderPageSelect->where('urls.url = ?', $strUrl)
@@ -291,46 +291,77 @@ class Model_Urls
 
 
         $objRootLevelPageSelect = $this->core->dbh->select();
-        $objRootLevelPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+        $objRootLevelPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objRootLevelPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->rootlevel, array());
         $objRootLevelPageSelect->join('rootLevels', ' rootLevels.id = pages.idParent', array());
         $objRootLevelPageSelect->where('urls.url = ?', $strUrl)
-                               ->where('urls.idUrlTypes IN ('.$this->core->sysConfig->url_types->page.','.$this->core->sysConfig->url_types->external.')');
+            ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page);
         if ($blnLanguage) {
             $objRootLevelPageSelect->where('urls.idLanguages = ?', $this->intLanguageId);
         }
         if ($strType != 'global') {
             $objRootLevelPageSelect->where('rootLevels.id = ?', $intRootLevelId);
         }
-        $objRootLevelPageSelect->where('urls.isLandingPage = ?', $blnLandingPage);
+        $objRootLevelPageSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+    
+        $objRootLevelPageSelect = $this->core->dbh->select();
+        $objRootLevelPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+        $objRootLevelPageSelect->joinLeft('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array());
+        $objRootLevelPageSelect->join('rootLevels', ' rootLevels.id = pages.idParent OR (rootLevels.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel.')', array());
+        $objRootLevelPageSelect->where('urls.url = ?', $strUrl)
+        				       ->where('urls.idUrlTypes IN ('.$this->core->sysConfig->url_types->page.','.$this->core->sysConfig->url_types->external.')');
+        if($blnLanguage){
+          $objRootLevelPageSelect->where('urls.idLanguages = ?', $this->intLanguageId);
+        }
+        if($strType != 'global'){
+        	  $objRootLevelPageSelect->where('rootLevels.id = ?', $intRootLevelId);
+        }
+        $objRootLevelPageSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
 
+//     $objExternalPageSelect = $this->core->dbh->select();
+//     $objExternalPageSelect->from('urls', array('relationId' => new Zend_Db_Expr('""'), 'version' => new Zend_Db_Expr('"1"'), 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+//     $objExternalPageSelect->where('urls.url = ?', $strUrl)
+//     ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->external);
+//     if($blnLanguage){
+//         $objExternalPageSelect->where('urls.idLanguages = ?', $this->intLanguageId);
+//     }
+//     if($strType != 'global'){
+//         $objExternalPageSelect->where('urls.idParent = ?', $intRootLevelId);
+//         $objExternalPageSelect->where('urls.idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel);
+//     }
+//     $objExternalPageSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+					                 
         $objGlobalSelect = $this->core->dbh->select();
-        $objGlobalSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+        $objGlobalSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objGlobalSelect->join('globals', 'globals.globalId = urls.relationId AND globals.version = urls.version', array());
         $objGlobalSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = urls.idLanguages', array());
         $objGlobalSelect->where('urls.url = ?', $strUrl)
-            ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global)
-            ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
-        if ($blnLanguage) {
-            $objGlobalSelect->where('urls.idLanguages = ?', $this->intLanguageId);
+                         ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global)
+                         ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
+        if($blnLanguage){
+            $objGlobalSelect->joinLeft('folders', 'folders.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
         }
-        $objGlobalSelect->where('urls.isLandingPage = ?', $blnLandingPage);
-
+        $objGlobalSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+          
         $objGlobalLinksSelect = $this->core->dbh->select();
-        $objGlobalLinksSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.external', 'idLink' => 'lG.id', 'linkId' => 'lG.globalId', 'idLinkParent' => 'lG.idParent'));
+        $objGlobalLinksSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => 'lG.id', 'linkId' => 'lG.globalId', 'idLinkParent' => 'lG.idParent'));
         $objGlobalLinksSelect->join(array('lG' => 'globals'), 'lG.globalId = urls.relationId AND lG.version = urls.version', array());
         $objGlobalLinksSelect->join('globalLinks', 'globalLinks.idGlobals = lG.id', array());
         $objGlobalLinksSelect->join('globals', 'globals.globalId = globalLinks.globalId', array());
         $objGlobalLinksSelect->where('urls.url = ?', $strUrl)
-            ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global)
-            ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
-        if ($blnLanguage) {
+                             ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global)
+                             ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
+        if($blnLanguage){
             $objGlobalLinksSelect->where('urls.idLanguages = ?', $this->intLanguageId);
         }
-        $objGlobalLinksSelect->where('urls.isLandingPage = ?', $blnLandingPage);
-
+        if($blnLandingPage){
+            $objGlobalLinksSelect->joinLeft('folders', 'folders.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
+            $objGlobalLinksSelect->where('folders.idRootLevels = ?', $intRootLevelId);
+        }
+        $objGlobalLinksSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+        
         $objSelect = $this->getUrlTable()->select()
-            ->union(array($objFolderPageSelect, $objRootLevelPageSelect, $objGlobalSelect, $objGlobalLinksSelect));
+                                         ->union(array($objFolderPageSelect, $objRootLevelPageSelect, $objGlobalSelect, $objGlobalLinksSelect));
 
         $objUrlData->url = $this->objUrlTable->fetchAll($objSelect);
 
@@ -350,7 +381,7 @@ class Model_Urls
 
         return $objUrlData;
     }
-
+    
     /**
      * loadGlobalTreeBaseUrls
      * @param integer $intRootLevelId

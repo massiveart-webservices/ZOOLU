@@ -252,7 +252,12 @@ class IndexController extends WebControllerAction
                             if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
                                  $uriLanguageFolder = '/' . strtolower($objMainUrl->languageCode) . '/';
                             }
-                            $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                            if ($objUrlData->isLandingPage && $objUrlData->idParent) {
+                                $objBasePage = $this->getModelUrls()->loadByFolderId($objUrlData->idParent);                                
+                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objBasePage->url.$objMainUrl->url);
+                            } else {
+                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                            }
                         }
                     }
     
@@ -648,7 +653,7 @@ class IndexController extends WebControllerAction
     * getValidatedUrlObject
     * @param string $strUrl
     */
-    private function getValidatedUrlObject($strUrl) {
+private function getValidatedUrlObject($strUrl) {
         $objUrl = null;
         
         //Load URL now, because language is alredy needed if more then one language is defined
@@ -658,27 +663,27 @@ class IndexController extends WebControllerAction
         }else{
             //Load landingpage if there is no language in the url
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
-            if($objUrl->url->current()->external != ''){
-                if((bool) $objUrl->url->current()->isMain === true){
-                    $ch = curl_init();
-                    $timeout = 5;
-                    curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-                    $data = curl_exec($ch);
-                    curl_close($ch);
-                    // displa content of linked landingpage but do not redirect
-                    echo $data;
-                    exit();
-                }else{
-                    $this->_redirect($objUrl->url->current()->external);
-                }
-            }
             if (!isset($objUrl->url) || count($objUrl->url) == 0) {
                 //If there is no landingpage, try normal page with default language 
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
             } else {
                 $this->blnIsLandingPage = true;
+                if($objUrl->url->current()->external != ''){                     
+                    if((bool) $objUrl->url->current()->isMain === true){
+                        $ch = curl_init();
+                        $timeout = 5;
+                        curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                        $data = curl_exec($ch);
+                        curl_close($ch);
+                        // displa content of linked landingpage but do not redirect
+                        echo $data;
+                        exit();
+                    }else{
+                        $this->_redirect($objUrl->url->current()->external);  
+                    }        
+                }
             }
             if (isset($objUrl->url) && count($objUrl->url) > 0) {
                 //Needed for landingpage: change language for redirect
