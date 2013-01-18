@@ -659,7 +659,20 @@ class IndexController extends WebControllerAction
             //Load landingpage if there is no language in the url
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
             if($objUrl->url->current()->external != ''){
-                $this->_redirect($objUrl->url->current()->external);
+                if((bool) $objUrl->url->current()->isMain === true){
+                    $ch = curl_init();
+                    $timeout = 5;
+                    curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                    $data = curl_exec($ch);
+                    curl_close($ch);
+                    // displa content of linked landingpage but do not redirect
+                    echo $data;
+                    exit();
+                }else{
+                    $this->_redirect($objUrl->url->current()->external);
+                }
             }
             if (!isset($objUrl->url) || count($objUrl->url) == 0) {
                 //If there is no landingpage, try normal page with default language 
