@@ -775,6 +775,8 @@ class GenericSetup
                     foreach ($objRegion->getFields() as $objField) {
                         if ($objField->idFieldTypeGroup == GenericSetup::FIELD_TYPE_FILE_FILTER_ID) {
                             $objField->setValue($this->getFileFilterObject($objField->name, $arrValues));
+                        } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_ARTICLES) {
+                            $objField->setValue($this->getArticlesObject($objField->name, $arrValues));
                         } else if (array_key_exists($objField->name, $arrValues)) {
                             $objField->setValue($arrValues[$objField->name]);
                         }
@@ -851,6 +853,8 @@ class GenericSetup
             $objArticle->size = array_key_exists($strFieldName . '_size_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_size_' . $intInstanceId] : null;
             $objArticle->price = array_key_exists($strFieldName . '_price_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_price_' . $intInstanceId] : null;
             $objArticle->discount = array_key_exists($strFieldName . '_discount_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_discount_' . $intInstanceId] : null;
+            $objArticle->weight = array_key_exists($strFieldName . '_weight_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_weight_' . $intInstanceId] : null;
+            $objArticle->article_number = array_key_exists($strFieldName . '_article_number_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_article_number_' . $intInstanceId] : null;
 
             $articles[] = $objArticle;
         }
