@@ -82,6 +82,11 @@ class Model_Globals extends ModelAbstract
     protected $objGlobalInternalLinkTable;
 
     /**
+     * @var Model_Table_GlobalArticles
+     */
+    protected $objGlobalArticleTable;
+    
+    /**
      * @var Model_Table_GlobalVideos
      */
     protected $objGlobalVideoTable;
@@ -1472,6 +1477,91 @@ class Model_Globals extends ModelAbstract
     }
 
     /**
+     * addArticles
+     * @param array $arrArticles
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @return integer
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function addArticles($arrArticles, $strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('global->models->Model_Globals->addArticles(' . $arrArticles . ', ' . $strElementId . ', ' . $intVersion . ', ' . $intFieldId . ')');
+
+        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $arrData = array(
+            'globalId'     => $strElementId,
+            'version'      => $intVersion,
+            'idLanguages'  => $this->intLanguageId,
+            'idFields'     => $intFieldId,
+            'idUsers'      => $intUserId,
+            'creator'      => $intUserId,
+            'created'      => date('Y-m-d H:i:s')
+        );
+
+        if (count($arrArticles) > 0) {
+            foreach ($arrArticles as $sortPosition => $objArticle) {
+                $this->getGlobalArticleTable()->insert(array_merge(array(
+                                                                        'size'           => $objArticle->size,
+                                                                        'price'          => $objArticle->price,
+                                                                        'discount'       => $objArticle->discount,
+                                                                        'weight'         => $objArticle->weight,
+                                                                        'article_number' => $objArticle->article_number,
+                                                                        'sortPosition'   => $sortPosition + 1
+                                                                   ), $arrData));
+            }
+        }
+    }
+
+    /**
+     * loadArticles
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function loadArticles($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('global->models->Model_Globals->loadArticles(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $objSelect = $this->getGlobalArticleTable()->select();
+
+        $objSelect->from('globalArticles', array('size', 'price', 'discount', 'weight', 'article_number'))
+            ->where('globalId = ?', $strElementId)
+            ->where('version = ?', $intVersion)
+            ->where('idLanguages = ?', $this->intLanguageId)
+            ->where('idFields = ?', $intFieldId)
+            ->order('sortPosition ASC');
+
+        return $this->objGlobalArticleTable->fetchAll($objSelect);
+    }
+    
+    /**
+     * deleteArticles
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteArticles($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('global->models->Model_Globals->deleteArticles(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $strWhere = $this->getGlobalArticleTable()->getAdapter()->quoteInto('globalId = ?', $strElementId);
+        $strWhere .= $this->objGlobalArticleTable->getAdapter()->quoteInto(' AND version = ?', $intVersion);
+        $strWhere .= $this->objGlobalArticleTable->getAdapter()->quoteInto(' AND idFields = ?', $intFieldId);
+        $strWhere .= $this->objGlobalArticleTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->intLanguageId);
+
+        return $this->objGlobalArticleTable->delete($strWhere);
+    }
+    
+    /**
      * loadVideo
      * @param string $intElementId
      * @return Zend_Db_Table_Rowset_Abstract
@@ -1800,6 +1890,22 @@ class Model_Globals extends ModelAbstract
         }
 
         return $this->objGlobalInternalLinkTable;
+    }
+
+    /**
+     * getGlobalArticleTable
+     * @return Zend_Db_Table_Abstract
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getGlobalArticleTable()
+    {
+        if ($this->objGlobalArticleTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'global/models/tables/GlobalArticles.php';
+            $this->objGlobalArticleTable = new Model_Table_GlobalArticles();
+        }
+
+        return $this->objGlobalArticleTable;
     }
 
     /**
