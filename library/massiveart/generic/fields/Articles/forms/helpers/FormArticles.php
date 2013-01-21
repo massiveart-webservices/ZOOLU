@@ -79,6 +79,9 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
             $fieldOptions = json_decode($attribs['fieldOptions']);
         } else {
             $fieldOptions = new stdClass();
+            $fieldOptions->article_number = new stdClass();
+            $fieldOptions->article_number->active = true;
+
             $fieldOptions->size = new stdClass();
             $fieldOptions->size->active = true;
             $fieldOptions->size->sql = '';
@@ -88,6 +91,9 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
 
             $fieldOptions->discount = new stdClass();
             $fieldOptions->discount->active = true;
+
+            $fieldOptions->weight = new stdClass();
+            $fieldOptions->weight->active = false;
         }
 
 
@@ -95,22 +101,65 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
 
         $template = '
                 <div id="{id}_{n}" class="box-12 article" {box_style}>
-                    <div class="article-fieldgroup">
-                        <div class="field-4">
+                    <div class="article-fieldgroup">';
+
+
+        if ($fieldOptions->article_number->active) {
+            $template .= '
+                        <div class="field-3">
+                            <div class="field">
+                                <input type="text" id="{id}_article_number_{n}" name="{name}_article_number_{n}" value="{value_article_number}" ' . $endTag . '
+                            </div>
+                        </div>';
+        }
+
+        if ($fieldOptions->size->active) {
+            if (count($options) > 0) {
+                $template .= '
+                        <div class="field-select">
                             <div class="field">
                                 <select class="select" id="{id}_size_{n}" name="{name}_size_{n}">{options}</select>
                             </div>
-                        </div>
-                        <div class="field-4">
+                        </div>';
+            } else {
+                $template .= '
+                        <div class="field-3">
+                            <div class="field">
+                                <input  type="text" id="{id}_size_{n}" name="{name}_size_{n}" value="{value_size}" ' . $endTag . '
+                            </div>
+                        </div>';
+            }
+        }
+
+        if ($fieldOptions->price->active) {
+            $template .= '
+                        <div class="field-3">
                             <div class="field">
                                 <input type="text" id="{id}_price_{n}" name="{name}_price_{n}" value="{value_price}" ' . $endTag . '
                             </div>
-                        </div>
-                        <div class="field-4">
+                        </div>';
+        }
+
+        if ($fieldOptions->discount->active) {
+            $template .= '
+                        <div class="field-3">
                             <div class="field">
                                 <input type="text" id="{id}_discount_{n}" name="{name}_discount_{n}" value="{value_discount}" ' . $endTag . '
                             </div>
-                        </div>
+                        </div>';
+
+        }
+
+        if ($fieldOptions->weight->active) {
+            $template .= '
+                        <div class="field-3">
+                            <div class="field">
+                                <input type="text" id="{id}_weight_{n}" name="{name}_weight_{n}" value="{value_weight}" ' . $endTag . '
+                            </div>
+                        </div>';
+        }
+
+        $template .= '
                     </div>
                     <div class="clear"></div>
                     <div class="article-edit-box">
@@ -120,7 +169,7 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
                     </div>
                 </div>';
 
-        $wildcards = array('{id}', '{name}', '{n}', '{options}', '{box_style}', '{value_price}', '{value_discount}', '{add_article_style}');
+        $wildcards = array('{id}', '{name}', '{n}', '{options}', '{box_style}', '{value_size}', '{value_price}', '{value_discount}', '{value_weight}', '{value_article_number}', '{add_article_style}');
 
         $htmlData = '';
         $strIstances = '';
@@ -131,14 +180,18 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
                 if (count($values) == $i) {
                     $style = '';
                 }
+
                 $htmlData .= str_replace($wildcards, array(
                                                           $this->view->escape($id),
                                                           $this->view->escape($name),
                                                           $i,
-                                                          implode("\n    ", $this->buildSelect($options, $data)),
+                                                          ($fieldOptions->size->active && count($options) > 0) ? implode("\n    ", $this->buildSelect($options, $data)) : '',
                                                           '',
+                                                          $data->size,
                                                           $data->price,
                                                           $data->discount,
+                                                          $data->weight,
+                                                          $data->article_number,
                                                           $style
                                                      ), $template);
                 $strIstances .= '[' . $i . ']';
@@ -150,7 +203,7 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
                                                      $this->view->escape($id),
                                                      $this->view->escape($name),
                                                      '1',
-                                                     implode("\n    ", $this->buildSelect($options, null)),
+                                                     ($fieldOptions->size->active && count($options) > 0) ? implode("\n    ", $this->buildSelect($options, null)) : '',
                                                      '',
                                                 ), $template);
         }
@@ -158,22 +211,54 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
         $xhtml = '
             <div id="' . $this->view->escape($id) . '" class="articlewrapper">
                 <div class="box-12 article">
-                    <div class="article-labels">
-                        <div class="field-4">
+                    <div class="article-labels">';
+
+        if ($fieldOptions->article_number->active) {
+            $xhtml .= '
+                        <div class="field-3">
+                            <div class="field">
+                                <label class="fieldtitle" for="{id}_article_number_{n}">' . $core->translate->_('Article_number') . '</label>
+                            </div>
+                        </div>';
+        }
+
+        if ($fieldOptions->size->active) {
+            $xhtml .= '
+                        <div class="field-3">
                             <div class="field">
                                 <label class="fieldtitle" for="{id}_size_{n}">' . $core->translate->_('Size') . '</label>
                             </div>
-                        </div>
-                        <div class="field-4">
+                        </div>';
+        }
+
+        if ($fieldOptions->price->active) {
+            $xhtml .= '
+                        <div class="field-3">
                             <div class="field">
                                 <label class="fieldtitle" for="{id}_price_{n}">' . $core->translate->_('Price') . '</label>
                             </div>
-                        </div>
-                        <div class="field-4">
+                        </div>';
+        }
+
+        if ($fieldOptions->discount->active) {
+            $xhtml .= '
+                        <div class="field-3">
                             <div class="field">
                                 <label class="fieldtitle" for="{id}_discount_{n}">' . $core->translate->_('Discount') . '</label>
                             </div>
-                        </div>
+                        </div>';
+        }
+
+        if ($fieldOptions->weight->active) {
+            $xhtml .= '
+                        <div class="field-3">
+                            <div class="field">
+                                <label class="fieldtitle" for="{id}_weight_{n}">' . $core->translate->_('Weight') . '</label>
+                            </div>
+                        </div>';
+        }
+
+        $xhtml .= '
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -182,7 +267,7 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
                                                  $this->view->escape($id),
                                                  $this->view->escape($name),
                                                  'REPLACE_x',
-                                                 implode("\n    ", $this->buildSelect($options, null)),
+                                                 ($fieldOptions->size->active && count($options) > 0) ? implode("\n    ", $this->buildSelect($options, null)) : '',
                                                  'style="display:none;"',
                                             ), $template) . '
                 <div class="clear"></div>
@@ -233,6 +318,7 @@ class Form_Helper_FormArticles extends Zend_View_Helper_FormElement
             $arrSelected[] = $objData->size;
         }
 
+        $list = '';
         foreach ($options as $opt_value => $opt) {
             $depth = 0;
             if (is_array($opt) && array_key_exists('title', $opt)) {

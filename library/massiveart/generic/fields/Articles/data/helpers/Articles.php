@@ -64,14 +64,23 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
      * @param integer $intElementId
      * @param string $strType
      * @param string $strElementId
-     * @param integet $intVersion
+     * @param int $intVersion
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
     public function save($intElementId, $strType, $strElementId = null, $intVersion = null)
     {
         try {
-            // TODO
+            $this->strType = $strType;
+
+            $this->getModel();
+
+            $this->objModel->deleteArticles($strElementId, $intVersion, $this->objElement->id);
+
+            if ($this->objElement->getValue() != '') $this->objModel->addArticles($this->objElement->getValue(), $strElementId, $intVersion, $this->objElement->id);
+
+            $this->load($intElementId, $strType, $strElementId, $intVersion);
+
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -82,14 +91,36 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
      * @param integer $intElementId
      * @param string $strType
      * @param string $strElementId
-     * @param integet $intVersion
+     * @param int $intVersion
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
     public function load($intElementId, $strType, $strElementId = null, $intVersion = null)
     {
         try {
-            // TODO
+            $this->strType = $strType;
+
+            $this->getModel();
+
+            $objArticles = $this->objModel->loadArticles($strElementId, $intVersion, $this->objElement->id);
+
+            if (count($objArticles) > 0) {
+                $this->objElement->objArticles = $objArticles;
+
+                $arrArticles = array();
+                foreach ($objArticles as $objArticle) {
+                    $arrArticles[] = array(
+                        'size'           => $objArticle->size,
+                        'price'          => $objArticle->price,
+                        'discount'       => $objArticle->discount,
+                        'weight'         => $objArticle->weight,
+                        'article_number' => $objArticle->article_number
+                    );
+                }
+
+                $this->objElement->setValue(json_encode($arrArticles));
+            }
+
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -115,20 +146,23 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
             // add instance values
             $arrValues = $this->objElement->getInstanceValue($intRegionInstanceId);
 
-            foreach ($arrValues as $objArticle) {
+            if (is_array($arrValues)) {
+                foreach ($arrValues as $objArticle) {
+                    $arrFileData = array(
+                        $strType . 'Id'         => $strElementId,
+                        'version'               => $intVersion,
+                        'idLanguages'           => $this->objElement->Setup()->getLanguageId(),
+                        'idRegionInstances'     => $idRegionInstance,
+                        'size'                  => $objArticle->size,
+                        'price'                 => $objArticle->price,
+                        'discount'              => $objArticle->discount,
+                        'weight'                => $objArticle->weight,
+                        'article_number'        => $objArticle->article_number,
+                        'idFields'              => $this->objElement->id
+                    );
 
-                $arrFileData = array(
-                    $strType . 'Id'         => $strElementId,
-                    'version'               => $intVersion,
-                    'idLanguages'           => $this->objElement->Setup()->getLanguageId(),
-                    'idRegionInstances'     => $idRegionInstance,
-                    'size'                  => $objArticle->size,
-                    'price'                 => $objArticle->price,
-                    'discount'              => $objArticle->discount,
-                    'idFields'              => $this->objElement->id
-                );
-
-                $objGenTable->insert($arrFileData);
+                    $objGenTable->insert($arrFileData);
+                }
             }
 
             // load instance data
@@ -147,6 +181,7 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
      * @param GenericElementRegion $objRegion
      * @param number $intVersion
      * @author Daniel Rotter
+     * @return array
      * @version 1.0
      */
     public function loadInstanceData($strType, $strElementId, $objRegion, $intVersion)
@@ -160,7 +195,7 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
             $objSelect = $objGenTable->select();
             $objSelect->setIntegrityCheck(false);
 
-            $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'size', 'price', 'discount', 'idFields'));
+            $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'size', 'price', 'discount', 'weight', 'article_number', 'idFields'));
             $objSelect->join($strType . '-' . $this->objElement->Setup()->getFormId() . '-' . $this->objElement->Setup()->getFormVersion() . '-Region' . $objRegion->getRegionId() . '-Instances AS regionInstance', '`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idRegionInstances = regionInstance.id', array('sortPosition'));
             $objSelect->join('fields', 'fields.id = `' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idFields', array('name'));
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . $strType . 'Id = ?', $strElementId);
@@ -187,9 +222,11 @@ class GenericDataHelper_Articles extends GenericDataHelperAbstract
             //Group the field values together (multiply instance)
             foreach ($arrRawInstanceData as $arrInstanceDataRow) {
                 $arrInstanceData[$arrInstanceDataRow['sortPosition']][] = json_encode(array(
-                                                                                           'size'     => $arrInstanceDataRow['size'],
-                                                                                           'price'    => $arrInstanceDataRow['price'],
-                                                                                           'discount' => $arrInstanceDataRow['discount'],
+                                                                                           'size'           => $arrInstanceDataRow['size'],
+                                                                                           'price'          => $arrInstanceDataRow['price'],
+                                                                                           'discount'       => $arrInstanceDataRow['discount'],
+                                                                                           'weight'         => $arrInstanceDataRow['weight'],
+                                                                                           'article_number' => $arrInstanceDataRow['article_number'],
                                                                                       ));
                 $arrInstanceFieldNames[$arrInstanceDataRow['sortPosition']] = $arrInstanceDataRow['name'];
             }
