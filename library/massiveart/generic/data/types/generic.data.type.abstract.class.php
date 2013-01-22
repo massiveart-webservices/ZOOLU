@@ -288,7 +288,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      */
     final protected function insertFileData($strType, $arrTypeProperties)
     {
-
         if (count($this->setup->FileFields()) > 0) {
 
             $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
@@ -305,7 +304,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $arrFileIds = explode('][', $strTmpFileIds);
                 
                 $strDisplayOption = $objField->getProperty('display_option');
-
+                
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
                         if ($intFileId != '') {
@@ -316,7 +315,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'    => $this->setup->getLanguageId(),
                                     'sortPosition'   => $intSortPosition + 1,
                                     'idFiles'        => $intFileId,
-                                    'displayOption'  => $strDisplayOption,
                                     'idFields'       => $intFieldId
                                 );
                             } else {
@@ -324,9 +322,12 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id'],
                                     'idFiles'                            => $intFileId,
                                     'idFields'                           => $intFieldId,
-                                    'sortPosition'                       => $intSortPosition + 1,
-                                    'displayOption'                      => $strDisplayOption
+                                    'sortPosition'                       => $intSortPosition + 1
                                 );
+                            }
+                            
+                            if ($strDisplayOption != '') {
+                                $arrFileData['displayOption'] = $strDisplayOption;   
                             }
 
                             $this->getModelGenericData()->getGenericTable($strType . '-' . $this->setup->getFormId() . '-' . $this->setup->getFormVersion() . '-InstanceFiles')->insert($arrFileData);
@@ -709,7 +710,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
      */
     final protected function updateFileData($strType, $arrTypeProperties)
     {
-
         if (count($this->setup->FileFields()) > 0) {
 
             $objGenTable = $this->getModelGenericData()->getGenericTable($strType . '-' . $this->setup->getFormId() . '-' . $this->setup->getFormVersion() . '-InstanceFiles');
@@ -735,7 +735,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $arrFileIds = explode('][', $strTmpFileIds);
                 
                 $strDisplayOption = $objField->getProperty('display_option');
-
+                
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
                         if ($intFileId != '') {
@@ -746,7 +746,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'   => $this->setup->getLanguageId(),
                                     'sortPosition'  => $intSortPosition + 1,
                                     'idFiles'       => $intFileId,
-                                    'displayOption' => $strDisplayOption,
                                     'idFields'      => $intFieldId
                                 );
                             } else {
@@ -755,8 +754,11 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idFiles'                            => $intFileId,
                                     'idFields'                           => $intFieldId,
                                     'sortPosition'                       => $intSortPosition + 1,
-                                    'displayOption'                      => $strDisplayOption
                                 );
+                            }
+                            
+                            if ($strDisplayOption != '') {
+                                $arrFileData['displayOption'] = $strDisplayOption;   
                             }
 
                             $objGenTable->insert($arrFileData);
