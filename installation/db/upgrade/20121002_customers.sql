@@ -16,12 +16,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `customerSalutations`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `customerSalutations` (
-  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `title` VARCHAR(255) NOT NULL ,
-  PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `title_UNIQUE` (`title` ASC) )
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `customerSalutations` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `idLanguages` int(10) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title_UNIQUE` (`title`)
+) ENGINE=InnoDB
 
 
 -- -----------------------------------------------------
@@ -43,7 +44,7 @@ CREATE  TABLE IF NOT EXISTS `customers` (
   `fax` VARCHAR(255) NULL ,
   `idCustomerStatus` BIGINT(20) UNSIGNED NOT NULL ,
   `idCustomerSalutations` BIGINT(20) UNSIGNED ,
-  `idRootLevels` BIGINT(20) UNSIGNED NOT NULL ,
+  `idRootLevels` BIGINT(20) UNSIGNED NULL ,
   `idUsers` INT(10) UNSIGNED ,
   `creator` INT(10) UNSIGNED ,
   `created` TIMESTAMP NULL ,
@@ -199,7 +200,10 @@ ALTER TABLE `rootLevels`
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION;
 	
+`ALTER TABLE customerSalutations DROP INDEX title_UNIQUE`
 
+INSERT INTO `zo-zoolu`.`customerSalutations` (`id`, `idLanguages`, `title`) VALUES ('1', '0', 'Mr.'), ('2', '0', 'Mrs.'), ('3', '1', 'Herr'), ('4', '2', 'Frau');
+INSERT INTO `zo-zoolu`.`customerSalutations` (`id`, `idLanguages`, `title`) VALUES (NULL, '2', 'Mr.'), (NULL, '2', 'Mrs.');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

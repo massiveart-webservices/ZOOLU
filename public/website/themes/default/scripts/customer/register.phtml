@@ -15,6 +15,17 @@
             <form action="/register?re=<?php echo urlencode($this->redirectUrl) ?>" method="post" id="registerForm">
 
                 <div class="element">
+                    <label for="customerSalutation" id="lbl_customerSalutation"><?php echo $this->translate->_('Salutation'); ?> *</label><br>
+                    <select id="customerSalutation" name="customerSalutation" size="1" lass="mandatory">
+                        <option value=""><?php echo $this->translate->_('Please_choose'); ?></option>
+                        <?php echo HtmlOutput::getOptionsOfSQL(getCoreObject(), 'SELECT `id` AS VALUE, `title` AS DISPLAY  FROM `customerSalutations` WHERE `idLanguages` = ' . getCoreObject()->intLanguageId . ' OR `idLanguages` = 0 ORDER BY idLanguages DESC LIMIT 2'); ?>
+                    </select>
+                    <div class="error">
+                        <?php echo $this->errcustomerSalutation; ?>
+                    </div>
+                </div>
+
+                <div class="element">
                     <label for="fname">Vorname</label>
                     <input type="text" id="fname" name="fname" value="<?php echo $this->fname ?>"/>
 

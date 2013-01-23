@@ -157,7 +157,6 @@ class Contacts_CustomerController extends AuthControllerAction
                             'fax' => $arrFormData['fax'],
                             'idCustomerStatus' => $arrFormData['idCustomerStatus'],
                             'idCustomerSalutations' => $arrFormData['idCustomerSalutations'],
-                            'idRootLevels' => 49, //FIXME don't hardcode rootlevel
                             'idUsers' => Zend_Auth::getInstance()->getIdentity()->id,
                             'creator' => Zend_Auth::getInstance()->getIdentity()->id
                         )
@@ -526,9 +525,17 @@ class Contacts_CustomerController extends AuthControllerAction
 
         $arrSalutationOptions = array();
         $arrSalutationOptions[''] = $this->core->translate->_('Please_choose', false);
-        $sqlStmt = $this->core->dbh->query("SELECT `id`, `title` AS title FROM `customerSalutations` ORDER BY id")->fetchAll();
+        
+        $sqlStmt = $this->core->dbh->query("SELECT `id`, `title` AS title FROM `customerSalutations` WHERE `idLanguages` = " . $this->core->intZooluLanguageId . " ORDER BY id")->fetchAll();
         foreach ($sqlStmt as $arrSql) {
             $arrSalutationOptions[$arrSql['id']] = $arrSql['title'];
+        }
+        
+        if (count($arrSalutationOptions) <= 0) {
+            $sqlStmt = $this->core->dbh->query("SELECT `id`, `title` AS title FROM `customerSalutations` ORDER BY id WHERE idLanguages = 0")->fetchAll();
+            foreach ($sqlStmt as $arrSql) {
+                $arrSalutationOptions[$arrSql['id']] = $arrSql['title'];
+            }
         }
 
         $arrAddressTypeOptions = array();
