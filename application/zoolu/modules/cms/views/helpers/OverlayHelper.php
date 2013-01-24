@@ -142,10 +142,9 @@ class OverlayHelper
      * Lists the given folders on the first level
      * @param Zend_Db_Table_Rowset $rowset
      */
-    public function getSitemapNavigationElements($rowset)
+    public function getSitemapNavigationElements($rowset, $strParentUniqid = null, $intCategoryId = null, $intLabel = null)
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getSitemapNavigationElements()');
-
 
         $strOutput = '';
 
@@ -158,11 +157,34 @@ class OverlayHelper
                     $strType = 'type_' . $row->type;
                 }
 
+                $intVersion = 1;
+                if(isset($row->version) && $row->version != ''){
+                    $intVersion = $row->version;
+                }
+
+                $strUniqid = uniqid();
+
+                $strAction = 'myOverlay.getSiteMapNavItem(' . $row->id . ', \''.$strUniqid.'\', \''.$row->startpageGenericFormId.'\', '.$intVersion;
+                if($strParentUniqid != null && $strParentUniqid != '' && $strParentUniqid != 0) {
+                    $strAction .= ', '.$strParentUniqid;
+                }
+                if($intCategoryId != null && $intCategoryId != '' && $intCategoryId != 0) {
+                    $strAction .= ', '.$intCategoryId;
+                }elseif(isset($row->categoryId) && $row->categoryId != null && $row->categoryId != '' && $row->categoryId != 0){
+                    $strAction .= ', '.$row->categoryId;
+                }
+                if($intLabel != null && $intLabel != '' && $intLabel != 0) {
+                    $strAction .= ', '.$intLabel;
+                }elseif(isset($row->label) && $row->label != null && $row->label != '' && $row->label != 0){
+                    $strAction .= ', '.$row->label;
+                }
+                $strAction .= ')';
+
                 $strOutput .= '
-                    <div id="olnavitem' . $row->id . '" class="olnavchilditem ' . $strType . '">
-                        <div style="position:relative;" onclick="myOverlay.getSiteMapNavItem(' . $row->id . ', \'' . $row->genericFormId . '\', ' . $row->version . ')">
+                    <div id="olnavitem' . $row->id .'_'. $strUniqid . '" class="olnavchilditem '.$strType.'">
+                        <div style="position:relative;" onclick="'.$strAction.'">
                             <div class="icon img_folder_on"></div>
-                            <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
+                            <span id="olnavitemtitle' . $row->id.'_'.$strUniqid . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                         </div>
                      </div>';
             }
@@ -501,7 +523,7 @@ class OverlayHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getListSitemap($rowset)
+    public function getListSitemap($rowset, $intParentId, $strParentUniqid)
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getListSitemap()');
 
@@ -527,7 +549,7 @@ class OverlayHelper
             <div class="olpageitemcontainer">';
             foreach ($rowset as $row) {
 
-                $strAction = 'myOverlay.selectSitemapPage(\'' . $row->type . '\', \'' . $row->relationId . '\', ' . $row->id . '); return false;';
+                $strAction = 'myOverlay.selectSitemapPage(\''.$row->type.'\', \''.$row->relationId.'\', '.$row->id.', '.$intParentId.', \''.$strParentUniqid.'\'); return false;';
 
                 $strOutput .= '
                     <div class="olpageitem" id="olItem' . $row->relationId . '" onclick="' . $strAction . '">
