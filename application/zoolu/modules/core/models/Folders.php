@@ -1882,7 +1882,7 @@ class Model_Folders extends ModelAbstract
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function loadRootFolders($intRootId)
+    public function loadRootFolders($intRootId, $blnStartpage = false)
     {
         $this->core->logger->debug('core->models->Folders->loadRootFolders(' . $intRootId . ')');
 
@@ -1895,6 +1895,11 @@ class Model_Folders extends ModelAbstract
                                           folderProperties.idLanguages = ' . $this->intLanguageId, array('idGenericForms'));
         $objSelect->join('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
         $objSelect->join('genericForms', 'genericForms.id = folderProperties.idGenericForms', array('genericFormId', 'version'));
+        if ($blnStartpage) {
+            $objSelect->joinLeft(array('startpages' => 'pages'), 'startpages.idParent = folders.id AND startpages.idParentTypes = '.$this->core->sysConfig->parent_types->folder.' AND startpages.isStartPage = 1', array());
+            $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = startpages.pageId AND pageProperties.version = startpages.version AND pageProperties.idLanguages = '.$this->intLanguageId, array());
+            $objSelect->joinLeft(array('startpageGenForms' => 'genericForms'), 'startpageGenForms.id = pageProperties.idGenericForms', array('startpageGenericFormId' => 'genericFormId'));
+        }
         $objSelect->where('folders.idRootLevels  = ? AND folders.idParentFolder = 0', $intRootId);
 
         return $this->getFolderTable()->fetchAll($objSelect);
@@ -1939,7 +1944,7 @@ class Model_Folders extends ModelAbstract
         $objCmsSelect = $this->getFolderTable()->select();
         $objCmsSelect->setIntegrityCheck(false);
 
-        $objCmsSelect->from('folders', array('folders.id', 'folderProperties.idGenericForms', 'folderTitles.title', 'startpageGenForms.genericFormId', 'startpageGenForms.version', 'type' => new Zend_Db_Expr('"page"')));
+        $objCmsSelect->from('folders', array('folders.id', 'folderProperties.idGenericForms', 'folderTitles.title', 'startpageGenericFormId' => 'startpageGenForms.genericFormId', 'startpageGenForms.version', 'type' => new Zend_Db_Expr('"page"')));
         $objCmsSelect->join('folderProperties', 'folderProperties.folderId = folders.folderId AND
                                           folderProperties.version = folders.version AND
                                           folderProperties.idLanguages = ' . $this->intLanguageId, array());

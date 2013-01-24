@@ -269,29 +269,35 @@ Massiveart.Overlay = Class.create({
   /**
    * selectPage
    */
-  selectSitemapPage: function(type, elementId, idElement){
-    myCore.addBusyClass('overlayGenContent');
-    if('sitemapLink_'+this.fieldId){
-      idParent = null;
-      if(type == 'global'){
-        idParent = $('olnavitem13').up('.type_page').id.substr(9);
+  selectSitemapPage: function(type, elementId, idElement, idParent, uniqid){
+      myCore.addBusyClass('overlayGenContent');
+      if('sitemapLink_'+this.fieldId){
+          idParentFolder = null;
+          if(type == 'global'){
+              idParentFolder = $('olnavitem'+idParent+'_'+uniqid).up('.type_page').id.substr(9);
+          }
+          var languageId = null;
+          var rootLevelId = $F('rootLevelId');
+          if($('rootLevelLanguageId'+rootLevelId)){
+              languageId = $F('rootLevelLanguageId'+rootLevelId)
+          }
+          new Ajax.Updater('sitemapLink_'+this.fieldId, '/zoolu/core/landingpage/sitemapfield', { //FIXME URL should not be hardcoded
+              parameters: {
+                  fieldId: this.fieldId,
+                  type: type,
+                  elementId: elementId,
+                  idElement: idElement,
+                  idParent: idParentFolder,
+                  languageId: languageId
+              },
+              evalScripts: true,
+              onComplete: function() {
+                  $('overlayGenContentWrapper').hide();
+                  $('overlayBlack75').hide();
+                  myCore.removeBusyClass('overlayGenContent');
+              }.bind(this)
+          });
       }
-      new Ajax.Updater('sitemapLink_'+this.fieldId, '/zoolu/core/landingpage/sitemapfield', { //FIXME URL should not be hardcoded
-        parameters: {
-          fieldId: this.fieldId,
-          type: type,
-          elementId: elementId,
-          idElement: idElement,
-          idParent: idParent
-        },
-        evalScripts: true,     
-        onComplete: function() {  
-          $('overlayGenContentWrapper').hide(); 
-          $('overlayBlack75').hide();
-          myCore.removeBusyClass('overlayGenContent'); 
-        }.bind(this)
-      });
-    }
   },
   
   /**
@@ -453,47 +459,52 @@ Massiveart.Overlay = Class.create({
       } 
     }
   },
-  
-  /**
-   * getSiteMapNavItem
-   */
-  getSiteMapNavItem: function(folderId, genericFormId, genericFormVersion){
-    this.resetNavItems();
-    
-    $('olnavitemtitle'+folderId).addClassName('selected');
-    
-    if($('olsubnav'+folderId)){
-      this.toggleSubNavItem(folderId);      
-      this.getSiteMapContent(folderId);
-    }else{
-      if(folderId != ''){
-        var subNavContainer = '<div id="olsubnav'+folderId+'" class="olsubnav" style="display:none;"></div>'; 
-        new Insertion.Bottom('olnavitem'+folderId, subNavContainer);
-        
-        var blnVisible = this.toggleSubNavItem(folderId);
-        myCore.addBusyClass('olsubnav'+folderId);
-        
-        var languageId = null;
-        if($('languageId')) {
-          languageId = $F('languageId');
+
+    /**
+     * getSiteMapNavItem
+     */
+    getSiteMapNavItem: function(folderId, uniqid, genericFormId, genericFormVersion, categoryId, label){
+        this.resetNavItems();
+
+        $('olnavitemtitle'+folderId+'_'+uniqid).addClassName('selected');
+
+        if($('olsubnav'+folderId+'_'+uniqid)){
+            this.toggleSubNavItem(folderId+'_'+uniqid);
+            this.getSiteMapContent(folderId, uniqid, categoryId, label);
+        }else{
+            if(folderId != ''){
+                var subNavContainer = '<div id="olsubnav'+folderId+'_'+uniqid+'" class="olsubnav" style="display:none;"></div>';
+                new Insertion.Bottom('olnavitem'+folderId+'_'+uniqid, subNavContainer);
+
+                var blnVisible = this.toggleSubNavItem(folderId+'_'+uniqid);
+                myCore.addBusyClass('olsubnav'+folderId+'_'+uniqid);
+
+                var languageId = null;
+                var rootLevelId = $F('rootLevelId');
+                if($('rootLevelLanguageId'+rootLevelId)){
+                    languageId = $F('rootLevelLanguageId'+rootLevelId)
+                }else if($('languageId')) {
+                    languageId = $F('languageId');
+                }
+
+                new Ajax.Updater('olsubnav'+folderId+'_'+uniqid, '/zoolu/cms/overlay/sitemapchildnavigation', {
+                    parameters: {
+                        folderId: folderId,
+                        languageId: languageId,
+                        genericFormId: genericFormId,
+                        genericFormVersion: genericFormVersion,
+                        categoryId: categoryId,
+                        label: label
+                    },
+                    evalScripts: true,
+                    onComplete: function() {
+                        this.getSiteMapContent(folderId, uniqid, categoryId, label);
+                        myCore.removeBusyClass('olsubnav'+folderId+'_'+uniqid);
+                    }.bind(this)
+                });
+            }
         }
-        
-        new Ajax.Updater('olsubnav'+folderId, '/zoolu/cms/overlay/sitemapchildnavigation', {
-          parameters: { 
-            folderId: folderId, 
-            languageId: languageId,
-            genericFormId: genericFormId,
-            genericFormVersion: genericFormVersion
-          },      
-          evalScripts: true,     
-          onComplete: function() {
-            this.getSiteMapContent(folderId);
-            myCore.removeBusyClass('olsubnav'+folderId);
-          }.bind(this)
-        });
-      } 
-    }
-  },
+    },
   
   /**
    * getContactNavItem
@@ -571,32 +582,38 @@ Massiveart.Overlay = Class.create({
      });
     }
   },
-  
-  /**
-   * getSiteMapContent
-   */
-  getSiteMapContent: function(folderId){
-    if(folderId != ''){
-      $(this.updateContainer).innerHTML = '';
-      myCore.addBusyClass(this.updateContainer);
-      
-      var languageId = null;
-      if($('languageId')){
-        languageId = $F('languageId');
-      }
-    }
-    
-    new Ajax.Updater(this.updateContainer, '/zoolu/cms/overlay/listsitemap', {
-      parameters: {
-        folderId: folderId,
-        languageId: languageId
-      },
-      evalScripts: true,
-      onComplete: function(){
-        myCore.removeBusyClass(this.updateContainer);
-      }.bind(this)
-    });
-  },
+
+    /**
+     * getSiteMapContent
+     */
+    getSiteMapContent: function(folderId, uniqid, categoryId, label){
+        if(folderId != ''){
+            $(this.updateContainer).innerHTML = '';
+            myCore.addBusyClass(this.updateContainer);
+
+            var languageId = null;
+            var rootLevelId = $F('rootLevelId');
+            if($('rootLevelLanguageId'+rootLevelId)){
+                languageId = $F('rootLevelLanguageId'+rootLevelId)
+            }else if($('languageId')) {
+                languageId = $F('languageId');
+            }
+        }
+
+        new Ajax.Updater(this.updateContainer, '/zoolu/cms/overlay/listsitemap', {
+            parameters: {
+                folderId: folderId,
+                uniqid: uniqid,
+                languageId: languageId,
+                categoryId: categoryId,
+                label: label
+            },
+            evalScripts: true,
+            onComplete: function(){
+                myCore.removeBusyClass(this.updateContainer);
+            }.bind(this)
+        });
+    },
   
   /**
    * getPortalFolderContent

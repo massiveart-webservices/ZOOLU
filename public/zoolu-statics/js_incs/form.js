@@ -971,23 +971,26 @@ Massiveart.Form = Class.create({
    * getAddSitemapLinkOverlay
    */
   getAddSitemapLinkOverlay: function(fieldId){
-    $(this.updateOverlayContainer).innerHTML = '';
-    myCore.putCenter('overlayGenContentWrapper');
-    $('overlayGenContentWrapper').show();
-    $('overlayGenContent').setStyle({height:'100%'});
-    new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/sitemaplink', { 
-      parameters: {
-        rootLevelId: $F('rootLevelId')
-      },
-      evalScripts: true,
-      onComplete: function(){
-        myOverlay.overlayCounter++;
-        $('olContent').addClassName('ollandingpage');
-        myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
-        myCore.putOverlayCenter('overlayGenContentWrapper');
-        myOverlay.fieldId = fieldId;
-      } 
-    });
+      $(this.updateOverlayContainer).innerHTML = '';
+      myCore.putCenter('overlayGenContentWrapper');
+      $('overlayGenContentWrapper').show();
+      $('overlayButtons').hide();
+      $('overlayGenContent').setStyle({height:'100%'});
+      var rootLevelId = $F('rootLevelId');
+      new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/sitemaplink', {
+          parameters: {
+              rootLevelId: rootLevelId,
+              rootLevelLanguageId: $F('rootLevelLanguageId'+rootLevelId)
+          },
+          evalScripts: true,
+          onComplete: function(){
+              myOverlay.overlayCounter++;
+              $('olContent').addClassName('ollandingpage');
+              myCore.calcMaxOverlayHeight('overlayGenContentWrapper', true);
+              myCore.putOverlayCenter('overlayGenContentWrapper');
+              myOverlay.fieldId = fieldId;
+          }
+      });
   },
   
   /**
