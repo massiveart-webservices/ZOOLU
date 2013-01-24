@@ -368,6 +368,8 @@ abstract class WebControllerAction extends Zend_Controller_Action
         $this->strLanguageCode = $this->core->strLanguageCode;
         $this->view->languageId = $this->intLanguageId;
         $this->view->languageCode = $this->strLanguageCode;
+        
+        $this->core->updateSessionLanguage();
     }
 
     /**

@@ -680,6 +680,15 @@ class Cms_PageController extends AuthControllerAction
 
             $this->view->blnIsStartPage = $this->objForm->Setup()->getIsStartElement(false);
 
+            $arrLanguages = $this->core->zooConfig->languages->language->toArray();
+            $strLanguageCode = '';
+            foreach($arrLanguages as $arrLanguage){
+                if($arrLanguage['id'] ==  $this->objForm->Setup()->getLanguageId()){
+                    $strLanguageCode = $arrLanguage['code'];
+                    break;
+                }
+            }
+            
             if ($this->objForm->Setup()->getField('url')) {
                 $objBaseUrl = $this->getModelFolders()->getRootLevelMainUrl($this->objForm->Setup()->getRootLevelId(), null, false, true);
                 $arrUrl = parse_url($objBaseUrl->url);
@@ -690,7 +699,7 @@ class Cms_PageController extends AuthControllerAction
                     if ($this->objForm->Setup()->getLanguageId() == $objBaseUrl->defaultLanguage && $objBaseUrl->hostPrefix != '') {
                         $strBaseUrl = $objBaseUrl->hostPrefix . '.' . $strBaseUrl;
                     } else {
-                        $strBaseUrl = $this->objForm->Setup()->getLanguageCode() . '.' . $strBaseUrl;
+                        $strBaseUrl = $strLanguageCode . '.' . $strBaseUrl;
                     }
 
                 } else {

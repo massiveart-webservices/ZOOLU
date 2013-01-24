@@ -180,10 +180,16 @@ class Core
             }
 
         } else {
-            $this->logger->info('DEFAULT');
-            $this->blnIsDefaultLanguage = true;
-            $this->intLanguageId = $this->sysConfig->languages->default->id;
-            $this->strLanguageCode = $this->sysConfig->languages->default->code;
+            if(isset($this->objCoreSession->languageId)){
+                $this->logger->info('SESSION');
+                $this->intLanguageId = $this->objCoreSession->languageId;
+                $this->strLanguageCode = $this->objCoreSession->languageCode;
+            }else{
+                $this->logger->info('DEFAULT');
+                $this->blnIsDefaultLanguage = true;
+                $this->intLanguageId = $this->sysConfig->languages->default->id;
+                $this->strLanguageCode = $this->sysConfig->languages->default->code;  
+            }
         }
         
         Zend_Session::setOptions(array('cookie_domain' => 'zoolu.area51.at'));
