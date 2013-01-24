@@ -176,8 +176,10 @@ class Contacts_CustomerController extends AuthControllerAction
                         );
                     }
                     $this->getModelCustomers()->updateAddresses($arrData, $intCustomerId);
-
-                    $this->getModelCustomers()->updateGroups($this->getRequest()->getParam('group'), $intCustomerId);
+                    
+                    if (count($this->getRequest()->getParam('group')) > 0) {
+                        $this->getModelCustomers()->updateGroups($this->getRequest()->getParam('group'), $intCustomerId);
+                    }
 
                     $this->_forward('list', 'customer', 'contacts');
                     $this->view->assign('blnShowFormAlert', true);
@@ -323,8 +325,10 @@ class Contacts_CustomerController extends AuthControllerAction
                         );
                     }
                     $this->getModelCustomers()->updateAddresses($arrData, $intCustomerId);
-
-                    $this->getModelCustomers()->updateGroups($this->getRequest()->getParam('group'), $intCustomerId);
+                    
+                    if (count($this->getRequest()->getParam('group')) > 0) {
+                        $this->getModelCustomers()->updateGroups($this->getRequest()->getParam('group'), $intCustomerId);
+                    }
 
                     $this->_forward('list', 'customer', 'contacts');
                     $this->view->assign('blnShowFormAlert', true);
