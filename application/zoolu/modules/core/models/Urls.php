@@ -59,12 +59,12 @@ class Model_Urls
      * @var Model_RootLevels
      */
     protected $objModelRootLevels;
-    
+
     /**
      * @var Model_Table_RootLevelUrls
      */
     protected $objRootLevelUrlTable;
-    
+
 
     protected $objPathReplacers;
 
@@ -166,7 +166,7 @@ class Model_Urls
 
         return $this->core->dbh->query($objSelect->assemble())->fetchAll(Zend_Db::FETCH_OBJ | Zend_Db::FETCH_GROUP);
     }
-    
+
     /**
      * loadDomainSettings
      * @param string $strDomain
@@ -174,16 +174,16 @@ class Model_Urls
      */
     public function loadDomainSettings($strDomain, $intEnvironment = null) {
         $this->core->logger->debug('core->models->Model_Urls->loadDomainSettings(' . $strDomain . ')');
-        
+
         $strAppEnv = APPLICATION_ENV;
         $intEnvironment = ($intEnvironment == null) ? $this->core->sysConfig->environments->$strAppEnv : $intEnvironment;
-        
+
         $objSelect = $this->getRootLevelUrlTable()->select(array('hostPrefix', 'idLanguages'));
         $objSelect->setIntegrityCheck(false);
         $objSelect->where('url = ?', $strDomain);
         $objSelect->where('idEnvironments = ?', $intEnvironment);
         $objSelect->limit(1);
-        
+
         $objResult = $this->getRootLevelUrlTable()->fetchAll($objSelect);
         return $objResult->current();
     }
@@ -196,53 +196,74 @@ class Model_Urls
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadUrlsByRootLevelForSitemapList($intRootLevelId, $blnLandingPage = false, $blnReturnSelect = false)
+    public function loadUrlsByRootLevelForSitemapList($intRootLevelId, $blnLandingPage = false, $blnReturnSelect = false, $strOrderColumn = '', $strSortOrder = 'asc', $strSearchValue = '')
     {
-        $this->core->logger->debug('core->models->Model_Urls->loadByUrl(' . $intRootLevelId . ', ' . $blnLandingPage . ')');
+        $this->core->logger->debug('core->models->Model_Urls->loadUrlsByRootLevelForSitemapList('.$intRootLevelId.', '.$blnLandingPage.')');
 
         $objFolderPageSelect = $this->core->dbh->select();
-        $objFolderPageSelect->from('urls', array('id', 'targetpage' => 'pageTitles.title', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "' . $this->core->translate->_('deactivated') . '", "' . $this->core->translate->_('active') . '")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objFolderPageSelect->from('urls', array('id', 'targetpage' => new Zend_Db_Expr('IFNULL(pageTitles.title, alternativeTitle.title)'), 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objFolderPageSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objFolderPageSelect->join('users', 'users.id = urls.idUsers', array());
-        $objFolderPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array());
+        $objFolderPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
         $objFolderPageSelect->join('folders', 'folders.id = pages.idParent', array());
-        $objFolderPageSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = ' . $this->intLanguageId, array());
+        $objFolderPageSelect->joinLeft('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = '.$this->intLanguageId, array());
+        $objFolderPageSelect->joinLeft(array('alternativeTitle' => 'pageTitles'), 'alternativeTitle.pageId = pages.pageId AND alternativeTitle.version = pages.version AND alternativeTitle.idLanguages = 0', array());
         $objFolderPageSelect->where('folders.idRootLevels = ?', $intRootLevelId);
         $objFolderPageSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page);
         $objFolderPageSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+        if($strSearchValue != ''){
+            $objFolderPageSelect->where('IFNULL(pageTitles.title, alternativeTitle.title) LIKE ? OR url LIKE ? OR languages.title LIKE ? OR CONCAT(users.fname, \' \', users.sname) LIKE ?', '%'.$strSearchValue.'%');
+        }
 
         $objRootLevelPageSelect = $this->core->dbh->select();
-        $objRootLevelPageSelect->from('urls', array('id', 'targetpage' => 'pageTitles.title', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "' . $this->core->translate->_('deactivated') . '", "' . $this->core->translate->_('active') . '")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objRootLevelPageSelect->from('urls', array('id', 'targetpage' => 'pageTitles.title', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objRootLevelPageSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objRootLevelPageSelect->join('users', 'users.id = urls.idUsers', array());
-        $objRootLevelPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->rootlevel, array());
+        $objRootLevelPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array());
         $objRootLevelPageSelect->join('rootLevels', ' rootLevels.id = pages.idParent', array());
-        $objRootLevelPageSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = ' . $this->intLanguageId, array());
+        $objRootLevelPageSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = '.$this->intLanguageId, array());
+        $objRootLevelPageSelect->where('rootLevels.id = ?', $intRootLevelId);
         $objRootLevelPageSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page);
-        $objRootLevelPageSelect->where('urls.isLandingPage = ?', $blnLandingPage);
+        $objRootLevelPageSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+        if($strSearchValue != ''){
+            $objRootLevelPageSelect->where('pageTitles.title LIKE ? OR url LIKE ? OR languages.title LIKE ? OR CONCAT(users.fname, \' \', users.sname) LIKE ?', '%'.$strSearchValue.'%');
+        }
 
         $objGlobalSelect = $this->core->dbh->select();
-        $objGlobalSelect->from('urls', array('id', 'targetpage' => 'globalTitles.title', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "' . $this->core->translate->_('deactivated') . '", "' . $this->core->translate->_('active') . '")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objGlobalSelect->from('urls', array('id', 'targetpage' => new Zend_Db_Expr('IFNULL(globalTitles.title, alternativeTitle.title)'), 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objGlobalSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objGlobalSelect->join('users', 'users.id = urls.idUsers', array());
         $objGlobalSelect->join('globals', 'globals.globalId = urls.relationId AND globals.version = urls.version', array());
         $objGlobalSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = urls.idLanguages', array());
-        $objGlobalSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $this->intLanguageId, array());
+        $objGlobalSelect->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->intLanguageId, array());
+        $objGlobalSelect->joinLeft(array('alternativeTitle' => 'globalTitles'), 'alternativeTitle.globalId = globals.globalId AND alternativeTitle.version = globals.version AND alternativeTitle.idLanguages = 0', array());
+        $objGlobalSelect->joinLeft(array('parentFolder' => 'folders'), 'parentFolder.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
+        $objGlobalSelect->joinLeft(array('parentRootLevel' => 'rootLevels'), 'parentRootLevel.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array());
         $objGlobalSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global);
-        $objGlobalSelect->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
-        $objGlobalSelect->where('urls.isLandingPage = ?', $blnLandingPage);
+        //$objGlobalSelect->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
+        $objGlobalSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+        $objGlobalSelect->where('parentFolder.idRootLevels = '.$intRootLevelId.' OR parentRootLevel.id = '.$intRootLevelId);
+        if($strSearchValue != ''){
+            $objGlobalSelect->where('IFNULL(globalTitles.title, alternativeTitle.title) LIKE ? OR url LIKE ? OR languages.title LIKE ? OR CONCAT(users.fname, \' \', users.sname) LIKE ?', '%'.$strSearchValue.'%');
+        }
 
         $objGlobalLinksSelect = $this->core->dbh->select();
-        $objGlobalLinksSelect->from('urls', array('id', 'targetpage' => 'globalTitles.title', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "' . $this->core->translate->_('deactivated') . '", "' . $this->core->translate->_('active') . '")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objGlobalLinksSelect->from('urls', array('id', 'targetpage' => new Zend_Db_Expr('IFNULL(globalTitles.title, alternativeTitle.title)'), 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objGlobalLinksSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objGlobalLinksSelect->join('users', 'users.id = urls.idUsers', array());
         $objGlobalLinksSelect->join(array('lG' => 'globals'), 'lG.globalId = urls.relationId AND lG.version = urls.version', array());
         $objGlobalLinksSelect->join('globalLinks', 'globalLinks.idGlobals = lG.id', array());
         $objGlobalLinksSelect->join('globals', 'globals.globalId = globalLinks.globalId', array());
-        $objGlobalLinksSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $this->intLanguageId, array());
+        $objGlobalLinksSelect->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->intLanguageId, array());
+        $objGlobalLinksSelect->joinLeft(array('alternativeTitle' => 'globalTitles'), 'alternativeTitle.globalId = globals.globalId AND alternativeTitle.version = globals.version AND alternativeTitle.idLanguages = 0', array());
+        $objGlobalLinksSelect->joinLeft('folders', 'folders.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
         $objGlobalLinksSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global);
-        $objGlobalLinksSelect->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
-        $objGlobalLinksSelect->where('urls.isLandingPage = ?', $blnLandingPage);
+        $objGlobalLinksSelect->where('folders.idRootLevels = ?', $intRootLevelId);
+        //$objGlobalLinksSelect->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
+        $objGlobalLinksSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+        if($strSearchValue != ''){
+            $objGlobalLinksSelect->where('IFNULL(globalTitles.title, alternativeTitle.title) LIKE ? OR url LIKE ? OR languages.title LIKE ? OR CONCAT(users.fname, \' \', users.sname) LIKE ?', '%'.$strSearchValue.'%');
+        }
 
         $objExternalSelect = $this->core->dbh->select();
         $objExternalSelect->from('urls', array('id', 'targetpage' => 'external', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
@@ -252,9 +273,15 @@ class Model_Urls
         $objExternalSelect->where('urls.idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel);
         $objExternalSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->external);
         $objExternalSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
+        if($strSearchValue != ''){
+            $objExternalSelect->where('external LIKE ? OR url LIKE ? OR languages.title LIKE ? OR CONCAT(users.fname, \' \', users.sname) LIKE ?', '%'.$strSearchValue.'%');
+        }
 
         $objSelect = $this->getUrlTable()->select()
             ->union(array($objFolderPageSelect, $objRootLevelPageSelect, $objGlobalSelect, $objGlobalLinksSelect, $objExternalSelect));
+        if($strOrderColumn != '') {
+            $objSelect->order($strOrderColumn.' '.$strSortOrder);
+        }
 
         if ($blnReturnSelect) {
             return $objSelect;
@@ -304,7 +331,7 @@ class Model_Urls
             $objRootLevelPageSelect->where('rootLevels.id = ?', $intRootLevelId);
         }
         $objRootLevelPageSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
-    
+
         $objRootLevelPageSelect = $this->core->dbh->select();
         $objRootLevelPageSelect->from('urls', array('relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objRootLevelPageSelect->joinLeft('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array());
@@ -331,7 +358,7 @@ class Model_Urls
 //         $objExternalPageSelect->where('urls.idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel);
 //     }
 //     $objExternalPageSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
-					                 
+
         $objGlobalSelect = $this->core->dbh->select();
         $objGlobalSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
         $objGlobalSelect->join('globals', 'globals.globalId = urls.relationId AND globals.version = urls.version', array());
@@ -343,7 +370,7 @@ class Model_Urls
             $objGlobalSelect->joinLeft('folders', 'folders.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
         }
         $objGlobalSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
-          
+
         $objGlobalLinksSelect = $this->core->dbh->select();
         $objGlobalLinksSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'urls.isLandingPage', 'urls.external', 'idLink' => 'lG.id', 'linkId' => 'lG.globalId', 'idLinkParent' => 'lG.idParent'));
         $objGlobalLinksSelect->join(array('lG' => 'globals'), 'lG.globalId = urls.relationId AND lG.version = urls.version', array());
@@ -360,7 +387,7 @@ class Model_Urls
             $objGlobalLinksSelect->where('folders.idRootLevels = ?', $intRootLevelId);
         }
         $objGlobalLinksSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
-        
+
         $objSelect = $this->getUrlTable()->select()
                                          ->union(array($objFolderPageSelect, $objRootLevelPageSelect, $objGlobalSelect, $objGlobalLinksSelect));
 
@@ -382,7 +409,7 @@ class Model_Urls
 
         return $objUrlData;
     }
-    
+
     /**
      * loadGlobalTreeBaseUrls
      * @param integer $intRootLevelId
@@ -671,7 +698,7 @@ class Model_Urls
             return $this->getUrlTable()->delete('relationId IN (' . $strSelect . ') AND idLanguages = ' . $intLanguagesId);
         }
     }
-    
+
     /**
      * Adds a new URL to the system
      * @param The data of the URL $arrData
@@ -865,7 +892,7 @@ class Model_Urls
 
         return $this->objModelRootLevels;
     }
-    
+
     /**
      * getRootLevelUrlTable
      * @author Cornelius Hansjakob <cha@massiveart.com>
