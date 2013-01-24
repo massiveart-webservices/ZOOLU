@@ -404,14 +404,16 @@
         myNavigation.module = <?php echo $this->module; ?>;
 
         <?php
-            $intRootLevelId = '';
-            if (isset(Zend_Registry::get('Core')->objCoreSession->selectItem)) {
-                $objSelectItem = Zend_Registry::get('Core')->objCoreSession->selectItem;
-                if (isset($objSelectItem->rootLevelId) && $objSelectItem->rootLevelId != '') {
-                    $intRootLevelId = $objSelectItem->rootLevelId;
-                }
+        $intRootLevelId = '';
+        if ($this->rootLevelId != null) {
+            $intRootLevelId = $this->rootLevelId;
+        } else if(isset(Zend_Registry::get('Core')->objCoreSession->selectItem)) {
+            $objSelectItem = Zend_Registry::get('Core')->objCoreSession->selectItem;
+            if (isset($objSelectItem->rootLevelId) && $objSelectItem->rootLevelId != '') {
+                $intRootLevelId = $objSelectItem->rootLevelId;
             }
-        ?>
+        }
+    ?>
 
         if (!Prototype.Browser.IE) myNavigation.initModuleCMS(<?php echo $intRootLevelId; ?>);
 

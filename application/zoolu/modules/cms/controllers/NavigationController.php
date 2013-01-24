@@ -127,8 +127,8 @@ class Cms_NavigationController extends AuthControllerAction
         $this->view->assign('pageTemplateDefaultId', $this->core->sysConfig->page_types->page->default_templateId);
         $this->view->assign('pageTypeDefaultId', $this->core->sysConfig->page_types->page->id);
 
-        $strRenderSciprt = ($this->getRequest()->getParam('layoutType') == 'list') ? 'list.phtml' : 'tree.phtml';
-        $this->renderScript('navigation/' . $strRenderSciprt);
+        $strRenderScript = ($this->getRequest()->getParam('layoutType') == 'list') ? 'list.phtml' : 'tree.phtml';
+        $this->renderScript('navigation/' . $strRenderScript);
     }
 
     /**

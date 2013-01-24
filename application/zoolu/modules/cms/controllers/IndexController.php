@@ -81,6 +81,7 @@ class Cms_IndexController extends ModuleControllerAction
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
         $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->portals);
         $this->view->assign('module', $this->core->sysConfig->modules->cms);
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
 
         $strMapsKey = '';
         $objThemeData = $this->getModelFolders()->getThemeByDomain($_SERVER['SERVER_NAME']);
@@ -122,6 +123,7 @@ class Cms_IndexController extends ModuleControllerAction
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
         $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->portals);
         $this->view->assign('module', $this->core->sysConfig->modules->cms);
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
     }
 
     /**

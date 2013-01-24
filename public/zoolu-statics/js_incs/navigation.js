@@ -274,7 +274,7 @@ Massiveart.Navigation = Class.create({
      * select root level with layout change -> location href.
      */
     if(typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType == 'list')){
-      location.href = url;
+      //location.href = url;
       var myForm = document.createElement('form');
       myForm.method = 'post';
       myForm.action = url;
