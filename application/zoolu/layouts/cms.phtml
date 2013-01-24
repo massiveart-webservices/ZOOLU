@@ -419,7 +419,20 @@
         myNavigation.topNaviTitle = '<?php echo $this->translate->_('Portals'); ?>';
         myNavigation.rootLevelTypeId = <?php echo $this->rootLevelTypeId; ?>;
         myNavigation.module = <?php echo $this->module; ?>;
-        if(!Prototype.Browser.IE) myNavigation.initModuleCMS();
+
+        <?php
+        $intRootLevelId = '';
+        if ($this->rootLevelId != null) {
+            $intRootLevelId = $this->rootLevelId;
+        } else if(isset(Zend_Registry::get('Core')->objCoreSession->selectItem)) {
+            $objSelectItem = Zend_Registry::get('Core')->objCoreSession->selectItem;
+            if (isset($objSelectItem->rootLevelId) && $objSelectItem->rootLevelId != '') {
+                $intRootLevelId = $objSelectItem->rootLevelId;
+            }
+        }
+        ?>
+
+        if (!Prototype.Browser.IE) myNavigation.initModuleCMS(<?php echo $intRootLevelId; ?>);
 
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
       });
