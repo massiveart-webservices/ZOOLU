@@ -114,49 +114,76 @@ Massiveart.Navigation.Cms = Class.create(Massiveart.Navigation, {
   }, 
   
   /**
-   * selectSubscribers
+   * selectLandingPages
    */
   selectLandingPages: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType){
-    if(!this.actionMenu || this.actionMenu.isOpen == false) {
-        
-      if(typeof(viewType) == 'undefined'){
-        viewType = 'list';
-      }
-      
-      if(typeof(rootLevelFilter) == 'undefined'){
-        rootLevelFilter = null;
-      }
-      
-      if(typeof(url) != 'undefined' && url != '' && (!location.href.replace(/#/,'').endsWith(url) || viewType != 'list')){
-        location.href = url;
-      }else{
-        this.rootLevelId = rootLevelId;
-        this.rootLevelGroupId = rootLevelGroupId;
-        this.rootLevelType = rootLevelType;
-        
-        $(this.genFormContainer).hide();
-        $(this.genFormFunctions).hide();
-        
-        if($('naviitem'+rootLevelId)){
-          this.makeSelected('naviitem'+rootLevelId);
-          if($(this.preSelectedNaviItem) && ('naviitem'+rootLevelId) != this.preSelectedNaviItem){ 
-            this.makeDeselected(this.preSelectedNaviItem);
-            this.makeDeselected(this.preSelectedSubNaviItem);
-          }      
-          this.preSelectedNaviItem = 'naviitem'+rootLevelId;
-        }else if($('subnaviitem'+rootLevelId)){
-          this.makeSelected('subnaviitem'+rootLevelId);
-          if($(this.preSelectedSubNaviItem) && ('subnaviitem'+rootLevelId) != this.preSelectedSubNaviItem){ 
-            this.makeDeselected(this.preSelectedSubNaviItem);
+      if(!this.actionMenu || this.actionMenu.isOpen == false) {
+
+          if(typeof(viewType) == 'undefined'){
+              viewType = 'list';
           }
-          this.preSelectedSubNaviItem = 'subnaviitem'+rootLevelId;
-        }
-        
-        myList.sortColumn = '';
-        myList.sortOrder = '';
-        myList.getListPage();
+
+          if(typeof(rootLevelFilter) == 'undefined'){
+              rootLevelFilter = null;
+          }
+
+          if(typeof(url) != 'undefined' && url != '' && (!location.href.replace(/#/,'').endsWith(url) || viewType != 'list')){
+              location.href = url;
+              var myForm = document.createElement('form');
+              myForm.method = 'post';
+              myForm.action = url;
+
+              var myRootLevelIdInput = document.createElement("input");
+              myRootLevelIdInput.setAttribute('name', 'rootLevelId');
+              myRootLevelIdInput.setAttribute('value', rootLevelId);
+              myRootLevelIdInput.setAttribute('type', 'hidden');
+              myForm.appendChild(myRootLevelIdInput);
+
+              var myRootLevelGroupIdInput = document.createElement("input");
+              myRootLevelGroupIdInput.setAttribute('name', 'rootLevelGroupId');
+              myRootLevelGroupIdInput.setAttribute('value', rootLevelGroupId);
+              myRootLevelGroupIdInput.setAttribute('type', 'hidden');
+              myForm.appendChild(myRootLevelGroupIdInput);
+
+              if(typeof(rootLevelTypeId) != 'undefined'){
+                  var myRootLevelTypeIdInput = document.createElement("input");
+                  myRootLevelTypeIdInput.setAttribute('name', 'rootLevelTypeId');
+                  myRootLevelTypeIdInput.setAttribute('value', rootLevelTypeId);
+                  myRootLevelTypeIdInput.setAttribute('type', 'hidden');
+                  myForm.appendChild(myRootLevelTypeIdInput);
+              }
+
+              document.body.appendChild(myForm);
+              myForm.submit();
+          }else{
+              this.rootLevelId = rootLevelId;
+              this.rootLevelGroupId = rootLevelGroupId;
+              this.rootLevelType = rootLevelType;
+
+              $(this.genFormContainer).hide();
+              $(this.genFormFunctions).hide();
+
+              if($('naviitem'+rootLevelId)){
+                  this.makeSelected('naviitem'+rootLevelId);
+                  if($(this.preSelectedNaviItem) && ('naviitem'+rootLevelId) != this.preSelectedNaviItem){
+                      this.makeDeselected(this.preSelectedNaviItem);
+                      this.makeDeselected(this.preSelectedSubNaviItem);
+                  }
+                  this.preSelectedNaviItem = 'naviitem'+rootLevelId;
+              }else if($('subnaviitem'+rootLevelId)){
+                  this.makeSelected('subnaviitem'+rootLevelId);
+                  if($(this.preSelectedSubNaviItem) && ('subnaviitem'+rootLevelId) != this.preSelectedSubNaviItem){
+                      this.makeDeselected(this.preSelectedSubNaviItem);
+                  }
+                  this.preSelectedSubNaviItem = 'subnaviitem'+rootLevelId;
+              }
+
+              myList.sortColumn = '';
+              myList.sortOrder = '';
+              myList.searchValue = '';
+              myList.getListPage();
+          }
       }
-    }
   },
   
   /**
