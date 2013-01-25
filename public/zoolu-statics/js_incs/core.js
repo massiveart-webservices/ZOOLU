@@ -156,6 +156,7 @@ Massiveart.Core = Class.create({
     if(typeof(size != 'undefined') && size > 0){
       if($('overlayGenContentWrapper')){
         $('overlayGenContentWrapper').setStyle({height: 'auto'});
+        $('overlayGenContent').setStyle({height: 'auto'});
         $('overlayGenContent').innerHTML = '';	      
 
       	if($('overlayBlack75')) $('overlayBlack75').show();
