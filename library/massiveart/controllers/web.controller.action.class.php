@@ -314,8 +314,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
     {
         $this->core->logger->debug('get language by: ');
         $this->intLanguageDefinitionType = $this->objTheme->languageDefinitionType;
-
-        if ($this->core->blnIsDefaultLanguage === true) {
+        if ($this->core->blnIsDefaultLanguage === true || $this->core->blnIsSessionLanguage === true) {
             $this->core->logger->debug('theme');
             $this->core->intLanguageId = $this->objTheme->idLanguages;
             $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
