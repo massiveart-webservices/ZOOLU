@@ -109,6 +109,7 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
 
       $('buttonCancel').observe('click', function(event){
         myCore.hideDeleteAlertMessage();
+        $('overlayBlack75').hide();
       }.bind(this));
     }
   }  
