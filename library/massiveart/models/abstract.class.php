@@ -51,7 +51,7 @@ abstract class ModelAbstract
 
         // no listener was able to process the $method? The method does not exist
         if (!$undefinedMethod->isProcessed()) {
-            throw new \Exception(sprintf('Call to undefined method %s::%s.', get_class($this), $method));
+            throw new Exception(sprintf('Call to undefined method %s::%s.', get_class($this), $method));
         }
 
         // return the listener returned value
