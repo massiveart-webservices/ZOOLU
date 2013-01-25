@@ -106,6 +106,11 @@ class Core
      * @var boolean
      */
     public $blnIsDefaultLanguage = false;
+    
+    /**
+     * @var boolean
+     */
+    public $blnIsSessionLanguage = false;
 
     /**
      * @var string
@@ -184,6 +189,7 @@ class Core
                 $this->logger->info('SESSION');
                 $this->intLanguageId = $this->objCoreSession->languageId;
                 $this->strLanguageCode = $this->objCoreSession->languageCode;
+                $this->blnIsSessionLanguage = true;
             }else{
                 $this->logger->info('DEFAULT');
                 $this->blnIsDefaultLanguage = true;
