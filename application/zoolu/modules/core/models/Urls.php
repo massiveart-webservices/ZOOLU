@@ -481,10 +481,14 @@ class Model_Urls
             ->joinLeft('pages', 'pages.pageId = urls.relationId', array())
             ->joinLeft(array('pageFolders' => 'folders'), 'pageFolders.id = pages.idParent', array())
             ->joinLeft('globals', 'globals.globalId = urls.relationId', array())
-            ->joinLeft(array('globalFolders' => 'folders'), 'globalFolders.id = globals.idParent', array())
+            ->joinLeft(array('globalParentFolder' => 'folders'), 'globalParentFolder.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array())
+            ->joinLeft(array('globalRootLevel' => 'rootLevels'), 'globalRootLevel.id = globalParentFolder.idRootLevels', array())
+            ->joinLeft('rootLevels', 'rootLevels.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array())
             ->where('urls.url = ?', $strUrl)
             ->where('urls.isLandingPage = ?', (int) $blnLandingPage)
-            ->where('pageFolders.idRootLevels = ' . $intRootLevelId . ' OR globalFolders.idRootLevels = ' . $intRootLevelId);
+            ->where('pageFolders.idRootLevels = ' . $intRootLevelId . ' OR globalRootLevel.id = ' . $intRootLevelId . ' OR rootLevels.id = ' . $intRootLevelId . ' OR globalRootLevel.id = ' . $intRootLevelId);
+
+        $this->core->logger->debug(strval($objPageSelect));
 
         return $this->getUrlTable()->fetchAll($objPageSelect);
     }
