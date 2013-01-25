@@ -2132,6 +2132,7 @@ Massiveart.Form = Class.create({
       onComplete: function(response){
         var cnt = parseInt(response.responseText);
         if(cnt > 0){
+          $('overlayGenContentWrapper2').hide();   
           myCore.showAlertMessage(myCore.translate['Copy_language_override']);
           
           $('buttonOk').observe('click', function(){
@@ -2146,6 +2147,7 @@ Massiveart.Form = Class.create({
           
           $('buttonCancel').observe('click', function(){
             myCore.hideAlertMessage();
+            $('overlayGenContentWrapper2').show();
           }.bind(this));
         }else{
           myOverlay.close('overlayGenContentWrapper2');
