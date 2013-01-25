@@ -668,7 +668,7 @@ private function getValidatedUrlObject($strUrl) {
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
             } else {
                 $this->blnIsLandingPage = true;
-                if($objUrl->url->current()->external != ''){                     
+                if(isset($objUrl->url->current()->external) && $objUrl->url->current()->external != ''){                     
                     if((bool) $objUrl->url->current()->isMain === true){
                         $ch = curl_init();
                         $timeout = 5;
