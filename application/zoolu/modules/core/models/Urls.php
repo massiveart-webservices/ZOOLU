@@ -488,8 +488,6 @@ class Model_Urls
             ->where('urls.isLandingPage = ?', (int) $blnLandingPage)
             ->where('pageFolders.idRootLevels = ' . $intRootLevelId . ' OR globalRootLevel.id = ' . $intRootLevelId . ' OR rootLevels.id = ' . $intRootLevelId . ' OR globalRootLevel.id = ' . $intRootLevelId);
 
-        $this->core->logger->debug(strval($objPageSelect));
-
         return $this->getUrlTable()->fetchAll($objPageSelect);
     }
 
