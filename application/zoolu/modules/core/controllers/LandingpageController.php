@@ -246,7 +246,8 @@ class Core_LandingpageController extends AuthControllerAction
                 }
                 unset($arrFormData['sitemapLinkType_link']);
                 unset($arrFormData['sitemapLinkParent_link']);
-                if ($this->objForm->isValid($arrFormData) && $this->checkUnqiueUrl($arrFormData['url'], $intRootLevelId)) {
+                $blnUniqueLink = $this->checkUnqiueUrl($arrFormData['url'], $intRootLevelId);
+                if ($this->objForm->isValid($arrFormData) && $blnUniqueLink) {
                     //Save and show list again
                     $intUrlId = $this->getRequest()->getParam('id');
 
@@ -256,6 +257,10 @@ class Core_LandingpageController extends AuthControllerAction
                     $this->view->assign('blnShowFormAlert', true);
                 } else {
                     //Show Form with errors
+                    if (!$blnUniqueLink) {
+                        $this->objForm->getElement('url')->addError('URL already exists');
+                    }
+                    
                     $this->objForm->setAction('/zoolu/core/landingpage/add');
                     $this->view->assign('blnShowFormAlert', false);
 
@@ -541,6 +546,7 @@ class Core_LandingpageController extends AuthControllerAction
     private function checkUnqiueUrl($strUrl, $intRootLevelId, $intElementId = null)
     {
         $objLandingPageUrls = $this->getModelUrls()->loadUrlByUrlAndRootLevel($strUrl, $intRootLevelId, true);
+        $this->core->logger->debug('count: '.count($objLandingPageUrls));
         if (count($objLandingPageUrls) == 0) {
             //URL is unique
             return true;
