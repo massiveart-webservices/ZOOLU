@@ -78,6 +78,8 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
 
       $('buttonOk').observe('click', function(event){
         myCore.hideDeleteAlertMessage();
+        $('overlayBlack75').hide();
+
         var intPosLastSlash = $(this.formId).readAttribute('action').lastIndexOf('/');
         var strAjaxActionBase = $(this.formId).readAttribute('action').substring(0, intPosLastSlash + 1);
         var elementId = $('id').getValue();
@@ -86,7 +88,7 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
         this.getFormSaveLoader();
 
         new Ajax.Updater(myNavigation.genListContainer, strAjaxActionBase + 'delete', {
-          parameters: { id: elementId },
+          parameters: { id: elementId,  rootLevelId: $F('rootLevelId') },
           evalScripts: true,
           onComplete: function() {
             //deleted
@@ -100,6 +102,7 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
 
             myCore.initSelectAll();
             myCore.initListHover();
+
           }.bind(this)
         });
       }.bind(this));
