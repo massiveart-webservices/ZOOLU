@@ -584,9 +584,8 @@ class DatareceiverController extends Zend_Controller_Action {
      */
     private function convertFormData($arrFormData)
     {
-        echo "<pre>";
         $arrValues = array();
-        $strCountryKey = null;;
+        $strCountryKey = null;
         foreach ($arrFormData as $key => $value) {
             if ($key == 'idRootLevels' || $key == 'idPage' || preg_match('/test$/', $key) || preg_match('/other$/', $key)) {
                 //Do nothing
