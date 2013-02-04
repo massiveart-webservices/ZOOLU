@@ -11622,9 +11622,12 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 
 			// Setup iframe body
 			if (!isIE || !tinymce.relaxedDomain) {
-				d.open();
-				d.write(t.iframeHTML);
-				d.close();
+			    // MA BUGFIX lock page after init http://www.tinymce.com/forum/viewtopic.php?id=20722
+			    if(!t.isWebKit) {
+			        d.open();
+			        d.write(t.iframeHTML);
+			        d.close();
+			    }
 
 				if (tinymce.relaxedDomain)
 					d.domain = tinymce.relaxedDomain;
