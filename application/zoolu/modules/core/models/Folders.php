@@ -1904,6 +1904,30 @@ class Model_Folders extends ModelAbstract
 
         return $this->getFolderTable()->fetchAll($objSelect);
     }
+    
+    /**
+     * loadMediaRootFolders
+     * @param integer $intRootId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadMediaRootFolders($intRootId)
+    {
+        $this->core->logger->debug('core->models->Folders->loadMediaRootFolders(' . $intRootId . ')');
+
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array('id'));
+        $objSelect->joinLeft('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+        $objSelect->joinLeft(array('fallbackFolderTitles' => 'folderTitles'), 'fallbackFolderTitles.folderId = folders.folderId AND fallbackFolderTitles.version = folders.version AND fallbackFolderTitles.idLanguages = 0', array('fallbackTitle' => 'title'));
+        $objSelect->where('folders.idRootLevels  = ? AND folders.idParentFolder = 0', $intRootId);
+
+        return $this->getFolderTable()->fetchAll($objSelect);
+    }
+    
+    
 
     /**
      * loadChildFolders

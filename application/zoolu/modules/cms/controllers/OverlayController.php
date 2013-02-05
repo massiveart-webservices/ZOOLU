@@ -526,8 +526,7 @@ class Cms_OverlayController extends AuthControllerAction
             if (count($objMediaRootLevels) > 0) {
                 $objMediaRootLevel = $objMediaRootLevels->current();
                 $this->intRootLevelId = $objMediaRootLevel->id;
-                $objRootelements = $this->objModelFolders->loadRootFolders($this->intRootLevelId);
-
+                $objRootelements = $this->objModelFolders->loadMediaRootFolders($this->intRootLevelId);
                 $this->view->assign('elements', $objRootelements);
                 $this->view->assign('rootLevelId', $this->intRootLevelId);
             }

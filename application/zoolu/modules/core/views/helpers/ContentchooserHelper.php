@@ -143,7 +143,7 @@ class ContentchooserHelper
             foreach ($objElements as $objRow) {
                 if ($objRow->id != $this->core->sysConfig->product->rootLevels->list->id) { // 11 - All Products
                     $strReturn .= '
-                        <div class="olcontactitem" id="olRootLevelItem' . $objRow->id . '" onclick="myContentchooser.getRootLevel(' . $objRow->id . ',' . $objRow->idRootLevelTypes . ',' . $objRow->idRootLevelGroups . ((isset($objRow->rootLevelLanguageId) && $objRow->rootLevelLanguageId != '') ? ', ' . $objRow->rootLevelLanguageId : '') . '); return false;">
+                        <div class="olcontactitem" id="olRootLevelItem' . $objRow->id . '" onclick="myContentchooser.getRootLevel(' . $objRow->id . ',' . $objRow->idRootLevelTypes . ',' . $objRow->idRootLevelGroups . ', $F(\'selectLanguageId\')); return false;">
                             <div class="olcontactleft"></div>
                             <div style="display:none;" id="Remove' . $objRow->id . '" class="itemremovelist"></div>
                             <div class="olcontactitemtitle">' . $objRow->title . '</div>

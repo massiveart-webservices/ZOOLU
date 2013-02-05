@@ -79,7 +79,7 @@ Massiveart.Contentchooser = Class.create({
                             break;
                         case 'content':
                             $('olModuleId').setValue(myNavigation.module);
-                            this.getRootLevel(myNavigation.rootLevelId, myNavigation.rootLevelTypeId, myNavigation.rootLevelGroupId); //TODO Add rootLevelLanguage
+                            this.getRootLevel(myNavigation.rootLevelId, myNavigation.rootLevelTypeId, myNavigation.rootLevelGroupId, $F('selectLanguageId'));
                             break;
                     }
                 }
@@ -128,7 +128,7 @@ Massiveart.Contentchooser = Class.create({
             if (typeof(rootLevelTypeId) == 'undefined') rootLevelTypeId = '';
             if (typeof(rootLevelGroupId) == 'undefined') rootLevelGroupId = '';
             if (typeof(rootLevelLanguageId) == 'undefined') rootLevelLanguageId = '';
-
+            
             this.olNewContainerId = 'olContentItems';
             this.createContainer();
 
