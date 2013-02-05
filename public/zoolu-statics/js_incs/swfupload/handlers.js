@@ -228,13 +228,18 @@ function queueComplete(numFilesUploaded) {
  *------------------------------*/
 
 function singleSWFUploadLoaded() {
-  if($('btnMediaEditSubmit')) $('btnMediaEditSubmit').onclick = doSubmit;
+  if($('btnMediaEditSubmit')) $('btnMediaEditSubmit').onclick = doSingleSubmit;
   if($('buttoneditsave')) $('buttoneditsave').onclick = doSubmit;
 }
 
+function doSingleSubmit(e) {
+    doSubmit(e, true);
+}
+
 // Called by the submit button to start the upload
-function doSubmit(e) {
+function doSubmit(e, single) {
   e = e || window.event;
+  single = single || false;
   if (e.stopPropagation) {
     e.stopPropagation();
   }
@@ -247,7 +252,7 @@ function doSubmit(e) {
       element.startUpload();
     });
     if(count == 0) {
-      myMedia.editFiles();
+      myMedia.editFiles(single);
     }
   } catch (ex) { }
   
