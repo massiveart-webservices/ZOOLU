@@ -25,6 +25,7 @@ Massiveart.Overlay = Class.create({
     this.areaViewType = new Object();
     this.viewtype = null;
     this.lastFolderId = null;
+    this.rootLevelType = 1;
     this.overlayCounter = 0;
   },
   
@@ -435,6 +436,7 @@ Massiveart.Overlay = Class.create({
             viewtype: viewtype,
             languageId: languageId,
             contenttype: contenttype,
+            rootleveltype: myOverlay.rootLevelType,
             selectOne: selectOne,
             replace: replace
           },      
