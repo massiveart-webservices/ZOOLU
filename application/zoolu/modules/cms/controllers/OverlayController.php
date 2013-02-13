@@ -414,11 +414,14 @@ class Cms_OverlayController extends AuthControllerAction
         $this->intFolderId = $objRequest->getParam("folderId");
         $viewtype = $objRequest->getParam("viewtype");
         $contenttype = $objRequest->getParam('contenttype');
+        $rootLevelType = $objRequest->getParam('rootleveltype', 1);
 
-        /**
-         * get childfolders
-         */
-        $objChildelements = $this->objModelFolders->loadChildFolders($this->intFolderId);
+        // if is document or image ovleray, load media child folders
+        if ($rootLevelType == $this->core->sysConfig->root_level_types->documents || $rootLevelType == $this->core->sysConfig->root_level_types->images) {
+            $objChildelements = $this->objModelFolders->loadMediaChildFolders($this->intFolderId);
+        } else {
+            $objChildelements = $this->objModelFolders->loadChildFolders($this->intFolderId);
+        }
 
         $this->view->assign('elements', $objChildelements);
         $this->view->assign('intFolderId', $this->intFolderId);

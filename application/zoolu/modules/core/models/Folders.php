@@ -1927,8 +1927,6 @@ class Model_Folders extends ModelAbstract
         return $this->getFolderTable()->fetchAll($objSelect);
     }
     
-    
-
     /**
      * loadChildFolders
      * @param integer $intFolderId
@@ -1953,7 +1951,28 @@ class Model_Folders extends ModelAbstract
 
         return $this->getFolderTable()->fetchAll($objSelect);
     }
+    
+    /**
+     * loadMediaChildFolders
+     * @param integer $intFolderId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadMediaChildFolders($intFolderId)
+    {
+        $this->core->logger->debug('core->models->Folders->loadMediaChildFolders(' . $intFolderId . ')');
 
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array('id'));
+        $objSelect->joinLeft('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+        $objSelect->joinLeft(array('folderFallbackTitles' => 'folderTitles'), 'folderFallbackTitles.folderId = folders.folderId AND folderFallbackTitles.version = folders.version AND folderFallbackTitles.idLanguages = 0', array('fallbackTitle' => 'title'));
+        $objSelect->where('folders.idParentFolder = ?', $intFolderId);
+
+        return $this->getFolderTable()->fetchAll($objSelect);
+    }
 
     /**
      * Load all the child folder (cms and global) for the sitemaplink fieldtype
