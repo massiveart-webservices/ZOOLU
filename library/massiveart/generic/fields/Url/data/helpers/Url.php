@@ -137,18 +137,20 @@ class GenericDataHelper_Url extends GenericDataHelperAbstract
 
                                 // set all page urls to isMain 0
                                 $this->objModelUrls->resetIsMainUrl($objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
+                                $locator = $resourceLocator->get();
                                 $this->objModelUrls->insertUrl($resourceLocator->get(), $objItem->relationId, $objItem->version, $this->core->sysConfig->url_types->$strType);
 
                                 // change child urls if url layout is tree
                                 if ($this->core->config->url_layout == UniformResourceLocator::LAYOUT_TREE) {
-                                    var_dump($this->objElement->Setup()->getIsStartElement(false));
+                                    //var_dump($this->objElement->Setup()->getIsStartElement(false));
                                     if ($this->objElement->Setup()->getIsStartElement(false) == true) {
                                         $arrChildData = $this->getModel()->getChildUrls($this->objElement->Setup()->getParentId());
                                         if (count($arrChildData) > 0) {
                                             foreach ($arrChildData as $objChild) {
                                                 if ($objChild->relationId != $objItem->relationId) {
                                                     $this->objModelUrls->resetIsMainUrl($objChild->relationId, $objChild->version, $this->core->sysConfig->url_types->$strType);
-                                                    $this->objModelUrls->insertUrl($resourceLocator->makeUnique(str_replace($objUrl->url, $resourceLocator->get(), $objChild->url)), $objChild->relationId, $objChild->version, $this->core->sysConfig->url_types->$strType);
+                                                    $url = $resourceLocator->makeUnique(str_replace($objUrl->url, $locator, $objChild->url));
+                                                    $this->objModelUrls->insertUrl($url, $objChild->relationId, $objChild->version, $this->core->sysConfig->url_types->$strType);
                                                 }
                                             }
                                         }
