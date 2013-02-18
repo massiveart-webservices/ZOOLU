@@ -1711,6 +1711,9 @@ class Model_Globals extends ModelAbstract
         $objSelect->from($this->objGlobalTable, array('globalId', 'relationId' => 'globalId', 'version', 'isStartglobal'))
             ->join('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $intLanguageId . ' AND urls.isMain = 0 AND urls.idParent IS NULL', array('id', 'url'))
             ->join('languages', 'languages.id = urls.idLanguages', array('languageCode'))
+            ->joinLeft('folders', 'folders.id = globals.idParent AND globals.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idRootLevels'))
+            ->joinLeft('rootLevels', 'rootLevels.id = folders.idRootLevels', array('languageDefinitionType'))
+             ->joinLeft(array('rl' => 'rootLevels'), 'rl.id = globals.idParent AND globals.idParentTypes = ' . $this->core->sysConfig->parent_types->rootlevel, array('languageDefinitionType AS altLanguageDefinitionType'))
             ->where('globals.id = ?', $intGlobalId);
 
         return $this->objGlobalTable->fetchAll($objSelect);
