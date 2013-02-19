@@ -115,12 +115,13 @@ class OverlayHelper
             }
         }
         
-        $strOutput .= '<script>
-                        myOverlay.rootLevelType = ' . $intRootLevelTypeId . ';
-                       </script>';
-        /**
-         * return html output
-         */
+        if ($intRootLevelTypeId != '') {
+            $strOutput .= '<script>
+            	            myOverlay.rootLevelType = ' . $intRootLevelTypeId . ';
+                	       </script>';
+        }
+        
+        // return html output
         return $strOutput;
     }
 
