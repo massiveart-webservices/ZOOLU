@@ -197,6 +197,7 @@ class IndexController extends WebControllerAction
         // validate language
         $this->validateLanguage();
 
+        
         // validate root level segment
         $this->validateSegment();        
         
@@ -205,6 +206,7 @@ class IndexController extends WebControllerAction
             $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/' . $this->objTheme->path.'/');
             $this->renderScript('portalgate.php');
         } else {        
+
             //validate the url check if landingpage     
             $objUrl = $this->getValidatedUrlObject($strUrl);
             
@@ -322,7 +324,7 @@ class IndexController extends WebControllerAction
                         $this->objPage->setBaseUrl($objUrl->baseUrl);
                         $this->objPage->setNavParentId($objUrlData->idLinkParent);
                     }
-    
+                    
                     $this->objPage->loadPage();
     
                     /*
@@ -704,7 +706,7 @@ private function getValidatedUrlObject($strUrl) {
         // Case: language should be defined in subdomain, but is defined in subfolder
         if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
             //check if uri contains language code
-            if(preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)){
+            if(preg_match('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUri, $arrMatches)){
                 $strMatch = trim($arrMatches[0], '/');
                 foreach($this->core->config->languages->language->toArray() as $arrLanguage){
                     //check if language exists in config 
@@ -755,7 +757,7 @@ private function getValidatedUrlObject($strUrl) {
         
         if ($this->intLanguageDefinitionType == $this->core->config->language_definition->none) {
             //check if language contained in uri, then remove it
-            if (preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)) {
+            if (preg_match('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUri, $arrMatches)) {
                  $strMatch = $arrMatches[0];
                  $strRedirectUri = str_replace($strMatch, '', $strUri);
                  $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $strDomain . '/' . $strRedirectUri;         
