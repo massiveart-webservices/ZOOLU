@@ -2270,7 +2270,7 @@ Massiveart.Form = Class.create({
     this.updateSnippetPreviewDesc();
     this.updateSnippetPreviewUrl();
     
-    if ('articletitle') {
+    if ($('articletitle')) {
         $('articletitle').observe('keyup', function(event){
             myForm.updateSnippetPreviewTitle();
         });
