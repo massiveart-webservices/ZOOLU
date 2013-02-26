@@ -547,7 +547,7 @@ Massiveart.Form = Class.create({
               }
           }
       });
-      $(markersId).innerHTML = markers.toJSON();
+      $(markersId).innerHTML = Object.toJSON(markers);
   },
   
   /**
@@ -652,7 +652,8 @@ Massiveart.Form = Class.create({
       var markersId = fieldId + '_markers';
       var markers = this.getMarkersfromJson(markersId);
       markers.push(objMarker);
-      $(markersId).innerHTML = markers.toJSON();
+      
+      $(markersId).innerHTML = Object.toJSON(markers);
       $(fieldId + '_markerInstances').value = instances + '[' + id + ']';
   },
   
@@ -670,7 +671,7 @@ Massiveart.Form = Class.create({
               throw $break;
           }
       });
-      $(markersId).innerHTML = markers.toJSON();
+      $(markersId).innerHTML = Object.toJSON(markers);
       var instances = $(fieldId + '_markerInstances').value;
       $(fieldId + '_markerInstances').value = instances.replace('[' + markerId + ']', '');
       $(fieldId + '_marker_' + markerId).puff();
