@@ -241,10 +241,14 @@ class IndexController extends WebControllerAction
     
                 if (isset($objUrl->url) && count($objUrl->url) > 0) {
                     $objUrlData = $objUrl->url->current();
-    
+        
+                    $strRelationId = $objUrlData->relationId;
+                    if ($objUrlData->linkId != NULL) {
+                        $strRelationId = $objUrlData->linkId; 
+                    }            
                     // check if url is main
                     if (!$objUrlData->isMain) {
-                        $objMainUrl = $this->objModelUrls->loadUrl($objUrlData->relationId, $objUrlData->version, $objUrlData->idUrlTypes);
+                        $objMainUrl = $this->objModelUrls->loadUrl($strRelationId, $objUrlData->version, $objUrlData->idUrlTypes);
                         if (count($objMainUrl) > 0) {
                             $objMainUrl = $objMainUrl->current();
                             $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
