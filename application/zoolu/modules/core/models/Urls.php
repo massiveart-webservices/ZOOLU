@@ -465,7 +465,7 @@ class Model_Urls
 
 
         return $this->objUrlTable->fetchAll($objSelect);
-    } 
+    }
 
     /**
      * Loads the urls (hopefully only one) with the given url and rootlevel
