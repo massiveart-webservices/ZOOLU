@@ -258,9 +258,12 @@ class IndexController extends WebControllerAction
                             if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
                                  $uriLanguageFolder = '/' . strtolower($objMainUrl->languageCode) . '/';
                             }
-                            if ($objUrlData->isLandingPage && $objUrlData->idParent) {
-                                $objBasePage = $this->getModelUrls()->loadByFolderId($objUrlData->idParent);                                
-                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objBasePage->url.$objMainUrl->url);
+                            if (!$objUrlData->isLandingPage) {
+                                $baseUrl = '';
+                                if (isset($objUrl->baseUrl)) {
+                                    $baseUrl = $objUrl->baseUrl->url;   
+                                }
+                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
                             } else {
                                 $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
                             }
