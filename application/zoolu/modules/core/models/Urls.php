@@ -449,14 +449,14 @@ class Model_Urls
         $objSelect->setIntegrityCheck(false);
 
         if ($intPageTypeId == $this->core->sysConfig->page_types->product_tree->id) {
-            $objSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => 'lG.id', 'linkId' => 'lG.globalId', 'idLinkParent' => 'lG.idParent'));
+            $objSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isLandingPage', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => 'lG.id', 'linkId' => 'lG.globalId', 'idLinkParent' => 'lG.idParent'));
             $objSelect->join(array('lG' => 'globals'), 'lG.globalId = urls.relationId AND lG.version = urls.version', array());
             $objSelect->join('globalLinks', 'globalLinks.idGlobals = lG.id', array());
             $objSelect->join('globals', 'globals.globalId = globalLinks.globalId', array())
                 ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
             ;
         } else {
-            $objSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
+            $objSelect->from('urls', array('relationId' => 'globals.globalId', 'globals.version', 'urls.idLanguages', 'urls.isLandingPage', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => new Zend_Db_Expr('-1'), 'linkId' => new Zend_Db_Expr('NULL'), 'idLinkParent' => new Zend_Db_Expr('-1')));
             $objSelect->join('globals', 'globals.globalId = urls.relationId AND globals.version  = urls.version', array());
         }
         $objSelect->where('urls.url = ?', $strUrl)
@@ -465,7 +465,7 @@ class Model_Urls
 
 
         return $this->objUrlTable->fetchAll($objSelect);
-    }
+    } 
 
     /**
      * Loads the urls (hopefully only one) with the given url and rootlevel
