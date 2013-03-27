@@ -73,9 +73,9 @@ class Global_IndexController extends ModuleControllerAction
         $this->_helper->viewRenderer->setNoRender();
 
         Zend_Layout::startMvc(array(
-                                   'layout'     => 'global-list',
-                                   'layoutPath' => '../application/zoolu/layouts'
-                              ));
+            'layout'     => 'global-list',
+            'layoutPath' => '../application/zoolu/layouts'
+        ));
 
         $objLayout = Zend_Layout::getMvcInstance();
         $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'global', array('layoutType' => 'list')));
@@ -98,9 +98,9 @@ class Global_IndexController extends ModuleControllerAction
         $this->_helper->viewRenderer->setNoRender();
 
         Zend_Layout::startMvc(array(
-                                   'layout'     => 'global-tree',
-                                   'layoutPath' => '../application/zoolu/layouts'
-                              ));
+            'layout'     => 'global-tree',
+            'layoutPath' => '../application/zoolu/layouts'
+        ));
 
         $objLayout = Zend_Layout::getMvcInstance();
         $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'global', array('layoutType' => 'tree')));

@@ -121,6 +121,43 @@ class Model_Contacts
     }
 
     /**
+     * loadContacts
+     * @param $strSearchValue string
+     * @param $strSortOrder string
+     * @param $strOrderColumn string
+     * @param $blnReturnSelect boolean
+     * @return Zend_Db_Table_Rowset_Abstract|Zend_Db_Table_Select
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadContacts($strSearchValue = '', $strSortOrder = '', $strOrderColumn = '', $blnReturnSelect = false, $contactTypeId = null)
+    {
+        $this->core->logger->debug('contacts->models->Model_Contacts->loadContacts(' . $strSearchValue . ', ' . $strSortOrder . ', ' . $strOrderColumn . ', ' . $blnReturnSelect . ', ' . $contactTypeId . ')');
+
+        $objSelect = $this->getContactsTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('contacts', array('id', 'fname', 'sname', 'email', 'idUsers', 'creator', 'idUnits', 'version' => new Zend_Db_Expr("'0'"), 'type' => new Zend_Db_Expr("'contact'")))
+            ->join('genericForms', 'genericForms.id = contacts.idGenericForms', array('genericFormId'));
+
+        if ($contactTypeId !== null) {
+            $objSelect->where('contacts.idContactTypes = ?', $contactTypeId);
+        }
+
+        if ($strOrderColumn != '') {
+            $objSelect->order(array($strOrderColumn . ' ' . $strSortOrder));
+        } else {
+            $objSelect->order(array('sname ASC', 'fname ASC'));
+        }
+
+        if ($blnReturnSelect) {
+            return $objSelect;
+        } else {
+            return $this->getContactsTable()->fetchAll($objSelect);
+        }
+    }
+
+    /**
      * loadContactsByUnitId
      * @param integer $intUnitId
      * @author Thomas Schedler <tsh@massiveart.com>
