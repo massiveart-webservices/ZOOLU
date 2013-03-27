@@ -116,7 +116,7 @@ class Contacts_IndexController extends AuthControllerAction
 
         $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
-        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->global);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->contacts);
         $this->view->assign('module', $this->core->sysConfig->modules->contacts);
     }
 }
