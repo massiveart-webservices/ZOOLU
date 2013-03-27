@@ -1,1157 +1,1176 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configdata>
 
-  <!--
-  ***********************************************************
-    Levels to define the logger priority - field: <priority>
-  ***********************************************************
-    EMERG   = 0;  Emergency: system is unusable
-    ALERT   = 1;  Alert: action must be taken immediately
-    CRIT    = 2;  Critical: critical conditions
-    ERR     = 3;  Error: error conditions
-    WARN    = 4;  Warning: warning conditions
-    NOTICE  = 5;  Notice: normal but significant condition
-    INFO    = 6;  Informational: informational messages
-    DEBUG   = 7;  Debug: debug messages
-  ***********************************************************
-  -->
+    <!--
+    ***********************************************************
+      Levels to define the logger priority - field: <priority>
+    ***********************************************************
+      EMERG   = 0;  Emergency: system is unusable
+      ALERT   = 1;  Alert: action must be taken immediately
+      CRIT    = 2;  Critical: critical conditions
+      ERR     = 3;  Error: error conditions
+      WARN    = 4;  Warning: warning conditions
+      NOTICE  = 5;  Notice: normal but significant condition
+      INFO    = 6;  Informational: informational messages
+      DEBUG   = 7;  Debug: debug messages
+    ***********************************************************
+    -->
 
-  <!--
-  ***********************************************************
-  * config for online evnironment                           *
-  ***********************************************************
-  -->
-  <production>
-    <!-- CLIENT -->
-    <client>
-      <id>default</id>
-      <title>Default Portal</title>
-    </client>
+    <!--
+    ***********************************************************
+    * config for online evnironment                           *
+    ***********************************************************
+    -->
+    <production>
+        <!-- CLIENT -->
+        <client>
+            <id>default</id>
+            <title>Default Portal</title>
+        </client>
 
-    <!-- STANDARD -->
-    <language>de</language>
-    <location>de_AT</location>
-    <timezone>Europe/Vienna</timezone>
+        <!-- STANDARD -->
+        <language>de</language>
+        <location>de_AT</location>
+        <timezone>Europe/Vienna</timezone>
 
-    <!-- Standard web-server user & group -->
-    <server>
-      <executing>
-        <user>www-data</user>
-        <group>www-data</group>
-      </executing>
-    </server>
+        <!-- Standard web-server user & group -->
+        <server>
+            <executing>
+                <user>www-data</user>
+                <group>www-data</group>
+            </executing>
+        </server>
 
-    <!-- LANGUAGES -->
-    <languages>
-      <default>
-        <id>1</id>
-        <code>de</code>
-      </default>
-    </languages>
+        <!-- LANGUAGES -->
+        <languages>
+            <default>
+                <id>1</id>
+                <code>de</code>
+            </default>
+        </languages>
 
-    <!-- VERSION -->
-    <version>
-      <js>1.0</js>
-      <css>1.0</css>
-    </version>
+        <!-- VERSION -->
+        <version>
+            <js>1.0</js>
+            <css>1.0</css>
+        </version>
 
-    <!-- DISPLAY ENVIRONMENTS -->
-    <display_type>
-       <enabled>false</enabled> <!-- true/false -->
-       <website>website</website>
-       <tablet>tablet</tablet>
-       <mobile>mobile</mobile>
-    </display_type>
+        <!-- DISPLAY ENVIRONMENTS -->
+        <display_type>
+            <enabled>true</enabled>
+            <!-- true/false -->
+            <website>website</website>
+            <tablet>tablet</tablet>
+            <mobile>mobile</mobile>
+        </display_type>
 
-    <!-- PATHES -->
-    <path>
-      <cache>
-        <gen_forms>tmp/cache/gen_forms/</gen_forms>
-        <min>tmp/cache/min/</min>
-        <pages>tmp/cache/pages/</pages>
-        <tables>tmp/cache/tables/</tables>
-        <tmp>tmp/cache/tmp/</tmp>
-      </cache>
-      <session>tmp/sessions/</session>
-      <search_index>
-        <page>tmp/search_index/pages</page>
-        <global>tmp/search_index/globals</global>
-      </search_index>
-      <zoolu_modules>application/zoolu/modules/</zoolu_modules>
-    </path>
+        <!-- PATHES -->
+        <path>
+            <cache>
+                <gen_forms>tmp/cache/gen_forms/</gen_forms>
+                <min>tmp/cache/min/</min>
+                <pages>tmp/cache/pages/</pages>
+                <tables>tmp/cache/tables/</tables>
+                <tmp>tmp/cache/tmp/</tmp>
+            </cache>
+            <session>tmp/sessions/</session>
+            <search_index>
+                <page>tmp/search_index/pages</page>
+                <global>tmp/search_index/globals</global>
+            </search_index>
+            <zoolu_modules>application/zoolu/modules/</zoolu_modules>
+        </path>
 
-    <!-- MINIFY -->
-    <minify>
-      <debug>false</debug>
-    </minify>
+        <!-- MINIFY -->
+        <minify>
+            <debug>false</debug>
+        </minify>
 
-    <!-- LOGGER / DEBUGGING -->
-    <show_errors>false</show_errors>
-    <logger>
-      <priority>3</priority>
-      <path>logs/</path>
-      <firebug>false</firebug>
-    </logger>
+        <!-- LOGGER / DEBUGGING -->
+        <show_errors>false</show_errors>
+        <logger>
+            <priority>3</priority>
+            <path>logs/</path>
+            <firebug>false</firebug>
+        </logger>
 
-    <!-- CACHE -->
-    <cache>
-      <page>true</page>
-      <generic_form_structure>true</generic_form_structure>
-    </cache>
+        <!-- CACHE -->
+        <cache>
+            <page>true</page>
+            <generic_form_structure>true</generic_form_structure>
+        </cache>
 
-    <!-- DATABASE -->
-    <database>
-      <adapter>Pdo_Mysql</adapter>
-      <params>
-        <host>localhost</host>
-        <username>zoolu-default</username>
-        <password>zoolu</password>
-        <dbname>zo-zoolu</dbname>
-      </params>
-    </database>
+        <!-- DATABASE -->
+        <database>
+            <adapter>Pdo_Mysql</adapter>
+            <params>
+                <host>localhost</host>
+                <username>zoolu-default</username>
+                <password>zoolu</password>
+                <dbname>zo-zoolu</dbname>
+            </params>
+        </database>
 
-    <!-- ENCODING -->
-    <encoding>
-      <default>UTF-8</default>
-      <ajax>UTF-8</ajax>
-      <db>UTF8</db>
-    </encoding>
+        <!-- ENCODING -->
+        <encoding>
+            <default>UTF-8</default>
+            <ajax>UTF-8</ajax>
+            <db>UTF8</db>
+        </encoding>
 
-    <!-- Helpers -->
-    <helpers>
-      <client>
-        <dispatcher>disabled</dispatcher> <!-- enabled/disabled -->
-        <init>disabled</init> <!-- enabled/disabled -->
-        <datareceiver>disabled</datareceiver> <!-- enabled/disabled -->
-      </client>
-    </helpers>
+        <!-- Helpers -->
+        <helpers>
+            <client>
+                <dispatcher>disabled</dispatcher>
+                <!-- enabled/disabled -->
+                <init>disabled</init>
+                <!-- enabled/disabled -->
+                <datareceiver>disabled</datareceiver>
+                <!-- enabled/disabled -->
+            </client>
+        </helpers>
 
-    <!-- Contact  -->
-    <contact>
-      <replications>
-        <replication>MailChimp</replication>
-      </replications>
-      <interest_groups>
-        <interest_group>
-          <field>portal</field>
-          <title>Portal</title>
-        </interest_group>
-        <interest_group>
-          <field>interest_group</field>
-          <title>Interested in</title>
-        </interest_group>
-        <interest_group>
-          <field>language</field>
-          <title>Language</title>
-        </interest_group>
-        <interest_group>
-          <field>filter</field>
-          <title>Filter</title>
-        </interest_group>
-      </interest_groups>
-    </contact>
+        <!-- Contact  -->
+        <contact>
+            <replications>
+                <replication>MailChimp</replication>
+            </replications>
+            <interest_groups>
+                <interest_group>
+                    <field>portal</field>
+                    <title>Portal</title>
+                </interest_group>
+                <interest_group>
+                    <field>interest_group</field>
+                    <title>Interested in</title>
+                </interest_group>
+                <interest_group>
+                    <field>language</field>
+                    <title>Language</title>
+                </interest_group>
+                <interest_group>
+                    <field>filter</field>
+                    <title>Filter</title>
+                </interest_group>
+            </interest_groups>
+        </contact>
 
-    <mail_chimp>
-      <api_key>6061ae004265eb4f2e4cdb88d6f7e66d-us2</api_key>
-      <list_id>930f4657db</list_id>
-      <from_email>no-replay@massiveart.com</from_email>
-      <from_name>ZOOLU CMS</from_name>
-      <type>regular</type>
-      <!-- mappings from interests to idFields -->
-      <mappings>
-        <!-- <interests-3949>230</interests-3949> -->
-        <subscribe>632</subscribe>
-        <unsubscribe>633</unsubscribe>
-        <dirty>638</dirty>
-        <clean>639</clean>
-        <hardbounce>648</hardbounce>
-      </mappings>
-      <subscribeaction>http://massiveart.us2.list-manage.com/subscribe?u=a9abbfef6b6b2fe37d2fe4105&amp;id=930f4657db</subscribeaction>
-      <portals>
-        <portal>
-          <value>8</value>
-          <name>group[6585][8]</name>
-          <id>mce-group[6585]-6585-0</id>
-          <title>Portal</title>
-        </portal>
-      </portals>
-      <languages>
-        <language>
-          <value>1</value>
-          <name>group[6577][1]</name>
-          <id>mce-group[6577]-6577-0</id>
-          <title>Deutsch</title>
-        </language>
-      </languages>
-      <interests>
-        <interest>
-          <value>2</value>
-          <name>group[6581][2]</name>
-          <id>mce-group[6581]-6581-0</id>
-          <title>Test1</title>
-        </interest>
-        <interest>
-          <value>4</value>
-          <name>group[6581][4]</name>
-          <id>mce-group[6581]-6581-1</id>
-          <title>Test2</title>
-        </interest>
-      </interests>
-    </mail_chimp>
+        <mail_chimp>
+            <api_key>6061ae004265eb4f2e4cdb88d6f7e66d-us2</api_key>
+            <list_id>930f4657db</list_id>
+            <from_email>no-replay@massiveart.com</from_email>
+            <from_name>ZOOLU CMS</from_name>
+            <type>regular</type>
+            <!-- mappings from interests to idFields -->
+            <mappings>
+                <!-- <interests-3949>230</interests-3949> -->
+                <subscribe>632</subscribe>
+                <unsubscribe>633</unsubscribe>
+                <dirty>638</dirty>
+                <clean>639</clean>
+                <hardbounce>648</hardbounce>
+            </mappings>
+            <subscribeaction>http://massiveart.us2.list-manage.com/subscribe?u=a9abbfef6b6b2fe37d2fe4105&amp;id=930f4657db</subscribeaction>
+            <portals>
+                <portal>
+                    <value>8</value>
+                    <name>group[6585][8]</name>
+                    <id>mce-group[6585]-6585-0</id>
+                    <title>Portal</title>
+                </portal>
+            </portals>
+            <languages>
+                <language>
+                    <value>1</value>
+                    <name>group[6577][1]</name>
+                    <id>mce-group[6577]-6577-0</id>
+                    <title>Deutsch</title>
+                </language>
+            </languages>
+            <interests>
+                <interest>
+                    <value>2</value>
+                    <name>group[6581][2]</name>
+                    <id>mce-group[6581]-6581-0</id>
+                    <title>Test1</title>
+                </interest>
+                <interest>
+                    <value>4</value>
+                    <name>group[6581][4]</name>
+                    <id>mce-group[6581]-6581-1</id>
+                    <title>Test2</title>
+                </interest>
+            </interests>
+        </mail_chimp>
 
-    <!-- Subscriber  -->
-    <subscriber>
-      <default>
-        <rootLevelId>48</rootLevelId>
-        <genericFormId>36</genericFormId>
-        <userId>6</userId>
-      </default>
-      <import_fields>
-        <import_field>
-          <title>salutation</title>
-          <defaults>
-            <default>salutation</default>
-            <default>Anrede</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>title</title>
-          <defaults>
-            <default>title</default>
-            <default>Titel</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>fname</title>
-          <defaults>
-            <default>fname</default>
-            <default>Vorname</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>sname</title>
-          <defaults>
-            <default>sname</default>
-            <default>Nachname</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>email</title>
-          <defaults>
-            <default>email</default>
-            <default>EMail</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>phone</title>
-          <defaults>
-            <default>phone</default>
-            <default>Telefon</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>mobile</title>
-          <defaults>
-            <default>mobile</default>
-            <default>Handy</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>fax</title>
-          <defaults>
-            <default>fax</default>
-            <default>Fax</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>website</title>
-          <defaults>
-            <default>website</default>
-            <default>Homepage</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>street</title>
-          <defaults>
-            <default>street</default>
-            <default>Straße</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>city</title>
-          <defaults>
-            <default>city</default>
-            <default>Stadt</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>state</title>
-          <defaults>
-            <default>state</default>
-            <default>Staat</default>
-          </defaults>
-        </import_field>
-        <import_field>
-          <title>zip</title>
-          <defaults>
-            <default>zip</default>
-            <default>Plz</default>
-          </defaults>
-        </import_field>
-      </import_fields>
-    </subscriber>
+        <!-- Subscriber  -->
+        <subscriber>
+            <default>
+                <rootLevelId>48</rootLevelId>
+                <genericFormId>36</genericFormId>
+                <userId>6</userId>
+            </default>
+            <import_fields>
+                <import_field>
+                    <title>salutation</title>
+                    <defaults>
+                        <default>salutation</default>
+                        <default>Anrede</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>title</title>
+                    <defaults>
+                        <default>title</default>
+                        <default>Titel</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>fname</title>
+                    <defaults>
+                        <default>fname</default>
+                        <default>Vorname</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>sname</title>
+                    <defaults>
+                        <default>sname</default>
+                        <default>Nachname</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>email</title>
+                    <defaults>
+                        <default>email</default>
+                        <default>EMail</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>phone</title>
+                    <defaults>
+                        <default>phone</default>
+                        <default>Telefon</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>mobile</title>
+                    <defaults>
+                        <default>mobile</default>
+                        <default>Handy</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>fax</title>
+                    <defaults>
+                        <default>fax</default>
+                        <default>Fax</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>website</title>
+                    <defaults>
+                        <default>website</default>
+                        <default>Homepage</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>street</title>
+                    <defaults>
+                        <default>street</default>
+                        <default>Straße</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>city</title>
+                    <defaults>
+                        <default>city</default>
+                        <default>Stadt</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>state</title>
+                    <defaults>
+                        <default>state</default>
+                        <default>Staat</default>
+                    </defaults>
+                </import_field>
+                <import_field>
+                    <title>zip</title>
+                    <defaults>
+                        <default>zip</default>
+                        <default>Plz</default>
+                    </defaults>
+                </import_field>
+            </import_fields>
+        </subscriber>
 
-    <seo_tab>
-        <noindex>689</noindex>
-        <nofollow>690</nofollow>
-    </seo_tab>
-    
-    <!-- RESPONSE CODES -->
-    <response>
-      <ok>200</ok>
-      <bad_request>400</bad_request>
-      <internal_server_error>500</internal_server_error>
-    </response>
+        <seo_tab>
+            <noindex>689</noindex>
+            <nofollow>690</nofollow>
+        </seo_tab>
 
-    <!-- List Config -->
-    <list>
-      <default>
-        <itemsPerPage>100</itemsPerPage>
-      </default>
-    </list>
+        <!-- RESPONSE CODES -->
+        <response>
+            <ok>200</ok>
+            <bad_request>400</bad_request>
+            <internal_server_error>500</internal_server_error>
+        </response>
 
-    <!-- GENERIC -->
-    <generic>
-      <!-- table: actions -->
-      <actions>
-        <add>1</add>
-        <edit>2</edit>
-        <change_template>3</change_template>
-        <change_template_id>4</change_template_id>
-      </actions>
-    </generic>
-
-    <!-- FORM -->
-    <form>
-      <ids>
-        <!-- default genericFormIds for folders / table: genericForms -->
-        <folders>
-          <default>DEFAULT_FOLDER</default>
-        </folders>
-        <!-- default genericFormIds for pages / table: genericForms -->
-        <pages>
-          <tmp1>DEFAULT_PAGE_1</tmp1>
-          <overview>DEFAULT_OVERVIEW</overview>
-        </pages>
-        <categories>
-          <default>DEFAULT_CATEGORY</default>
-        </categories>
-        <units>
-          <default>DEFAULT_UNIT</default>
-        </units>
-        <contacts>
-          <default>DEFAULT_CONTACT</default>
-        </contacts>
-        <events>
-          <default>DEFAULT_EVENT</default>
-          <overview>DEFAULT_EVENT_OVERVIEW</overview>
-        </events>
-        <product>
-          <default>DEFAULT_PRODUCT</default>
-          <overview>DEFAULT_PRODUCT_OVERVIEW</overview>
-        </product>
-        <press>
-          <default>DEFAULT_PRESS</default>
-          <overview>DEFAULT_PRESS_OVERVIEW</overview>
-        </press>
-        <course>
-          <default>DEFAULT_COURSE</default>
-          <overview>DEFAULT_COURSE_OVERVIEW</overview>
-        </course>
-        <locations>
-          <default>DEFAULT_LOCATION</default>
-        </locations>
-        <event>
-          <default>DEFAULT_EVENT</default>
-          <overview>DEFAULT_EVENT_OVERVIEW</overview>
-        </event>
-        <members>
-          <default>DEFAULT_MEMBER</default>
-        </members>
-        <companies>
-          <default>DEFAULT_COMPANY</default>
-        </companies>
-        <newsletters>
-          <default>DEFAULT_NEWSLETTER</default>
-        </newsletters>
-        <subscribers>
-          <default>DEFAULT_SUBSCRIBER</default>
-        </subscribers>
-      </ids>
-      <!-- GENERIC FORM TYPES -->
-      <!-- table: genericFormTypes -->
-      <types>
-        <folder>1</folder>
-        <page>2</page>
-        <category>3</category>
-        <unit>4</unit>
-        <contact>5</contact>
-        <global>6</global>
-        <location>7</location>
-        <member>8</member>
-        <company>9</company>
-        <newsletter>10</newsletter>
-        <subscriber>11</subscriber>
-      </types>
-      <!-- default status for folder/page creation(1...Test, 2...Published, 3...Approval) -->
-      <!-- table: status -->
-      <status>
-       <default>1</default>
-      </status>
-    </form>
-
-    <!-- FIELDS -->
-    <fields>
-      <properties>
-        <url_field>1</url_field>
-      </properties>
-    </fields>
-
-    <!-- VIEW TYPES -->
-    <viewtypes>
-      <thumb>1</thumb>
-      <list>2</list>
-    </viewtypes>
-
-    <!-- PRODUCT -->
-    <product>
-      <rootLevels>
+        <!-- List Config -->
         <list>
-          <id>11</id>
+            <default>
+                <itemsPerPage>100</itemsPerPage>
+            </default>
         </list>
-        <tree>
-          <id>12</id>
-        </tree>
-      </rootLevels>
-    </product>
 
-    <!-- UPLOAD -->
-    <upload>
-      <!-- maximum filesize -->
-      <max_filesize>52428800</max_filesize> <!-- 50 MB (1024*1024*15) for each upload media -->
-      <!-- excluded extensions -->
-      <excluded_extensions>
-        <extension>com</extension>
-        <extension>exe</extension>
-        <extension>msi</extension>
-        <extension>dif</extension>
-        <extension>inf</extension>
-        <extension>mdb</extension>
-        <extension>js</extension>
-        <extension>jse</extension>
-        <extension>reg</extension>
-        <extension>vbe</extension>
-        <extension>vbs</extension>
-        <extension>bat</extension>
-        <extension>pif</extension>
-        <extension>sh</extension>
-        <extension>pl</extension>
-        <extension>scr</extension>
-      </excluded_extensions>
-
-      <!-- IMAGES -->
-      <images>
-        <!-- Adapter (Gd2, Imagick) -->
-        <adapter>Imagick</adapter>
-        <!-- Save destination (local, s3) -->
-        <destination>local</destination>
-
-        <!-- file system segmenting -->
-        <segmenting>
-          <enabled>true</enabled>
-          <number_of_segments>10</number_of_segments>
-        </segmenting>
-
-        <!-- upload pathes -->
-        <path>
-          <local>
-            <tmp>tmp/images/</tmp>
-            <private>uploads/images/</private>
-            <public>public/website/uploads/images/</public>
-          </local>
-          <s3>
-            <tmp>tmp/images/</tmp>
-            <private>private/images/</private>
-            <public>public/images/</public>
-          </s3>
-        </path>
-
-        <!-- maximum filesize -->
-        <max_filesize>15728640</max_filesize> <!-- 15 MB (1024*1024*15) for each Image -->
-        <!-- excluded extensions -->
-        <excluded_extensions>
-          <extension>exe</extension>
-        </excluded_extensions>
-        <default_sizes>
-          <default_size>
-            <folder>icon32</folder>
+        <!-- GENERIC -->
+        <generic>
+            <!-- table: actions -->
             <actions>
-	            <action>
-	              <method>scale</method>
-	              <params>32,32</params>
-	            </action>
+                <add>1</add>
+                <edit>2</edit>
+                <change_template>3</change_template>
+                <change_template_id>4</change_template_id>
             </actions>
-            <display>
-              <single_edit>true</single_edit>
-            </display>
-          </default_size>
-          <default_size>
-            <folder>thumb</folder>
-            <actions>
-              <action>
-                <method>resize</method>
-                <params>200</params>
-              </action>
-            </actions>
-            <display>
-              <single_edit>true</single_edit>
-            </display>
-          </default_size>
-          <default_size>
-            <folder>660x</folder>
-            <actions>
-              <action>
-                <method>resize</method>
-                <params>660</params>
-              </action>
-            </actions>                        
-            <display>
-              <imagemap>true</imagemap>
-            </display>
-          </default_size>
-          <default_size>
-            <folder>420x</folder>
-            <actions>
-              <action>
-                <method>resize</method>
-                <params>420</params>
-              </action>
-            </actions>
-            <display>
-              <imagemap>true</imagemap>
-            </display>                        
-          </default_size>
-          <default_size>
-            <folder>220x</folder>
-            <actions>
-              <action>
-                <method>resize</method>
-                <params>220</params>
-              </action>
-            </actions>
-          </default_size>
-          <default_size>
-            <folder>180x</folder>
-            <actions>
-              <action>
-                <method>resize</method>
-                <params>180</params>
-              </action>
-            </actions>
-          </default_size>
-          <default_size>
-            <folder>140x140</folder>
-            <actions>
-              <action>
-                <method>scale</method>
-                <params>140,140</params>
-              </action>
-            </actions>
-          </default_size>
-          <default_size>
-            <folder>80x80</folder>
-            <actions>
-              <action>
-                <method>scale</method>
-                <params>80,80</params>
-              </action>
-            </actions>
-          </default_size>
-          <default_size>
-            <folder>40x40</folder>
-            <actions>
-              <action>
-                <method>scale</method>
-                <params>40,40</params>
-              </action>
-            </actions>
-          </default_size>
-        </default_sizes>
-      </images>
+        </generic>
 
-      <!-- DOCS -->
-      <documents>
-        <!-- Save destination (local, S3) -->
-        <destination>local</destination>
+        <!-- FORM -->
+        <form>
+            <ids>
+                <!-- default genericFormIds for folders / table: genericForms -->
+                <folders>
+                    <default>DEFAULT_FOLDER</default>
+                </folders>
+                <!-- default genericFormIds for pages / table: genericForms -->
+                <pages>
+                    <tmp1>DEFAULT_PAGE_1</tmp1>
+                    <overview>DEFAULT_OVERVIEW</overview>
+                </pages>
+                <categories>
+                    <default>DEFAULT_CATEGORY</default>
+                </categories>
+                <units>
+                    <default>DEFAULT_UNIT</default>
+                </units>
+                <contacts>
+                    <default>DEFAULT_CONTACT</default>
+                </contacts>
+                <contactcompanies>
+                    <default>DEFAULT_CONTACT_COMPANY</default>
+                </contactcompanies>
+                <events>
+                    <default>DEFAULT_EVENT</default>
+                    <overview>DEFAULT_EVENT_OVERVIEW</overview>
+                </events>
+                <product>
+                    <default>DEFAULT_PRODUCT</default>
+                    <overview>DEFAULT_PRODUCT_OVERVIEW</overview>
+                </product>
+                <press>
+                    <default>DEFAULT_PRESS</default>
+                    <overview>DEFAULT_PRESS_OVERVIEW</overview>
+                </press>
+                <course>
+                    <default>DEFAULT_COURSE</default>
+                    <overview>DEFAULT_COURSE_OVERVIEW</overview>
+                </course>
+                <locations>
+                    <default>DEFAULT_LOCATION</default>
+                </locations>
+                <event>
+                    <default>DEFAULT_EVENT</default>
+                    <overview>DEFAULT_EVENT_OVERVIEW</overview>
+                </event>
+                <members>
+                    <default>DEFAULT_MEMBER</default>
+                </members>
+                <companies>
+                    <default>DEFAULT_COMPANY</default>
+                </companies>
+                <newsletters>
+                    <default>DEFAULT_NEWSLETTER</default>
+                </newsletters>
+                <subscribers>
+                    <default>DEFAULT_SUBSCRIBER</default>
+                </subscribers>
+            </ids>
+            <!-- GENERIC FORM TYPES -->
+            <!-- table: genericFormTypes -->
+            <types>
+                <folder>1</folder>
+                <page>2</page>
+                <category>3</category>
+                <unit>4</unit>
+                <contact>5</contact>
+                <global>6</global>
+                <location>7</location>
+                <member>8</member>
+                <company>9</company>
+                <newsletter>10</newsletter>
+                <subscriber>11</subscriber>
+            </types>
+            <!-- default status for folder/page creation(1...Test, 2...Published, 3...Approval) -->
+            <!-- table: status -->
+            <status>
+                <default>1</default>
+            </status>
+        </form>
 
-        <!-- file system segmenting -->
-        <segmenting>
-          <enabled>true</enabled>
-          <number_of_segments>10</number_of_segments>
-        </segmenting>
+        <!-- FIELDS -->
+        <fields>
+            <properties>
+                <url_field>1</url_field>
+            </properties>
+        </fields>
 
-        <!-- upload pathes -->
-        <path>
-          <local>
-            <private>uploads/documents/</private>
-            <public>public/website/uploads/documents/</public>
-          </local>
-          <s3>
-            <private>private/documents/</private>
-            <public>public/documents/</public>
-          </s3>
-        </path>
-        <!-- maximum filesize -->
-        <max_filesize>52428800</max_filesize> <!-- 50 MB (1024*1024*15) for each upload media -->
-      </documents>
+        <!-- VIEW TYPES -->
+        <viewtypes>
+            <thumb>1</thumb>
+            <list>2</list>
+        </viewtypes>
 
-      <!-- VIDEOS -->
-      <videos>
-        <!-- Save destination (local, S3) -->
-        <destination>local</destination>
+        <!-- PRODUCT -->
+        <product>
+            <rootLevels>
+                <list>
+                    <id>11</id>
+                </list>
+                <tree>
+                    <id>12</id>
+                </tree>
+            </rootLevels>
+        </product>
 
-        <!-- file system segmenting -->
-        <segmenting>
-          <enabled>true</enabled>
-          <number_of_segments>10</number_of_segments>
-        </segmenting>
+        <!-- UPLOAD -->
+        <upload>
+            <!-- maximum filesize -->
+            <max_filesize>52428800</max_filesize>
+            <!-- 50 MB (1024*1024*15) for each upload media -->
+            <!-- excluded extensions -->
+            <excluded_extensions>
+                <extension>com</extension>
+                <extension>exe</extension>
+                <extension>msi</extension>
+                <extension>dif</extension>
+                <extension>inf</extension>
+                <extension>mdb</extension>
+                <extension>js</extension>
+                <extension>jse</extension>
+                <extension>reg</extension>
+                <extension>vbe</extension>
+                <extension>vbs</extension>
+                <extension>bat</extension>
+                <extension>pif</extension>
+                <extension>sh</extension>
+                <extension>pl</extension>
+                <extension>scr</extension>
+            </excluded_extensions>
 
-        <!-- upload pathes -->
-        <path>
-          <local>
-            <private>uploads/videos/</private>
-            <public>public/website/uploads/videos/</public>
-          </local>
-          <s3>
-            <private>private/videos/</private>
-            <public>public/videos/</public>
-          </s3>
-        </path>
-        <!-- maximum filesize -->
-        <max_filesize>125829120</max_filesize> <!-- 120 MB (1024*1024*120) for each file -->
-      </videos>
+            <!-- IMAGES -->
+            <images>
+                <!-- Adapter (Gd2, Imagick) -->
+                <adapter>Imagick</adapter>
+                <!-- Save destination (local, s3) -->
+                <destination>local</destination>
 
-      <!-- UPLOADED DATA OF FORMS -->
-      <forms>
-        <!-- upload pathes -->
-        <path>
-          <local>
-            <private>uploads/forms/</private>
-          </local>
-        </path>
-      </forms>
+                <!-- file system segmenting -->
+                <segmenting>
+                    <enabled>true</enabled>
+                    <number_of_segments>10</number_of_segments>
+                </segmenting>
 
-    </upload>
+                <!-- upload pathes -->
+                <path>
+                    <local>
+                        <tmp>tmp/images/</tmp>
+                        <private>uploads/images/</private>
+                        <public>public/website/uploads/images/</public>
+                    </local>
+                    <s3>
+                        <tmp>tmp/images/</tmp>
+                        <private>private/images/</private>
+                        <public>public/images/</public>
+                    </s3>
+                </path>
 
-    <!-- MEDIA OUTPUT PATHS -->
-    <media>
-      <paths>
-        <docbase>/website/uploads/documents/</docbase>
-        <imgbase>/website/uploads/images/</imgbase>
-        <vidbase>/website/uploads/videos/</vidbase>
-        <thumb>/website/uploads/images/%sthumb/</thumb>
-        <icon32>/website/uploads/images/%sicon32/</icon32>
-      </paths>
-      <download>
-        <zip_extensions>
-          <extension>dxf</extension>
-        </zip_extensions>
-      </download>
-    </media>
+                <!-- maximum filesize -->
+                <max_filesize>15728640</max_filesize>
+                <!-- 15 MB (1024*1024*15) for each Image -->
+                <!-- excluded extensions -->
+                <excluded_extensions>
+                    <extension>exe</extension>
+                </excluded_extensions>
+                <default_sizes>
+                    <default_size>
+                        <folder>icon32</folder>
+                        <actions>
+                            <action>
+                                <method>scale</method>
+                                <params>32,32</params>
+                            </action>
+                        </actions>
+                        <display>
+                            <single_edit>true</single_edit>
+                        </display>
+                    </default_size>
+                    <default_size>
+                        <folder>thumb</folder>
+                        <actions>
+                            <action>
+                                <method>resize</method>
+                                <params>200</params>
+                            </action>
+                        </actions>
+                        <display>
+                            <single_edit>true</single_edit>
+                        </display>
+                    </default_size>
+                    <default_size>
+                        <folder>660x</folder>
+                        <actions>
+                            <action>
+                                <method>resize</method>
+                                <params>660</params>
+                            </action>
+                        </actions>
+                        <display>
+                            <imagemap>true</imagemap>
+                        </display>
+                    </default_size>
+                    <default_size>
+                        <folder>420x</folder>
+                        <actions>
+                            <action>
+                                <method>resize</method>
+                                <params>420</params>
+                            </action>
+                        </actions>
+                        <display>
+                            <imagemap>true</imagemap>
+                        </display>
+                    </default_size>
+                    <default_size>
+                        <folder>220x</folder>
+                        <actions>
+                            <action>
+                                <method>resize</method>
+                                <params>220</params>
+                            </action>
+                        </actions>
+                    </default_size>
+                    <default_size>
+                        <folder>180x</folder>
+                        <actions>
+                            <action>
+                                <method>resize</method>
+                                <params>180</params>
+                            </action>
+                        </actions>
+                    </default_size>
+                    <default_size>
+                        <folder>140x140</folder>
+                        <actions>
+                            <action>
+                                <method>scale</method>
+                                <params>140,140</params>
+                            </action>
+                        </actions>
+                    </default_size>
+                    <default_size>
+                        <folder>80x80</folder>
+                        <actions>
+                            <action>
+                                <method>scale</method>
+                                <params>80,80</params>
+                            </action>
+                        </actions>
+                    </default_size>
+                    <default_size>
+                        <folder>40x40</folder>
+                        <actions>
+                            <action>
+                                <method>scale</method>
+                                <params>40,40</params>
+                            </action>
+                        </actions>
+                    </default_size>
+                </default_sizes>
+            </images>
 
-    <!-- ENVIRONMENT -->
-    <zone>
-      <zoolu>1</zoolu>
-      <website>2</website>
-    </zone>
+            <!-- DOCS -->
+            <documents>
+                <!-- Save destination (local, S3) -->
+                <destination>local</destination>
 
-    <!-- ENVIRONMENTS -->
-    <!-- table: environments -->
-    <environments>
-      <production>1</production>
-      <staging>2</staging>
-      <development>3</development>
-      <testing>4</testing>
-    </environments>
+                <!-- file system segmenting -->
+                <segmenting>
+                    <enabled>true</enabled>
+                    <number_of_segments>10</number_of_segments>
+                </segmenting>
 
+                <!-- upload pathes -->
+                <path>
+                    <local>
+                        <private>uploads/documents/</private>
+                        <public>public/website/uploads/documents/</public>
+                    </local>
+                    <s3>
+                        <private>private/documents/</private>
+                        <public>public/documents/</public>
+                    </s3>
+                </path>
+                <!-- maximum filesize -->
+                <max_filesize>52428800</max_filesize>
+                <!-- 50 MB (1024*1024*15) for each upload media -->
+            </documents>
 
-    <!-- PARENT TYPES -->
-    <!-- table: parentTypes -->
-    <parent_types>
-      <rootlevel>1</rootlevel>
-      <folder>2</folder>
-    </parent_types>
+            <!-- VIDEOS -->
+            <videos>
+                <!-- Save destination (local, S3) -->
+                <destination>local</destination>
 
-    <!-- MODULES -->
-    <!-- table: modules -->
-    <modules>
-      <cms>1</cms>
-      <media>2</media>
-      <properties>3</properties>
-      <users>4</users>
-      <global>5</global>
-      <contacts>6</contacts>
-      <newsletters>7</newsletters>
-    </modules>
+                <!-- file system segmenting -->
+                <segmenting>
+                    <enabled>true</enabled>
+                    <number_of_segments>10</number_of_segments>
+                </segmenting>
 
-    <!-- ROOTLEVEL TYPES -->
-    <!-- table: rootLevelTypes -->
-    <root_level_types>
-      <portals>1</portals>
-      <images>2</images>
-      <documents>3</documents>
-      <categories>4</categories>
-      <contacts>5</contacts>
-      <labels>6</labels>
-      <systeminternals>7</systeminternals>
-      <users>8</users>
-      <groups>9</groups>
-      <resources>10</resources>
-      <global>11</global>
-      <videos>12</videos>
-      <locations>13</locations>
-      <shops>14</shops>
-      <members>15</members>
-      <companies>16</companies>
-      <newsletters>17</newsletters>
-      <subscribers>18</subscribers>
-      <customers>19</customers>
-    </root_level_types>
+                <!-- upload pathes -->
+                <path>
+                    <local>
+                        <private>uploads/videos/</private>
+                        <public>public/website/uploads/videos/</public>
+                    </local>
+                    <s3>
+                        <private>private/videos/</private>
+                        <public>public/videos/</public>
+                    </s3>
+                </path>
+                <!-- maximum filesize -->
+                <max_filesize>125829120</max_filesize>
+                <!-- 120 MB (1024*1024*120) for each file -->
+            </videos>
 
-    <!-- ROOTLEVEL GROUPS -->
-    <!-- table: rootLevelGroups -->
-    <root_level_groups>
-      <portal>1</portal>
-      <file>2</file>
-      <category>3</category>
-      <contact>4</contact>
-      <user>5</user>
-      <group>6</group>
-      <resource>7</resource>
-      <content>8</content>
-      <product>9</product>
-      <press>10</press>
-      <course>11</course>
-      <location>12</location>
-      <event>13</event>
-      <tradeinfonet>14</tradeinfonet>
-      <newsletter>15</newsletter>
-      <subscriber>16</subscriber>
-      <customer>17</customer>
-    </root_level_groups>
+            <!-- UPLOADED DATA OF FORMS -->
+            <forms>
+                <!-- upload pathes -->
+                <path>
+                    <local>
+                        <private>uploads/forms/</private>
+                    </local>
+                </path>
+            </forms>
 
-    <!-- FOLDER TYPES -->
-    <!-- table: folderTypes -->
-    <folder_types>
-      <folder>1</folder>
-      <blog>2</blog>
-    </folder_types>
+        </upload>
 
-    <!-- PAGE TYPES -->
-    <!-- table: pageTypes -->
-    <page_types>
-      <page>
-        <id>1</id>
-        <default_formId>DEFAULT_PAGE_1</default_formId>
-        <default_templateId>1</default_templateId>
-        <startpage_formId>DEFAULT_PAGE_1</startpage_formId>
-        <startpage_templateId>2</startpage_templateId>
-        <portal_startpage_formId>DEFAULT_STARTPAGE</portal_startpage_formId>
-        <portal_startpage_templateId>3</portal_startpage_templateId>
-        <event_formId>DEFAULT_EVENT</event_formId>
-        <event_templateId>7</event_templateId>
-        <headquarters_formId>DEFAULT_PAGE_1</headquarters_formId>
-        <headquarters_templateId>30</headquarters_templateId>
-      </page>
-      <link>
-        <id>2</id>
-        <default_formId>DEFAULT_LINKING</default_formId>
-      </link>
-      <overview>
-        <id>3</id>
-        <default_formId>DEFAULT_OVERVIEW</default_formId>
-        <default_templateId>4</default_templateId>
-        <event_formId>DEFAULT_EVENT_OVERVIEW</event_formId>
-        <event_templateId>8</event_templateId>
-      </overview>
-      <external>
-        <id>4</id>
-        <default_formId>DEFAULT_EXTERNAL</default_formId>
-      </external>
-      <process>
-        <id>5</id>
-        <default_formId>DEFAULT_PROCESS</default_formId>
-        <default_templateId>9</default_templateId>
-      </process>
-      <collection>
-        <id>6</id>
-        <default_formId>DEFAULT_COLLECTION</default_formId>
-        <default_templateId>10</default_templateId>
-      </collection>
-      <product_tree>
-        <id>7</id>
-        <default_formId>DEFAULT_PRODUCT_TREE</default_formId>
-        <default_templateId>13</default_templateId>
-      </product_tree>
-      <press_area>
-        <id>8</id>
-        <default_formId>DEFAULT_PRESS_AREA</default_formId>
-        <default_templateId>19</default_templateId>
-      </press_area>
-      <iframe>
-        <id>9</id>
-        <default_formId>DEFAULT_IFRAME</default_formId>
-        <default_templateId>23</default_templateId>
-      </iframe>
-      <courses>
-        <id>10</id>
-        <default_formId>DEFAULT_COURSES</default_formId>
-        <default_templateId>29</default_templateId>
-      </courses>
-      <events>
-        <id>11</id>
-        <default_formId>DEFAULT_EVENTS</default_formId>
-        <default_templateId>33</default_templateId>
-      </events>
-      <download_center>
-        <id>12</id>
-        <default_formId>DEFAULT_DOWNLOAD_CENTER</default_formId>
-        <default_templateId>35</default_templateId>
-      </download_center>
-      <sitemap>
-        <id>13</id>
-        <default_formId>DEFAULT_PAGE_1</default_formId>
-        <default_templateId>37</default_templateId>
-      </sitemap>
-      <service>
-        <id>14</id>
-        <default_formId>DEFAULT_COURSES_SERVICE</default_formId>
-        <default_templateId>42</default_templateId>
-      </service>
-    </page_types>
+        <!-- MEDIA OUTPUT PATHS -->
+        <media>
+            <paths>
+                <docbase>/website/uploads/documents/</docbase>
+                <imgbase>/website/uploads/images/</imgbase>
+                <vidbase>/website/uploads/videos/</vidbase>
+                <thumb>/website/uploads/images/%sthumb/</thumb>
+                <icon32>/website/uploads/images/%sicon32/</icon32>
+            </paths>
+            <download>
+                <zip_extensions>
+                    <extension>dxf</extension>
+                </zip_extensions>
+            </download>
+        </media>
 
-    <!-- GLOBAL TYPES -->
-    <!-- table: globalTypes -->
-    <global_types>
-      <product>
-        <id>1</id>
-        <default_formId>DEFAULT_PRODUCT</default_formId>
-        <default_templateId>11</default_templateId>
-      </product>
-      <product_link>
-        <id>2</id>
-      </product_link>
-      <product_overview>
-        <id>3</id>
-        <default_formId>DEFAULT_PRODUCT_OVERVIEW</default_formId>
-        <default_templateId>12</default_templateId>
-      </product_overview>
-      <content>
-        <id>4</id>
-        <default_formId>DEFAULT_CONTENT</default_formId>
-        <default_templateId>15</default_templateId>
-      </content>
-      <content_overview>
-        <id>5</id>
-        <default_formId>DEFAULT_CONTENT_OVERVIEW</default_formId>
-        <default_templateId>16</default_templateId>
-      </content_overview>
-      <press>
-        <id>6</id>
-        <default_formId>DEFAULT_PRESS</default_formId>
-        <default_templateId>17</default_templateId>
-      </press>
-      <press_overview>
-        <id>7</id>
-        <default_formId>DEFAULT_PRESS_OVERVIEW</default_formId>
-        <default_templateId>18</default_templateId>
-      </press_overview>
-      <course>
-        <id>8</id>
-        <default_formId>DEFAULT_COURSE</default_formId>
-        <default_templateId>20</default_templateId>
-      </course>
-      <course_overview>
-        <id>9</id>
-        <default_formId>DEFAULT_COURSE_OVERVIEW</default_formId>
-        <default_templateId>21</default_templateId>
-      </course_overview>
-      <event>
-        <id>10</id>
-        <default_formId>DEFAULT_EVENT</default_formId>
-        <default_templateId>31</default_templateId>
-      </event>
-      <event_overview>
-        <id>11</id>
-        <default_formId>DEFAULT_EVENT_OVERVIEW</default_formId>
-        <default_templateId>32</default_templateId>
-      </event_overview>
-    </global_types>
+        <!-- ENVIRONMENT -->
+        <zone>
+            <zoolu>1</zoolu>
+            <website>2</website>
+        </zone>
 
-    <!-- REGION TYPES -->
-    <!-- table: regionTypes -->
-    <region_types>
-      <content>1</content>
-      <config>2</config>
-      <unique>3</unique>
-    </region_types>
-
-    <!-- CATEGORY TYPES -->
-    <!-- table: categoryTypes -->
-    <category_types>
-      <default>1</default>
-      <system>2</system>
-      <label>3</label>
-    </category_types>
-
-    <!-- GROUP TYPES -->
-    <!-- table: groupTypes -->
-    <group_types>
-      <frontend>1</frontend>
-      <backend>2</backend>
-    </group_types>
-
-    <!-- TYPES -->
-    <!-- table: types -->
-    <types>
-      <startpage>1</startpage>
-      <page>2</page>
-      <overview>3</overview>
-      <portal_startpage>4</portal_startpage>
-      <collection>5</collection>
-      <product>6</product>
-      <product_tree>7</product_tree>
-      <product_overview>8</product_overview>
-      <content>9</content>
-      <content_overview>10</content_overview>
-      <press>11</press>
-      <press_overview>12</press_overview>
-      <press_area>13</press_area>
-      <course>14</course>
-      <course_overview>15</course_overview>
-      <courses>16</courses>
-      <event>17</event>
-      <event_overview>18</event_overview>
-      <events>19</events>
-      <download_center>20</download_center>
-      <sitemap>21</sitemap>
-      <newsletter>22</newsletter>
-      <service>23</service>
-    </types>
-
-    <!-- URL TYPES -->
-    <!-- table: urlTypes -->
-    <url_types>
-      <page>1</page>
-      <global>2</global>
-      <external>3</external>
-    </url_types>
-
-    <!-- FILTER TYPES-->
-    <!-- table: filterTypes -->
-    <filter_types>
-      <tags>1</tags>
-      <folders>2</folders>
-      <rootLevel>3</rootLevel>
-    </filter_types>
-
-    <!-- table: categories / idRootCategory=11, idCategoryTypes=2 -->
-    <sort>
-      <!-- sorttypes -->
-      <types>
-        <alpha>
-          <id>16</id>
-          <matchcode>alpha</matchcode>
-        </alpha>
-        <manual_sort>
-          <id>17</id>
-          <matchcode>sort</matchcode>
-        </manual_sort>
-        <created>
-          <id>18</id>
-          <matchcode>created</matchcode>
-        </created>
-        <changed>
-          <id>19</id>
-          <matchcode>changed</matchcode>
-        </changed>
-        <published>
-          <id>40</id>
-          <matchcode>published</matchcode>
-        </published>
-      </types>
-      <!-- sortorders -->
-      <orders>
-        <asc>
-          <id>15</id>
-          <matchcode>ASC</matchcode>
-        </asc>
-        <desc>
-          <id>14</id>
-          <matchcode>DESC</matchcode>
-        </desc>
-      </orders>
-    </sort>
-    <filter>
-      <depth>
-        <first>65</first>
-        <all>66</all>
-      </depth>
-    </filter>
-    <display>
-      <one_column>650</one_column>
-      <two_column>651</two_column>
-    </display>
+        <!-- ENVIRONMENTS -->
+        <!-- table: environments -->
+        <environments>
+            <production>1</production>
+            <staging>2</staging>
+            <development>3</development>
+            <testing>4</testing>
+        </environments>
 
 
-    <!-- STATUS -->
-    <status>
-      <test>1</test>
-      <live>2</live>
-      <approval>3</approval>
-    </status>
+        <!-- PARENT TYPES -->
+        <!-- table: parentTypes -->
+        <parent_types>
+            <rootlevel>1</rootlevel>
+            <folder>2</folder>
+        </parent_types>
 
-    <!-- ACTIVITY USER STATUS -->
-    <activity_user_status>
-      <done>1</done>
-      <read>2</read>
-      <not_read>3</not_read>
-    </activity_user_status>
+        <!-- MODULES -->
+        <!-- table: modules -->
+        <modules>
+            <cms>1</cms>
+            <media>2</media>
+            <properties>3</properties>
+            <users>4</users>
+            <global>5</global>
+            <contacts>6</contacts>
+            <newsletters>7</newsletters>
+        </modules>
 
-      <!-- table: customerStatus -->
-    <customerstatus>
-        <active>1</active>
-        <inactive>2</inactive>
-        <unapproved>3</unapproved>
-        <unverified>4</unverified>
-    </customerstatus>
+        <!-- ROOTLEVEL TYPES -->
+        <!-- table: rootLevelTypes -->
+        <root_level_types>
+            <portals>1</portals>
+            <images>2</images>
+            <documents>3</documents>
+            <categories>4</categories>
+            <contacts>5</contacts>
+            <labels>6</labels>
+            <systeminternals>7</systeminternals>
+            <users>8</users>
+            <groups>9</groups>
+            <resources>10</resources>
+            <global>11</global>
+            <videos>12</videos>
+            <locations>13</locations>
+            <shops>14</shops>
+            <members>15</members>
+            <companies>16</companies>
+            <newsletters>17</newsletters>
+            <subscribers>18</subscribers>
+            <customers>19</customers>
+            <contactcompanies>20</contactcompanies>
+        </root_level_types>
 
-    <!-- NAVIGATION OPTIONS -->
-    <navigation_options>
-      <top>1</top>
-      <left>2</left>
-      <right>3</right>
-      <bottom>4</bottom>
-    </navigation_options>
+        <!-- ROOTLEVEL GROUPS -->
+        <!-- table: rootLevelGroups -->
+        <root_level_groups>
+            <portal>1</portal>
+            <file>2</file>
+            <category>3</category>
+            <contact>4</contact>
+            <user>5</user>
+            <group>6</group>
+            <resource>7</resource>
+            <content>8</content>
+            <product>9</product>
+            <press>10</press>
+            <course>11</course>
+            <location>12</location>
+            <event>13</event>
+            <tradeinfonet>14</tradeinfonet>
+            <newsletter>15</newsletter>
+            <subscriber>16</subscriber>
+            <customer>17</customer>
+        </root_level_groups>
 
-    <!-- VIDEO CHANNELS -->
-    <video_channels>
-      <!--<vimeo>
-        <id>1</id>
-        <users>
-          <user>
-            <id></id>
-            <name></name>
-          </user>
-        </users>
-      </vimeo> -->
-      <youtube>
-        <id>2</id>
-        <users>
-          <user>
-            <id>MASSIVEARTWebService</id>
-            <name>MASSIVE ART WebServices</name>
-          </user>
-        </users>
-      </youtube>
-    </video_channels>
+        <!-- FOLDER TYPES -->
+        <!-- table: folderTypes -->
+        <folder_types>
+            <folder>1</folder>
+            <blog>2</blog>
+        </folder_types>
 
-    <!-- Plugins / Fields Javascript -->
-    <pluginsJs>
-      <gmaps>http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key={MAPSKEY}</gmaps>
-    </pluginsJs>
+        <!-- PAGE TYPES -->
+        <!-- table: pageTypes -->
+        <page_types>
+            <page>
+                <id>1</id>
+                <default_formId>DEFAULT_PAGE_1</default_formId>
+                <default_templateId>1</default_templateId>
+                <startpage_formId>DEFAULT_PAGE_1</startpage_formId>
+                <startpage_templateId>2</startpage_templateId>
+                <portal_startpage_formId>DEFAULT_STARTPAGE</portal_startpage_formId>
+                <portal_startpage_templateId>3</portal_startpage_templateId>
+                <event_formId>DEFAULT_EVENT</event_formId>
+                <event_templateId>7</event_templateId>
+                <headquarters_formId>DEFAULT_PAGE_1</headquarters_formId>
+                <headquarters_templateId>30</headquarters_templateId>
+            </page>
+            <link>
+                <id>2</id>
+                <default_formId>DEFAULT_LINKING</default_formId>
+            </link>
+            <overview>
+                <id>3</id>
+                <default_formId>DEFAULT_OVERVIEW</default_formId>
+                <default_templateId>4</default_templateId>
+                <event_formId>DEFAULT_EVENT_OVERVIEW</event_formId>
+                <event_templateId>8</event_templateId>
+            </overview>
+            <external>
+                <id>4</id>
+                <default_formId>DEFAULT_EXTERNAL</default_formId>
+            </external>
+            <process>
+                <id>5</id>
+                <default_formId>DEFAULT_PROCESS</default_formId>
+                <default_templateId>9</default_templateId>
+            </process>
+            <collection>
+                <id>6</id>
+                <default_formId>DEFAULT_COLLECTION</default_formId>
+                <default_templateId>10</default_templateId>
+            </collection>
+            <product_tree>
+                <id>7</id>
+                <default_formId>DEFAULT_PRODUCT_TREE</default_formId>
+                <default_templateId>13</default_templateId>
+            </product_tree>
+            <press_area>
+                <id>8</id>
+                <default_formId>DEFAULT_PRESS_AREA</default_formId>
+                <default_templateId>19</default_templateId>
+            </press_area>
+            <iframe>
+                <id>9</id>
+                <default_formId>DEFAULT_IFRAME</default_formId>
+                <default_templateId>23</default_templateId>
+            </iframe>
+            <courses>
+                <id>10</id>
+                <default_formId>DEFAULT_COURSES</default_formId>
+                <default_templateId>29</default_templateId>
+            </courses>
+            <events>
+                <id>11</id>
+                <default_formId>DEFAULT_EVENTS</default_formId>
+                <default_templateId>33</default_templateId>
+            </events>
+            <download_center>
+                <id>12</id>
+                <default_formId>DEFAULT_DOWNLOAD_CENTER</default_formId>
+                <default_templateId>35</default_templateId>
+            </download_center>
+            <sitemap>
+                <id>13</id>
+                <default_formId>DEFAULT_PAGE_1</default_formId>
+                <default_templateId>37</default_templateId>
+            </sitemap>
+            <service>
+                <id>14</id>
+                <default_formId>DEFAULT_COURSES_SERVICE</default_formId>
+                <default_templateId>42</default_templateId>
+            </service>
+        </page_types>
 
-    <!-- reCAPTCHA - http://www.google.com/recaptcha -->
-    <recaptcha>
-      <keys>
-        <public></public>
-        <private></private>
-      </keys>
-    </recaptcha>
+        <!-- GLOBAL TYPES -->
+        <!-- table: globalTypes -->
+        <global_types>
+            <product>
+                <id>1</id>
+                <default_formId>DEFAULT_PRODUCT</default_formId>
+                <default_templateId>11</default_templateId>
+            </product>
+            <product_link>
+                <id>2</id>
+            </product_link>
+            <product_overview>
+                <id>3</id>
+                <default_formId>DEFAULT_PRODUCT_OVERVIEW</default_formId>
+                <default_templateId>12</default_templateId>
+            </product_overview>
+            <content>
+                <id>4</id>
+                <default_formId>DEFAULT_CONTENT</default_formId>
+                <default_templateId>15</default_templateId>
+            </content>
+            <content_overview>
+                <id>5</id>
+                <default_formId>DEFAULT_CONTENT_OVERVIEW</default_formId>
+                <default_templateId>16</default_templateId>
+            </content_overview>
+            <press>
+                <id>6</id>
+                <default_formId>DEFAULT_PRESS</default_formId>
+                <default_templateId>17</default_templateId>
+            </press>
+            <press_overview>
+                <id>7</id>
+                <default_formId>DEFAULT_PRESS_OVERVIEW</default_formId>
+                <default_templateId>18</default_templateId>
+            </press_overview>
+            <course>
+                <id>8</id>
+                <default_formId>DEFAULT_COURSE</default_formId>
+                <default_templateId>20</default_templateId>
+            </course>
+            <course_overview>
+                <id>9</id>
+                <default_formId>DEFAULT_COURSE_OVERVIEW</default_formId>
+                <default_templateId>21</default_templateId>
+            </course_overview>
+            <event>
+                <id>10</id>
+                <default_formId>DEFAULT_EVENT</default_formId>
+                <default_templateId>31</default_templateId>
+            </event>
+            <event_overview>
+                <id>11</id>
+                <default_formId>DEFAULT_EVENT_OVERVIEW</default_formId>
+                <default_templateId>32</default_templateId>
+            </event_overview>
+        </global_types>
 
-    <newsletter>
-      <theme>default</theme>
-    </newsletter>
+        <!-- REGION TYPES -->
+        <!-- table: regionTypes -->
+        <region_types>
+            <content>1</content>
+            <config>2</config>
+            <unique>3</unique>
+        </region_types>
 
-  </production>
+        <!-- CATEGORY TYPES -->
+        <!-- table: categoryTypes -->
+        <category_types>
+            <default>1</default>
+            <system>2</system>
+            <label>3</label>
+        </category_types>
 
-  <!--
-  ***********************************************************
-  * config for staging evnironment                          *
-  ***********************************************************
-  -->
-  <staging extends="production">
+        <!-- GROUP TYPES -->
+        <!-- table: groupTypes -->
+        <group_types>
+            <frontend>1</frontend>
+            <backend>2</backend>
+        </group_types>
 
-    <!-- LOGGER / DEBUGGING -->
-    <show_errors>false</show_errors>
-    <logger>
-      <priority>5</priority>
-      <firebug>false</firebug>
-    </logger>
+        <!-- TYPES -->
+        <!-- table: types -->
+        <types>
+            <startpage>1</startpage>
+            <page>2</page>
+            <overview>3</overview>
+            <portal_startpage>4</portal_startpage>
+            <collection>5</collection>
+            <product>6</product>
+            <product_tree>7</product_tree>
+            <product_overview>8</product_overview>
+            <content>9</content>
+            <content_overview>10</content_overview>
+            <press>11</press>
+            <press_overview>12</press_overview>
+            <press_area>13</press_area>
+            <course>14</course>
+            <course_overview>15</course_overview>
+            <courses>16</courses>
+            <event>17</event>
+            <event_overview>18</event_overview>
+            <events>19</events>
+            <download_center>20</download_center>
+            <sitemap>21</sitemap>
+            <newsletter>22</newsletter>
+            <service>23</service>
+        </types>
 
-    <!-- CACHE -->
-    <cache>
-      <page>true</page>
-      <generic_form_structure>true</generic_form_structure>
-    </cache>
+        <!-- URL TYPES -->
+        <!-- table: urlTypes -->
+        <url_types>
+            <page>1</page>
+            <global>2</global>
+            <external>3</external>
+        </url_types>
 
-  </staging>
+        <!-- FILTER TYPES-->
+        <!-- table: filterTypes -->
+        <filter_types>
+            <tags>1</tags>
+            <folders>2</folders>
+            <rootLevel>3</rootLevel>
+        </filter_types>
 
-  <!--
-  ***********************************************************
-  * config for testing evnironment                          *
-  ***********************************************************
-  -->
-  <testing extends="staging">
+        <!-- CONTACT TYPES -->
+        <!-- table: contactTypes -->
+        <contact_types>
+            <contact>1</contact>
+            <company>2</company>
+        </contact_types>
 
-    <!-- LOGGER / DEBUGGING -->
-    <show_errors>true</show_errors>
-    <logger>
-      <priority>6</priority>
-      <firebug>true</firebug>
-    </logger>
+        <!-- table: categories / idRootCategory=11, idCategoryTypes=2 -->
+        <sort>
+            <!-- sorttypes -->
+            <types>
+                <alpha>
+                    <id>16</id>
+                    <matchcode>alpha</matchcode>
+                </alpha>
+                <manual_sort>
+                    <id>17</id>
+                    <matchcode>sort</matchcode>
+                </manual_sort>
+                <created>
+                    <id>18</id>
+                    <matchcode>created</matchcode>
+                </created>
+                <changed>
+                    <id>19</id>
+                    <matchcode>changed</matchcode>
+                </changed>
+                <published>
+                    <id>40</id>
+                    <matchcode>published</matchcode>
+                </published>
+            </types>
+            <!-- sortorders -->
+            <orders>
+                <asc>
+                    <id>15</id>
+                    <matchcode>ASC</matchcode>
+                </asc>
+                <desc>
+                    <id>14</id>
+                    <matchcode>DESC</matchcode>
+                </desc>
+            </orders>
+        </sort>
+        <filter>
+            <depth>
+                <first>65</first>
+                <all>66</all>
+            </depth>
+        </filter>
+        <display>
+            <one_column>650</one_column>
+            <two_column>651</two_column>
+        </display>
 
-    <!-- CACHE -->
-    <cache>
-      <page>false</page>
-      <generic_form_structure>true</generic_form_structure>
-    </cache>
 
-  </testing>
+        <!-- STATUS -->
+        <status>
+            <test>1</test>
+            <live>2</live>
+            <approval>3</approval>
+        </status>
 
-  <!--
-  ***********************************************************
-  * config for development evnironment                      *
-  ***********************************************************
-  -->
-  <development extends="testing">
+        <!-- ACTIVITY USER STATUS -->
+        <activity_user_status>
+            <done>1</done>
+            <read>2</read>
+            <not_read>3</not_read>
+        </activity_user_status>
 
-    <!-- MINIFY -->
-    <minify>
-      <debug>true</debug>
-    </minify>
+        <!-- table: customerStatus -->
+        <customerstatus>
+            <active>1</active>
+            <inactive>2</inactive>
+            <unapproved>3</unapproved>
+            <unverified>4</unverified>
+        </customerstatus>
 
-    <!-- LOGGER / DEBUGGING -->
-    <logger>
-      <priority>7</priority>
-    </logger>
+        <!-- NAVIGATION OPTIONS -->
+        <navigation_options>
+            <top>1</top>
+            <left>2</left>
+            <right>3</right>
+            <bottom>4</bottom>
+        </navigation_options>
 
-    <!-- CACHE -->
-    <cache>
-      <page>false</page>
-      <generic_form_structure>false</generic_form_structure>
-    </cache>
+        <!-- VIDEO CHANNELS -->
+        <video_channels>
+            <!--<vimeo>
+              <id>1</id>
+              <users>
+                <user>
+                  <id></id>
+                  <name></name>
+                </user>
+              </users>
+            </vimeo> -->
+            <youtube>
+                <id>2</id>
+                <users>
+                    <user>
+                        <id>MASSIVEARTWebService</id>
+                        <name>MASSIVE ART WebServices</name>
+                    </user>
+                </users>
+            </youtube>
+        </video_channels>
 
-  </development>
+        <!-- Plugins / Fields Javascript -->
+        <pluginsJs>
+            <gmaps>http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key={MAPSKEY}</gmaps>
+        </pluginsJs>
+
+        <!-- reCAPTCHA - http://www.google.com/recaptcha -->
+        <recaptcha>
+            <keys>
+                <public></public>
+                <private></private>
+            </keys>
+        </recaptcha>
+
+        <newsletter>
+            <theme>default</theme>
+        </newsletter>
+
+    </production>
+
+    <!--
+    ***********************************************************
+    * config for staging evnironment                          *
+    ***********************************************************
+    -->
+    <staging extends="production">
+
+        <!-- LOGGER / DEBUGGING -->
+        <show_errors>false</show_errors>
+        <logger>
+            <priority>5</priority>
+            <firebug>false</firebug>
+        </logger>
+
+        <!-- CACHE -->
+        <cache>
+            <page>true</page>
+            <generic_form_structure>true</generic_form_structure>
+        </cache>
+
+    </staging>
+
+    <!--
+    ***********************************************************
+    * config for testing evnironment                          *
+    ***********************************************************
+    -->
+    <testing extends="staging">
+
+        <!-- LOGGER / DEBUGGING -->
+        <show_errors>true</show_errors>
+        <logger>
+            <priority>6</priority>
+            <firebug>true</firebug>
+        </logger>
+
+        <!-- CACHE -->
+        <cache>
+            <page>false</page>
+            <generic_form_structure>true</generic_form_structure>
+        </cache>
+
+    </testing>
+
+    <!--
+    ***********************************************************
+    * config for development evnironment                      *
+    ***********************************************************
+    -->
+    <development extends="testing">
+
+        <!-- MINIFY -->
+        <minify>
+            <debug>true</debug>
+        </minify>
+
+        <!-- LOGGER / DEBUGGING -->
+        <logger>
+            <priority>7</priority>
+        </logger>
+
+        <!-- CACHE -->
+        <cache>
+            <page>false</page>
+            <generic_form_structure>false</generic_form_structure>
+        </cache>
+
+    </development>
 
 </configdata>

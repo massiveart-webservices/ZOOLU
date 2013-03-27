@@ -132,8 +132,8 @@ class Contacts_NavigationController extends AuthControllerAction
         $this->view->assign('rootLevelGroupKey', $this->getRequest()->getParam('rootLevelGroupKey'));
         $this->view->assign('rootLevelType', $this->getRequest()->getParam('rootLevelType'));
 
-        $strRenderSciprt = ($this->getRequest()->getParam('layoutType') == 'list') ? 'list.phtml' : 'tree.phtml';
-        $this->renderScript('navigation/' . $strRenderSciprt);
+        $strRenderScript = ($this->getRequest()->getParam('layoutType') == 'list') ? 'list.phtml' : 'tree.phtml';
+        $this->renderScript('navigation/' . $strRenderScript);
     }
 
     /**
@@ -161,6 +161,7 @@ class Contacts_NavigationController extends AuthControllerAction
 
                 switch ($intRootLevelTypeId) {
                     case $this->core->sysConfig->root_level_types->contacts:
+                    case $this->core->sysConfig->root_level_types->contactcompanies:
                         /**
                          * get contacts root navigation
                          */

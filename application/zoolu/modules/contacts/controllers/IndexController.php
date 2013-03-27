@@ -73,9 +73,9 @@ class Contacts_IndexController extends AuthControllerAction
         $this->_helper->viewRenderer->setNoRender();
 
         Zend_Layout::startMvc(array(
-                                   'layout'     => 'contacts-list',
-                                   'layoutPath' => '../application/zoolu/layouts'
-                              ));
+            'layout'     => 'contacts-list',
+            'layoutPath' => '../application/zoolu/layouts'
+        ));
 
         //Additional information for upload
         $strFileId = $this->getRequest()->getParam('fileId', '');
@@ -91,6 +91,7 @@ class Contacts_IndexController extends AuthControllerAction
 
         $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->contacts);
         $this->view->assign('module', $this->core->sysConfig->modules->contacts);
     }
 
@@ -104,9 +105,9 @@ class Contacts_IndexController extends AuthControllerAction
         $this->_helper->viewRenderer->setNoRender();
 
         Zend_Layout::startMvc(array(
-                                   'layout'     => 'contacts-tree',
-                                   'layoutPath' => '../application/zoolu/layouts'
-                              ));
+            'layout'     => 'contacts-tree',
+            'layoutPath' => '../application/zoolu/layouts'
+        ));
 
         $objLayout = Zend_Layout::getMvcInstance();
         $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'contacts', array('layoutType' => 'tree')));
@@ -115,6 +116,7 @@ class Contacts_IndexController extends AuthControllerAction
 
         $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->global);
         $this->view->assign('module', $this->core->sysConfig->modules->contacts);
     }
 }
