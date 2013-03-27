@@ -66,18 +66,17 @@ class GenericDataTypeContact extends GenericDataTypeAbstract
 
             $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
-            /**
-             * add|edit|newVersion core and instance data
-             */
+            // add|edit core and instance data
             switch ($this->setup->getActionType()) {
                 case $this->core->sysConfig->generic->actions->add:
 
                     $arrCoreData = array(
-                        'idGenericForms'   => $this->setup->getGenFormId(),
-                        'idUnits'          => $this->setup->getParentId(),
-                        'idUsers'          => $intUserId,
-                        'creator'          => $intUserId,
-                        'created'          => date('Y-m-d H:i:s')
+                        'idContactTypes' => $this->setup->getElementTypeId(),
+                        'idGenericForms' => $this->setup->getGenFormId(),
+                        'idUnits'        => $this->setup->getParentId(),
+                        'idUsers'        => $intUserId,
+                        'creator'        => $intUserId,
+                        'created'        => date('Y-m-d H:i:s')
                     );
 
                     if (count($this->setup->CoreFields()) > 0) {
@@ -86,10 +85,10 @@ class GenericDataTypeContact extends GenericDataTypeAbstract
                         }
                     }
 
-                    /**
-                     * add contact
-                     */
+                    // add contact core data
                     $this->setup->setElementId($this->objModelContacts->addContact($arrCoreData));
+
+                    // add contact file data
                     $this->insertFileData('contact', array('Id' => $this->setup->getElementId()));
                     break;
                 case $this->core->sysConfig->generic->actions->edit :
@@ -102,10 +101,10 @@ class GenericDataTypeContact extends GenericDataTypeAbstract
                         }
                     }
 
-                    /**
-                     * add contact
-                     */
+                    // update contact core data
                     $this->objModelContacts->editContact($this->setup->getElementId(), $arrCoreData);
+
+                    // update contact file data
                     $this->updateFileData('contact', array('Id' => $this->setup->getElementId()));
                     break;
             }
