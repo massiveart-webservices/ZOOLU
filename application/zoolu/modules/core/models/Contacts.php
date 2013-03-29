@@ -137,7 +137,12 @@ class Model_Contacts
         $objSelect = $this->getContactsTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('contacts', array('id', 'fname', 'sname', 'email', 'idUsers', 'creator', 'idUnits', 'version' => new Zend_Db_Expr("'0'"), 'type' => new Zend_Db_Expr("'contact'")))
+        $fields = array('id', 'fname', 'sname', 'email', 'idUsers', 'creator', 'idUnits', 'version' => new Zend_Db_Expr("'0'"), 'type' => new Zend_Db_Expr("'contact'"));
+        if ($contactTypeId == $this->core->sysConfig->contact_types->company) {
+            $fields = array('id', 'name', 'email', 'idUsers', 'creator', 'idUnits', 'version' => new Zend_Db_Expr("'0'"), 'type' => new Zend_Db_Expr("'contact'"));
+        }
+
+        $objSelect->from('contacts', $fields)
             ->join('genericForms', 'genericForms.id = contacts.idGenericForms', array('genericFormId'));
 
         if ($contactTypeId !== null) {
@@ -147,7 +152,7 @@ class Model_Contacts
         if ($strOrderColumn != '') {
             $objSelect->order(array($strOrderColumn . ' ' . $strSortOrder));
         } else {
-            $objSelect->order(array('sname ASC', 'fname ASC'));
+            $objSelect->order(array('sname ASC', 'fname ASC', 'name ASC'));
         }
 
         if ($blnReturnSelect) {
