@@ -68,6 +68,11 @@ function get_meta_keywords()
     echo getCustomerHelperObject()->getMetaKeywords();
 }
 
+function get_meta_robots()
+{
+    echo getCustomerHelperObject()->getMetaRobots();
+}
+
 function get_canonical_tag() { }
 
 function get_static_component_domain()

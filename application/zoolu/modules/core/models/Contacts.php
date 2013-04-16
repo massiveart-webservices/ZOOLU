@@ -149,6 +149,13 @@ class Model_Contacts
             $objSelect->where('contacts.idContactTypes = ?', $contactTypeId);
         }
 
+        // search
+        if ($strSearchValue != '') {
+            $objSelect->where('(contacts.fname LIKE ?', '%' . $strSearchValue . '%');
+            $objSelect->orWhere('contacts.sname LIKE ?', '%' . $strSearchValue . '%');
+            $objSelect->orWhere('contacts.name LIKE ?)', '%' . $strSearchValue . '%');
+        }
+
         if ($strOrderColumn != '') {
             $objSelect->order(array($strOrderColumn . ' ' . $strSortOrder));
         } else {
@@ -168,17 +175,27 @@ class Model_Contacts
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadContactsByUnitId($intUnitId)
+    public function loadContactsByUnitId($intUnitId, $contactTypeId = null)
     {
         $this->core->logger->debug('core->models->Contacts->loadContactsByUnitId(' . $intUnitId . ')');
 
         $objSelect = $this->getContactsTable()->select();
         $objSelect->setIntegrityCheck(false);
 
+        $fields = array('id', 'title AS acTitle', 'CONCAT(fname, \' \', sname) AS title', 'position', 'phone', 'mobile', 'fax', 'email', 'website', 'street', 'city', 'state', 'zip', 'country');
+        if ($contactTypeId == $this->core->sysConfig->contact_types->company) {
+            $fields = array('id', 'title AS acTitle', 'name AS title', 'email', 'website', 'street', 'city', 'state', 'zip', 'country');
+        }
+
         //FIXME Subselect of `contact-DEFAULT_CONTACT-1-InstanceFiles` for contactPics should be changed!
-        $objSelect->from('contacts', array('id', 'title AS acTitle', 'CONCAT(fname, \' \', sname) AS title', 'position', 'phone', 'mobile', 'fax', 'email', 'website', 'street', 'city', 'state', 'zip', 'country'));
+        $objSelect->from('contacts', $fields);
         $objSelect->joinLeft(array('pics' => 'files'), 'pics.id = (SELECT contactPics.idFiles FROM `contact-DEFAULT_CONTACT-1-InstanceFiles` AS contactPics WHERE contactPics.idContacts = contacts.id AND contactPics.idFields = 84 LIMIT 1)', array('filename', 'filepath' => 'path', 'fileversion' => 'version'));
         $objSelect->join('genericForms', 'genericForms.id = contacts.idGenericForms', array('genericFormId', 'version'));
+        if ($contactTypeId !== null) {
+            $objSelect->where('contacts.idContactTypes = ?', $contactTypeId);
+        } else {
+            $objSelect->where('contacts.idContactTypes = ?', $this->core->sysConfig->contact_types->contact);
+        }
         $objSelect->where('contacts.idUnits = ?', $intUnitId);
 
         return $this->objContactsTable->fetchAll($objSelect);

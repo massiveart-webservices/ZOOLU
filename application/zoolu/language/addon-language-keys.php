@@ -51,6 +51,11 @@ $core->translate->_('fname');
 $core->translate->_('sname');
 $core->translate->_('editor');
 $core->translate->_('changed');
+$core->translate->_('group');
+$core->translate->_('department');
+$core->translate->_('organisation');
+$core->translate->_('building');
+$core->translate->_('branch');
 
 /**
  * group list
