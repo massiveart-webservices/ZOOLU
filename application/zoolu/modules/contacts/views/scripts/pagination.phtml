@@ -6,7 +6,7 @@
             <!-- Previous page link -->
             <?php if (isset($this->previous)): ?>
             <div class="listback">
-                <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->previous; ?>, $F('rootLevelFilterListId'));">
+                <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->previous; ?>);">
                     <?php echo $core->translate->_('previous'); ?>
                 </div>
             </div>
@@ -30,7 +30,7 @@
             <!-- Next page link -->
             <?php if (isset($this->next)): ?>
             <div class="listnext">
-                <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->next; ?>, $F('rootLevelFilterListId'));">
+                <div class="listfooterbutton" onclick="myList.getListPage(<?php echo $this->next; ?>);">
                     <?php echo $core->translate->_('next'); ?>
                 </div>
             </div>
@@ -57,12 +57,12 @@
         <div class="clear"></div>
         <script type="text/javascript">
             $('paginationControl').observe('change', function() {
-                myList.getListPage(this.options[this.selectedIndex].value, $F('rootLevelFilterListId'));
+                myList.getListPage(this.options[this.selectedIndex].value);
             });
 
             $('paginationItemsPerPage').observe('change', function() {
                 myList.ItemsPerPage = this.options[this.selectedIndex].value;
-                myList.getListPage($('paginationControl').options[$('paginationControl').selectedIndex].value, $F('rootLevelFilterListId'));
+                myList.getListPage($('paginationControl').options[$('paginationControl').selectedIndex].value);
             });
         </script>
     </div>

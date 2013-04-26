@@ -121,22 +121,81 @@ class Model_Contacts
     }
 
     /**
+     * loadContacts
+     * @param $strSearchValue string
+     * @param $strSortOrder string
+     * @param $strOrderColumn string
+     * @param $blnReturnSelect boolean
+     * @return Zend_Db_Table_Rowset_Abstract|Zend_Db_Table_Select
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadContacts($strSearchValue = '', $strSortOrder = '', $strOrderColumn = '', $blnReturnSelect = false, $contactTypeId = null)
+    {
+        $this->core->logger->debug('contacts->models->Model_Contacts->loadContacts(' . $strSearchValue . ', ' . $strSortOrder . ', ' . $strOrderColumn . ', ' . $blnReturnSelect . ', ' . $contactTypeId . ')');
+
+        $objSelect = $this->getContactsTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $fields = array('id', 'fname', 'sname', 'email', 'idUsers', 'creator', 'idUnits', 'version' => new Zend_Db_Expr("'0'"), 'type' => new Zend_Db_Expr("'contact'"));
+        if ($contactTypeId == $this->core->sysConfig->contact_types->company) {
+            $fields = array('id', 'name', 'email', 'idUsers', 'creator', 'idUnits', 'version' => new Zend_Db_Expr("'0'"), 'type' => new Zend_Db_Expr("'contact'"));
+        }
+
+        $objSelect->from('contacts', $fields)
+            ->join('genericForms', 'genericForms.id = contacts.idGenericForms', array('genericFormId'));
+
+        if ($contactTypeId !== null) {
+            $objSelect->where('contacts.idContactTypes = ?', $contactTypeId);
+        }
+
+        // search
+        if ($strSearchValue != '') {
+            $objSelect->where('(contacts.fname LIKE ?', '%' . $strSearchValue . '%');
+            $objSelect->orWhere('contacts.sname LIKE ?', '%' . $strSearchValue . '%');
+            $objSelect->orWhere('contacts.name LIKE ?)', '%' . $strSearchValue . '%');
+        }
+
+        if ($strOrderColumn != '') {
+            $objSelect->order(array($strOrderColumn . ' ' . $strSortOrder));
+        } else {
+            $objSelect->order(array('sname ASC', 'fname ASC', 'name ASC'));
+        }
+
+        if ($blnReturnSelect) {
+            return $objSelect;
+        } else {
+            return $this->getContactsTable()->fetchAll($objSelect);
+        }
+    }
+
+    /**
      * loadContactsByUnitId
      * @param integer $intUnitId
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadContactsByUnitId($intUnitId)
+    public function loadContactsByUnitId($intUnitId, $contactTypeId = null)
     {
         $this->core->logger->debug('core->models->Contacts->loadContactsByUnitId(' . $intUnitId . ')');
 
         $objSelect = $this->getContactsTable()->select();
         $objSelect->setIntegrityCheck(false);
 
+        $fields = array('id', 'title AS acTitle', 'CONCAT(fname, \' \', sname) AS title', 'position', 'phone', 'mobile', 'fax', 'email', 'website', 'street', 'city', 'state', 'zip', 'country');
+        if ($contactTypeId == $this->core->sysConfig->contact_types->company) {
+            $fields = array('id', 'title AS acTitle', 'name AS title', 'email', 'website', 'street', 'city', 'state', 'zip', 'country');
+        }
+
         //FIXME Subselect of `contact-DEFAULT_CONTACT-1-InstanceFiles` for contactPics should be changed!
-        $objSelect->from('contacts', array('id', 'title AS acTitle', 'CONCAT(fname, \' \', sname) AS title', 'position', 'phone', 'mobile', 'fax', 'email', 'website', 'street', 'city', 'state', 'zip', 'country'));
+        $objSelect->from('contacts', $fields);
         $objSelect->joinLeft(array('pics' => 'files'), 'pics.id = (SELECT contactPics.idFiles FROM `contact-DEFAULT_CONTACT-1-InstanceFiles` AS contactPics WHERE contactPics.idContacts = contacts.id AND contactPics.idFields = 84 LIMIT 1)', array('filename', 'filepath' => 'path', 'fileversion' => 'version'));
         $objSelect->join('genericForms', 'genericForms.id = contacts.idGenericForms', array('genericFormId', 'version'));
+        if ($contactTypeId !== null) {
+            $objSelect->where('contacts.idContactTypes = ?', $contactTypeId);
+        } else {
+            $objSelect->where('contacts.idContactTypes = ?', $this->core->sysConfig->contact_types->contact);
+        }
         $objSelect->where('contacts.idUnits = ?', $intUnitId);
 
         return $this->objContactsTable->fetchAll($objSelect);

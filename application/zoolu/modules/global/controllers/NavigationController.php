@@ -112,13 +112,12 @@ class Global_NavigationController extends AuthControllerAction
         }
 
         $this->view->assign('rootLevelNavigation', $objRootLevelNavigation);
-
         $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
         $this->view->assign('rootLevelGroupId', $this->getRequest()->getParam('rootLevelGroupId'));
         $this->view->assign('rootLevelGroupKey', $this->getRequest()->getParam('rootLevelGroupKey'));
 
-        $strRenderSciprt = ($this->getRequest()->getParam('layoutType') == 'list') ? 'list.phtml' : 'tree.phtml';
-        $this->renderScript('navigation/' . $strRenderSciprt);
+        $strRenderScript = ($this->getRequest()->getParam('layoutType') == 'list') ? 'list.phtml' : 'tree.phtml';
+        $this->renderScript('navigation/' . $strRenderScript);
     }
 
 

@@ -62,6 +62,11 @@ class CustomerHelper
      */
     private $strMetaDescription;
 
+    /**
+     * @var array
+     */
+    private $arrMetaRobots = array();
+
     public function __construct($blnRequireFunctionWrapper = true)
     {
         $this->core = Zend_Registry::get('Core');
@@ -130,6 +135,37 @@ class CustomerHelper
         if ($this->strMetaKeywords != '') {
             $strReturn .= '<meta name="keywords" content="' . trim($this->strMetaKeywords, ', ') . '"/>';
         }
+        return $strReturn;
+    }
+
+    /**
+     * setMetaRobots
+     * @param string $strMetaIndex
+     * @param string $strMetaFollow
+     * @author Mathias Ober <mob@massiveart.com>
+     * @version 1.0
+     */
+    public function setMetaRobots($strMetaIndex, $strMetaFollow)
+    {
+        $this->arrMetaRobots[0] = $strMetaIndex;
+        $this->arrMetaRobots[1] = $strMetaFollow;
+    }
+
+    /**
+     * getMetaRobots
+     * @return string $strReturn
+     * @author Mathias Ober <mob@massiveart.com>
+     * @version 1.0
+     */
+    public function getMetaRobots()
+    {
+
+        if (!empty($this->arrMetaRobots)) {
+            $strReturn = '<meta name="robots" content="' . $this->arrMetaRobots[0] . ', ' . $this->arrMetaRobots[1] . '"/>';
+        } else {
+            $strReturn = '<meta name="robots" content="noindex,nofollow"/>';
+        }
+
         return $strReturn;
     }
 

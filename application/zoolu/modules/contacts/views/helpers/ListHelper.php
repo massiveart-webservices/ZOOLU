@@ -66,7 +66,7 @@ class ListHelper
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function getList($objPaginator, $strOrderColumn, $strSortOrder, $strSearchValue, $strJsNavigationFunction = 'getEditFormList')
+    public function getList($objPaginator, $strOrderColumn, $strSortOrder, $strSearchValue, $strJsNavigationFunction = 'getEditFormList', $type = null)
     {
         $this->core->logger->debug('users->views->helpers->ListHelper->getList()');
 
@@ -74,19 +74,20 @@ class ListHelper
 
         $strThead = '<thead>';
         $strTbody = '<tbody id="listEntries">';
+
         foreach ($objPaginator as $objItem) {
             $intCounter++;
 
             if ($intCounter == 1) {
                 $strThead .= '
-            <tr>
-              <th class="topcornerleft"><div>&nbsp;</div></th>
-              <th class="topcheckbox"><input type="checkbox" class="listSelectAll" name="listSelectAll" id="listSelectAll"/></th>';
+                    <tr>
+                        <th class="topcornerleft"><div>&nbsp;</div></th>
+                        <th class="topcheckbox"><input type="checkbox" class="listSelectAll" name="listSelectAll" id="listSelectAll"/></th>';
             }
 
             $strTbody .= '
-            <tr id="Row' . $objItem->id . '" class="listrow">
-              <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="' . $objItem->id . '" name="listSelect" id="listSelect' . $objItem->id . '"/></td>';
+                <tr id="Row' . $objItem->id . '" class="listrow">
+                    <td class="rowcheckbox" colspan="2"><input type="checkbox" class="listSelectRow" value="' . $objItem->id . '" name="listSelect" id="listSelect' . $objItem->id . '"/></td>';
 
             $arrItem = $objItem->toArray();
             $intColumCounter = 0;
@@ -95,8 +96,13 @@ class ListHelper
             $intColums = count($arrItem);
 
             foreach ($arrItem as $column => $value) {
-                $intColumCounter++;
                 if ($this->core->translate->getAdapter()->isTranslated($column)) {
+                    $intColumCounter++;
+
+                    if (empty($type)) {
+                        $type = $objItem->type;
+                    }
+
                     if ($intCounter == 1) {
                         $strSortOrderClass = '';
                         $strOrderColumnClass = '';
@@ -109,13 +115,15 @@ class ListHelper
 
                     $strColspan = ($intColumCounter == $intColums) ? ' colspan="2"' : '';
 
-                    if ($intColumCounter <= 1) {
+                    if ($intColumCounter <= 2) {
                         $strTbody .= '
-                <td class="row' . $column . '"' . $strColspan . '><a href="#" onclick="myNavigation.' . $strJsNavigationFunction . '(' . $objItem->id . ',\'' . $objItem->type . '\',\'' . $objItem->genericFormId . '\',' . $objItem->version . '); return false;">' . htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a></td>';
+                            <td class="row' . $column . '"' . $strColspan . '><a href="#" onclick="myNavigation.' . $strJsNavigationFunction . '(' . $objItem->id . ',\'' . $type . '\',\'' . $objItem->genericFormId . '\',' . $objItem->version . '); return false;">' . htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a></td>';
                     } else {
                         $strTbody .= '
-                <td class="row' . $column . '"' . $strColspan . '>' . (($value != '') ? htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) : '- - -') . '</td>';
+                            <td class="row' . $column . '"' . $strColspan . '>' . (($value != '') ? htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) : '- - -') . '</td>';
                     }
+
+
                 }
             }
 
@@ -126,7 +134,7 @@ class ListHelper
             }
 
             $strTbody .= '
-      				<td></td>
+                    <td></td>
             </tr>';
         }
         $strThead .= '</thead>';
@@ -139,35 +147,36 @@ class ListHelper
         if ($strSearchValue != '') {
             if (count($objPaginator) > 0) {
                 $strOutput = '
-            <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('Search_for_'), $strSearchValue) . '</div>';
+                    <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('Search_for_'), $strSearchValue) . '</div>';
             } else {
                 $strOutput = '
-            <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('No_search_results_for_'), $strSearchValue) . '</div>';
+                    <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('No_search_results_for_'), $strSearchValue) . '</div>';
             }
+
             $strOutput .= '
-            <div class="bttnSearchReset" onclick="myList.resetSearch();">
-              <div class="button17leftOff"></div>
-              <div class="button17centerOff">
-                <div>' . $this->core->translate->_('Reset') . '</div>
-                <div class="clear"></div>
-              </div>
-              <div class="button17rightOff"></div>
-              <div class="clear"></div>
-            </div>
-            <div class="clear"></div>';
+                <div class="bttnSearchReset" onclick="myList.resetSearch();">
+                  <div class="button17leftOff"></div>
+                  <div class="button17centerOff">
+                    <div>' . $this->core->translate->_('Reset') . '</div>
+                    <div class="clear"></div>
+                  </div>
+                  <div class="button17rightOff"></div>
+                  <div class="clear"></div>
+                </div>
+                <div class="clear"></div>';
         } else {
             $strOutput = '
-            <div class="spacer2"></div>';
+                <div class="spacer2"></div>';
         }
 
         if ($intCounter == 0) {
             $strOutput = $this->core->translate->_('No_entries_available');
         } else {
             $strOutput .= '
-            <table class="tablelist">
-              ' . $strThead . '
-              ' . $strTbody . '
-            </table>';
+                <table class="tablelist">
+                  ' . $strThead . '
+                  ' . $strTbody . '
+                </table>';
         }
 
         return $strOutput;

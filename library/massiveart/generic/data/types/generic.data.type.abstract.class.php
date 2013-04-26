@@ -1282,7 +1282,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $objSelect = $objGenTable->select();
                 $objSelect->setIntegrityCheck(false);
 
-                $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('idFiles', 'sortPosition'));
+                $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('idFiles', 'sortPosition', 'displayOption'));
                 $objSelect->join('fields', 'fields.id = `' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idFields', array('name'));
                 if (isset($arrTypeProperties['Version'])) {
                     $objSelect->where($strType . 'Id = ?', $arrTypeProperties['Id']);
