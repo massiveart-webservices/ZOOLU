@@ -1,15 +1,43 @@
 <?php
+
 require_once (dirname(__FILE__) . '/../../helpers/OverlayHelper.php');
 $objHelper = new OverlayHelper();
+$objHelper->setType($this->type);
+
 ?>
 
 <div class="oltitle"><?php echo $this->overlaytitle; ?></div>
 <div class="spacer1"></div>
-<div class="olnavigationwrapper">
-    <?php echo $objHelper->getContactNavigationElements($this->navElements); ?>
-</div>
-<div class="spacer1"></div>
-<div id="olContent" class="olcontentwrapper olcontacts">
-    <?php echo $objHelper->getContactListView($this->listElements, array()); ?>
+<?php if ($this->type != 'list' && $this->navElements != '') : ?>
+    <div class="olnavigationwrapper">
+        <?php echo $objHelper->getContactNavigationElements($this->navElements); ?>
+    </div>
+    <div class="spacer1"></div>
+<?php else : ?>
+    <div class="contactSearchContainer">
+        <input<?php echo ((!empty($this->search)) ? ' class="search"' : ''); ?> id="contactSearch_<?php echo $this->fieldId; ?>" type="text" name="contactSearch_<?php echo $this->fieldId; ?>" value="<?php echo $this->search; ?>" onkeypress="myForm.searchContactEnter(event, '<?php echo $this->fieldname; ?>');">
+        <div onclick="myForm.searchContact('<?php echo $this->fieldname; ?>'); return false;" id="contactSearchButton" class="searchbutton">
+            <div class="button25leftOff"></div>
+            <div class="button25centerOff">
+                <img width="14" height="14" src="/zoolu-statics/images/icons/icon_search_white.png" class="icondelete">
+                <div><?php echo $objHelper->getSearch(); ?></div>
+            </div>
+            <div class="button25rightOff"></div>
+        </div>
+        <?php if (!empty($this->search)): ?>
+            <div onclick="myForm.resetContactSearch('<?php echo $this->fieldname; ?>');" class="bttnContactSearchReset">
+                <div class="button25leftOff"></div>
+                <div class="button25centerOff" style="width: 50px;">
+                    <div style="width: 50px; text-align: center;"><?php echo $objHelper->getReset(); ?></div>
+                </div>
+                <div class="button25rightOff"></div>
+            </div>
+        <?php endif; ?>
+        <div class="clear"></div>
+    </div>
+    <div class="spacer1"></div>
+<?php endif; ?>
+<div id="olContent" class="olcontentwrapper <?php echo (($this->type == 'list') ? 'olcontactslist' : 'olcontacts'); ?>">
+    <?php echo $objHelper->getContactListView($this->listElements, $this->contactIds); ?>
 </div>
 <div class="spacer1 clear"></div>

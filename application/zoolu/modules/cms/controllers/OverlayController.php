@@ -214,10 +214,23 @@ class Cms_OverlayController extends AuthControllerAction
     {
         $this->core->logger->debug('cms->controllers->OverlayController->contactAction()');
 
-        $this->loadRootContactsAndUnits();
+        $strSearchValue = $this->getRequest()->getParam('search');
+
+        if ($this->core->sysConfig->overlays->contacts->type == 'list') {
+            $this->loadContacts($strSearchValue);
+        } else {
+            $this->loadRootContactsAndUnits();
+        }
+
+        $arrContactIds = explode('][', trim($this->getRequest()->getParam('contactIds'), '[]'));
 
         $this->view->assign('overlaytitle', $this->core->translate->_('Assign_contacts'));
         $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+        $this->view->assign('type', $this->core->sysConfig->overlays->contacts->type);
+        $this->view->assign('fieldId', $this->getRequest()->getParam('fieldId'));
+        $this->view->assign('fieldname', $this->getRequest()->getParam('fieldname'));
+        $this->view->assign('contactIds', $arrContactIds);
+        $this->view->assign('search', $strSearchValue);
     }
 
     /**
@@ -554,6 +567,21 @@ class Cms_OverlayController extends AuthControllerAction
         $this->view->assign('navElements', $objRootUnits);
         $this->view->assign('listElements', $objRootContacts);
         $this->view->assign('rootLevelId', $this->intRootLevelId);
+    }
+
+    /**
+     * loadContacts
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function loadContacts($strSearchValue = '')
+    {
+        $this->core->logger->debug('cms->controllers->OverlayController->loadContacts()');
+
+        $this->getModelContacts();
+        $contacts = $this->objModelContacts->loadContacts($strSearchValue);
+
+        $this->view->assign('listElements', $contacts);
     }
 
     /**
