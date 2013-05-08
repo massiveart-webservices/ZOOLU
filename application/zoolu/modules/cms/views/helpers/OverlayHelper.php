@@ -755,7 +755,7 @@ class OverlayHelper
         /**
          * return html output
          */
-        if ($strOutput != '') {
+        if ($strOutput != '' || $this->type == 'list') {
             return $strOutputTop . $strOutput . $strOutputBottom . '<div class="clear"></div>';
         }
     }

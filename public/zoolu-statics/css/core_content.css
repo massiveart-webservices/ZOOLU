@@ -1883,6 +1883,10 @@ Overlay Inner */
     width: 413px;
 }
 
+.olcontactslist .olcontactitemcontainer {
+    min-height: 200px;
+}
+
 .olcontactitem {
     border-bottom: 1px solid #e4e4e4;
     cursor: pointer;
@@ -2013,7 +2017,7 @@ Overlay Inner */
     min-height: 214px;
 }
 
-.olcontentwrapper .olcontactitemcontainer,
+/*.olcontentwrapper .olcontactitemcontainer,*/
 .olcontentchoosercontentwrapper .olcontentchoosercontentcontainer {
     height: 188px;
     min-height: 188px;
