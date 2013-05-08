@@ -147,6 +147,8 @@ class Model_Contacts
 
         if ($contactTypeId !== null) {
             $objSelect->where('contacts.idContactTypes = ?', $contactTypeId);
+        } else {
+            $objSelect->where('contacts.idContactTypes = ?', $this->core->sysConfig->contact_types->contact);
         }
 
         // search

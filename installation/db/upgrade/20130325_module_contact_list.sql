@@ -25,6 +25,11 @@ VALUES (
 50 , NULL , NULL
 );
 
+INSERT INTO `tabRegions` (`id`, `idTabs`, `idRegions`, `order`)
+VALUES (NULL, '50', '106', '10'),
+(NULL, '50', '61', '20'),
+(NULL, '50', '21', '30');
+
 INSERT INTO  `genericFormTabs` (
 `id` ,
 `idGenericForms` ,
