@@ -715,6 +715,14 @@
             <newsletters>7</newsletters>
         </modules>
 
+        <!-- OVERLAYS -->
+        <overlays>
+            <contacts>
+                <!-- tree (default) / list -->
+                <type>list</type>
+            </contacts>
+        </overlays>
+
         <!-- ROOTLEVEL TYPES -->
         <!-- table: rootLevelTypes -->
         <root_level_types>
