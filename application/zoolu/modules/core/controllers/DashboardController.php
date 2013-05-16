@@ -533,19 +533,16 @@ class Core_DashboardController extends AuthControllerAction
         try {
             $mail = new Zend_Mail('utf-8');
 
-            /**
-             * config for SMTP with auth
-             */
-            $config = array(
-                'auth'     => 'login',
-                'username' => $this->core->config->mail->params->username,
-                'password' => $this->core->config->mail->params->password
-            );
+            $transport = null;
+            if(!empty($this->core->config->mail->params->host)){
+                //config for SMTP with auth
+                $config = array('auth'     => 'login',
+                                'username' => $this->core->config->mail->params->username,
+                                'password' => $this->core->config->mail->params->password);
 
-            /**
-             * SMTP
-             */
-            $transport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $config);
+                // smtp
+                $transport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $config);
+            }
 
             /**
              * mail content
