@@ -184,6 +184,13 @@ body,html {
 	background:#DFDFDF url('../img/gray-grad.png') repeat-x scroll top left;
 	border:1px solid #CCC;
 }
+#copy {
+    padding:5px;
+    margin:0;
+
+    background:#DFDFDF url('../img/gray-grad.png') repeat-x scroll top left;
+    border:1px solid #CCC;
+}
 #message_container {
 	margin-left:385px;
 }
@@ -213,6 +220,7 @@ body,html {
 }
 #msg_table_head th.msgid, #msg_table_head th.msgstr {
 	padding:8px 8px;
+	width: 35%;
 }
 #msg_table_head th a {
 	text-decoration:none;
@@ -254,7 +262,7 @@ body,html {
 	text-align:center;
 }
 #msg_table td.msgid,#msg_table_head th.msgid {
-	width:45%;
+	width:25%;
 	text-align:left;
 }
 #msg_table tr.empty td {
