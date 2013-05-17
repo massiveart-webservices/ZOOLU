@@ -39,7 +39,21 @@ class JSON_RPC {
 class MessageService {
 	function __construct() {
 	}
-	function getMessages($id) {
+	
+	/**
+	 * setSuggestionTitle
+	 * 
+	 * @author Dominik Matt <dma@massiveart.com>
+	 */
+	function getSuggestionLanguage()
+	{
+		return MaConfig::getSuggestionLanguage();
+	}
+	
+	function getMessages($id = null) {
+	  if($id == null) {
+	  	$id = MaConfig::getRefCatalogueId();
+	  }
       $q = new Query();
       $messages = $q->sql("SELECT * 
         FROM {messages} 
