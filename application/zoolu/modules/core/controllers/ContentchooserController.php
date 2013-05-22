@@ -267,12 +267,11 @@ class Core_ContentchooserController extends AuthControllerAction
 
     /**
      * getItemLanguageId
-     * @param integer $intActionType
      * @return integer
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    protected function getItemLanguageId($intActionType = null)
+    protected function getItemLanguageId()
     {
         if ($this->intItemLanguageId == null) {
             if (!$this->getRequest()->getParam("languageId")) {
