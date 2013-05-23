@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.2.0 (2012-05-23)
+* 66a22fc updated file structure of default theme
+* c03a345 modified simplepo, displaying a default language in a third column
+* 3626a12 added new view for contacts, showing in searchable list
+* 2fbbdb1 updated article region, now using in not-multiple region, too
+* 79d1104 external landing pages possible
+* ca8d4a6 copy start page function
+* f538475 extended media multi edit, like single edit
+* 48dd31f implemented copy language on portal pages
+* c5603f3 implemented copy language on global pages
+* 094c3e0 fallback on folder startpages
+
 ## 1.1.2 (2012-12-04)
 * e27c855: made document region folder available in every language
 
