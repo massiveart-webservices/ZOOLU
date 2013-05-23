@@ -452,6 +452,175 @@ class Cms_PageController extends AuthControllerAction
     }
 
     /**
+     * copyTextAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function copyTextAction()
+    {
+        $intSrcId = $this->getRequest()->getParam('src', '');
+        $intDestId = $this->getRequest()->getParam('dest', '');
+
+        $objPage = $this->getModelPages()->load($intSrcId)->current();
+        $objFolder = $this->getModelFolders()->load($intDestId)->current();
+
+        $this->view->message = str_replace('%s', $objFolder->title, str_replace('%t', $objPage->title, $this->core->translate->_('Copy_startpage_message')));
+        $this->view->yes = $this->core->translate->_('Override');
+        $this->view->no = $this->core->translate->_('Create_subfolder');
+    }
+
+    /**
+     * copystartpageAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function copystartpageAction()
+    {
+        $this->core->logger->debug('cms->controllers->PageController->copystartpageAction()');
+
+        $this->_helper->viewRenderer->setNoRender();
+
+        $strOverride = $this->getRequest()->getParam('override');
+
+        try {
+            $intSrcId = $this->getRequest()->getParam('src');
+            $intDestId = $this->getRequest()->getParam('dest');
+
+            $objPageSrc = $this->getModelPages()->load($intSrcId)->current();
+
+            $objFolderSrc = $this->getModelFolders()->load($objPageSrc->idParent)->current();
+            $objLanguages = $this->getModelFolders()->loadLanguages($objFolderSrc->id);
+
+            $intPageIdDest = null;
+
+            if ($strOverride == 'false') {
+                //Copy parent folder if new subfolder should be created
+                $intFolderDestId = null;
+                $objGenericForm = $this->getModelGenericForm()->load($objFolderSrc->idGenericForms)->current();
+
+                foreach ($objLanguages as $objLanguage) {
+
+                    //Build Form
+                    $objForm = new GenericForm();
+                    $objForm->Setup()->setElementId($objFolderSrc->id);
+                    $objForm->Setup()->setFormId($objGenericForm->genericFormId);
+                    $objForm->Setup()->setFormVersion($objGenericForm->version);
+                    $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                    $objForm->Setup()->setLanguageId($objLanguage->idLanguages);
+                    $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
+
+                    $objForm->Setup()->setModelSubPath('cms/models/');
+                    $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->page);
+
+                    // load basic generic form
+                    $objForm->Setup()->loadGenericForm();
+
+                    // load generic form structure
+                    $objForm->Setup()->loadGenericFormStructure();
+
+                    // init data type object
+                    $objForm->initDataTypeObject();
+
+                    // load data
+                    $objForm->loadFormData();
+
+                    // get new rootlevel
+                    $objFolder = $this->getModelFolders()->load($intDestId)->current();
+                    $intRootLevelId = $objFolder->idRootLevels;
+
+                    // copy page
+                    if ($intFolderDestId == null) {
+                        $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+                    } else {
+                        $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                    }
+                    $objForm->Setup()->setElementId($intFolderDestId);
+                    $objForm->Setup()->setParentId($intDestId);
+                    $objForm->Setup()->setRootLevelId($intRootLevelId);
+
+                    // reset loaded flag
+                    foreach ($objForm->Setup()->CoreFields() as $objField) {
+                        $objField->blnHasLoadedData = false;
+                    }
+
+                    $objForm->saveFormData();
+
+                    $intFolderDestId = $objForm->Setup()->getElementId();
+                }
+                //Override the destination id
+                $intDestId = $intFolderDestId;
+            }
+
+            //Copy the element itself
+            $objGenericForm = $this->getModelGenericForm()->load($objPageSrc->idGenericForms)->current();
+
+            foreach ($objLanguages as $objLanguage) {
+                //Build Form
+                $objForm = new GenericForm();
+                $objForm->Setup()->setElementId($objPageSrc->id);
+                $objForm->Setup()->setFormId($objGenericForm->genericFormId);
+                $objForm->Setup()->setTemplateId($objPageSrc->idTemplates);
+                $objForm->Setup()->setFormVersion($objGenericForm->version);
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                $objForm->Setup()->setLanguageId($objLanguage->idLanguages);
+                $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
+                $objForm->Setup()->setIsStartElement($objPageSrc->isStartPage);
+                $objForm->Setup()->setParentId($objPageSrc->idParent);
+                $objForm->Setup()->setRootLevelId($objFolderSrc->idRootLevels);
+
+                $objForm->Setup()->setModelSubPath('cms/models/');
+                $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->page);
+
+                // load basic generic form
+                $objForm->Setup()->loadGenericForm();
+
+                // load generic form structure
+                $objForm->Setup()->loadGenericFormStructure();
+
+                // init data type object
+                $objForm->initDataTypeObject();
+
+                // load data
+                $objForm->loadFormData();
+
+                // get new rootlevel
+                $objFolder = $this->getModelFolders()->load($intDestId)->current();
+                $intRootLevelId = $objFolder->idRootLevels;
+
+                //set new title, if current page get override
+                if($strOverride == 'true') {
+                    $objElementDest = $this->getModelPages()->loadStartpageByParentId($intDestId)->current();
+                    $intPageIdDest = $objElementDest->id;
+                    $objForm->Setup()->getField('title')->setValue($objElementDest->title);
+                }
+
+                // copy page
+                if ($intPageIdDest == null) {
+                    $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+                } else {
+                    $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                }
+
+                $objForm->Setup()->setElementId($intPageIdDest);
+                $objForm->Setup()->setParentId($intDestId);
+                $objForm->Setup()->setRootLevelId($intRootLevelId);
+
+                // reset loaded flag
+                foreach ($objForm->Setup()->CoreFields() as $objField) {
+                    $objField->blnHasLoadedData = false;
+                }
+
+                $objForm->saveFormData();
+
+                $intPageIdDest = $objForm->Setup()->getElementId();
+            }
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+    /**
      * getpropertiescountAction
      *
      * For checking if there is already an Entry in a specified language
@@ -511,6 +680,15 @@ class Cms_PageController extends AuthControllerAction
 
             $this->view->blnIsStartPage = $this->objForm->Setup()->getIsStartElement(false);
 
+            $arrLanguages = $this->core->config->languages->language->toArray();
+            $strLanguageCode = '';
+            foreach($arrLanguages as $arrLanguage){
+                if($arrLanguage['id'] ==  $this->objForm->Setup()->getLanguageId()){
+                    $strLanguageCode = $arrLanguage['code'];
+                    break;
+                }
+            }
+            
             if ($this->objForm->Setup()->getField('url')) {
                 $objBaseUrl = $this->getModelFolders()->getRootLevelMainUrl($this->objForm->Setup()->getRootLevelId(), null, false, true);
                 $arrUrl = parse_url($objBaseUrl->url);
@@ -521,7 +699,7 @@ class Cms_PageController extends AuthControllerAction
                     if ($this->objForm->Setup()->getLanguageId() == $objBaseUrl->defaultLanguage && $objBaseUrl->hostPrefix != '') {
                         $strBaseUrl = $objBaseUrl->hostPrefix . '.' . $strBaseUrl;
                     } else {
-                        $strBaseUrl = $this->objForm->Setup()->getLanguageCode() . '.' . $strBaseUrl;
+                        $strBaseUrl = $strLanguageCode . '.' . $strBaseUrl;
                     }
 
                 } else {
@@ -582,13 +760,13 @@ class Cms_PageController extends AuthControllerAction
 
             $arrTagIds = explode(',', $this->objRequest->getParam('tagIds'));
             $arrFolderIds = explode('][', trim($this->objRequest->getParam('folderIds'), '[]'));
-            $intRootLevelId = (int) $this->objRequest->getParam('rootLevelId', -1);
+            $intRootLevelId = (int)$this->objRequest->getParam('rootLevelId', -1);
             $arrCurrFileIds = explode('][', trim($this->objRequest->getParam('fileIds'), '[]'));
 
             $this->view->assign('fieldname', $this->objRequest->getParam('fileFieldId'));
             $this->view->assign('viewtype', $this->objRequest->getParam('viewtype'));
-            $this->view->assign('isOverlay', (bool) $this->objRequest->getParam('isOverlay', false));
-            $this->view->assign('replace', (bool) $this->objRequest->getParam('replace', false));
+            $this->view->assign('isOverlay', (bool)$this->objRequest->getParam('isOverlay', false));
+            $this->view->assign('replace', (bool)$this->objRequest->getParam('replace', false));
             $this->view->assign('arrCurrFileIds', $arrCurrFileIds);
 
             if ($intRootLevelId > 0 || $arrFolderIds[0] > 0) {
@@ -621,7 +799,7 @@ class Cms_PageController extends AuthControllerAction
 
             $arrTagIds = explode(',', $this->objRequest->getParam('tagIds'));
             $arrFolderIds = explode('][', trim($this->objRequest->getParam('folderIds'), '[]'));
-            $intRootLevelId = (int) $this->objRequest->getParam('rootLevelId', -1);
+            $intRootLevelId = (int)$this->objRequest->getParam('rootLevelId', -1);
             $arrCurrFileIds = explode('][', trim($this->objRequest->getParam('fileIds'), '[]'));
 
             $this->view->assign('fieldname', $this->objRequest->getParam('fileFieldId'));
@@ -834,7 +1012,7 @@ class Cms_PageController extends AuthControllerAction
 
         $objAdapter = new Zend_Paginator_Adapter_DbSelect($objEntries);
         $objPaginator = new Zend_Paginator($objAdapter);
-        $objPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
+        $objPaginator->setItemCountPerPage((int)$this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
         $objPaginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
         $objPaginator->setView($this->view);
 
@@ -938,7 +1116,7 @@ class Cms_PageController extends AuthControllerAction
                 $objPageData = $this->getModelPages()->loadFormAndTemplateById($this->objRequest->getParam('id'));
                 if (count($objPageData) == 1) {
                     $objPage = $objPageData->current();
-                    if ((int) $objPage->idTemplates > 0) $this->objRequest->setParam('templateId', $objPage->idTemplates);
+                    if ((int)$objPage->idTemplates > 0) $this->objRequest->setParam('templateId', $objPage->idTemplates);
                     if ($objPage->genericFormId != '') $this->objRequest->setParam('formId', $objPage->genericFormId);
                 }
                 $this->_forward('geteditform');
@@ -1257,6 +1435,7 @@ class Cms_PageController extends AuthControllerAction
             $this->objForm->Setup()->setRootLevelId((($this->objRequest->getParam("rootLevelId") != '') ? $this->objRequest->getParam("rootLevelId") : null));
             $this->objForm->Setup()->setParentId((($this->objRequest->getParam("parentFolderId") != '') ? $this->objRequest->getParam("parentFolderId") : null));
             $this->objForm->Setup()->setIsStartElement((($this->objRequest->getParam("isStartPage") != '') ? $this->objRequest->getParam("isStartPage") : 0));
+            $this->objForm->Setup()->setLanguageDefinitionType((($this->objRequest->getParam("languageDefinitionType") != '') ? $this->objRequest->getParam("languageDefinitionType") : $this->core->config->language_definition->folder));
             $this->objForm->Setup()->setPublishDate((($this->objRequest->getParam("publishDate") != '') ? $this->objRequest->getParam("publishDate") : date('Y-m-d H:i:s')));
             $this->objForm->Setup()->setShowInNavigation((($this->objRequest->getParam("showInNavigation") != '') ? $this->objRequest->getParam("showInNavigation") : 0));
             $this->objForm->Setup()->setDestinationId((($this->objRequest->getParam("destinationId") != '') ? $this->objRequest->getParam("destinationId") : 0));
@@ -1303,6 +1482,7 @@ class Cms_PageController extends AuthControllerAction
             $this->objForm->addElement('hidden', 'parentFolderId', array('value' => $this->objForm->Setup()->getParentId(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'pageTypeId', array('value' => $this->objForm->Setup()->getElementTypeId(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'isStartPage', array('value' => $this->objForm->Setup()->getIsStartElement(), 'decorators' => array('Hidden')));
+            $this->objForm->addElement('hidden', 'languageDefinitionType', array('value' => $this->objForm->Setup()->getLanguageDefinitionType(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'publishDate', array('value' => $this->objForm->Setup()->getPublishDate('Y-m-d H:i:s'), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'showInNavigation', array('value' => $this->objForm->Setup()->getShowInNavigation(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'destinationId', array('value' => $this->objForm->Setup()->getDestinationId(), 'decorators' => array('Hidden')));

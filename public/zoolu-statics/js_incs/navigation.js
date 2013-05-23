@@ -274,7 +274,7 @@ Massiveart.Navigation = Class.create({
      * select root level with layout change -> location href.
      */
     if(typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType == 'list')){
-      location.href = url;
+      //location.href = url;
       var myForm = document.createElement('form');
       myForm.method = 'post';
       myForm.action = url;
@@ -547,11 +547,16 @@ Massiveart.Navigation = Class.create({
   /**
    * updateCurrentPage
    */
-  updateCurrentPage: function() {
+  updateCurrentPage: function(isStartItem) {
     this.pageId = this.currItemId;
     if($('divPageRapper')){
       $('divPageRapper').show();
       $('divPageTitle').innerHTML = $('divNavigationTitle_page'+this.pageId).innerHTML;
+      if(isStartItem) {
+          $('divPageChangeParent').hide();
+      } else {
+          $('divPageChangeParent').show();
+      }
     } 
   },
   
@@ -568,11 +573,16 @@ Massiveart.Navigation = Class.create({
   /**
    * updateCurrentElement
    */
-  updateCurrentElement: function() {
+  updateCurrentElement: function(isStartItem) {
     this.elementId = this.currItemId;
     if($('divElementRapper')){
       $('divElementRapper').show();
       $('divElementTitle').innerHTML = $('divNavigationTitle_element'+this.elementId).innerHTML;
+      if(isStartItem) {
+          $('divElementChangeParent').hide();
+      } else {
+          $('divElementChangeParent').show();
+      }
     } 
   },
   
@@ -1013,19 +1023,12 @@ Massiveart.Navigation = Class.create({
       for(var i = levelPos; i < this.levelArray.length; i++){
         if($('navlevel'+this.levelArray[i])) $('navlevel'+this.levelArray[i]).innerHTML = '';
       }
+      var isStartItem = $(element).down('.icon').className.indexOf(this.constStartItem) != -1;
       this.hideCurrentFolder();
       if(elType == this.constPage){
-        if($(element).down('.icon').className.indexOf(this.constStartItem) == -1){
-          this.updateCurrentPage();
-        }else{
-          this.hideCurrentPage();
-        }
+          this.updateCurrentPage(isStartItem);
       }else if(elType == this.constGlobal){
-        if($(element).down('.icon').className.indexOf(this.constStartItem) == -1){
-          this.updateCurrentElement();
-        }else{
-          this.hideCurrentElement();
-        }
+          this.updateCurrentElement(isStartItem);
       }
     }
     
@@ -1047,6 +1050,10 @@ Massiveart.Navigation = Class.create({
     
     myCore.resetTinyMCE(true);
     
+    if (typeof(elementTypeDefaultId) == 'undefined') {
+        elementTypeDefaultId = '';
+    }
+    
     new Ajax.Updater(this.genFormContainer, strAjaxAction, {
        parameters: { 
          id: itemId,
@@ -1061,6 +1068,7 @@ Massiveart.Navigation = Class.create({
          rootLevelGroupKey: ($('rootLevelGroupKey'+this.rootLevelGroupId)) ? $F('rootLevelGroupKey'+this.rootLevelGroupId) : '',
          parentFolderId: $('navlevel'+currLevel).readAttribute('parentid'),
          elementType: elType,
+         elementTypeId: elementTypeDefaultId,
          zoolu_module: this.module,
          rootLevelTypeId: this.rootLevelTypeId,
          backLink: backLink

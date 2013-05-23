@@ -108,9 +108,30 @@ class Model_Folders extends ModelAbstract
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('folders', array('id', 'folderId', 'relationId' => 'folderId', 'idSegments', 'idRootLevels', 'version'));
-        $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = ' . $this->intLanguageId, array('idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
+        $objSelect->joinLeft('folderProperties', 'folderProperties.folderId = folders.folderId AND folderProperties.version = folders.version AND folderProperties.idLanguages = ' . $this->intLanguageId, array('idGenericForms', 'idFolderTypes', 'showInNavigation', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idStatus', 'isUrlFolder', 'published', 'changed', 'creator'));
+        $objSelect->joinLeft('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
         $objSelect->joinLeft(array('ub' => 'users'), 'ub.id = folderProperties.publisher', array('publisher' => 'CONCAT(ub.fname, \' \', ub.sname)'));
         $objSelect->joinLeft(array('uc' => 'users'), 'uc.id = folderProperties.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'));
+        $objSelect->where('folders.id = ?', $intElementId);
+
+        return $this->getFolderTable()->fetchAll($objSelect);
+    }
+
+    /**
+     * Loads all the languages in which the folder with the given id exists
+     * @param $intElementId The id of the folder
+     * @return Zend_Db_Table_Select
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function loadLanguages($intElementId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadLanguages('.$intElementId.')');
+
+        $objSelect = $this->getFolderTable()->select()->setIntegrityCheck(false);
+        $objSelect->from($this->getFolderTable(), array());
+        $objSelect->join('folderTitles', 'folderTitles.folderId = folders.folderId', array('idLanguages'));
+        $objSelect->where('idLanguages != ?', 0);
         $objSelect->where('folders.id = ?', $intElementId);
 
         return $this->getFolderTable()->fetchAll($objSelect);
@@ -1818,6 +1839,7 @@ class Model_Folders extends ModelAbstract
     public function loadGlobalParentFolders($intFolderId, $intRootLevelGroupId = 0)
     {
         $this->core->logger->debug('core->models->Folders->loadGlobalParentFolders(' . $intFolderId . ',' . $intRootLevelGroupId . ')');
+        $this->core->logger->debug('core->models->Folders->loadGlobalParentFolders Language : ' . $this->intLanguageId . ')');
 
         $objSelect = $this->getFolderTable()->select();
         $objSelect->setIntegrityCheck(false);
@@ -1860,7 +1882,7 @@ class Model_Folders extends ModelAbstract
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function loadRootFolders($intRootId)
+    public function loadRootFolders($intRootId, $blnStartpage = false)
     {
         $this->core->logger->debug('core->models->Folders->loadRootFolders(' . $intRootId . ')');
 
@@ -1873,11 +1895,38 @@ class Model_Folders extends ModelAbstract
                                           folderProperties.idLanguages = ' . $this->intLanguageId, array('idGenericForms'));
         $objSelect->join('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
         $objSelect->join('genericForms', 'genericForms.id = folderProperties.idGenericForms', array('genericFormId', 'version'));
+        if ($blnStartpage) {
+            $objSelect->joinLeft(array('startpages' => 'pages'), 'startpages.idParent = folders.id AND startpages.idParentTypes = '.$this->core->sysConfig->parent_types->folder.' AND startpages.isStartPage = 1', array());
+            $objSelect->joinLeft('pageProperties', 'pageProperties.pageId = startpages.pageId AND pageProperties.version = startpages.version AND pageProperties.idLanguages = '.$this->intLanguageId, array());
+            $objSelect->joinLeft(array('startpageGenForms' => 'genericForms'), 'startpageGenForms.id = pageProperties.idGenericForms', array('startpageGenericFormId' => 'genericFormId'));
+        }
         $objSelect->where('folders.idRootLevels  = ? AND folders.idParentFolder = 0', $intRootId);
 
         return $this->getFolderTable()->fetchAll($objSelect);
     }
+    
+    /**
+     * loadMediaRootFolders
+     * @param integer $intRootId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadMediaRootFolders($intRootId)
+    {
+        $this->core->logger->debug('core->models->Folders->loadMediaRootFolders(' . $intRootId . ')');
 
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array('id'));
+        $objSelect->joinLeft('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+        $objSelect->joinLeft(array('fallbackFolderTitles' => 'folderTitles'), 'fallbackFolderTitles.folderId = folders.folderId AND fallbackFolderTitles.version = folders.version AND fallbackFolderTitles.idLanguages = 0', array('fallbackTitle' => 'title'));
+        $objSelect->where('folders.idRootLevels  = ? AND folders.idParentFolder = 0', $intRootId);
+
+        return $this->getFolderTable()->fetchAll($objSelect);
+    }
+    
     /**
      * loadChildFolders
      * @param integer $intFolderId
@@ -1902,7 +1951,28 @@ class Model_Folders extends ModelAbstract
 
         return $this->getFolderTable()->fetchAll($objSelect);
     }
+    
+    /**
+     * loadMediaChildFolders
+     * @param integer $intFolderId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function loadMediaChildFolders($intFolderId)
+    {
+        $this->core->logger->debug('core->models->Folders->loadMediaChildFolders(' . $intFolderId . ')');
 
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array('id'));
+        $objSelect->joinLeft('folderTitles', 'folderTitles.folderId = folders.folderId AND folderTitles.version = folders.version AND folderTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+        $objSelect->joinLeft(array('folderFallbackTitles' => 'folderTitles'), 'folderFallbackTitles.folderId = folders.folderId AND folderFallbackTitles.version = folders.version AND folderFallbackTitles.idLanguages = 0', array('fallbackTitle' => 'title'));
+        $objSelect->where('folders.idParentFolder = ?', $intFolderId);
+
+        return $this->getFolderTable()->fetchAll($objSelect);
+    }
 
     /**
      * Load all the child folder (cms and global) for the sitemaplink fieldtype
@@ -1917,7 +1987,7 @@ class Model_Folders extends ModelAbstract
         $objCmsSelect = $this->getFolderTable()->select();
         $objCmsSelect->setIntegrityCheck(false);
 
-        $objCmsSelect->from('folders', array('folders.id', 'folderProperties.idGenericForms', 'folderTitles.title', 'startpageGenForms.genericFormId', 'startpageGenForms.version', 'type' => new Zend_Db_Expr('"page"')));
+        $objCmsSelect->from('folders', array('folders.id', 'folderProperties.idGenericForms', 'folderTitles.title', 'startpageGenericFormId' => 'startpageGenForms.genericFormId', 'startpageGenForms.version', 'type' => new Zend_Db_Expr('"page"')));
         $objCmsSelect->join('folderProperties', 'folderProperties.folderId = folders.folderId AND
                                           folderProperties.version = folders.version AND
                                           folderProperties.idLanguages = ' . $this->intLanguageId, array());
@@ -2198,7 +2268,7 @@ class Model_Folders extends ModelAbstract
      */
     public function updateFolderSecurity($intFolderId, $arrGroups, $intZone)
     {
-        $this->core->logger->debug('core->models->Folders->updateFolderSecurity(' . $intFolderId . ', ' . $arrGroups . ', ' . $intZone . ')');
+        $this->core->logger->debug('core->models->Folders->updateFolderSecurity(' . $intFolderId . ', array , ' . $intZone . ')');
 
         try {
             $this->getFolderPermissionTable();
@@ -2370,6 +2440,57 @@ class Model_Folders extends ModelAbstract
         }
         
         return $url;
+    }
+
+    /**
+     * @param $intFolderId
+     * @param $blnIsStartElement
+     * @return null|Zend_Db_Table_Row_Abstract
+     */
+    public function loadStartElementUrl($intFolderId, $blnIsStartElement)
+    {
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array());
+
+        if ($blnIsStartElement) {
+            $objSelect->joinInner('pages', 'pages.idParent = folders.idParentFolder AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND pages.isStartPage = 1', array());
+        } else {
+            $objSelect->joinInner('pages', 'pages.idParent = folders.id AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND pages.isStartPage = 1', array());
+        }
+
+        $objSelect->joinInner('urls', 'urls.relationId = pages.pageId AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1', array('url'))
+            ->where('folders.id = ?', $intFolderId)
+            ->order(array('urls.version DESC'));
+
+        return $this->objFolderTable->fetchRow($objSelect);
+    }
+
+    /**
+     * @param $intFolderId
+     * @param $blnIsStartElement
+     * @param $intRootLevelGroupId
+     * @return null|Zend_Db_Table_Row_Abstract
+     */
+    public function loadGlobalStartElementUrl($intFolderId, $blnIsStartElement, $intRootLevelGroupId)
+    {
+        $objSelect = $this->getFolderTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('folders', array());
+
+        if ($blnIsStartElement) {
+            $objSelect->joinInner('globals', 'globals.idParent = folders.idParentFolder AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND globals.isStartGlobal = 1', array());
+        } else {
+            $objSelect->joinInner('globals', 'globals.idParent = folders.id AND idParentTypes = ' . $this->core->sysConfig->parent_types->folder . ' AND globals.isStartGlobal = 1', array());
+        }
+
+        $objSelect->joinInner('urls', 'urls.relationId = globals.globalId AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1', array('url'))
+            ->where('folders.id = ?', $intFolderId)
+            ->order(array('urls.version DESC'));
+
+        return $this->objFolderTable->fetchRow($objSelect);
     }
 
     /**

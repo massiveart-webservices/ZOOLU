@@ -10,8 +10,8 @@
 
 Massiveart.Contacts = Class.create({
 
-  initialize: function() {
-    this.isStartContact = false;
-  }
+    initialize:function () {
+        this.isStartContact = false;
+    }
 
 });

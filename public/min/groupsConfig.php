@@ -146,7 +146,8 @@ return array(
         '//zoolu-statics/js_incs/folder.js',
         '//zoolu-statics/js_incs/overlay.js',
         '//zoolu-statics/js_incs/tags.js',
-        '//zoolu-statics/js_incs/dashboard.js'),
+        '//zoolu-statics/js_incs/dashboard.js',
+        '//zoolu-statics/js_incs/contentchooser.js'),
     'zPropertyCss' => array(
         '//zoolu-statics/css/core_main.css',
         '//zoolu-statics/css/core_navigation.css',

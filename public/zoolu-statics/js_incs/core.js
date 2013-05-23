@@ -155,6 +155,8 @@ Massiveart.Core = Class.create({
   showDeleteAlertMessage: function(size){
     if(typeof(size != 'undefined') && size > 0){
       if($('overlayGenContentWrapper')){
+        $('overlayGenContentWrapper').setStyle({height: 'auto'});
+        $('overlayGenContent').setStyle({height: 'auto'});
         $('overlayGenContent').innerHTML = '';	      
 
       	if($('overlayBlack75')) $('overlayBlack75').show();
@@ -167,7 +169,7 @@ Massiveart.Core = Class.create({
       	$('overlayButtons').show();
       	      
       	this.putOverlayCenter('overlayGenContentWrapper');
-      	$('overlayGenContentWrapper').show(); 
+      	$('overlayGenContentWrapper').show();
       	myOverlay.overlayCounter++;
       }	  
     }
@@ -184,7 +186,22 @@ Massiveart.Core = Class.create({
     if($('overlayButtons')) $('overlayButtons').hide();
     if(--myOverlay.overlayCounter == 0) $('overlayBlack75').hide();
   },
-  
+
+    /**
+     * showDynamicMessage
+     */
+  showDynamicMessage: function() {
+      $('overlayGenContent2').innerHTML = '';
+      $('overlayBlack75').show();
+      this.putOverlayCenter('overlayGenContentWrapper2');
+      $('overlayGenContentWrapper2').show();
+      myOverlay.overlayCounter++;
+  },
+
+  hideDynamicMessage: function() {
+      $('overlayGenContentWrapper2').hide();
+  },
+
   /**
    * check
    */

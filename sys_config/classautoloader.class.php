@@ -82,6 +82,9 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         'UndefinedMethod'               => '/library/massiveart/undefined/Method.php',
         'UndefinedMethodHandler'        => '/library/massiveart/undefined/MethodHandler.php',
         'UndefinedMethodListener'       => '/library/massiveart/undefined/MethodListener.php',
+
+        // URL
+        'UniformResourceLocator'      => '/library/massiveart/locator/UniformResourceLocator.php',    
     
         // Gearman
         'GearmanReplicationMailChimp'	=> '/library/massiveart/gearman/replication/mailchimp.replication.class.php',

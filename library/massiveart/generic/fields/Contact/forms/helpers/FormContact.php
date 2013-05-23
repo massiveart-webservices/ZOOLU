@@ -69,7 +69,7 @@ class Form_Helper_FormContact extends Zend_View_Helper_FormElement
          * build the element
          */
         $strOutput = '<div class="conwrapper">
-                    <div class="contop">' . $core->translate->_('Add_contacts') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddContactOverlay(\'divContactContainer_' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div class="contop">' . $core->translate->_('Add_contacts') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddContactOverlay(\'divContactContainer_' . $this->view->escape($id) . '\', \'' . $this->view->escape($id) . '\'); return false;"/></div>
                     <div id="divContactContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '">
                     </div>
                     <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . $attribs['isCoreField'] . '" fieldId="' . $attribs['fieldId'] . '" value="' . $this->view->escape($value) . '"/>

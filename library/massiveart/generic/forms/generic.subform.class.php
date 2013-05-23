@@ -261,6 +261,21 @@ class GenericSubForm extends Zend_Form_SubForm
                 $this->getElement($objField->name . $strNameExtension)->intRootLevelId = $this->objGenericForm->Setup()->getRootLevelId();
             }
 
+            if ($objField->type == GenericSetup::FIELD_TYPE_URL) {
+                $this->getElement($objField->name . $strNameExtension)->intLanguageDefinitionType = $this->objGenericForm->Setup()->getLanguageDefinitionType();
+                $this->getElement($objField->name . $strNameExtension)->blnIsStartElement = $this->objGenericForm->Setup()->getIsStartElement(false);
+                $this->getElement($objField->name . $strNameExtension)->intParentId = $this->objGenericForm->Setup()->getParentId();
+                $arrLanguages = $this->core->config->languages->language->toArray();
+                $strLanguageCode = '';
+                foreach($arrLanguages as $arrLanguage){
+                    if($arrLanguage['id'] ==  $this->objGenericForm->Setup()->getLanguageId()){
+                        $strLanguageCode = $arrLanguage['code'];
+                        break;
+                    }
+                }
+                $this->getElement($objField->name . $strNameExtension)->setAttribs(array('LanguageCode' => $strLanguageCode));
+            }
+
             $this->objGenericForm->fieldAddedToSubform($this->intId, $objField->name);
 
         } catch (Exception $exc) {

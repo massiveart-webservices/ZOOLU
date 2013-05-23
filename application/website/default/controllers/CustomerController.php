@@ -77,9 +77,11 @@ class CustomerController extends WebControllerAction
     public function init()
     {
         parent::init();
+        $this->validateLanguage();
 
         $this->setTranslate();
 
+        
         //Initialize Authentication
         $this->objAuth = Zend_Auth::getInstance();
         $this->objAuth->setStorage(new Zend_Auth_Storage_Session(self::STORAGE_NAME));
@@ -338,7 +340,10 @@ class CustomerController extends WebControllerAction
             $objMailValidator = new Zend_Validate_EmailAddress();
             $objCustomersUsername = $this->getModelCustomers()->loadByUsername($strUsername);
             $objCustomersEmail = $this->getModelCustomers()->loadByEmail($strEmail);
-
+            $blnRequiredSalutation = $this->getRequest()->getParam('customerSalutation', '') != '';
+            $blnRequiredFName = $this->getRequest()->getParam('fname', '') != '';
+            $blnRequiredSName = $this->getRequest()->getParam('sname', '') != '';
+            
             $blnRequiredEmail = $this->getRequest()->getParam('email', '') != '';
             $blnRequiredUsername = $strUsername != '';
             $blnRequiredPassword = $this->getRequest()->getParam('password', '') != '';
@@ -348,7 +353,7 @@ class CustomerController extends WebControllerAction
             $blnUniqueEmail = count($objCustomersEmail) == 0;
             $blnKeySet = $this->getRequest()->getParam('key', '') != '';
             $blnValid = (
-                $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername && $blnUniqueEmail
+                $blnRequiredSalutation && $blnRequiredFName && $blnRequiredSName && $blnRequiredEmail && $blnRequiredUsername && $blnRequiredPassword && $blnValidPassword && $blnValidEmail && $blnUniqueUsername && $blnUniqueEmail
             ) || $blnKeySet;
 
             if ($blnValid) {
@@ -364,16 +369,30 @@ class CustomerController extends WebControllerAction
                     throw new Exception('RegisterStrategy with name "' . $strRegisterStrategy . '" not found!');
                 }
                 $objRegisterStrategy = new $strRegisterStrategy($this->getRequest(), $this->objTheme);
-                $this->view->display = $objRegisterStrategy->register($this->getUrl($this->getRequest()->getParam('re')));
+                $this->view->display = $objRegisterStrategy->register($this->getUrl($this->getRequest()->getParam('re')), $this->objTheme->idRootLevels);
                 $this->view->redirect = $this->getRequest()->getParam('re', '/');
             } else {
                 //Reassign field values
                 $this->view->fname = $this->getRequest()->getParam('fname');
                 $this->view->sname = $this->getRequest()->getParam('sname');
                 $this->view->email = $this->getRequest()->getParam('email');
+                $this->view->street = $this->getRequest()->getParam('street');
+                $this->view->zip = $this->getRequest()->getParam('zip');
+                $this->view->city = $this->getRequest()->getParam('city');
+                $this->view->country = $this->getRequest()->getParam('country');
+                $this->view->email = $this->getRequest()->getParam('email');
                 $this->view->username = $strUsername;
 
                 //Show validation errors
+                 if (!$blnRequiredFName) {
+                    $this->view->errFname = $this->translate->_('Fname_mandatory', false);
+                }
+                if (!$blnRequiredSName) {
+                    $this->view->errSname = $this->translate->_('Sname_mandatory', false);
+                }
+                if (!$blnRequiredSalutation) {
+                    $this->view->errcustomerSalutation = $this->translate->_('Salutation_mandatory', false);
+                }
                 if (!$blnRequiredEmail) {
                     $this->view->errEmail = $this->translate->_('Email_mandatory', false);
                 }

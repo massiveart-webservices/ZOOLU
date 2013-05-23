@@ -476,6 +476,247 @@ class Global_ElementController extends AuthControllerAction
     }
 
     /**
+     * copyAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function copyAction()
+    {
+        $this->core->logger->debug('global->controllers->ElementController->copyAction()');
+
+        $this->_helper->viewRenderer->setNoRender();
+
+        $intParentId = $this->getRequest()->getParam('newParentFolderId');
+        $intElementIdSrc = $this->getRequest()->getParam('id');
+        $intElementIdDest = null;
+
+        $objLanguages = $this->getModelGlobals()->loadLanguages($intElementIdSrc);
+
+        foreach ($objLanguages as $objLanguage) {
+
+            //Build Form
+            $objForm = new GenericForm();
+            $objForm->Setup()->setElementId($intElementIdSrc);
+            $objForm->Setup()->setFormId($this->getRequest()->getParam('formId'));
+            $objForm->Setup()->setTemplateId($this->getRequest()->getParam('templateId'));
+            $objForm->Setup()->setFormVersion($this->getRequest()->getParam('formVersion'));
+            $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+            $objForm->Setup()->setLanguageId($objLanguage->idLanguages);
+            $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
+            $objForm->Setup()->setIsStartElement($this->getRequest()->getParam('isStartPage'));
+            $objForm->Setup()->setParentId($this->getRequest()->getParam('parentFolderId'));
+            $objForm->Setup()->setRootLevelId($this->getRequest()->getParam('rootLevelId'));
+
+            $objForm->Setup()->setModelSubPath('global/models/');
+            $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->global);
+
+            // load basic generic form
+            $objForm->Setup()->loadGenericForm();
+
+            // load generic form structure
+            $objForm->Setup()->loadGenericFormStructure();
+
+            // init data type object
+            $objForm->initDataTypeObject();
+
+            // load data
+            $objForm->loadFormData();
+
+            // get new rootlevel
+            $objFolder = $this->getModelFolders()->load($intParentId)->current();
+            $intRootLevelId = $objFolder->idRootLevels;
+
+            // copy page
+            if ($intElementIdDest == null) {
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+            } else {
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+            }
+            $objForm->Setup()->setElementId($intElementIdDest);
+            $objForm->Setup()->setParentId($intParentId);
+            $objForm->Setup()->setRootLevelId($intRootLevelId);
+
+            // reset loaded flag
+            foreach ($objForm->Setup()->CoreFields() as $objField) {
+                $objField->blnHasLoadedData = false;
+            }
+
+            $objForm->saveFormData();
+
+            $intElementIdDest = $objForm->Setup()->getElementId();
+        }
+    }
+
+    /**
+     * copyTextAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function copyTextAction() {
+        $intSrcId = $this->getRequest()->getParam('src', '');
+        $intDestId = $this->getRequest()->getParam('dest', '');
+
+        $objGlobal = $this->getModelGlobals()->load($intSrcId)->current();
+        $objFolder = $this->getModelFolders()->load($intDestId)->current();
+
+        $this->view->message = str_replace('%s', $objFolder->title, str_replace('%t', $objGlobal->title, $this->core->translate->_('Copy_startpage_message')));
+        $this->view->yes = $this->core->translate->_('Override');
+        $this->view->no = $this->core->translate->_('Create_subfolder');
+    }
+
+    /**
+     * copystartelementAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function copystartelementAction()
+    {
+        $this->core->logger->debug('global->controllers->ElementController->copystartelementAction()');
+
+        $this->_helper->viewRenderer->setNoRender();
+
+        $strOverride = $this->getRequest()->getParam('override');
+
+        try {
+            $intSrcId = $this->getRequest()->getParam('src');
+            $intDestId = $this->getRequest()->getParam('dest');
+
+            $objElementSrc = $this->getModelGlobals()->load($intSrcId)->current();
+            $objElementSrcLink = $this->getModelGlobals()->loadLinkGlobal($intSrcId)->current();
+
+            $objFolderSrc = $this->getModelFolders()->load($objElementSrc->idParent)->current();
+            $objLanguages = $this->getModelFolders()->loadLanguages($objFolderSrc->id);
+
+            $intElementIdDest = null;
+
+            if ($strOverride == 'false') {
+                //Copy parent folder if new subfolder should be created
+                $intFolderDestId = null;
+                $objGenericForm = $this->getModelGenericForm()->load($objFolderSrc->idGenericForms)->current();
+
+                foreach ($objLanguages as $objLanguage) {
+
+                    //Build Form
+                    $objForm = new GenericForm();
+                    $objForm->Setup()->setElementId($objFolderSrc->id);
+                    $objForm->Setup()->setFormId($objGenericForm->genericFormId);
+                    $objForm->Setup()->setFormVersion($objGenericForm->version);
+                    $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                    $objForm->Setup()->setLanguageId($objLanguage->idLanguages);
+                    $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
+
+                    $objForm->Setup()->setModelSubPath('global/models/');
+                    $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->global);
+
+                    // load basic generic form
+                    $objForm->Setup()->loadGenericForm();
+
+                    // load generic form structure
+                    $objForm->Setup()->loadGenericFormStructure();
+
+                    // init data type object
+                    $objForm->initDataTypeObject();
+
+                    // load data
+                    $objForm->loadFormData();
+
+                    // get new rootlevel
+                    $objFolder = $this->getModelFolders()->load($intDestId)->current();
+                    $intRootLevelId = $objFolder->idRootLevels;
+
+                    // copy page
+                    if ($intFolderDestId == null) {
+                        $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+                    } else {
+                        $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                    }
+                    $objForm->Setup()->setElementId($intFolderDestId);
+                    $objForm->Setup()->setParentId($intDestId);
+                    $objForm->Setup()->setRootLevelId($intRootLevelId);
+
+                    // reset loaded flag
+                    foreach ($objForm->Setup()->CoreFields() as $objField) {
+                        $objField->blnHasLoadedData = false;
+                    }
+
+                    $objForm->saveFormData();
+
+                    $intFolderDestId = $objForm->Setup()->getElementId();
+                }
+                //Override the destination id
+                $intDestId = $intFolderDestId;
+            }
+
+            //Copy the element itself
+            $objGenericForm = $this->getModelGenericForm()->load($objElementSrcLink->idGenericForms)->current();
+
+            foreach ($objLanguages as $objLanguage) {
+                //Build Form
+                $objForm = new GenericForm();
+                $objForm->Setup()->setElementId($objElementSrcLink->id);
+                $objForm->Setup()->setFormId($objGenericForm->genericFormId);
+                $objForm->Setup()->setTemplateId($objElementSrcLink->idTemplates);
+                $objForm->Setup()->setFormVersion($objGenericForm->version);
+                $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                $objForm->Setup()->setLanguageId($objLanguage->idLanguages);
+                $objForm->Setup()->setFormLanguageId($this->core->sysConfig->languages->default->id);
+                $objForm->Setup()->setIsStartElement($objElementSrcLink->isStartGlobal);
+                $objForm->Setup()->setParentId($objElementSrcLink->idParent);
+                $objForm->Setup()->setRootLevelId($objFolderSrc->idRootLevels);
+
+                $objForm->Setup()->setModelSubPath('global/models/');
+                $objForm->Setup()->setFormTypeId($this->core->sysConfig->form->types->global);
+
+                // load basic generic form
+                $objForm->Setup()->loadGenericForm();
+
+                // load generic form structure
+                $objForm->Setup()->loadGenericFormStructure();
+
+                // init data type object
+                $objForm->initDataTypeObject();
+
+                // load data
+                $objForm->loadFormData();
+
+                // get new rootlevel
+                $objFolder = $this->getModelFolders()->load($intDestId)->current();
+                $intRootLevelId = $objFolder->idRootLevels;
+
+                //set new title, if current page get override
+                if($strOverride == 'true') {
+                    $objElementDest = $this->getModelGlobals()->loadStartelementByParentId($intDestId)->current();
+                    $intElementIdDest = $objElementDest->id;
+                    $objForm->Setup()->getField('title')->setValue($objElementDest->title);
+                }
+
+                // copy page
+                if ($intElementIdDest == null) {
+                    $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->add);
+                } else {
+                    $objForm->Setup()->setActionType($this->core->sysConfig->generic->actions->edit);
+                }
+
+                $objForm->Setup()->setElementId($intElementIdDest);
+                $objForm->Setup()->setParentId($intDestId);
+                $objForm->Setup()->setRootLevelId($intRootLevelId);
+
+                // reset loaded flag
+                foreach ($objForm->Setup()->CoreFields() as $objField) {
+                    $objField->blnHasLoadedData = false;
+                }
+
+                $objForm->saveFormData();
+
+                $intElementIdDest = $objForm->Setup()->getElementId();
+            }
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+    /**
      * copylanguageAction
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
@@ -872,6 +1113,11 @@ class Global_ElementController extends AuthControllerAction
             $this->objRequest->setParam('backLink', $this->objRequest->getParam('backLink', false));
             $strGroupKey = $this->objRequest->getParam('rootLevelGroupKey');
             $strGroupKeyStartpage = 'startpage_' . $strGroupKey;
+            $strStartpageTypeId = '';
+            if (isset($this->core->sysConfig->global_types->$strGroupKeyStartpage)) {
+                $strStartpageTypeId = $this->core->sysConfig->global_types->$strGroupKeyStartpage->id;
+            }
+
             $strGroupKeyLink = $strGroupKey . '_link';
             $strGroupKeyOverview = $strGroupKey . '_overview';
             if ($this->objRequest->getParam('elementTypeId') != '' && $this->objRequest->getParam('elementTypeId') > 0) {
@@ -886,7 +1132,7 @@ class Global_ElementController extends AuthControllerAction
                             $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKey->default_templateId);
                         }
                         break;
-                    case $this->core->sysConfig->global_types->$strGroupKeyStartpage->id :                        
+                    case $strStartpageTypeId:
                         $this->objRequest->setParam('templateId', $this->core->sysConfig->global_types->$strGroupKeyStartpage->default_templateId);
                         $this->objRequest->setParam('formId', '');
                         break;
@@ -1099,6 +1345,7 @@ class Global_ElementController extends AuthControllerAction
             $this->objForm->Setup()->setRootLevelGroupId((($this->objRequest->getParam("rootLevelGroupId") != '') ? $this->objRequest->getParam("rootLevelGroupId") : 0));
             $this->objForm->Setup()->setParentId((($this->objRequest->getParam("parentFolderId") != '') ? $this->objRequest->getParam("parentFolderId") : null));
             $this->objForm->Setup()->setIsStartElement((($this->objRequest->getParam("isStartGlobal") != '') ? $this->objRequest->getParam("isStartGlobal") : 0));
+            $this->objForm->Setup()->setLanguageDefinitionType((($this->objRequest->getParam("languageDefinitionType") != '') ? $this->objRequest->getParam("languageDefinitionType") : $this->core->config->language_definition->folder));
             $this->objForm->Setup()->setPublishDate((($this->objRequest->getParam("publishDate") != '') ? $this->objRequest->getParam("publishDate") : date('Y-m-d H:i:s')));
             $this->objForm->Setup()->setShowInNavigation((($this->objRequest->getParam("showInNavigation") != '') ? $this->objRequest->getParam("showInNavigation") : 0));
             $this->objForm->Setup()->setLanguageFallbackId((($this->objRequest->getParam("languageFallback") != '') ? $this->objRequest->getParam("languageFallback") : 0));
@@ -1142,6 +1389,7 @@ class Global_ElementController extends AuthControllerAction
             $this->objForm->addElement('hidden', 'parentFolderId', array('value' => $this->objForm->Setup()->getParentId(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'elementTypeId', array('value' => $this->objForm->Setup()->getElementTypeId(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'isStartGlobal', array('value' => $this->objForm->Setup()->getIsStartElement(), 'decorators' => array('Hidden')));
+            $this->objForm->addElement('hidden', 'languageDefinitionType', array('value' => $this->objForm->Setup()->getLanguageDefinitionType(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'publishDate', array('value' => $this->objForm->Setup()->getPublishDate('Y-m-d H:i:s'), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'showInNavigation', array('value' => $this->objForm->Setup()->getShowInNavigation(), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'languageFallback', array('value' => $this->objForm->Setup()->getLanguageFallbackId(), 'decorators' => array('Hidden')));

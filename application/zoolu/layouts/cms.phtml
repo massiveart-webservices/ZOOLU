@@ -400,7 +400,9 @@
           None: '<?php echo $this->translate->_('None'); ?>',
           Copy_folder_text: '<?php echo $this->translate->_('Copy_folder_text', false); ?>',
           Move_folder_text: '<?php echo $this->translate->_('Move_folder_text', false); ?>',
-          Move_page_text: '<?php echo $this->translate->_('Move_page_text', false); ?>'          
+          Move_page_text: '<?php echo $this->translate->_('Move_page_text', false); ?>',
+          Override_startpage: '<?php echo $this->translate->_('Override_startpage', false); ?>',
+          Copy_language_override: '<?php echo $this->translate->_('Copy_language_override'); ?>'
         };
         
         myNavigation = new Massiveart.Navigation.Cms();
@@ -418,7 +420,20 @@
         myNavigation.topNaviTitle = '<?php echo $this->translate->_('Portals'); ?>';
         myNavigation.rootLevelTypeId = <?php echo $this->rootLevelTypeId; ?>;
         myNavigation.module = <?php echo $this->module; ?>;
-        if(!Prototype.Browser.IE) myNavigation.initModuleCMS();
+
+        <?php
+        $intRootLevelId = '';
+        if ($this->rootLevelId != null) {
+            $intRootLevelId = $this->rootLevelId;
+        } else if(isset(Zend_Registry::get('Core')->objCoreSession->selectItem)) {
+            $objSelectItem = Zend_Registry::get('Core')->objCoreSession->selectItem;
+            if (isset($objSelectItem->rootLevelId) && $objSelectItem->rootLevelId != '') {
+                $intRootLevelId = $objSelectItem->rootLevelId;
+            }
+        }
+        ?>
+
+        if (!Prototype.Browser.IE) myNavigation.initModuleCMS(<?php echo $intRootLevelId; ?>);
 
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
       });

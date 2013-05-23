@@ -96,7 +96,7 @@ class GenericDataHelper_InternalLink extends GenericDataHelperAbstract
             $objLinkedPageData = $this->objModelPages->loadPageLink($intElementId);
 
             if (count($objLinkedPageData) > 0) {
-                $this->setPageLinkData($objLinkedPageData->current());
+                $this->setPageLinkData($objLinkedPageData->current(), $this->objElement->Setup()->getLanguageDefinitionType());
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -117,7 +117,7 @@ class GenericDataHelper_InternalLink extends GenericDataHelperAbstract
             $objLinkedPageData = $this->objModelPages->loadLinkPage($intElementId);
 
             if (count($objLinkedPageData) > 0) {
-                $this->setPageLinkData($objLinkedPageData->current());
+                $this->setPageLinkData($objLinkedPageData->current(), $this->objElement->Setup()->getLanguageDefinitionType());
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -130,7 +130,7 @@ class GenericDataHelper_InternalLink extends GenericDataHelperAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    private function setPageLinkData($objLinkedPage)
+    private function setPageLinkData($objLinkedPage, $languageDefinitionType)
     {
         try {
 
@@ -147,7 +147,11 @@ class GenericDataHelper_InternalLink extends GenericDataHelperAbstract
             $this->objElement->strLinkedPageId = $objLinkedPage->pageId;
             $this->objElement->intLinkedPageVersion = $objLinkedPage->version;
             $this->objElement->strLinkedPageTitle = $objLinkedPage->title;
-            $this->objElement->strLinkedPageUrl = '/' . strtolower($objLinkedPage->languageCode) . '/' . $objLinkedPage->url;
+            if ($languageDefinitionType == $this->core->config->language_definition->folder) {
+                $this->objElement->strLinkedPageUrl = '/' . strtolower($objLinkedPage->languageCode) . '/' . $objLinkedPage->url;
+            } else {
+                $this->objElement->strLinkedPageUrl = '/' . $objLinkedPage->url;                
+            }
             $this->objElement->intLinkedPageId = $objLinkedPage->id;
             $this->objElement->strLinkedPageBreadcrumb = ltrim($strBreadcrumb, ' » ') . ' » ';
         } catch (Exception $exc) {

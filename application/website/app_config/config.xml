@@ -13,7 +13,10 @@
         <!-- http://developer.yahoo.com/performance/rules.html#split -->
         <components></components>
       </static>
-    </domains>    
+    </domains> 
+    
+    <!-- url -->
+    <url_layout>short</url_layout> <!-- short|tree -->   
     
     <!-- mailer -->
     <mail>
@@ -37,12 +40,15 @@
       <transport></transport>
       <actions>
         <sendmail>
-          <client>false</client>
-          <confirmation>false</confirmation>
+          <client>true</client>
+          <confirmation>true</confirmation>
         </sendmail>
-        <database>false</database>
+        <database>true</database>
       </actions>
-      <database>pageRegistrations</database>
+      <database>
+        <default>pageRegistrations</default>
+        <dynform>pageDynForm</dynform>
+      </database>
     </mail>
     
     <rss>

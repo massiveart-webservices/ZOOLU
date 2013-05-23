@@ -154,7 +154,7 @@ class Cms_OverlayController extends AuthControllerAction
     public function sitemaplinkAction()
     {
         $this->core->logger->debug('cms->controllers->OverlayController->sitemaplinkAction()');
-        $this->loadRootNavigation($this->core->sysConfig->modules->cms, $this->core->sysConfig->root_level_types->portals, $this->getRequest()->getParam('rootLevelId'));
+        $this->loadRootNavigation($this->core->sysConfig->modules->cms, $this->core->sysConfig->root_level_types->portals, $this->getRequest()->getParam('rootLevelId'), true);
         $this->view->assign('overlaytitle', $this->core->translate->_('Assign_sitemaplink'));
     }
 
@@ -173,14 +173,20 @@ class Cms_OverlayController extends AuthControllerAction
         $this->intFolderId = $objRequest->getParam("folderId");
         $strGenFormId = $objRequest->getParam('genericFormId');
         $intGenFormVersion = $objRequest->getParam('genericFormVersion', 1);
+        $intCategoryId = $objRequest->getParam('categoryId');
+        $intLabel = $objRequest->getParam('label');
+        $strUniqid = $objRequest->getParam('uniqid');
 
         /**
          * get childfolders
          */
-        $objChildelements = $this->objModelFolders->loadChildFoldersForSitemap($this->intFolderId, $strGenFormId, $intGenFormVersion); //TODO Also load linked global folders
+        $objChildelements = $this->objModelFolders->loadChildFoldersForSitemap($this->intFolderId, $strGenFormId, $intGenFormVersion);
 
         $this->view->assign('elements', $objChildelements);
         $this->view->assign('intFolderId', $this->intFolderId);
+        $this->view->assign('intCategoryId', $intCategoryId);
+        $this->view->assign('intLabel', $intLabel);
+        $this->view->assign('uniqid', $strUniqid);
     }
 
     /**
@@ -208,10 +214,23 @@ class Cms_OverlayController extends AuthControllerAction
     {
         $this->core->logger->debug('cms->controllers->OverlayController->contactAction()');
 
-        $this->loadRootContactsAndUnits();
+        $strSearchValue = $this->getRequest()->getParam('search');
+
+        if ($this->core->sysConfig->overlays->contacts->type == 'list') {
+            $this->loadContacts($strSearchValue);
+        } else {
+            $this->loadRootContactsAndUnits();
+        }
+
+        $arrContactIds = explode('][', trim($this->getRequest()->getParam('contactIds'), '[]'));
 
         $this->view->assign('overlaytitle', $this->core->translate->_('Assign_contacts'));
         $this->view->assign('viewtype', $this->core->sysConfig->viewtypes->list);
+        $this->view->assign('type', $this->core->sysConfig->overlays->contacts->type);
+        $this->view->assign('fieldId', $this->getRequest()->getParam('fieldId'));
+        $this->view->assign('fieldname', $this->getRequest()->getParam('fieldname'));
+        $this->view->assign('contactIds', $arrContactIds);
+        $this->view->assign('search', $strSearchValue);
     }
 
     /**
@@ -357,10 +376,14 @@ class Cms_OverlayController extends AuthControllerAction
 
         $intFolderId = $this->getRequest()->getParam('folderId');
         $intLanguageId = $this->getRequest()->getParam('languageId');
+        $intCategoryId = $this->getRequest()->getParam('categoryId');
+        $strUniqid = $this->getRequest()->getParam('uniqid');
 
-        $objElements = $this->getModelFolders()->loadChildElements($intFolderId);
+        $objElements = $this->getModelFolders()->loadChildElements($intFolderId, $intCategoryId);
 
         $this->view->assign('elements', $objElements);
+        $this->view->assign('idParent', $intFolderId);
+        $this->view->assign('parentUniqid', $strUniqid);
     }
 
     /**
@@ -404,11 +427,14 @@ class Cms_OverlayController extends AuthControllerAction
         $this->intFolderId = $objRequest->getParam("folderId");
         $viewtype = $objRequest->getParam("viewtype");
         $contenttype = $objRequest->getParam('contenttype');
+        $rootLevelType = $objRequest->getParam('rootleveltype', 1);
 
-        /**
-         * get childfolders
-         */
-        $objChildelements = $this->objModelFolders->loadChildFolders($this->intFolderId);
+        // if is document or image ovleray, load media child folders
+        if ($rootLevelType == $this->core->sysConfig->root_level_types->documents || $rootLevelType == $this->core->sysConfig->root_level_types->images) {
+            $objChildelements = $this->objModelFolders->loadMediaChildFolders($this->intFolderId);
+        } else {
+            $objChildelements = $this->objModelFolders->loadChildFolders($this->intFolderId);
+        }
 
         $this->view->assign('elements', $objChildelements);
         $this->view->assign('intFolderId', $this->intFolderId);
@@ -497,7 +523,7 @@ class Cms_OverlayController extends AuthControllerAction
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    protected function loadRootNavigation($intRootLevelModule, $intRootLevelType = -1, $intRootLevel = null)
+    protected function loadRootNavigation($intRootLevelModule, $intRootLevelType = -1, $intRootLevel = null, $blnStartpage = false)
     {
         $this->core->logger->debug('cms->controllers->OverlayController->loadRootNavigation(' . $intRootLevelModule . ', ' . $intRootLevelType . ', ' . $intRootLevel . ')');
 
@@ -508,7 +534,7 @@ class Cms_OverlayController extends AuthControllerAction
         }
 
         if ($intRootLevelType == $this->core->sysConfig->root_level_types->portals) {
-            $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel);
+            $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel, $blnStartpage);
             $this->view->assign('elements', $objRootLevelElements);
         } else {
             $objMediaRootLevels = $this->objModelFolders->loadAllRootLevels($intRootLevelModule, $intRootLevelType);
@@ -516,8 +542,7 @@ class Cms_OverlayController extends AuthControllerAction
             if (count($objMediaRootLevels) > 0) {
                 $objMediaRootLevel = $objMediaRootLevels->current();
                 $this->intRootLevelId = $objMediaRootLevel->id;
-                $objRootelements = $this->objModelFolders->loadRootFolders($this->intRootLevelId);
-
+                $objRootelements = $this->objModelFolders->loadMediaRootFolders($this->intRootLevelId);
                 $this->view->assign('elements', $objRootelements);
                 $this->view->assign('rootLevelId', $this->intRootLevelId);
             }
@@ -542,6 +567,21 @@ class Cms_OverlayController extends AuthControllerAction
         $this->view->assign('navElements', $objRootUnits);
         $this->view->assign('listElements', $objRootContacts);
         $this->view->assign('rootLevelId', $this->intRootLevelId);
+    }
+
+    /**
+     * loadContacts
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function loadContacts($strSearchValue = '')
+    {
+        $this->core->logger->debug('cms->controllers->OverlayController->loadContacts()');
+
+        $this->getModelContacts();
+        $contacts = $this->objModelContacts->loadContacts($strSearchValue);
+
+        $this->view->assign('listElements', $contacts);
     }
 
     /**

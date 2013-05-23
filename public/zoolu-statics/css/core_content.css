@@ -1856,6 +1856,10 @@ Overlay Inner */
     float: left;
 }
 
+.olcontactslist .olcontacttopitemtitle {
+    width: 383px;
+}
+
 .olcontacttop, .olcontentchoosertop {
     background-color:#e4e4e4;
     border-top:1px #fff solid;
@@ -1877,6 +1881,10 @@ Overlay Inner */
     min-height: 148px;
     background-color: #fff;
     width: 413px;
+}
+
+.olcontactslist .olcontactitemcontainer {
+    min-height: 200px;
 }
 
 .olcontactitem {
@@ -2009,7 +2017,7 @@ Overlay Inner */
     min-height: 214px;
 }
 
-.olcontentwrapper .olcontactitemcontainer,
+/*.olcontentwrapper .olcontactitemcontainer,*/
 .olcontentchoosercontentwrapper .olcontentchoosercontentcontainer {
     height: 188px;
     min-height: 188px;
@@ -2575,3 +2583,27 @@ Dashboard Overlay */
 .plus, .minus{font-weight: bold}
 .plus{ color: green; }
 .minus{ color: red; }
+
+.contactSearchContainer input {
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    width: 293px;
+    font-size: 13px;
+}
+
+.contactSearchContainer input.search {
+    width: 222px;
+}
+
+.contactSearchContainer .searchbutton {
+    float:left;
+    margin-left:10px;
+    cursor: pointer;
+}
+
+.contactSearchContainer .bttnContactSearchReset {
+    float:left;
+    margin-left:10px;
+    cursor: pointer;
+}

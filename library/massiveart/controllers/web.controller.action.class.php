@@ -149,10 +149,10 @@ abstract class WebControllerAction extends Zend_Controller_Action
         $strUrl = $this->cutUrlPrefix($strUrl);
 
         // cut off language & segment prefix of url
-        if (preg_match('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', $strUrl)) {
-            $strUrl = preg_replace('/^\/[a-zA-Z]{1}\/[a-zA-Z\-]{2,5}\//', '', $strUrl);
-        } elseif (preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUrl) && $blnCutLanguage) { // cut off language prefix of url
-            $strUrl = preg_replace('/^\/[a-zA-Z\-]{2,5}\//', '', $strUrl);
+        if (preg_match('/^\/[a-zA-Z]{1}\/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUrl)) {
+            $strUrl = preg_replace('/^\/[a-zA-Z]{1}\/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', '', $strUrl);
+        } elseif (preg_match('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUrl) && $blnCutLanguage) { // cut off language prefix of url
+            $strUrl = preg_replace('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', '', $strUrl);
         } else {
             $strUrl = preg_replace('/^\//', '', $strUrl);
             $this->blnUrlWithLanguage = false;
@@ -314,46 +314,49 @@ abstract class WebControllerAction extends Zend_Controller_Action
     {
         $this->core->logger->debug('get language by: ');
         $this->intLanguageDefinitionType = $this->objTheme->languageDefinitionType;
-        
-        $this->core->logger->debug('theme');
-        $this->core->intLanguageId = $this->objTheme->idLanguages;
-        $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
-
-        if ($this->intLanguageDefinitionType != $this->core->config->language_definition->none) {
-            $strRequestString = '';
-            $strMatchCode = '';
-            $strTld = '';
-            if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
-                $this->core->logger->debug('folder');
-                $strRequestString = $_SERVER['REQUEST_URI'];
-                $strMatchCode = '/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//';
-            } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain || $this->core->config->language_definition->subandtld) {
-                $this->core->logger->debug('subdomain');
-                $strRequestString = $_SERVER['HTTP_HOST'];
-                $strMatchCode = '/^[a-zA-Z]{2}/';
-                $strTld = strrchr ( $_SERVER['SERVER_NAME'], "." );
-                $strTld = substr ( $strTld, 1 );
-            }
-            if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
-                preg_match($strMatchCode, $strRequestString, $arrMatches);
-                $strCode = trim($arrMatches[0], '/');
-                if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subandtld) {
-                    if ($strTld != '') {
-                        $strTmpCode = $strCode . '-' . $strTld;
+        if ($this->core->blnIsDefaultLanguage === true || $this->core->blnIsSessionLanguage === true) {
+            $this->core->logger->debug('theme');
+            $this->core->intLanguageId = $this->objTheme->idLanguages;
+            $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
+            if ($this->intLanguageDefinitionType != $this->core->config->language_definition->none) {
+                $strRequestString = '';
+                $strMatchCode = '';
+                $strTld = '';
+                if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                    $this->core->logger->debug('folder');
+                    $strRequestString = $_SERVER['REQUEST_URI'];
+                    if ($this->strUrlPrefix != ''){
+                        $strRequestString = $this->cutUrlPrefix($_SERVER['REQUEST_URI']);
+                    }
+                    $strMatchCode = '/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//';
+                } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain || $this->core->config->language_definition->subandtld) {
+                    $this->core->logger->debug('subdomain');
+                    $strRequestString = $_SERVER['HTTP_HOST'];
+                    $strMatchCode = '/^[a-zA-Z]{2}/';
+                    $strTld = strrchr ( $_SERVER['SERVER_NAME'], "." );
+                    $strTld = substr ( $strTld, 1 );
+                }
+                if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
+                    preg_match($strMatchCode, $strRequestString, $arrMatches);
+                    $strCode = trim($arrMatches[0], '/');
+                    if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subandtld) {
+                        if ($strTld != '') {
+                            $strTmpCode = $strCode . '-' . $strTld;
+                            foreach($this->core->config->languages->language->toArray() as $arrLanguage){
+                                if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strTmpCode)) {
+                                    $this->core->strLanguageCode = $strTmpCode;
+                                    $this->core->intLanguageId = $arrLanguage['id'];
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
                         foreach($this->core->config->languages->language->toArray() as $arrLanguage){
-                            if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strTmpCode)) {
-                                $this->core->strLanguageCode = $strTmpCode;
+                            if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strCode)) {
+                                $this->core->strLanguageCode = $strCode;
                                 $this->core->intLanguageId = $arrLanguage['id'];
                                 break;
                             }
-                        }
-                    }
-                } else {
-                    foreach($this->core->config->languages->language->toArray() as $arrLanguage){
-                        if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strCode)) {
-                            $this->core->strLanguageCode = $strCode;
-                            $this->core->intLanguageId = $arrLanguage['id'];
-                            break;
                         }
                     }
                 }
@@ -363,6 +366,8 @@ abstract class WebControllerAction extends Zend_Controller_Action
         $this->strLanguageCode = $this->core->strLanguageCode;
         $this->view->languageId = $this->intLanguageId;
         $this->view->languageCode = $this->strLanguageCode;
+        
+        $this->core->updateSessionLanguage();
     }
 
     /**

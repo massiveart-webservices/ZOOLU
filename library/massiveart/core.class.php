@@ -106,6 +106,11 @@ class Core
      * @var boolean
      */
     public $blnIsDefaultLanguage = false;
+    
+    /**
+     * @var boolean
+     */
+    public $blnIsSessionLanguage = false;
 
     /**
      * @var string
@@ -180,13 +185,19 @@ class Core
             }
 
         } else {
-            $this->logger->info('DEFAULT');
-            $this->blnIsDefaultLanguage = true;
-            $this->intLanguageId = $this->sysConfig->languages->default->id;
-            $this->strLanguageCode = $this->sysConfig->languages->default->code;
+            if(isset($this->objCoreSession->languageId)){
+                $this->logger->info('SESSION');
+                $this->intLanguageId = $this->objCoreSession->languageId;
+                $this->strLanguageCode = $this->objCoreSession->languageCode;
+                $this->blnIsSessionLanguage = true;
+            }else{
+                $this->logger->info('DEFAULT');
+                $this->blnIsDefaultLanguage = true;
+                $this->intLanguageId = $this->sysConfig->languages->default->id;
+                $this->strLanguageCode = $this->sysConfig->languages->default->code;  
+            }
         }
         
-        Zend_Session::setOptions(array('cookie_domain' => 'zoolu.area51.at'));
         // set up zoolu translate obj
         $this->intZooluLanguageId = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageId : $this->intLanguageId;
         $this->strZooluLanguageCode = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageCode : $this->strLanguageCode;

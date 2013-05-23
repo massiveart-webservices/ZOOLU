@@ -5799,18 +5799,28 @@ var Form = {
       accumulator = function(result, key, value) {
         if (key in result) {
           if (!Object.isArray(result[key])) result[key] = [result[key]];
-          result[key].push(value);
+          result[key] = result[key].concat(value); // MASSIVE ART FIX https://github.com/sstephenson/prototype/commit/d017062caa6db53d02093c1813b0ac4fd40fc084
         } else result[key] = value;
         return result;
       };
     } else {
       initial = '';
-      accumulator = function(result, key, value) {
-        value = value.gsub(/(\r)?\n/, '\r\n');
-        value = encodeURIComponent(value);
-        value = value.gsub(/%20/, '+');
-        return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
-      }
+      // MASSIVE ART FIX https://github.com/sstephenson/prototype/commit/d017062caa6db53d02093c1813b0ac4fd40fc084
+      accumulator = function(result, key, values) {
+        if (!Object.isArray(values)) {values = [values];}
+        if (!values.length) {return result;}
+        // According to the spec, spaces should be '+' rather than '%20'.
+        var encodedKey = encodeURIComponent(key).gsub(/%20/, '+');
+        return result + (result ? "&" : "") + values.map(function (value) {
+          // Normalize newlines as \r\n because the HTML spec says newlines should
+          // be encoded as CRLFs.
+          value = value.gsub(/(\r)?\n/, '\r\n');
+          value = encodeURIComponent(value);
+          // According to the spec, spaces should be '+' rather than '%20'.
+          value = value.gsub(/%20/, '+');
+          return encodedKey + "=" + value;
+        }).join("&");
+      };
     }
 
     return elements.inject(initial, function(result, element) {
@@ -6784,7 +6794,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     try {
       document.documentElement.doScroll('left');
     } catch (e) {
-      TIMER = pollDoScroll.defer();
+      TIMER = pollDoScroll.delay(0.01); // MASSIVE ART FIX FOR USING WITH EXT JS
       return;
     }
 
@@ -6795,7 +6805,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
   } else {
     document.attachEvent('onreadystatechange', checkReadyState);
-    if (window == top) TIMER = pollDoScroll.defer();
+    if (window == top) TIMER = pollDoScroll.delay(0.01); // MASSIVE ART FIX FOR USING WITH EXT JS
   }
 
   Event.observe(window, 'load', fireContentLoadedEvent);

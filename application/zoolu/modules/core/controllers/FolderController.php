@@ -105,7 +105,7 @@ class Core_FolderController extends AuthControllerAction
 
         if ($this->objRequest->getParam('rootLevelTypeId') == $this->core->sysConfig->root_level_types->global) {
             $this->core->logger->debug('add global command!');
-            $this->objCommandChain->addCommand(new GlobalCommand((int) $this->objRequest->getParam('rootLevelGroupId'), $this->objRequest->getParam('rootLevelGroupKey')));
+            $this->objCommandChain->addCommand(new GlobalCommand((int)$this->objRequest->getParam('rootLevelGroupId'), $this->objRequest->getParam('rootLevelGroupKey')));
         }
     }
 
@@ -207,10 +207,10 @@ class Core_FolderController extends AuthControllerAction
                 $this->view->assign('blnShowFormAlert', true);
 
                 $arrArgs = array(
-                    'ParentId'         => $intFolderId,
-                    'LanguageId'       => $this->objRequest->getParam('languageId', $this->core->intZooluLanguageId),
-                    'LanguageCode'     => $this->objRequest->getParam('languageCode', $this->core->strZooluLanguageCode),
-                    'GenericSetup'     => $this->objForm->Setup()
+                    'ParentId' => $intFolderId,
+                    'LanguageId' => $this->objRequest->getParam('languageId', $this->core->intZooluLanguageId),
+                    'LanguageCode' => $this->objRequest->getParam('languageCode', $this->core->strZooluLanguageCode),
+                    'GenericSetup' => $this->objForm->Setup()
                 );
                 if ($this->objCommandChain->runCommand('addFolderStartElement', $arrArgs)) {
                     $this->view->assign('selectNavigationItemNow', true);
@@ -343,9 +343,9 @@ class Core_FolderController extends AuthControllerAction
                  * update the folder start element
                  */
                 $arrArgs = array(
-                    'LanguageId'       => $this->objRequest->getParam("languageId", $this->core->intZooluLanguageId),
-                    'LanguageCode'     => $this->objRequest->getParam("languageCode", $this->core->strZooluLanguageCode),
-                    'GenericSetup'     => $this->objForm->Setup()
+                    'LanguageId' => $this->objRequest->getParam("languageId", $this->core->intZooluLanguageId),
+                    'LanguageCode' => $this->objRequest->getParam("languageCode", $this->core->strZooluLanguageCode),
+                    'GenericSetup' => $this->objForm->Setup()
                 );
                 $this->objCommandChain->runCommand('editFolderStartElement', $arrArgs);
 
@@ -431,10 +431,10 @@ class Core_FolderController extends AuthControllerAction
             $arrSecurityCheck = array();
             if (!Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId(), Security::PRIVILEGE_VIEW, false, false)) {
                 $arrSecurityCheck = array(
-                    'ResourceKey'           => Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId() . '_%d',
-                    'Privilege'             => Security::PRIVILEGE_VIEW,
-                    'CheckForAllLanguages'  => false,
-                    'IfResourceNotExists'   => false
+                    'ResourceKey' => Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId() . '_%d',
+                    'Privilege' => Security::PRIVILEGE_VIEW,
+                    'CheckForAllLanguages' => false,
+                    'IfResourceNotExists' => false
                 );
             }
 
@@ -571,7 +571,7 @@ class Core_FolderController extends AuthControllerAction
 
         $objAdapter = new Zend_Paginator_Adapter_DbTableSelect($objFolderSelect);
         $objFolderPaginator = new Zend_Paginator($objAdapter);
-        $objFolderPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
+        $objFolderPaginator->setItemCountPerPage((int)$this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
         $objFolderPaginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
         $objFolderPaginator->setView($this->view);
 
@@ -647,6 +647,28 @@ class Core_FolderController extends AuthControllerAction
             $this->objModelFolders->moveFolderToLastChildOfRootFolder($intFolderId, $intRootFolderId);
         }
 
+        $this->_helper->viewRenderer->setNoRender();
+    }
+
+    /**
+     * copylanguageversionAction
+     */
+    public function copylanguageversionAction()
+    {
+        $this->core->logger->debug('core->controllers->FolderController->copylanguageversionAction()');
+        $id = $this->objRequest->getParam('id');
+        $intSrcLanguage = $this->objRequest->getParam('srcLanguage');
+        $intDstLanguage = $this->objRequest->getParam('dstLanguage');
+        if ($id > 0 && $intSrcLanguage > 0 && $intDstLanguage > 0) {
+            $this->intItemLanguageId = $intSrcLanguage;
+            $this->getForm($this->core->sysConfig->generic->actions->edit);
+            $this->objForm->loadFormData();
+            $this->addFolderSpecificFormElements();
+            $this->objForm->Setup()->setLanguageId($intDstLanguage);
+            $this->objForm->prepareForm();
+            $this->objForm->setAction('/zoolu/core/folder/edit');
+            $this->objForm->saveFormData();
+        }
         $this->_helper->viewRenderer->setNoRender();
     }
 

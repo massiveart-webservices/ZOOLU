@@ -327,7 +327,7 @@
     <?php echo $this->jsPlugins; ?>
 
     <script type="text/javascript">//<![CDATA[
-    var myCore, myNavigation, myForm, myGlobal, myFolder, myOverlay, myList, myDashboard;
+    var myCore, myNavigation, myForm, myGlobal, myFolder, myOverlay, myList, myDashboard, myContentchooser;
 
     //document.observe('dom:loaded', function() {
     Event.observe(window, 'load', function() {
@@ -346,7 +346,8 @@
             Delete_press: '<?php echo $this->translate->_('Delete_press'); ?>',
             Delete_course: '<?php echo $this->translate->_('Delete_course'); ?>',
             Delete_event: '<?php echo $this->translate->_('Delete_event'); ?>',
-            Copy_language_override: '<?php echo $this->translate->_('Copy_language_override'); ?>'
+            Copy_language_override: '<?php echo $this->translate->_('Copy_language_override'); ?>',
+            Override_startpage: '<?php echo $this->translate->_('Override_startpage', false); ?>'
         };
 
         myNavigation = new Massiveart.Navigation.Global();
@@ -357,6 +358,7 @@
         myList = new Massiveart.List();
         myList.ItemsPerPage = <?php echo Zend_Registry::get('Core')->sysConfig->list->default->itemsPerPage; ?>;
         myDashboard = new Massiveart.Dashboard();
+        myContentchooser = new Massiveart.Contentchooser();
 
         myNavigation.constRequestRootNav = '/zoolu/global/navigation/rootnavigation';
         myNavigation.constRequestChildNav = '/zoolu/global/navigation/childnavigation';

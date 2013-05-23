@@ -10,7 +10,36 @@
   <script src="incl/js/jquery.tablesorter.js" type="text/javascript" charset="utf-8"></script>
   <script src="incl/js/json2.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-
+  
+  
+    /* MASSIVEART Enhancements */
+    
+    //Copy
+    function copyTranslation(e) {
+        if($('#msgstrref').text() != '') {
+            $('#msgstr').val($('#msgstrref').text());
+        }
+    }
+    
+    // set the Suggestion Title
+    function setSuggestionLanguage() {
+        $.messageService('getSuggestionLanguage',[],function(e) {
+            $('.suggestion-language').text(e);
+        });
+    }
+    
+    var msgsRef = [];
+    function addRefTranslation() {
+        $.messageService('getMessages',[null],function(msgs) { 
+            $.each(msgs,function(i,e){
+                $('tr.' + e.msgid + ' td.ref').html('<div>' + $.escape(e.msgstr) + '</div>'); 
+                msgsRef[e.msgid] = e.msgstr;
+            }) 
+        });
+    }
+    
+    /* MASSIVEART Enhancements end*/
+  
     $.escape = function(str) {
       return str.replace(/&/g,'&amp;').replace(/>/g,'&gt;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
     }
@@ -199,6 +228,7 @@
       var fillMsgTable = function(catalogue_id) {
         $('#loading_indicator').show();
         if ($('#errors span').text() != "") return;
+        setSuggestionLanguage();
         $.messageService('getMessages',[catalogue_id],function(d){
           msgs = d; // save data to global messages
           if (!(msgs && msgs.length) ) {
@@ -209,6 +239,7 @@
             $.each(msgs,function(i,e){
               html += renderRowAsString(e);
             })
+            addRefTranslation();
             $tbody.append(html)
               .find('tr')
               .each(function(i,e){
@@ -226,10 +257,11 @@
                       + (obj.fuzzy == 1 ? 'f ' : '')
                       + (obj.is_obsolete ? 'd ' : ''); 
         return  ''
-                +  '<tr class="' + tr_class + '"><td class="msgid"><div><span>'
+                +  '<tr class="' + tr_class + obj.msgid + '"><td class="msgid"><div><span>'
                 + $.escape(obj.msgid) + '</span></div></td>'
                 + '<td class="msgstr"><div>'
                 + $.escape(obj.msgstr) + '</div></td>'
+                + '<td class="msgstr ref"><div></div></td>'
                 + '<td class="fuzzy">'
                 + (obj.fuzzy == 1 ? 'F' : '')
                 + '</td>'
@@ -241,12 +273,18 @@
       // Fill the Edit Bar with the selected message
       var fillEditBar = function(index){
         var msg = msgs[index];
+        var msgRef = msgsRef[msg.msgid];
         $('#ref_data').html( $.nl2br($.escape(msg.reference)) || '-' );
         $('#com_data').html( $.nl2br($.escape(msg.extracted_comments)) || '-' );
         $('#update_data').html( msg.updated_at || '-' );
         $('#comments').val(msg.comments);
         $('#msgid').html( $.nl2br($.escape(msg.msgid)) || "-" );
         $('#msgstr').val(msg.msgstr);
+        if(msgRef != undefined) {
+            $('#msgstrref').text(msgRef);
+        } else {
+            $('#msgstrref').text('');
+        }
         ( msg.fuzzy == 1 ) ? $('#fuzz').attr('checked',true) : $('#fuzz').attr('checked',false);
         $('#edit_id').attr( 'value', msg.id );
       };
@@ -386,10 +424,14 @@
       <h3><a href="#" id="orig_str_head">Translation (msgstr)</a></h3>
       <textarea id="msgstr" class="data" spellcheck="false"></textarea>
     </div>
+    <div class="block">
+      <h3><a href="#" id="orig_str_head">Suggestion (msgstr / <span class="suggestion-language"></span>)</a> <span >Copy</span></h3>
+      <div id="msgstrref" class="data">-</div>
+    </div>
     <div class="block" id="cntrl_blk">
-      
+      <input type="submit" id="copy" name="copy" onCLick="copyTranslation(this)" value="Copy Translation" />
       <input type="submit" id="next" name="next" value="Next Message &raquo;" />
-      <label for="fuzz">Mark as Fuzzy</label> <input type="checkbox" id="fuzz" name="fuzz" /> 
+      <label for="fuzz">Fuzzy</label> <input type="checkbox" id="fuzz" name="fuzz" /> 
     </div>
   </div>
 
@@ -403,6 +445,7 @@
                   </div>
                 </th>
                 <th class="msgstr"><img src="incl/img/blank.gif"/>Translation</th>
+                <th class="msgstr"><img src="incl/img/blank.gif"/>Suggestion (<span class="suggestion-language"></span>)</th>
                 <th class="fuzzy"><img src="incl/img/blank.gif"/>F</th>
                 <th class="depr"><img src="incl/img/blank.gif"/>D</th>
             </tr>

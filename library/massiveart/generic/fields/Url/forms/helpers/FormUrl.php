@@ -42,7 +42,6 @@
  * @package massiveart.forms.helpers
  * @subpackage Form_Helper_FormUrl
  */
-
 class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
 {
 
@@ -74,7 +73,7 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
         if ($intLanguageDefinitionType == $core->config->language_definition->folder) {
             $strLanguage = array_shift($arrUrl) . '/';
         }
-        
+
         if (is_null($intParentId) && $blnIsStartElement == true) {
             $strOutput = '<div class="urlwrapper">
                       <span class="gray666 bold">Adresse: /' . $strLanguage . '</span>
@@ -85,18 +84,33 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
 
                 if (count($arrUrl) >= 1) {
 
-                    /**
-                     * if is start page, delete last empty array element
-                     */
+                    $blnSuggestion = isset($arrMessages['suggestion']);
+                    if ($blnSuggestion) {
+                        $arrUrl = explode('/', $arrMessages['suggestion']);
+                    }
+
+                    // if is start page, delete last empty array element
                     if ($blnIsStartElement == true) {
                         array_pop($arrUrl);
                     }
 
-                    $strUrlShown = '/' . $strLanguage;
+                    $strUrlShown = '/';
+                    if (!empty($strLanguage)) {
+                        $strUrlShown .= $strLanguage;
+                    }
 
-                    $blnSuggestion = isset($arrMessages['suggestion']);
-
-                    $strUrlEditable = ($blnSuggestion) ? $arrMessages['suggestion'] : implode('/', $arrUrl);
+                    switch ($core->config->url_layout) {
+                        case UniformResourceLocator::LAYOUT_SHORT:
+                            $strUrlEditable = implode('/', $arrUrl);
+                            break;
+                        case UniformResourceLocator::LAYOUT_TREE:
+                        default:
+                            $strUrlEditable = array_pop($arrUrl);
+                            if (count($arrUrl) > 0) {
+                                $strUrlShown .= implode('/', $arrUrl) . '/';
+                            }
+                            break;
+                    }
 
                     $strOutput = '
                   <div class="urlwrapper">
@@ -128,14 +142,12 @@ class Form_Helper_FormUrl extends Zend_View_Helper_FormElement
                   </div>';
             }
         }
-        
-        $strOutput .='
-        		  <script type="text/javascript">
+
+        $strOutput .= '
+                  <script type="text/javascript">
                       myForm.preventSavingFields.push(\'' . $this->view->escape($id) . '\');
                   </script>';
-        
+
         return $strOutput;
     }
 }
-
-?>

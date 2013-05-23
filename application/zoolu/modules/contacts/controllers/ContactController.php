@@ -92,6 +92,31 @@ class Contacts_ContactController extends AuthControllerAction
         $this->_helper->viewRenderer->setNoRender();
     }
 
+    public function listAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->listAction()');
+
+        $strOrderColumn = (($this->getRequest()->getParam('order') != '') ? $this->getRequest()->getParam('order') : 'sname');
+        $strSortOrder = (($this->getRequest()->getParam('sort') != '') ? $this->getRequest()->getParam('sort') : 'asc');
+        $strSearchValue = (($this->getRequest()->getParam('search') != '') ? $this->getRequest()->getParam('search') : '');
+
+        $objSelect = $this->getModelContacts()->loadContacts($strSearchValue, $strSortOrder, $strOrderColumn, true, $this->core->sysConfig->contact_types->contact);
+
+        $objPaginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbTableSelect($objSelect));
+        $objPaginator->setItemCountPerPage((int)$this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
+        $objPaginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
+        $objPaginator->setView($this->view);
+
+        $this->view->assign('contactFormDefaultId', $this->core->sysConfig->form->ids->contacts->default);
+        $this->view->assign('contactTypeId', $this->core->sysConfig->contact_types->contact);
+        $this->view->assign('contactType', 'contact');
+
+        $this->view->assign('paginator', $objPaginator);
+        $this->view->assign('orderColumn', $strOrderColumn);
+        $this->view->assign('sortOrder', $strSortOrder);
+        $this->view->assign('searchValue', $strSearchValue);
+    }
+
     /**
      * addformAction
      * @author Cornelius Hansjakob <cha@massiveart.com>
@@ -123,7 +148,7 @@ class Contacts_ContactController extends AuthControllerAction
     }
 
     /**
-     * contactAddAction
+     * addAction
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -266,17 +291,51 @@ class Contacts_ContactController extends AuthControllerAction
      */
     public function deleteAction()
     {
-        $this->core->logger->debug('contacts->controllers->ContactController->deleteAction()');
+        $this->core->logger->debug('contacts->controllers->ContactCompanyController->deleteAction()');
 
-        $this->getModelContacts();
+        try {
 
-        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-            $objRequest = $this->getRequest();
-            $this->objModelContacts->deleteContact($objRequest->getParam("id"));
-            $this->view->blnShowFormAlert = true;
+            if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+                $this->getModelContacts()->deleteContact($this->getRequest()->getParam('id'));
+
+                $this->view->assign('blnShowFormAlert', true);
+                if ((bool) $this->getRequest()->getParam('isList') === true) {
+                    $this->_forward('list', 'contact', 'contacts');
+                } else {
+                    $this->renderScript('form.phtml');
+                }
+            }
+
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
         }
+    }
 
-        $this->renderScript('form.phtml');
+    /**
+     * listdeleteAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function listdeleteAction()
+    {
+        $this->core->logger->debug('contacts->controllers->ContactController->listdeleteAction()');
+
+        try {
+            if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+
+                $strTmpIds = trim($this->getRequest()->getParam('values'), '[]');
+                $arrIds = explode('][', $strTmpIds);
+                foreach ($arrIds as $intContactId) {
+                    $this->getModelContacts()->deleteContact($intContactId);
+                }
+
+                $this->_forward('list', 'contact', 'contacts');
+                $this->view->assign('blnShowFormAlert', true);
+
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
     }
 
     /**
@@ -416,9 +475,7 @@ class Contacts_ContactController extends AuthControllerAction
 
         $this->getForm($this->core->sysConfig->generic->actions->edit);
 
-        /**
-         * get form title
-         */
+        // get form title
         $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
         if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
@@ -426,14 +483,10 @@ class Contacts_ContactController extends AuthControllerAction
             $arrFormData = $this->getRequest()->getPost();
             $this->objForm->Setup()->setFieldValues($arrFormData);
 
-            /**
-             * set action
-             */
+            // set action
             $this->objForm->setAction('/zoolu/contacts/contact/edit-unit');
 
-            /**
-             * prepare form (add fields and region to the Zend_Form)
-             */
+            // prepare form (add fields and region to the Zend_Form)
             $this->objForm->prepareForm();
 
             if ($this->objForm->isValid($arrFormData)) {
@@ -479,12 +532,11 @@ class Contacts_ContactController extends AuthControllerAction
 
             $strFormId = $objRequest->getParam("formId");
             $intElementId = ($objRequest->getParam("id") != '') ? $objRequest->getParam("id") : null;
+            $elementTypeId = ($objRequest->getParam("elementTypeId") != '') ? $objRequest->getParam("elementTypeId") : $this->core->sysConfig->contact_types->contact;
 
-            /**
-             * if there is no formId
-             */
+            // if there is no formId use default contact form id
             if ($strFormId == '') {
-                throw new Exception('Not able to create a form, because there is no form id!');
+                $strFormId = $this->core->sysConfig->form->ids->contacts->default;
             }
 
             $objFormHandler = FormHandler::getInstance();
@@ -496,20 +548,19 @@ class Contacts_ContactController extends AuthControllerAction
 
             $this->objForm = $objFormHandler->getGenericForm();
 
-            /**
-             * add contact & unit specific hidden fields
-             */
+            // set elementTypeId
+            if (!empty($elementTypeId)) {
+                $this->objForm->Setup()->setElementTypeId($elementTypeId);
+            }
+
+            // add contact & unit specific hidden fields
             $this->objForm->addElement('hidden', 'rootLevelId', array('value' => $objRequest->getParam("rootLevelId"), 'decorators' => array('Hidden')));
             $this->objForm->addElement('hidden', 'parentId', array('value' => $objRequest->getParam("parentId"), 'decorators' => array('Hidden')));
 
-            /**
-             * add currlevel hidden field
-             */
+            // add currlevel hidden field
             $this->objForm->addElement('hidden', 'currLevel', array('value' => $objRequest->getParam("currLevel"), 'decorators' => array('Hidden'), 'ignore' => true));
 
-            /**
-             * add elementTye hidden field (folder, element, ...)
-             */
+            // add elementTye hidden field (folder, element, ...)
             $this->objForm->addElement('hidden', 'elementType', array('value' => $this->objRequest->getParam("elementType"), 'decorators' => array('Hidden'), 'ignore' => true));
 
         } catch (Exception $exc) {

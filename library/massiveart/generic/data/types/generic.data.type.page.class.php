@@ -241,7 +241,7 @@ class GenericDataTypePage extends GenericDataTypeAbstract
                 } elseif ($objPage->altLanguageDefinitionType != '') {
                     $this->setup->setLanguageDefinitionType($objPage->altLanguageDefinitionType);
                 } else {
-                    $this->setup->setLanguageDefinitionType(1);
+                    $this->setup->setLanguageDefinitionType($this->core->config->language_definition->folder);
                 }
 
                 parent::loadGenericData('page', array('Id' => $objPage->pageId, 'Version' => $objPage->version));

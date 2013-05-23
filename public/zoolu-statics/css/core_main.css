@@ -180,6 +180,11 @@ Content List View */
 .topcountry,
 .topsubscribed,
 .topdirty,
+.topgroup,
+.topdepartment,
+.toporganisation,
+.topbuilding,
+.topbranch,
 .tophardbounce {
     background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
     height: 26px;
@@ -189,7 +194,8 @@ Content List View */
 
 .topauthor,
 .topeditor,
-.topcreator {
+.topcreator,
+.topdownloadcounter {
     width: 160px;
     background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
     height: 26px;
@@ -287,6 +293,7 @@ Content List View */
 .rowsname,
 .rowfname,
 .rowname,
+.rowemail,
 .rowtargetpage,
 .rowurl,
 .rowtargetlanguage,
@@ -296,7 +303,13 @@ Content List View */
 .rowusername,
 .rowcompany,
 .rowcountry,
-.rowtags {
+.rowtags,
+.rowgroup,
+.rowdepartment,
+.roworganisation,
+.rowbuilding,
+.rowbranch,
+.rowdownloadcounter {
     height: 30px;
     padding: 0 11px 0 11px;
 }
@@ -471,7 +484,7 @@ Screen Overlay */
     z-index: 820;
 }
 
-#overlaySingleEdit {
+#overlayMediaEdit {
     width: 560px;
 }
 
@@ -692,7 +705,8 @@ td.contentright {
 
 .busy.propertywrapper div,
 .busy.propertywrapper span,
-#buttonOk.busy div {
+#buttonOk.busy div,
+#buttonsave.busy div {
     visibility: hidden;
 }
 

@@ -117,7 +117,7 @@ class Model_Files extends ModelAbstract
              * INNER JOIN users ON users.id = files.creator
              * WHERE files.idParent = ?
              */
-            $objSelect->from('files', array('id', 'fileId', 'version', 'idParent', 'idParentTypes', 'filename', 'isImage', 'created', 'changed', 'path', 'extension', 'mimeType', 'isLanguageSpecific'));
+            $objSelect->from('files', array('id', 'fileId', 'version', 'idParent', 'idParentTypes', 'filename', 'isImage', 'created', 'changed', 'path', 'extension', 'mimeType', 'isLanguageSpecific', 'downloadCounter'));
             $objSelect->joinLeft('fileAttributes', 'fileAttributes.idFiles = files.id', array('xDim', 'yDim'));
             $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = ' . $this->intLanguageId, array('title', 'description', 'idLanguages'));
             $objSelect->joinLeft(array('fileTitleLanguages' => 'fileTitles'), 'fileTitleLanguages.idFiles = files.id', array());
@@ -201,7 +201,7 @@ class Model_Files extends ModelAbstract
                     $strIds .= $intFileId . ',';
                 }
 
-                $objSelect->from('files', array('id', 'fileId', 'version', 'filename', 'isLanguageSpecific', 'idDestination', 'idGroup', 'isImage', 'created', 'changed', 'path', 'extension', 'mimeType', 'size', 'stream', 'idFiles'));
+                $objSelect->from('files', array('id', 'fileId', 'version', 'filename', 'isLanguageSpecific', 'idDestination', 'idGroup', 'isImage', 'created', 'changed', 'path', 'extension', 'mimeType', 'size', 'stream', 'idFiles', 'downloadCounter'));
                 $objSelect->joinLeft('fileAttributes', 'fileAttributes.idFiles = files.id', array('xDim', 'yDim'));
                 $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = ' . $this->intLanguageId, array('title', 'description', 'idLanguages'));
 

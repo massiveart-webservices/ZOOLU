@@ -197,6 +197,7 @@ class IndexController extends WebControllerAction
         // validate language
         $this->validateLanguage();
 
+        
         // validate root level segment
         $this->validateSegment();        
         
@@ -205,6 +206,7 @@ class IndexController extends WebControllerAction
             $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/' . $this->objTheme->path.'/');
             $this->renderScript('portalgate.php');
         } else {        
+
             //validate the url check if landingpage     
             $objUrl = $this->getValidatedUrlObject($strUrl);
             
@@ -239,10 +241,14 @@ class IndexController extends WebControllerAction
     
                 if (isset($objUrl->url) && count($objUrl->url) > 0) {
                     $objUrlData = $objUrl->url->current();
-    
+        
+                    $strRelationId = $objUrlData->relationId;
+                    if ($objUrlData->linkId != NULL) {
+                        $strRelationId = $objUrlData->linkId; 
+                    }            
                     // check if url is main
                     if (!$objUrlData->isMain) {
-                        $objMainUrl = $this->objModelUrls->loadUrl($objUrlData->relationId, $objUrlData->version, $objUrlData->idUrlTypes);
+                        $objMainUrl = $this->objModelUrls->loadUrl($strRelationId, $objUrlData->version, $objUrlData->idUrlTypes);
                         if (count($objMainUrl) > 0) {
                             $objMainUrl = $objMainUrl->current();
                             $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
@@ -252,7 +258,15 @@ class IndexController extends WebControllerAction
                             if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
                                  $uriLanguageFolder = '/' . strtolower($objMainUrl->languageCode) . '/';
                             }
-                            $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                            if (!$objUrlData->isLandingPage) {
+                                $baseUrl = '';
+                                if (isset($objUrl->baseUrl)) {
+                                    $baseUrl = $objUrl->baseUrl->url;   
+                                }
+                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
+                            } else {
+                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                            }
                         }
                     }
     
@@ -317,7 +331,7 @@ class IndexController extends WebControllerAction
                         $this->objPage->setBaseUrl($objUrl->baseUrl);
                         $this->objPage->setNavParentId($objUrlData->idLinkParent);
                     }
-    
+                    
                     $this->objPage->loadPage();
     
                     /*
@@ -335,7 +349,7 @@ class IndexController extends WebControllerAction
     
                     // update default cache lifetime
                     if ($this->objPage->getTemplateCacheLifetime() > 0) {
-                        $this->objCache->setOption('lifetime', $this->objPage->getTemplateCacheLifetime());
+                        $this->objCache->setLifetime($this->objPage->getTemplateCacheLifetime());
                     } else {
                         // deactivate caching
                         $this->blnCachingStart = false;
@@ -648,7 +662,7 @@ class IndexController extends WebControllerAction
     * getValidatedUrlObject
     * @param string $strUrl
     */
-    private function getValidatedUrlObject($strUrl) {
+private function getValidatedUrlObject($strUrl) {
         $objUrl = null;
         
         //Load URL now, because language is alredy needed if more then one language is defined
@@ -663,6 +677,22 @@ class IndexController extends WebControllerAction
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
             } else {
                 $this->blnIsLandingPage = true;
+                if(isset($objUrl->url->current()->external) && $objUrl->url->current()->external != ''){                     
+                    if((bool) $objUrl->url->current()->isMain === true){
+                        $ch = curl_init();
+                        $timeout = 5;
+                        curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                        $data = curl_exec($ch);
+                        curl_close($ch);
+                        // displa content of linked landingpage but do not redirect
+                        echo $data;
+                        exit();
+                    }else{
+                        $this->_redirect($objUrl->url->current()->external);  
+                    }        
+                }
             }
             if (isset($objUrl->url) && count($objUrl->url) > 0) {
                 //Needed for landingpage: change language for redirect
@@ -683,7 +713,7 @@ class IndexController extends WebControllerAction
         // Case: language should be defined in subdomain, but is defined in subfolder
         if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain) {
             //check if uri contains language code
-            if(preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)){
+            if(preg_match('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUri, $arrMatches)){
                 $strMatch = trim($arrMatches[0], '/');
                 foreach($this->core->config->languages->language->toArray() as $arrLanguage){
                     //check if language exists in config 
@@ -725,7 +755,7 @@ class IndexController extends WebControllerAction
             //check if language not contained in uri
             if (!preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)) {
                 //add langauge if not in uri
-                $strRedirectUri = '/' . $strRedirectLanguage . '/' . $strUrl;         
+                $strRedirectUri = $this->getPrefix() . '/' . $strRedirectLanguage . '/' . $strUrl;         
             }
             if ($strRedirectUri != $strUri || $strRedirectDomain != $strDomain || $strRedirectLanguage != $this->strLanguageCode) {
                 $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $this->core->getMainDomain($strDomain) . $strRedirectUri;
@@ -734,7 +764,7 @@ class IndexController extends WebControllerAction
         
         if ($this->intLanguageDefinitionType == $this->core->config->language_definition->none) {
             //check if language contained in uri, then remove it
-            if (preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)) {
+            if (preg_match('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUri, $arrMatches)) {
                  $strMatch = $arrMatches[0];
                  $strRedirectUri = str_replace($strMatch, '', $strUri);
                  $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $strDomain . '/' . $strRedirectUri;         

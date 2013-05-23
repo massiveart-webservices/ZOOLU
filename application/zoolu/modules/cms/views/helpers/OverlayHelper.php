@@ -40,7 +40,7 @@
  * @version 1.0
  */
 
-require_once (dirname(__FILE__) . '/../../../media/views/helpers/ViewHelper.php');
+require_once(dirname(__FILE__) . '/../../../media/views/helpers/ViewHelper.php');
 
 class OverlayHelper
 {
@@ -56,7 +56,13 @@ class OverlayHelper
     private $objViewHelper;
 
     /**
+     * @var string
+     */
+    protected $type;
+
+    /**
      * Constructor
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -67,6 +73,7 @@ class OverlayHelper
 
     /**
      * getNavigationElements
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -75,9 +82,9 @@ class OverlayHelper
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getNavigationElements()');
 
         if ($replace == '') {
-            $replace = 'false';    
+            $replace = 'false';
         }
-        
+
         $strOutput = '';
 
 //        $strType = '';
@@ -112,40 +119,46 @@ class OverlayHelper
 
         if (count($rowset) > 0) {
             foreach ($rowset as $row) {
+                $title = $row->title;
+                if ($title == '' && isset($row->fallbackTitle)) {
+                    $title = $row->fallbackTitle;
+                }
                 if ($intFolderId == 0) {
-                    $strOutput .= '
-                        <div id="olnavitem' . $row->id . '" class="olnavrootitem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . ', '. $replace .'); return false;" style="position:relative;">
-                                <div class="icon img_folder_on"></div>
-                                <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
-                            </div>
-                        </div>';
+                    $strOutput .= '<div id="olnavitem' . $row->id . '" class="olnavrootitem">
+                           <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . ', ' . $replace . '); return false;" style="position:relative;">
+                             <div class="icon img_folder_on"></div>
+                             <span id="olnavitemtitle' . $row->id . '">' . htmlentities($title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
+                           </div>
+                         </div>';
                 } else {
-                    $strOutput .= '
-                        <div id="olnavitem' . $row->id . '" class="olnavchilditem">
-                            <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . ', '. $replace .'); return false;" style="position:relative;">
-                                <div class="icon img_folder_on"></div>
-                                <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
-                            </div>
+                    $strOutput .= '<div id="olnavitem' . $row->id . '" class="olnavchilditem">
+                           <div onclick="myOverlay.getNavItem(' . $row->id . ',' . $viewtype . $strType . ', ' . $blnSelectOne . ', ' . $replace . '); return false;" style="position:relative;">
+                             <div class="icon img_folder_on"></div>
+                             <span id="olnavitemtitle' . $row->id . '">' . htmlentities($title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
+                           </div>
                          </div>';
                 }
             }
         }
 
-        /**
-         * return html output
-         */
+        if ($intRootLevelTypeId != '') {
+            $strOutput .= '<script>
+            	            myOverlay.rootLevelType = ' . $intRootLevelTypeId . ';
+                	       </script>';
+        }
+
+        // return html output
         return $strOutput;
     }
 
     /**
      * Lists the given folders on the first level
+     *
      * @param Zend_Db_Table_Rowset $rowset
      */
-    public function getSitemapNavigationElements($rowset)
+    public function getSitemapNavigationElements($rowset, $strParentUniqid = null, $intCategoryId = null, $intLabel = null)
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getSitemapNavigationElements()');
-
 
         $strOutput = '';
 
@@ -158,11 +171,34 @@ class OverlayHelper
                     $strType = 'type_' . $row->type;
                 }
 
+                $intVersion = 1;
+                if (isset($row->version) && $row->version != '') {
+                    $intVersion = $row->version;
+                }
+
+                $strUniqid = uniqid();
+
+                $strAction = 'myOverlay.getSiteMapNavItem(' . $row->id . ', \'' . $strUniqid . '\', \'' . $row->startpageGenericFormId . '\', ' . $intVersion;
+                if ($strParentUniqid != null && $strParentUniqid != '' && $strParentUniqid != 0) {
+                    $strAction .= ', ' . $strParentUniqid;
+                }
+                if ($intCategoryId != null && $intCategoryId != '' && $intCategoryId != 0) {
+                    $strAction .= ', ' . $intCategoryId;
+                } elseif (isset($row->categoryId) && $row->categoryId != null && $row->categoryId != '' && $row->categoryId != 0) {
+                    $strAction .= ', ' . $row->categoryId;
+                }
+                if ($intLabel != null && $intLabel != '' && $intLabel != 0) {
+                    $strAction .= ', ' . $intLabel;
+                } elseif (isset($row->label) && $row->label != null && $row->label != '' && $row->label != 0) {
+                    $strAction .= ', ' . $row->label;
+                }
+                $strAction .= ')';
+
                 $strOutput .= '
-                    <div id="olnavitem' . $row->id . '" class="olnavchilditem ' . $strType . '">
-                        <div style="position:relative;" onclick="myOverlay.getSiteMapNavItem(' . $row->id . ', \'' . $row->genericFormId . '\', ' . $row->version . ')">
+                    <div id="olnavitem' . $row->id . '_' . $strUniqid . '" class="olnavchilditem ' . $strType . '">
+                        <div style="position:relative;" onclick="' . $strAction . '">
                             <div class="icon img_folder_on"></div>
-                            <span id="olnavitemtitle' . $row->id . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
+                            <span id="olnavitemtitle' . $row->id . '_' . $strUniqid . '">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
                         </div>
                      </div>';
             }
@@ -176,6 +212,7 @@ class OverlayHelper
 
     /**
      * getContactNavigationElements
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -219,6 +256,7 @@ class OverlayHelper
 
     /**
      * getPageTree
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -277,6 +315,7 @@ class OverlayHelper
 
     /**
      * getThumbView
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -333,6 +372,7 @@ class OverlayHelper
 
     /**
      * getListView
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -425,6 +465,7 @@ class OverlayHelper
 
     /**
      * getListView
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -498,10 +539,11 @@ class OverlayHelper
 
     /**
      * getListView
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getListSitemap($rowset)
+    public function getListSitemap($rowset, $intParentId, $strParentUniqid)
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getListSitemap()');
 
@@ -527,7 +569,7 @@ class OverlayHelper
             <div class="olpageitemcontainer">';
             foreach ($rowset as $row) {
 
-                $strAction = 'myOverlay.selectSitemapPage(\'' . $row->type . '\', \'' . $row->relationId . '\', ' . $row->id . '); return false;';
+                $strAction = 'myOverlay.selectSitemapPage(\'' . $row->type . '\', \'' . $row->relationId . '\', ' . $row->id . ', ' . $intParentId . ', \'' . $strParentUniqid . '\'); return false;';
 
                 $strOutput .= '
                     <div class="olpageitem" id="olItem' . $row->relationId . '" onclick="' . $strAction . '">
@@ -564,6 +606,7 @@ class OverlayHelper
 
     /**
      * getGroupListView
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -629,10 +672,11 @@ class OverlayHelper
 
     /**
      * getContactListView
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function getContactListView($rowset, $arrFileIds)
+    public function getContactListView($rowset, $arrContactIds)
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getContactListView()');
 
@@ -643,9 +687,13 @@ class OverlayHelper
          */
         $strOutputTop = '
             <div>
-                <div class="olcontacttopleft"></div>
-                <div class="olcontacttopitemicon"></div>
-                <div class="olcontacttopitemtitle bold">Name</div>
+                <div class="olcontacttopleft"></div>';
+        if ($this->type != 'list') {
+            $strOutputTop .= '
+                <div class="olcontacttopitemicon"></div>';
+        }
+        $strOutputTop .= '
+                <div class="olcontacttopitemtitle bold">' . $this->core->translate->_('Name') . '</div>
                 <div class="olcontacttopright"></div>
                 <div class="clear"></div>
             </div>
@@ -656,24 +704,36 @@ class OverlayHelper
          */
         $strOutput = '';
         foreach ($rowset as $row) {
+            if (!empty($row->title)) {
+                $name = $row->title;
+            } else {
+                $name = $row->fname . ' ' . $row->sname;
+            }
+
             $strHidden = '';
-            if (array_search($row->id, $arrFileIds) !== false) {
+            if (array_search($row->id, $arrContactIds) !== false) {
                 $strHidden = ' style="display:none;"';
             }
 
             $strOutput .= '
                 <div class="olcontactitem" id="olContactItem' . $row->id . '" onclick="myOverlay.addContactItemToListArea(\'olContactItem' . $row->id . '\', ' . $row->id . '); return false;"' . $strHidden . '>
                     <div class="olcontactleft"></div>
-                    <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>
+                    <div style="display:none;" id="Remove' . $row->id . '" class="itemremovelist"></div>';
+
+            if ($this->type != 'list') {
+                $strOutput .= '
                     <div class="olcontactitemicon">';
 
-            if ($row->filename != '') {
-                $strOutput .= '<img width="32" height="32" id="Contact' . $row->id . '" src="' . sprintf($this->core->sysConfig->media->paths->icon32, $row->filepath) . $row->filename . '?v=' . $row->fileversion . '" alt="' . $row->title . '" width="16" height="16"/>';
+                if (!empty($row->filename)) {
+                    $strOutput .= '<img width="32" height="32" id="Contact' . $row->id . '" src="' . sprintf($this->core->sysConfig->media->paths->icon32, $row->filepath) . $row->filename . '?v=' . $row->fileversion . '" alt="' . $row->title . '" width="16" height="16"/>';
+                }
+
+                $strOutput .= '
+                    </div>';
             }
 
             $strOutput .= '
-                    </div>
-                    <div class="olcontactitemtitle">' . $row->title . '</div>
+                    <div class="olcontactitemtitle">' . $name . '</div>
                     <div class="olcontactright"></div>
                     <div class="clear"></div>
                 </div>';
@@ -695,13 +755,14 @@ class OverlayHelper
         /**
          * return html output
          */
-        if ($strOutput != '') {
+        if ($strOutput != '' || $this->type == 'list') {
             return $strOutputTop . $strOutput . $strOutputBottom . '<div class="clear"></div>';
         }
     }
 
     /**
      * getMediaFilter
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -742,6 +803,7 @@ class OverlayHelper
 
     /**
      * getAllTagsForAutocompleter
+     *
      * @return string $strAllTags
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
@@ -771,6 +833,22 @@ class OverlayHelper
     public function getReset()
     {
         return $this->core->translate->_('Reset');
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }
 
