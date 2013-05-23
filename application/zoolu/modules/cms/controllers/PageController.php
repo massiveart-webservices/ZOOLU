@@ -680,7 +680,7 @@ class Cms_PageController extends AuthControllerAction
 
             $this->view->blnIsStartPage = $this->objForm->Setup()->getIsStartElement(false);
 
-            $arrLanguages = $this->core->zooConfig->languages->language->toArray();
+            $arrLanguages = $this->core->config->languages->language->toArray();
             $strLanguageCode = '';
             foreach($arrLanguages as $arrLanguage){
                 if($arrLanguage['id'] ==  $this->objForm->Setup()->getLanguageId()){
