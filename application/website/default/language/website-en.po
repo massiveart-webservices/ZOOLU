@@ -272,7 +272,7 @@ msgstr "Send"
 #: application/website/default/helpers/PageHelper.php:1971
 #: application/website/default/helpers/PageHelper.php:2189
 msgid "LegalNotes"
-msgstr "I agree that the above personal data are stored, processed and used by Ivoclar Vivadent AG and the companies of the Ivoclar Vivadent Group to provide me with information about products, services, or activities of the Ivoclar Vivadent Group in writing, by fax, phone, or e-mail. I can revoke my consent completely or partially with immediate effect by sending a corresponding notification to info@ivoclarvivadent.com."
+msgstr "I agree that the above personal data are stored, processed and used by MASSIVE ART and the companies of the MASSIVE ART Group to provide me with information about products, services, or activities of the MASSIVE ART Group in writing, by fax, phone, or e-mail. I can revoke my consent completely or partially with immediate effect by sending a corresponding notification to MAIL@MASSIVE ART.AT."
 
 #: application/website/default/helpers/PageHelper.php:2053
 msgid "Dental_office"
