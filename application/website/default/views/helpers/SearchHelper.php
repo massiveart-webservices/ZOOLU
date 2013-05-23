@@ -48,7 +48,6 @@ class SearchHelper
             </div>';
 
         $strHtmlOutput .= '<div class="searchResultContainer">' . $strHtmlSearchHeader;
-
         if (count($objHits) > 0) {
             foreach ($objHits as $objHit) {
                 $objDoc = $objHit->getDocument();

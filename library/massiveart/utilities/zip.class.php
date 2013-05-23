@@ -50,7 +50,7 @@ class Zip
      * creates a zip file out of the files in the array
      *
      * $files = array('FILENAME' => 'PATH TO FILE WITH FILENAME')
-     * $files = array('xyz.dxf' => '/var/data/websites/zoolu.area51.at/uploads/xyz.dxf.zip')
+     * $files = array('xyz.dxf' => '/var/data/websites/bazinga.at/uploads/xyz.dxf.zip')
      *
      * Version history (please keep backward compatible):
      * 1.0, 2012-08-09: Cornelius Hansjakob

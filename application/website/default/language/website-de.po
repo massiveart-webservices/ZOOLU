@@ -320,7 +320,7 @@ msgstr "Senden"
 #: application/website/default/helpers/PageHelper.php:1972
 #: application/website/default/helpers/PageHelper.php:2190
 msgid "LegalNotes"
-msgstr "Ich bin damit einverstanden, dass meine oben eingegebenen Daten von der Ivoclar Vivadent AG und den Gesellschaften der Ivoclar Vivadent Gruppe gespeichert, verarbeitet und genutzt werden, um mich mit Informationen über Produkte, Dienstleistungen oder Aktivitäten der Ivoclar Vivadent Gruppe schriftlich, per Telefax, telefonisch oder per E-mail zu versorgen. Meine Einwilligung kann ich jederzeit ganz oder teilweise mit Wirkung für die Zukunft durch eine Mitteilung an info@ivoclarvivadent.com widerrufen."
+msgstr "Ich bin damit einverstanden, dass meine oben eingegebenen Daten von MASSIVE ART und den Gesellschaften der MASSIVE ART Gruppe gespeichert, verarbeitet und genutzt werden, um mich mit Informationen über Produkte, Dienstleistungen oder Aktivitäten der MASSIVE ART Gruppe schriftlich, per Telefax, telefonisch oder per E-mail zu versorgen. Meine Einwilligung kann ich jederzeit ganz oder teilweise mit Wirkung für die Zukunft durch eine Mitteilung an MAIL@MASSIVEART.AT widerrufen."
 
 #: application/website/default/helpers/PageHelper.php:2054
 msgid "Dental_office"

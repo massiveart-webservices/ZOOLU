@@ -9,20 +9,15 @@
 Main (overwrite core.css) */
  
 body {
-  padding:40px 0 0 0; 
-  background-position: 0 40px;
+  padding:0 0 0 0;   
 }
 
 /* ----------------
 Modus Container */
 
-.headerContainer {
-  padding: 40px 0 0 0;
-} 
-
 .divModusContainer {
   position:fixed; 
-  z-index:80; 
+  z-index:1500; 
   right:40px; 
   top: -40px;
   left:40px; 
@@ -43,11 +38,13 @@ Modus Container */
   -moz-box-shadow: 0 2px 5px rgba(0,0,0,.6);
   -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.6);
   box-shadow: 0 2px 5px rgba(0,0,0,.6);
+  overflow:hidden;
 }
+
 .divShowModusContainer {
   background-color: #754480;
   position:fixed; 
-  z-index:80; 
+  z-index:1500; 
   top:0; 
   left:40px; 
   height:32px;
