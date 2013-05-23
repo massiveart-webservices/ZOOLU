@@ -349,7 +349,7 @@ class IndexController extends WebControllerAction
     
                     // update default cache lifetime
                     if ($this->objPage->getTemplateCacheLifetime() > 0) {
-                        $this->objCache->setOption('lifetime', $this->objPage->getTemplateCacheLifetime());
+                        $this->objCache->setLifetime($this->objPage->getTemplateCacheLifetime());
                     } else {
                         // deactivate caching
                         $this->blnCachingStart = false;
