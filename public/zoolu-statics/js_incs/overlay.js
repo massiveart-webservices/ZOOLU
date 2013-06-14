@@ -487,13 +487,13 @@ Massiveart.Overlay = Class.create({
 
                 var languageId = null;
                 var rootLevelId = $F('rootLevelId');
-                if ($('rootLevelLanguageId' + rootLevelId)) {
-                    languageId = $F('rootLevelLanguageId' + rootLevelId)
-                } else if ($('languageId')) {
+                if ($('languageId')) {
                     languageId = $F('languageId');
+                } else if ($('rootLevelLanguageId' + rootLevelId)) {
+                    languageId = $F('rootLevelLanguageId' + rootLevelId)
                 }
 
-                new Ajax.Updater('olsubnav' + folderId + '_' + uniqid, '/zoolu/cms/overlay/sitemapchildnavigation', {
+                    new Ajax.Updater('olsubnav' + folderId + '_' + uniqid, '/zoolu/cms/overlay/sitemapchildnavigation', {
                     parameters: {
                         folderId: folderId,
                         languageId: languageId,

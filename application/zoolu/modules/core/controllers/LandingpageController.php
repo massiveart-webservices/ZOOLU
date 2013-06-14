@@ -142,6 +142,10 @@ class Core_LandingpageController extends AuthControllerAction
         $this->objForm->addElement('select', 'idLanguages', array('label' => $this->core->translate->_('Landingpage_language', false), 'description' => $this->core->translate->_('Landingpage_language_desc'), 'decorators' => array('Input'), 'columns' => 3, 'class' => 'select', 'required' => true, 'MultiOptions' => $arrLanguageOptions));
         $this->objForm->addElement('checkbox', 'isMain', array('decorators' => array('Input'), 'columns' => 12, 'class' => 'checkbox', 'label' => $this->core->translate->_('Landingpage_redirect', false), 'description' => $this->core->translate->_('Landingpage_redirect_desc')));
 
+        $this->objForm->addDisplayGroup(array('url', 'isMain', 'idLanguages'), 'main-group');
+        $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information_landingpage', false));
+        $this->objForm->getDisplayGroup('main-group')->setDecorators(array('FormElements', 'Region'));
+
         $this->objForm->addDisplayGroup(array('link'), 'link-group');
         $this->objForm->getDisplayGroup('link-group')->setLegend($this->core->translate->_('Contentpage', false));
         $this->objForm->getDisplayGroup('link-group')->setDecorators(array('FormElements', 'Region'));
@@ -149,10 +153,6 @@ class Core_LandingpageController extends AuthControllerAction
         $this->objForm->addDisplayGroup(array('external'), 'external-group');
         $this->objForm->getDisplayGroup('external-group')->setLegend($this->core->translate->_('External_page', false));
         $this->objForm->getDisplayGroup('external-group')->setDecorators(array('FormElements', 'Region'));
-
-        $this->objForm->addDisplayGroup(array('url', 'isMain', 'idLanguages'), 'main-group');
-        $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information_landingpage', false));
-        $this->objForm->getDisplayGroup('main-group')->setDecorators(array('FormElements', 'Region'));
     }
 
     /**

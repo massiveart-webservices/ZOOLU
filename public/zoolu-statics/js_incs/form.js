@@ -990,7 +990,7 @@ Massiveart.Form = Class.create({
         new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/sitemaplink', {
             parameters: {
                 rootLevelId: rootLevelId,
-                rootLevelLanguageId: $F('rootLevelLanguageId' + rootLevelId)
+                rootLevelLanguageId: $F('idLanguages')
             },
             evalScripts: true,
             onComplete: function () {
