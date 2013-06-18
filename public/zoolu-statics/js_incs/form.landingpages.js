@@ -112,5 +112,18 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
         $('overlayBlack75').hide();
       }.bind(this));
     }
-  }  
+  },
+
+  resetBreadCrump: function() {
+      $('sitemapLink_link').update('' +
+          '<span class="big" id="sitemapLinkBreadcrumb_link"></span>' +
+          '<span class="bold big" id="sitemapLinkTitle_link"></span>' +
+          '(' +
+          '<a href="#" onclick="myForm.getAddSitemapLinkOverlay(\'link\'); return false;">Seite wählen</a>' +
+          ')' +
+          '<input type="hidden" value="" id="sitemapLinkRelation_link" name="sitemapLinkRelation_link">' +
+          '<input type="hidden" value="" id="sitemapLinkParent_link" name="sitemapLinkParent_link">' +
+          '<input type="hidden" value="" id="sitemapLinkType_link" name="sitemapLinkType_link">' +
+          '');
+  }
 });

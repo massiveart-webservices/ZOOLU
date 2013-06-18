@@ -154,6 +154,12 @@ class Cms_OverlayController extends AuthControllerAction
     public function sitemaplinkAction()
     {
         $this->core->logger->debug('cms->controllers->OverlayController->sitemaplinkAction()');
+
+        if ((int)$this->getRequest()->getParam('rootLevelLanguageId') == 0) {
+            echo $this->core->translate->_('please_choose_language');
+            exit();
+        }
+
         $this->loadRootNavigation($this->core->sysConfig->modules->cms, $this->core->sysConfig->root_level_types->portals, $this->getRequest()->getParam('rootLevelId'), true);
         $this->view->assign('overlaytitle', $this->core->translate->_('Assign_sitemaplink'));
     }
