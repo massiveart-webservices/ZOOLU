@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-14 15:24+0100\n"
+"POT-Creation-Date: 2013-06-18 08:20+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -589,7 +589,7 @@ msgstr "Web content"
 
 #: application/zoolu/modules/cms/views/helpers/NavigationHelper.php:125
 msgid "Landing_pages"
-msgstr "Langing Pages"
+msgstr "Landing Pages"
 
 #: application/zoolu/modules/cms/views/helpers/NavigationHelper.php:137
 msgid "Widgets"
@@ -1045,7 +1045,7 @@ msgid "External_page"
 msgstr "External page"
 
 #: application/zoolu/modules/core/controllers/LandingpageController.php:188
-#: application/zoolu/modules/core/controllers/LandingpageController.php:486
+#: application/zoolu/modules/core/controllers/LandingpageController.php:488
 #: application/zoolu/modules/newsletters/views/scripts/newsletter/printstats.phtml:145
 #: application/zoolu/layouts/newsletters-list.phtml:392
 msgid "Link"
