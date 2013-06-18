@@ -201,7 +201,7 @@ class Model_Urls
         $this->core->logger->debug('core->models->Model_Urls->loadUrlsByRootLevelForSitemapList('.$intRootLevelId.', '.$blnLandingPage.')');
 
         $objFolderPageSelect = $this->core->dbh->select();
-        $objFolderPageSelect->from('urls', array('id', 'targetpage' => new Zend_Db_Expr('IFNULL(pageTitles.title, alternativeTitle.title)'), 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objFolderPageSelect->from('urls', array('id', 'url', 'targetpage' => new Zend_Db_Expr('IFNULL(pageTitles.title, alternativeTitle.title)'), 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objFolderPageSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objFolderPageSelect->join('users', 'users.id = urls.idUsers', array());
         $objFolderPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
@@ -216,7 +216,7 @@ class Model_Urls
         }
 
         $objRootLevelPageSelect = $this->core->dbh->select();
-        $objRootLevelPageSelect->from('urls', array('id', 'targetpage' => 'pageTitles.title', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objRootLevelPageSelect->from('urls', array('id','url', 'targetpage' => 'pageTitles.title', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objRootLevelPageSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objRootLevelPageSelect->join('users', 'users.id = urls.idUsers', array());
         $objRootLevelPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->rootlevel, array());
@@ -230,7 +230,7 @@ class Model_Urls
         }
 
         $objGlobalSelect = $this->core->dbh->select();
-        $objGlobalSelect->from('urls', array('id', 'targetpage' => new Zend_Db_Expr('IFNULL(globalTitles.title, alternativeTitle.title)'), 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objGlobalSelect->from('urls', array('id', 'url', 'targetpage' => new Zend_Db_Expr('IFNULL(globalTitles.title, alternativeTitle.title)'), 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objGlobalSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objGlobalSelect->join('users', 'users.id = urls.idUsers', array());
         $objGlobalSelect->join('globals', 'globals.globalId = urls.relationId AND globals.version = urls.version', array());
@@ -248,7 +248,7 @@ class Model_Urls
         }
 
         $objGlobalLinksSelect = $this->core->dbh->select();
-        $objGlobalLinksSelect->from('urls', array('id', 'targetpage' => new Zend_Db_Expr('IFNULL(globalTitles.title, alternativeTitle.title)'), 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objGlobalLinksSelect->from('urls', array('id', 'url', 'targetpage' => new Zend_Db_Expr('IFNULL(globalTitles.title, alternativeTitle.title)'), 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objGlobalLinksSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objGlobalLinksSelect->join('users', 'users.id = urls.idUsers', array());
         $objGlobalLinksSelect->join(array('lG' => 'globals'), 'lG.globalId = urls.relationId AND lG.version = urls.version', array());
@@ -266,7 +266,7 @@ class Model_Urls
         }
 
         $objExternalSelect = $this->core->dbh->select();
-        $objExternalSelect->from('urls', array('id', 'targetpage' => 'external', 'url', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
+        $objExternalSelect->from('urls', array('id', 'url', 'targetpage' => 'external', 'targetlanguage' => 'languages.title', 'redirect' => new Zend_Db_Expr('IF(isMain = 1, "'.$this->core->translate->_('deactivated').'", "'.$this->core->translate->_('active').'")'), 'changeUser' => 'CONCAT(users.fname, \' \', users.sname)', 'created', 'changed'));
         $objExternalSelect->join('languages', 'languages.id = urls.idLanguages', array());
         $objExternalSelect->join('users', 'users.id = urls.idUsers', array());
         $objExternalSelect->where('urls.idParent = ?', $intRootLevelId);
