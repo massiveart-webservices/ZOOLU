@@ -206,7 +206,7 @@ class Model_Urls
         $objFolderPageSelect->join('users', 'users.id = urls.idUsers', array());
         $objFolderPageSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
         $objFolderPageSelect->join('folders', 'folders.id = pages.idParent', array());
-        $objFolderPageSelect->joinLeft('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = '.$this->intLanguageId, array());
+        $objFolderPageSelect->joinLeft('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = urls.idLanguages', array());
         $objFolderPageSelect->joinLeft(array('alternativeTitle' => 'pageTitles'), 'alternativeTitle.pageId = pages.pageId AND alternativeTitle.version = pages.version AND alternativeTitle.idLanguages = 0', array());
         $objFolderPageSelect->where('folders.idRootLevels = ?', $intRootLevelId);
         $objFolderPageSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page);

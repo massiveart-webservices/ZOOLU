@@ -1379,16 +1379,19 @@ class Model_Pages extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadLinkPage($intElementId)
+    public function loadLinkPage($intElementId, $languageId = 0)
     {
+        if ($languageId == 0) {
+            $languageId = $this->intLanguageId;
+        }
         $this->core->logger->debug('cms->models->Model_Pages->loadLinkPage(' . $intElementId . ')');
 
         $objSelect = $this->getPageTable()->select();
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('pages', array('id', 'pageId', 'version'));
-        $objSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = ' . $this->intLanguageId, array('title'));
-        $objSelect->joinleft('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
+        $objSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = ' . $languageId, array('title'));
+        $objSelect->joinleft('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $languageId . ' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
         $objSelect->joinleft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
         $objSelect->where('pages.id = ?', $intElementId);
 
@@ -1902,8 +1905,11 @@ class Model_Pages extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadParentFolders($intPageId)
+    public function loadParentFolders($intPageId, $languageId = 0)
     {
+        if ($languageId == 0) {
+            $languageId = $this->intLanguageId;
+        }
         $this->core->logger->debug('cms->models->Model_Pages->loadParentFolders(' . $intPageId . ')');
 
         $sqlStmt = $this->core->dbh->query('SELECT folders.id, folderProperties.isUrlFolder, folderTitles.title
@@ -1924,7 +1930,7 @@ class Model_Pages extends ModelAbstract
                                            WHERE folders.lft <= parent.lft AND
                                                  folders.rgt >= parent.rgt AND
                                                  folders.idRootLevels = parent.idRootLevels
-                                             ORDER BY folders.rgt', array($this->intLanguageId, $this->intLanguageId, $intPageId, $this->core->sysConfig->parent_types->folder));
+                                             ORDER BY folders.rgt', array($languageId, $languageId, $intPageId, $this->core->sysConfig->parent_types->folder));
 
 
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
