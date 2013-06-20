@@ -2355,7 +2355,9 @@ Massiveart.Form = Class.create({
         }
 
         if (title == '') {
-            title = this.cleanText($('title').getValue());
+            if ($('title')) {
+                title = this.cleanText( $('title').getValue() );
+            } 
         }
 
         if (title.length > 70) {
