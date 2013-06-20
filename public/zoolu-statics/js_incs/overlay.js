@@ -279,7 +279,9 @@ Massiveart.Overlay = Class.create({
             }
             var languageId = null;
             var rootLevelId = $F('rootLevelId');
-            if ($('rootLevelLanguageId' + rootLevelId)) {
+            if ($('idLanguages')) {
+                languageId = $F('idLanguages')
+            } else if ($('rootLevelLanguageId' + rootLevelId)) {
                 languageId = $F('rootLevelLanguageId' + rootLevelId)
             }
             new Ajax.Updater('sitemapLink_' + this.fieldId, '/zoolu/core/landingpage/sitemapfield', { //FIXME URL should not be hardcoded
@@ -485,15 +487,14 @@ Massiveart.Overlay = Class.create({
                 var blnVisible = this.toggleSubNavItem(folderId + '_' + uniqid);
                 myCore.addBusyClass('olsubnav' + folderId + '_' + uniqid);
 
+                var rootLevelId = $F('rootLevelId');
                 var languageId = null;
                 var rootLevelId = $F('rootLevelId');
-                if ($('rootLevelLanguageId' + rootLevelId)) {
-                    languageId = $F('rootLevelLanguageId' + rootLevelId)
-                } else if ($('languageId')) {
-                    languageId = $F('languageId');
+                if ($('idLanguages')) {
+                    languageId = $F('idLanguages')
                 }
 
-                new Ajax.Updater('olsubnav' + folderId + '_' + uniqid, '/zoolu/cms/overlay/sitemapchildnavigation', {
+                    new Ajax.Updater('olsubnav' + folderId + '_' + uniqid, '/zoolu/cms/overlay/sitemapchildnavigation', {
                     parameters: {
                         folderId: folderId,
                         languageId: languageId,
@@ -599,7 +600,9 @@ Massiveart.Overlay = Class.create({
 
             var languageId = null;
             var rootLevelId = $F('rootLevelId');
-            if ($('rootLevelLanguageId' + rootLevelId)) {
+            if ($('idLanguages')) {
+                languageId = $F('idLanguages');
+            } else if ($('rootLevelLanguageId' + rootLevelId)) {
                 languageId = $F('rootLevelLanguageId' + rootLevelId)
             } else if ($('languageId')) {
                 languageId = $F('languageId');

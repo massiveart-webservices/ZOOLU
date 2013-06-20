@@ -118,4 +118,5 @@ $core->translate->_('url');
 $core->translate->_('targetlanguage');
 $core->translate->_('redirect');
 $core->translate->_('changeUser');
+$core->translate->_('please_choose_language');
 ?>
