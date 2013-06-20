@@ -1541,7 +1541,7 @@ Massiveart.Form = Class.create({
                 theme_advanced_resize_horizontal: false,
 
                 // Example content CSS (should be your site CSS)
-                content_css: "/website/themes/" + this.theme + "/css/screen.css",
+                content_css: "/website/themes/" + this.theme + "/css/style.css",
 
                 relative_urls: false,
                 convert_urls: false
