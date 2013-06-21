@@ -149,6 +149,7 @@ class SearchController extends Zend_Controller_Action {
             $this->view->rootLevelId = $intRootLevelId;
             $this->view->segmentId = $this->intSegmentId;
             $this->view->segmentCode = $this->strSegmentCode;
+            $this->view->searchTerm = $strSearchValue;
         } else {
             $this->_helper->viewRenderer->setNoRender();
         }
