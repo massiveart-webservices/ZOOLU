@@ -4,3 +4,6 @@
   echo $objHelper->getLiveSearchList($this->objHits);
 ?>
 <div class="detailSearch" onclick="Web.search(); return false;"><a href="#" onclick="Web.search(); return false;"><?php echo $this->translate->_('Advanced_Search')?></a></div>
+<script type="text/javascript">
+    _gaq.push(['_trackPageview', window.location.href + '/?q=<?php echo $this->searchTerm; ?>']);
+</script>

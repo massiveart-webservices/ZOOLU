@@ -49,10 +49,11 @@ jQuery.fn.liveSearch = function (conf) {
 		url:			'/search-results.php?q=', 
 		id:				'jquery-live-search', 
 		duration:		400, 
-		typeDelay:		200,
+		typeDelay:		400,
 		loadingClass:	'loading', 
 		onSlideUp:		function () {}, 
-		uptadePosition:	false
+		uptadePosition:	false,
+		defaultValue:   'Search'
 	}, conf);
 
 	var liveSearch	= jQuery('.' + config.id);
@@ -126,7 +127,7 @@ jQuery.fn.liveSearch = function (conf) {
 			// On focus, if the live-search is empty, perform an new search
 			// If not, just slide it down. Only do this if there's something in the input
 			.focus(function () {
-				if (this.value !== '') {
+				if (this.value !== '' && this.value != config.defaultValue) {
 					// Perform a new search if there are no search results
 					if (liveSearch.html() == '') {
 						this.lastValue = '';
@@ -154,26 +155,28 @@ jQuery.fn.liveSearch = function (conf) {
 
 					// Start a new ajax-request in X ms
 					this.timer = setTimeout(function () {
-						if ( $.browser.msie ) { /* IE FIX */
-							q = unescape(encodeURIComponent(q));
+					    if (q.length > 2) {
+    						if ( $.browser.msie ) { /* IE FIX */
+    							q = unescape(encodeURIComponent(q));
+    						}
+    						//jQuery.get(config.url + q, function (data) {
+    						jQuery.ajax({
+    							url: config.url+q,
+    							type:'GET',
+    							contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    							success: function(data) {
+    							input.removeClass(config.loadingClass);
+    
+    							// Show live-search if results and search-term aren't empty
+    							if (data.length && q.length > 2) {
+    								liveSearch.html(data);
+    								showLiveSearch();
+    							}
+    							else {
+    								hideLiveSearch();
+    							}
+							}});
 						}
-						//jQuery.get(config.url + q, function (data) {
-						jQuery.ajax({
-							url: config.url+q,
-							type:'GET',
-							contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-							success: function(data) {
-							input.removeClass(config.loadingClass);
-
-							// Show live-search if results and search-term aren't empty
-							if (data.length && q.length > 2) {
-								liveSearch.html(data);
-								showLiveSearch();
-							}
-							else {
-								hideLiveSearch();
-							}
-						}});
 					}, config.typeDelay);
 
 					this.lastValue = this.value;
