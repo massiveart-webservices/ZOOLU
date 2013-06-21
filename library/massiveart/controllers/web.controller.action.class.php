@@ -498,6 +498,28 @@ abstract class WebControllerAction extends Zend_Controller_Action
     }
 
     /**
+     * getRedirectDomain
+     * @return string
+     */
+    protected function getRedirectDomain($strDomainLanguageCode = '')
+    {
+        $strDomain = $_SERVER['HTTP_HOST'] . '/';
+    
+         
+        if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain && $strDomainLanguageCode != '') {
+            if(strpos($strDomain, 'www.') === 0) {
+                $strDomain = str_replace('www.', '', $strDomain);
+            }
+            //if language allready in subdomain
+            if(strpos($strDomain, ($strDomainLanguageCode.'.')) !== 0){
+                $strDomain = $strDomainLanguageCode . '.' . $strDomain;
+            }
+        }
+    
+        return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $strDomain;
+    }
+    
+    /**
      * setTranslate
      * @return void
      */
