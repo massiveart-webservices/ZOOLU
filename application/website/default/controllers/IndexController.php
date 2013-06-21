@@ -256,7 +256,7 @@ class IndexController extends WebControllerAction
                             $this->getResponse()->setHttpResponseCode(301);
                             $uriLanguageFolder = '';
                             if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
-                                 $uriLanguageFolder = '/' . strtolower($objMainUrl->languageCode) . '/';
+                                 $uriLanguageFolder = strtolower($objMainUrl->languageCode) . '/';
                             }
                             if (!$objUrlData->isLandingPage) {
                                 $baseUrl = '';
