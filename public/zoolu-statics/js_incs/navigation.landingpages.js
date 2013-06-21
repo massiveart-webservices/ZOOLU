@@ -29,8 +29,17 @@ Massiveart.Navigation.Landingpages = Class.create(Massiveart.Navigation.Cms, {
     
     myCore.resetTinyMCE(true);
     
+    var languageId = null;
+    var rootLevelId = myNavigation.rootLevelId;
+    if($('rootLevelLanguageId'+rootLevelId)){
+      languageId = $F('rootLevelLanguageId'+rootLevelId)
+    }
+    
     new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + this.rootLevelType + '/editform', {
-      parameters: { rootLevelId: this.rootLevelId, id: itemId },      
+      parameters: { 
+        rootLevelId: this.rootLevelId, 
+        id: itemId,
+        languageId: languageId },
       evalScripts: true,     
       onComplete: function() {
         $(this.genFormContainer).show();

@@ -265,7 +265,7 @@ class IndexController extends WebControllerAction
                                 }
                                 $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
                             } else {
-                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                                $this->_redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
                             }
                         }
                     }
