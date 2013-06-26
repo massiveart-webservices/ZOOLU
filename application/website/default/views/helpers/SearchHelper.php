@@ -153,7 +153,7 @@ class SearchHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getLiveSearchList($objHits)
+    public function getLiveSearchList($objHits, $translate)
     {
         $this->core->logger->debug('website->views->helpers->SearchHelper->getLiveSearchList()');
 
@@ -201,7 +201,7 @@ class SearchHelper
             }
             $strHtmlOutput .= '</ul>';
         } else {
-            $strHtmlOutput .= '<ul id="search_list"><li>Sorry, no search result.</li></ul>';
+            $strHtmlOutput .= '<ul id="search_list"><li>' . $translate->_('Sorry, no search result.') . '</li></ul>';
         }
 
         echo $strHtmlOutput;
