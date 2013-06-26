@@ -436,6 +436,16 @@ class Default_NavigationHelper extends NavigationHelper {
         }    
         return $action;
     }
+    
+    /**
+     * getLanguageDefinitionType
+     * @return int $type
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function getLanguageDefinitionType() {
+        $type = $this->objNavigation->getLanguageDefinitionType();
+        return $this->objNavigation->getLanguageDefinitionType();    
+    }
 }
 
 ?>

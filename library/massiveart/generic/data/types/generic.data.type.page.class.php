@@ -162,9 +162,16 @@ class GenericDataTypePage extends GenericDataTypeAbstract
                     $objField->save($this->setup->getElementId(), 'page', $objPage->pageId, $objPage->version);
                 }
             }
-
+               
+            $arrTreeTypes = array( 
+                $this->core->sysConfig->page_types->product_tree->id,
+                $this->core->sysConfig->page_types->press_area->id,
+                $this->core->sysConfig->page_types->courses->id,
+                $this->core->sysConfig->page_types->events->id
+            );
+            
             //page index
-            if ($this->setup->getElementTypeId() != $this->core->sysConfig->page_types->link->id && $this->setup->getStatusId() == $this->core->sysConfig->status->live) {
+            if (!in_array($this->setup->getElementTypeId(), $arrTreeTypes) && $this->setup->getElementTypeId() != $this->core->sysConfig->page_types->link->id && $this->setup->getStatusId() == $this->core->sysConfig->status->live) {
                 if (substr(PHP_OS, 0, 3) === 'WIN') {
                     $this->core->logger->warning('slow page index on windows based OS!');
                     $this->updateIndex(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId . '_' . $this->setup->getLanguageId());
