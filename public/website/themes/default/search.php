@@ -102,9 +102,9 @@
     
         $(document).ready(function() {
             jQuery('#searchField').liveSearch({
-                url: '/zoolu-website/search/livesearch?theme=default&rootLevelId=<?php echo $this->rootLevelId; ?>&languageId=<?php echo $this->languageId; ?>&q='
+                url: '/zoolu-website/search/livesearch?theme=default&rootLevelId=<?php echo $this->rootLevelId; ?>&languageId=<?php echo $this->languageId; ?>&searchBase=<?php get_search_action(); ?>&q=',
+                defaultValue: '<?php echo $this->translate->_('Search', false); ?>'
             });
-
             <?php get_dom_loaded_js(); ?>
         });
 
