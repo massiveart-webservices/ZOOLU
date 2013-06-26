@@ -4,7 +4,7 @@
             <div class="logo">Logospace</div>
             <div class="slogan">Slogan Platzhalter</div>
             <div class="search">
-                <form id="searchForm" name="searchForm">
+                <form id="searchForm" name="searchForm" action="<?php get_search_action(); ?>">
                     <a class="button" href="#" onclick="myDefault.search(); return false;"><div class='sprite loupe'></div></a>
                     <input id="searchField" type="text" name="q" class="" onclick="this.placeholder='';this.onclick=function(){return false;}" value="" autocomplete="off" placeholder="<?php echo $this->translate->_('Search', false); ?>"/>
                 </form>

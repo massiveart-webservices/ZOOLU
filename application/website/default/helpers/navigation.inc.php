@@ -147,4 +147,12 @@ function get_sitemap(){
   echo getNavigationHelperObject()->getSitemap();
 }
 
+/**
+ * get_search_action
+ * @author Raphael Stocker <rst@massiveart.com>
+ */
+function get_search_action(){
+  echo getNavigationHelperObject()->getSearchAction();  
+}
+
 ?>
