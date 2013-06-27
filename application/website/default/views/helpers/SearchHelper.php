@@ -66,7 +66,7 @@ class SearchHelper
                     $strUrl = $objHit->url;
                     $arrUrls = array($objHit->url);
                     if (array_search('parentPages', $arrDocFields)) {
-                        $arrParentPages = @unserialize($objHit->parentPages); //FIXME!!!
+                        $arrParentPages = @unserialize(base64_decode($objHit->parentPages)); //FIXME!!!
                         if (is_array($arrParentPages)) {
                             $arrUrls = array();
                             $blnFirst = true;
@@ -159,7 +159,7 @@ class SearchHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getLiveSearchList($objHits, $translate, $intLanguageDefinitionType = 1)
+    public function getLiveSearchList($objHits, $translate, $intLanguageDefinitionType = 1, $searchBase, $searchTerm)
     {
         $this->core->logger->debug('website->views->helpers->SearchHelper->getLiveSearchList()');
 
@@ -176,7 +176,7 @@ class SearchHelper
 
                     $strUrl = $objHit->url;
                     if (array_search('parentPages', $arrDocFields)) {
-                        $arrParentPages = @unserialize($objHit->parentPages); //FIXME!!!
+                        $arrParentPages = @unserialize(base64_decode($objHit->parentPages)); //FIXME!!!
                         if (is_array($arrParentPages)) {
                             $arrUrls = array();
                             $blnFirst = true;
@@ -211,15 +211,28 @@ class SearchHelper
                         $strIcon = '<img src="' . sprintf($this->core->sysConfig->media->paths->icon32, $arrPic['path']) . $arrPic['filename'] . '?v=' . $arrPic['version'] . '"/>';
                     }
 
-                    $strHtmlOutput .= '<li><a href="' . $strUrl . '"><table cellpadding="0" cellspacing="0"><tr><td class="icon">' . $strIcon . '</td><td class="info"><a href="' . $strUrl . '">' . $strTitle . '</a></td></tr></table></a></li>';
-                }
+                    $strHtmlOutput .= '<li>
+                    				       <a href="#" onclick="
+                    				          _gaq.push([\'_set\', \'hitCallback\', function(){ window.location.href=\'' . $strUrl . '\'; }]);
+                    				          _gaq.push([\'_trackPageview\', \'' . $searchBase . '?q=' . $searchTerm . '\']);
+                    				          return false;
+                    				          ">
+                    				           <table cellpadding="0" cellspacing="0">
+                    				               <tr>
+                    				                   <td class="icon">' . $strIcon . '</td>
+                    				                   <td class="info"><a href="' . $strUrl . '">' . $strTitle . '</a></td>
+                    				               </tr>
+                    				           </table>
+                    				       </a>
+                    				   </li>';
+                } 
             }
             $strHtmlOutput .= '</ul>';
         } else {
             $strHtmlOutput .= '<ul id="search_list"><li>' . $translate->_('Sorry, no search result.') . '</li></ul>';
         }
 
-        echo $strHtmlOutput;
+        echo $strHtmlOutput; 
     }
 
     /**

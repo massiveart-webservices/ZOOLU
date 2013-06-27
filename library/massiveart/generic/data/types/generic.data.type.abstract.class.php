@@ -1692,7 +1692,11 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
             
             if ($objParentPageContainer !== null && $objParentPageContainer instanceof PageContainer) {
                 if (count($objParentPageContainer->getEntries()) > 0) {
-                    $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('parentPages', serialize($objParentPageContainer->getEntries())));
+
+                    
+                    //$this->core->logger->debug(var_export());
+                    
+                    $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('parentPages', base64_encode( serialize($objParentPageContainer->getEntries()) )));
                     $objDoc->addField(Zend_Search_Lucene_Field::keyword('rootLevelId', end($objParentPageContainer->getEntries())->rootLevelId));
                 }
             }
