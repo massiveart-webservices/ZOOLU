@@ -1684,7 +1684,12 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
             $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('date', $this->setup->getPublishDate('d.m.Y')));
             $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('elementTypeId', $this->setup->getElementTypeId()));
             $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('segmentId', $this->setup->getSegmentId()));
-
+            
+            if (count($arrParentFolderIds) > 0) {
+                $parentFolderId = $arrParentFolderIds[0]; 
+                $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('parentFolderId', $parentFolderId));
+            }
+            
             if ($objParentPageContainer !== null && $objParentPageContainer instanceof PageContainer) {
                 if (count($objParentPageContainer->getEntries()) > 0) {
                     $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('parentPages', serialize($objParentPageContainer->getEntries())));

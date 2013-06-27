@@ -1,7 +1,7 @@
 <?php
   require_once (dirname(__FILE__).'/../../helpers/SearchHelper.php');
   $objHelper = new SearchHelper();
-  echo $objHelper->getLiveSearchList($this->objHits, $this->translate);
+  echo $objHelper->getLiveSearchList($this->objHits, $this->translate, $this->languageDefinitionType);
 ?>
 <div class="detailSearch" onclick="Web.search(); return false;"><a href="#" onclick="Web.search(); return false;"><?php echo $this->translate->_('Advanced_Search')?></a></div>
 <script type="text/javascript">

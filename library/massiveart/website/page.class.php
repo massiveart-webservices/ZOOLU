@@ -556,7 +556,7 @@ class Page
                     }
 
                     if (count($arrParentPageContainer) > 0) {
-                        $this->objGenericData->indexData(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', (($intLanguageId != null) ? $intLanguageId : $this->intLanguageId)), $this->strPageId, $arrParentPageContainer, $arrParentFolderStrIds);
+                        $this->objGenericData->indexData(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', (($intLanguageId != null) ? $intLanguageId : $this->intLanguageId)), $this->strPageId, $arrParentPageContainer, $arrParentFolderIds);
                     }
                 }
 
