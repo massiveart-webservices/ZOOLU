@@ -703,7 +703,7 @@ class Cms_PageController extends AuthControllerAction
                     }
 
                 } else {
-                    if (substr_count($strBaseUrl, '.') == 2) {
+                    if (substr_count($strBaseUrl, '.') == 1) {
                         $strBaseUrl = 'www.' . $strBaseUrl;
                     }
                 }
