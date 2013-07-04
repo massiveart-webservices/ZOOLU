@@ -84,8 +84,9 @@ class TestmodeController extends Zend_Controller_Action {
    */
   public function changeAction(){
     $this->core->logger->debug('website->controllers->TestmodeController->changeAction()');
-    
+
     $objAuth = Zend_Auth::getInstance();
+    $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
     
     if($objAuth->hasIdentity()){
       if($this->request->getParam('TestMode') == 'on'){

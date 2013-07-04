@@ -65,7 +65,9 @@ class Media_IndexController extends ModuleControllerAction
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
         $this->view->assign('module', $this->core->sysConfig->modules->media);
 
-        $this->view->assign('languageId', Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $this->view->assign('languageId', $objAuth->getIdentity()->contentLanguageId);
         $this->view->assign('languageDefaultId', $this->core->sysConfig->languages->default->id);
         $this->view->assign('languageOptions', HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', Zend_Auth::getInstance()->getIdentity()->contentLanguageId));
     }

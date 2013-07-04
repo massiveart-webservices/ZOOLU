@@ -63,7 +63,9 @@ class GenericDataTypeCategory extends GenericDataTypeAbstract
         $this->core->logger->debug('massiveart->generic->data->GenericDataTypeCategory->save()');
         try {
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             $this->getModelCategories()->setLanguageId($this->setup->getLanguageId());
 

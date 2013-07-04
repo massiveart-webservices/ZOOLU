@@ -154,7 +154,9 @@ class Model_Folders extends ModelAbstract
         $objFolder->parentId = $objGenericSetup->getParentId();
         $objFolder->rootLevelId = $objGenericSetup->getRootLevelId();
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         /**
          * check if parent element is rootlevel or folder and get sort position
@@ -227,7 +229,9 @@ class Model_Folders extends ModelAbstract
     {
         $this->core->logger->debug('cms->models->Model_Folders->update()');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $strWhere = $this->getFolderTable()->getAdapter()->quoteInto('folderId = ?', $objFolder->folderId);
         $strWhere .= $this->getFolderTable()->getAdapter()->quoteInto(' AND version = ?', $objFolder->version);
@@ -1631,13 +1635,15 @@ class Model_Folders extends ModelAbstract
     {
         $this->core->logger->debug('core->models->Folders->loadRootLevelChilds(' . $intRootLevelId . ',' . $intLimitNumber . ')');
 
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
         /*$objSelect = $this->getPageTable()->select();
         $objSelect->setIntegrityCheck(false);
         $objSelect->from($this->getPageTable(), array(idPage => 'id', 'idParent', 'idParentTypes', 'pageTitle' => 'IF(displayTitle.title <> \'\', displayTitle.title, fallbackTitle.title)'))
                   ->joinInner('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version', array())
                   ->joinInner('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = pageProperties.idLanguages', array())
                   ->joinInner('languages', 'languages.id = pageTitles.idLanguages', array('languageCodes' => 'GROUP_CONCAT(languages.languageCode SEPARATOR \', \')'))
-                  ->joinLeft(array('displayTitle' => 'pageTitles'), 'displayTitle.pageId = pages.pageId AND displayTitle.version = pages.version AND displayTitle.idLanguages = '.Zend_Auth::getInstance()->getIdentity()->languageId, array())
+                  ->joinLeft(array('displayTitle' => 'pageTitles'), 'displayTitle.pageId = pages.pageId AND displayTitle.version = pages.version AND displayTitle.idLanguages = '.$objAuth->getIdentity()->languageId, array())
                   ->joinInner(array('fallbackTitle' => 'pageTitles'), 'fallbackTitle.pageId = pages.pageId AND fallbackTitle.version = pages.version AND fallbackTitle.idLanguages = 0', array())
                   ->joinLeft(array('editor' => 'users'), 'editor.id = pageProperties.idUsers', array('editor' => 'CONCAT(`editor`.`fname`, \' \', `editor`.`sname`)', 'pageProperties.changed'))
                   ->where('idParent = ?', $intRootLevelId)
@@ -1667,7 +1673,7 @@ class Model_Folders extends ModelAbstract
                                                                                             pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = pageProperties.idLanguages
                                                                                         INNER JOIN languages ON languages.id = pageTitles.idLanguages
                                                                                         LEFT JOIN pageTitles AS displayTitle ON
-                                                                                            displayTitle.pageId = pages.pageId AND displayTitle.version = pages.version AND displayTitle.idLanguages = " . Zend_Auth::getInstance()->getIdentity()->languageId . "
+                                                                                            displayTitle.pageId = pages.pageId AND displayTitle.version = pages.version AND displayTitle.idLanguages = " . $objAuth->getIdentity()->languageId . "
                                                                                         INNER JOIN pageTitles As fallbackTitle ON
                                                                                             fallbackTitle.pageId = pages.pageId AND fallbackTitle.version = pages.version AND fallbackTitle.idLanguages = 0
                                                                                         LEFT JOIN users AS editor ON editor.id = pageProperties.idUsers

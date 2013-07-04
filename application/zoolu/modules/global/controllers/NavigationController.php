@@ -140,8 +140,11 @@ class Global_NavigationController extends AuthControllerAction
             /**
              * get navigation
              */
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+
             $this->getModelFolders();
-            $this->objModelFolders->setLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+            $this->objModelFolders->setLanguageId($objAuth->getIdentity()->contentLanguageId);
             $objRootelements = $this->objModelFolders->loadGlobalRootNavigation($this->intRootLevelId, $intRootLevelGroupId);
             $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
 
@@ -182,8 +185,11 @@ class Global_NavigationController extends AuthControllerAction
             /**
              * get childnavigation
              */
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+
             $this->getModelFolders();
-            $this->objModelFolders->setLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+            $this->objModelFolders->setLanguageId($objAuth->getIdentity()->contentLanguageId);
             $objChildelements = $this->objModelFolders->loadGlobalChildNavigation($this->intFolderId, $intRootLevelGroupId);
             $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
 
@@ -280,10 +286,12 @@ class Global_NavigationController extends AuthControllerAction
              * Since this is an application model, we need to require it
              * from its modules path location.
              */
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
             $this->objModelFolders = new Model_Folders();
             $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
-            $this->objModelFolders->setContentLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+            $this->objModelFolders->setContentLanguageId($objAuth->getIdentity()->contentLanguageId);
         }
 
         return $this->objModelFolders;

@@ -67,7 +67,9 @@ try {
         // simulate user auth
         $obj = new stdClass();
         $obj->id = 3; //user id
-        Zend_Auth::getInstance()->getStorage()->write($obj);
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $objAuth->getStorage()->write($obj);
 
         if (isset($objProducts) && count($objProducts)) {
             buildTreeUrlsNow($objProducts);

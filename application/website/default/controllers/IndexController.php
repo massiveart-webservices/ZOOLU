@@ -441,7 +441,7 @@ class IndexController extends WebControllerAction
     {
         $blnHasIdentity = true;
         $objAuth = Zend_Auth::getInstance();
-        $objAuth->setStorage(new Zend_Auth_Storage_Session());
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
         if (!$objAuth->hasIdentity()) {
             $blnHasIdentity = false;
         }
@@ -505,6 +505,7 @@ class IndexController extends WebControllerAction
         $this->setTranslate();
 
         $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('Website'));
         if ($objAuth->hasIdentity()) {
             $this->_redirect($this->getRequest()->getParam('re', '/'));
         } else {
@@ -632,6 +633,7 @@ class IndexController extends WebControllerAction
     public function logoutAction()
     {
         $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('Website'));
         $objAuth->clearIdentity();
         $this->_redirect($this->getPrefix() . '/');
     }

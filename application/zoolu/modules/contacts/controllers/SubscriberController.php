@@ -376,12 +376,13 @@ class Contacts_SubscriberController extends AuthControllerAction
                     if (($strKey = array_search('headline' . $intCount, $arrFields)) !== false) {
                         $arrData[$strKey] = trimQuotes($arrTmpData[$intCount]);
                     }
-                }
+                }$objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
                 $arrData['subscribed'] = $this->core->sysConfig->mail_chimp->mappings->subscribe;
                 $arrData['idRootLevels'] = $intRootLevelId;
                 $arrData['idGenericForms'] = $this->core->sysConfig->subscriber->default->genericFormId;
-                $arrData['creator'] = Zend_Auth::getInstance()->getIdentity()->id;
-                $arrData['idUsers'] = Zend_Auth::getInstance()->getIdentity()->id;
+                $arrData['creator'] = $objAuth->getIdentity()->id;
+                $arrData['idUsers'] = $objAuth->getIdentity()->id;
                 $arrData['dirty'] = $this->core->sysConfig->mail_chimp->mappings->clean;
 
                 try {
@@ -501,11 +502,13 @@ class Contacts_SubscriberController extends AuthControllerAction
         fclose($fh);
         unlink(GLOBAL_ROOT_PATH . '/uploads/subscribers/' . $strFileId);
 
-        if (class_exists('GearmanClient') && !empty(Zend_Auth::getInstance()->getIdentity()->email)) {
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        if (class_exists('GearmanClient') && !empty($objAuth->getIdentity()->email)) {
             $client = new GearmanClient();
             $client->addServer();
             $workload = new stdClass();
-            $workload->email = Zend_Auth::getInstance()->getIdentity()->email;
+            $workload->email = $objAuth->getIdentity()->email;
             $workload->errors = $arrErrors;
             $workload->warnings = $arrWarnings;
             $client->doLowBackground($this->core->sysConfig->client->id . '_contact_replication_mailchimp_done', serialize($workload));

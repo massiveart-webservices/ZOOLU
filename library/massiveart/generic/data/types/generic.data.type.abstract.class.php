@@ -123,7 +123,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
     {
         if (count($this->setup->CoreFields()) > 0) {
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             /**
              * for each core field, try to insert into the secondary table
@@ -290,7 +292,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
     {
         if (count($this->setup->FileFields()) > 0) {
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             /**
              * insert into the file instances table
@@ -349,7 +353,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
         if (count($this->setup->MultiFields()) > 0) {
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             /**
              * insert into the multi fields instances table
@@ -399,7 +405,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
         if (count($this->setup->InstanceFields()) > 0) {
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             if (isset($arrTypeProperties['Version'])) {
                 $arrInstanceData = array(
@@ -493,7 +501,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
     final private function saveZooluFallbackTitle($stTitle, $strType, $strTypeId, $intTypeVersion, Model_Table_Generics $objGenTable)
     {
         try {
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             $objGenItem = $objGenTable->fetchRow($objGenTable->select()
                 ->where($strType . 'Id = ?', $strTypeId)
@@ -539,7 +549,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
         if (count($this->setup->CoreFields()) > 0) {
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             /**
              * for each core field, try to insert into the secondary table
@@ -841,7 +853,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
         if (count($this->setup->InstanceFields()) > 0) {
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             $objGenTable = $this->getModelGenericData()->getGenericTable($strType . '-' . $this->setup->getFormId() . '-' . $this->setup->getFormVersion() . '-Instances');
 

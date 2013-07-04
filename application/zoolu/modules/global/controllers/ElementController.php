@@ -169,6 +169,9 @@ class Global_ElementController extends AuthControllerAction
     {
         $this->core->logger->debug('global->controllers->ElementController->listAction()');
 
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+
         $strOrderColumn = (($this->getRequest()->getParam('order') != '') ? $this->getRequest()->getParam('order') : 'title');
         $strSortOrder = (($this->getRequest()->getParam('sort') != '') ? $this->getRequest()->getParam('sort') : 'asc');
         $strSearchValue = (($this->getRequest()->getParam('search') != '') ? $this->getRequest()->getParam('search') : '');
@@ -179,7 +182,7 @@ class Global_ElementController extends AuthControllerAction
             ->joinInner('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version', array())
             ->joinInner('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = globalProperties.idLanguages', array())
             ->joinInner('languages', 'languages.id = globalTitles.idLanguages', array('languageCodes' => 'GROUP_CONCAT(languages.languageCode SEPARATOR \', \')'))
-            ->joinLeft(array('displayTitle' => 'globalTitles'), 'displayTitle.globalId = globals.globalId AND displayTitle.version = globals.version AND displayTitle.idLanguages = ' . Zend_Auth::getInstance()->getIdentity()->languageId, array())
+            ->joinLeft(array('displayTitle' => 'globalTitles'), 'displayTitle.globalId = globals.globalId AND displayTitle.version = globals.version AND displayTitle.idLanguages = ' . $objAuth->getIdentity()->languageId, array())
             ->joinInner(array('fallbackTitle' => 'globalTitles'), 'fallbackTitle.globalId = globals.globalId AND fallbackTitle.version = globals.version AND fallbackTitle.idLanguages = 0', array())
             ->joinLeft(array('editor' => 'users'), 'editor.id = globalProperties.idUsers', array('editor' => 'CONCAT(`editor`.`fname`, \' \', `editor`.`sname`)', 'globalProperties.changed'))
             ->where('idParent = ?', $this->getRequest()->getParam('rootLevelId'))
@@ -1291,7 +1294,6 @@ class Global_ElementController extends AuthControllerAction
         $this->core->logger->debug('global->controllers->ElementController->getForm(' . $intActionType . ')');
 
         try {
-
             $strFormId = $this->objRequest->getParam("formId");
             $intTemplateId = $this->objRequest->getParam("templateId");
 
@@ -1339,7 +1341,10 @@ class Global_ElementController extends AuthControllerAction
             /**
              * set element default & specific form values
              */
-            $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam("creator") != '') ? $this->objRequest->getParam("creator") : Zend_Auth::getInstance()->getIdentity()->id));
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+
+            $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam("creator") != '') ? $this->objRequest->getParam("creator") : $objAuth->getIdentity()->id));
             $this->objForm->Setup()->setStatusId((($this->objRequest->getParam("idStatus") != '') ? $this->objRequest->getParam("idStatus") : $this->core->sysConfig->form->status->default));
             $this->objForm->Setup()->setRootLevelId((($this->objRequest->getParam("rootLevelId") != '') ? $this->objRequest->getParam("rootLevelId") : null));
             $this->objForm->Setup()->setRootLevelGroupId((($this->objRequest->getParam("rootLevelGroupId") != '') ? $this->objRequest->getParam("rootLevelGroupId") : 0));
@@ -1432,7 +1437,9 @@ class Global_ElementController extends AuthControllerAction
     {
         if ($this->intItemLanguageId == null) {
             if (!$this->objRequest->getParam("languageId")) {
-                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : Zend_Auth::getInstance()->getIdentity()->contentLanguageId;
+                $objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : $objAuth->getIdentity()->contentLanguageId;
 
                 $intRootLevelId = $this->objRequest->getParam("rootLevelId");
                 $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
@@ -1518,7 +1525,9 @@ class Global_ElementController extends AuthControllerAction
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
             $this->objModelFolders = new Model_Folders();
             $this->objModelFolders->setLanguageId($this->getItemLanguageId());
-            $this->objModelFolders->setContentLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $this->objModelFolders->setContentLanguageId($objAuth->getIdentity()->contentLanguageId);
         }
 
         return $this->objModelFolders;

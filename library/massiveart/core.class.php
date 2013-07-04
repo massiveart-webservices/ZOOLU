@@ -199,8 +199,10 @@ class Core
         }
         
         // set up zoolu translate obj
-        $this->intZooluLanguageId = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageId : $this->intLanguageId;
-        $this->strZooluLanguageCode = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->languageCode : $this->strLanguageCode;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $this->intZooluLanguageId = ($objAuth->hasIdentity()) ? $objAuth->getIdentity()->languageId : $this->intLanguageId;
+        $this->strZooluLanguageCode = ($objAuth->hasIdentity()) ? $objAuth->getIdentity()->languageCode : $this->strLanguageCode;
         if(file_exists(GLOBAL_ROOT_PATH.'application/zoolu/language/zoolu-'.$this->strZooluLanguageCode.'.mo')){
           $this->translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH.'application/zoolu/language/zoolu-'.$this->strZooluLanguageCode.'.mo');  
         }else{

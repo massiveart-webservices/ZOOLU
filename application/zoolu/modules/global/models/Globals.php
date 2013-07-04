@@ -977,7 +977,9 @@ class Model_Globals extends ModelAbstract
         $objGlobal->globalId = uniqid();
         $objGlobal->version = 1;
         $objGlobal->sortPosition = GenericSetup::DEFAULT_SORT_POSITION;
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         if ($objGenericSetup->getRootLevelGroupId() == $this->core->sysConfig->root_level_groups->product) {
             $objGlobal->parentId = $this->core->sysConfig->product->rootLevels->list->id;
@@ -1069,7 +1071,9 @@ class Model_Globals extends ModelAbstract
 
         $objGlobal->linkGlobalId = uniqid();
         $objGlobal->linkVersion = 1;
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         /**
          * check if parent element is rootlevel or folder and get sort position
@@ -1126,7 +1130,9 @@ class Model_Globals extends ModelAbstract
     {
         $this->core->logger->debug('global->models->Model_Globals->update()');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $strWhere = $this->getGlobalTable()->getAdapter()->quoteInto('globalId = ?', $objGlobal->globalId);
         $strWhere .= $this->getGlobalTable()->getAdapter()->quoteInto(' AND version = ?', $objGlobal->version);
@@ -1378,7 +1384,9 @@ class Model_Globals extends ModelAbstract
             $strContactIds = trim($strContactIds, '[]');
             $arrContactIds = explode('][', $strContactIds);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             foreach ($arrContactIds as $intContactId) {
                 $arrData = array(
@@ -1408,7 +1416,9 @@ class Model_Globals extends ModelAbstract
     {
         $this->core->logger->debug('global->models->Model_Globals->addInternalLinks(' . $strLinkedGlobalIds . ', ' . $strElementId . ', ' . $intVersion . ', ' . $intFieldId . ')');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $arrData = array(
             'globalId'     => $strElementId,
@@ -1497,7 +1507,9 @@ class Model_Globals extends ModelAbstract
     {
         $this->core->logger->debug('global->models->Model_Globals->addArticles(' . $arrArticles . ', ' . $strElementId . ', ' . $intVersion . ', ' . $intFieldId . ')');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $arrData = array(
             'globalId'     => $strElementId,
@@ -1616,7 +1628,9 @@ class Model_Globals extends ModelAbstract
             $this->objGlobalVideoTable->delete($strWhere);
 
             if ($mixedVideoId != '') {
-                $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+                $objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+                $intUserId = $objAuth->getIdentity()->id;
                 $arrData = array(
                     'globalId'      => $objGlobal->globalId,
                     'version'       => $objGlobal->version,

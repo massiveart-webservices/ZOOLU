@@ -64,7 +64,9 @@ class GenericDataTypeFolder extends GenericDataTypeAbstract
 
             $this->getModelFolders()->setLanguageId($this->setup->getLanguageId());
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             /**
              * add|edit|... core and instance data

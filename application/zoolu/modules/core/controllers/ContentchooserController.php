@@ -401,10 +401,12 @@ class Core_ContentchooserController extends AuthControllerAction
              * Since this is an application model, we need to require it
              * from its modules path location.
              */
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Files.php';
             $this->objModelFiles = new Model_Files();
             $this->objModelFiles->setLanguageId($this->getItemLanguageId());
-            $this->objModelFiles->setAlternativLanguageId(Zend_Auth::getInstance()->getIdentity()->languageId);
+            $this->objModelFiles->setAlternativLanguageId($objAuth->getIdentity()->languageId);
         }
 
         return $this->objModelFiles;

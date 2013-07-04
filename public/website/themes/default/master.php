@@ -36,7 +36,10 @@
     <!-- SCREEN CSS -->
     <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/website/themes/default/css/style.css" />
 
-    <?php if(Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session())->hasIdentity()) : ?>
+    <?php
+    $objAuth = Zend_Auth::getInstance();
+    $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+    if($objAuth->hasIdentity()) : ?>
     <link rel="stylesheet" type="text/css" media="screen" href="<?php get_static_component_domain() ?>/website/themes/default/css/modus.css"></link>
     <script type="text/javascript" src="<?php get_static_component_domain() ?>/website/themes/default/js/modus.js"></script>
     <?php endif; ?>

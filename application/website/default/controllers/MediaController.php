@@ -161,6 +161,7 @@ class MediaController extends Zend_Controller_Action
                         if ($objFileData->idGroup != 0) {
                             // if logged in as zoolu user
                             $objAuth = Zend_Auth::getInstance();
+                            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
                             if ($objAuth->hasIdentity()) {
                                 $this->objModelFiles->increaseDownloadCounter($objFileData->id);
                                 $this->setDocumentHeader($strFileName, array('MimeType' => $objFileData->mimeType, 'Size' => $dblFileSize));
@@ -269,6 +270,7 @@ class MediaController extends Zend_Controller_Action
                     if ($objFileData->idGroup != 0) {
                         // if logged in as zoolu user
                         $objAuth = Zend_Auth::getInstance();
+                        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
                         if ($objAuth->hasIdentity()) {
                             $this->objModelFiles->increaseDownloadCounter($objFileData->id);
                             $this->sendDownloadPackage($strFileBase, $strFileName, array('DesiredFileName' => $strDesiredFileName, 'Extension' => $objFileData->extension, 'Size' => $dblFileSize));
