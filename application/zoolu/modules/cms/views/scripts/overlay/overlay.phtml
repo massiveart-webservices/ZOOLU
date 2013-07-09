@@ -6,7 +6,7 @@ $objHelper = new OverlayHelper();
 <div class="oltitle"><?php echo $this->overlaytitle; ?></div>
 <div class="spacer1"></div>
 <div class="olnavigationwrapper">
-    <?php echo $objHelper->getNavigationElements($this->elements, $this->viewtype, 0, $this->rootLevelId, $this->rootLevelType, $this->contenttype, $this->selectOne, $this->replace); ?>
+    <?php echo $objHelper->getNavigationElements($this->elements, $this->viewtype, 0, $this->rootLevelId, $this->rootLevelType, $this->contenttype, $this->selectOne, $this->replace, $this->rootLevelTitle); ?>
 </div>
 <?php if ($this->rootLevelType == Zend_Registry::get('Core')->sysConfig->root_level_types->images) : ?>
 <div class="contenthead">

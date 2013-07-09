@@ -400,20 +400,24 @@ Massiveart.Overlay = Class.create({
      * getNavItem
      * @param integer folderId, integer viewtype
      */
-    getNavItem: function (folderId, viewtype, contenttype, selectOne, replace) {
+    getNavItem: function (folderId, viewtype, contenttype, selectOne, replace, isRootLevel) {
+
+        var selectFolderId = folderId;
+        if (isRootLevel) selectFolderId = 'R'+folderId;
+
         if (typeof(replace) == 'undefined') {
             replace = '';
         }
         this.resetNavItems();
 
-        $('olnavitemtitle' + folderId).addClassName('selected');
+        $('olnavitemtitle' + selectFolderId).addClassName('selected');
 
         if ($('olsubnav' + folderId)) {
-            this.toggleSubNavItem(folderId);
+            if (!isRootLevel) this.toggleSubNavItem(folderId);
             // if mediaFilter is active
             if ($('mediaFilter_Folders')) {
                 $('mediaFilter_Folders').value = folderId;
-                this.loadFileFilterContent(viewtype, contenttype, selectOne, replace);
+                this.loadFileFilterContent(viewtype, contenttype, selectOne, replace, isRootLevel);
             } else {
                 if (typeof(contenttype) == 'undefined') {
                     this.getMediaFolderContent(folderId, viewtype);
@@ -424,46 +428,62 @@ Massiveart.Overlay = Class.create({
                 }
             }
         } else {
-            if (folderId != '') {
-                var subNavContainer = '<div id="olsubnav' + folderId + '" class="olsubnav" style="display:none;"></div>';
-                new Insertion.Bottom('olnavitem' + folderId, subNavContainer);
+            if (selectFolderId != '') {
+                if (!isRootLevel) {
 
-                var blnVisible = this.toggleSubNavItem(folderId);
-                myCore.addBusyClass('olsubnav' + folderId);
 
-                var languageId = null;
-                if ($('languageId')) {
-                    languageId = $F('languageId');
-                }
+                    var subNavContainer = '<div id="olsubnav' + folderId + '" class="olsubnav" style="display:none;"></div>';
+                    new Insertion.Bottom('olnavitem' + folderId, subNavContainer);
+                    var blnVisible = this.toggleSubNavItem(folderId);
+                    myCore.addBusyClass('olsubnav' + folderId);
 
-                new Ajax.Updater('olsubnav' + folderId, '/zoolu/cms/overlay/childnavigation', {
-                    parameters: {
-                        folderId: folderId,
-                        viewtype: viewtype,
-                        languageId: languageId,
-                        contenttype: contenttype,
-                        rootleveltype: myOverlay.rootLevelType,
-                        selectOne: selectOne,
-                        replace: replace
-                    },
-                    evalScripts: true,
-                    onComplete: function () {
-                        // if mediaFilter is active
-                        if ($('mediaFilter_Folders')) {
-                            $('mediaFilter_Folders').value = folderId;
-                            this.loadFileFilterContent(viewtype, contenttype, selectOne, replace);
-                        } else {
-                            if (typeof(contenttype) == 'undefined') {
-                                this.getMediaFolderContent(folderId, viewtype);
-                            } else if (contenttype == 'page') {
-                                this.getPortalFolderContent(folderId);
-                            } else if (contenttype == 'global') {
-                                this.getGlobalFolderContent(folderId);
+                    var languageId = null;
+                    if ($('languageId')) {
+                        languageId = $F('languageId');
+                    }
+
+                    new Ajax.Updater('olsubnav' + folderId, '/zoolu/cms/overlay/childnavigation', {
+                        parameters: {
+                            folderId: folderId,
+                            viewtype: viewtype,
+                            languageId: languageId,
+                            contenttype: contenttype,
+                            rootleveltype: myOverlay.rootLevelType,
+                            selectOne: selectOne,
+                            replace: replace
+                        },
+                        evalScripts: true,
+                        onComplete: function () {
+                            // if mediaFilter is active
+                            if ($('mediaFilter_Folders')) {
+                                $('mediaFilter_Folders').value = folderId;
+                                this.loadFileFilterContent(viewtype, contenttype, selectOne, replace, isRootLevel);
+                            } else {
+                                if (typeof(contenttype) == 'undefined') {
+                                    this.getMediaFolderContent(folderId, viewtype);
+                                } else if (contenttype == 'page') {
+                                    this.getPortalFolderContent(folderId);
+                                } else if (contenttype == 'global') {
+                                    this.getGlobalFolderContent(folderId);
+                                }
                             }
+                            myCore.removeBusyClass('olsubnav' + folderId);
+                        }.bind(this)
+                    });
+                } else {
+                    if ($('mediaFilter_Folders')) {
+                        $('mediaFilter_Folders').value = folderId;
+                        this.loadFileFilterContent(viewtype, contenttype, selectOne, replace, isRootLevel);
+                    } else {
+                        if (typeof(contenttype) == 'undefined') {
+                            this.getMediaFolderContent(folderId, viewtype);
+                        } else if (contenttype == 'page') {
+                            this.getPortalFolderContent(folderId);
+                        } else if (contenttype == 'global') {
+                            this.getGlobalFolderContent(folderId);
                         }
-                        myCore.removeBusyClass('olsubnav' + folderId);
-                    }.bind(this)
-                });
+                    }
+                }
             }
         }
     },
@@ -627,7 +647,7 @@ Massiveart.Overlay = Class.create({
     /**
      * getPortalFolderContent
      */
-    getPortalFolderContent: function (folderId) {
+    getPortalFolderContent: function (folderId, isRootLevel) {
         $(this.updateContainer).innerHTML = '';
         myCore.addBusyClass(this.updateContainer);
 
@@ -712,7 +732,7 @@ Massiveart.Overlay = Class.create({
      * loadFileFilterContent
      * @param integer viewType
      */
-    loadFileFilterContent: function (viewType, contenttype, selectOne, replace) {
+    loadFileFilterContent: function (viewType, contenttype, selectOne, replace, isRootLevel) {
         if (typeof(replace) == 'undefined') {
             replace = '';
         }
@@ -752,7 +772,8 @@ Massiveart.Overlay = Class.create({
                         viewtype: viewType,
                         isOverlay: true,
                         selectOne: selectOne,
-                        replace: replace
+                        replace: replace,
+                        isRootLevel: isRootLevel
                     }
                 } else {
                     var fieldname = this.areaId.substring(this.areaId.indexOf('_') + 1);
