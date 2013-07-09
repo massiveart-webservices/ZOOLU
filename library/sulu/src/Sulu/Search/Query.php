@@ -11,5 +11,9 @@ namespace Sulu\Search;
 
 class Query
 {
+    // parse
+    // search / wildcard search
+    // set limit of search
+    //
 
 }

@@ -12,5 +12,4 @@ namespace Sulu\Search\Handler;
 abstract class AbstractHandler implements HandlerInterface
 {
 
-
 }
