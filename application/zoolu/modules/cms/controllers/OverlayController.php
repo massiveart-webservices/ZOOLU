@@ -540,11 +540,15 @@ class Cms_OverlayController extends AuthControllerAction
             $this->objModelFolders->setLanguageId($intPortalLanguageId);
         }
 
-        $objRootLevels = $this->getModelRootLevels()->loadRootLevelTitle($intRootLevel, $intPortalLanguageId);
+        if ($intRootLevel != null && $intRootLevel != '') {
+            $strRootLevelTitle = $this->getModelRootLevels()->loadRootLevelTitle($intRootLevel, $intPortalLanguageId)->current()->title;
+        } else {
+            $strRootLevelTitle = '';
+        }
 
         if ($intRootLevelType == $this->core->sysConfig->root_level_types->portals) {
             $objRootLevelElements = $this->getModelFolders()->loadRootFolders($intRootLevel, $blnStartpage);
-            $this->view->assign('rootLevelTitle', $objRootLevels->current()->title);
+            $this->view->assign('rootLevelTitle', $strRootLevelTitle);
             $this->view->assign('elements', $objRootLevelElements);
             $this->view->assign('rootLevelId', $intRootLevel);
         } else {
@@ -554,7 +558,7 @@ class Cms_OverlayController extends AuthControllerAction
                 $objMediaRootLevel = $objMediaRootLevels->current();
                 $this->intRootLevelId = $objMediaRootLevel->id;
                 $objRootelements = $this->objModelFolders->loadMediaRootFolders($this->intRootLevelId);
-                $this->view->assign('rootLevelTitle', $objRootLevels->current()->title);
+                $this->view->assign('rootLevelTitle', $strRootLevelTitle);
                 $this->view->assign('elements', $objRootelements);
                 $this->view->assign('rootLevelId', $intRootLevel);
             }

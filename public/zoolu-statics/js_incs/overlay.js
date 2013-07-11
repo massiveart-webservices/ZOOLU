@@ -401,7 +401,6 @@ Massiveart.Overlay = Class.create({
      * @param integer folderId, integer viewtype
      */
     getNavItem: function (folderId, viewtype, contenttype, selectOne, replace, isRootLevel) {
-
         var selectFolderId = folderId;
         if (isRootLevel) selectFolderId = 'R'+folderId;
 
@@ -753,7 +752,6 @@ Massiveart.Overlay = Class.create({
                 if ($('languageId')) {
                     languageId = $F('languageId');
                 }
-
                 var strAjaxAction;
                 if (typeof(contenttype) == 'undefined' || contenttype == '') {
                     strAjaxAction = '/zoolu/cms/page/getfilteredfiles';
@@ -786,7 +784,8 @@ Massiveart.Overlay = Class.create({
                         fileIds: $(fieldname).value,
                         languageId: languageId,
                         viewtype: viewType,
-                        isOverlay: true
+                        isOverlay: true,
+                        isRootLevel: isRootLevel
                     }
                 }
 
