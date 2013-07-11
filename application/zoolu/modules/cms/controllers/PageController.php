@@ -801,6 +801,7 @@ class Cms_PageController extends AuthControllerAction
             $arrFolderIds = explode('][', trim($this->objRequest->getParam('folderIds'), '[]'));
             $intRootLevelId = (int)$this->objRequest->getParam('rootLevelId', -1);
             $arrCurrFileIds = explode('][', trim($this->objRequest->getParam('fileIds'), '[]'));
+            $blnIsRootLevel = $this->objRequest->getParam('isRootLevel');
 
             $this->view->assign('fieldname', $this->objRequest->getParam('fileFieldId'));
             $this->view->assign('viewtype', $this->objRequest->getParam('viewtype'));
@@ -812,7 +813,7 @@ class Cms_PageController extends AuthControllerAction
                 /**
                  * get files
                  */
-                $objPages = $this->getModelPages()->loadPagesByFilter($arrFolderIds, $arrTagIds);
+                $objPages = $this->getModelPages()->loadPagesByFilter($arrFolderIds, $arrTagIds, $blnIsRootLevel);
                 $this->view->assign('pages', $objPages);
                 $this->renderScript('overlay/listpage.phtml');
             } else {
