@@ -1103,7 +1103,7 @@ class Model_Pages extends ModelAbstract
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function loadPagesByFilter($intParentFolderId, $arrTagIds = array())
+    public function loadPagesByFilter($intParentFolderId, $arrTagIds = array(), $blnIsRootLevel = false)
     {
         $this->core->logger->debug('cms->models->Model_Pages->loadPagesByFilter(' . json_encode($intParentFolderId) . ')');
 
@@ -1121,9 +1121,16 @@ class Model_Pages extends ModelAbstract
         if (trim($strTagIds, ',') != '') {
             $objSelect->join('tagPages', 'tagPages.pageId = pages.pageId AND tagPages.idTags IN (' . trim($strTagIds, ',') . ')', array());
         }
-        $objSelect->where('pages.idParent = ?', $intParentFolderId)
-            ->where('pages.idParentTypes = ?', $this->core->sysConfig->parent_types->folder)
-            ->order('pages.sortPosition');
+
+        if ($blnIsRootLevel) {
+            $objSelect->where('pages.idParent = ?', $intParentFolderId)
+                ->where('pages.idParentTypes = ?', $this->core->sysConfig->parent_types->rootlevel)
+                ->order('pages.sortPosition');
+        } else {
+            $objSelect->where('pages.idParent = ?', $intParentFolderId)
+                ->where('pages.idParentTypes = ?', $this->core->sysConfig->parent_types->folder)
+                ->order('pages.sortPosition');
+        }
 
         $this->core->logger->debug('loadPagesByFilter: ' . strval($objSelect));
 

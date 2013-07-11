@@ -77,7 +77,7 @@ class OverlayHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getNavigationElements($rowset, $viewtype, $intFolderId = 0, $intRootLevelId = 0, $intRootLevelTypeId = 0, $strContentType = null, $blnSelectOne = 'false', $replace = 'false')
+    public function getNavigationElements($rowset, $viewtype, $intFolderId = 0, $intRootLevelId = 0, $intRootLevelTypeId = 0, $strContentType = null, $blnSelectOne = 'false', $replace = 'false', $strRootLevelTitle = '')
     {
         $this->core->logger->debug('cms->views->helpers->OverlayHelper->getNavigationElements()');
 
@@ -117,6 +117,14 @@ class OverlayHelper
                 </div>';
         }
 
+        if ($strRootLevelTitle != '') {
+            $strOutput .= '<div id="olnavitemR' . $intRootLevelId . '" class="olnavrootitem">
+                           <div onclick="myOverlay.getNavItem(' . $intRootLevelId . ',' . $viewtype . $strType . ', ' . $blnSelectOne . ', ' . $replace . ', true); return false;" style="position:relative;">
+                             <div class="icon img_startpage_on"></div>
+                             <span id="olnavitemtitleR' . $intRootLevelId . '">' . htmlentities($strRootLevelTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</span>
+                           </div>
+                         </div>';
+        }
         if (count($rowset) > 0) {
             foreach ($rowset as $row) {
                 $title = $row->title;
