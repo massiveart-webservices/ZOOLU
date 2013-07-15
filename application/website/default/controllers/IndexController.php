@@ -271,8 +271,11 @@ class IndexController extends WebControllerAction
                     }
     
                     if ($this->core->sysConfig->cache->page == 'true' && !isset($_SESSION['sesTestMode']) && $this->blnSearch == false && (!isset($_POST) || count($_POST) == 0)) {
-                        $this->objCache->start($this->strCacheId);
-                        $this->blnCachingStart = true;
+                        if ($this->blnCachingStart !== false) {
+                            $this->objCache->start($this->strCacheId);
+                        }
+                    } else {
+                        $this->blnCachingStart = false;
                     }
     
                     if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
