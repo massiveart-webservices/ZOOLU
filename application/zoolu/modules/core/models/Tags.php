@@ -131,6 +131,24 @@ class Model_Tags
     }
 
     /**
+     * editTag
+     * @param integer $intTagId
+     * @param array $arrData
+     * @author Mathias Ober <mob@massiveart.com>
+     * @version 1.0
+     */
+    public function editTag($intTagId, $arrData)
+    {
+        try {
+            $this->getTagsTable();
+            $strWhere = $this->objTagsTable->getAdapter()->quoteInto('id = ?', $intTagId);
+            return $this->objTagsTable->update($arrData, $strWhere);
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+
+    /**
      * addTypeTags
      * @param string $strTagType
      * @param array $arrTagIds

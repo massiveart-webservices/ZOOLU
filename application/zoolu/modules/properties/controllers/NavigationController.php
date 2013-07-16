@@ -77,12 +77,66 @@ class Properties_NavigationController extends AuthControllerAction
      */
     public function indexAction()
     {
+
+        $this->getModelFolders();
+        $objRootLevels = $this->objModelFolders->loadAllRootLevelsWithGroups($this->core->sysConfig->modules->contacts);
         $objPropertiesRootLevels = $this->getModelFolders()->loadAllRootLevels($this->core->sysConfig->modules->properties);
+
+        $objRootLevelNavigation = new NavigationTree();
+        if (count($objRootLevels) > 0) {
+            $intOrder = 0;
+            foreach ($objRootLevels as $objRootLevel) {
+                $intOrder++;
+
+                if (!$objRootLevelNavigation->hasSubTree($objRootLevel->name)) {
+                    $objNavGroup = new NavigationTree();
+                    $objNavGroup->setId($objRootLevel->idRootLevelGroups);
+                    $objNavGroup->setItemId($objRootLevel->name);
+                    $objNavGroup->setTypeId($objRootLevel->idRootLevelGroups);
+                    $objNavGroup->setTitle($objRootLevel->rootLevelGroupTitle);
+                    $objNavGroup->setUrl($objRootLevel->href);
+                    $objNavGroup->setLanguageId(((int) $objRootLevel->rootLevelGuiLanguageId > 0 ? $objRootLevel->rootLevelGuiLanguageId : $objRootLevel->rootLevelLanguageId));
+
+                    $objRootLevelNavigation->addTree($objNavGroup, $objRootLevel->name);
+                }
+
+                $objNavItem = new NavigationItem();
+                $objNavItem->setId($objRootLevel->id);
+                $objNavItem->setItemId($objRootLevel->name);
+                $objNavItem->setTypeId($objRootLevel->idRootLevelTypes);
+                $objNavItem->setTitle($objRootLevel->title);
+                $objNavItem->setUrl($objRootLevel->href);
+                $objNavItem->setOrder($intOrder);
+                $objNavItem->setParentId($objRootLevel->idRootLevelGroups);
+                $objNavItem->setLanguageId(((int) $objRootLevel->rootLevelGuiLanguageId > 0 ? $objRootLevel->rootLevelGuiLanguageId : $objRootLevel->rootLevelLanguageId));
+
+                $objRootLevelNavigation->addToParentTree($objNavItem, $objRootLevel->name . '_' . $objRootLevel->id);
+            }
+        }
+
+        $this->view->assign('rootLevelNavigation', $objRootLevelNavigation);
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
+        $this->view->assign('rootLevelGroupId', $this->getRequest()->getParam('rootLevelGroupId'));
+        $this->view->assign('rootLevelGroupKey', $this->getRequest()->getParam('rootLevelGroupKey'));
+        $this->view->assign('rootLevelType', $this->getRequest()->getParam('rootLevelType'));
+
 
         $this->view->assign('rootLevels', $objPropertiesRootLevels);
         $this->view->assign('categoryFormDefaultId', $this->core->sysConfig->form->ids->categories->default);
         $this->view->assign('unitFormDefaultId', $this->core->sysConfig->form->ids->units->default);
         $this->view->assign('contactFormDefaultId', $this->core->sysConfig->form->ids->contacts->default);
+
+        $strRenderScript = ($this->getRequest()->getParam('layoutType') == 'list') ? 'list.phtml' : 'index.phtml';
+        $this->renderScript('navigation/' . $strRenderScript);
+
+
+//
+//        $objPropertiesRootLevels = $this->getModelFolders()->loadAllRootLevels($this->core->sysConfig->modules->properties);
+//
+//        $this->view->assign('rootLevels', $objPropertiesRootLevels);
+//        $this->view->assign('categoryFormDefaultId', $this->core->sysConfig->form->ids->categories->default);
+//        $this->view->assign('unitFormDefaultId', $this->core->sysConfig->form->ids->units->default);
+//        $this->view->assign('contactFormDefaultId', $this->core->sysConfig->form->ids->contacts->default);
     }
 
     /**

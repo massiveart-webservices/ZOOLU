@@ -324,6 +324,20 @@
         myNavigation.topNaviTitle = '<?php echo $this->translate->_('Settings'); ?>';
         myNavigation.module = <?php echo $this->module; ?>;
 
+        if ((typeof(rootLevelId) != 'undefined') && (typeof(rootLevelGroupId) != 'undefined')) {
+            myNavigation.setRootLevelId(rootLevelId);
+            myNavigation.setRootLevelGroupId(rootLevelGroupId);
+            myNavigation.getRootLevelTreeStart();
+        }
+
+        if ((typeof(preSelectedNaviItem) != 'undefined')) {
+            myNavigation.preSelectedNaviItem = preSelectedNaviItem;
+        }
+
+        if ((typeof(preSelectedSubNaviItem) != 'undefined')) {
+            myNavigation.preSelectedSubNaviItem = preSelectedSubNaviItem;
+        }
+
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
     });
 
