@@ -106,6 +106,10 @@ class Properties_TagController extends AuthControllerAction
         $objSelect->setIntegrityCheck(false);
         $objSelect->from($this->getModelTags()->getTagsTable(), array('id', 'title'));
 
+        if($strSearchValue != ''){
+            $objSelect->where('tags.title LIKE ?', '%'.$strSearchValue.'%');
+        }
+
         $objSelect->order($strOrderColumn.' '.strtoupper($strSortOrder));
 
         $intCountResult = 0;
