@@ -174,13 +174,21 @@ class Properties_TagController extends AuthControllerAction
 
             if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
                 $arrFormData = $this->getRequest()->getPost();
-                if ($this->objForm->isValid($arrFormData) && count($this->getModelTags()->loadTagByName($arrFormData['title'])) == 0 && $arrFormData['title'] !== '') {
+
+                $objTag = $this->getModelTags()->loadTag($arrFormData['id']);
+                $blnIsOwnTagName = false;
+
+                //check if tagname changed
+                foreach($objTag as $value) {
+                    if ($arrFormData['title'] == $value->title) {
+                        $blnIsOwnTagName = true;
+                    }
+                }
+
+                if ($this->objForm->isValid($arrFormData) && (count($this->getModelTags()->loadTagByName($arrFormData['title'])) == 0 || $blnIsOwnTagName == true) && $arrFormData['title'] !== '') {
                     $this->objForm->setAction('/zoolu/properties/tag/edit');
 
-                    //Get old customer data
-                    $objTag = $this->getModelTags()->loadTag($intTagId);
-
-                    //Edit customer
+                    //Edit tag
                     $arrData = array(
                         'title' => $arrFormData['title']
                     );

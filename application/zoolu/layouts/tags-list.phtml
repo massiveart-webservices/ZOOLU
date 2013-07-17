@@ -118,6 +118,10 @@
             </div>
 
             <div id="genFormFunctions" style="display:none;">
+                <!-- back link to list -->
+                <div id="backlink">
+                    <a href="#" onclick="myList.backFilter(); return false;">&laquo; <?php echo $this->translate->_('back'); ?></a>
+                </div>
                 <!-- save button -->
                 <div id="buttonsave" onclick="myForm.saveTag();">
                     <div class="button25leftOn"></div>
