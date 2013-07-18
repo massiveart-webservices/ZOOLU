@@ -299,7 +299,7 @@ class Properties_TagController extends AuthControllerAction
                     //Set Action
                     $this->objForm->setAction('/zoolu/properties/tag/add');
                     //Add Tag
-                    $intCustomerId = $this->getModelTags()->addTag($arrFormData['title']);
+                    $intTagId = $this->getModelTags()->addTag($arrFormData['title']);
 
                     $this->view->assign('blnShowFormAlert', true);
                     $this->_forward('list', 'tag', 'properties');

@@ -98,9 +98,9 @@ Massiveart.Form.Properties = Class.create(Massiveart.Form, {
             // loader
             this.getFormSaveLoader();
 
-            new Ajax.Updater(myNavigation.genTmpContainer, $(this.formId).readAttribute('action'), {
+            new Ajax.Request($(this.formId).readAttribute('action'), {
                 parameters: serializedForm,
-                evalScripts: true,
+                evalScripts: false,
                 onComplete: function(transport) {
                     //problem: ajax.updater evalScripts = true was too late
                     transport.responseText.evalScripts();
@@ -109,7 +109,7 @@ Massiveart.Form.Properties = Class.create(Massiveart.Form, {
                         //saved
                         this.getFormSaveSucces();
 
-                        $(myNavigation.genListContainer).update($(myNavigation.genTmpContainer).innerHTML);
+                        $(myNavigation.genListContainer).update(transport.responseText);
 
                         $(myNavigation.genFormContainer).hide();
                         $(myNavigation.genFormFunctions).hide();
@@ -118,8 +118,7 @@ Massiveart.Form.Properties = Class.create(Massiveart.Form, {
                         $(myNavigation.genListFunctions).show();
                     }else{
                         this.getFormSaveError();
-
-                        $(myNavigation.genFormContainer).update($(myNavigation.genTmpContainer).innerHTML);
+                        $(myNavigation.genFormContainer).update(transport.responseText);
                     }
                     myCore.initSelectAll();
                     myCore.initListHover();
