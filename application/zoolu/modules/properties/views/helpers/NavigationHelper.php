@@ -63,7 +63,7 @@ class NavigationHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    function getRootLevels($rowset)
+    function getRootLevels($rowset, $rootLevelId, $strViewType = 'tree')
     {
         $this->core->logger->debug('properties->views->helpers->NavigationHelper->getRootLevels()');
 
@@ -75,38 +75,55 @@ class NavigationHelper
              */
             $strJsClickFunc = '';
             $strRootLevelIconCss = '';
+            $strRootLevelType = '';
 
             switch ($row->idRootLevelTypes) {
                 case $this->core->sysConfig->root_level_types->contacts:
-                    $strJsClickFunc = 'myNavigation.selectContacts(' . $row->id . '); ';
+                    $strJsClickFunc = 'myNavigation.selectContacts(' . $row->id . ', ' . $this->core->sysConfig->root_level_groups->category . ', \'' .  $row->href . '\',  \'' . $strViewType . '\'); ';
                     $strRootLevelIconCss = 'usericon';
                     break;
                 case $this->core->sysConfig->root_level_types->locations:
-                    $strJsClickFunc = 'myNavigation.selectLocations(' . $row->id . '); ';
+                    $strJsClickFunc = 'myNavigation.selectLocations(' . $row->id . ', ' . $this->core->sysConfig->root_level_groups->category . ', \'' .  $row->href . '\',  \'' . $strViewType . '\'); ';
                     $strRootLevelIconCss = 'locationicon';
                     break;
                 case $this->core->sysConfig->root_level_types->categories:
-                    $strJsClickFunc = 'myNavigation.selectCategories(' . $row->id . ', ' . $this->core->sysConfig->category_types->default . '); ';
+                    $strJsClickFunc = 'myNavigation.selectCategories(' . $row->id . ', ' . $this->core->sysConfig->category_types->default . ', ' . $this->core->sysConfig->root_level_groups->category . ', \'' .  $row->href . '\',  \'' . $strViewType . '\'); ';
                     $strRootLevelIconCss = 'categoryicon';
                     break;
                 case $this->core->sysConfig->root_level_types->labels:
-                    $strJsClickFunc = 'myNavigation.selectCategories(' . $row->id . ', ' . $this->core->sysConfig->category_types->label . '); ';
+                    $strJsClickFunc = 'myNavigation.selectCategories(' . $row->id . ', ' . $this->core->sysConfig->category_types->label . ', ' . $this->core->sysConfig->root_level_groups->category . ', \'' .  $row->href . '\',  \'' . $strViewType . '\'); ';
                     $strRootLevelIconCss = 'labelicon';
                     break;
                 case $this->core->sysConfig->root_level_types->systeminternals:
-                    $strJsClickFunc = 'myNavigation.selectCategories(' . $row->id . ', ' . $this->core->sysConfig->category_types->system . '); ';
+                    $strJsClickFunc = 'myNavigation.selectCategories(' . $row->id . ', ' . $this->core->sysConfig->category_types->system . ', ' . $this->core->sysConfig->root_level_groups->category . ', \'' .  $row->href . '\',  \'' . $strViewType . '\'); ';
+                    $strRootLevelIconCss = 'sysinternicon';
+                    break;
+                case $this->core->sysConfig->root_level_types->tags:
+                    $strRootLevelType = 'tag';
+                    $strJsClickFunc = 'myNavigation.selectTags(' . $row->id . ', ' . $this->core->sysConfig->root_level_groups->category . ', \'' .  $row->href . '\', \'' . $strViewType . '\', \'' . $strRootLevelType . '\'); ';
                     $strRootLevelIconCss = 'sysinternicon';
                     break;
             }
 
+            if ($rootLevelId == $row->id) {
+                $strSelected = ' selected';
+
+                $strOutput .= '
+                                <script type="text/javascript">//<![CDATA[
+                                    var preSelectedNaviItem = \'portal' . $row->id . '\';
+                                    //]]>
+                                </script>';
+            }
+
             $strOutput .= '<div class="naviitemcontainer">
-        <div id="portal' . $row->id . '" class="naviitem" onclick="' . $strJsClickFunc . 'return false;">
-          <div class="' . $strRootLevelIconCss . '"></div>
-          <div id="divRootLevelTitle_' . $row->id . '" class="itemtitle">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
-          <div class="clear"></div>
-        </div>
-        <div class="clear"></div>
-      </div>';
+                <div id="portal' . $row->id . '" class="naviitem" onclick="' . $strJsClickFunc . 'return false;">
+                  <div class="' . $strRootLevelIconCss . '"></div>
+                  <div id="divRootLevelTitle_' . $row->id . '" class="itemtitle">' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</div>
+                  <div class="clear"></div>
+                  <input type="hidden" value="' . $strRootLevelType . '" id="rootLevelType' . $row->id . '"/>
+                </div>
+                <div class="clear"></div>
+              </div>';
         }
 
         return $strOutput;
@@ -227,6 +244,8 @@ class NavigationHelper
 
         return $strOutput;
     }
+
+
 }
 
 ?>

@@ -30,9 +30,9 @@ Massiveart.Form.Properties = Class.create(Massiveart.Form, {
    * save
    */
   save: function(){
-      
+
     if($(this.formId)){
-      
+
       /**
        * write/save texteditor content to generic form
        */
@@ -55,10 +55,9 @@ Massiveart.Form.Properties = Class.create(Massiveart.Form, {
 	        onComplete: function(transport) {
             //problem: ajax.updater evalScripts = true was too late
             transport.responseText.evalScripts();
-
-	          if($('rootLevelId').getValue() != '' && $('rootLevelId').getValue() > 0){
+	          if($('rootLevelId') != null && $('rootLevelId').getValue() != '' && $('rootLevelId').getValue() > 0){
 	            myNavigation.updateNavigationLevel();
-	          }                    
+	          }
 	          //saved
 	          this.getFormSaveSucces();
 	          $('buttondelete').show();  
@@ -76,7 +75,58 @@ Massiveart.Form.Properties = Class.create(Massiveart.Form, {
       }      
     }
   },
-  
+
+    /**
+     * save
+     */
+    saveTag: function(){
+        if($(this.formId)){
+
+            /**
+             * write/save texteditor content to generic form
+             */
+            if($$('.texteditor')){
+                tinyMCE.triggerSave();
+                myCore.resetTinyMCE(true);
+            }
+
+            /**
+             * serialize generic form
+             */
+            var serializedForm = $(this.formId).serialize();
+
+            // loader
+            this.getFormSaveLoader();
+
+            new Ajax.Request($(this.formId).readAttribute('action'), {
+                parameters: serializedForm,
+                evalScripts: false,
+                onComplete: function(transport) {
+                    //problem: ajax.updater evalScripts = true was too late
+                    transport.responseText.evalScripts();
+
+                    if(this.blnShowFormAlert){
+                        //saved
+                        this.getFormSaveSucces();
+
+                        $(myNavigation.genListContainer).update(transport.responseText);
+
+                        $(myNavigation.genFormContainer).hide();
+                        $(myNavigation.genFormFunctions).hide();
+
+                        $(myNavigation.genListContainer).show();
+                        $(myNavigation.genListFunctions).show();
+                    }else{
+                        this.getFormSaveError();
+                        $(myNavigation.genFormContainer).update(transport.responseText);
+                    }
+                    myCore.initSelectAll();
+                    myCore.initListHover();
+                }.bind(this)
+            });
+        }
+    },
+
   /**
    * deleteElement
    */
@@ -136,6 +186,57 @@ Massiveart.Form.Properties = Class.create(Massiveart.Form, {
       }.bind(this));
     }
   },
+
+    /**
+     * deleteTagElement
+     */
+    deleteTagElement: function(){
+
+        if($(this.formId)){
+
+            if($('rootLevelGroupKey' + myNavigation.rootLevelGroupId)){
+                tmpKey = 'Delete_' + $('rootLevelGroupKey' + myNavigation.rootLevelGroupId).getValue();
+                var key = (myCore.translate[tmpKey]) ? tmpKey : 'Delete_';
+            }else{
+                var key = 'Delete_';
+            }
+
+            myCore.deleteAlertSingleMessage = myCore.translate[key];
+            myCore.showDeleteAlertMessage(1);
+
+            $('buttonOk').observe('click', function(event){
+                myCore.hideDeleteAlertMessage();
+                var intPosLastSlash = $(this.formId).readAttribute('action').lastIndexOf('/');
+                var strAjaxActionBase = $(this.formId).readAttribute('action').substring(0, intPosLastSlash + 1);
+                var elementId = $('id').getValue();
+
+                // loader
+                this.getFormSaveLoader();
+
+                new Ajax.Updater(myNavigation.genListContainer, strAjaxActionBase + 'delete', {
+                    parameters: { id: elementId },
+                    evalScripts: true,
+                    onComplete: function() {
+                        //deleted
+                        this.getFormDeleteSucces();
+
+                        $(myNavigation.genFormContainer).hide();
+                        $(myNavigation.genFormFunctions).hide();
+
+                        $(myNavigation.genListContainer).show();
+                        $(myNavigation.genListFunctions).show();
+
+                        myCore.initSelectAll();
+                        myCore.initListHover();
+                    }.bind(this)
+                });
+            }.bind(this));
+
+            $('buttonCancel').observe('click', function(event){
+                myCore.hideDeleteAlertMessage();
+            }.bind(this));
+        }
+    },
   
   /**
    * changeLanguage

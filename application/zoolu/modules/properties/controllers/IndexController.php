@@ -60,21 +60,80 @@ class Properties_IndexController extends AuthControllerAction
     public function indexAction()
     {
 
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_forward('tree');
+
+//        $this->_helper->viewRenderer->setNoRender();
+//
+//        Zend_Layout::startMvc(array(
+//                                   'layout'     => 'properties',
+//                                   'layoutPath' => '../application/zoolu/layouts'
+//                              ));
+//
+//        $objLayout = Zend_Layout::getMvcInstance();
+//        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'properties'));
+//        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+//        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
+//        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->properties)));
+//
+//        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+//        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+//        $this->view->assign('module', $this->core->sysConfig->modules->properties);
+    }
+
+
+    /**
+     * listAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function listAction()
+    {
         $this->_helper->viewRenderer->setNoRender();
 
         Zend_Layout::startMvc(array(
-                                   'layout'     => 'properties',
-                                   'layoutPath' => '../application/zoolu/layouts'
-                              ));
+            'layout'     => 'tags-list',
+            'layoutPath' => '../application/zoolu/layouts'
+        ));
+
+
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
 
         $objLayout = Zend_Layout::getMvcInstance();
-        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'properties'));
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'properties', array('layoutType' => 'list')));
         $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
         $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->properties)));
 
         $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->tags);
+        $this->view->assign('module', $this->core->sysConfig->modules->properties);
+    }
+
+    /**
+     * treeAction
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    public function treeAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+
+        Zend_Layout::startMvc(array(
+            'layout'     => 'properties',
+            'layoutPath' => '../application/zoolu/layouts'
+        ));
+
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
+
+        $objLayout = Zend_Layout::getMvcInstance();
+        $objLayout->assign('navigation', $this->view->action('index', 'Navigation', 'properties'));
+        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core', array('module' => $this->core->sysConfig->modules->properties)));
+
+        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->properties);
         $this->view->assign('module', $this->core->sysConfig->modules->properties);
     }
 
