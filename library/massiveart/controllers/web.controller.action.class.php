@@ -73,7 +73,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
      */
     protected $objCache;
 
-    protected $blnCachingStart = false;
+    protected $blnCachingStart = true;
     protected $blnCachingOutput = false;
 
     /**
