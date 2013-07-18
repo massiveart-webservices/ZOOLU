@@ -272,27 +272,29 @@ class Security
     /**
      * save
      * @param Security $objSecurity
+     * @param String $namespce
      * @return void
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public static function save(Security $objSecurity)
+    public static function save(Security $objSecurity, $namespace = 'Security')
     {
         self::clearInstance();
-        $objSecuritySesNam = new Zend_Session_Namespace('Security');
+        $objSecuritySesNam = new Zend_Session_Namespace($namespace);
         $objSecuritySesNam->security = $objSecurity;
     }
 
     /**
      * get
+     * @param String $namespce
      * @return Security
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public static function get()
+    public static function get($namespace = 'Security')
     {
         if (self::$objInstance === null) {
-            $objSecuritySesNam = new Zend_Session_Namespace('Security');
+            $objSecuritySesNam = new Zend_Session_Namespace($namespace);
             if (isset($objSecuritySesNam->security)) {
                 self::$objInstance = $objSecuritySesNam->security;
             } else {
