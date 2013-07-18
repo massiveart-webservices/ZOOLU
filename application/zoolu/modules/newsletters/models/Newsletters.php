@@ -164,7 +164,9 @@ class Model_Newsletters
     {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->add()');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $arrData = array_merge(
             $arrData,
@@ -188,7 +190,9 @@ class Model_Newsletters
     {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->update()');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $strWhere = $this->getNewsletterTable()->getAdapter()->quoteInto('id = ?', $objGenericSetup->getElementId());
 

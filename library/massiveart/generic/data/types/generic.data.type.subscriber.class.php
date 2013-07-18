@@ -61,8 +61,9 @@ class GenericDataTypeSubscriber extends GenericDataTypeAbstract
     {
         $this->core->logger->debug('massiveart->generic->data->GenericDataTypeSubscriber->save()');
         try {
-
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             /**
              * add|edit|newVersion core and instance data

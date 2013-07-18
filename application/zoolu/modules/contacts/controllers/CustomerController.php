@@ -144,6 +144,8 @@ class Contacts_CustomerController extends AuthControllerAction
                     $this->objForm->setAction('/zoolu/contacts/customer/edit');
 
                     //Add customer
+                    $objAuth = Zend_Auth::getInstance();
+                    $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
                     $intCustomerId = $this->getModelCustomers()->add(array(
                             'username' => $arrFormData['username'],
                             'password' => md5($arrFormData['password']),
@@ -157,8 +159,8 @@ class Contacts_CustomerController extends AuthControllerAction
                             'fax' => $arrFormData['fax'],
                             'idCustomerStatus' => $arrFormData['idCustomerStatus'],
                             'idCustomerSalutations' => $arrFormData['idCustomerSalutations'],
-                            'idUsers' => Zend_Auth::getInstance()->getIdentity()->id,
-                            'creator' => Zend_Auth::getInstance()->getIdentity()->id
+                            'idUsers' => $objAuth->getIdentity()->id,
+                            'creator' => $objAuth->getIdentity()->id
                         )
                     );
 
@@ -284,6 +286,8 @@ class Contacts_CustomerController extends AuthControllerAction
                     $objCustomer = $this->getModelCustomers()->load($intCustomerId)->current();
 
                     //Edit customer
+                    $objAuth = Zend_Auth::getInstance();
+                    $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
                     $arrCustomerData = array(
                         'username' => $arrFormData['username'],
                         'password' => md5($arrFormData['password']),
@@ -297,7 +301,7 @@ class Contacts_CustomerController extends AuthControllerAction
                         'fax' => $arrFormData['fax'],
                         'idCustomerStatus' => $arrFormData['idCustomerStatus'],
                         'idCustomerSalutations' => $arrFormData['idCustomerSalutations'],
-                        'idUsers' => Zend_Auth::getInstance()->getIdentity()->id
+                        'idUsers' => $objAuth->getIdentity()->id
                     );
 
                     //Do not update password if it is empty

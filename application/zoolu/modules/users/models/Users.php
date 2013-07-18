@@ -122,7 +122,9 @@ class Model_Users
     public function addUser($arrData)
     {
         try {
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['creator'] = $intUserId;
             $arrData['created'] = date('Y-m-d H:i:s');
@@ -150,7 +152,9 @@ class Model_Users
             $this->getUserTable();
             $strWhere = $this->objUserTable->getAdapter()->quoteInto('id = ?', $intUserId);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['changed'] = date('Y-m-d H:i:s');
 
@@ -279,7 +283,9 @@ class Model_Users
     public function addGroup($arrData)
     {
         try {
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['creator'] = $intUserId;
             $arrData['created'] = date('Y-m-d H:i:s');
@@ -304,7 +310,9 @@ class Model_Users
             $this->getGroupTable();
             $strWhere = $this->objGroupTable->getAdapter()->quoteInto('id = ?', $intGroupId);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['changed'] = date('Y-m-d H:i:s');
 
@@ -562,7 +570,9 @@ class Model_Users
     public function addResource($arrData)
     {
         try {
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['creator'] = $intUserId;
             $arrData['created'] = date('Y-m-d H:i:s');
@@ -589,7 +599,9 @@ class Model_Users
             $this->getResourceTable();
             $strWhere = $this->objResourceTable->getAdapter()->quoteInto('id = ?', $intResourceId);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['changed'] = date('Y-m-d H:i:s');
 

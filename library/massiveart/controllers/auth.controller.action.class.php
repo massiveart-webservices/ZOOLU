@@ -80,6 +80,7 @@ class AuthControllerAction extends Zend_Controller_Action
          * check if user is authenticated, else redirect to login form
          */
         $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
 
         if (!$objAuth->hasIdentity() || !isset($_SESSION['sesZooluLogin']) || $_SESSION['sesZooluLogin'] == false) {
             if ($this->getRequest()->isXmlHttpRequest()) {

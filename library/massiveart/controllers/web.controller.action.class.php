@@ -281,7 +281,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
 
             $blnHasIdentity = true;
             $objAuth = Zend_Auth::getInstance();
-            $objAuth->setStorage(new Zend_Auth_Storage_Session());
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
             if (!$objAuth->hasIdentity()) {
                 $blnHasIdentity = false;
             }

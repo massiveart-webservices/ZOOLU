@@ -253,7 +253,9 @@ class Properties_NavigationController extends AuthControllerAction
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
             $this->objModelFolders = new Model_Folders();
             $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
-            $this->objModelFolders->setContentLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $this->objModelFolders->setContentLanguageId($objAuth->getIdentity()->contentLanguageId);
         }
 
         return $this->objModelFolders;

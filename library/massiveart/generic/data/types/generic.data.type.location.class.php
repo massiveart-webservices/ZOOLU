@@ -64,7 +64,9 @@ class GenericDataTypeLocation extends GenericDataTypeAbstract
 
             $this->getModelLocations()->setLanguageId($this->setup->getLanguageId());
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             /**
              * add|edit|newVersion core and instance data

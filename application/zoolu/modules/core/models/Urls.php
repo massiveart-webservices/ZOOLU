@@ -505,7 +505,9 @@ class Model_Urls
     {
         $this->core->logger->debug('core->models->Model_Urls->insertUrl(' . $strUrl . ', ' . $strRelationId . ', ' . $intVersion . ', ' . $intUrlTypeId . ')');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $arrDataInsert = array(
             'relationId'   => $strRelationId,
@@ -709,7 +711,9 @@ class Model_Urls
     public function addUrl($arrData)
     {
         try {
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['creator'] = $intUserId;
             $arrData['created'] = date('Y-m-d H:i:s');
@@ -736,7 +740,9 @@ class Model_Urls
         try {
             $strWhere = $this->getUrlTable()->getAdapter()->quoteInto('id = ?', $intUrlId);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData['idUsers'] = $intUserId;
             $arrData['changed'] = date('Y-m-d H:i:s');
 

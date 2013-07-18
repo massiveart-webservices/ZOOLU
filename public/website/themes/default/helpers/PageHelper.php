@@ -272,8 +272,9 @@ class Default_PageHelper extends PageHelper {
      */
     public function getZooluHeader(){
         $strReturn = '';
-        Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
-        if(Zend_Auth::getInstance()->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true){
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        if($objAuth->hasIdentity()){
             $strReturn .= '
                             <div class="divShowModusContainer" id="zoolu-show-modus-toolbar" onClick="Web.Modus.showModusContainer()">
                             <div class="divShowModusContainerArrow">

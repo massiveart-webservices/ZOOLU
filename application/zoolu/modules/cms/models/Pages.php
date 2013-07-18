@@ -170,7 +170,9 @@ class Model_Pages extends ModelAbstract
             $strWhere .= ' AND ' . $objPagePluginTable->getAdapter()->quoteInto('idLanguages = ?', $this->intLanguageId);
             $objPagePluginTable->delete($strWhere);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
             $arrData = array(
                 'pageId' => $objPage->pageId,
                 'version' => $objPage->version,
@@ -328,7 +330,9 @@ class Model_Pages extends ModelAbstract
         $objPage->rootLevelId = $objGenericSetup->getRootLevelId();
         $objPage->isStartElement = $objGenericSetup->getIsStartElement();
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         /**
          * check if parent element is rootlevel or folder and get sort position
@@ -407,7 +411,10 @@ class Model_Pages extends ModelAbstract
     {
         $this->core->logger->debug('cms->models->Model_Pages->update()');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $strWhere = $this->getPageTable()->getAdapter()->quoteInto('pageId = ?', $objPage->pageId);
         $strWhere .= $this->getPageTable()->getAdapter()->quoteInto(' AND version = ?', $objPage->version);
@@ -498,7 +505,10 @@ class Model_Pages extends ModelAbstract
     {
         $this->core->logger->debug('cms->models->Model_Pages->addInternalLinks(' . $strLinkedPageIds . ', ' . $strElementId . ', ' . $intVersion . ', ' . $intFieldId . ')');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $arrData = array(
             'pageId' => $strElementId,
@@ -535,7 +545,10 @@ class Model_Pages extends ModelAbstract
     {
         $this->core->logger->debug('cms->models->Model_Pages->addPageCollection(' . $strCollectedPageIds . ', ' . $strElementId . ', ' . $intVersion . ')');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $arrData = array(
             'pageId' => $strElementId,
@@ -571,7 +584,10 @@ class Model_Pages extends ModelAbstract
     {
         $this->core->logger->debug('cms->models->Model_Pages->addPageCollectionUrls(Zend_Db_Table_Rowset_Abstract, ' . $intParentId . ', ' . $intParentTypeId . ')');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $arrData = array(
             'idLanguages' => $this->intLanguageId,
@@ -1691,7 +1707,9 @@ class Model_Pages extends ModelAbstract
             $this->objPageVideosTable->delete($strWhere);
 
             if ($mixedVideoId != '') {
-                $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+                $objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+                $intUserId = $objAuth->getIdentity()->id;
                 $arrData = array(
                     'pageId' => $objPage->pageId,
                     'version' => $objPage->version,
@@ -1842,7 +1860,10 @@ class Model_Pages extends ModelAbstract
             $strContactIds = trim($strContactIds, '[]');
             $arrContactIds = explode('][', $strContactIds);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             foreach ($arrContactIds as $sortPosition => $intContactId) {
                 $arrData = array(
@@ -1888,7 +1909,10 @@ class Model_Pages extends ModelAbstract
             $strGroupIds = trim($strGroupIds, '[]');
             $arrGroupIds = explode('][', $strGroupIds);
 
-            $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $intUserId = $objAuth->getIdentity()->id;
 
             foreach ($arrGroupIds as $sortPosition => $intGroupId) {
                 $arrData = array(

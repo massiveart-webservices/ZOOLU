@@ -734,8 +734,10 @@ class Cms_PageController extends AuthControllerAction
             /**
              * get files
              */
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
             $this->getModelFiles();
-            $this->objModelFiles->setAlternativLanguageId(Zend_Auth::getInstance()->getIdentity()->languageId);
+            $this->objModelFiles->setAlternativLanguageId($objAuth->getIdentity()->languageId);
             $objFiles = $this->objModelFiles->loadFilesById($strFileIds);
 
             $this->view->assign('objFiles', $objFiles);
@@ -774,7 +776,9 @@ class Cms_PageController extends AuthControllerAction
                  * get files
                  */
                 $this->getModelFiles();
-                $this->objModelFiles->setAlternativLanguageId(Zend_Auth::getInstance()->getIdentity()->languageId);
+                $objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+                $this->objModelFiles->setAlternativLanguageId($objAuth->getIdentity()->languageId);
                 $objFiles = $this->objModelFiles->loadFilesByFilter($intRootLevelId, $arrTagIds, $arrFolderIds);
                 $this->view->assign('objFiles', $objFiles);
             } else {
@@ -1431,7 +1435,9 @@ class Cms_PageController extends AuthControllerAction
             /**
              * set page default & specific form values
              */
-            $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam("creator") != '') ? $this->objRequest->getParam("creator") : Zend_Auth::getInstance()->getIdentity()->id));
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam("creator") != '') ? $this->objRequest->getParam("creator") : $objAuth->getIdentity()->id));
             $this->objForm->Setup()->setStatusId((($this->objRequest->getParam("idStatus") != '') ? $this->objRequest->getParam("idStatus") : $this->core->sysConfig->form->status->default));
             $this->objForm->Setup()->setRootLevelId((($this->objRequest->getParam("rootLevelId") != '') ? $this->objRequest->getParam("rootLevelId") : null));
             $this->objForm->Setup()->setParentId((($this->objRequest->getParam("parentFolderId") != '') ? $this->objRequest->getParam("parentFolderId") : null));

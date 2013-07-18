@@ -68,7 +68,9 @@ try {
         // simulate user auth
         $obj = new stdClass();
         $obj->id = 2; //user id
-        Zend_Auth::getInstance()->getStorage()->write($obj);
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $objAuth->getStorage()->write($obj);
 
         if (isset($objPages) && count($objPages)) {
             buildTreeLanguageVariantNow($objPages);

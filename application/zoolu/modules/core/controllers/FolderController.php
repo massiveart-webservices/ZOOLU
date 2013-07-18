@@ -723,7 +723,9 @@ class Core_FolderController extends AuthControllerAction
         /**
          * set page default & specific form values
          */
-        $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam('creator') != '') ? $this->objRequest->getParam('creator') : Zend_Auth::getInstance()->getIdentity()->id));
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam('creator') != '') ? $this->objRequest->getParam('creator') : $objAuth->getIdentity()->id));
         $this->objForm->Setup()->setStatusId((($this->objRequest->getParam('idStatus') != '') ? $this->objRequest->getParam('idStatus') : $this->core->sysConfig->form->status->default));
         $this->objForm->Setup()->setRootLevelId((($this->objRequest->getParam('rootLevelId') != '') ? $this->objRequest->getParam('rootLevelId') : null));
         $this->objForm->Setup()->setRootLevelTypeId((($this->objRequest->getParam('rootLevelTypeId') != '') ? $this->objRequest->getParam('rootLevelTypeId') : null));
@@ -792,7 +794,9 @@ class Core_FolderController extends AuthControllerAction
     {
         if ($this->intItemLanguageId == null) {
             if (!$this->objRequest->getParam("languageId")) {
-                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : Zend_Auth::getInstance()->getIdentity()->contentLanguageId;
+                $objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+                $this->intItemLanguageId = $this->objRequest->getParam("rootLevelLanguageId") != '' ? $this->objRequest->getParam("rootLevelLanguageId") : $objAuth->getIdentity()->contentLanguageId;
 
                 $intRootLevelId = $this->objRequest->getParam("rootLevelId");
                 $PRIVILEGE = ($intActionType == $this->core->sysConfig->generic->actions->add) ? Security::PRIVILEGE_ADD : Security::PRIVILEGE_UPDATE;
@@ -854,10 +858,12 @@ class Core_FolderController extends AuthControllerAction
              * Since this is an application model, we need to require it
              * from its modules path location.
              */
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
             $this->objModelFolders = new Model_Folders();
             $this->objModelFolders->setLanguageId($this->getItemLanguageId());
-            $this->objModelFolders->setContentLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+            $this->objModelFolders->setContentLanguageId($objAuth->getIdentity()->contentLanguageId);
         }
 
         return $this->objModelFolders;

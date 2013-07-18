@@ -168,7 +168,9 @@ class PageCommand implements CommandInterface
                 $objGenericSetup = $arrArgs['GenericSetup'];
 
                 $intFolderId = $objGenericSetup->getElementId();
-                $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+                $objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+                $intUserId = $objAuth->getIdentity()->id;
 
 
                 $arrProperties = array(

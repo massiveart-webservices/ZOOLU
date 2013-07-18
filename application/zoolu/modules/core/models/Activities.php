@@ -88,7 +88,9 @@ class Model_Activities
     {
         $this->core->logger->debug('core->models->Model_Activities->loadActivities()');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         $objSelect = $this->getActivitiesTable()->select();
         $objSelect->setIntegrityCheck(false);
@@ -238,7 +240,9 @@ class Model_Activities
         $this->core->logger->debug('core->models->Model_Activities->add()');
 
         $objActivity = new stdClass();
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         if (count($arrData) > 0 && (array_key_exists('title', $arrData) && $arrData['title'] != '')) {
             /**
@@ -289,7 +293,9 @@ class Model_Activities
         $this->core->logger->debug('core->models->Model_Activities->addComment()');
 
         $objActivityComment = new stdClass();
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         if (count($arrData) > 0 && array_key_exists('idActivities', $arrData) && array_key_exists('comment', $arrData)) {
             /**
@@ -392,7 +398,9 @@ class Model_Activities
     {
         $this->core->logger->debug('core->models->Model_Activities->changeUserStatusByActivityId(' . $intActivityId . ', ' . $blnIsChecked . ')');
 
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         // change activity status of author
         $strWhere = $this->getActivitiesTable()->getAdapter()->quoteInto('id = ?', $intActivityId);

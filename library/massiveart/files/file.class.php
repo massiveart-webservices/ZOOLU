@@ -162,7 +162,9 @@ class File
             $this->_FILE_NAME = $_FILE_NAME;
 
             $this->getModelFile();
-            $this->intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $this->intUserId = $objAuth->getIdentity()->id;
             $this->intVersion = 1;
 
             /**
@@ -249,7 +251,9 @@ class File
         $this->core->logger->debug('massiveart.files.File->addVersion()');
         try {
             $this->_FILE_NAME = $_FILE_NAME;
-            $this->intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $this->intUserId = $objAuth->getIdentity()->id;
 
             $objFileData = $this->getModelFile()->getFileTable()->find($this->intId);
 

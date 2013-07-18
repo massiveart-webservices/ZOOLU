@@ -276,7 +276,9 @@ class Newsletters_NewsletterController extends AuthControllerAction
             $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
             $this->core->logger->debug($blnTestMail);
             if ($blnTestMail == 'true') {
-                $strEmail = Zend_Auth::getInstance()->getIdentity()->email;
+                $objAuth = Zend_Auth::getInstance();
+                $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+                $strEmail = $objAuth->getIdentity()->email;
                 $this->view->assign('recipients', $strEmail);
             } else {
                 $objFilter = $this->getModelRootLevels()->loadRootLevelFilter($objGenericData->Setup()->getField('filter')->getValue());
@@ -1016,7 +1018,9 @@ class Newsletters_NewsletterController extends AuthControllerAction
             /**
              * set newsletter default & specific form values
              */
-            $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam("creator") != '') ? $this->objRequest->getParam("creator") : Zend_Auth::getInstance()->getIdentity()->id));
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $this->objForm->Setup()->setCreatorId((($this->objRequest->getParam("creator") != '') ? $this->objRequest->getParam("creator") : $objAuth->getIdentity()->id));
             $this->objForm->Setup()->setStatusId((($this->objRequest->getParam("idStatus") != '') ? $this->objRequest->getParam("idStatus") : $this->core->sysConfig->form->status->default));
             $this->objForm->Setup()->setTemplateId($intTemplateId);
             $this->objForm->Setup()->setRootLevelId((($this->objRequest->getParam("rootLevelId") != '') ? $this->objRequest->getParam("rootLevelId") : null));

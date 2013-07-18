@@ -99,7 +99,9 @@ class Media_NavigationController extends AuthControllerAction
          * get navigation
          */
         $this->getModelFolders();
-        $this->objModelFolders->setLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $this->objModelFolders->setLanguageId($objAuth->getIdentity()->contentLanguageId);
         $objRootelements = $this->objModelFolders->loadRootNavigation($this->intPortalId);
         $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
 
@@ -126,7 +128,9 @@ class Media_NavigationController extends AuthControllerAction
          * get childnavigation
          */
         $this->getModelFolders();
-        $this->objModelFolders->setLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $this->objModelFolders->setLanguageId($objAuth->getIdentity()->contentLanguageId);
         $objChildelements = $this->objModelFolders->loadChildNavigation($this->intFolderId);
         $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
 
@@ -185,7 +189,9 @@ class Media_NavigationController extends AuthControllerAction
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Folders.php';
             $this->objModelFolders = new Model_Folders();
             $this->objModelFolders->setLanguageId($this->core->intZooluLanguageId);
-            $this->objModelFolders->setContentLanguageId(Zend_Auth::getInstance()->getIdentity()->contentLanguageId);
+            $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+            $this->objModelFolders->setContentLanguageId($objAuth->getIdentity()->contentLanguageId);
         }
 
         return $this->objModelFolders;

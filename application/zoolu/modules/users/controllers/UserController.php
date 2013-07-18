@@ -87,6 +87,7 @@ class Users_UserController extends Zend_Controller_Action
 
         if ($this->getRequest()->getActionName() != 'login' && $this->getRequest()->getActionName() != 'logout') {
             $objAuth = Zend_Auth::getInstance();
+            $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
 
             if (!$objAuth->hasIdentity() || !isset($_SESSION['sesZooluLogin']) || $_SESSION['sesZooluLogin'] == false) {
                 $this->_redirect('/zoolu/users/user/login');
@@ -563,7 +564,9 @@ class Users_UserController extends Zend_Controller_Action
     public function userinfoAction()
     {
         $this->initView();
-        $this->view->user = Zend_Auth::getInstance()->getIdentity();
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $this->view->user = $objAuth->getIdentity();
         $this->view->translate = Zend_Registry::get('Core')->translate;
     }
 
@@ -574,11 +577,11 @@ class Users_UserController extends Zend_Controller_Action
      */
     public function loginAction()
     {
-
         $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
         //$objAuth->setStorage(new Zend_Auth_Storage_Session('UserAuth'));
 
-        if ($objAuth->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true) {
+        if ($objAuth->hasIdentity()) {
             $this->_redirect('/zoolu');
         }
 
@@ -722,7 +725,8 @@ class Users_UserController extends Zend_Controller_Action
      */
     public function logoutAction()
     {
-        $auth = Zend_Auth::getInstance();
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
         $auth->clearIdentity();
         unset($_SESSION['sesTestMode']);
         unset($_SESSION['sesZooluLogin']);

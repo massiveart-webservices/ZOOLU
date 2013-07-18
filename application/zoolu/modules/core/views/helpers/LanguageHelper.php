@@ -51,7 +51,9 @@ class LanguageHelper
     public function getCopyLanguages($arrLanguages)
     {
         $strReturn = '';
-        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('zoolu'));
+        $intUserId = $objAuth->getIdentity()->id;
 
         foreach ($arrLanguages as $arrLanguage) {
             $strReturn .= '
