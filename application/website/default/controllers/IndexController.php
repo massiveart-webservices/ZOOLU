@@ -433,6 +433,9 @@ class IndexController extends WebControllerAction
                     $this->urlRetryRedirectAndError($strUrl);
                 }
             } else {
+                if ($this->objCache->test($this->strCacheId)) {
+                    $this->blnCachingStart = false;
+                }
                 $this->blnCachingOutput = true;
                 $this->getResponse()->setBody($this->objCache->load($this->strCacheId));
                 $this->_helper->viewRenderer->setNoRender();
