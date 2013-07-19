@@ -36,10 +36,10 @@ class SearchHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getSearchList($objHits, $strSearchValue, $translate)
+    public function getSearchList($objHits, $strSearchValue, $translate, $intLanguageDefinitionType = 1)
     {
         $this->core->logger->debug('website->views->helpers->SearchHelper->getSearchList()');
-
+        
         $strHtmlOutput = '';
 
         $strHtmlSearchHeader = '
@@ -66,14 +66,21 @@ class SearchHelper
                     $strUrl = $objHit->url;
                     $arrUrls = array($objHit->url);
                     if (array_search('parentPages', $arrDocFields)) {
-                        $arrParentPages = @unserialize($objHit->parentPages); //FIXME!!!
+                        $arrParentPages = @unserialize(base64_decode($objHit->parentPages)); //FIXME!!!
                         if (is_array($arrParentPages)) {
                             $arrUrls = array();
                             $blnFirst = true;
                             foreach ($arrParentPages as $objEntry) {
-                                $arrUrls[$objEntry->getEntryId()] = $objEntry->url . substr($objHit->url, strpos($objHit->url, '/', 1) + 1);
+                                if (array_search('parentFolderId', $arrDocFields) && $objHit->parentFolderId == $objEntry->entry_point) {
+                                    $arrUrls[$objEntry->getEntryId()] = $objEntry->url;
+                                } else {
+                                    $arrUrls[$objEntry->getEntryId()] = $objEntry->url . substr($objHit->url, strpos($objHit->url, '/', 1) + 1);
+                                }
                                 if ($blnFirst == true || ($objEntry->entry_category == 0 && $objEntry->entry_label == 0)) {
                                     $strUrl = $arrUrls[$objEntry->getEntryId()];
+                                    if ($intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                                        $strUrl = '/' . $this->core->strLanguageCode . $strUrl;            
+                                    }
                                     $blnFirst = false;
                                 }
                             }
@@ -123,8 +130,7 @@ class SearchHelper
                     $strIcon = '';
                     if (count($arrPics) > 0) {
                         $arrPic = current($arrPics);
-                        $strIcon = '<div class="img"><img class="img47x47" src="' . $this->core->sysConfig->media->paths->imgbase . $arrPic['path'] . '47x47/' . $arrPic['filename'] . '?v=' . $arrPic['version'] . '"/></div>';
-                        //$strIcon = '<div class="img"><img class="img117x88" src="'.$this->core->sysConfig->media->paths->imgbase.$arrPic['path'].'117x88/'.$arrPic['filename'].'?v='.$arrPic['version'].'"/></div>';
+                        $strIcon = '<div class="img"><img class="img47x47" src="' . $this->core->sysConfig->media->paths->imgbase . $arrPic['path'] . 'icon32/' . $arrPic['filename'] . '?v=' . $arrPic['version'] . '"/></div>';
                     }
                     $strHtmlOutput .= $strIcon;
                     $strHtmlOutput .= '<div class="info">
@@ -153,7 +159,7 @@ class SearchHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function getLiveSearchList($objHits)
+    public function getLiveSearchList($objHits, $translate, $intLanguageDefinitionType = 1, $searchBase, $searchTerm)
     {
         $this->core->logger->debug('website->views->helpers->SearchHelper->getLiveSearchList()');
 
@@ -170,12 +176,21 @@ class SearchHelper
 
                     $strUrl = $objHit->url;
                     if (array_search('parentPages', $arrDocFields)) {
-                        $arrParentPages = @unserialize($objHit->parentPages); //FIXME!!!
+                        $arrParentPages = @unserialize(base64_decode($objHit->parentPages)); //FIXME!!!
                         if (is_array($arrParentPages)) {
+                            $arrUrls = array();
                             $blnFirst = true;
                             foreach ($arrParentPages as $objEntry) {
+                                if (array_search('parentFolderId', $arrDocFields) && $objHit->parentFolderId == $objEntry->entry_point) {
+                                    $arrUrls[$objEntry->getEntryId()] = $objEntry->url;
+                                } else {
+                                    $arrUrls[$objEntry->getEntryId()] = $objEntry->url . substr($objHit->url, strpos($objHit->url, '/', 1) + 1);
+                                }
                                 if ($blnFirst == true || ($objEntry->entry_category == 0 && $objEntry->entry_label == 0)) {
-                                    $strUrl = $objEntry->url . substr($objHit->url, strpos($objHit->url, '/', 1) + 1);
+                                    $strUrl = $arrUrls[$objEntry->getEntryId()];
+                                    if ($intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                                        $strUrl = '/' . $this->core->strLanguageCode . $strUrl;            
+                                    }
                                     $blnFirst = false;
                                 }
                             }
@@ -196,15 +211,28 @@ class SearchHelper
                         $strIcon = '<img src="' . sprintf($this->core->sysConfig->media->paths->icon32, $arrPic['path']) . $arrPic['filename'] . '?v=' . $arrPic['version'] . '"/>';
                     }
 
-                    $strHtmlOutput .= '<li><a href="' . $strUrl . '"><table cellpadding="0" cellspacing="0"><tr><td class="icon">' . $strIcon . '</td><td class="info"><a href="' . $strUrl . '">' . $strTitle . '</a></td></tr></table></a></li>';
-                }
+                    $strHtmlOutput .= '<li>
+                    				       <a href="#" onclick="
+                    				          _gaq.push([\'_set\', \'hitCallback\', function(){ window.location.href=\'' . $strUrl . '\'; }]);
+                    				          _gaq.push([\'_trackPageview\', \'' . $searchBase . '?q=' . $searchTerm . '\']);
+                    				          return false;
+                    				          ">
+                    				           <table cellpadding="0" cellspacing="0">
+                    				               <tr>
+                    				                   <td class="icon">' . $strIcon . '</td>
+                    				                   <td class="info"><a href="' . $strUrl . '">' . $strTitle . '</a></td>
+                    				               </tr>
+                    				           </table>
+                    				       </a>
+                    				   </li>';
+                } 
             }
             $strHtmlOutput .= '</ul>';
         } else {
-            $strHtmlOutput .= '<ul id="search_list"><li>Sorry, no search result.</li></ul>';
+            $strHtmlOutput .= '<ul id="search_list"><li>' . $translate->_('Sorry, no search result.') . '</li></ul>';
         }
 
-        echo $strHtmlOutput;
+        echo $strHtmlOutput; 
     }
 
     /**

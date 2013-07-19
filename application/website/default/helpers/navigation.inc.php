@@ -147,4 +147,20 @@ function get_sitemap(){
   echo getNavigationHelperObject()->getSitemap();
 }
 
+/**
+ * get_search_action
+ * @author Raphael Stocker <rst@massiveart.com>
+ */
+function get_search_action(){
+  echo getNavigationHelperObject()->getSearchAction();  
+}
+
+/**
+ * get_language_definition_type
+ * @author Raphael Stocker <rst@massiveart.com>
+ */
+function get_language_definition_type(){
+  echo getNavigationHelperObject()->getLanguageDefinitionType();  
+}
+
 ?>

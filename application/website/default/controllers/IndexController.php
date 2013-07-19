@@ -256,7 +256,7 @@ class IndexController extends WebControllerAction
                             $this->getResponse()->setHttpResponseCode(301);
                             $uriLanguageFolder = '';
                             if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
-                                 $uriLanguageFolder = '/' . strtolower($objMainUrl->languageCode) . '/';
+                                 $uriLanguageFolder = strtolower($objMainUrl->languageCode) . '/';
                             }
                             if (!$objUrlData->isLandingPage) {
                                 $baseUrl = '';
@@ -265,14 +265,17 @@ class IndexController extends WebControllerAction
                                 }
                                 $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
                             } else {
-                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                                $this->_redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
                             }
                         }
                     }
     
                     if ($this->core->sysConfig->cache->page == 'true' && !isset($_SESSION['sesTestMode']) && $this->blnSearch == false && (!isset($_POST) || count($_POST) == 0)) {
-                        $this->objCache->start($this->strCacheId);
-                        $this->blnCachingStart = true;
+                        if ($this->blnCachingStart !== false) {
+                            $this->objCache->start($this->strCacheId);
+                        }
+                    } else {
+                        $this->blnCachingStart = false;
                     }
     
                     if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {

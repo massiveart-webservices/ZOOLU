@@ -1,0 +1,27 @@
+<?php
+
+require_once (dirname(__FILE__) . '/../../helpers/NavigationHelper.php');
+$objHelper = new NavigationHelper();
+
+?>
+
+<?php if ($this->rootLevelId > 0 && $this->rootLevelGroupId > 0): ?>
+<script type="text/javascript">//<![CDATA[
+    var rootLevelId = <?php echo $this->rootLevelId; ?>;
+    var rootLevelGroupId = <?php echo $this->rootLevelGroupId; ?>;
+    var rootLevelType = '<?php echo $this->rootLevelType; ?>';
+//]]>
+</script>
+<?php endif; ?>
+
+<!-- navigation left -->
+<div id="navigation-left">
+    <div id="divNaviLeft2">
+        <div id="divNaviLeftInner">
+            <!-- main navigatin -->
+            <div id="divNaviLeftMain">
+                <?php echo $objHelper->getRootLevels($this->rootLevels, $this->rootLevelId, 'list'); ?>
+            </div>
+        </div>
+    </div>
+</div> <!-- END navigation main -->

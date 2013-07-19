@@ -151,7 +151,7 @@ class CustomerController extends WebControllerAction
                         $objSecurity = new Security();
                         $objSecurity->setRoleProvider($objCustomerRoleProvider);
                         $objSecurity->buildAcl($this->getModelUsers());
-                        Security::save($objSecurity);
+                        Security::save($objSecurity, 'CustomerSecurity');
 
                         //Write to session and redirect
                         $this->objAuth->getStorage()->write($objUserData);

@@ -190,8 +190,12 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadLinkGlobal($intElementId)
+    public function loadLinkGlobal($intElementId, $languageId = 0)
     {
+        if ($languageId == 0) {
+            $languageId = $this->intLanguageId;
+        }
+
         $this->core->logger->debug('global->models->Model_Globals->loadLinkGlobal(' . $intElementId . ')');
 
         $objSelect = $this->getGlobalTable()->select();
@@ -200,9 +204,9 @@ class Model_Globals extends ModelAbstract
         $objSelect->from(array('origin' => 'globals'), array('originId' => 'id'));
         $objSelect->join('globalLinks', 'globalLinks.idGlobals = origin.id', array());
         $objSelect->join('globals', 'globals.globalId = globalLinks.globalId', array('id', 'globalId', 'version', 'isStartGlobal', 'idParent'));
-        $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $this->intLanguageId, array('title'));
-        $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->intLanguageId, array('idGenericForms', 'idTemplates'));
-        $objSelect->joinleft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
+        $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $languageId, array('title'));
+        $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $languageId, array('idGenericForms', 'idTemplates'));
+        $objSelect->joinleft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $languageId . ' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
         $objSelect->joinleft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
         $objSelect->where('origin.id = ?', $intElementId);
 
@@ -1269,8 +1273,11 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadParentFolders($intElementId)
+    public function loadParentFolders($intElementId, $languageId = 0)
     {
+        if ($languageId == 0) {
+            $languageId = $this->intLanguageId;
+        }
         $this->core->logger->debug('global->models->Model_Globals->loadParentFolders(' . $intElementId . ')');
 
         $sqlStmt = $this->core->dbh->query('SELECT folders.id, folders.folderId, folderProperties.isUrlFolder, folderTitles.title
@@ -1291,7 +1298,7 @@ class Model_Globals extends ModelAbstract
                                            WHERE folders.lft <= parent.lft AND
                                                  folders.rgt >= parent.rgt AND
                                                  folders.idRootLevels = parent.idRootLevels
-                                             ORDER BY folders.rgt', array($this->intLanguageId, $this->intLanguageId, $intElementId, $this->core->sysConfig->parent_types->folder));
+                                             ORDER BY folders.rgt', array($languageId, $languageId, $intElementId, $this->core->sysConfig->parent_types->folder));
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
     }
 

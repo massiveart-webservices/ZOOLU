@@ -1,14 +1,14 @@
 /**
- * form.landingpages.js
+ * form.tags.js
  *
  * Version history (please keep backward compatible):
  * 1.0, 2009-10-16: Thomas Schedler
  *
- * @author Daniel Rotter <daniel.rotter@massiveart.com>
+ * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  */
 
-Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
+Massiveart.Form.Tags = Class.create(Massiveart.Form, {
   
   initialize: function($super) {
     // initialize superclass
@@ -19,7 +19,7 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
    * save
    */
   save: function(){
-   if($(this.formId)){
+   if($(this.formId)){      
       
      /**
       * write/save texteditor content to generic form
@@ -73,13 +73,18 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
   deleteElement: function(){
     if($(this.formId)){
 
-      myCore.deleteAlertSingleMessage = myCore.translate['Delete_'];
+      if($('rootLevelGroupKey' + myNavigation.rootLevelGroupId)){
+        tmpKey = 'Delete_' + $('rootLevelGroupKey' + myNavigation.rootLevelGroupId).getValue();
+        var key = (myCore.translate[tmpKey]) ? tmpKey : 'Delete_';
+      }else{
+        var key = 'Delete_';
+      }
+
+      myCore.deleteAlertSingleMessage = myCore.translate[key];
       myCore.showDeleteAlertMessage(1);
 
       $('buttonOk').observe('click', function(event){
         myCore.hideDeleteAlertMessage();
-        $('overlayBlack75').hide();
-
         var intPosLastSlash = $(this.formId).readAttribute('action').lastIndexOf('/');
         var strAjaxActionBase = $(this.formId).readAttribute('action').substring(0, intPosLastSlash + 1);
         var elementId = $('id').getValue();
@@ -88,7 +93,7 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
         this.getFormSaveLoader();
 
         new Ajax.Updater(myNavigation.genListContainer, strAjaxActionBase + 'delete', {
-          parameters: { id: elementId,  rootLevelId: $F('rootLevelId') },
+          parameters: { id: elementId },
           evalScripts: true,
           onComplete: function() {
             //deleted
@@ -96,34 +101,19 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
 
             $(myNavigation.genFormContainer).hide();
             $(myNavigation.genFormFunctions).hide();
-            
+
             $(myNavigation.genListContainer).show();
             $(myNavigation.genListFunctions).show();
 
             myCore.initSelectAll();
             myCore.initListHover();
-
           }.bind(this)
         });
       }.bind(this));
 
       $('buttonCancel').observe('click', function(event){
         myCore.hideDeleteAlertMessage();
-        $('overlayBlack75').hide();
       }.bind(this));
     }
-  },
-
-  resetBreadCrump: function() {
-      $('sitemapLink_link').update('' +
-          '<span class="big" id="sitemapLinkBreadcrumb_link"></span>' +
-          '<span class="bold big" id="sitemapLinkTitle_link"></span>' +
-          '(' +
-          '<a href="#" onclick="myForm.getAddSitemapLinkOverlay(\'link\'); return false;">Seite wählen</a>' +
-          ')' +
-          '<input type="hidden" value="" id="sitemapLinkRelation_link" name="sitemapLinkRelation_link">' +
-          '<input type="hidden" value="" id="sitemapLinkParent_link" name="sitemapLinkParent_link">' +
-          '<input type="hidden" value="" id="sitemapLinkType_link" name="sitemapLinkType_link">' +
-          '');
-  }
+  }    
 });

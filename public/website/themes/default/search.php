@@ -73,7 +73,7 @@
                                 $objHelper->setSegmentId($this->segmentId);
                                 $objHelper->setSegmentCode($this->segmentCode);
                             }
-                            echo $objHelper->getSearchList($this->objHits, $this->strSearchValue, $this->translate);
+                            echo $objHelper->getSearchList($this->objHits, $this->strSearchValue, $this->translate, getNavigationHelperObject()->getLanguageDefinitionType());
                         ?>
                     </div>
                 </div>
@@ -102,9 +102,9 @@
     
         $(document).ready(function() {
             jQuery('#searchField').liveSearch({
-                url: '/zoolu-website/search/livesearch?theme=default&rootLevelId=<?php echo $this->rootLevelId; ?>&languageId=<?php echo $this->languageId; ?>&q='
+                url: '/zoolu-website/search/livesearch?theme=default&rootLevelId=<?php echo $this->rootLevelId; ?>&languageId=<?php echo $this->languageId; ?>&languagecode=<?php echo $this->languageCode; ?>&languageDefinitionType=<?php echo get_language_definition_type(); ?>&searchBase=<?php get_search_action(); ?>&q=',
+                defaultValue: '<?php echo $this->translate->_('Search', false); ?>'
             });
-
             <?php get_dom_loaded_js(); ?>
         });
 

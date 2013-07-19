@@ -894,15 +894,24 @@ class Navigation
     {
         $blnAuthorized = true;
 
+        Security::get('CustomerSecurity')->addFoldersToAcl($this->getModelFolders(), Security::ZONE_WEBSITE);
         Security::get()->addFoldersToAcl($this->getModelFolders(), Security::ZONE_WEBSITE);
 
         if (count($this->ParentFolders()) > 0) {
             foreach ($this->ParentFolders() as $objParentFolderData) {
-                if ($objParentFolderData->isSecure == 1 && !Security::get()->isAllowed(Security::RESOURCE_FOLDER_PREFIX . $objParentFolderData->id, Security::PRIVILEGE_VIEW, true, false, Security::ZONE_WEBSITE) && !Security::get()->isAllowed(Security::RESOURCE_FOLDER_PREFIX . $objParentFolderData->id . '_' . $this->intLanguageId, Security::PRIVILEGE_VIEW, true, false, Security::ZONE_WEBSITE)) {
+                if ($objParentFolderData->isSecure == 1 && (
+                        (
+                            !Security::get()->isAllowed(Security::RESOURCE_FOLDER_PREFIX . $objParentFolderData->id, Security::PRIVILEGE_VIEW, true, false, Security::ZONE_WEBSITE) && !Security::get()->isAllowed(Security::RESOURCE_FOLDER_PREFIX . $objParentFolderData->id . '_' . $this->intLanguageId, Security::PRIVILEGE_VIEW, true, false, Security::ZONE_WEBSITE)
+                        ) &&
+                        (
+                            !Security::get('CustomerSecurity')->isAllowed(Security::RESOURCE_FOLDER_PREFIX . $objParentFolderData->id, Security::PRIVILEGE_VIEW, true, false, Security::ZONE_WEBSITE) && !Security::get('CustomerSecurity')->isAllowed(Security::RESOURCE_FOLDER_PREFIX . $objParentFolderData->id . '_' . $this->intLanguageId, Security::PRIVILEGE_VIEW, true, false, Security::ZONE_WEBSITE)
+                        )
+                    )) {
                     $blnAuthorized = false;
                     break;
                 }
             }
+            
         }
         return $blnAuthorized;
     }

@@ -128,19 +128,25 @@ class Plugin_DataHelper_Gmaps extends GenericDataHelperAbstract  {
    * @version 1.0
    */
   protected function getModel(){
-    if($this->objModel === null) {
+      if($this->objModel === null) {
       /**
        * autoload only handles "library" compoennts.
        * Since this is an application model, we need to require it
        * from its modules path location.
        */
       $strModelFilePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.$this->objElement->Setup()->getModelSubPath().((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s').'.php';
- 
+      $strCoreModelFilePath = GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/'.((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s').'.php';
+      
       if(file_exists($strModelFilePath)){
         require_once $strModelFilePath;
         $strModel = 'Model_'.((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s');
         $this->objModel = new $strModel();
         $this->objModel->setLanguageId($this->objElement->Setup()->getLanguageId());
+      }else if(file_exists($strCoreModelFilePath)){
+        require_once $strCoreModelFilePath;
+        $strModel = 'Model_'.((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')).'ies' : ucfirst($this->strType).'s');
+        $this->objModel = new $strModel();
+        $this->objModel->setLanguageId($this->objElement->Setup()->getLanguageId());  
       }else{
         throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "'.$this->strType.'"');
       }

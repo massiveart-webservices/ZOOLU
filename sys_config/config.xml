@@ -746,6 +746,7 @@
             <subscribers>18</subscribers>
             <customers>19</customers>
             <contactcompanies>20</contactcompanies>
+            <tags>21</tags>
         </root_level_types>
 
         <!-- ROOTLEVEL GROUPS -->

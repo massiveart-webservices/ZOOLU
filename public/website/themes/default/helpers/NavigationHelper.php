@@ -422,6 +422,30 @@ class Default_NavigationHelper extends NavigationHelper {
     public function setTranslate(Zend_Translate $objTranslate){
         $this->objTranslate = $objTranslate;
     }
+    
+    /**
+     * getSearchAction
+     * @return string $action
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function getSearchAction() {
+        $action = '/';
+        $intLanguageDefinitionType = $this->objNavigation->getLanguageDefinitionType();
+        if ($intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+            $action = '/' . $this->core->strLanguageCode . '/';   
+        }    
+        return $action;
+    }
+    
+    /**
+     * getLanguageDefinitionType
+     * @return int $type
+     * @author Raphael Stocker <rst@massiveart.com>
+     */
+    public function getLanguageDefinitionType() {
+        $type = $this->objNavigation->getLanguageDefinitionType();
+        return $this->objNavigation->getLanguageDefinitionType();    
+    }
 }
 
 ?>

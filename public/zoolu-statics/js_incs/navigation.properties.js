@@ -59,179 +59,197 @@ Massiveart.Navigation.Properties = Class.create(Massiveart.Navigation, {
   /**
    * selectContacts
    */
-  selectContacts: function(portalId){
-    this.resetGenContainer();
-    this.currLevel = 1;
-    this.navigationItemType = 'unit';
-   
-    $(this.genFormContainer).hide();
-    $(this.genFormSaveContainer).hide();
-    
-    // add css classes to mark an item as 'selected'
-    this.makeSelected('portal'+portalId);
-    
-    // remove css classes to deselect an item
-    if($(this.preSelectedPortal) && ('portal'+portalId) != this.preSelectedPortal){ 
-      this.makeDeselected(this.preSelectedPortal);
-    }  
-            
-    this.preSelectedPortal = 'portal'+portalId;
-    this.rootLevelId = portalId;
-    this.rootLevelType = 'contact';
-    
-    $('divNaviCenterInner').innerHTML = '';
-    this.levelArray = [];
-    
-    var levelContainer = '<div id="navlevel'+this.currLevel+'" parentid="" class="navlevel busy" style="left: '+(201*this.currLevel-201)+'px"></div>'; 
-    new Insertion.Bottom('divNaviCenterInner', levelContainer);
-    
-    if(Prototype.Browser.IE){
-      newNavHeight = $('divNaviCenter').getHeight();
-      $$('.navlevel').each(function(elDiv){
-        $(elDiv).setStyle({height: (newNavHeight-42) + 'px'});
-      });
+  selectContacts: function(portalId, rootLevelGroupId, url, viewType){
+
+    if (typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType != 'tree')) {
+      this.changeViewType(portalId, rootLevelGroupId, url);
+    } else {
+
+
+        this.resetGenContainer();
+        this.currLevel = 1;
+        this.navigationItemType = 'unit';
+
+        $(this.genFormContainer).hide();
+        $(this.genFormSaveContainer).hide();
+
+        // add css classes to mark an item as 'selected'
+        this.makeSelected('portal'+portalId);
+
+        // remove css classes to deselect an item
+        if($(this.preSelectedPortal) && ('portal'+portalId) != this.preSelectedPortal){
+          this.makeDeselected(this.preSelectedPortal);
+        }
+
+        this.preSelectedPortal = 'portal'+portalId;
+        this.rootLevelId = portalId;
+        this.rootLevelType = 'contact';
+
+        $('divNaviCenterInner').innerHTML = '';
+        this.levelArray = [];
+
+        var levelContainer = '<div id="navlevel'+this.currLevel+'" parentid="" class="navlevel busy" style="left: '+(201*this.currLevel-201)+'px"></div>';
+        new Insertion.Bottom('divNaviCenterInner', levelContainer);
+
+        if(Prototype.Browser.IE){
+          newNavHeight = $('divNaviCenter').getHeight();
+          $$('.navlevel').each(function(elDiv){
+            $(elDiv).setStyle({height: (newNavHeight-42) + 'px'});
+          });
+        }
+        else if(Prototype.Browser.WebKit){
+          newNavHeight = $('divNaviCenter').getHeight();
+          $$('.navlevel').each(function(elDiv){
+            $(elDiv).setStyle({height: (newNavHeight-40) + 'px'});
+          });
+        }
+
+        this.navigationPath = '/navigation/contactnavigation';
+        new Ajax.Updater('navlevel'+this.currLevel, this.constBasePath+this.navigationPath, {
+          parameters: {
+            rootLevelId: this.rootLevelId,
+            currLevel: this.currLevel
+          },
+          evalScripts: true,
+          onComplete: function() {
+            myCore.removeBusyClass('navlevel'+this.currLevel);
+            this.initItemHover();
+            this.initAddMenuHover();
+            this.levelArray.push(this.currLevel);
+          }.bind(this)
+        });
     }
-    else if(Prototype.Browser.WebKit){
-      newNavHeight = $('divNaviCenter').getHeight();
-      $$('.navlevel').each(function(elDiv){
-        $(elDiv).setStyle({height: (newNavHeight-40) + 'px'});
-      });
-    }
-    
-    this.navigationPath = '/navigation/contactnavigation';
-    new Ajax.Updater('navlevel'+this.currLevel, this.constBasePath+this.navigationPath, {
-      parameters: { 
-        rootLevelId: this.rootLevelId,
-        currLevel: this.currLevel
-      },      
-      evalScripts: true,     
-      onComplete: function() {
-        myCore.removeBusyClass('navlevel'+this.currLevel);
-        this.initItemHover();
-        this.initAddMenuHover();
-        this.levelArray.push(this.currLevel);   
-      }.bind(this)
-    });
-    
   },
   
   /**
    * selectLocations
    */
-  selectLocations: function(rootLevelId){
-    this.resetGenContainer();
-    this.currLevel = 1;
-    this.navigationItemType = 'unit';
-   
-    $(this.genFormContainer).hide();
-    $(this.genFormSaveContainer).hide();
-    
-    // add css classes to mark an item as 'selected'
-    this.makeSelected('portal'+rootLevelId);
-    
-    // remove css classes to deselect an item
-    if($(this.preSelectedPortal) && ('portal'+rootLevelId) != this.preSelectedPortal){ 
-      this.makeDeselected(this.preSelectedPortal);
-    }  
-            
-    this.preSelectedPortal = 'portal'+rootLevelId;
-    this.rootLevelId = rootLevelId;
-    this.rootLevelType = 'location';
-    
-    $('divNaviCenterInner').innerHTML = '';
-    this.levelArray = [];
-    
-    var levelContainer = '<div id="navlevel'+this.currLevel+'" parentid="" class="navlevel busy" style="left: '+(201*this.currLevel-201)+'px"></div>'; 
-    new Insertion.Bottom('divNaviCenterInner', levelContainer);
-    
-    if(Prototype.Browser.IE){
-      newNavHeight = $('divNaviCenter').getHeight();
-      $$('.navlevel').each(function(elDiv){
-        $(elDiv).setStyle({height: (newNavHeight-42) + 'px'});
-      });
+  selectLocations: function(rootLevelId, rootLevelGroupId, url, viewType){
+
+    if (typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType != 'tree')) {
+      this.changeViewType(portalId, rootLevelGroupId, url);
+    } else {
+        this.resetGenContainer();
+        this.currLevel = 1;
+        this.navigationItemType = 'unit';
+
+        $(this.genFormContainer).hide();
+        $(this.genFormSaveContainer).hide();
+
+        // add css classes to mark an item as 'selected'
+        this.makeSelected('portal'+rootLevelId);
+
+        // remove css classes to deselect an item
+        if($(this.preSelectedPortal) && ('portal'+rootLevelId) != this.preSelectedPortal){
+          this.makeDeselected(this.preSelectedPortal);
+        }
+
+        this.preSelectedPortal = 'portal'+rootLevelId;
+        this.rootLevelId = rootLevelId;
+        this.rootLevelType = 'location';
+
+        $('divNaviCenterInner').innerHTML = '';
+        this.levelArray = [];
+
+        var levelContainer = '<div id="navlevel'+this.currLevel+'" parentid="" class="navlevel busy" style="left: '+(201*this.currLevel-201)+'px"></div>';
+        new Insertion.Bottom('divNaviCenterInner', levelContainer);
+
+        if(Prototype.Browser.IE){
+          newNavHeight = $('divNaviCenter').getHeight();
+          $$('.navlevel').each(function(elDiv){
+            $(elDiv).setStyle({height: (newNavHeight-42) + 'px'});
+          });
+        }
+        else if(Prototype.Browser.WebKit){
+          newNavHeight = $('divNaviCenter').getHeight();
+          $$('.navlevel').each(function(elDiv){
+            $(elDiv).setStyle({height: (newNavHeight-40) + 'px'});
+          });
+        }
+
+        this.navigationPath = '/navigation/locationnavigation';
+        new Ajax.Updater('navlevel' + this.currLevel, this.constBasePath + this.navigationPath, {
+          parameters: {
+            rootLevelId: this.rootLevelId,
+            currLevel: this.currLevel
+          },
+          evalScripts: true,
+          onComplete: function() {
+            myCore.removeBusyClass('navlevel'+this.currLevel);
+            this.initItemHover();
+            this.initAddMenuHover();
+            this.levelArray.push(this.currLevel);
+          }.bind(this)
+        });
     }
-    else if(Prototype.Browser.WebKit){
-      newNavHeight = $('divNaviCenter').getHeight();
-      $$('.navlevel').each(function(elDiv){
-        $(elDiv).setStyle({height: (newNavHeight-40) + 'px'});
-      });
-    }
-    
-    this.navigationPath = '/navigation/locationnavigation';
-    new Ajax.Updater('navlevel' + this.currLevel, this.constBasePath + this.navigationPath, {
-      parameters: { 
-        rootLevelId: this.rootLevelId,
-        currLevel: this.currLevel
-      },      
-      evalScripts: true,     
-      onComplete: function() {
-        myCore.removeBusyClass('navlevel'+this.currLevel);
-        this.initItemHover();
-        this.initAddMenuHover();
-        this.levelArray.push(this.currLevel);   
-      }.bind(this)
-    });
-    
   },
     
   /**
    * selectCategories
    */
-  selectCategories: function(portalId, categoryTypeId){
-    this.resetGenContainer();
-    this.currLevel = 1;
-    this.categoryTypeId = categoryTypeId;
-    this.navigationItemType = 'category';
-     
-    $(this.genFormContainer).hide();
-    $(this.genFormSaveContainer).hide();
-    
-    // add css classes to mark an item as 'selected'
-    this.makeSelected('portal'+portalId);
-    
-    // remove css classes to deselect an item
-    if($(this.preSelectedPortal) && ('portal'+portalId) != this.preSelectedPortal){ 
-      this.makeDeselected(this.preSelectedPortal);
-    }  
-            
-    this.preSelectedPortal = 'portal'+portalId;
-    this.rootLevelId = portalId;
-    this.rootLevelType = 'category';
-    
-    $('divNaviCenterInner').innerHTML = '';
-    this.levelArray = [];
-    
-    var levelContainer = '<div id="navlevel'+this.currLevel+'" parentid="" class="navlevel busy" style="left: '+(201*this.currLevel-201)+'px"></div>'; 
-    new Insertion.Bottom('divNaviCenterInner', levelContainer);
-    
-    if(Prototype.Browser.IE){
-      newNavHeight = $('divNaviCenter').getHeight();
-      $$('.navlevel').each(function(elDiv){
-        $(elDiv).setStyle({height: (newNavHeight-42) + 'px'});
-      });
+  selectCategories: function(portalId, categoryTypeId, rootLevelGroupId, url, viewType){
+
+    if (typeof(viewType) == 'undefined') {
+        viewType = 'tree';
     }
-    else if(Prototype.Browser.WebKit){
-      newNavHeight = $('divNaviCenter').getHeight();
-      $$('.navlevel').each(function(elDiv){
-        $(elDiv).setStyle({height: (newNavHeight-40) + 'px'});
-      });
+
+    if (typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType != 'tree')) {
+        this.changeViewType(portalId, rootLevelGroupId, url);
+    } else {
+        this.resetGenContainer();
+        this.currLevel = 1;
+        this.categoryTypeId = categoryTypeId;
+        this.navigationItemType = 'category';
+
+        $(this.genFormContainer).hide();
+        $(this.genFormSaveContainer).hide();
+
+        // add css classes to mark an item as 'selected'
+        this.makeSelected('portal'+portalId);
+
+        // remove css classes to deselect an item
+        if($(this.preSelectedPortal) && ('portal'+portalId) != this.preSelectedPortal){
+          this.makeDeselected(this.preSelectedPortal);
+        }
+
+        this.preSelectedPortal = 'portal'+portalId;
+        this.rootLevelId = portalId;
+        this.rootLevelType = 'category';
+
+        $('divNaviCenterInner').innerHTML = '';
+        this.levelArray = [];
+
+        var levelContainer = '<div id="navlevel'+this.currLevel+'" parentid="" class="navlevel busy" style="left: '+(201*this.currLevel-201)+'px"></div>';
+        new Insertion.Bottom('divNaviCenterInner', levelContainer);
+
+        if(Prototype.Browser.IE){
+          newNavHeight = $('divNaviCenter').getHeight();
+          $$('.navlevel').each(function(elDiv){
+            $(elDiv).setStyle({height: (newNavHeight-42) + 'px'});
+          });
+        }
+        else if(Prototype.Browser.WebKit){
+          newNavHeight = $('divNaviCenter').getHeight();
+          $$('.navlevel').each(function(elDiv){
+            $(elDiv).setStyle({height: (newNavHeight-40) + 'px'});
+          });
+        }
+
+        this.navigationPath = '/navigation/catnavigation';
+        new Ajax.Updater('navlevel'+this.currLevel, this.constBasePath+this.navigationPath, {
+          parameters: {
+            currLevel: this.currLevel,
+            categoryTypeId: categoryTypeId
+          },
+          evalScripts: true,
+          onComplete: function() {
+            myCore.removeBusyClass('navlevel'+this.currLevel);
+            this.initItemHover();
+            this.initAddMenuHover();
+            this.levelArray.push(this.currLevel);
+          }.bind(this)
+        });
     }
-    
-    this.navigationPath = '/navigation/catnavigation';
-    new Ajax.Updater('navlevel'+this.currLevel, this.constBasePath+this.navigationPath, {
-      parameters: { 
-        currLevel: this.currLevel, 
-        categoryTypeId: categoryTypeId 
-      },      
-      evalScripts: true,     
-      onComplete: function() {
-        myCore.removeBusyClass('navlevel'+this.currLevel);
-        this.initItemHover();
-        this.initAddMenuHover();
-        this.levelArray.push(this.currLevel);   
-      }.bind(this)
-    });
-    
   },
   
   /**
@@ -314,7 +332,84 @@ Massiveart.Navigation.Properties = Class.create(Massiveart.Navigation, {
       }.bind(this)
     });
   },
-  
+
+    /**
+     * selectTags
+     */
+    selectTags: function (rootLevelId, rootLevelGroupId, url, viewType, rootLevelType) {
+        if (typeof(viewType) == 'undefined') {
+            viewType = 'tree';
+        }
+
+        if (typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType != 'list')) {
+            this.changeViewType(rootLevelId, rootLevelGroupId, url);
+        } else {
+            this.rootLevelId = rootLevelId;
+            this.rootLevelGroupId = rootLevelGroupId;
+            this.rootLevelType = rootLevelType;
+
+            $(this.genFormContainer).hide();
+            $(this.genFormFunctions).hide();
+
+            if ($('portal' + rootLevelId)) {
+                this.makeSelected('portal' + rootLevelId);
+                if ($(this.preSelectedNaviItem) && ('portal' + rootLevelId) != this.preSelectedNaviItem) {
+                    this.makeDeselected(this.preSelectedNaviItem);
+                    this.makeDeselected(this.preSelectedSubNaviItem);
+                }
+                this.preSelectedNaviItem = 'portal' + rootLevelId;
+            }
+
+            myList.sortColumn = '';
+            myList.sortOrder = '';
+            myList.resetSearch();
+        }
+    },
+
+    /**
+     * changeViewType
+     */
+    changeViewType: function (rootLevelId, rootLevelGroupId, url) {
+        // select root level with layout change
+
+        var myForm = document.createElement('form');
+        myForm.method = 'post';
+        myForm.action = url;
+
+        var myRootLevelIdInput = document.createElement("input");
+        myRootLevelIdInput.setAttribute('name', 'rootLevelId');
+        myRootLevelIdInput.setAttribute('value', rootLevelId);
+        myRootLevelIdInput.setAttribute('type', 'hidden');
+        myForm.appendChild(myRootLevelIdInput);
+
+        var myRootLevelGroupIdInput = document.createElement("input");
+        myRootLevelGroupIdInput.setAttribute('name', 'rootLevelGroupId');
+        myRootLevelGroupIdInput.setAttribute('value', rootLevelGroupId);
+        myRootLevelGroupIdInput.setAttribute('type', 'hidden');
+        myForm.appendChild(myRootLevelGroupIdInput);
+
+        document.body.appendChild(myForm);
+        myForm.submit();
+    },
+
+    /**
+     * getRootLevelList
+     */
+    getRootLevelList: function () {
+
+        // set root level type if undefined
+        if (typeof(this.rootLevelType) == 'undefined') {
+            if ($('rootLevelType' + this.rootLevelId)) this.rootLevelType = $F('rootLevelType' + this.rootLevelId);
+        }
+
+        // load list
+        if ((typeof(myList) != 'undefined')) {
+            //myList.getListPage();
+            myList.sortColumn = '';
+            myList.sortOrder = '';
+            myList.resetSearch();
+        }
+    },
   /**
    * updateNavigationLevel
    * @param integer level, integer rootLevelId, integer parentItemId
@@ -476,7 +571,6 @@ Massiveart.Navigation.Properties = Class.create(Massiveart.Navigation, {
    * getAddForm
    */
   getAddForm: function(){
-    
     this.resetGenContainer();
     
     if($('buttondelete')) $('buttondelete').hide();
@@ -500,7 +594,31 @@ Massiveart.Navigation.Properties = Class.create(Massiveart.Navigation, {
       }.bind(this)
     });
   },
-  
+
+    /**
+     * getAddFormList
+     */
+    getAddFormList: function () {
+        $(this.genListContainer).hide();
+        $(this.genListFunctions).hide();
+        if ($('sendDataLink')) $('sendDataLink').hide();
+        if ($('buttondelete')) $('buttondelete').hide();
+
+        myCore.resetTinyMCE(true);
+
+        new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + this.rootLevelType + '/addform', {
+            parameters: {
+                rootLevelId: this.rootLevelId
+            },
+            evalScripts: true,
+            onComplete: function () {
+                $(this.genFormContainer).show();
+                $(this.genFormFunctions).show();
+                $(this.genFormContainer).scrollTo($('widgetfunctions'));
+            }.bind(this)
+        });
+    },
+
   /**
    * getEditForm
    * @param integer itemId
@@ -599,6 +717,87 @@ Massiveart.Navigation.Properties = Class.create(Massiveart.Navigation, {
          myForm.loadFileFilterFieldsContent('documentFilter');
        }.bind(this)
      });
-  }
+  },
+
+    /**
+     * getEditTagsForm
+     */
+    getEditTagsForm: function(itemId){
+
+        $(this.genListContainer).hide();
+        $(this.genListFunctions).hide();
+
+        if($('buttondelete')) $('buttondelete').show();
+
+        new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + this.rootLevelType + '/editform', {
+            parameters: {
+                rootLevelId: this.rootLevelId,
+                id: itemId
+            },
+            evalScripts: true,
+            onComplete: function() {
+                $(this.genFormContainer).show();
+                $(this.genFormFunctions).show();
+                $(this.genFormContainer).scrollTo($('widgetfunctions'));
+
+                // load medias
+                myForm.loadFileFieldsContent('media');
+            }.bind(this)
+        });
+    },
+
+    /**
+     * getEditFormList
+     * @param integer itemId
+     */
+    getEditFormList: function (itemId, elType, formId, version) {
+        version = (version == null) ? 1 : version;
+
+        $(this.genListContainer).hide();
+        $(this.genListFunctions).hide();
+        if ($('sendDataLink')) $('sendDataLink').hide();
+
+        myCore.resetTinyMCE(true);
+
+        if ($('buttondelete')) $('buttondelete').show();
+
+        new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + elType + '/editform', {
+            parameters: {
+                id: itemId,
+                formId: formId,
+                formVersion: version,
+                rootLevelId: this.rootLevelId,
+                rootLevelFilterId: $('rootLevelFilterListId') ? $('rootLevelFilterListId').getValue() : null
+            },
+            evalScripts: true,
+            onComplete: function () {
+                $(this.genFormContainer).show();
+                $(this.genFormFunctions).show();
+                $(this.genFormContainer).scrollTo($('widgetfunctions'));
+
+                myForm.loadFileFieldsContent('media');
+                myForm.loadFileFieldsContent('document');
+
+                // show special link to send data to user per click
+                if (elType == 'member' || elType == 'company') {
+                    if ($('id') && $F('id') > 0) {
+                        if ($('sendDataLink')) $('sendDataLink').show();
+                    }
+                }
+            }.bind(this)
+        });
+    },
+
+    /**
+     * getRootLevelTreeStart
+     */
+    getRootLevelTreeStart: function () {
+        if ($('subnaviitem' + this.rootLevelId + '_link')) {
+            $('subnaviitem' + this.rootLevelId + '_link').onclick();
+        } else if ($('portal' + this.rootLevelId)) {
+            $('portal' + this.rootLevelId).onclick();
+        }
+
+    }
   
 });

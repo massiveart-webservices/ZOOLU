@@ -990,7 +990,7 @@ Massiveart.Form = Class.create({
         new Ajax.Updater(this.updateOverlayContainer, '/zoolu/cms/overlay/sitemaplink', {
             parameters: {
                 rootLevelId: rootLevelId,
-                rootLevelLanguageId: $F('rootLevelLanguageId' + rootLevelId)
+                rootLevelLanguageId: $F('idLanguages')
             },
             evalScripts: true,
             onComplete: function () {
@@ -1541,7 +1541,7 @@ Massiveart.Form = Class.create({
                 theme_advanced_resize_horizontal: false,
 
                 // Example content CSS (should be your site CSS)
-                content_css: "/website/themes/" + this.theme + "/css/screen.css",
+                content_css: "/website/themes/" + this.theme + "/css/style.css",
 
                 relative_urls: false,
                 convert_urls: false
@@ -2355,7 +2355,9 @@ Massiveart.Form = Class.create({
         }
 
         if (title == '') {
-            title = this.cleanText($('title').getValue());
+            if ($('title')) {
+                title = this.cleanText( $('title').getValue() );
+            } 
         }
 
         if (title.length > 70) {
