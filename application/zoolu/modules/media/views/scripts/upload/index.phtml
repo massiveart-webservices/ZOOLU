@@ -12,12 +12,15 @@ $objHelper = new ViewHelper();
     </div>
     <div class="mediainfos">
         <div class="mediainfotitle">
+            <label class="gray666 bold" for="FileTitle69"><?php echo $this->translate->_('Title') ?></label>
+            <br>
             <input id="FileTitle<?php echo $this->fileId; ?>" name="FileTitle<?php echo $this->fileId; ?>" type="text" value="<?php echo $this->fileTitle; ?>"/>
         </div>
         <div class="mediainfodescription">
             <textarea onfocus="myMedia.setFocusTextarea(this.id); return false;" id="FileDescription<?php echo $this->fileId; ?>" name="FileDescription<?php echo $this->fileId; ?>"><?php echo $this->strDefaultDescription; ?></textarea>
         </div>
         <div class="mediainfotags">
+            <label for="FileTitle' . $objFile->id . '" class="gray666 bold"><?php echo $this->translate->_('Tags') ?></label><br/>
             <ol>
                 <li class="autocompletList input-text">
                     <input type="text" value="" id="FileTags<?php echo $this->fileId; ?>" name="FileTags<?php echo $this->fileId; ?>"/>
