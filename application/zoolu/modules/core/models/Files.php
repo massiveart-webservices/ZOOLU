@@ -766,7 +766,7 @@ class Model_Files extends ModelAbstract
             $objSelect = $this->getCategoriesTable()->select();
             $objSelect->setIntegrityCheck(false);
             $objSelect->from('categories', array('id'));
-            $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->intZooluLanguageId, array('title'));
+            $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->core->intZooluLanguageId, array('title'));
             $objSelect->joinLeft('fileFilters', 'fileFilters.idCategories = categories.id AND fileFilters.idFiles = ' . $intFileId, array('value'));
             $objSelect->where('categories.idParentCategory = ' . $intFileFiltersCategoryId);
             $objSelect->order(array('categories.id'));
