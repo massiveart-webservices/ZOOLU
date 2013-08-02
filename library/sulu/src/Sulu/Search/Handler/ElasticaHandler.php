@@ -9,15 +9,37 @@
 
 namespace Sulu\Search\Handler;
 
-class ElasticaHandler extends AbstractHandler
+class ElasticaHandler extends AbstractHandler implements HandlerInterface
 {
 
-    /*
-     * /[CLIENT]/[TYPE]/ID
-     *
-     * Rootlevel Id - Key
-     * Language Id - Key
-     * Version - Key
-     * Page Id - Key / Global Id - Key
+    /**
+     * @var \Elastica\Index
      */
+    private $index;
+
+    public function add($key, $data)
+    {
+        if ($this->getIndex() !== false) {
+
+
+        }
+    }
+
+    public function delete($key)
+    {
+        if ($this->getIndex(false) !== false) {
+
+
+        }
+    }
+
+    protected function getIndex()
+    {
+
+        if (!is_object($this->index) || !($this->index instanceof \Zend_Search_Lucene)) {
+
+        }
+
+        return $this->index;
+    }
 }

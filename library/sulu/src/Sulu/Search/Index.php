@@ -9,21 +9,40 @@
 
 namespace Sulu\Search;
 
+use Sulu\Search\Handler\ElasticaHandler;
+use Sulu\Search\Handler\ZendLuceneHandler;
+
 class Index
 {
-    // create
-    // open
-    // add
-    // optimize
-    // delete
-    // find
-    // term (Zend_Search_Lucene_Index_Term)
 
-    // addDocument
-    //     addField
+    /**
+     * @var ZendLuceneHandler|ElasticaHandler
+     */
+    protected $handler;
 
-    // config:
-    //     min prefix length
-    //     set default: Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive
+    /**
+     * @param $handler
+     */
+    public function __construct($handler)
+    {
+        $this->handler = $handler;
+    }
+
+    /**
+     * @param $key
+     * @param $data
+     */
+    public function add($key, $data)
+    {
+        $this->handler->add($key, $data);
+    }
+
+    /**
+     * @param $key
+     */
+    public function delete($key)
+    {
+        $this->handler->delete($key);
+    }
 
 }

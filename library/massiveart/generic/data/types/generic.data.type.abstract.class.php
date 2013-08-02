@@ -44,6 +44,8 @@
 
 require_once(dirname(__FILE__) . '/generic.data.type.interface.php');
 
+use Sulu\Search\Search;
+
 abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 {
 
@@ -59,17 +61,13 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * property of the generic setup object
+     *
      * @return GenericSetup $setup
      */
     public function Setup()
     {
         return $this->setup;
     }
-
-    /**
-     * @var Zend_Search_Lucene
-     */
-    protected $objIndex;
 
     /**
      * @var Array
@@ -101,6 +99,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * save
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -108,6 +107,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * load
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -115,7 +115,11 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * insertCoreData
-     * @param string $strType, string $strTypeId, integer $intTypeVersion
+     *
+     * @param string $strType,
+     * @param string $strTypeId
+     * @param int $intTypeVersion
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -134,13 +138,13 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
-                        
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType . 'Files');
 
                         $strTmpFileIds = trim($objField->getValue(), '[]');
                         $arrFileIds = array();
                         $arrFileIds = explode('][', $strTmpFileIds);
-                        
+
                         // start transaction
                         $this->core->dbh->beginTransaction();
                         try {
@@ -151,7 +155,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $objGenTable->delete($strWhere);
 
                             $strDisplayOption = $objField->getProperty('display_option');
-                            
+
                             // insert data
                             foreach ($arrFileIds as $key => $value) {
                                 $arrCoreData = array(
@@ -160,7 +164,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'   => $this->setup->getLanguageId(),
                                     'idFiles'       => $value,
                                     'idFields'      => $objField->id,
-                                    'sortPosition' => $key + 1,
+                                    'sortPosition'  => $key + 1,
                                     'displayOption' => $strDisplayOption
                                 );
                                 $objGenTable->insert($arrCoreData);
@@ -176,14 +180,14 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                              */
                             $this->core->dbh->rollBack();
                             $this->core->logger->err($exc);
-                        }    
+                        }
                     } else {
                         /**
                          * if field has already been loaded, update data ( -> e.g. change template)
                          */
                         if ($objField->blnHasLoadedData === true) {
                             if (is_array($objField->getValue())) {
-    
+
                                 /**
                                  * start transaction
                                  */
@@ -192,7 +196,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                                     $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                                     $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
-    
+
                                     /**
                                      * delete data
                                      */
@@ -211,10 +215,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                             'creator'       => $intUserId,
                                             'created'       => date('Y-m-d H:i:s')
                                         );
-    
+
                                         $objGenTable->insert($arrCoreData);
                                     }
-    
+
                                     /**
                                      * commit transaction
                                      */
@@ -228,14 +232,14 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                 }
                             } else {
                                 $arrCoreData = array(
-                                    $strField     => $objField->getValue(),
-                                    'idUsers'     => $intUserId
+                                    $strField => $objField->getValue(),
+                                    'idUsers' => $intUserId
                                 );
 
                                 $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
-    
+
                                 $objGenTable->update($arrCoreData, $strWhere);
                             }
                         } else {
@@ -250,7 +254,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                         'creator'       => $intUserId,
                                         'created'       => date('Y-m-d H:i:s')
                                     );
-    
+
                                     $objGenTable->insert($arrCoreData);
                                 }
                             } else {
@@ -282,7 +286,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * insertFileData
+     *
+     * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -302,20 +309,20 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $strTmpFileIds = trim($objField->getValue(), '[]');
                 $arrFileIds = array();
                 $arrFileIds = explode('][', $strTmpFileIds);
-                
+
                 $strDisplayOption = $objField->getProperty('display_option');
-                
+
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
                         if ($intFileId != '') {
                             if (isset($arrTypeProperties['Version'])) {
                                 $arrFileData = array(
-                                    $strType . 'Id'  => $arrTypeProperties['Id'],
-                                    'version'        => $arrTypeProperties['Version'],
-                                    'idLanguages'    => $this->setup->getLanguageId(),
-                                    'sortPosition'   => $intSortPosition + 1,
-                                    'idFiles'        => $intFileId,
-                                    'idFields'       => $intFieldId
+                                    $strType . 'Id' => $arrTypeProperties['Id'],
+                                    'version'       => $arrTypeProperties['Version'],
+                                    'idLanguages'   => $this->setup->getLanguageId(),
+                                    'sortPosition'  => $intSortPosition + 1,
+                                    'idFiles'       => $intFileId,
+                                    'idFields'      => $intFieldId
                                 );
                             } else {
                                 $arrFileData = array(
@@ -325,9 +332,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'sortPosition'                       => $intSortPosition + 1
                                 );
                             }
-                            
+
                             if ($strDisplayOption != '') {
-                                $arrFileData['displayOption'] = $strDisplayOption;   
+                                $arrFileData['displayOption'] = $strDisplayOption;
                             }
 
                             $this->getModelGenericData()->getGenericTable($strType . '-' . $this->setup->getFormId() . '-' . $this->setup->getFormVersion() . '-InstanceFiles')->insert($arrFileData);
@@ -340,7 +347,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * insertMultiFieldData
+     *
+     * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Shedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -389,8 +399,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * insertInstanceData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -403,12 +415,12 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
             if (isset($arrTypeProperties['Version'])) {
                 $arrInstanceData = array(
-                    $strType . 'Id'  => $arrTypeProperties['Id'],
-                    'version'        => $arrTypeProperties['Version'],
-                    'idLanguages'    => $this->setup->getLanguageId(),
-                    'idUsers'        => $intUserId,
-                    'creator'        => $intUserId,
-                    'created'        => date('Y-m-d H:i:s')
+                    $strType . 'Id' => $arrTypeProperties['Id'],
+                    'version'       => $arrTypeProperties['Version'],
+                    'idLanguages'   => $this->setup->getLanguageId(),
+                    'idUsers'       => $intUserId,
+                    'creator'       => $intUserId,
+                    'created'       => date('Y-m-d H:i:s')
                 );
             } else {
                 $arrInstanceData = array(
@@ -437,8 +449,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * insertMultiplyRegionData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -486,7 +500,13 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * saveZooluFallbackTitle
-     * @param string $stTitle, string $strType, string $strTypeId, integer $intTypeVersion, Model_Table_Generics $objGenTable
+     *
+     * @param string $stTitle
+     * @param string $strType
+     * @param string $strTypeId
+     * @param integer $intTypeVersion
+     * @param Model_Table_Generics $objGenTable
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -517,8 +537,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', 0);
                 $arrCoreData = array(
-                    'title'       => $stTitle,
-                    'idUsers'     => $intUserId
+                    'title'   => $stTitle,
+                    'idUsers' => $intUserId
                 );
                 $objGenTable->update($arrCoreData, $strWhere);
             }
@@ -530,7 +550,11 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * updateCoreData
-     * @param string $strType, string $strTypeId, integer $intTypeVersion
+     *
+     * @param string $strType
+     * @param string $strTypeId
+     * @param int $intTypeVersion
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -547,16 +571,16 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
             foreach ($this->setup->CoreFields() as $strField => $objField) {
 
                 $objGenTable = $this->getModelGenericData()->getGenericTable($strType . str_replace('_', '', ((substr($strField, strlen($strField) - 1) == 'y') ? ucfirst(rtrim($strField, 'y')) . 'ies' : ucfirst($strField) . 's')));
-                    
+
                 if ($objField->getValue() != '') {
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType . 'Files');
 
                         $strTmpFileIds = trim($objField->getValue(), '[]');
                         $arrFileIds = array();
                         $arrFileIds = explode('][', $strTmpFileIds);
-                        
-                        
+
+
                         // start transaction
                         $this->core->dbh->beginTransaction();
                         try {
@@ -564,12 +588,12 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idFields = ?', $objField->id);
-                            
+
                             // delete
                             $objGenTable->delete($strWhere);
 
                             $strDisplayOption = $objField->getProperty('display_option');
-                            
+
                             // insert data
                             foreach ($arrFileIds as $key => $value) {
                                 $arrCoreData = array(
@@ -578,7 +602,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'idLanguages'   => $this->setup->getLanguageId(),
                                     'idFiles'       => $value,
                                     'idFields'      => $objField->id,
-                                    'sortPosition' => $key + 1,
+                                    'sortPosition'  => $key + 1,
                                     'displayOption' => $strDisplayOption
                                 );
                                 $objGenTable->insert($arrCoreData);
@@ -597,7 +621,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         }
                     } else {
                         if (is_array($objField->getValue())) {
-    
+
                             /**
                              * start transaction
                              */
@@ -606,12 +630,12 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                 $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                                 $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
-    
+
                                 /**
                                  * delete
                                  */
                                 $objGenTable->delete($strWhere);
-    
+
                                 /**
                                  * insert data
                                  */
@@ -625,10 +649,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                         'creator'       => $intUserId,
                                         'created'       => date('Y-m-d H:i:s')
                                     );
-    
+
                                     $objGenTable->insert($arrCoreData);
                                 }
-    
+
                                 /**
                                  * commit transaction
                                  */
@@ -642,17 +666,17 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             }
                         } else {
                             $arrCoreData = array(
-                                $strField     => $objField->getValue(),
-                                'idUsers'     => $intUserId,
-                                'changed'     => date('Y-m-d H:i:s')
+                                $strField => $objField->getValue(),
+                                'idUsers' => $intUserId,
+                                'changed' => date('Y-m-d H:i:s')
                             );
-    
+
                             $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                             $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
-    
+
                             $intNumOfEffectedRows = $objGenTable->update($arrCoreData, $strWhere);
-    
+
                             if ($intNumOfEffectedRows == 0 && $objField->getValue() != '') {
                                 $arrCoreData = array(
                                     $strType . 'Id' => $strTypeId,
@@ -663,7 +687,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'creator'       => $intUserId,
                                     'created'       => date('Y-m-d H:i:s')
                                 );
-    
+
                                 $objGenTable->insert($arrCoreData);
                             }
                         }
@@ -677,21 +701,21 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     }
                 } else {
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType . 'Files');
                         $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idFields = ?', $objField->id);
-    
+
                         /**
                          * delete
                          */
-                        $objGenTable->delete($strWhere);                        
+                        $objGenTable->delete($strWhere);
                     } else {
                         $strWhere = $objGenTable->getAdapter()->quoteInto($strType . 'Id = ?', $strTypeId);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND version = ?', $intTypeVersion);
                         $strWhere .= $objGenTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->setup->getLanguageId());
-    
+
                         /**
                          * delete
                          */
@@ -704,7 +728,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * updateFileData
+     *
+     * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -733,9 +760,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 $strTmpFileIds = trim($objField->getValue(), '[]');
                 $arrFileIds = array();
                 $arrFileIds = explode('][', $strTmpFileIds);
-                
+
                 $strDisplayOption = $objField->getProperty('display_option');
-                
+
                 if (count($arrFileIds) > 0) {
                     foreach ($arrFileIds as $intSortPosition => $intFileId) {
                         if ($intFileId != '') {
@@ -756,9 +783,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                                     'sortPosition'                       => $intSortPosition + 1,
                                 );
                             }
-                            
+
                             if ($strDisplayOption != '') {
-                                $arrFileData['displayOption'] = $strDisplayOption;   
+                                $arrFileData['displayOption'] = $strDisplayOption;
                             }
 
                             $objGenTable->insert($arrFileData);
@@ -771,8 +798,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * updateMultiFieldData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <cha@massiveart.com>
      * @version 1.0
      */
@@ -831,8 +860,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * updateInstanceData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -846,8 +877,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
             $objGenTable = $this->getModelGenericData()->getGenericTable($strType . '-' . $this->setup->getFormId() . '-' . $this->setup->getFormVersion() . '-Instances');
 
             $arrInstanceData = array(
-                'idUsers'  => $intUserId,
-                'changed'  => date('Y-m-d H:i:s')
+                'idUsers' => $intUserId,
+                'changed' => date('Y-m-d H:i:s')
             );
 
             /**
@@ -879,8 +910,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * updateMultiplyRegionData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -939,11 +972,13 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * insertMultiplyRegionInstanceData
+     *
      * @param GenericElementRegion $objRegion
      * @param integer $intRegionInstanceId
      * @param integer $intRegionPosition
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -952,35 +987,35 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
         try {
             if (isset($arrTypeProperties['Version'])) {
                 $arrInstanceData = array(
-                    $strType . 'Id'  => $arrTypeProperties['Id'],
-                    'version'        => $arrTypeProperties['Version'],
-                    'idLanguages'    => $this->setup->getLanguageId()
+                    $strType . 'Id' => $arrTypeProperties['Id'],
+                    'version'       => $arrTypeProperties['Version'],
+                    'idLanguages'   => $this->setup->getLanguageId()
                 );
             } else {
                 $arrInstanceData = array(
-                    $this->getDbIdFieldForType($strType)  => $arrTypeProperties['Id']
+                    $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id']
                 );
             }
 
             $arrInstanceData = array_merge(
                 $arrInstanceData,
                 array(
-                     'sortPosition' => $intRegionPosition
+                    'sortPosition' => $intRegionPosition
                 )
             );
-            
+
             if ($objRegion->getRegionTypeId() == $this->core->sysConfig->region_types->unique) {
                 $uniqueId = $arrTypeProperties['regionUniqueId'];
                 if ($uniqueId == null) {
                     $uniqueId = uniqid();
-                    $objRegion->addRegionUniqueId($intRegionInstanceId, $uniqueId);    
+                    $objRegion->addRegionUniqueId($intRegionInstanceId, $uniqueId);
                 }
                 $arrInstanceData = array_merge(
-                $arrInstanceData,
+                    $arrInstanceData,
                     array(
-                         'uniqueId' => $uniqueId
+                        'uniqueId' => $uniqueId
                     )
-                );    
+                );
             }
 
 
@@ -1018,23 +1053,23 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             if ($intFileId != '') {
                                 if (isset($arrTypeProperties['Version'])) {
                                     $arrFileData = array(
-                                        $strType . 'Id'        => $arrTypeProperties['Id'],
-                                        'version'              => $arrTypeProperties['Version'],
-                                        'idLanguages'          => $this->setup->getLanguageId()
+                                        $strType . 'Id' => $arrTypeProperties['Id'],
+                                        'version'       => $arrTypeProperties['Version'],
+                                        'idLanguages'   => $this->setup->getLanguageId()
                                     );
                                 } else {
                                     $arrFileData = array(
-                                        $this->getDbIdFieldForType($strType)  => $arrTypeProperties['Id']
+                                        $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id']
                                     );
                                 }
 
                                 $arrFileData = array_merge(
                                     $arrFileData,
                                     array(
-                                         'idRegionInstances'  => $idRegionInstance,
-                                         'idFiles'            => $intFileId,
-                                         'displayOption'      => $strDisplayOption,
-                                         'idFields'           => $intFieldId
+                                        'idRegionInstances' => $idRegionInstance,
+                                        'idFiles'           => $intFileId,
+                                        'displayOption'     => $strDisplayOption,
+                                        'idFields'          => $intFieldId
                                     )
                                 );
 
@@ -1067,23 +1102,23 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
                                     if (isset($arrTypeProperties['Version'])) {
                                         $arrFileFilterData = array(
-                                            $strType . 'Id'        => $arrTypeProperties['Id'],
-                                            'version'              => $arrTypeProperties['Version'],
-                                            'idLanguages'          => $this->setup->getLanguageId()
+                                            $strType . 'Id' => $arrTypeProperties['Id'],
+                                            'version'       => $arrTypeProperties['Version'],
+                                            'idLanguages'   => $this->setup->getLanguageId()
                                         );
                                     } else {
                                         $arrFileFilterData = array(
-                                            $this->getDbIdFieldForType($strType)  => $arrTypeProperties['Id']
+                                            $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id']
                                         );
                                     }
 
                                     $arrFileFilterData = array_merge(
                                         $arrFileFilterData,
                                         array(
-                                             'idRegionInstances'  => $idRegionInstance,
-                                             'idFilterTypes'      => $objFilter->typeId,
-                                             'referenceId'        => $intReferenceId,
-                                             'idFields'           => $intFieldId
+                                            'idRegionInstances' => $idRegionInstance,
+                                            'idFilterTypes'     => $objFilter->typeId,
+                                            'referenceId'       => $intReferenceId,
+                                            'idFields'          => $intFieldId
                                         )
                                     );
 
@@ -1110,23 +1145,23 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
                                 if (isset($arrTypeProperties['Version'])) {
                                     $arrFileData = array(
-                                        $strType . 'Id'        => $arrTypeProperties['Id'],
-                                        'version'              => $arrTypeProperties['Version'],
-                                        'idLanguages'          => $this->setup->getLanguageId()
+                                        $strType . 'Id' => $arrTypeProperties['Id'],
+                                        'version'       => $arrTypeProperties['Version'],
+                                        'idLanguages'   => $this->setup->getLanguageId()
                                     );
                                 } else {
                                     $arrFileData = array(
-                                        $this->getDbIdFieldForType($strType)  => $arrTypeProperties['Id']
+                                        $this->getDbIdFieldForType($strType) => $arrTypeProperties['Id']
                                     );
                                 }
 
                                 $arrFileData = array_merge(
                                     $arrFileData,
                                     array(
-                                         'idRegionInstances'  => $idRegionInstance,
-                                         'idRelation'         => $intRelationId,
-                                         //'value'            => '', TODO ::  load value, if copyValue is true
-                                         'idFields'           => $intFieldId
+                                        'idRegionInstances' => $idRegionInstance,
+                                        'idRelation'        => $intRelationId,
+                                        //'value'            => '', TODO ::  load value, if copyValue is true
+                                        'idFields'          => $intFieldId
                                     )
                                 );
 
@@ -1155,8 +1190,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * loadCoreData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -1176,8 +1213,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * loadCoreData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -1194,18 +1233,18 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 foreach ($this->setup->CoreFields() as $strField => $objField) {
 
                     if ($objField->getProperty('type') === 'media') {
-                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType.'Files');
+                        $objGenTable = $this->getModelGenericData()->getGenericTable($strType . 'Files');
                         $objSelect = $objGenTable->select();
                         $objSelect->setIntegrityCheck(false);
-        
-                        $objSelect->from($strType.'Files', array('idFiles', 'sortPosition', 'displayOption'));
-                        $objSelect->join('fields', 'fields.id = '.$strType.'Files.idFields', array('name'));
+
+                        $objSelect->from($strType . 'Files', array('idFiles', 'sortPosition', 'displayOption'));
+                        $objSelect->join('fields', 'fields.id = ' . $strType . 'Files.idFields', array('name'));
                         $objSelect->where($strType . 'Id = ?', $arrTypeProperties['Id']);
                         $objSelect->where('version = ?', $arrTypeProperties['Version']);
                         $objSelect->where('idLanguages = ?', $this->Setup()->getLanguageId());
                         $objSelect->where('idFields = ?', $objField->id);
                         $objSelect->order(array('sortPosition ASC'));
-        
+
                         $arrGenFormsData = $objGenTable->fetchAll($objSelect)->toArray();
                         if (count($arrGenFormsData) > 0) {
                             $objField->blnHasLoadedData = true;
@@ -1219,14 +1258,14 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     } else {
                         $objGenTable = $this->getModelGenericData()->getGenericTable($strType . str_replace('_', '', ((substr($strField, strlen($strField) - 1) == 'y') ? ucfirst(rtrim($strField, 'y')) . 'ies' : ucfirst($strField) . 's')));
                         $objSelect = $objGenTable->select();
-    
+
                         $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array($strField));
                         $objSelect->where($strType . 'Id = ?', $arrTypeProperties['Id']);
                         $objSelect->where('version = ?', $arrTypeProperties['Version']);
                         $objSelect->where('idLanguages = ?', $this->Setup()->getLanguageId());
-    
+
                         $arrGenFormsData = $objGenTable->fetchAll($objSelect)->toArray();
-    
+
                         if (count($arrGenFormsData) > 0) {
                             $objField->blnHasLoadedData = true;
                             if (count($arrGenFormsData) > 1) {
@@ -1263,8 +1302,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * loadFileData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -1313,8 +1354,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * loadMultiFieldData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -1363,8 +1406,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * loadInstanceData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -1418,8 +1463,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * loadMultiplyRegionData
+     *
      * @param string $strType
      * @param array $arrTypeProperties
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -1450,7 +1497,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                     foreach ($objRegion->InstanceFieldNames() as $strField) {
                         $arrSelectFields[] = $strField;
                     }
-                    
+
                     if ($objRegion->getRegionTypeId() == $this->core->sysConfig->region_types->unique) {
                         $arrSelectFields[] = 'uniqueId';
                     }
@@ -1478,7 +1525,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $objRegion->addRegionInstanceId($intRegionInstanceCounter);
                             foreach ($arrRowGenFormData as $column => $value) {
                                 if ($column == 'uniqueId') {
-                                    $objRegion->addRegionUniqueId($intRegionInstanceCounter, $value);    
+                                    $objRegion->addRegionUniqueId($intRegionInstanceCounter, $value);
                                 } else if ($column != 'id') {
                                     if (is_array(json_decode($value))) {
                                         $objRegion->getField($column)->setInstanceValue($intRegionInstanceCounter, json_decode($value));
@@ -1636,8 +1683,8 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         foreach ($objRegion->SpecialFieldNames() as $strFieldName) {
                             $objField = $objRegion->getField($strFieldName);
                             $objField->setGenericSetup($this->Setup());
-                            $arrInstanceData = $objField->loadInstanceData($strType, $arrTypeProperties['Id'], $objRegion, $arrTypeProperties['Version']);  
-                            foreach ($arrInstanceData as $intInstanceId => $arrInstanceDataRow) {                                
+                            $arrInstanceData = $objField->loadInstanceData($strType, $arrTypeProperties['Id'], $objRegion, $arrTypeProperties['Version']);
+                            foreach ($arrInstanceData as $intInstanceId => $arrInstanceDataRow) {
                                 $objRegion->getField($arrInstanceDataRow['name'])->setInstanceValue($intInstanceId, $arrInstanceDataRow['value']);
                             }
                         }
@@ -1651,70 +1698,56 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * addToIndex
-     * @param string $strIndexPath
-     * @param string $strKey
-     * @param PageContainer $objParentPageContainer
+     *
+     * @param $strKey
+     * @param $type
+     * @param $languageId
+     * @param null $objParentPageContainer
+     * @param array $arrParentFolderIds
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    final protected function addToIndex($strIndexPath, $strKey, $objParentPageContainer = null, $arrParentFolderIds = array())
+    final protected function addToIndex($strKey, $type, $languageId, $objParentPageContainer = null, $arrParentFolderIds = array())
     {
         try {
-            $this->core->logger->debug('massiveart->generic->data->types->GenericDataTypeAbstract->addToIndex(' . $strIndexPath . ', ' . $strKey . ')');
+            $this->core->logger->debug('massiveart->generic->data->types->GenericDataTypeAbstract->addToIndex(' . $strKey . ', ' . $type . ', ' . $languageId . ')');
 
-            if (!is_object($this->objIndex) || !($this->objIndex instanceof Zend_Search_Lucene)) {
-                if (count(scandir($strIndexPath)) > 2) {
-                    $this->objIndex = Zend_Search_Lucene::open($strIndexPath);
-                } else {
-                    $this->objIndex = Zend_Search_Lucene::create($strIndexPath);
-                }
-            }
+            $data = array();
 
-            Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
-
-            $objDoc = new Zend_Search_Lucene_Document();
-
-            $objDoc->addField(Zend_Search_Lucene_Field::keyword('key', $strKey));
             if ($this->setup->getLanguageFallbackId() > 0 && $this->setup->getLanguageFallbackId() != $this->setup->getLanguageId()) {
-                $objDoc->addField(Zend_Search_Lucene_Field::keyword('languageId', $this->setup->getLanguageFallbackId()));
+                $data['languageId'] = array('value' => $this->setup->getLanguageFallbackId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
             } else {
-                $objDoc->addField(Zend_Search_Lucene_Field::keyword('languageId', $this->setup->getLanguageId()));
+                $data['languageId'] = array('value' => $this->setup->getLanguageId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
             }
-            $objDoc->addField(Zend_Search_Lucene_Field::keyword('rootLevelId', $this->setup->getRootLevelId()));
-            $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('date', $this->setup->getPublishDate('d.m.Y')));
-            $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('elementTypeId', $this->setup->getElementTypeId()));
-            $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('segmentId', $this->setup->getSegmentId()));
-            
-            if (count($arrParentFolderIds) > 0) {
-                $parentFolderId = $arrParentFolderIds[0]; 
-                $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('parentFolderId', $parentFolderId));
-            }
-            
+
+            $data['rootLevelId'] = array('value' => $this->setup->getRootLevelId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
+            $data['templateId'] = array('value' => $this->setup->getTemplateId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
+            $data['date'] = array('value' => $this->setup->getPublishDate('d.m.Y'), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+            $data['elementTypeId'] = array('value' => $this->setup->getElementTypeId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+            $data['segmentId'] = array('value' => $this->setup->getSegmentId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+
             if ($objParentPageContainer !== null && $objParentPageContainer instanceof PageContainer) {
                 if (count($objParentPageContainer->getEntries()) > 0) {
-
-                    
-                    //$this->core->logger->debug(var_export());
-                    
-                    $objDoc->addField(Zend_Search_Lucene_Field::unIndexed('parentPages', base64_encode( serialize($objParentPageContainer->getEntries()) )));
-                    $objDoc->addField(Zend_Search_Lucene_Field::keyword('rootLevelId', end($objParentPageContainer->getEntries())->rootLevelId));
+                    $data['parentPages'] = array('value' => base64_encode(serialize($objParentPageContainer->getEntries())), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+                    $data['rootLevelId'] = array('value' => end($objParentPageContainer->getEntries())->rootLevelId, 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
                 }
             }
 
-            if (count($arrParentFolderIds) > 0) {
-                $objDoc->addField(Zend_Search_Lucene_Field::unStored('parentFolderIds', implode(',', $arrParentFolderIds)));
+            if (is_array($arrParentFolderIds) && count($arrParentFolderIds) > 0) {
+                $data['parentFolderId'] = array('value' => $arrParentFolderIds[0], 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+                $data['parentFolderIds'] = array('value' => implode(',', $arrParentFolderIds), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
             }
 
-            /**
-             * index fields
-             */
+            // index fields
             foreach ($this->setup->FieldNames() as $strField => $intFieldType) {
                 $objField = $this->setup->getField($strField);
                 if (is_object($objField) && $objField->idSearchFieldTypes != Search::FIELD_TYPE_NONE) {
-                    $this->addToNodeSummary($this->indexFieldNow($objField, $strField, $intFieldType, $objField->getValue(), $objDoc));
+                    $data = $this->indexFieldNow($objField, $strField, $intFieldType, $objField->getValue(), $data);
                 }
             }
 
+            // index multiply region fields
             foreach ($this->setup->MultiplyRegionIds() as $intRegionId) {
                 $objRegion = $this->setup->getRegion($intRegionId);
 
@@ -1725,58 +1758,39 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         foreach ($objRegion->FieldNames() as $strField => $intFieldType) {
                             $objField = $objRegion->getField($strField);
                             if (is_object($objField) && $objField->idSearchFieldTypes != Search::FIELD_TYPE_NONE) {
-                                $this->addToNodeSummary($this->indexFieldNow($objField, $objField->name . '_' . $intRegionPosition, $intFieldType, $objField->getInstanceValue($intRegionInstanceId), $objDoc));
+                                $data = $this->indexFieldNow($objField, $objField->name . '_' . $intRegionPosition, $intFieldType, $objField->getInstanceValue($intRegionInstanceId), $data);
                             }
                         }
                     }
                 }
             }
 
-            $this->indexNodeSummaryNow($objDoc);
+            $search = new Search($this->core->sysConfig->search->toArray(), $type, $languageId);
+            $search->getIndex()->add($strKey, $data);
 
-            // Add document to the index.
-            $this->objIndex->addDocument($objDoc);
-            unset($objDoc);
-
-            $this->objIndex->optimize();
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
     }
 
     /**
-     * addToNodeSummary
-     * @param string value
-     * @author Raphael Stocker <rst@massiveart.com>
-     */
-    final protected function addToNodeSummary($value)
-    {
-        $this->strNodeSummary .= ' ' . $value;
-    }
-
-    /**
-     * indexNodeSummaryNow
-     * @param string value
-     * @author Raphael Stocker <rst@massiveart.com>
-     */
-    final protected function indexNodeSummaryNow($objDoc)
-    {
-        $objDoc->addField(Zend_Search_Lucene_Field::unStored(Search::ZO_NODE_SUMMARY, $this->strNodeSummary, $this->core->sysConfig->encoding->default));
-    }
-
-    /**
      * indexFieldNow
+     *
      * @param GenericElementField $objField
      * @param string $strField
      * @param integer $intFieldType
      * @param string|array|object $mixedFieldValue
-     * @param Zend_Search_Lucene_Document $objDoc
+     * @param array $data
+     *
      * @return string
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    final protected function indexFieldNow($objField, $strField, $intFieldType, $mixedFieldValue, Zend_Search_Lucene_Document $objDoc)
+    final protected function indexFieldNow($objField, $strField, $intFieldType, $mixedFieldValue, array $data)
     {
         try {
+
+            $this->core->logger->debug($strField);
+
             $strValue = '';
             $strValueIds = '';
             $blnReturnValue = false;
@@ -1845,36 +1859,23 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 }
 
                 if ($strValueIds != '') {
-                    $objDoc->addField(Zend_Search_Lucene_Field::unIndexed($strField . 'Ids', $strValueIds, $this->core->sysConfig->encoding->default));
+                    if ($objField->idSearchFieldTypes == Search::FIELD_TYPE_KEYWORD) {
+                        $data[$strField . 'Ids'] = array('value' => $strValueIds, 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
+                    } else {
+                        $data[$strField . 'Ids'] = array('value' => $strValueIds, 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+                    }
                 }
 
-                $this->core->logger->debug($strField . ': ' . $strValue);
-                switch ($objField->idSearchFieldTypes) {
-                    case Search::FIELD_TYPE_KEYWORD:
-                        $blnReturnValue = true;
-                        $objDoc->addField(Zend_Search_Lucene_Field::keyword($strField, $strValue, $this->core->sysConfig->encoding->default));
-                        break;
-                    case Search::FIELD_TYPE_UNINDEXED:
-                        $objDoc->addField(Zend_Search_Lucene_Field::unIndexed($strField, $strValue, $this->core->sysConfig->encoding->default));
-                        break;
-                    case Search::FIELD_TYPE_BINARY:
-                        $objDoc->addField(Zend_Search_Lucene_Field::binary($strField, $strValue, $this->core->sysConfig->encoding->default));
-                        break;
-                    case Search::FIELD_TYPE_TEXT:
-                        $blnReturnValue = true;
-                        $objDoc->addField(Zend_Search_Lucene_Field::text($strField, $strValue, $this->core->sysConfig->encoding->default));
-                        break;
-                    case Search::FIELD_TYPE_UNSTORED:
-                        $blnReturnValue = true;
-                        break;
-                    case Search::FIELD_TYPE_SUMMARY_INDEXED:
-                        $blnReturnValue = true;
-                        $objDoc->addField(Zend_Search_Lucene_Field::unIndexed($strField, $strValue, $this->core->sysConfig->encoding->default));
-                        break;
-                }
+                // decide to return value or not
+                /*if ($objField->idSearchFieldTypes == Search::FIELD_TYPE_KEYWORD || $objField->idSearchFieldTypes == Search::FIELD_TYPE_TEXT || $objField->idSearchFieldTypes == Search::FIELD_TYPE_SUMMARY_INDEXED || $objField->idSearchFieldTypes == Search::FIELD_TYPE_UNSTORED)   {
+                    $blnReturnValue = true;
+                }*/
+
+                $data[$strField] = array('value' => $strValue, 'params' => array('searchFieldTypeId' => $objField->idSearchFieldTypes));
             }
 
-            return $blnReturnValue ? $strValue : '';
+            //return $blnReturnValue ? $strValue : '';
+            return $data;
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -1882,20 +1883,22 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * updateIndex
-     * @param string $strIndexPath
-     * @param string $strKey
-     * @param PageContainer $objParentPageContainer
+     *
+     * @param $strKey
+     * @param $type
+     * @param $languageId
+     * @param null $objParentPageContainer
+     * @param array $arrParentFolderIds
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    final public function updateIndex($strIndexPath, $strKey, $objParentPageContainer = null, $arrParentFolderIds = array())
+    final public function updateIndex($strKey, $type, $languageId, $objParentPageContainer = null, $arrParentFolderIds = array())
     {
         try {
-            if (count(scandir($strIndexPath)) > 2) {
-                $this->removeFromIndex($strIndexPath, $strKey);
-            }
+            $this->removeFromIndex($strKey, $type, $languageId);
 
-            $this->addToIndex($strIndexPath, $strKey, $objParentPageContainer, $arrParentFolderIds);
+            $this->addToIndex($strKey, $type, $languageId, $objParentPageContainer, $arrParentFolderIds);
 
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -1904,30 +1907,22 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * removeFromIndex
-     * @param string $strIndexPath
-     * @param string $strKey
+     *
+     * @param $strKey
+     * @param $type
+     * @param $languageId
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    final protected function removeFromIndex($strIndexPath, $strKey)
+    final protected function removeFromIndex($strKey, $type, $languageId)
     {
         try {
-            $this->core->logger->debug('massiveart->generic->data->types->GenericDataTypeAbstract->removeFromIndex(' . $strIndexPath . ', ' . $strKey . ')');
-            if (count(scandir($strIndexPath)) > 2) {
-                $this->objIndex = Zend_Search_Lucene::open($strIndexPath);
+            $this->core->logger->debug('massiveart->generic->data->types->GenericDataTypeAbstract->removeFromIndex(' . $strKey . ', ' . $type . ', ' . $languageId . ')');
 
-                $objTerm = new Zend_Search_Lucene_Index_Term($strKey, 'key');
-                $objQuery = (strpos($strKey, '*') !== false) ? new Zend_Search_Lucene_Search_Query_Wildcard($objTerm) : new Zend_Search_Lucene_Search_Query_Term($objTerm);
+            $search = new \Sulu\Search\Search($this->core->sysConfig->search->toArray(), $type, $languageId);
+            $search->getIndex()->delete($strKey);
 
-                $objHits = $this->objIndex->find($objQuery);
-                foreach ($objHits as $objHit) {
-                    $this->objIndex->delete($objHit->id);
-                }
-
-                $this->objIndex->commit();
-
-                $this->objIndex->optimize();
-            }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -1935,7 +1930,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * getDbIdFieldForType
+     *
      * @param string $strType
+     *
      * @return string
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -1950,6 +1947,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * getModelGenericData
+     *
      * @return Model_GenericData
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -1971,6 +1969,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * getModelFiles
+     *
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
@@ -1992,7 +1991,9 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 
     /**
      * setGenericSetup
+     *
      * @param GenericSetup $objGenericSetup
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -2001,5 +2002,3 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
         $this->setup = $objGenericSetup;
     }
 }
-
-?>

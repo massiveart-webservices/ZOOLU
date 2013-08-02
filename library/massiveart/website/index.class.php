@@ -83,7 +83,8 @@ class Index
     {
         try {
             $this->core->logger->debug('massiveart->website->index->indexPage(' . $strPageId . ', ' . $intPageVersion . ', ' . $intLanguageId . ', ' . $intRootLevelId . ')');
-            $objPage = new Page();
+
+            $objPage = $this->getPage();
             $objPage->setPageId($strPageId);
             $objPage->setPageVersion($intPageVersion);
             $objPage->setLanguageId($intLanguageId);
@@ -138,7 +139,8 @@ class Index
     {
         try {
             $this->core->logger->debug('massiveart->website->index->indexGlobal(' . $strGlobalId . ', ' . $intGlobalLinkId . ', ' . $intGlobalVersion . ', ' . $intLanguageId . ', ' . $intRootLevelId . ')');
-            $objPage = new Page();
+
+            $objPage = $this->getPage();
             $objPage->setPageId($strGlobalId);
             $objPage->setPageVersion($intGlobalVersion);
             $objPage->setLanguageId($intLanguageId);
@@ -258,6 +260,21 @@ class Index
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
+    }
+
+    /**
+     * @return Client_Page|Page
+     */
+    protected function getPage ()
+    {
+        if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
+            require_once(GLOBAL_ROOT_PATH . 'client/website/page.class.php');
+            $objPage = new Client_Page();
+        } else {
+            $objPage = new Page();
+        }
+
+        return $objPage;
     }
 
     /**

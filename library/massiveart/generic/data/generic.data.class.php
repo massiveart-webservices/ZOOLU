@@ -147,33 +147,36 @@ class GenericData
 
     /**
      * indexData
-     * @param string $strIndexPath
      * @param string $strKey
+     * @param string $type
+     * @param int $languageId
      * @param array $arrParentPageContainer
+     * @param array $arrParentFolderIds
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function indexData($strIndexPath, $strKey, $arrParentPageContainer = array(), $arrParentFolderIds = array())
+    public function indexData($strKey, $type, $languageId, $arrParentPageContainer = array(), $arrParentFolderIds = array())
     {
-        $this->core->logger->debug('massiveart->generic->data->GenericData->indexData(' . $strIndexPath . ', ' . $strKey . ')');
+        $this->core->logger->debug('massiveart->generic->data->GenericData->indexData(' . $strKey . ', ' . $type . ', ' . $languageId .')');
+
         if ($this->objDataType instanceof GenericDataTypeAbstract) {
             if (count($arrParentPageContainer) > 0) {
                 foreach ($arrParentPageContainer as $intRootLevelId => $objParentPageContainer) {
                     if ($this->setup->getLanguageFallbackId() > 0 && $this->setup->getLanguageFallbackId() != $this->setup->getLanguageId()) {
-                        $this->objDataType->updateIndex($strIndexPath, $strKey . '_' . $this->setup->getLanguageFallbackId() . '_r' . $intRootLevelId, $objParentPageContainer, $arrParentFolderIds);
+                        $this->objDataType->updateIndex($strKey . '_' . $this->setup->getLanguageFallbackId() . '_r' . $intRootLevelId, $type, $languageId, $objParentPageContainer, $arrParentFolderIds); // TODO : check language ???
                     } else {
-                        $this->objDataType->updateIndex($strIndexPath, $strKey . '_' . $this->setup->getLanguageId() . '_r' . $intRootLevelId, $objParentPageContainer, $arrParentFolderIds);
+                        $this->objDataType->updateIndex($strKey . '_' . $this->setup->getLanguageId() . '_r' . $intRootLevelId, $type, $languageId, $objParentPageContainer, $arrParentFolderIds); // TODO : check language ???
                     }
                 }
             } else {
-                $this->objDataType->updateIndex($strIndexPath, $strKey . '_' . $this->setup->getLanguageId());
+                $this->objDataType->updateIndex($strKey . '_' . $this->setup->getLanguageId(), $type, $languageId);
             }
         }
     }
 
     /**
      * changeTemplate
-     * @param integer $intNewTemplateId
+     * @param int $intNewTemplateId
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */

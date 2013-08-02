@@ -17,5 +17,8 @@ namespace Sulu\Search\Handler;
 interface HandlerInterface
 {
 
+    public function add($key, $data);
+
+    public function delete($key);
 
 }

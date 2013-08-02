@@ -9,23 +9,43 @@
 
 namespace Sulu\Search;
 
+use Sulu\Search\Config;
 use Sulu\Search\Query;
 use Sulu\Search\Index;
-use Sulu\Search\Handler\ZendLuceneHandler;
-use Sulu\Search\Handler\ElasticaHandler;
 
 class Search
 {
     /**
-     * define constants for search types
+     * constants for search types
      */
     const TYPE_ZEND_LUCENE = 'ZendLucene';
     const TYPE_ELASTICA = 'Elastica';
 
     /**
+     * constants for search field types
+     */
+    const FIELD_TYPE_NONE = 1;
+    const FIELD_TYPE_KEYWORD = 2;
+    const FIELD_TYPE_UNINDEXED = 3;
+    const FIELD_TYPE_BINARY = 4;
+    const FIELD_TYPE_TEXT = 5;
+    const FIELD_TYPE_UNSTORED = 6;
+    const FIELD_TYPE_SUMMARY_INDEXED = 7;
+
+    /**
+     * constant for search field node summary
+     */
+    const ZO_NODE_SUMMARY = 'zo_node_summary';
+
+    /**
      * @var string
      */
     protected $type;
+
+    /**
+     * @var Config
+     */
+    protected $config;
 
     /**
      * @var Query
@@ -39,21 +59,41 @@ class Search
 
     /**
      * different handlers
+     *
      * @var ZendLuceneHandler|ElasticaHandler
      */
     protected $handler = null;
 
     /**
-     * @var array
+     * @param array $configData
+     * @param string $dataType
+     * @param int $languageId
      */
-    protected $filters;
+    public function __construct(array $configData, $dataType, $languageId)
+    {
+        // set config
+        $this->setConfig($configData);
+        $this->config->addData('dataType', $dataType);
+        $this->config->addData('languageId', $languageId);
+
+        // set search type
+        $this->setType();
+    }
 
     /**
-     * @param $type
+     * @param array $config
      */
-    public function __construct($type)
+    public function setConfig($config)
     {
-        $this->type = $type;
+        $this->config = new Config($config);
+    }
+
+    /**
+     * @return Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
@@ -62,7 +102,7 @@ class Search
     public function getQuery()
     {
         if (null === $this->query) {
-            $this->query = new Query();
+            $this->query = new Query($this->getHandler());
         }
 
         return $this->query;
@@ -74,13 +114,13 @@ class Search
     public function getIndex()
     {
         if (null === $this->index) {
-            $this->index = new Index();
+            $this->index = new Index($this->getHandler());
         }
 
         return $this->index;
     }
 
-    public function getHandler()
+    protected function getHandler()
     {
         if (null === $this->handler) {
             $this->setHandler();
@@ -91,8 +131,27 @@ class Search
 
     protected function setHandler()
     {
-        $handlerClass = $this->type . 'Handler';
-        $this->handler = new $handlerClass();
+        $handlerClass = '\\Sulu\\Search\\Handler\\' . $this->type . 'Handler';
+        $this->handler = new $handlerClass($this->config);
+    }
+
+    private function setType()
+    {
+        if ($this->getConfig('type') !== null) {
+            // define search type by config
+            switch ($this->getConfig('type')) {
+                case self::TYPE_ELASTICA:
+                    $this->type = self::TYPE_ELASTICA;
+                    break;
+                case self::TYPE_ZEND_LUCENE:
+                default:
+                    $this->type = self::TYPE_ZEND_LUCENE;
+                    break;
+            }
+        } else {
+            // define default search type
+            $this->type = self::TYPE_ZEND_LUCENE;
+        }
     }
 
     /**
@@ -103,42 +162,4 @@ class Search
         return $this->type;
     }
 
-    /**
-     * @param $key
-     * @param $value
-     *
-     * @return Search
-     */
-    public function addFilter($key, $value)
-    {
-        $this->filters[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * @param array $filters
-     *
-     * @return Search
-     */
-    public function setFilters(array $filters)
-    {
-        $this->filters = $filters;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFilters()
-    {
-        return $this->filters;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasFilters()
-    {
-        return count($this->filters) > 0;
-    }
 }

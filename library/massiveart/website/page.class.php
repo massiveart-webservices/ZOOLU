@@ -450,7 +450,7 @@ class Page
         $this->core->logger->debug('massiveart->website->page->indexPage()');
         try {
             if ($this->objGenericData instanceof GenericData) {
-                $this->objGenericData->indexData(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId), $this->strPageId);
+                $this->objGenericData->indexData($this->strPageId, 'page', $this->intLanguageId);
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -459,6 +459,7 @@ class Page
 
     /**
      * indexGlobal
+     * @param null $intLanguageId
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -551,12 +552,12 @@ class Page
                             $arrParentPageContainer[$intRootLevelId] = $objContainer;
                         }
 
-                        // reset root leve id
+                        // reset root level id
                         $intRootLevelId = null;
                     }
 
                     if (count($arrParentPageContainer) > 0) {
-                        $this->objGenericData->indexData(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', (($intLanguageId != null) ? $intLanguageId : $this->intLanguageId)), $this->strPageId, $arrParentPageContainer, $arrParentFolderIds);
+                        $this->objGenericData->indexData($this->strPageId, 'global', (($intLanguageId != null) ? $intLanguageId : $this->intLanguageId), $arrParentPageContainer, $arrParentFolderIds);
                     }
                 }
 
