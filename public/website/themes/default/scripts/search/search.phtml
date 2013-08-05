@@ -1,0 +1,31 @@
+<div class="top">
+    <div class="inner">
+        <!-- TODO : header image or flash -->
+        <div class="clear"></div>
+    </div>
+</div> <!-- /.top -->
+<!-- Content -->
+<div class="contentContainer search-content">
+    <div class="inner">
+        <h1 class="title">
+            <?php echo $this->translate->_('Search'); ?>
+        </h1>
+        <div class="column-cont">
+            <?php
+                $searchHelper = getSearchHelperObject();
+
+                // set variables
+                $searchHelper->setHits($this->hits)
+                    ->setSubject($this->subject)
+                    ->setSegmentId($this->segmentId)
+                    ->setSegmentCode($this->segmentCode)
+                    ->setHasSegments($this->hasSegments)
+                    ->setLanguageDefinitionType(getNavigationHelperObject()->getLanguageDefinitionType());
+
+                // get search result output
+                echo $searchHelper->getSearchList();
+            ?>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>

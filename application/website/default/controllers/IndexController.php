@@ -263,9 +263,9 @@ class IndexController extends WebControllerAction
                                 if (isset($objUrl->baseUrl)) {
                                     $baseUrl = $objUrl->baseUrl->url;   
                                 }
-                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
+                                $this->redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
                             } else {
-                                $this->_redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                                $this->redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
                             }
                         }
                     }
@@ -341,7 +341,7 @@ class IndexController extends WebControllerAction
                      * check status
                      */
                     if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
-                        $this->_redirect($this->getPrefix() . '/');
+                        $this->redirect($this->getPrefix() . '/');
                     }
     
                     if ($this->objPage->ParentPage() instanceof Page) {
@@ -373,7 +373,7 @@ class IndexController extends WebControllerAction
                         list($blnHasIdentity, $blnHasIdentityCustomer) = $this->isZooluOrCustomerIdentity();
     
                         if ($blnHasIdentity == false && $blnHasIdentityCustomer == false) {
-                            $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
+                            $this->redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
                         } else {
                             if (!$objNavigation->checkZonePrivileges()) {
                                 $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
@@ -400,7 +400,7 @@ class IndexController extends WebControllerAction
     
                     // forward to SearchController
                     if ($this->blnSearch == true) {
-                        $this->_forward('index', 'Search', null, array(
+                        $this->forward('search', 'Search', null, array(
                                                                       'rootLevelId'  => $this->objPage->getRootLevelId(),
                                                                       'theme'        => $this->objTheme->path,
                                                                       'urlPrefix'    => $this->strUrlPrefix,
@@ -413,7 +413,7 @@ class IndexController extends WebControllerAction
                     }
                     // forward to RssController
                     elseif ($this->blnIsRss == true) {
-                        $this->_forward('index', 'Rss', null, array(
+                        $this->forward('index', 'Rss', null, array(
                                                                    'page'  => $this->objPage,
                                                                    'theme' => $this->objTheme
                                                               ));
@@ -491,10 +491,10 @@ class IndexController extends WebControllerAction
                 $this->getResponse()->setHeader('Content-Type', 'text/xml')
                      ->setBody(file_get_contents(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml'));
             } else {
-                $this->_redirect($this->getPrefix() . '/');
+                $this->redirect($this->getPrefix() . '/');
             }
         } else {
-            $this->_redirect($this->getPrefix() . '/');
+            $this->redirect($this->getPrefix() . '/');
         }
     }
 
@@ -509,7 +509,7 @@ class IndexController extends WebControllerAction
 
         $objAuth = Zend_Auth::getInstance();
         if ($objAuth->hasIdentity()) {
-            $this->_redirect($this->getRequest()->getParam('re', '/'));
+            $this->redirect($this->getRequest()->getParam('re', '/'));
         } else {
 
             $this->view->strErrMessage = '';
@@ -610,7 +610,7 @@ class IndexController extends WebControllerAction
                             }
 
                             $objAuth->getStorage()->write($objUserData);
-                            $this->_redirect($this->getRequest()->getParam('re', '/'));
+                            $this->redirect($this->getRequest()->getParam('re', '/'));
                             break;
 
                         default:
@@ -636,7 +636,7 @@ class IndexController extends WebControllerAction
     {
         $objAuth = Zend_Auth::getInstance();
         $objAuth->clearIdentity();
-        $this->_redirect($this->getPrefix() . '/');
+        $this->redirect($this->getPrefix() . '/');
     }
 
     /**
@@ -693,7 +693,7 @@ private function getValidatedUrlObject($strUrl) {
                         echo $data;
                         exit();
                     }else{
-                        $this->_redirect($objUrl->url->current()->external);  
+                        $this->redirect($objUrl->url->current()->external);
                     }        
                 }
             }
@@ -778,7 +778,7 @@ private function getValidatedUrlObject($strUrl) {
             $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
             $this->getResponse()->setHeader('Status', '301 Moved Permanently');
             $this->getResponse()->setHttpResponseCode(301);
-            $this->_redirect($strRedirectUrl);    
+            $this->redirect($strRedirectUrl);
         }
     }
 
@@ -809,13 +809,13 @@ private function getValidatedUrlObject($strUrl) {
           $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
           $this->getResponse()->setHeader('Status', '301 Moved Permanently');
           $this->getResponse()->setHttpResponseCode(301);
-          $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/');
+          $this->redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/');
       } else if (parse_url($strUrl, PHP_URL_PATH) == '/'.$this->strLanguageCode.'/' && $this->objTheme->languageDefinitionType == $this->core->config->language_definition->none) {
           // redirect url without language
           $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
           $this->getResponse()->setHeader('Status', '301 Moved Permanently');
           $this->getResponse()->setHttpResponseCode(301);
-          $this->_redirect($this->getPrefix());
+          $this->redirect($this->getPrefix());
       } else {
           // rootlevel has no portal gate
           return false;

@@ -31,74 +31,16 @@
  */
 
 /**
- * Customer output Functions
+ * search output Functions
  *
- * @author Daniel Rotter <daniel.rotter@massiveart.com>
+ * @author Cornelius Hansjakob <cha@massiveart.com>
  * @version 1.0
  */
 
 /**
- * @return CustomerHelper
+ * @return SearchHelper
  */
-function getCustomerHelperObject()
+function getSearchHelperObject()
 {
-    return Zend_Registry::get('CustomerHelper');
-}
-
-/**
- * @return Core
- */
-function getCoreObject()
-{
-    return Zend_Registry::get('Core');
-}
-
-function get_meta_title($strTag = '')
-{
-    echo getCustomerHelperObject()->getMetaTitle($strTag);
-}
-
-function get_meta_description()
-{
-    echo getCustomerHelperObject()->getMetaDescription();
-}
-
-function get_meta_keywords()
-{
-    echo getCustomerHelperObject()->getMetaKeywords();
-}
-
-function get_meta_robots()
-{
-    echo getCustomerHelperObject()->getMetaRobots();
-}
-
-function get_canonical_tag()
-{
-}
-
-function get_static_component_domain()
-{
-    echo getCoreObject()->config->domains->static->components;
-}
-
-function get_zoolu_header()
-{
-}
-
-function get_language_chooser()
-{
-}
-
-function get_content($objView)
-{
-    echo getCustomerHelperObject()->getContent($objView);
-}
-
-function get_bottom_content()
-{
-}
-
-function get_dom_loaded_js()
-{
+    return Zend_Registry::get('SearchHelper');
 }
