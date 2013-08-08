@@ -27,12 +27,12 @@
     <meta name="robots" content="noindex, nofollow" />
 
     <!-- SCREEN CSS -->
-    <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/website/themes/default/css/style.css"/>
-    <!-- <link type="text/css" rel="stylesheet" href="<?php get_static_component_domain() ?>/website/themes/lechzuers&amp;f=lightbox/css/jquery.lightbox-0.5.css,css/bootstrap.css,js/datepicker/css/custom-theme/jquery-ui-1.8.23.custom.css"/>
+    <link type="text/css" rel="stylesheet" href="/website/themes/default/css/style.css"/>
+    <!-- <link type="text/css" rel="stylesheet" href="/website/themes/lechzuers&amp;f=lightbox/css/jquery.lightbox-0.5.css,css/bootstrap.css,js/datepicker/css/custom-theme/jquery-ui-1.8.23.custom.css"/>
 -->
-    <link rel="shortcut icon" href="<?php get_static_component_domain() ?>favicon.ico" type="image/x-icon"></link>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"></link>
 
-    <script src="/website/themes/default/js/libs/modernizr-2.5.3.min.js?v=<?php echo getCoreObject()->sysConfig->version->js; ?>"></script>
+    <script src="/website/themes/default/js/libs/modernizr-2.5.3.min.js?v=<?php echo date('Ymd') ?>"></script>
 </head>
 
 <body>  
@@ -59,10 +59,10 @@
 <?php include dirname(__FILE__).'/includes/footer.inc.php'; ?>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="<?php get_static_component_domain() ?>/website/themes/default/js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="/website/themes/default/js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 
-<script type="text/javascript" src="<?php get_static_component_domain() ?>/website/themes/default/js/libs.min.js"></script>
-<script type="text/javascript" src="<?php get_static_component_domain() ?>/website/themes/default/js/script.min.js"></script>
+<script type="text/javascript" src="/website/themes/default/js/libs.min.js"></script>
+<script type="text/javascript" src="/website/themes/default/js/script.min.js"></script>
 
 <script type="text/javascript">//<![CDATA[
 

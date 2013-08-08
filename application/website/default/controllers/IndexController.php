@@ -380,6 +380,7 @@ class IndexController extends WebControllerAction
                                 $this->getResponse()->setHeader('Status', '403 Forbidden');
                                 $this->getResponse()->setHttpResponseCode(403);
                                 $this->strRenderScript = 'error-403.php';
+                                $this->blnCachingStart = false;
                             }
                         }
                     }
