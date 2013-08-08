@@ -18,10 +18,16 @@
     function addRefTranslation() {
         $.messageService('getMessages',[null],function(msgs) { 
             $.each(msgs,function(i,e){
-                $('tr.' + e.msgid + ' td.ref').html('<div>' + $.escape(e.msgstr) + '</div>'); 
+                var keyName = replaceSpecificChars(e.msgid);
+                $('tr.' + keyName + ' td.ref').html('<div>' + $.escape(e.msgstr) + '</div>');
                 msgsRef[e.msgid] = e.msgstr;
             }) 
         });
+    }
+
+    function replaceSpecificChars(str) {
+        str = encodeURI(str);
+        return str.replace(/\./g, '--46--').replace(/\'/g, '--39--').replace(/\*/g, '--42--').replace(/\,/g, '--44--');
     }
 
     /* MASSIVEART Enhancements end*/
@@ -238,12 +244,16 @@
         });
       };
       var renderRowAsString = function(obj) {
-        var tr_class = "" 
+        var tr_class = ""
                       + (!obj.msgstr.length ? 'empty ' : '')
                       + (obj.fuzzy == 1 ? 'f ' : '')
-                      + (obj.is_obsolete ? 'd ' : ''); 
+                      + (obj.is_obsolete ? 'd ' : '');
+
+        // MA FIX: replace for keys with spaces and specialchars
+        var cleanMsgId = replaceSpecificChars(obj.msgid);
+
         return  ''
-                +  '<tr class="' + tr_class + obj.msgid + '"><td class="msgid"><div><span>'
+                +  '<tr class="' + tr_class + cleanMsgId + '"><td class="msgid"><div><span>'
                 + $.escape(obj.msgid) + '</span></div></td>'
                 + '<td class="msgstr"><div>'
                 + $.escape(obj.msgstr) + '</div></td>'
