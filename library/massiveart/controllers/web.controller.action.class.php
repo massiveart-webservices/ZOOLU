@@ -473,6 +473,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 $this->getResponse()->setHeader('Status', '404 Not Found');
                 $this->getResponse()->setHttpResponseCode(404);
                 $this->renderScript('error-404.php');
+                $this->blnCachingStart = false;
             }
         }
     }
