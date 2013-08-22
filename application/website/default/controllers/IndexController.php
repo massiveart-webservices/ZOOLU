@@ -671,42 +671,87 @@ class IndexController extends WebControllerAction
     */
 private function getValidatedUrlObject($strUrl) {
         $objUrl = null;
-        
+        $blnCheckAlternative = false;
         //Load URL now, because language is alredy needed if more then one language is defined
         if($this->blnUrlWithLanguage){
             //Load stadard url if there is a language
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
         }else{
+
+            $strAlternativeUrl = '';
+            if ($strUrl[strlen($strUrl)-1] === '/') {
+                $strAlternativeUrl = substr($strUrl, 0, -1);
+            } else {
+                $strAlternativeUrl = $strUrl.'/';
+            }
             //Load landingpage if there is no language in the url
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
-            if (!isset($objUrl->url) || count($objUrl->url) == 0) {
-                //If there is no landingpage, try normal page with default language 
+            $objAlternativeUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strAlternativeUrl, PHP_URL_PATH) === null) ? '' : parse_url($strAlternativeUrl, PHP_URL_PATH), null, true, false);
+
+
+            if ((!isset($objUrl->url) || count($objUrl->url) == 0) && (isset($objAlternativeUrl->url) && count($objAlternativeUrl->url) > 0)) {
+                $blnCheckAlternative = true;
+            }
+
+            if ((!isset($objUrl->url) || count($objUrl->url) == 0) && (!isset($objAlternativeUrl->url) || count($objAlternativeUrl->url) == 0)) {
+                //If there is no landingpage, try normal page with default language
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
             } else {
                 $this->blnIsLandingPage = true;
-                if(isset($objUrl->url->current()->external) && $objUrl->url->current()->external != ''){                     
-                    if((bool) $objUrl->url->current()->isMain === true){
-                        $ch = curl_init();
-                        $timeout = 5;
-                        curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-                        $data = curl_exec($ch);
-                        curl_close($ch);
-                        // displa content of linked landingpage but do not redirect
-                        echo $data;
-                        exit();
-                    }else{
-                        $this->_redirect($objUrl->url->current()->external);  
-                    }        
+                if (!$blnCheckAlternative){
+                    if(isset($objUrl->url->current()->external) && $objUrl->url->current()->external != ''){
+                        if((bool) $objUrl->url->current()->isMain === true){
+                            $ch = curl_init();
+                            $timeout = 5;
+                            curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                            $data = curl_exec($ch);
+                            curl_close($ch);
+                            // displa content of linked landingpage but do not redirect
+                            echo $data;
+                            exit();
+                        }else{
+                            $this->_redirect($objUrl->url->current()->external);
+                        }
+                    }
+                } else {
+                    if(isset($objAlternativeUrl->url->current()->external) && $objAlternativeUrl->url->current()->external != ''){
+                        if((bool) $objAlternativeUrl->url->current()->isMain === true){
+                            $ch = curl_init();
+                            $timeout = 5;
+                            curl_setopt($ch, CURLOPT_URL, $objAlternativeUrl->url->current()->external);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                            $data = curl_exec($ch);
+                            curl_close($ch);
+                            // displa content of linked landingpage but do not redirect
+                            echo $data;
+                            exit();
+                        }else{
+                            $this->_redirect($objAlternativeUrl->url->current()->external);
+                        }
+                    }
                 }
             }
-            if (isset($objUrl->url) && count($objUrl->url) > 0) {
-                //Needed for landingpage: change language for redirect
-                $this->setLanguage($objUrl->url->current()->idLanguages);
+
+            if (!$blnCheckAlternative){
+                if (isset($objUrl->url) && count($objUrl->url) > 0) {
+                    //Needed for landingpage: change language for redirect
+                    $this->setLanguage($objUrl->url->current()->idLanguages);
+                }
+            } else {
+                if (isset($objAlternativeUrl->url) && count($objAlternativeUrl->url) > 0) {
+                    //Needed for landingpage: change language for redirect
+                    $this->setLanguage($objAlternativeUrl->url->current()->idLanguages);
+                }
             }
         }
-        return $objUrl;
+        if (!$blnCheckAlternative){
+            return $objUrl;
+        } else {
+            return $objAlternativeUrl;
+        }
     }
     
     /**
