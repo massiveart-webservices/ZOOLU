@@ -30,7 +30,7 @@
     <link type="text/css" rel="stylesheet" href="/website/themes/default/css/style.css"/>
     <!-- <link type="text/css" rel="stylesheet" href="/website/themes/lechzuers&amp;f=lightbox/css/jquery.lightbox-0.5.css,css/bootstrap.css,js/datepicker/css/custom-theme/jquery-ui-1.8.23.custom.css"/>
 -->
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"></link>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"></link>
 
     <script src="/website/themes/default/js/libs/modernizr-2.5.3.min.js?v=<?php echo date('Ymd') ?>"></script>
 </head>
