@@ -698,41 +698,7 @@ private function getValidatedUrlObject($strUrl) {
                 $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH));
             } else {
                 $this->blnIsLandingPage = true;
-                if (!$blnCheckAlternative){
-                    if(isset($objUrl->url->current()->external) && $objUrl->url->current()->external != ''){
-                        if((bool) $objUrl->url->current()->isMain === true){
-                            $ch = curl_init();
-                            $timeout = 5;
-                            curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-                            $data = curl_exec($ch);
-                            curl_close($ch);
-                            // displa content of linked landingpage but do not redirect
-                            echo $data;
-                            exit();
-                        }else{
-                            $this->_redirect($objUrl->url->current()->external);
-                        }
-                    }
-                } else {
-                    if(isset($objAlternativeUrl->url->current()->external) && $objAlternativeUrl->url->current()->external != ''){
-                        if((bool) $objAlternativeUrl->url->current()->isMain === true){
-                            $ch = curl_init();
-                            $timeout = 5;
-                            curl_setopt($ch, CURLOPT_URL, $objAlternativeUrl->url->current()->external);
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-                            $data = curl_exec($ch);
-                            curl_close($ch);
-                            // displa content of linked landingpage but do not redirect
-                            echo $data;
-                            exit();
-                        }else{
-                            $this->_redirect($objAlternativeUrl->url->current()->external);
-                        }
-                    }
-                }
+                (!$blnCheckAlternative) ? $this->displayLandingpage($objUrl) : $this->displayLandingpage($objAlternativeUrl);
             }
 
             if (!$blnCheckAlternative){
@@ -927,6 +893,26 @@ private function getValidatedUrlObject($strUrl) {
         }
 
         return $this->objModelUsers;
+    }
+
+
+    public function displayLandingpage($objUrl) {
+        if(isset($objUrl->url->current()->external) && $objUrl->url->current()->external != ''){
+            if((bool) $objUrl->url->current()->isMain === true){
+                $ch = curl_init();
+                $timeout = 5;
+                curl_setopt($ch, CURLOPT_URL, $objUrl->url->current()->external);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                $data = curl_exec($ch);
+                curl_close($ch);
+                // display content of linked landingpage but do not redirect
+                echo $data;
+                exit();
+            }else{
+                $this->_redirect($objUrl->url->current()->external);
+            }
+        }
     }
 }
 
