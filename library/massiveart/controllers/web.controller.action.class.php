@@ -316,9 +316,6 @@ abstract class WebControllerAction extends Zend_Controller_Action
         $this->core->logger->debug('get language by: ');
         $this->intLanguageDefinitionType = $this->objTheme->languageDefinitionType;
         if ($this->core->blnIsDefaultLanguage === true || $this->core->blnIsSessionLanguage === true) {
-            $this->core->logger->debug('theme');
-            $this->core->intLanguageId = $this->objTheme->idLanguages;
-            $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
             if ($this->intLanguageDefinitionType != $this->core->config->language_definition->none) {
                 $strRequestString = '';
                 $strMatchCode = '';
@@ -359,6 +356,12 @@ abstract class WebControllerAction extends Zend_Controller_Action
                                 break;
                             }
                         }
+                    }
+                } else {
+                    if ($this->core->blnIsSessionLanguage !== true) {
+                        $this->core->logger->debug('theme');
+                        $this->core->intLanguageId = $this->objTheme->idLanguages;
+                        $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
                     }
                 }
             }
