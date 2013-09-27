@@ -66,15 +66,16 @@ class Search
 
     /**
      * @param array $configData
-     * @param string $dataType
-     * @param int $languageId
+     * @param string|null $dataType
+     * @param int|null $languageId
      */
-    public function __construct(array $configData, $dataType, $languageId)
+    public function __construct(array $configData, $dataType = null, $languageId = null)
     {
         // set config
         $this->setConfig($configData);
-        $this->config->addData('dataType', $dataType);
-        $this->config->addData('languageId', $languageId);
+
+        $this->getConfig()->setDataType($dataType);
+        $this->getConfig()->setLanguageId($languageId);
 
         // set search type
         $this->setType();
@@ -161,5 +162,4 @@ class Search
     {
         return $this->type;
     }
-
 }

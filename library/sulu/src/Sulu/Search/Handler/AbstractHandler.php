@@ -22,7 +22,7 @@ abstract class AbstractHandler
     /**
      * @var string
      */
-    protected $type = '';
+    protected $type = null;
 
     /**
      * @var int
@@ -35,10 +35,6 @@ abstract class AbstractHandler
     public function __construct($config)
     {
         $this->config = $config;
-
-        // define type and language id from config
-        $this->type = $this->config->getValue('dataType');
-        $this->languageId = $this->config->getValue('languageId');
     }
 
     /**
@@ -50,18 +46,30 @@ abstract class AbstractHandler
     }
 
     /**
-     * @return int
+     * @param bool $clear
+     *
+     * @return array|int|null|string
      */
-    public function getLanguageId()
+    public function getLanguageId($clear = false)
     {
+        if ($clear === true || null === $this->languageId) {
+            $this->languageId = $this->config->getValue('languageId');
+        }
+
         return $this->languageId;
     }
 
     /**
-     * @return string
+     * @param bool $clear
+     *
+     * @return array|null|string
      */
-    public function getType()
+    public function getType($clear = false)
     {
+        if ($clear === true || null === $this->type) {
+            $this->type = $this->config->getValue('dataType');
+        }
+
         return $this->type;
     }
 

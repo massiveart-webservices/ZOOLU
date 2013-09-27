@@ -18,6 +18,16 @@ class Config
     protected $data;
 
     /**
+     * @var string
+     */
+    protected $dataType;
+
+    /**
+     * @var int
+     */
+    protected $languageId;
+
+    /**
      * @param array $data
      */
     public function __construct(array $data)
@@ -56,5 +66,41 @@ class Config
         }
 
         return $this->data[$key];
+    }
+
+    /**
+     * @param string $dataType
+     */
+    public function setDataType($dataType)
+    {
+        if (!empty($dataType)) {
+            $this->addData('dataType', $dataType);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataType()
+    {
+        return $this->getValue('dataType');
+    }
+
+    /**
+     * @param int $languageId
+     */
+    public function setLanguageId($languageId)
+    {
+        if (!empty($languageId)) {
+            $this->addData('languageId', $languageId);
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getLanguageId()
+    {
+        return $this->getValue('languageId');
     }
 }

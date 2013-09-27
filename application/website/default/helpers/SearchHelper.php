@@ -260,6 +260,9 @@ class SearchHelper
 
         if (count($this->hits) > 0) {
             foreach ($this->hits as $objHit) {
+
+
+
                 $objDoc = $objHit->getDocument();
                 $arrDocFields = $objDoc->getFieldNames();
 

@@ -44,8 +44,6 @@
 
 require_once(dirname(__FILE__) . '/generic.data.type.interface.php');
 
-use Sulu\Search\Search;
-
 abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
 {
 
@@ -1716,33 +1714,33 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
             $data = array();
 
             if ($this->setup->getLanguageFallbackId() > 0 && $this->setup->getLanguageFallbackId() != $this->setup->getLanguageId()) {
-                $data['languageId'] = array('value' => $this->setup->getLanguageFallbackId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
+                $data['languageId'] = array('value' => $this->setup->getLanguageFallbackId(), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_KEYWORD));
             } else {
-                $data['languageId'] = array('value' => $this->setup->getLanguageId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
+                $data['languageId'] = array('value' => $this->setup->getLanguageId(), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_KEYWORD));
             }
 
-            $data['rootLevelId'] = array('value' => $this->setup->getRootLevelId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
-            $data['templateId'] = array('value' => $this->setup->getTemplateId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
-            $data['date'] = array('value' => $this->setup->getPublishDate('d.m.Y'), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
-            $data['elementTypeId'] = array('value' => $this->setup->getElementTypeId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
-            $data['segmentId'] = array('value' => $this->setup->getSegmentId(), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+            $data['rootLevelId'] = array('value' => $this->setup->getRootLevelId(), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_KEYWORD));
+            $data['templateId'] = array('value' => $this->setup->getTemplateId(), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_KEYWORD));
+            $data['date'] = array('value' => $this->setup->getPublishDate('d.m.Y'), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_UNINDEXED));
+            $data['elementTypeId'] = array('value' => $this->setup->getElementTypeId(), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_UNINDEXED));
+            $data['segmentId'] = array('value' => $this->setup->getSegmentId(), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_UNINDEXED));
 
             if ($objParentPageContainer !== null && $objParentPageContainer instanceof PageContainer) {
                 if (count($objParentPageContainer->getEntries()) > 0) {
-                    $data['parentPages'] = array('value' => base64_encode(serialize($objParentPageContainer->getEntries())), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
-                    $data['rootLevelId'] = array('value' => end($objParentPageContainer->getEntries())->rootLevelId, 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
+                    $data['parentPages'] = array('value' => base64_encode(serialize($objParentPageContainer->getEntries())), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_UNINDEXED));
+                    $data['rootLevelId'] = array('value' => end($objParentPageContainer->getEntries())->rootLevelId, 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_KEYWORD));
                 }
             }
 
             if (is_array($arrParentFolderIds) && count($arrParentFolderIds) > 0) {
-                $data['parentFolderId'] = array('value' => $arrParentFolderIds[0], 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
-                $data['parentFolderIds'] = array('value' => implode(',', $arrParentFolderIds), 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+                $data['parentFolderId'] = array('value' => $arrParentFolderIds[0], 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_UNINDEXED));
+                $data['parentFolderIds'] = array('value' => implode(',', $arrParentFolderIds), 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_UNINDEXED));
             }
 
             // index fields
             foreach ($this->setup->FieldNames() as $strField => $intFieldType) {
                 $objField = $this->setup->getField($strField);
-                if (is_object($objField) && $objField->idSearchFieldTypes != Search::FIELD_TYPE_NONE) {
+                if (is_object($objField) && $objField->idSearchFieldTypes != \Sulu\Search\Search::FIELD_TYPE_NONE) {
                     $data = $this->indexFieldNow($objField, $strField, $intFieldType, $objField->getValue(), $data);
                 }
             }
@@ -1757,7 +1755,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                         $intRegionPosition++;
                         foreach ($objRegion->FieldNames() as $strField => $intFieldType) {
                             $objField = $objRegion->getField($strField);
-                            if (is_object($objField) && $objField->idSearchFieldTypes != Search::FIELD_TYPE_NONE) {
+                            if (is_object($objField) && $objField->idSearchFieldTypes != \Sulu\Search\Search::FIELD_TYPE_NONE) {
                                 $data = $this->indexFieldNow($objField, $objField->name . '_' . $intRegionPosition, $intFieldType, $objField->getInstanceValue($intRegionInstanceId), $data);
                             }
                         }
@@ -1765,7 +1763,7 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 }
             }
 
-            $search = new Search($this->core->sysConfig->search->toArray(), $type, $languageId);
+            $search = new \Sulu\Search\Search($this->core->sysConfig->search->toArray(), $type, $languageId);
             $search->getIndex()->add($strKey, $data);
 
         } catch (Exception $exc) {
@@ -1859,15 +1857,15 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 }
 
                 if ($strValueIds != '') {
-                    if ($objField->idSearchFieldTypes == Search::FIELD_TYPE_KEYWORD) {
-                        $data[$strField . 'Ids'] = array('value' => $strValueIds, 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_KEYWORD));
+                    if ($objField->idSearchFieldTypes == \Sulu\Search\Search::FIELD_TYPE_KEYWORD) {
+                        $data[$strField . 'Ids'] = array('value' => $strValueIds, 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_KEYWORD));
                     } else {
-                        $data[$strField . 'Ids'] = array('value' => $strValueIds, 'params' => array('searchFieldTypeId' => Search::FIELD_TYPE_UNINDEXED));
+                        $data[$strField . 'Ids'] = array('value' => $strValueIds, 'params' => array('searchFieldTypeId' => \Sulu\Search\Search::FIELD_TYPE_UNINDEXED));
                     }
                 }
 
                 // decide to return value or not
-                /*if ($objField->idSearchFieldTypes == Search::FIELD_TYPE_KEYWORD || $objField->idSearchFieldTypes == Search::FIELD_TYPE_TEXT || $objField->idSearchFieldTypes == Search::FIELD_TYPE_SUMMARY_INDEXED || $objField->idSearchFieldTypes == Search::FIELD_TYPE_UNSTORED)   {
+                /*if ($objField->idSearchFieldTypes == \Sulu\Search\Search::FIELD_TYPE_KEYWORD || $objField->idSearchFieldTypes == \Sulu\Search\Search::FIELD_TYPE_TEXT || $objField->idSearchFieldTypes == \Sulu\Search\Search::FIELD_TYPE_SUMMARY_INDEXED || $objField->idSearchFieldTypes == \Sulu\Search\Search::FIELD_TYPE_UNSTORED)   {
                     $blnReturnValue = true;
                 }*/
 

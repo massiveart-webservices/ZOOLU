@@ -70,14 +70,10 @@ class Index
     }
 
     /**
-     * indexPage
-     * @param string $strPageId
-     * @param integer $intPageVersion
-     * @param integer $intLanguageId
-     * @param integer $intRootLevelId
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @param $strPageId
+     * @param $intPageVersion
+     * @param $intLanguageId
+     * @param $intRootLevelId
      */
     public function indexPage($strPageId, $intPageVersion, $intLanguageId, $intRootLevelId)
     {
@@ -101,10 +97,7 @@ class Index
     }
 
     /**
-     * indexRemovePages
-     * @return void
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
+     * @param $strKey
      */
     public function indexRemovePages($strKey)
     {
@@ -125,15 +118,11 @@ class Index
     }
 
     /**
-     * indexGlobal
-     * @param string $strGlobalId
-     * @param integer $intGlobalLinkId
-     * @param integer $intGlobalVersion
-     * @param integer $intLanguageId
-     * @param integer $intRootLevelId
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @param $strGlobalId
+     * @param $intGlobalLinkId
+     * @param $intGlobalVersion
+     * @param $intLanguageId
+     * @param $intRootLevelId
      */
     public function indexGlobal($strGlobalId, $intGlobalLinkId, $intGlobalVersion, $intLanguageId, $intRootLevelId)
     {
@@ -161,10 +150,7 @@ class Index
     }
 
     /**
-     * indexRemoveGlobals
-     * @return void
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
+     * @param $strKey
      */
     public function indexRemoveGlobals($strKey)
     {
@@ -185,10 +171,8 @@ class Index
     }
 
     /**
-     * indexRemoveElement
-     * @return void
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
+     * @param $strIndexPath
+     * @param $strKey
      */
     protected function indexRemoveElement($strIndexPath, $strKey)
     {
@@ -212,10 +196,7 @@ class Index
     }
 
     /**
-     * indexAllPublicPages
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     *
      */
     public function indexAllPublicPages()
     {
@@ -232,12 +213,8 @@ class Index
     }
 
     /**
-     * indexAllPublicGlobals
-     * @param integer $intRootLevelId
-     * @param integer $intLanguageId
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @param null $intRootLevelId
+     * @param null $intLanguageId
      */
     public function indexAllPublicGlobals($intRootLevelId = null, $intLanguageId = null)
     {
@@ -265,7 +242,7 @@ class Index
     /**
      * @return Client_Page|Page
      */
-    protected function getPage ()
+    protected function getPage()
     {
         if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
             require_once(GLOBAL_ROOT_PATH . 'client/website/page.class.php');
@@ -278,10 +255,7 @@ class Index
     }
 
     /**
-     * getModelPages
      * @return Model_Pages
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
      */
     protected function getModelPages()
     {
@@ -299,10 +273,7 @@ class Index
     }
 
     /**
-     * getModelGlobals
      * @return Model_Globals
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
      */
     protected function getModelGlobals()
     {
@@ -319,5 +290,3 @@ class Index
         return $this->objModelGlobals;
     }
 }
-
-?>
