@@ -1241,6 +1241,10 @@ class Model_Globals extends ModelAbstract
         $this->core->logger->debug('global->models->Model_Globals->delete()');
 
         $objGlobal = $this->load($intElementId);
+        
+        
+        var_export($objGlobal); exit;
+        
         if (count($objGlobal) == 1) {
             $objGlobal = $objGlobal->current();
             $strGlobalId = $objGlobal->globalId;
@@ -1251,6 +1255,11 @@ class Model_Globals extends ModelAbstract
                 //TODO:: delet all link globals
             }
 
+            $tmpGlobalId = $strGlobalId;
+            if ($idRootLevels == $this->core->sysConfig->product->rootLevels->tree->id) {
+                
+            }
+            
             // remove from index
             $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
             if (file_exists($strIndexGlobalFilePath)) {

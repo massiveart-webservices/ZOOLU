@@ -87,9 +87,9 @@
         </minify>
 
         <!-- LOGGER / DEBUGGING -->
-        <show_errors>false</show_errors>
+        <show_errors>true</show_errors>
         <logger>
-            <priority>3</priority>
+            <priority>7</priority>
             <path>logs/</path>
             <firebug>false</firebug>
         </logger>
