@@ -194,9 +194,8 @@ class PageCommand implements CommandInterface
                     'changed'    => date('Y-m-d H:i:s'),
                     'idSegments' => $objGenericSetup->getSegmentId()
                 );
-
-
-                $this->getModelPages($arrArgs)->updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes);
+                
+                $this->getModelPages($arrArgs)->updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes, $objGenericSetup->getRootLevelId());
                 return true;
             } else {
                 throw new Exception('There is no GenericSetup in the args array!');

@@ -501,7 +501,11 @@ class Core_FolderController extends AuthControllerAction
             
             $childElements = $this->getModelFolders()->loadFolderChildElementIds($this->objRequest->getParam("id"));
             foreach ($childElements as $childElement) {
-                $this->getModelGlobals()->delete($childElement->id);
+                if ($this->objRequest->getParam("rootLevelId") !== 12) {
+                    $this->getModelGlobals()->delete($childElement->id, true);
+                } else {
+                    $this->getModelGlobals()->delete($childElement->id, false);
+                }
             }
             
             $this->objModelFolders->deleteFolderNode($this->objRequest->getParam("id"));

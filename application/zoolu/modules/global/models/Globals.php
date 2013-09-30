@@ -1185,13 +1185,13 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function updateFolderStartGlobal($intFolderId, $arrProperties, $arrTitle, $intRootLevelGroupId, $intDefaultTemplateId)
+    public function updateFolderStartGlobal($intFolderId, $arrProperties, $arrTitle, $intRootLevelGroupId, $intDefaultTemplateId, $rootLevelId)
     {
-        $objSelect = $this->getGlobalTable()->select();
+        $objSelect = $this->getGlobalTable()->select()->setIntegrityCheck(false);
         $objSelect->from('globals', array('globalId', 'version'));
 
         if ($intRootLevelGroupId == $this->core->sysConfig->root_level_groups->product) {
-            $objSelect->join('globalLinks', 'globalLinks.globalId = globals.globalId', array());
+            $objSelect->join('globalLinks', 'globalLinks.globalId = globals.globalId', array('linkId' => 'idGlobals'));
             $objSelect->join(array('lP' => 'globals'), 'lP.id = globalLinks.idGlobals', array());
             $objSelect->where('lP.idParent = ?', $intFolderId)
                 ->where('lP.idParentTypes = ?', $this->core->sysConfig->parent_types->folder)
@@ -1226,6 +1226,18 @@ class Model_Globals extends ModelAbstract
                 $arrTitle = array_merge($arrTitle, array('globalId' => $objStartGlobal->globalId, 'version' => $objStartGlobal->version, 'idLanguages' => $this->intLanguageId));
                 $this->core->dbh->insert('globalTitles', $arrTitle);
             }
+            
+            if ($arrProperties['idStatus'] == $this->core->sysConfig->status->live) {
+                $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexGlobal.php';
+                if (file_exists($strIndexGlobalFilePath)) {
+                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $objStartGlobal->globalId . "' --linkId='" . $objStartGlobal->linkId . "' --version=" . $objStartGlobal->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevelId . " > /dev/null &#038;");
+                }
+            } else {
+                $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
+                if (file_exists($strIndexGlobalFilePath)) {
+                    exec("php " . $strIndexGlobalFilePath . " --key='" . $objStartGlobal->globalId . "_*" . $this->intLanguageId . "_r*' > /dev/null &#038;");
+                }
+            }
         }
     }
 
@@ -1236,14 +1248,10 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function delete($intElementId)
+    public function delete($intElementId, $bnlIsLink = false)
     {
         $this->core->logger->debug('global->models->Model_Globals->delete()');
-
         $objGlobal = $this->load($intElementId);
-        
-        
-        var_export($objGlobal); exit;
         
         if (count($objGlobal) == 1) {
             $objGlobal = $objGlobal->current();
@@ -1254,16 +1262,25 @@ class Model_Globals extends ModelAbstract
             ) {
                 //TODO:: delet all link globals
             }
-
-            $tmpGlobalId = $strGlobalId;
-            if ($idRootLevels == $this->core->sysConfig->product->rootLevels->tree->id) {
-                
-            }
             
-            // remove from index
-            $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
-            if (file_exists($strIndexGlobalFilePath)) {
-                exec("php " . $strIndexGlobalFilePath . " --key='" . $strGlobalId . "_" . $this->intLanguageId . "_r*' > /dev/null &#038;");
+            $indexToRemove = null;
+            if ($bnlIsLink) {
+                $objSelect = $this->getGlobalLinkTable()->select();
+                $objSelect->where('idGlobals = ?', $intElementId);
+                $globalLink = $this->getGlobalTable()->fetchRow($objSelect);
+                if ($globalLink !== null) {
+                    $indexToRemove = $globalLink->globalId; 
+                }
+            } else {
+                $indexToRemove = $strGlobalId;
+            }
+            if ($indexToRemove !== null) {
+                // remove from index
+                $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
+                if (file_exists($strIndexGlobalFilePath)) {
+                    exec("php " . $strIndexGlobalFilePath . " --key='" . $indexToRemove . "_*_r*' > /dev/null &#038;");
+                }
+                /** @todo if there are other public productlinks in the tree: index one of them */
             }
 
             $strWhere = $this->objGlobalTable->getAdapter()->quoteInto('relationId = ?', $strGlobalId);
