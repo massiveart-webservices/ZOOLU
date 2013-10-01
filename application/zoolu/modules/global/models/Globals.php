@@ -1233,10 +1233,8 @@ class Model_Globals extends ModelAbstract
                     exec("php " . $strIndexGlobalFilePath . " --globalId='" . $objStartGlobal->globalId . "' --linkId='" . $objStartGlobal->linkId . "' --version=" . $objStartGlobal->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevelId . " > /dev/null &#038;");
                 }
             } else {
-                $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
-                if (file_exists($strIndexGlobalFilePath)) {
-                    exec("php " . $strIndexGlobalFilePath . " --key='" . $objStartGlobal->globalId . "_*" . $this->intLanguageId . "_r*' > /dev/null &#038;");
-                }
+                $objIndex = new Index();
+                $objIndex->indexRemoveGlobals($objStartGlobal->globalId . '_'. $this->intLanguageId . '_r*');
             }
         }
     }
@@ -1248,7 +1246,7 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function delete($intElementId, $bnlIsLink = false)
+    public function delete($intElementId, $bnlIsLink = false, $rootLevelId)
     {
         $this->core->logger->debug('global->models->Model_Globals->delete()');
         $objGlobal = $this->load($intElementId);
@@ -1274,22 +1272,43 @@ class Model_Globals extends ModelAbstract
             } else {
                 $indexToRemove = $strGlobalId;
             }
+            
             if ($indexToRemove !== null) {
-                // remove from index
-                $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
-                if (file_exists($strIndexGlobalFilePath)) {
-                    exec("php " . $strIndexGlobalFilePath . " --key='" . $indexToRemove . "_*_r*' > /dev/null &#038;");
-                }
-                /** @todo if there are other public productlinks in the tree: index one of them */
+                $objIndex = new Index();
+                $objIndex->indexRemoveGlobals($indexToRemove . '_*_r*');
+                $this->indexOtherProduktLinks($intElementId, $indexToRemove, $rootLevelId);
             }
-
             $strWhere = $this->objGlobalTable->getAdapter()->quoteInto('relationId = ?', $strGlobalId);
             $strWhere .= $this->objGlobalTable->getAdapter()->quoteInto(' AND idUrlTypes = ?', $this->core->sysConfig->url_types->global);
             $this->getGlobalUrlTable()->delete($strWhere);
         }
-
         $strWhere = $this->getGlobalTable()->getAdapter()->quoteInto('id = ?', $intElementId);
         return $this->objGlobalTable->delete($strWhere);
+    }
+    
+    /**
+     * indexOtherProduktLinks
+     * @param int $intElementId
+     * @param String $strGlobalId
+     */
+    public function indexOtherProduktLinks($intElementId, $strGlobalId, $rootLevelId) {
+        $objSelect = $this->getGlobalLinkTable()->select()->setIntegrityCheck(false);
+        $objSelect->from('globalLinks', array('idGlobals'));
+        $objSelect->join('globalProperties', 'globalProperties.globalId = globalLinks.globalId AND globalProperties.idStatus = ' . $this->core->sysConfig->status->live, array('idLanguages', 'version'));
+        $objSelect->where('globalLinks.globalId = ?', $strGlobalId);
+        $objSelect->where('globalLinks.idGlobals != ?', $intElementId);
+        $globalLinks = $this->getGlobalTable()->fetchAll($objSelect);
+        
+        $arrIndexedLanguages = array();
+        foreach ($globalLinks as $globalLink) {
+            $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexGlobal.php';
+            if (file_exists($strIndexGlobalFilePath)) {
+                if (!in_array($globalLink->idLanguages, $arrIndexedLanguages)) {
+                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $strGlobalId . "' --linkId='" . $globalLink->idGlobals . "' --version=" . $globalLink->version . " --languageId=" . $globalLink->idLanguages . " --rootLevelId=" . $rootLevelId . " > /dev/null &#038;");
+                    $arrIndexedLanguages[] = $globalLink->idLanguages;
+                }
+            }
+        }
     }
 
     /**
