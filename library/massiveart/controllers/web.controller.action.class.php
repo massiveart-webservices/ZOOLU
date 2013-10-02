@@ -330,13 +330,14 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain || $this->core->config->language_definition->subandtld) {
                     $this->core->logger->debug('subdomain');
                     $strRequestString = $_SERVER['HTTP_HOST'];
-                    $strMatchCode = '/^[a-zA-Z]{2}/';
+                    $strMatchCode = '/^[a-zA-Z]{2}\./';
                     $strTld = strrchr ( $_SERVER['SERVER_NAME'], "." );
                     $strTld = substr ( $strTld, 1 );
                 }
                 if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
                     preg_match($strMatchCode, $strRequestString, $arrMatches);
                     $strCode = trim($arrMatches[0], '/');
+                    $strCode = trim($strCode, '.');
                     if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subandtld) {
                         if ($strTld != '') {
                             $strTmpCode = $strCode . '-' . $strTld;
