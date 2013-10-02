@@ -330,9 +330,19 @@ class IndexController extends WebControllerAction
                      * e.g. prduct tree
                      */
                     if (isset($objUrl->baseUrl)) {
-                        $objNavigation->setBaseUrl($objUrl->baseUrl);
-                        $this->objPage->setBaseUrl($objUrl->baseUrl);
-                        $this->objPage->setNavParentId($objUrlData->idLinkParent);
+                        if ($this->validateEntrypoint($objUrl->url, $objUrl->baseUrl)) {
+                            $objNavigation->setBaseUrl($objUrl->baseUrl);
+                            $this->objPage->setBaseUrl($objUrl->baseUrl);
+                            $this->objPage->setNavParentId($objUrlData->idLinkParent);
+                        } else {
+                            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
+                            $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
+                            $this->getResponse()->setHeader('Status', '404 Not Found');
+                            $this->getResponse()->setHttpResponseCode(404);
+                            $this->renderScript('error-404.php');
+                            $this->blnCachingStart = false;
+                            return;
+                        }
                     }
                     
                     $this->objPage->loadPage();
@@ -840,6 +850,27 @@ private function getValidatedUrlObject($strUrl) {
         $objWebSession->fontSize = $strFontSize;
 
         $this->_helper->viewRenderer->setNoRender();
+    }
+    
+    /**
+     * validateEntrypoint
+     * @param stdClass $objUrl
+     * @param stdClass $objBaseUrl
+     * @return boolean $ret
+     */
+    public function validateEntrypoint($objUrl, $objBaseUrl) {
+        $ret = false;
+        $entryPoints = $this->getModelPages()->loadEntryPoint($objBaseUrl->relationId, $objBaseUrl->version, $objBaseUrl->genericFormId);
+        if (count($entryPoints) > 0) {
+            $entryPoint = $entryPoints[0];
+            $parentFolders = $this->getModelFolders()->loadGlobalParentFolders($objUrl->current()->idLinkParent);
+            foreach ($parentFolders as $parentFolder) {
+                if ($entryPoint->entry_point == $parentFolder->id) {
+                    $ret = true;
+                }
+            }
+        }
+        return $ret;
     }
 
     /**

@@ -2247,6 +2247,22 @@ class Model_Pages extends ModelAbstract
         }
         return array_unique($arrGroups);
     }
+    
+    /**
+     * loadEntryPoint
+     * @param type $name Description
+     */
+    public function loadEntryPoint($strPageId, $version, $strGenericFormId) {
+        $this->core->logger->debug('cms->models->Model_Pages->loadEntryPoint(' . $strPageId . ', ' . $version . ', ' . $strGenericFormId . ')');
+
+        $sqlStmt = $this->core->dbh->query("SELECT entry_point FROM `page-" . $strGenericFormId . "-1-Instances`
+                                            WHERE pageId = ? AND idLanguages = ? AND version = ?;",
+                                            array($strPageId,
+                                                  $this->intLanguageId,
+                                                  $version)
+                                          );
+        return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
+    }
 
     /**
      * getModelFolders

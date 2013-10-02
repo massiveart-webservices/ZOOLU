@@ -426,6 +426,7 @@ class Model_Urls
         $objSelect->from('urls', array('url', 'relationId' => 'pages.pageId', 'pages.version', 'urls.idLanguages', 'urls.isMain', 'urls.idParent', 'urls.idParentTypes', 'urls.idUrlTypes', 'idLink' => new Zend_Db_Expr('-1')));
         $objSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array());
         $objSelect->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('pageProperties.idPageTypes'));
+        $objSelect->join('genericForms', 'genericForms.id = pageProperties.idGenericForms', array('genericFormId'));
         $objSelect->join('folders', 'folders.id = pages.idParent', array());
         $objSelect->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->page)
             ->where('urls.idLanguages = ?', $this->intLanguageId)
