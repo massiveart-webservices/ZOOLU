@@ -365,6 +365,12 @@ abstract class WebControllerAction extends Zend_Controller_Action
                         $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
                     }
                 }
+            } else {
+                if ($this->core->blnIsSessionLanguage !== true) {
+                    $this->core->logger->debug('theme');
+                    $this->core->intLanguageId = $this->objTheme->idLanguages;
+                    $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
+                }
             }
         }
         $this->intLanguageId = $this->core->intLanguageId;
