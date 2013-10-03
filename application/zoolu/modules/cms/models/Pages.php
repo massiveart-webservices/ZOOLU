@@ -2261,7 +2261,7 @@ class Model_Pages extends ModelAbstract
                                                   $this->intLanguageId,
                                                   $version)
                                           );
-        return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
+        return $sqlStmt->fetch(Zend_Db::FETCH_OBJ);
     }
 
     /**

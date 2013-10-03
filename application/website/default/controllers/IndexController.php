@@ -875,9 +875,8 @@ private function getValidatedUrlObject($strUrl) {
         } else {
             if (isset($objUrl->baseUrl)) {
                 $objBaseUrl = $objUrl->baseUrl;
-                $entryPoints = $this->getModelPages()->loadEntryPoint($objBaseUrl->relationId, $objBaseUrl->version, $objBaseUrl->genericFormId);
-                if (count($entryPoints) > 0) {
-                    $entryPoint = $entryPoints[0];
+                $entryPoint = $this->getModelPages()->loadEntryPoint($objBaseUrl->relationId, $objBaseUrl->version, $objBaseUrl->genericFormId);
+                if ($entryPoint) {
                     $parentFolders = $this->getModelFolders()->loadGlobalParentFolders($objUrl->url->current()->idLinkParent);
                     foreach ($parentFolders as $parentFolder) {
                         if ($entryPoint->entry_point == $parentFolder->id) {
