@@ -247,7 +247,7 @@ class IndexController extends WebControllerAction
                          * validate the entrypoint
                          */
                         if ($objUrlData->idUrlTypes == $this->core->sysConfig->url_types->global) {
-                            $this->validateEntrypoint($objUrl->url, $objUrl->baseUrl);
+                            $this->validateEntrypoint($objUrl);
                         }
 
                         $strRelationId = $objUrlData->relationId;
@@ -866,18 +866,19 @@ private function getValidatedUrlObject($strUrl) {
      * @param stdClass $objBaseUrl
      * @return boolean $ret
      */
-    public function validateEntrypoint($objUrl, $objBaseUrl) {
+    public function validateEntrypoint($objUrl) {
         $valid = false;
         $objAuth = Zend_Auth::getInstance();
         $objAuth->setStorage(new Zend_Auth_Storage_Session());
         if ($objAuth->hasIdentity()) {
             $valid = true;
         } else {
-            if (isset($objBaseUrl)) {
+            if (isset($objUrl->baseUrl)) {
+                $objBaseUrl = $objUrl->baseUrl;
                 $entryPoints = $this->getModelPages()->loadEntryPoint($objBaseUrl->relationId, $objBaseUrl->version, $objBaseUrl->genericFormId);
                 if (count($entryPoints) > 0) {
                     $entryPoint = $entryPoints[0];
-                    $parentFolders = $this->getModelFolders()->loadGlobalParentFolders($objUrl->current()->idLinkParent);
+                    $parentFolders = $this->getModelFolders()->loadGlobalParentFolders($objUrl->url->current()->idLinkParent);
                     foreach ($parentFolders as $parentFolder) {
                         if ($entryPoint->entry_point == $parentFolder->id) {
                             $valid = true;
@@ -887,7 +888,7 @@ private function getValidatedUrlObject($strUrl) {
             }
         }
         if (!$valid) {
-            throw new NotFoundException('In valid entry point for global page ' . $_SERVER['REQUEST_URI']);
+            throw new NotFoundException('Invalid entry point for global page ' . $_SERVER['REQUEST_URI']);
         }
     }
 
