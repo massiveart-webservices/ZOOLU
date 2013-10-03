@@ -870,7 +870,7 @@ private function getValidatedUrlObject($strUrl) {
         $valid = false;
         $objAuth = Zend_Auth::getInstance();
         $objAuth->setStorage(new Zend_Auth_Storage_Session());
-        if ($objAuth->hasIdentity()) {
+        if ($objAuth->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true) {
             $valid = true;
         } else {
             if (isset($objUrl->baseUrl)) {
