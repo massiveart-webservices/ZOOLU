@@ -188,269 +188,277 @@ class IndexController extends WebControllerAction
         // load theme
         $this->loadTheme();
         
-        // get cleaned url
-        $strUrl = $this->getUrl($_SERVER['REQUEST_URI']);
-        
-        // check portal security
-        $this->checkPortalSecuirty();
+        try {
+            // get cleaned url
+            $strUrl = $this->getUrl($_SERVER['REQUEST_URI']);
 
-        // validate language
-        $this->validateLanguage();
+            // check portal security
+            $this->checkPortalSecuirty();
 
-        
-        // validate root level segment
-        $this->validateSegment();        
-        
-        // check if rootlevel has portal gate
-        if ($this->isPortalGate()) {
-            $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/' . $this->objTheme->path.'/');
-            $this->renderScript('portalgate.php');
-        } else {        
+            // validate language
+            $this->validateLanguage();
 
-            //validate the url check if landingpage     
-            $objUrl = $this->getValidatedUrlObject($strUrl);
-            
-            $this->checkforLanguageRedirects($strUrl);
-            
-            // set translate
-            $this->setTranslate();
-            
-            // init page cache
-            $this->initPageCache($strUrl);
-        
-            /*
-             * check if "q" param is in the url for the search
-             */
-            if (strpos($strUrl, '?q=') !== false) {
-                $this->blnSearch = true;
-                $strUrl = '';
-            }
-    
-            // check, if cached page exists
-            if ($this->core->sysConfig->cache->page == 'false' ||
-                ($this->core->sysConfig->cache->page == 'true' && $this->objCache->test($this->strCacheId) == false) ||
-                ($this->core->sysConfig->cache->page == 'true' && isset($_SESSION['sesTestMode']))
-            ) {
-    
-                $this->getModelUrls(true);
-                $this->getModelPages();
 
-                $objNavigation = $this->initNavigation();
-    
-                $this->core->logger->debug('loadUrls 1st Approach');
-    
-                if (isset($objUrl->url) && count($objUrl->url) > 0) {
-                    $objUrlData = $objUrl->url->current();
-        
-                    $strRelationId = $objUrlData->relationId;
-                    if ($objUrlData->linkId != NULL) {
-                        $strRelationId = $objUrlData->linkId; 
-                    }            
-                    // check if url is main
-                    if (!$objUrlData->isMain) {
-                        $objMainUrl = $this->objModelUrls->loadUrl($strRelationId, $objUrlData->version, $objUrlData->idUrlTypes);
-                        if (count($objMainUrl) > 0) {
-                            $objMainUrl = $objMainUrl->current();
-                            $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
-                            $this->getResponse()->setHeader('Status', '301 Moved Permanently');
-                            $this->getResponse()->setHttpResponseCode(301);
-                            $uriLanguageFolder = '';
-                            if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
-                                 $uriLanguageFolder = strtolower($objMainUrl->languageCode) . '/';
-                            }
-                            if (!$objUrlData->isLandingPage) {
-                                $baseUrl = '';
-                                if (isset($objUrl->baseUrl)) {
-                                    $baseUrl = $objUrl->baseUrl->url;   
+            // validate root level segment
+            $this->validateSegment();        
+
+            // check if rootlevel has portal gate
+            if ($this->isPortalGate()) {
+                $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/' . $this->objTheme->path.'/');
+                $this->renderScript('portalgate.php');
+            } else {        
+
+                //validate the url check if landingpage     
+                $objUrl = $this->getValidatedUrlObject($strUrl);
+
+                $this->checkforLanguageRedirects($strUrl);
+
+                // set translate
+                $this->setTranslate();
+
+                // init page cache
+                $this->initPageCache($strUrl);
+
+                /*
+                 * check if "q" param is in the url for the search
+                 */
+                if (strpos($strUrl, '?q=') !== false) {
+                    $this->blnSearch = true;
+                    $strUrl = '';
+                }
+
+                // check, if cached page exists
+                if ($this->core->sysConfig->cache->page == 'false' ||
+                    ($this->core->sysConfig->cache->page == 'true' && $this->objCache->test($this->strCacheId) == false) ||
+                    ($this->core->sysConfig->cache->page == 'true' && isset($_SESSION['sesTestMode']))
+                ) {
+
+                    $this->getModelUrls(true);
+                    $this->getModelPages();
+
+                    $objNavigation = $this->initNavigation();
+
+                    $this->core->logger->debug('loadUrls 1st Approach');
+
+                    if (isset($objUrl->url) && count($objUrl->url) > 0) {
+                        $objUrlData = $objUrl->url->current();
+
+                        /*
+                         * validate the entrypoint
+                         */
+                        if ($objUrlData->idUrlTypes == $this->core->sysConfig->url_types->global) {
+                            $this->validateEntrypoint($objUrl->url, $objUrl->baseUrl);
+                        }
+
+                        $strRelationId = $objUrlData->relationId;
+                        if ($objUrlData->linkId != NULL) {
+                            $strRelationId = $objUrlData->linkId; 
+                        }            
+                        // check if url is main
+                        if (!$objUrlData->isMain) {
+                            $objMainUrl = $this->objModelUrls->loadUrl($strRelationId, $objUrlData->version, $objUrlData->idUrlTypes);
+                            if (count($objMainUrl) > 0) {
+                                $objMainUrl = $objMainUrl->current();
+                                $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
+                                $this->getResponse()->setHeader('Status', '301 Moved Permanently');
+                                $this->getResponse()->setHttpResponseCode(301);
+                                $uriLanguageFolder = '';
+                                if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
+                                     $uriLanguageFolder = strtolower($objMainUrl->languageCode) . '/';
                                 }
-                                $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
-                            } else {
-                                $this->_redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                                if (!$objUrlData->isLandingPage) {
+                                    $baseUrl = '';
+                                    if (isset($objUrl->baseUrl)) {
+                                        $baseUrl = $objUrl->baseUrl->url;   
+                                    }
+                                    $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
+                                } else {
+                                    $this->_redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                                }
                             }
                         }
-                    }
-    
-                    if ($this->core->sysConfig->cache->page == 'true' && !isset($_SESSION['sesTestMode']) && $this->blnSearch == false && (!isset($_POST) || count($_POST) == 0)) {
-                        if ($this->blnCachingStart !== false) {
-                            $this->objCache->start($this->strCacheId);
+
+                        if ($this->core->sysConfig->cache->page == 'true' && !isset($_SESSION['sesTestMode']) && $this->blnSearch == false && (!isset($_POST) || count($_POST) == 0)) {
+                            if ($this->blnCachingStart !== false) {
+                                $this->objCache->start($this->strCacheId);
+                            }
+                        } else {
+                            $this->blnCachingStart = false;
                         }
-                    } else {
-                        $this->blnCachingStart = false;
-                    }
-    
-                    if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
-                        require_once(GLOBAL_ROOT_PATH . 'client/website/page.class.php');
-                        $this->objPage = new Client_Page();
-                    } else {
-                        $this->objPage = new Page();
-                    }
-                    $this->objPage->setRootLevelId($this->objTheme->idRootLevels);
-                    $this->objPage->setRootLevelTitle(($this->core->blnIsDefaultLanguage === true ? $this->objTheme->defaultTitle : $this->objTheme->title));
-                    $this->objPage->setRootLevelAlternativeTitle(((isset($this->core->config->languages->alternative->id)) ? $this->objTheme->alternativeTitle : ''));
-                    $this->objPage->setRootLevelGroupId($this->objTheme->idRootLevelGroups);
-                    $this->objPage->setPageId($objUrlData->relationId);
-                    $this->objPage->setPageVersion($objUrlData->version);
-                    $this->objPage->setLanguageId($objUrlData->idLanguages);
-                    
-                    // set url prefix properties
-                    $this->objPage->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
-                    $this->objPage->setUrlPrefix($this->strUrlPrefix);
-                    $this->objPage->setLanguageDefinitionType($this->intLanguageDefinitionType);
-                    
-                    // set navigation segmentation properties
-                    $this->objPage->setHasSegments($this->objTheme->hasSegments);
-                    $this->objPage->setSegmentId($this->intSegmentId);
-                    $this->objPage->setSegmentCode($this->strSegmentCode);
-    
-                    switch ($objUrlData->idUrlTypes) {
-                        case $this->core->sysConfig->url_types->page:
-                            $this->objPage->setType('page');
-                            $this->objPage->setModelSubPath('cms/models/');
-                            break;
-                        case $this->core->sysConfig->url_types->global:
-                            $this->objPage->setType('global');
-                            $this->objPage->setModelSubPath('global/models/');
-                            $this->objPage->setElementLinkId($objUrlData->idLink);
-                            $this->objPage->setNavParentId($objUrlData->idLinkParent);
-                            $this->objPage->setPageLinkId($objUrlData->linkId);
-                            break;
-                    }
-    
-                    /*
-                     * preset navigation parent properties
-                     * e.g. is a collection page
-                     */
-                    if ($objUrlData->idParent !== null) {
-                        $this->objPage->setNavParentId($objUrlData->idParent);
-                        $this->objPage->setNavParentTypeId($objUrlData->idParentTypes);
-                    }
-    
-                    /*
-                     * has base url object
-                     * e.g. prduct tree
-                     */
-                    if (isset($objUrl->baseUrl)) {
-                        if ($this->validateEntrypoint($objUrl->url, $objUrl->baseUrl)) {
+
+                        if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
+                            require_once(GLOBAL_ROOT_PATH . 'client/website/page.class.php');
+                            $this->objPage = new Client_Page();
+                        } else {
+                            $this->objPage = new Page();
+                        }
+                        $this->objPage->setRootLevelId($this->objTheme->idRootLevels);
+                        $this->objPage->setRootLevelTitle(($this->core->blnIsDefaultLanguage === true ? $this->objTheme->defaultTitle : $this->objTheme->title));
+                        $this->objPage->setRootLevelAlternativeTitle(((isset($this->core->config->languages->alternative->id)) ? $this->objTheme->alternativeTitle : ''));
+                        $this->objPage->setRootLevelGroupId($this->objTheme->idRootLevelGroups);
+                        $this->objPage->setPageId($objUrlData->relationId);
+                        $this->objPage->setPageVersion($objUrlData->version);
+                        $this->objPage->setLanguageId($objUrlData->idLanguages);
+
+                        // set url prefix properties
+                        $this->objPage->setHasUrlPrefix((($this->strUrlPrefix != '') ? true : false));
+                        $this->objPage->setUrlPrefix($this->strUrlPrefix);
+                        $this->objPage->setLanguageDefinitionType($this->intLanguageDefinitionType);
+
+                        // set navigation segmentation properties
+                        $this->objPage->setHasSegments($this->objTheme->hasSegments);
+                        $this->objPage->setSegmentId($this->intSegmentId);
+                        $this->objPage->setSegmentCode($this->strSegmentCode);
+
+                        switch ($objUrlData->idUrlTypes) {
+                            case $this->core->sysConfig->url_types->page:
+                                $this->objPage->setType('page');
+                                $this->objPage->setModelSubPath('cms/models/');
+                                break;
+                            case $this->core->sysConfig->url_types->global:
+                                $this->objPage->setType('global');
+                                $this->objPage->setModelSubPath('global/models/');
+                                $this->objPage->setElementLinkId($objUrlData->idLink);
+                                $this->objPage->setNavParentId($objUrlData->idLinkParent);
+                                $this->objPage->setPageLinkId($objUrlData->linkId);
+                                break;
+                        }
+
+                        /*
+                         * preset navigation parent properties
+                         * e.g. is a collection page
+                         */
+                        if ($objUrlData->idParent !== null) {
+                            $this->objPage->setNavParentId($objUrlData->idParent);
+                            $this->objPage->setNavParentTypeId($objUrlData->idParentTypes);
+                        }
+
+                        /*
+                         * has base url object
+                         * e.g. prduct tree
+                         */
+                        if (isset($objUrl->baseUrl)) {
                             $objNavigation->setBaseUrl($objUrl->baseUrl);
                             $this->objPage->setBaseUrl($objUrl->baseUrl);
                             $this->objPage->setNavParentId($objUrlData->idLinkParent);
-                        } else {
-                            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
-                            $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
-                            $this->getResponse()->setHeader('Status', '404 Not Found');
-                            $this->getResponse()->setHttpResponseCode(404);
-                            $this->renderScript('error-404.php');
-                            $this->blnCachingStart = false;
-                            return;
-                        }
-                    }
-                    
-                    $this->objPage->loadPage();
-    
-                    /*
-                     * check status
-                     */
-                    if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
-                        $this->_redirect($this->getPrefix() . '/');
-                    }
-    
-                    if ($this->objPage->ParentPage() instanceof Page) {
-                        $objNavigation->setPage($this->objPage->ParentPage());
-                    } else {
-                        $objNavigation->setPage($this->objPage);
-                    }
-    
-                    // update default cache lifetime
-                    if ($this->objPage->getTemplateCacheLifetime() > 0) {
-                        $this->objCache->setLifetime($this->objPage->getTemplateCacheLifetime());
-                    } else {
-                        // deactivate caching
-                        $this->blnCachingStart = false;
-                    }
-    
-                    // update default render script
-                    if ($this->objPage->getTemplateRenderScript() != '') {
-                        $this->strRenderScript = $this->objPage->getTemplateRenderScript();
-                    }
-    
-                    /*
-                     * check page security
-                     */
-                    if ($objNavigation->secuirtyZoneCheck()) {
-                        // deactivate caching
-                        $this->blnCachingStart = false;
 
-                        list($blnHasIdentity, $blnHasIdentityCustomer) = $this->isZooluOrCustomerIdentity();
-    
-                        if ($blnHasIdentity == false && $blnHasIdentityCustomer == false) {
-                            $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
+                        }
+
+                        $this->objPage->loadPage();
+
+                        /*
+                         * check status
+                         */
+                        if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
+                            $this->_redirect($this->getPrefix() . '/');
+                        }
+
+                        if ($this->objPage->ParentPage() instanceof Page) {
+                            $objNavigation->setPage($this->objPage->ParentPage());
                         } else {
-                            if (!$objNavigation->checkZonePrivileges()) {
-                                $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-                                $this->getResponse()->setHeader('Status', '403 Forbidden');
-                                $this->getResponse()->setHttpResponseCode(403);
-                                $this->strRenderScript = 'error-403.php';
-                                $this->blnCachingStart = false;
+                            $objNavigation->setPage($this->objPage);
+                        }
+
+                        // update default cache lifetime
+                        if ($this->objPage->getTemplateCacheLifetime() > 0) {
+                            $this->objCache->setLifetime($this->objPage->getTemplateCacheLifetime());
+                        } else {
+                            // deactivate caching
+                            $this->blnCachingStart = false;
+                        }
+
+                        // update default render script
+                        if ($this->objPage->getTemplateRenderScript() != '') {
+                            $this->strRenderScript = $this->objPage->getTemplateRenderScript();
+                        }
+
+                        /*
+                         * check page security
+                         */
+                        if ($objNavigation->secuirtyZoneCheck()) {
+                            // deactivate caching
+                            $this->blnCachingStart = false;
+
+                            list($blnHasIdentity, $blnHasIdentityCustomer) = $this->isZooluOrCustomerIdentity();
+
+                            if ($blnHasIdentity == false && $blnHasIdentityCustomer == false) {
+                                $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
+                            } else {
+                                if (!$objNavigation->checkZonePrivileges()) {
+                                    $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
+                                    $this->getResponse()->setHeader('Status', '403 Forbidden');
+                                    $this->getResponse()->setHttpResponseCode(403);
+                                    $this->strRenderScript = 'error-403.php';
+                                    $this->blnCachingStart = false;
+                                }
                             }
                         }
-                    }
-    
-                    if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php')) {
-                        require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php');
-                        $strPageHelper = ucfirst($this->objTheme->path) . '_PageHelper';
-                        $objPageHelper = new $strPageHelper();
+
+                        if (file_exists(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php')) {
+                            require_once(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/helpers/PageHelper.php');
+                            $strPageHelper = ucfirst($this->objTheme->path) . '_PageHelper';
+                            $objPageHelper = new $strPageHelper();
+                        } else {
+                            require_once(dirname(__FILE__) . '/../helpers/PageHelper.php');
+                            $objPageHelper = new PageHelper();
+                        }
+                        $objPageHelper->setTheme($this->objTheme->path);
+
+                        $objPageHelper->setPage($this->objPage);
+                        $objPageHelper->setTranslate($this->translate);
+                        Zend_Registry::set('PageHelper', $objPageHelper);
+
+                        // forward to SearchController
+                        if ($this->blnSearch == true) {
+                            $this->_forward('index', 'Search', null, array(
+                                                                          'rootLevelId'  => $this->objPage->getRootLevelId(),
+                                                                          'theme'        => $this->objTheme->path,
+                                                                          'urlPrefix'    => $this->strUrlPrefix,
+                                                                          'segmentation' => array(
+                                                                              'id'           => $this->intSegmentId,
+                                                                              'code'         => $this->strSegmentCode,
+                                                                              'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
+                                                                          )
+                                                                     ));
+                        }
+                        // forward to RssController
+                        elseif ($this->blnIsRss == true) {
+                            $this->_forward('index', 'Rss', null, array(
+                                                                       'page'  => $this->objPage,
+                                                                       'theme' => $this->objTheme
+                                                                  ));
+                        } else {
+                            /*
+                             * get page template filename
+                             */
+                            $this->view->template = $this->objPage->getTemplateFile();
+                            $this->view->publisher = $this->objPage->getPublisherName();
+                            $this->view->publishdate = $this->objPage->getPublishDate();
+
+                            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
+                            $this->renderScript($this->strRenderScript);
+                        }
                     } else {
-                        require_once(dirname(__FILE__) . '/../helpers/PageHelper.php');
-                        $objPageHelper = new PageHelper();
-                    }
-                    $objPageHelper->setTheme($this->objTheme->path);
-    
-                    $objPageHelper->setPage($this->objPage);
-                    $objPageHelper->setTranslate($this->translate);
-                    Zend_Registry::set('PageHelper', $objPageHelper);
-    
-                    // forward to SearchController
-                    if ($this->blnSearch == true) {
-                        $this->_forward('index', 'Search', null, array(
-                                                                      'rootLevelId'  => $this->objPage->getRootLevelId(),
-                                                                      'theme'        => $this->objTheme->path,
-                                                                      'urlPrefix'    => $this->strUrlPrefix,
-                                                                      'segmentation' => array(
-                                                                          'id'           => $this->intSegmentId,
-                                                                          'code'         => $this->strSegmentCode,
-                                                                          'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
-                                                                      )
-                                                                 ));
-                    }
-                    // forward to RssController
-                    elseif ($this->blnIsRss == true) {
-                        $this->_forward('index', 'Rss', null, array(
-                                                                   'page'  => $this->objPage,
-                                                                   'theme' => $this->objTheme
-                                                              ));
-                    } else {
-                        /*
-                         * get page template filename
-                         */
-                        $this->view->template = $this->objPage->getTemplateFile();
-                        $this->view->publisher = $this->objPage->getPublisherName();
-                        $this->view->publishdate = $this->objPage->getPublishDate();
-    
-                        $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
-                        $this->renderScript($this->strRenderScript);
+                        // try url with/without slash redirect or error output
+                        $this->urlRetryRedirectAndError($strUrl);
                     }
                 } else {
-                    // try url with/without slash redirect or error output
-                    $this->urlRetryRedirectAndError($strUrl);
+                    if ($this->objCache->test($this->strCacheId)) {
+                        $this->blnCachingStart = false;
+                    }
+                    $this->blnCachingOutput = true;
+                    $this->getResponse()->setBody($this->objCache->load($this->strCacheId));
+                    $this->_helper->viewRenderer->setNoRender();
                 }
-            } else {
-                if ($this->objCache->test($this->strCacheId)) {
-                    $this->blnCachingStart = false;
-                }
-                $this->blnCachingOutput = true;
-                $this->getResponse()->setBody($this->objCache->load($this->strCacheId));
-                $this->_helper->viewRenderer->setNoRender();
             }
+        } catch (NotFoundException $e) {
+            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
+            $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
+            $this->getResponse()->setHeader('Status', '404 Not Found');
+            $this->getResponse()->setHttpResponseCode(404);
+            $this->renderScript('error-404.php');
+            $this->blnCachingStart = false;
+            $this->core->logger->warn($e->getMessage());
         }
     }
 
@@ -859,18 +867,28 @@ private function getValidatedUrlObject($strUrl) {
      * @return boolean $ret
      */
     public function validateEntrypoint($objUrl, $objBaseUrl) {
-        $ret = false;
-        $entryPoints = $this->getModelPages()->loadEntryPoint($objBaseUrl->relationId, $objBaseUrl->version, $objBaseUrl->genericFormId);
-        if (count($entryPoints) > 0) {
-            $entryPoint = $entryPoints[0];
-            $parentFolders = $this->getModelFolders()->loadGlobalParentFolders($objUrl->current()->idLinkParent);
-            foreach ($parentFolders as $parentFolder) {
-                if ($entryPoint->entry_point == $parentFolder->id) {
-                    $ret = true;
+        $valid = false;
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session());
+        if ($objAuth->hasIdentity()) {
+            $valid = true;
+        } else {
+            if (isset($objBaseUrl)) {
+                $entryPoints = $this->getModelPages()->loadEntryPoint($objBaseUrl->relationId, $objBaseUrl->version, $objBaseUrl->genericFormId);
+                if (count($entryPoints) > 0) {
+                    $entryPoint = $entryPoints[0];
+                    $parentFolders = $this->getModelFolders()->loadGlobalParentFolders($objUrl->current()->idLinkParent);
+                    foreach ($parentFolders as $parentFolder) {
+                        if ($entryPoint->entry_point == $parentFolder->id) {
+                            $valid = true;
+                        }
+                    }
                 }
             }
         }
-        return $ret;
+        if (!$valid) {
+            throw new NotFoundException('In valid entry point for global page ' . $_SERVER['REQUEST_URI']);
+        }
     }
 
     /**

@@ -478,12 +478,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 }
                 $this->_redirect($this->getPrefix() . '/' . $strLanguageFolder . $strTmpUrl);
             } else {
-                $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
-                $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
-                $this->getResponse()->setHeader('Status', '404 Not Found');
-                $this->getResponse()->setHttpResponseCode(404);
-                $this->renderScript('error-404.php');
-                $this->blnCachingStart = false;
+                throw new NotFoundException('Page not found ' . $_SERVER['REQUEST_URI']);
             }
         }
     }
