@@ -197,23 +197,25 @@ abstract class WebControllerAction extends Zend_Controller_Action
 
     /**
      * validateUrlPrefix
+     *
      * @param Zend_Db_Table_Rowset $objThemeData
      */
     protected function validateUrlPrefix($objThemeData)
     {
         if (count($objThemeData) > 1) {
             $strUrl = ltrim($_SERVER['REQUEST_URI'], '/');
+            $strUrl .= '/';
             foreach ($objThemeData as $objTheme) {
-                if (strpos($strUrl, $objTheme->urlPath) !== false && strpos($strUrl, $objTheme->urlPath) == 0) {
+                $urlPath = $objTheme->urlPath . '/';
+                if (!empty($strUrl) && !empty($urlPath) && strpos($strUrl, $urlPath) !== false && strpos($strUrl, $urlPath) === 0) {
                     $this->objTheme = $objTheme;
                     break;
                 }
             }
-
             // check if objTheme is null
             if (!isset($this->objTheme)) {
                 foreach ($objThemeData as $objTheme) {
-                    if ((bool) $objTheme->isMain === true) {
+                    if ((bool)$objTheme->isMain === true) {
                         $this->objTheme = $objTheme;
                         break;
                     }
@@ -222,7 +224,6 @@ abstract class WebControllerAction extends Zend_Controller_Action
         } else {
             $this->objTheme = $objThemeData->current();
         }
-
         $this->strUrlPrefix = $this->objTheme->urlPath;
     }
 
