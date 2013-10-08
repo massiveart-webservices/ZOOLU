@@ -369,6 +369,38 @@ class Model_Tags
     {
         return $this->arrTagTypeTables[$strType];
     }
+
+
+
+    /**
+     * @param $strTagType
+     * @param $intTagId
+     * @param $intVersion
+     *
+     * @return Zend_Db_Table_Rowset_Abstract
+     */
+
+    public function loadElementWithTag($strTagType, $strTagId, $intVersion)
+    {
+        $this->core->logger->debug('core->models->Tags->loadElementWithTag(' . $strTagType . ', ' . $strTagId . ', ' . $intVersion . ')');
+
+        $objSelect = $this->getTagTypeTable($strTagType)->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $strTagTypeTableName = $this->getTagTypeTable($strTagType)->info(Zend_Db_Table_Abstract::NAME);
+
+        $objSelect->from($strTagTypeTableName, array());
+        if ($strTagType === 'file') {
+            $objSelect->join($strTagType . 'Titles', $strTagTypeTableName . '.' . $strTagType . 'Id = ' . $strTagType . 'Titles.idFiles', array('title'));
+            $objSelect->group(array($strTagType . 'Titles.idFiles'));
+        } else {
+            $objSelect->join($strTagType . 'Titles', $strTagTypeTableName . '.' . $strTagType . 'Id = ' . $strTagType . 'Titles.' . $strTagType . 'Id', array('title'));
+            $objSelect->group(array($strTagType . 'Titles.' . $strTagType . 'Id'));
+        }
+
+
+        return $this->objTagTypeTable->fetchAll($objSelect);
+    }
 }
 
 ?>
