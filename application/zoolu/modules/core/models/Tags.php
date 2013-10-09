@@ -397,7 +397,7 @@ class Model_Tags
             $objSelect->join($strTagType . 'Titles', $strTagTypeTableName . '.' . $strTagType . 'Id = ' . $strTagType . 'Titles.' . $strTagType . 'Id', array('title'));
             $objSelect->group(array($strTagType . 'Titles.' . $strTagType . 'Id'));
         }
-
+        $objSelect->where($strTagTypeTableName . '.idTags = ?', $strTagId);
 
         return $this->objTagTypeTable->fetchAll($objSelect);
     }

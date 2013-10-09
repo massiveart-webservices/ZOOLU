@@ -389,7 +389,7 @@ class Properties_TagController extends AuthControllerAction
         $this->objForm->addElement('hidden', 'formType', array('value' => 'tag', 'decorators' => array('Hidden')));
 
         $this->objForm->addElement('text', 'title', array('label' => $this->core->translate->_('Tagname', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
-        $this->objForm->addElement('freeText', 'usedTitle', array('label' => $this->core->translate->_('used_in', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
+        $this->objForm->addElement('freeText', 'usedTitle', array('label' => $this->core->translate->_('tag_used_in', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
 
         $this->objForm->addDisplayGroup(array('title', 'usedTitle'), 'main-group');
         $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information', false));
