@@ -149,12 +149,13 @@ class Properties_TagController extends AuthControllerAction
 
             $strTagUsedIn = '';
             $intCounter = 0;
+            $strSeperator = ', ';
 
             foreach ($this->getModelTags()->loadElementWithTag('file', $objTag->id, 1) as $objElement) {
                 if ($intCounter === 0 && $objElement->title) {
                     $strTagUsedIn .= '<br /><b>Files:</b><br />';
                 } else {
-                    $strTagUsedIn .= ', ';
+                    $strTagUsedIn .= $strSeperator;
                 }
                 $strTagUsedIn .= $objElement->title;
                 $intCounter++;
@@ -165,7 +166,7 @@ class Properties_TagController extends AuthControllerAction
                 if ($intCounter === 0 && $objElement->title) {
                     $strTagUsedIn .= '<br /><br /><b>Pages:</b><br />';
                 } else {
-                    $strTagUsedIn .= ', ';
+                    $strTagUsedIn .= $strSeperator;
                 }
                 $strTagUsedIn .= $objElement->title;
                 $intCounter++;
@@ -176,7 +177,7 @@ class Properties_TagController extends AuthControllerAction
                 if ($intCounter === 0 && $objElement->title) {
                     $strTagUsedIn .= '<br /><br /><b>Globals:</b><br />';
                 } else {
-                    $strTagUsedIn .= ', ';
+                    $strTagUsedIn .= $strSeperator;
                 }
                 $strTagUsedIn .= $objElement->title;
                 $intCounter++;
@@ -188,7 +189,7 @@ class Properties_TagController extends AuthControllerAction
                 if ($intCounter === 0 && $objElement->title) {
                     $strTagUsedIn .= '<br /><br /><b>Folders:</b><br />';
                 } else {
-                    $strTagUsedIn .= ', ';
+                    $strTagUsedIn .= $strSeperator;
                 }
                 $strTagUsedIn .= $objElement->title;
                 $intCounter++;

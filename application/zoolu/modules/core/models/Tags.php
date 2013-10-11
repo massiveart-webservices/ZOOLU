@@ -398,6 +398,7 @@ class Model_Tags
             $objSelect->group(array($strTagType . 'Titles.' . $strTagType . 'Id'));
         }
         $objSelect->where($strTagTypeTableName . '.idTags = ?', $strTagId);
+        $objSelect->order($strTagType . 'Titles.title ASC');
 
         return $this->objTagTypeTable->fetchAll($objSelect);
     }
