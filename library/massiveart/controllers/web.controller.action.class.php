@@ -331,13 +331,14 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 } else if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subdomain || $this->core->config->language_definition->subandtld) {
                     $this->core->logger->debug('subdomain');
                     $strRequestString = $_SERVER['HTTP_HOST'];
-                    $strMatchCode = '/^[a-zA-Z]{2}/';
+                    $strMatchCode = '/^[a-zA-Z]{2}\./';
                     $strTld = strrchr ( $_SERVER['SERVER_NAME'], "." );
                     $strTld = substr ( $strTld, 1 );
                 }
                 if ($strRequestString != '' && preg_match($strMatchCode, $strRequestString)) {
                     preg_match($strMatchCode, $strRequestString, $arrMatches);
                     $strCode = trim($arrMatches[0], '/');
+                    $strCode = trim($strCode, '.');
                     if ($this->intLanguageDefinitionType == $this->core->config->language_definition->subandtld) {
                         if ($strTld != '') {
                             $strTmpCode = $strCode . '-' . $strTld;
@@ -364,6 +365,12 @@ abstract class WebControllerAction extends Zend_Controller_Action
                         $this->core->intLanguageId = $this->objTheme->idLanguages;
                         $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
                     }
+                }
+            } else {
+                if ($this->core->blnIsSessionLanguage !== true) {
+                    $this->core->logger->debug('theme');
+                    $this->core->intLanguageId = $this->objTheme->idLanguages;
+                    $this->core->strLanguageCode = strtolower($this->objTheme->languageCode);
                 }
             }
         }
@@ -472,12 +479,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 }
                 $this->_redirect($this->getPrefix() . '/' . $strLanguageFolder . $strTmpUrl);
             } else {
-                $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
-                $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
-                $this->getResponse()->setHeader('Status', '404 Not Found');
-                $this->getResponse()->setHttpResponseCode(404);
-                $this->renderScript('error-404.php');
-                $this->blnCachingStart = false;
+                throw new NotFoundException('Page not found ' . $_SERVER['REQUEST_URI']);
             }
         }
     }
