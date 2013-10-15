@@ -195,6 +195,10 @@ class Properties_TagController extends AuthControllerAction
                 $intCounter++;
             }
 
+            if ($strTagUsedIn == '') {
+                $strTagUsedIn = $this->core->translate->_('tag_not_used');
+            }
+
             foreach ($this->objForm->getElements() as $objElement) {
                 $name = $objElement->getName();
                 if (isset($objTag->$name)) {
