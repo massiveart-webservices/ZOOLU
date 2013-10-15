@@ -68,11 +68,22 @@ class Core_FolderController extends AuthControllerAction
      * @var Model_Folders
      */
     protected $objModelFolders;
+    
+    /**
+     * @var Model_Pages
+     */
+    protected $objModelPages;
 
     /**
      * @var CommandChain
      */
     protected $objCommandChain;
+    
+    
+    /**
+     * @var Model_Globals
+     */
+    protected $objModelGlobals;
 
     /**
      * init
@@ -483,9 +494,24 @@ class Core_FolderController extends AuthControllerAction
         $this->getModelFolders();
 
         if ($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
+            $childPages = $this->getModelFolders()->loadFolderChildPages($this->objRequest->getParam("id"));
+            foreach ($childPages as $childPage) {
+                $this->getModelPages()->deletePage($childPage->idPage);
+            }
+            
+            $childElements = $this->getModelFolders()->loadFolderChildElementIds($this->objRequest->getParam("id"));
+            foreach ($childElements as $childElement) {
+                if ($this->objRequest->getParam("rootLevelId") !== 12) {
+                    $this->getModelGlobals()->delete($childElement->id, true, $this->objRequest->getParam("rootLevelId"));
+                } else {
+                    $this->getModelGlobals()->delete($childElement->id, false, $this->objRequest->getParam("rootLevelId"));
+                }
+            }
+            
             $this->objModelFolders->deleteFolderNode($this->objRequest->getParam("id"));
-
+            $this->view->core = $this->core;
             $this->view->blnShowFormAlert = true;
+            $this->view->navlevel = $this->objRequest->getParam("navlevel", 1);
         }
 
         $this->renderScript('folder/form.phtml');
@@ -861,6 +887,50 @@ class Core_FolderController extends AuthControllerAction
         }
 
         return $this->objModelFolders;
+    }
+    
+    
+    /**
+     * getModelPages
+     * @author Cornelius Hansjakob <cha@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelPages()
+    {
+        if (null === $this->objModelPages) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/Pages.php';
+            $this->objModelPages = new Model_Pages();
+            $this->objModelPages->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelPages;
+    }
+    
+    /**
+     * getModelGlobals
+     * @return Model_Globals
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelGlobals()
+    {
+        if (null === $this->objModelGlobals) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'global/models/Globals.php';
+            $this->objModelGlobals = new Model_Globals();
+            $this->objModelGlobals->setLanguageId($this->getItemLanguageId());
+        }
+
+        return $this->objModelGlobals;
     }
 }
 
