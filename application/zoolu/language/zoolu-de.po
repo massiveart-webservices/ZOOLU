@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-09 09:42+0100\n"
+"POT-Creation-Date: 2013-10-15 09:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -431,21 +431,25 @@ msgstr "Medien zuweisen"
 msgid "Assign_documents"
 msgstr "Dokumente zuweisen"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:209
-#: application/zoolu/modules/properties/controllers/TagController.php:266
+#: application/zoolu/modules/properties/controllers/TagController.php:199
+msgid "tag_not_used"
+msgstr "Tag nicht verwendet"
+
+#: application/zoolu/modules/properties/controllers/TagController.php:214
+#: application/zoolu/modules/properties/controllers/TagController.php:271
 msgid "Edit_Tag"
 msgstr "Tag Bearbeiten"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:333
-#: application/zoolu/modules/properties/controllers/TagController.php:371
+#: application/zoolu/modules/properties/controllers/TagController.php:338
+#: application/zoolu/modules/properties/controllers/TagController.php:376
 msgid "New_Tag"
 msgstr "Neuer Tag"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:391
+#: application/zoolu/modules/properties/controllers/TagController.php:396
 msgid "Tagname"
 msgstr "Tagname"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:392
+#: application/zoolu/modules/properties/controllers/TagController.php:397
 msgid "tag_used_in"
 msgstr "Tagverwendung"
 
