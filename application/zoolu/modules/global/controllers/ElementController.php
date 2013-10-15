@@ -935,9 +935,9 @@ class Global_ElementController extends AuthControllerAction
             if ($blnDeleteAuthorization == true) {
                 if ($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
                     if (intval($this->objRequest->getParam('linkId', -1)) > 0) {
-                        $this->objModelGlobals->delete($this->objRequest->getParam("linkId"));
+                        $this->objModelGlobals->delete($this->objRequest->getParam("linkId"), true, $this->objRequest->getParam("rootLevelId"));
                     } else {
-                        $this->objModelGlobals->delete($this->objRequest->getParam("id"));
+                        $this->objModelGlobals->delete($this->objRequest->getParam("id"), false, $this->objRequest->getParam("rootLevelId"));
                     }
 
                     $this->view->blnShowFormAlert = true;

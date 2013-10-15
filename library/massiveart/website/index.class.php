@@ -170,7 +170,7 @@ class Index
             $strIndexRootPath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global;
 
             $arrFolderContent = array_diff(scandir($strIndexRootPath), array('.', '..'));
-            if ($arrFolderContent > 0) {
+            if (count($arrFolderContent) > 0) {
                 foreach ($arrFolderContent as $item) {
                     if (is_dir($strIndexRootPath . '/' . $item)) {
                         $this->indexRemoveElement($strIndexRootPath . '/' . $item, $strKey);
@@ -191,19 +191,21 @@ class Index
     protected function indexRemoveElement($strIndexPath, $strKey)
     {
         try {
-            $objIndex = Zend_Search_Lucene::open($strIndexPath);
+            $arrFolderContent = array_diff(scandir($strIndexPath), array('.', '..'));
+            if (count($arrFolderContent) > 0) {
+                $objIndex = Zend_Search_Lucene::open($strIndexPath);
 
-            $objTerm = new Zend_Search_Lucene_Index_Term($strKey, 'key');
-            $objQuery = (strpos($strKey, '*') !== false) ? new Zend_Search_Lucene_Search_Query_Wildcard($objTerm) : new Zend_Search_Lucene_Search_Query_Term($objTerm);
+                $objTerm = new Zend_Search_Lucene_Index_Term($strKey, 'key');
+                $objQuery = (strpos($strKey, '*') !== false) ? new Zend_Search_Lucene_Search_Query_Wildcard($objTerm) : new Zend_Search_Lucene_Search_Query_Term($objTerm);
 
-            $objHits = $objIndex->find($objQuery);
-            foreach ($objHits as $objHit) {
-                $objIndex->delete($objHit->id);
+                $objHits = $objIndex->find($objQuery);
+                foreach ($objHits as $objHit) {
+                    $objIndex->delete($objHit->id);
+                }
+
+                $objIndex->commit();
+                $objIndex->optimize();
             }
-
-            $objIndex->commit();
-
-            $objIndex->optimize();
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
