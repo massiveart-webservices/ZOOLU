@@ -697,11 +697,14 @@ private function getValidatedUrlObject($strUrl) {
         }else{
 
             $strAlternativeUrl = '';
-            if ($strUrl[strlen($strUrl)-1] === '/') {
-                $strAlternativeUrl = substr($strUrl, 0, -1);
-            } else {
-                $strAlternativeUrl = $strUrl.'/';
+            if (strlen($strUrl) > 0) {
+                if ($strUrl[strlen($strUrl)-1] === '/') {
+                    $strAlternativeUrl = substr($strUrl, 0, -1);
+                } else {
+                    $strAlternativeUrl = $strUrl.'/';
+                }
             }
+            
             //Load landingpage if there is no language in the url
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
             $objAlternativeUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strAlternativeUrl, PHP_URL_PATH) === null) ? '' : parse_url($strAlternativeUrl, PHP_URL_PATH), null, true, false);
