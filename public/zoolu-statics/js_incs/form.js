@@ -2454,5 +2454,60 @@ Massiveart.Form = Class.create({
             .removeClassName('plus')
             .removeClassName('minus')
             .addClassName(classname);
+    },
+
+    datetimeChanged: function (el, id) {
+        var hideClass = '.' + id + '_frequency_specific';
+        var showId = id + '_' + el.value;
+        $$(hideClass).each(Element.hide);
+        $(showId).show();
+    },
+
+    toggle: function(id, el, onValue) {
+        // $(id).toggle();
+        if (typeof el !== 'undefined') {
+            onValue = typeof onValue !== 'undefined' ? onValue : '1';
+            if (el.value == onValue) {
+                $(id).show();
+            } else {
+                $(id).hide();
+            }
+        } else {
+            $(id).toggle();
+        }
+    },
+
+    toggleCheckbox: function(id, el) {
+        // $(id).toggle();
+        if (typeof el !== 'undefined') {
+            if (el.checked) {
+                $(id).show();
+            } else {
+                $(id).hide();
+            }
+        } else {
+            $(id).toggle();
+        }
+    },
+
+    datetimeChangeFulltime: function(el, id) {
+        console.log('called');
+        console.log(el.checked);
+        console.log('hadsf');
+        var fromDateId = id + '_field_from_date';
+        var toDateId = id +'_field_to_date';
+        var fromTimeId = id +'_field_from_time';
+        var toTimeId = id +'_field_to_time';
+        if (el.checked) {
+            $(fromDateId).removeClassName('field-3').addClassName('field-6');
+            $(toDateId).removeClassName('field-3').addClassName('field-6');
+            $(fromTimeId).hide();
+            $(toTimeId).hide();
+        } else {
+            $(fromDateId).removeClassName('field-6').addClassName('field-3');
+            $(toDateId).removeClassName('field-6').addClassName('field-3');
+            $(fromTimeId).show();
+            $(toTimeId).show();
+        }
     }
 });

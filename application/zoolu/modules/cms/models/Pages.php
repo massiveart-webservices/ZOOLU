@@ -108,6 +108,11 @@ class Model_Pages extends ModelAbstract
     protected $groupsTable;
 
     /**
+     * @var Model_Table_PageDates
+     */
+    protected $objPageDatetimesTable;
+
+    /**
      * @var Core
      */
     protected $core;
@@ -2246,6 +2251,113 @@ class Model_Pages extends ModelAbstract
             }
         }
         return array_unique($arrGroups);
+    }
+
+
+
+    /**
+     * addDatetimes
+     * @param array $arrDatetimes
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @return integer
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function addDatetimes($datetime, $strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->addDatetimes(' . print_r($datetime, true) . ', ' . $strElementId . ', ' . $intVersion . ', ' . $intFieldId . ')');
+
+        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $arrData = array(
+            'pageId'     => $strElementId,
+            'version'      => $intVersion,
+            'idLanguages'  => $this->intLanguageId,
+            'idFields'     => $intFieldId,
+            'idUsers'      => $intUserId,
+            'creator'      => $intUserId,
+            'created'      => date('Y-m-d H:i:s')
+        );
+
+        if (!empty($datetime)) {
+
+            $this->getPagesDatetimesTable()->insert(array_merge(array(
+                'from_date'             => $datetime->from_date,
+                'from_time'             => $datetime->from_time,
+                'to_date'               => $datetime->to_date,
+                'to_time'               => $datetime->to_time,
+                'fulltime'              => $datetime->fulltime,
+                'repeat'                => $datetime->repeat,
+                'repeat_frequency'      => $datetime->repeat_frequency,
+                'repeat_interval'       => $datetime->repeat_interval,
+                'repeat_type'           => $datetime->repeat_type,
+                'end'                   => $datetime->end,
+                'end_date'              => $datetime->end_date
+            ), $arrData));
+        }
+    }
+
+    /**
+     * deleteDatetimes
+     * @param $strElementId
+     * @param $intVersion
+     * @param $intFieldId
+     * @return int
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteDatetimes($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->deleteDatetimes(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $strWhere = $this->getPagesDatetimesTable()->getAdapter()->quoteInto('pageId = ?', $strElementId);
+        $strWhere .= $this->objPageDatetimesTable->getAdapter()->quoteInto(' AND version = ?', $intVersion);
+        $strWhere .= $this->objPageDatetimesTable->getAdapter()->quoteInto(' AND idFields = ?', $intFieldId);
+        $strWhere .= $this->objPageDatetimesTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->intLanguageId);
+
+        return $this->objPageDatetimesTable->delete($strWhere);
+    }
+
+    /**
+     * loadDatetimes
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function loadDatetimes($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadDatetimes(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $objSelect = $this->getPagesDatetimesTable()->select();
+
+        $objSelect->from('pageDates', array('from_date', 'from_time', 'to_date', 'to_time', 'fulltime', 'repeat', 'repeat_frequency', 'repeat_interval', 'repeat_type', 'end', 'end_date'))
+            ->where('pageId = ?', $strElementId)
+            ->where('version = ?', $intVersion)
+            ->where('idLanguages = ?', $this->intLanguageId)
+            ->where('idFields = ?', $intFieldId);
+
+        return $this->objPageDatetimesTable->fetchRow($objSelect);
+    }
+
+    /**
+     * getPagesDatetimesTable
+     * @return Zend_Db_Table_Abstract
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function getPagesDatetimesTable()
+    {
+        if ($this->objPageDatetimesTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/tables/PageDates.php';
+            $this->objPageDatetimesTable = new Model_Table_PageDates();
+        }
+
+        return $this->objPageDatetimesTable;
     }
 
     /**
