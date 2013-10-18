@@ -127,21 +127,21 @@ class Form_Helper_FormDatetimes extends Zend_View_Helper_FormElement
                             </div>
                             <div id="{id}_daily" class="field-12 {id}_frequency_specific" style="{style_daily}">
                                 <div class="field">
-                                    <label class="fieldtitle" for="{id}_daily_repeat">
+                                    <label class="fieldtitle" for="{id}_repeat_interval_daily">
                                         '.$core->translate->_('repeat_all').':
                                     </label>
-                                    <select id="{id}_repeat_daily" name="{id}_repeat_daily">
-                                        {repeat_daily}
+                                    <select id="{id}_repeat_interval_daily" name="{id}_repeat_interval_daily">
+                                        {repeat_interval_daily}
                                     </select> ' . $core->translate->_('days') . '
                                 </div>
                             </div>
                             <div id="{id}_weekly" class="field-12 {id}_frequency_specific" style="{style_weekly}">
                                 <div class="field">
-                                    <label class="fieldtitle" for="{id}_repeat_weekly">
+                                    <label class="fieldtitle" for="{id}_repeat_interval_weekly">
                                         '.$core->translate->_('repeat_all').':
                                     </label>
-                                    <select id="{id}_repeat_weekly" name="{id}_repeat_weekly">
-                                        {repeat_weekly}
+                                    <select id="{id}_repeat_interval_weekly" name="{id}_repeat_interval_weekly">
+                                        {repeat_interval_weekly}
                                     </select> ' . $core->translate->_('weeks') . '<br/>
                                 </div>
                                 <div class="field">
@@ -153,11 +153,11 @@ class Form_Helper_FormDatetimes extends Zend_View_Helper_FormElement
                             </div>
                             <div id="{id}_monthly" class="field-12 {id}_frequency_specific" style="{style_monthly}">
                                 <div class="field">
-                                    <label class="fieldtitle" for="{id}_repeat_monthly">
+                                    <label class="fieldtitle" for="{id}_repeat_interval_monthly">
                                         '.$core->translate->_('repeat_all').':
                                     </label>
-                                    <select id="{id}_repeat_monthly" name="{id}_repeat_monthly">
-                                        {repeat_monthly}
+                                    <select id="{id}_repeat_interval_monthly" name="{id}_repeat_interval_monthly">
+                                        {repeat_interval_monthly}
                                     </select> ' . $core->translate->_('months') . '
                                 </div>
                                 <div class="field">
@@ -169,11 +169,11 @@ class Form_Helper_FormDatetimes extends Zend_View_Helper_FormElement
                             </div>
                             <div id="{id}_yearly" class="field-12 {id}_frequency_specific" style="{style_yearly}">
                                 <div class="field">
-                                    <label class="fieldtitle" for="{id}_repeat_yearly">
+                                    <label class="fieldtitle" for="{id}_repeat_interval_yearly">
                                         '.$core->translate->_('repeat_all').':
                                     </label>
-                                    <select id="{id}_repeat_yearly" name="{id}_repeat_yearly">
-                                        {repeat_yearly}
+                                    <select id="{id}_repeat_interval_yearly" name="{id}_repeat_interval_yearly">
+                                        {repeat_interval_yearly}
                                     </select> ' . $core->translate->_('years') . '
                                 </div>
                             </div>
@@ -197,7 +197,7 @@ class Form_Helper_FormDatetimes extends Zend_View_Helper_FormElement
                     <div class="clear"></div>
                 </div>';
 
-        $wildcards = array('{id}', '{name}', '{from_date}', '{from_time}', '{to_time}', '{to_date}', '{fulltime}', '{repeat}', '{repeat_frequency}', '{repeat_daily}', '{repeat_weekly}', '{repeat_weekly_type}', '{repeat_monthly}', '{repeat_monthly_type}', '{repeat_yearly}', '{repeat_ending}', '{end_date}',
+        $wildcards = array('{id}', '{name}', '{from_date}', '{from_time}', '{to_time}', '{to_date}', '{fulltime}', '{repeat}', '{repeat_frequency}', '{repeat_interval_daily}', '{repeat_interval_weekly}', '{repeat_weekly_type}', '{repeat_interval_monthly}', '{repeat_monthly_type}', '{repeat_interval_yearly}', '{repeat_ending}', '{end_date}',
         '{style_daily}', '{style_weekly}', '{style_monthly}', '{style_yearly}', '{style_repeat_container}',
         '{class_from_date}', '{class_to_date}', '{style_from_time}', '{style_to_time}',
         '{style_end_date}');

@@ -894,10 +894,10 @@ class GenericSetup
         $datetime->repeat_frequency = array_key_exists($strFieldName . '_repeat_frequency', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_frequency']) ? $arrValues[$strFieldName . '_repeat_frequency'] : null;
 
         $repeat_interval = array(
-            'daily' => array_key_exists($strFieldName . '_repeat_interval_daily', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_daily']) ? $arrValues[$strFieldName . '_repeat_daily'] : null,
-            'weekly' => array_key_exists($strFieldName . '_repeat_interval_weekly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_weekly']) ? $arrValues[$strFieldName . '_repeat_weekly'] : null,
-            'monthly' => array_key_exists($strFieldName . '_repeat_interval_monthly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_monthly']) ? $arrValues[$strFieldName . '_repeat_monthly'] : null,
-            'yearly' => array_key_exists($strFieldName . '_repeat_interval_yearly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_yearly']) ? $arrValues[$strFieldName . '_repeat_yearly'] : null
+            'daily' => array_key_exists($strFieldName . '_repeat_interval_daily', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_daily']) ? $arrValues[$strFieldName . '_repeat_interval_daily'] : null,
+            'weekly' => array_key_exists($strFieldName . '_repeat_interval_weekly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_weekly']) ? $arrValues[$strFieldName . '_repeat_interval_weekly'] : null,
+            'monthly' => array_key_exists($strFieldName . '_repeat_interval_monthly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_monthly']) ? $arrValues[$strFieldName . '_repeat_interval_monthly'] : null,
+            'yearly' => array_key_exists($strFieldName . '_repeat_interval_yearly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_yearly']) ? $arrValues[$strFieldName . '_repeat_interval_yearly'] : null
         );
 
         if (isset($repeat_interval[$datetime->repeat_frequency])) {
