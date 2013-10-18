@@ -136,3 +136,25 @@ UPDATE `zo-zoolu`.`genericForms` SET `idGenericFormTypes` = '1' WHERE `genericFo
 /* Activate Event Template */
 UPDATE `zo-zoolu`.`templates` SET `active` = '1' WHERE `templates`.`id` =7;
 UPDATE `zo-zoolu`.`templates` SET `active` = '1' WHERE `templates`.`id` =8;
+
+
+
+
+/* Hide Template 7 Date Fields */
+INSERT INTO `zo-zoolu`.`templateExcludedFields` (`id` ,
+`idTemplates` ,
+`idFields`
+)
+VALUES (NULL , '7', '139'
+), (NULL , '7', '140'
+), (NULL , '7', '67'
+), (NULL , '7', '134'
+);
+
+
+/* FIX SEO TAB */
+ALTER TABLE `page-DEFAULT_EVENT-1-Instances` ADD `seo_description` TEXT NULL AFTER `event_status` ,
+ADD `seo_keywords` TEXT NULL AFTER `seo_description` ,
+ADD `seo_title` VARCHAR( 255 ) NULL AFTER `seo_keywords` ,
+ADD `seo_canonical` VARCHAR( 255 ) NOT NULL AFTER `seo_title`;
+
