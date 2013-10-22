@@ -95,7 +95,7 @@ INSERT INTO `regions` (`id` ,
 `isMultiply` ,
 `multiplyRegion`
 )
-VALUES (NULL , '1', '9', '0', '0', '1', NULL , '0', '0'
+VALUES (NULL , '1', '9', '0', '1', '1', NULL , '0', '0'
 );
 
 INSERT INTO `regionTitles` (`id` ,
@@ -152,9 +152,87 @@ VALUES (NULL , '7', '139'
 );
 
 
-/* FIX SEO TAB */
+/* FIX SEO TAB DEFAULT_EVENT */
 ALTER TABLE `page-DEFAULT_EVENT-1-Instances` ADD `seo_description` TEXT NULL AFTER `event_status` ,
 ADD `seo_keywords` TEXT NULL AFTER `seo_description` ,
 ADD `seo_title` VARCHAR( 255 ) NULL AFTER `seo_keywords` ,
 ADD `seo_canonical` VARCHAR( 255 ) NOT NULL AFTER `seo_title`;
+
+
+/* Deactivate Standard Overview Region in Event Overview Template 8 */
+INSERT INTO `zo-zoolu`.`templateExcludedRegions` (`id` ,
+`idTemplates` ,
+`idRegions`
+)
+VALUES (NULL , '8', '15'
+);
+
+/* Hide old Date Field from Event Overview */
+INSERT INTO `zo-zoolu`.`templateExcludedFields` (`id` ,
+`idTemplates` ,
+`idFields`
+)
+VALUES (NULL , '8', '134'
+);
+
+/* FIX SEO TAB DEFAULT_EVENT */
+ALTER TABLE `page-DEFAULT_EVENT_OVERVIEW-1-Instances` ADD `seo_description` TEXT NULL AFTER `description` ,
+ADD `seo_keywords` TEXT NULL AFTER `seo_description` ,
+ADD `seo_title` VARCHAR( 255 ) NULL AFTER `seo_keywords` ,
+ADD `seo_canonical` VARCHAR( 255 ) NOT NULL AFTER `seo_title`;
+
+
+/* Hide Sidebar from EVENT OVERVIEW TEMPLATE ID 8 */
+INSERT INTO `zo-zoolu`.`templateExcludedRegions` (`id` ,
+`idTemplates` ,
+`idRegions`
+)
+VALUES (NULL , '8', '14'
+);
+
+
+/* Change Excerpt Position */
+UPDATE `zo-zoolu`.`tabRegions` SET `order` = '120' WHERE `tabRegions`.`id` =57;
+UPDATE `zo-zoolu`.`tabRegions` SET `order` = '120' WHERE `tabRegions`.`id` =69;
+
+
+/* Event Overview Region */
+INSERT INTO `zo-zoolu`.`regions` (`id` ,
+`idRegionTypes` ,
+`columns` ,
+`isTemplate` ,
+`collapsable` ,
+`isCollapsed` ,
+`position` ,
+`isMultiply` ,
+`multiplyRegion`
+)
+VALUES (NULL , '1', '9', '0', '1', '1', NULL , '0', '0'
+);
+
+INSERT INTO `zo-zoolu`.`regionFields` (`id` ,
+`idRegions` ,
+`idFields` ,
+`order`
+)
+VALUES (NULL , '108', '34', '10'
+), (NULL , '108', '60', '20'
+), (NULL , '108', '95', '40'
+);
+
+
+/* Add Region to Event Overview */
+INSERT INTO `zo-zoolu`.`tabRegions` (`id` ,
+`idTabs` ,
+`idRegions` ,
+`order`
+)
+VALUES (NULL , '12', '108', '40'
+);
+
+/* Add Save Columns for Region 108 in DEFAULT_EVENT_OVERVIEW GENERIC FORM */
+ALTER TABLE `page-DEFAULT_EVENT_OVERVIEW-1-Instances` ADD `entry_category` BIGINT NULL AFTER `seo_canonical` ,
+ADD `entry_label` BIGINT NULL AFTER `entry_category` ,
+ADD `entry_number` BIGINT NULL AFTER `entry_label` ,
+ADD `entry_depth` BIGINT NULL AFTER `entry_number`;
 

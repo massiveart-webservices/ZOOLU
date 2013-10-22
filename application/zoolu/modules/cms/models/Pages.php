@@ -1102,6 +1102,65 @@ class Model_Pages extends ModelAbstract
     }
 
     /**
+     * loadMonthEvents
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function loadMonthEvents($rootLevelId, $parentId, $fieldId, $category, $label, $depth)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadMonthEvents('.$parentId.', '.$category.', '.$label.', '.$depth.')');
+        $select = $this->getPageTable()->select()->setIntegrityCheck(false);
+
+        $select->from('folders', array());
+
+        if ($depth == $this->core->sysConfig->filter->depth->all) {
+            $select->join(array('subFolders' => 'folders'), 'folders.idRootLevels = subFolders.idRootLevels AND subFolders.lft BETWEEN folders.lft AND folders.rgt AND subFolders.depth >= 0', array());
+        } else {
+            $select->join(array('subFolders' => 'folders'), 'folders.idRootLevels = subFolders.idRootLevels AND subFolders.lft BETWEEN folders.lft AND folders.rgt AND subFolders.depth = (folders.depth)', array());
+        }
+        $select->join('pages', 'pages.idParent = subFolders.id AND idParentTypes = 2', array('id', 'pageId', 'idParent'));
+        $select->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.idLanguages = ' . intval($this->intLanguageId), array());
+        $select->join('urls', 'urls.relationId = pages.pageId AND
+                               urls.version = pages.version AND
+                               urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND
+                               urls.idLanguages = pageProperties.idLanguages AND
+                               urls.idParent IS NULL AND
+                               urls.isMain = 1', array('url'));
+        $select->joinLeft('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.idLanguages = pageProperties.idLanguages', array('title', 'language' => 'idLanguages'));
+        $select->joinLeft('templates', 'templates.id = pageProperties.idTemplates', array('genericFormId'));
+
+        if (!empty($category)) {
+            $select->join('pageCategories', 'pageCategories.pageId = pages.pageId AND pageCategories.idLanguages = pageProperties.idLanguages AND pageCategories.category = ' . intval($category), array());
+        }
+
+        if (!empty($label)) {
+            $select->join('pageLabels', 'pageLabels.pageId = pages.pageId AND pageLabels.idLanguages = pageProperties.idLanguages AND pageLabels.label = ' . intval($label), array());
+        }
+
+        if (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)) {
+            $timestamp = time();
+            $now = date('Y-m-d H:i:s', $timestamp);
+            $select->where('pageProperties.idStatus = ?', $this->core->sysConfig->status->live);
+            $select->where('pageProperties.published <= \'' . $now . '\'');
+        }
+
+        $select->join('pageDates', 'pageDates.pageId = pages.pageId AND pageDates.idLanguages = pageProperties.idLanguages AND pageDates.idFields = ' . intval($fieldId), array('from_date', 'from_time', 'to_date', 'to_time', 'fulltime', 'repeat', 'repeat_frequency', 'repeat_interval', 'repeat_type', 'end', 'end_date'));
+
+        $select->join('page-DEFAULT_EVENT-1-Instances', '`page-DEFAULT_EVENT-1-Instances`.pageId = pages.pageId AND `page-DEFAULT_EVENT-1-Instances`.idLanguages = pageProperties.idLanguages', array('description', 'shortdescription'));
+
+        $select->joinLeft(array('iFiles' => 'page-DEFAULT_EVENT-1-InstanceFiles'), 'iFiles.id = (SELECT iFl.id FROM `page-DEFAULT_EVENT-1-InstanceFiles` AS iFl
+                                                         WHERE iFl.pageId = pages.pageId AND iFl.version = pages.version AND iFl.idLanguages = pageProperties.idLanguages AND iFl.idFields IN (5,55)
+                                                         ORDER BY iFl.idFields DESC LIMIT 1)', array());
+
+        $select->joinLeft('files', 'files.id = iFiles.idFiles AND files.isImage = 1', array('filepath' => 'path', 'fileversion' => 'version', 'filename'));
+        $select->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = pageProperties.idLanguages', array('filetitle' => 'title'));
+
+        $select->where('folders.idRootLevels = ' . intval($rootLevelId) . ' AND folders.id = ' . intval($parentId));
+
+        return $this->getPageTable()->fetchAll($select);
+    }
+
+    /**
      * loadPagesByfilter
      * @param integer $intParentFolderId
      * @param array $arrTagIds
