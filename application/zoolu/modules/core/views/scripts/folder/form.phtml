@@ -166,5 +166,14 @@ myForm.isAuthorizedToDelete(<?php echo (($this->authorizedDelete && $this->autho
 myForm.isAuthorizedToUpdate(<?php echo (($this->authorizedUpdate && $this->authorizedUpdate == true) ? 'true' : 'false') ?>);
 <?php if ($this->itemId): ?>myNavigation.itemId = '<?php echo $this->itemId ?>';<?php endif; ?>
 <?php if ($this->folderId): ?>myFolder.folderId = <?php echo $this->folderId ?>;<?php endif; ?>
+<?php if ($this->navlevel) { 
+    echo "
+$$('.navlevel').each(function(item) {
+    if (item.id.substr(8) > " . $this->navlevel . ") {
+        item.innerHTML = '';   
+    }
+});
+    ";   
+}?>   
 //]]>
 </script>

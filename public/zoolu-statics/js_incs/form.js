@@ -159,6 +159,11 @@ Massiveart.Form = Class.create({
                 this.getFormSaveLoader();
 
                 myCore.resetTinyMCE(true);
+                
+                var navlevel = 1;
+                if ($F('currLevel')) {
+                    navlevel = $F('currLevel');
+                }
 
                 new Ajax.Updater(this.updateContainer, strAjaxActionBase + 'delete', {
                     parameters: {
@@ -166,7 +171,9 @@ Massiveart.Form = Class.create({
                         linkId: linkId,
                         rootLevelId: $F('rootLevelId'),
                         languageId: $F('languageId'),
-                        languageCode: (($('languageCode')) ? $F('languageCode') : '')
+                        languageCode: (($('languageCode')) ? $F('languageCode') : ''),
+                        navlevel: navlevel
+                        
                     },
                     evalScripts: true,
                     onComplete: function () {

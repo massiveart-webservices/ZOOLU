@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-17 15:10+0100\n"
+"POT-Creation-Date: 2013-10-15 09:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -431,19 +431,27 @@ msgstr "Medien zuweisen"
 msgid "Assign_documents"
 msgstr "Dokumente zuweisen"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:157
+#: application/zoolu/modules/properties/controllers/TagController.php:199
+msgid "tag_not_used"
+msgstr "Tag nicht verwendet"
+
 #: application/zoolu/modules/properties/controllers/TagController.php:214
+#: application/zoolu/modules/properties/controllers/TagController.php:271
 msgid "Edit_Tag"
 msgstr "Tag Bearbeiten"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:281
-#: application/zoolu/modules/properties/controllers/TagController.php:319
+#: application/zoolu/modules/properties/controllers/TagController.php:338
+#: application/zoolu/modules/properties/controllers/TagController.php:376
 msgid "New_Tag"
 msgstr "Neuer Tag"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:339
+#: application/zoolu/modules/properties/controllers/TagController.php:396
 msgid "Tagname"
 msgstr "Tagname"
+
+#: application/zoolu/modules/properties/controllers/TagController.php:397
+msgid "tag_used_in"
+msgstr "Tagverwendung"
 
 #: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:99
 msgid "All_Images"
@@ -1460,7 +1468,7 @@ msgstr "Inhalte hinzufügen"
 msgid "Edit_media"
 msgstr "Medien bearbeiten"
 
-#: application/zoolu/modules/media/views/scripts/upload/index.phtml:34
+#: application/zoolu/modules/media/views/scripts/upload/index.phtml:37
 msgid "Medium_is_language_specific"
 msgstr "Medium ist sprachspezifisch"
 

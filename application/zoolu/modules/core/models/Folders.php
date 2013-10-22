@@ -1106,6 +1106,25 @@ class Model_Folders extends ModelAbstract
                                                                ));
         return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
     }
+    
+    /**
+     * loadFolderChildElements
+     * @param integer $intFolderId Description
+     */
+    public function loadFolderChildElementIds($intFolderId) {
+        $this->core->logger->debug('core->models->Folders->loadFolderChildElements(' . $intFolderId . ')');
+        $sqlStmt = $this->core->dbh->query('SELECT globals.id 
+                                            FROM folders
+                                            JOIN globals ON 
+                                                globals.idParent = folders.id AND
+                                                globals.idParentTypes = ?
+                                           ,folders AS parent
+                                            WHERE parent.id = ? AND
+                                                  folders.lft BETWEEN parent.lft AND parent.rgt AND
+                                                  folders.idRootLevels = parent.idRootLevels',
+                                            array($this->core->sysConfig->parent_types->folder, $intFolderId));
+        return $sqlStmt->fetchAll(Zend_Db::FETCH_OBJ);
+    }
 
     /**
      * loadOverallFolderChildPages

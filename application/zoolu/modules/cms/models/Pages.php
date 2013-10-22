@@ -613,7 +613,7 @@ class Model_Pages extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes)
+    public function updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes, $rootLevel)
     {
         $objSelect = $this->getPageTable()->select();
         $objSelect->from($this->objPageTable, array('pageId', 'version'));
@@ -650,6 +650,20 @@ class Model_Pages extends ModelAbstract
             if ($intNumOfEffectedRows == 0) {
                 $arrTitle = array_merge($arrTitle, array('pageId' => $objStartPage->pageId, 'version' => $objStartPage->version, 'idLanguages' => $this->intLanguageId));
                 $this->core->dbh->insert('pageTitles', $arrTitle);
+            }
+            
+            if ($arrProperties['idStatus'] == $this->core->sysConfig->status->live) {
+                 $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexPage.php';
+                 if (file_exists($strIndexPageFilePath)) {
+                    //run page index in background
+                    exec("php $strIndexPageFilePath --pageId='" . $objStartPage->pageId . "' --version=" . $objStartPage->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevel . " > /dev/null &#038;");   
+                 }
+            } else {
+                $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
+                //run remove page from index in background
+                if (file_exists($strIndexPageFilePath)) {
+                    exec("php " . $strIndexPageFilePath . " --key='" . $objStartPage->pageId . "_" . $this->intLanguageId . "' > /dev/null &#038;");
+                }
             }
         }
     }
@@ -1485,22 +1499,12 @@ class Model_Pages extends ModelAbstract
 
         if (count($objPageData) > 0) {
             $objPage = $objPageData->current();
-            $strIndexPath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId);
             $strPageId = $objPage->pageId;
-
-            if (count(scandir($strIndexPath)) > 2) {
-                $this->objIndex = Zend_Search_Lucene::open($strIndexPath);
-
-                $objTerm = new Zend_Search_Lucene_Index_Term($strPageId . '_*', 'key');
-                $objQuery = new Zend_Search_Lucene_Search_Query_Wildcard($objTerm);
-
-                $objHits = $this->objIndex->find($objQuery);
-
-                foreach ($objHits as $objHit) {
-                    $this->objIndex->delete($objHit->id);
-                }
-
-                $this->objIndex->commit();
+            
+            $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
+            //run remove page from index in background
+            if (file_exists($strIndexPageFilePath)) {
+                exec("php " . $strIndexPageFilePath . " --key='" . $strPageId . "_*' > /dev/null &#038;");
             }
 
             $strWhere = $this->objPageTable->getAdapter()->quoteInto('relationId = ?', $strPageId);
@@ -2310,6 +2314,22 @@ class Model_Pages extends ModelAbstract
             }
         }
         return array_unique($arrGroups);
+    }
+    
+    /**
+     * loadEntryPoint
+     * @param type $name Description
+     */
+    public function loadEntryPoint($strPageId, $version, $strGenericFormId) {
+        $this->core->logger->debug('cms->models->Model_Pages->loadEntryPoint(' . $strPageId . ', ' . $version . ', ' . $strGenericFormId . ')');
+
+        $sqlStmt = $this->core->dbh->query("SELECT entry_point FROM `page-" . $strGenericFormId . "-1-Instances`
+                                            WHERE pageId = ? AND idLanguages = ? AND version = ?;",
+                                            array($strPageId,
+                                                  $this->intLanguageId,
+                                                  $version)
+                                          );
+        return $sqlStmt->fetch(Zend_Db::FETCH_OBJ);
     }
 
 

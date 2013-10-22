@@ -196,7 +196,7 @@ class GlobalCommand implements CommandInterface
                     'changed'     => date('Y-m-d H:i:s')
                 );
 
-                $this->getModelGlobals($arrArgs)->updateFolderStartGlobal($intFolderId, $arrProperties, $arrTitle, $this->intRootLevelGroupId, $intDefaultTemplateId);
+                $this->getModelGlobals($arrArgs)->updateFolderStartGlobal($intFolderId, $arrProperties, $arrTitle, $this->intRootLevelGroupId, $intDefaultTemplateId, $objGenericSetup->getRootLevelId());
                 return true;
             } else {
                 throw new Exception('There ist now GenericSetup in the args array!');

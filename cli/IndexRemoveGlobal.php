@@ -44,9 +44,9 @@ try {
 
     if (isset($objConsoleOpts->key)) {
         $objIndex = new Index();
-        $core->logger->err('remove global from index now ...');
+        $core->logger->warn('remove global ' . $objConsoleOpts->key . ' from index now ...');
         $objIndex->indexRemoveGlobals($objConsoleOpts->key);
-        $core->logger->err('... finished!');
+        $core->logger->warn('... finished!');
     }
 } catch (Exception $exc) {
     $core->logger->err($exc);
