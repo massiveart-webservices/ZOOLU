@@ -1751,11 +1751,149 @@ class Default_PageHelper extends PageHelper {
 
     /**
      * getEventOverview
-     * @author Thomas Schedler <tsh@massiveart.com>
      * @return string
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
      */
-    public function getEventOverview(){
-        //TODO default product overview
+    public function getEventOverview()
+    {
+        $return = '';
+
+        $year = (isset($_GET['year']) ? (intval($_GET['year'])) : (intval(date('Y'))));
+        $month = (isset($_GET['month']) ? (intval($_GET['month'])) : (intval(date('m'))));
+
+        $return .= '<div class="inner">' . $this->getEventOverviewNavigation();
+        $events = $this->objPage->getMonthEvents($year, $month);
+        if (count($events)) {
+            $counter = 0;
+            foreach ($events as $event) {
+                /*switch ($this->objPage->getFieldValue('event_viewtype')) {
+                    case '1-column':
+                        break;
+                    default:*/
+                        $return .= $this->defaultEventOverview($event, $counter);
+                /*        break;
+                }*/
+            }
+        } else {
+
+        }
+        $return .= '</div>';
+        return $return;
+    }
+
+    /**
+     * @param $event
+     * @param $counter
+     * @param string $strImageFolder
+     * @return string
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    protected function defaultEventOverview($event, $counter, $strImageFolder = 'thumb')
+    {
+        $return = '';
+
+        $imageProperties = $event->getImage();
+        $image = '';
+        if (!empty($imageProperties->filename)) {
+            $image = '
+                <div class="left pRight20 pBottom20">
+                    <a href="'.$event->getUrl().'" itemprop="image">
+                        <img src="'.$this->core->config->domains->static->components.$this->core->sysConfig->media->paths->imgbase.$imageProperties->filepath.$strImageFolder.'/'.$imageProperties->filename.'?v='.$imageProperties->fileversion.'" alt="'.$imageProperties->filetitle.'" title="'.$imageProperties->filetitle.'" />
+                    </a>
+                </div>
+            ';
+        }
+
+        $moreLink = $event->getProperty('read_more_text');
+        if (empty($moreLink)) {
+            $moreLink = $this->objTranslate->_('read_more_text');
+        }
+
+        $return .= '
+            <div class="pBottom20" onclick="window.location.href=\''.$event->getUrl().'\'" itemscope itemtype="http://schema.org/Event">
+                '.$image.'
+                <div class="event-overview-item-text">
+                    <h3><a href="'.$event->getUrl().'">'.$event->getTitle().'</a></h3>
+                    <strong><time itemprop="startDate" content="" datetime="'.date('Y-m-d', strtotime($event->getProperty('from'))).'">'.date('d.m.Y', strtotime($event->getProperty('from'))).'</time></strong>
+                    <div>
+                        '.$event->getDescription().'
+                    </div>
+                    <a itemprop="url" href="'.$event->getUrl().'">'.$moreLink.'</a>
+                </div>
+            </div>';
+
+        return $return;
+    }
+
+    public function getEventMonthCalendar()
+    {
+        $year = (isset($_GET['year']) ? (intval($_GET['year'])) : (intval(date('Y'))));
+        $month = (isset($_GET['month']) ? (intval($_GET['month'])) : (intval(date('m'))));
+
+        $months = '<tr>';
+        $counter = 0;
+        for ($i=1;$i<=12;$i++) {
+            $counter++;
+            $addClass='';
+            if ($month == $i) {
+                $addClass = 'active';
+            }
+            $months .= '<td class="'.$addClass.'"><a href="?year='.$year.'&month='.$i.'">'.$i.'</a></td>';
+            if ($counter%4 == 0) {
+                $months .= '</tr><tr>';
+            }
+        }
+        $months .= '</tr>';
+
+        $return = '
+            <nav class="event-calendar right pRight20 mTop20 mRight20">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><a href="?year='.($year - 1).'&month'.$month.'">&lt;</a></th>
+                            <th colspan="2" class="to-current"><a href="?year='.date('Y').'&month='.date('m').'">'.$year.'</a></th>
+                            <th><a href="?year='.($year + 1).'&month'.$month.'">&gt;</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    '.$months.'
+                    </tbody>
+                </table>
+            </nav>';
+
+        return $return;
+    }
+
+    public function getEventOverviewNavigation()
+    {
+        $year = (isset($_GET['year']) ? (intval($_GET['year'])) : (intval(date('Y'))));
+        $month = (isset($_GET['month']) ? (intval($_GET['month'])) : (intval(date('m'))));
+
+        $prevMonth = $month - 1;
+        $prevYear = $year;
+        $nextMonth = $month + 1;
+        $nextYear = $year;
+        if ($nextMonth == 13) {
+            $nextMonth = 1;
+            $nextYear = $year + 1;
+        }
+        if ($prevMonth == 0) {
+            $prevMonth = 12;
+            $prevYear = $year - 1;
+        }
+
+        $return = '
+        <nav class="pTop20">
+            <div>
+                <a class="left" href="?year='.$prevYear.'&month='.$prevMonth.'">Previous Month</a>
+                <a class="right" href="?year='.$nextYear.'&month='.$nextMonth.'">Next Month</a>
+                <div class="clear"></div>
+            </div>
+        </nav>';
+
+        return $return;
     }
 
     /**
@@ -2517,5 +2655,3 @@ class Default_PageHelper extends PageHelper {
         return $this->objTranslate;
     }
 }
-
-?>
