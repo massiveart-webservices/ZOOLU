@@ -1118,6 +1118,49 @@ class Page
     }
 
     /**
+     * @param $year
+     * @param $month
+     * @param int $intFieldId
+     * @return array
+     */
+    public function getMonthEvents ($year, $month, $intFieldId = 275)
+    {
+        $eventManager = new Sulu\Events\Manager();
+        $from = strtotime($year . '-' . $month . '-01');
+        $to = strtotime($year . '-' . $month . '-01 + 1 month') - 1;
+        try {
+            $this->getModel();
+            $parentId = $this->getParentId();
+            $category = $this->getFieldValue('entry_category');
+            $label = $this->getFieldValue('entry_label');
+            $depth = $this->getFieldValue('entry_depth');
+            $rows = $this->objModel->loadMonthEvents($this->intRootLevelId, $parentId, $intFieldId, $category, $label, $depth);
+            if (count($rows)) {
+                // Get All Generic Forms
+                foreach ($rows as $row) {
+                    $data = array();
+                    $image = new stdClass();
+                    foreach ($row as $key => $value) {
+                        if (in_array($key, array('fileversion', 'filename', 'filepath', 'filetitle'))) {
+                            $image->$key = $value;
+                        } elseif($key == 'url') {
+                            $data[$key] = $this->getUrlFor($this->core->strLanguageCode, $value);
+                        } else {
+                            $data[$key] = $value;
+                        }
+                    }
+                    $data['image'] = $image;
+                    $event = new Sulu\Events\Event($data);
+                    $eventManager->addEvent($event);
+                }
+            }
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+        return $eventManager->getEvents($from, $to);
+    }
+
+    /**
      * getOverviewPages
      * @param integer $intCategoryId
      * @param integer $intEntryNumber

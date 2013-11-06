@@ -106,20 +106,26 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         try {
             $sysConfig = Zend_Registry::get('SysConfig');
 
-            if (strpos($class,'Zend_') === false && strpos($class,'ZendX_') === false) {
-                /**
-                 * check if given $className exists and file exists
-                 */
-                if (array_key_exists($class, self::$arrClasses)) {
-                    if (file_exists(GLOBAL_ROOT_PATH.$sysConfig->path->root.self::$arrClasses[$class])) {
-                        require_once(GLOBAL_ROOT_PATH.$sysConfig->path->root.self::$arrClasses[$class]);
-                    }
+            if (strpos($class, 'Zend_') === 0 || strpos($class, 'ZendX_') === 0) {
+                // load Zend Class
+                return parent::autoload($class);
+            } else if (strpos($class, 'Sulu\\') === 0) {
+                // load Sulu components
+                $path = GLOBAL_ROOT_PATH . $sysConfig->path->root . 'library/sulu/src/' . ($class = strtr($class, '\\', '/')) . '.php';
+                if (file_exists($path) && is_readable($path)) {
+                    require_once $path;
+
+                    return true;
                 }
             } else {
-                /**
-                 * load Zend Class
-                 */
-                parent::autoload($class);
+                // check if given $className exists and file exists
+                if (array_key_exists($class, self::$arrClasses)) {
+                    if (file_exists(GLOBAL_ROOT_PATH . $sysConfig->path->root . self::$arrClasses[$class])) {
+                        require_once(GLOBAL_ROOT_PATH . $sysConfig->path->root . self::$arrClasses[$class]);
+
+                        return true;
+                    }
+                }
             }
 
             return $class;

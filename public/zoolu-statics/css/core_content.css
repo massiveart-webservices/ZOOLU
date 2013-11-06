@@ -956,6 +956,45 @@ Articles */
     cursor: pointer;
 }
 
+
+/* ----------------
+Datetimes */
+
+.datetimewrapper {
+    background-color: #E4E4E4;
+    border: 1px solid #CCCCCC;
+    padding: 10px 0px 0px 10px;
+}
+
+.datetimewrapper .datetime {
+    position: relative;
+}
+
+.datetimewrapper .datetime-labels .field {
+    padding-bottom: 0px;
+    padding-top: 5px;
+}
+
+.datetime-labels,
+.datetime-fieldgroup {
+    padding-right: 0px;
+}
+
+.datetimewrapper .article-labels .field {
+    padding-bottom: 0;
+}
+
+.datetimewrapper input.checkbox {
+    width: 15px;
+    margin-right: 5px;
+}
+
+.datetimewrapper .datetime-repeat-container .fieldtitle {
+    width: 25%;
+    float: left;
+    display: block;
+}
+
 /* ----------------
 Function Widget */
 

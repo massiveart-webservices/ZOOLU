@@ -268,6 +268,7 @@ class GenericSetup
     const FIELD_TYPE_ID_TAG = 16;
     const FIELD_TYPE_ID_ARTICLES = 34;
     const FIELD_TYPE_ID_IMAGEMAP = 35;
+    const FIELD_TYPE_ID_DATETIMES = 39;
 
     /**
      * @var Core
@@ -753,6 +754,8 @@ class GenericSetup
                                             $objField->setInstanceValue($intRegionInstanceId, $this->getFileFilterObject($objField->name . '_' . $intRegionInstanceId, $arrValues));
                                         } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_ARTICLES) {
                                             $objField->setInstanceValue($intRegionInstanceId, $this->getArticlesObject($objField->name . '_' . $intRegionInstanceId, $arrValues));
+                                        } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_DATETIMES) {
+                                            $objField->setInstanceValue($intRegionInstanceId, $this->getDatetimesObject($objField->name . '_' . $intRegionInstanceId, $arrValues));
                                         } else if (array_key_exists($objField->name . '_' . $intRegionInstanceId, $arrValues)) {
                                             $objField->setInstanceValue($intRegionInstanceId, $arrValues[$objField->name . '_' . $intRegionInstanceId]);
                                         }
@@ -777,6 +780,8 @@ class GenericSetup
                             $objField->setValue($this->getFileFilterObject($objField->name, $arrValues));
                         } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_ARTICLES) {
                             $objField->setValue($this->getArticlesObject($objField->name, $arrValues));
+                        }  else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_DATETIMES) {
+                            $objField->setValue($this->getDatetimesObject($objField->name, $arrValues));
                         } else if (array_key_exists($objField->name, $arrValues)) {
                             $objField->setValue($arrValues[$objField->name]);
                         }
@@ -860,6 +865,66 @@ class GenericSetup
         }
 
         return $articles;
+    }
+
+    /**
+     * getDatetimesObject
+     * @param string $strFieldName
+     * @param array $arrValues
+     * @return $objArticles
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    protected function getDatetimesObject($strFieldName, &$arrValues)
+    {
+        $datetime = new stdClass();
+
+        $datetime->from_date = array_key_exists($strFieldName . '_from_date', $arrValues) && !empty($arrValues[$strFieldName . '_from_date']) ? $arrValues[$strFieldName . '_from_date'] : null;
+        $datetime->from_time = array_key_exists($strFieldName . '_from_time', $arrValues) && !empty($arrValues[$strFieldName . '_from_time']) ? $arrValues[$strFieldName . '_from_time'] . ':00' : null;
+        $datetime->to_time = array_key_exists($strFieldName . '_to_time', $arrValues) && !empty($arrValues[$strFieldName . '_to_time']) ? $arrValues[$strFieldName . '_to_time'] . ':00' : null;
+        $datetime->to_date = array_key_exists($strFieldName . '_to_date', $arrValues) && !empty($arrValues[$strFieldName . '_to_date']) ? $arrValues[$strFieldName . '_to_date'] : null;
+
+        $datetime->fulltime = array_key_exists($strFieldName . '_fulltime', $arrValues) & !empty($arrValues[$strFieldName . '_fulltime']) ? $arrValues[$strFieldName . '_fulltime'] : null;
+
+        $datetime->repeat = array_key_exists($strFieldName . '_repeat', $arrValues) ? $arrValues[$strFieldName . '_repeat'] : null;
+        $datetime->repeat_frequency = null;
+        $datetime->repeat_interval = null;
+        $datetime->repeat_type = null;
+
+        $datetime->repeat_frequency = array_key_exists($strFieldName . '_repeat_frequency', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_frequency']) ? $arrValues[$strFieldName . '_repeat_frequency'] : null;
+
+        $repeat_interval = array(
+            'daily' => array_key_exists($strFieldName . '_repeat_interval_daily', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_daily']) ? $arrValues[$strFieldName . '_repeat_interval_daily'] : null,
+            'weekly' => array_key_exists($strFieldName . '_repeat_interval_weekly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_weekly']) ? $arrValues[$strFieldName . '_repeat_interval_weekly'] : null,
+            'monthly' => array_key_exists($strFieldName . '_repeat_interval_monthly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_monthly']) ? $arrValues[$strFieldName . '_repeat_interval_monthly'] : null,
+            'yearly' => array_key_exists($strFieldName . '_repeat_interval_yearly', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_interval_yearly']) ? $arrValues[$strFieldName . '_repeat_interval_yearly'] : null
+        );
+
+        if (isset($repeat_interval[$datetime->repeat_frequency])) {
+            $datetime->repeat_interval = $repeat_interval[$datetime->repeat_frequency];
+        }
+
+        $repeat_types = array (
+            'weekly' => array_key_exists($strFieldName . '_repeat_weekly_type', $arrValues) ? $arrValues[$strFieldName . '_repeat_weekly_type'] : null,
+            'monthly' => array_key_exists($strFieldName . '_repeat_monthly_type', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_monthly_type']) ? $arrValues[$strFieldName . '_repeat_monthly_type'] : null
+        );
+
+        if (isset($repeat_types[$datetime->repeat_frequency])) {
+            $datetime->repeat_type = $repeat_types[$datetime->repeat_frequency];
+        }
+
+        $datetime->end = array_key_exists($strFieldName . '_repeat_ending', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_ending']) ? $arrValues[$strFieldName . '_repeat_ending'] : null;
+        $datetime->end_date = array_key_exists($strFieldName . '_end_date', $arrValues) && !empty($arrValues[$strFieldName . '_end_date']) ? $arrValues[$strFieldName . '_end_date'] : null;
+
+        if (count($datetime->repeat_type)) {
+            $days = $datetime->repeat_type;
+            $datetime->repeat_type = 0;
+            foreach ($days as $repeat_weekly) {
+                $datetime->repeat_type += $repeat_weekly;
+            }
+        }
+
+        return $datetime;
     }
 
     /**
