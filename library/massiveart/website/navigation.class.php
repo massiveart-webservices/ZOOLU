@@ -206,6 +206,7 @@ class Navigation
                                     'LabelId'     => $this->objPage->getFieldValue('entry_label'),
                                     'SorttypeId'  => $this->objPage->getFieldValue('entry_sorttype'),
                                     'ParentId'    => $this->objPage->getFieldValue('entry_point'),
+                                    
                                 );
                             } elseif ($blnLoadFilter == true) {
                                 $arrFilter = array(
@@ -698,6 +699,7 @@ class Navigation
                                         'LabelId'     => $this->objPage->getFieldValue('entry_label'),
                                         'SorttypeId'  => $this->objPage->getFieldValue('entry_sorttype'),
                                         'ParentId'    => $this->objPage->getFieldValue('entry_point'),
+                                        'IgnoreShowInNavigation' => true
                                     );
                                 } else {
                                     $arrFilter = array(
@@ -705,6 +707,7 @@ class Navigation
                                         'LabelId'     => $objNavigationItem->entry_label,
                                         'SorttypeId'  => $objNavigationItem->entry_sorttype,
                                         'ParentId'    => $objNavigationItem->entry_point,
+                                        'IgnoreShowInNavigation' => true
                                     );
                                 }
                                 if (count($arrFilter) > 0) {
@@ -745,6 +748,7 @@ class Navigation
                                             'LabelId'     => $this->objPage->getFieldValue('entry_label'),
                                             'SorttypeId'  => $this->objPage->getFieldValue('entry_sorttype'),
                                             'ParentId'    => $this->objPage->getFieldValue('entry_point'),
+                                            'IgnoreShowInNavigation' => true
                                         );
                                     } else {
                                         $arrFilter = array(
@@ -752,6 +756,7 @@ class Navigation
                                             'LabelId'     => $objNavigationItem->entry_label,
                                             'SorttypeId'  => $objNavigationItem->entry_sorttype,
                                             'ParentId'    => $objNavigationItem->entry_point,
+                                            'IgnoreShowInNavigation' => true
                                         );
                                     }
                                     if (count($arrFilter) > 0) {
