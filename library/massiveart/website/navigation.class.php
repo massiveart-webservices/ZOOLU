@@ -549,7 +549,13 @@ class Navigation
                  * add to parent tree
                  */
                 if (isset($objTree) && is_object($objTree) && $objTree instanceof NavigationTree) {
-                    $objNavigationTree->addToParentTree($objTree, 'tree_' . $objTree->getId());
+                    if ($objTree->getId() == $arrFilter['ParentId']) {
+                        foreach ($objTree as $objItem) {
+                           $objNavigationTree->addItem($objItem, 'item_' . $objItem->getId());
+                        } 
+                    } else {
+                        $objNavigationTree->addToParentTree($objTree, 'tree_' . $objTree->getId());
+                    }
                 }
             }
 
