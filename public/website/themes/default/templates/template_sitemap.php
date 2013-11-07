@@ -21,15 +21,6 @@
                 <div class="sitemap">
                     <?php get_sitemap(); ?>
                 </div>
-                <?php get_text_blocks('220x', true, true, '660x'); ?>
-                
-                <?php get_internal_links(); ?>
-                
-                <?php get_video('540', '304'); ?>
-                
-                <?php get_image_gallery(8, '140x140', true, true, '660x'); ?>
-                
-                <?php get_documents(); ?>
             </article>
             <aside class="sidebar">
                 <?php get_contact(); ?>
