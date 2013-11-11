@@ -1484,6 +1484,56 @@ Massiveart.Form = Class.create({
     },
 
     /**
+     * addOption
+     */
+    addOption: function(fieldId) {
+        var arrWidgets = [], n, emptyOption, newOption;
+
+        $(fieldId + '_Instances').value.scan(/\[\d*\]/, function(widgets) {
+            arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))
+        });
+        n = Number(arrWidgets[arrWidgets.length - 1]) + 1;
+
+        emptyOption = $(fieldId + '_REPLACE_x');
+        newOption = new Element(emptyOption.tagName);
+
+        newOption.update(emptyOption.innerHTML.gsub(/REPLACE_x/, n));
+
+        newOption['id'] = fieldId + '_' + n;
+        newOption.addClassName(emptyOption.className);
+        arrWidgets.each(function(wId) {
+            if ($('addOption_' + fieldId + '_' + wId)) $('addOption_' + fieldId + '_' + wId).hide();
+            if ($('removeOption_' + fieldId + '_' + wId)) $('removeOption_' + fieldId + '_' + wId).show();
+        });
+
+        new Insertion.Before(emptyOption, newOption);
+
+        $(fieldId + '_Instances').value = $(fieldId + '_Instances').value + '[' + n + ']';
+    },
+
+    /**
+     * removeOption
+     */
+    removeOption: function(fieldId, n) {
+
+        $(fieldId + '_' + n).remove();
+        var regEx = "[" + n + "]", arrWidgets = [];
+
+        $(fieldId + '_Instances').value = $(fieldId + '_Instances').value.replace(regEx, '');
+
+        $(fieldId + '_Instances').value.scan(/\[\d*\]/, function(widgets) {
+            arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))
+        });
+
+        if (arrWidgets.length == 1) {
+            if ($('removeOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1])) $('removeOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1]).hide();
+        }
+
+        if ($('addOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1])) $('addOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1]).show();
+    },
+
+
+    /**
      * removeTinyMCEControl
      */
     removeTinyMCEControl: function (elementId) {
