@@ -60,69 +60,6 @@ class GenericDataHelper_MultipleChoice extends GenericDataHelperAbstract
     private $strType;
 
     /**
-     * save()
-     * @param integer $intElementId
-     * @param string $strType
-     * @param string $strElementId
-     * @param int $intVersion
-     * @author Alexander Schranz <alexander.schranz@massiveart.com>
-     * @version 1.0
-     */
-    public function save($intElementId, $strType, $strElementId = null, $intVersion = null)
-    {
-        try {
-            $this->strType = $strType;
-
-            $this->getModel();
-
-            $this->objModel->deleteMultipleChoice($strElementId, $intVersion, $this->objElement->id);
-
-            if ($this->objElement->getValue() != '') $this->objModel->addMultipleChoice($this->objElement->getValue(), $strElementId, $intVersion, $this->objElement->id);
-
-            $this->load($intElementId, $strType, $strElementId, $intVersion);
-
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-        }
-    }
-
-    /**
-     * load()
-     * @param integer $intElementId
-     * @param string $strType
-     * @param string $strElementId
-     * @param int $intVersion
-     * @author Alexander Schranz <alexander.schranz@massiveart.com>
-     * @version 1.0
-     */
-    public function load($intElementId, $strType, $strElementId = null, $intVersion = null)
-    {
-        try {
-            $this->strType = $strType;
-
-            $this->getModel();
-
-            $objMultipleChoice = $this->objModel->loadMultipleChoice($strElementId, $intVersion, $this->objElement->id);
-
-            if (count($objMultipleChoice) > 0) {
-                $this->objElement->objMultipleChoice = $objMultipleChoice;
-
-                $multipleChoice = new stdClass();
-
-                foreach($objMultipleChoice as $key => $value) {
-                    $multipleChoice->$key = $objMultipleChoice->$key;
-                }
-
-                $this->objElement->setValue($multipleChoice);
-            }
-
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-        }
-    }
-
-
-    /**
      * saveInstanceData
      * @param string $strType
      * @param string $strElementId
