@@ -67,7 +67,7 @@ class PluginLoader extends Zend_Loader_PluginLoader
         'TextDisplay', 'Url', 'InternalLinks', 'Collection',
         'DocumentFilter', 'Video', 'CollapsableInternalLinks', 'LandingPageUrl',
         'SitemapLink', 'Articles', 'Imagemap', 'Seo', 'SnippetPreview', 'SeoKeywords', 'Freetext',
-        'Datetimes'
+        'Datetimes', 'MultipleChoice'
     );
 
     /**

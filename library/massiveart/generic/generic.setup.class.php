@@ -269,6 +269,7 @@ class GenericSetup
     const FIELD_TYPE_ID_ARTICLES = 34;
     const FIELD_TYPE_ID_IMAGEMAP = 35;
     const FIELD_TYPE_ID_DATETIMES = 39;
+    const FIELD_TYPE_ID_MULTIPLECHOICE = 40;
 
     /**
      * @var Core
@@ -756,6 +757,8 @@ class GenericSetup
                                             $objField->setInstanceValue($intRegionInstanceId, $this->getArticlesObject($objField->name . '_' . $intRegionInstanceId, $arrValues));
                                         } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_DATETIMES) {
                                             $objField->setInstanceValue($intRegionInstanceId, $this->getDatetimesObject($objField->name . '_' . $intRegionInstanceId, $arrValues));
+                                        } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_MULTIPLECHOICE) {
+                                            $objField->setInstanceValue($intRegionInstanceId, $this->getMultipleChoiceObject($objField->name . '_' . $intRegionInstanceId, $arrValues));
                                         } else if (array_key_exists($objField->name . '_' . $intRegionInstanceId, $arrValues)) {
                                             $objField->setInstanceValue($intRegionInstanceId, $arrValues[$objField->name . '_' . $intRegionInstanceId]);
                                         }
@@ -780,8 +783,10 @@ class GenericSetup
                             $objField->setValue($this->getFileFilterObject($objField->name, $arrValues));
                         } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_ARTICLES) {
                             $objField->setValue($this->getArticlesObject($objField->name, $arrValues));
-                        }  else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_DATETIMES) {
+                        } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_DATETIMES) {
                             $objField->setValue($this->getDatetimesObject($objField->name, $arrValues));
+                        } else if ((int) $objField->typeId == GenericSetup::FIELD_TYPE_ID_MULTIPLECHOICE) {
+                            $objField->setValue($this->getMultipleChoiceObject($objField->name, $arrValues));
                         } else if (array_key_exists($objField->name, $arrValues)) {
                             $objField->setValue($arrValues[$objField->name]);
                         }
@@ -925,6 +930,32 @@ class GenericSetup
         }
 
         return $datetime;
+    }
+
+    /**
+     * getMultipleChoiceObject
+     * @param string $strFieldName
+     * @param array $arrValues
+     * @return $objMultipleChoice
+     * @author Mathias Ober <mob@massiveart.com>
+     * @version 1.0
+     */
+    protected function getMultipleChoiceObject($strFieldName, &$arrValues)
+    {
+        $multipleChoice = array();
+
+        $arrMultipleChoiceInstanceIds = array_unique(explode('][', trim($arrValues[$strFieldName . '_Instances'], '[]')));
+
+        foreach ($arrMultipleChoiceInstanceIds as $intInstanceId) {
+            $objMultipleChoice = new stdClass();
+
+            $objMultipleChoice->option = array_key_exists($strFieldName . '_option_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_option_' . $intInstanceId] : null;
+            $objMultipleChoice->validity = array_key_exists($strFieldName . '_validity_' . $intInstanceId, $arrValues) ? $arrValues[$strFieldName . '_validity_' . $intInstanceId] : null;
+
+            $multipleChoice[] = $objMultipleChoice;
+        }
+
+        return $multipleChoice;
     }
 
     /**

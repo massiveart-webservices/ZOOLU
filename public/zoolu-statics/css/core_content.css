@@ -995,6 +995,67 @@ Datetimes */
     display: block;
 }
 
+
+/* ----------------
+MultipleChoice */
+
+.multiplechoicewrapper {
+    background-color: #E4E4E4;
+    border: 1px solid #CCCCCC;
+    padding: 10px 10px 0 10px;
+}
+
+.multiplechoicewrapper .option {
+    position: relative;
+}
+
+.multiplechoicewrapper .option .field {
+    padding-bottom: 10px;
+}
+
+.option-labels,
+.option-fieldgroup {
+    padding-right: 25px;
+}
+
+.multiplechoicewrapper .option-labels .field {
+    padding-bottom: 0;
+}
+
+.option-edit-box {
+    position: absolute;
+    width: 36px;
+    top: 4px;
+    right: 0;
+}
+
+.option-remove {
+    background: url('/zoolu-statics/images/icons/icon_remove_2.png') no-repeat center center;
+    height: 22px;
+    width: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+.option-remove.inactive {
+    background: url('/zoolu-statics/images/icons/icon_remove_2_inactive.png') no-repeat center center;
+    height: 22px;
+    width: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+.option-add {
+    background: url('/zoolu-statics/images/icons/icon_add_3.png') no-repeat center center;
+    height: 22px;
+    width: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+
+
+
 /* ----------------
 Function Widget */
 
