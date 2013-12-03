@@ -40,7 +40,7 @@ Massiveart.Form.Contacts = Class.create(Massiveart.Form, {
     /**
      * realSave
      */
-    realSave: function () {
+realSave: function () {
         if ($(this.formId)) {
             // write/save texteditor content to generic form
             if ($$('.texteditor')) {
@@ -54,20 +54,21 @@ Massiveart.Form.Contacts = Class.create(Massiveart.Form, {
             // loader
             this.getFormSaveLoader();
 
-            new Ajax.Updater(myNavigation.genTmpContainer, $(this.formId).readAttribute('action'), {
+            new Ajax.Request($(this.formId).readAttribute('action'), {
                 parameters: serializedForm,
-                evalScripts: true,
+                evalScripts: false,
                 onComplete: function (transport) {
-                    //problem: ajax.updater evalScripts = true was too late
+                    response = transport.responseText;
+                    $(myNavigation.genFormContainer).update(response);
                     transport.responseText.evalScripts();
-
+                    
                     if (this.blnShowFormAlert) {
                         //saved
                         this.getFormSaveSucces();
-
+                           
                         if (myNavigation.isList == true) {
-
-                            $(myNavigation.genListContainer).update($(myNavigation.genTmpContainer).innerHTML);
+                            
+                            $(myNavigation.genListContainer).update(response);
 
                             $(myNavigation.genFormContainer).hide();
                             $(myNavigation.genFormFunctions).hide();
@@ -75,7 +76,7 @@ Massiveart.Form.Contacts = Class.create(Massiveart.Form, {
                             $(myNavigation.genListContainer).show();
                             $(myNavigation.genListFunctions).show();
 
-                            if (myNavigation.rootLevelType == 'member' || myNavigation.rootLevelType == 'company') {
+                            if (myNavigation.rootLevelType == 'member' || myNavigation.rootLevelType == 'company' || myNavigation.rootLevelType == 'subscriber') {
                                 if ($('id') && $F('id') == '' && this.intId != null && this.intId > 0) {
                                     this.sendData();
                                 } else {
@@ -96,7 +97,6 @@ Massiveart.Form.Contacts = Class.create(Massiveart.Form, {
                         }
                     } else {
                         this.getFormSaveError();
-                        $(myNavigation.genFormContainer).update($(myNavigation.genTmpContainer).innerHTML);
                     }
                 }.bind(this)
             });
