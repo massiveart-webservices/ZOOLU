@@ -133,7 +133,6 @@
         <!-- Contact  -->
         <contact>
             <replications>
-                <replication>MailChimp</replication>
             </replications>
             <interest_groups>
                 <interest_group>
@@ -148,60 +147,8 @@
                     <field>language</field>
                     <title>Language</title>
                 </interest_group>
-                <interest_group>
-                    <field>filter</field>
-                    <title>Filter</title>
-                </interest_group>
             </interest_groups>
         </contact>
-
-        <mail_chimp>
-            <api_key>6061ae004265eb4f2e4cdb88d6f7e66d-us2</api_key>
-            <list_id>930f4657db</list_id>
-            <from_email>no-replay@massiveart.com</from_email>
-            <from_name>ZOOLU CMS</from_name>
-            <type>regular</type>
-            <!-- mappings from interests to idFields -->
-            <mappings>
-                <!-- <interests-3949>230</interests-3949> -->
-                <subscribe>632</subscribe>
-                <unsubscribe>633</unsubscribe>
-                <dirty>638</dirty>
-                <clean>639</clean>
-                <hardbounce>648</hardbounce>
-            </mappings>
-            <subscribeaction>http://massiveart.us2.list-manage.com/subscribe?u=a9abbfef6b6b2fe37d2fe4105&amp;id=930f4657db</subscribeaction>
-            <portals>
-                <portal>
-                    <value>8</value>
-                    <name>group[6585][8]</name>
-                    <id>mce-group[6585]-6585-0</id>
-                    <title>Portal</title>
-                </portal>
-            </portals>
-            <languages>
-                <language>
-                    <value>1</value>
-                    <name>group[6577][1]</name>
-                    <id>mce-group[6577]-6577-0</id>
-                    <title>Deutsch</title>
-                </language>
-            </languages>
-            <interests>
-                <interest>
-                    <value>2</value>
-                    <name>group[6581][2]</name>
-                    <id>mce-group[6581]-6581-0</id>
-                    <title>Test1</title>
-                </interest>
-                <interest>
-                    <value>4</value>
-                    <name>group[6581][4]</name>
-                    <id>mce-group[6581]-6581-1</id>
-                    <title>Test2</title>
-                </interest>
-            </interests>
-        </mail_chimp>
 
         <!-- Subscriber  -->
         <subscriber>

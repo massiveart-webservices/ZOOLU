@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ZOOLU - Content Management System
  * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
@@ -39,9 +40,7 @@
  * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  */
-
-class ViewHelper
-{
+class ViewHelper {
 
     /**
      * @var Core
@@ -55,13 +54,11 @@ class ViewHelper
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->core = Zend_Registry::get('Core');
     }
 
-    public function getFilterOutput($objRootLevelTypeFilters, $strCount, $blnShow = true, $value = null)
-    {
+    public function getFilterOutput($objRootLevelTypeFilters, $strCount, $blnShow = true, $value = null) {
         $arrValues = array();
         if (isset($value)) {
             $arrValues = explode(',', $value->value);
@@ -132,8 +129,7 @@ class ViewHelper
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function getFilterList($objRootLevelTypeFilters, $objRootLevelFilter = null, $objRootLevelFilterValues = null)
-    {
+    public function getFilterList($objRootLevelTypeFilters, $objRootLevelFilter = null, $objRootLevelFilterValues = null) {
         $strOutput = '';
         $arrCount = array();
         $initCount = 1;
@@ -161,12 +157,12 @@ class ViewHelper
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function getRootLevelFilterList($objRootLevelFilters)
-    {
+    public function getRootLevelFilterList($objRootLevelFilters) {
         $strOutput = '';
         $strRootLevelType = '';
 
-        $strOutput .= '
+        if (count($objRootLevelFilters) > 0) {
+            $strOutput .= '
       		  <div class="menulink">
                 <div class="menutitle portalnoicon">
                 	<a onclick="myNavigation.selectHardbounces(' . $objRootLevelFilters->current()->idRootLevels . ')" href="#">' . htmlentities($this->core->translate->_('Hardbounces'), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
@@ -174,32 +170,23 @@ class ViewHelper
                 <div class="clear"></div>
               </div>';
 
-        foreach ($objRootLevelFilters as $objRootLevelFilter) {
-            if ($objRootLevelFilter->idRootLevelTypes = $this->core->sysConfig->root_level_types->subscribers) {
-                $strRootLevelType = 'subscriber';
-            }
-            $strOutput .= '
+            foreach ($objRootLevelFilters as $objRootLevelFilter) {
+                if ($objRootLevelFilter->idRootLevelTypes == $this->core->sysConfig->root_level_types->subscribers) {
+                    $strRootLevelType = 'subscriber';
+                }
+                $strOutput .= '
       		  <div id="subnaviitem' . $objRootLevelFilter->id . '" class="menulink">
                 <div class="menutitle portalnoicon">
                 	<a id="subnaviitem' . $objRootLevelFilter->id . '_link" onclick="myNavigation.selectSubscribers(' . $objRootLevelFilter->idRootLevels . ', ' . $objRootLevelFilter->idRootLevelGroups . ', \'\', \'list\', \'' . $strRootLevelType . '\', ' . $objRootLevelFilter->id . ')" href="#">' . htmlentities($objRootLevelFilter->filtertitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
                 </div>
                 <div class="clear"></div>
               </div>';
-//       $strOutput.= '
-//             				<div id="subnaviitem'.$objRootLevelFilter->id.'" class="menulink">
-//                       <div class="portalcontenticon"></div>
-//                       <div class="menutitle">
-//                       	<a id="subnaviitem'.$objRootLevelFilter->id.'_link" onclick="myNavigation.getFilterEditOverlay('.$objRootLevelFilter->idRootLevels.', '.$objRootLevelFilter->idRootLevelTypes.', '.$objRootLevelFilter->id.')" href="#">'.htmlentities($objRootLevelFilter->filtertitle, ENT_COMPAT, $this->core->sysConfig->encoding->default).'</a>  
-//                       </div>
-//                       <div class="clear"></div>
-//                     </div>';
+            }
         }
-
         return $strOutput;
     }
 
-    public function getOverviewFilterTitle()
-    {
+    public function getOverviewFilterTitle() {
         return $this->core->translate->_('Edit_filter');
     }
 
@@ -209,8 +196,7 @@ class ViewHelper
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function getOverviewFilter($objRootLevelFilters)
-    {
+    public function getOverviewFilter($objRootLevelFilters) {
         $strReturn = '';
 
         foreach ($objRootLevelFilters as $objRootLevelFilter) {
@@ -223,6 +209,7 @@ class ViewHelper
         }
         return $strReturn;
     }
+
 }
 
 ?>

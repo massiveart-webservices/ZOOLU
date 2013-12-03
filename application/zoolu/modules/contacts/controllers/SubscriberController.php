@@ -748,6 +748,7 @@ class Contacts_SubscriberController extends AuthControllerAction
              */
             $this->objForm->prepareForm();
 
+            
             if ($this->objForm->isValid($arrFormData)) {
 
                 /**
@@ -861,7 +862,6 @@ class Contacts_SubscriberController extends AuthControllerAction
         $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
         if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-
             $arrFormData = $this->getRequest()->getPost();
             $this->objForm->Setup()->setFieldValues($arrFormData);
 
@@ -874,11 +874,10 @@ class Contacts_SubscriberController extends AuthControllerAction
              * prepare form (add fields and region to the Zend_Form)
              */
             $this->objForm->prepareForm();
-
+            
             if ($this->objForm->isValid($arrFormData)) {
                 $this->objForm->saveFormData();
                 $this->view->blnShowFormAlert = true;
-
                 try {
                     $this->objCommandChain->runCommand('updated', array(
                                                                        'Id'                    => $this->objForm->Setup()->getElementId(),
@@ -1081,7 +1080,6 @@ class Contacts_SubscriberController extends AuthControllerAction
              * add location & unit specific hidden fields
              */
             $this->objForm->addElement('hidden', 'rootLevelId', array('value' => $this->objRequest->getParam("rootLevelId"), 'decorators' => array('Hidden')));
-            //$this->objForm->addElement('hidden', 'parentId', array('value' => $this->objRequest->getParam("parentId"), 'decorators' => array('Hidden')));
 
             /**
              * add currlevel hidden field

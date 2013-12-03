@@ -9,8 +9,7 @@
  */
 
 Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
-
-    initialize: function ($super) {
+    initialize: function($super) {
         // initialize superclass
         $super();
 
@@ -30,13 +29,12 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
 
         this.isList = ((location.href.endsWith('/list')) ? true : false);
     },
-
     /**
      * initItemHover
      */
-    initItemHover: function () {
-        $$('div.hoveritem').each(function (elDiv) {
-            elDiv.observe('mouseover', function (event) {
+    initItemHover: function() {
+        $$('div.hoveritem').each(function(elDiv) {
+            elDiv.observe('mouseover', function(event) {
                 el = Event.element(event);
                 if (el.hasClassName('hoveritem')) {
                     el.addClassName('hover');
@@ -45,7 +43,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 }
             }.bind(this));
 
-            elDiv.observe('mouseout', function (event) {
+            elDiv.observe('mouseout', function(event) {
                 el = Event.element(event);
                 if (el.hasClassName('hoveritem')) {
                     el.removeClassName('hover');
@@ -55,11 +53,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             }.bind(this));
         }.bind(this));
     },
-
     /**
      * getRootLevelTreeStart
      */
-    getRootLevelTreeStart: function () {
+    getRootLevelTreeStart: function() {
         if ($('subnaviitem' + this.rootLevelId + '_link')) {
             $('subnaviitem' + this.rootLevelId + '_link').onclick();
         } else if ($('naviitem' + this.rootLevelId)) {
@@ -67,15 +64,15 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
         }
 
     },
-
     /**
      * getRootLevelList
      */
-    getRootLevelList: function () {
+    getRootLevelList: function() {
 
         // set root level type if undefined
         if (typeof(this.rootLevelType) == 'undefined') {
-            if ($('rootLevelType' + this.rootLevelId)) this.rootLevelType = $F('rootLevelType' + this.rootLevelId);
+            if ($('rootLevelType' + this.rootLevelId))
+                this.rootLevelType = $F('rootLevelType' + this.rootLevelId);
         }
 
         // load list
@@ -86,12 +83,11 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             myList.resetSearch();
         }
     },
-
     /**
      * getModuleRootLevelList
      * @param integer rootLevelId
      */
-    getModuleRootLevelList: function (rootLevelId, rootLevelType) {
+    getModuleRootLevelList: function(rootLevelId, rootLevelType) {
 
         this.rootLevelId = rootLevelId;
         this.rootLevelType = rootLevelType;
@@ -110,14 +106,14 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
         myList.sortOrder = '';
         myList.resetSearch();
     },
-
     /**
      * getAddForm
      */
-    getAddForm: function () {
+    getAddForm: function() {
         this.resetGenContainer();
 
-        if ($('buttondelete')) $('buttondelete').hide();
+        if ($('buttondelete'))
+            $('buttondelete').hide();
 
         myCore.addBusyClass(this.genFormContainer);
         myCore.resetTinyMCE(true);
@@ -134,24 +130,29 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 currLevel: this.currLevel
             },
             evalScripts: true,
-            onComplete: function () {
-                if ($(this.genFormContainer)) $(this.genFormContainer).show();
-                if ($(this.genFormFunctions)) $(this.genFormFunctions).show();
-                if ($(this.genFormSaveContainer)) $(this.genFormSaveContainer).show();
-                if ($('widgetfunctions')) $(this.genFormContainer).scrollTo($('widgetfunctions'));
+            onComplete: function() {
+                if ($(this.genFormContainer))
+                    $(this.genFormContainer).show();
+                if ($(this.genFormFunctions))
+                    $(this.genFormFunctions).show();
+                if ($(this.genFormSaveContainer))
+                    $(this.genFormSaveContainer).show();
+                if ($('widgetfunctions'))
+                    $(this.genFormContainer).scrollTo($('widgetfunctions'));
                 myCore.removeBusyClass(this.genFormContainer);
             }.bind(this)
         });
     },
-
     /**
      * getAddFormList
      */
-    getAddFormList: function () {
+    getAddFormList: function() {
         $(this.genListContainer).hide();
         $(this.genListFunctions).hide();
-        if ($('sendDataLink')) $('sendDataLink').hide();
-        if ($('buttondelete')) $('buttondelete').hide();
+        if ($('sendDataLink'))
+            $('sendDataLink').hide();
+        if ($('buttondelete'))
+            $('buttondelete').hide();
 
         myCore.resetTinyMCE(true);
 
@@ -160,20 +161,20 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 rootLevelId: this.rootLevelId
             },
             evalScripts: true,
-            onComplete: function () {
+            onComplete: function() {
                 $(this.genFormContainer).show();
                 $(this.genFormFunctions).show();
                 $(this.genFormContainer).scrollTo($('widgetfunctions'));
             }.bind(this)
         });
     },
-
     /**
      * addUnit
      * @param integer currLevel
      */
-    addUnit: function (currLevel) {
-        if ($('buttondelete')) $('buttondelete').hide();
+    addUnit: function(currLevel) {
+        if ($('buttondelete'))
+            $('buttondelete').hide();
         myNavigation.showFormContainer();
         $(this.genListContainer).hide();
         $(this.genListFunctions).hide();
@@ -192,20 +193,20 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 currLevel: currLevel
             },
             evalScripts: true,
-            onComplete: function () {
+            onComplete: function() {
                 $('levelmenu' + currLevel).hide();
                 $('addmenu' + currLevel).fade({duration: 0.5});
                 myCore.removeBusyClass(this.genFormContainer);
             }.bind(this)
         });
     },
-
     /**
      * addContact
      * @param integer currLevel
      */
-    addContact: function (currLevel) {
-        if ($('buttondelete')) $('buttondelete').hide();
+    addContact: function(currLevel) {
+        if ($('buttondelete'))
+            $('buttondelete').hide();
         myNavigation.showFormContainer();
 
         $(this.genFormContainer).innerHTML = '';
@@ -223,25 +224,25 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 currLevel: currLevel
             },
             evalScripts: true,
-            onComplete: function () {
+            onComplete: function() {
                 $('levelmenu' + currLevel).hide();
                 $('addmenu' + currLevel).fade({duration: 0.5});
                 myCore.removeBusyClass(this.genFormContainer);
             }.bind(this)
         });
     },
-
     /**
      * getEditForm
      * @param integer itemId
      */
-    getEditForm: function (itemId, elType, formId, version) {
+    getEditForm: function(itemId, elType, formId, version) {
         $(this.genFormContainer).innerHTML = '';
 
         this.resetGenContainer();
 
         var element = elType + itemId;
-        if ($(element)) this.currItemId = itemId;
+        if ($(element))
+            this.currItemId = itemId;
 
         var typeEditPath = '';
         switch (elType) {
@@ -287,15 +288,19 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
         if (this.levelArray.indexOf(currLevel) != -1 && elType == this.constContact) {
             var levelPos = this.levelArray.indexOf(currLevel) + 1;
             for (var i = levelPos; i < this.levelArray.length; i++) {
-                if ($('navlevel' + this.levelArray[i])) $('navlevel' + this.levelArray[i]).innerHTML = '';
+                if ($('navlevel' + this.levelArray[i]))
+                    $('navlevel' + this.levelArray[i]).innerHTML = '';
             }
         }
 
         this.showFormContainer();
 
-        if ($('buttondelete')) $('buttondelete').show();
-        if ($(this.genFormContainer)) $(this.genFormContainer).show();
-        if ($(this.genFormSaveContainer)) $(this.genFormSaveContainer).show();
+        if ($('buttondelete'))
+            $('buttondelete').show();
+        if ($(this.genFormContainer))
+            $(this.genFormContainer).show();
+        if ($(this.genFormSaveContainer))
+            $(this.genFormSaveContainer).show();
 
         myCore.addBusyClass(this.genFormContainer);
         myCore.resetTinyMCE(true);
@@ -315,28 +320,29 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 parentId: parentId
             },
             evalScripts: true,
-            onComplete: function () {
+            onComplete: function() {
                 myCore.removeBusyClass(this.genFormContainer);
                 myForm.loadFileFieldsContent('media');
                 myForm.loadFileFieldsContent('document');
             }.bind(this)
         });
     },
-
     /**
      * getEditFormList
      * @param integer itemId
      */
-    getEditFormList: function (itemId, elType, formId, version) {
+    getEditFormList: function(itemId, elType, formId, version) {
         version = (version == null) ? 1 : version;
 
         $(this.genListContainer).hide();
         $(this.genListFunctions).hide();
-        if ($('sendDataLink')) $('sendDataLink').hide();
+        if ($('sendDataLink'))
+            $('sendDataLink').hide();
 
         myCore.resetTinyMCE(true);
 
-        if ($('buttondelete')) $('buttondelete').show();
+        if ($('buttondelete'))
+            $('buttondelete').show();
 
         new Ajax.Updater(this.genFormContainer, this.constBasePath + '/' + elType + '/editform', {
             parameters: {
@@ -347,7 +353,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 rootLevelFilterId: $('rootLevelFilterListId') ? $('rootLevelFilterListId').getValue() : null
             },
             evalScripts: true,
-            onComplete: function () {
+            onComplete: function() {
                 $(this.genFormContainer).show();
                 $(this.genFormFunctions).show();
                 $(this.genFormContainer).scrollTo($('widgetfunctions'));
@@ -358,19 +364,21 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 // show special link to send data to user per click
                 if (elType == 'member' || elType == 'company') {
                     if ($('id') && $F('id') > 0) {
-                        if ($('sendDataLink')) $('sendDataLink').show();
+                        if ($('sendDataLink'))
+                            $('sendDataLink').show();
                     }
                 }
             }.bind(this)
         });
     },
-
     /**
      * selectContacts
      */
-    selectContacts: function (rootLevelId, rootLevelGroupId, url, makeRequest, viewType, rootLevelType) {
-        if ($('importList')) $('importList').hide();
-        if ($('exportList')) $('exportList').hide();
+    selectContacts: function(rootLevelId, rootLevelGroupId, url, makeRequest, viewType, rootLevelType) {
+        if ($('importList'))
+            $('importList').hide();
+        if ($('exportList'))
+            $('exportList').hide();
 
         if (typeof(viewType) == 'undefined') {
             viewType = 'tree';
@@ -408,7 +416,8 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 this.preSelectedSubNaviItem = 'subnaviitem' + rootLevelId;
             }
 
-            if ($('divNaviCenterInner')) $('divNaviCenterInner').innerHTML = '';
+            if ($('divNaviCenterInner'))
+                $('divNaviCenterInner').innerHTML = '';
             this.levelArray = [];
 
             if (makeRequest == true) {
@@ -417,14 +426,16 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
 
                 if (Prototype.Browser.IE) {
                     newNavHeight = $('divNaviCenter').getHeight();
-                    $$('.navlevel').each(function (elDiv) {
-                        if ((newNavHeight - 42) > 0) $(elDiv).setStyle({height: (newNavHeight - 42) + 'px'});
+                    $$('.navlevel').each(function(elDiv) {
+                        if ((newNavHeight - 42) > 0)
+                            $(elDiv).setStyle({height: (newNavHeight - 42) + 'px'});
                     });
                 }
                 else if (Prototype.Browser.WebKit) {
                     newNavHeight = $('divNaviCenter').getHeight();
-                    $$('.navlevel').each(function (elDiv) {
-                        if ((newNavHeight - 40) > 0) $(elDiv).setStyle({height: (newNavHeight - 40) + 'px'});
+                    $$('.navlevel').each(function(elDiv) {
+                        if ((newNavHeight - 40) > 0)
+                            $(elDiv).setStyle({height: (newNavHeight - 40) + 'px'});
                     });
                 }
 
@@ -439,7 +450,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                         currLevel: this.currLevel
                     },
                     evalScripts: true,
-                    onComplete: function () {
+                    onComplete: function() {
                         myCore.removeBusyClass('navlevel' + this.currLevel);
                         this.initItemHover();
                         this.initAddMenuHover();
@@ -449,13 +460,14 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             }
         }
     },
-
     /**
      * selectLocations
      */
-    selectLocations: function (rootLevelId, rootLevelGroupId, url, makeRequest, viewType, rootLevelType) {
-        if ($('importList')) $('importList').hide();
-        if ($('exportList')) $('exportList').hide();
+    selectLocations: function(rootLevelId, rootLevelGroupId, url, makeRequest, viewType, rootLevelType) {
+        if ($('importList'))
+            $('importList').hide();
+        if ($('exportList'))
+            $('exportList').hide();
 
         if (typeof(viewType) == 'undefined') {
             viewType = 'tree';
@@ -493,7 +505,8 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             this.rootLevelGroupId = rootLevelGroupId;
             this.rootLevelType = rootLevelType;
 
-            if ($('divNaviCenterInner')) $('divNaviCenterInner').innerHTML = '';
+            if ($('divNaviCenterInner'))
+                $('divNaviCenterInner').innerHTML = '';
             this.levelArray = [];
 
             if (makeRequest == true) {
@@ -502,14 +515,16 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
 
                 if (Prototype.Browser.IE) {
                     newNavHeight = $('divNaviCenter').getHeight();
-                    $$('.navlevel').each(function (elDiv) {
-                        if ((newNavHeight - 42) > 0) $(elDiv).setStyle({height: (newNavHeight - 42) + 'px'});
+                    $$('.navlevel').each(function(elDiv) {
+                        if ((newNavHeight - 42) > 0)
+                            $(elDiv).setStyle({height: (newNavHeight - 42) + 'px'});
                     });
                 }
                 else if (Prototype.Browser.WebKit) {
                     newNavHeight = $('divNaviCenter').getHeight();
-                    $$('.navlevel').each(function (elDiv) {
-                        if ((newNavHeight - 40) > 0) $(elDiv).setStyle({height: (newNavHeight - 40) + 'px'});
+                    $$('.navlevel').each(function(elDiv) {
+                        if ((newNavHeight - 40) > 0)
+                            $(elDiv).setStyle({height: (newNavHeight - 40) + 'px'});
                     });
                 }
 
@@ -523,7 +538,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                         rootLevelTypeId: this.rootLevelTypeId,
                         currLevel: this.currLevel},
                     evalScripts: true,
-                    onComplete: function () {
+                    onComplete: function() {
                         myCore.removeBusyClass('navlevel' + this.currLevel);
                         this.initItemHover();
                         this.initAddMenuHover();
@@ -533,11 +548,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             }
         }
     },
-
     /**
      * selectMembers
      */
-    selectMembers: function (rootLevelId, rootLevelGroupId, url, viewType, rootLevelType) {
+    selectMembers: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType) {
         if (typeof(viewType) == 'undefined') {
             viewType = 'tree';
         }
@@ -572,11 +586,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             myList.resetSearch();
         }
     },
-
     /**
      * selectCompanies
      */
-    selectCompanies: function (rootLevelId, rootLevelGroupId, url, viewType, rootLevelType) {
+    selectCompanies: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType) {
         if (typeof(viewType) == 'undefined') {
             viewType = 'tree';
         }
@@ -611,14 +624,15 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             myList.resetSearch();
         }
     },
-
     /**
      * selectSubscribers
      */
-    selectSubscribers: function (rootLevelId, rootLevelGroupId, url, viewType, rootLevelType, rootLevelFilter) {
+    selectSubscribers: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType, rootLevelFilter) {
         if (!this.actionMenu || this.actionMenu.isOpen == false) {
-            if ($('importList')) $('importList').show();
-            if ($('exportList')) $('exportList').show();
+            if ($('importList'))
+                $('importList').show();
+            if ($('exportList'))
+                $('exportList').show();
 
             if (typeof(viewType) == 'undefined') {
                 viewType = 'list';
@@ -658,7 +672,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                         rootLevelId: this.rootLevelId
                     },
                     evalScripts: true,
-                    onComplete: function () {
+                    onComplete: function() {
 
                     }.bind(this)
                 });
@@ -673,11 +687,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             }
         }
     },
-
     /**
      * selectCustomers
      */
-    selectCustomers: function (rootLevelId, rootLevelGroupId, url, viewType, rootLevelType) {
+    selectCustomers: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType) {
         if (typeof(viewType) == 'undefined') {
             viewType = 'tree';
         }
@@ -711,14 +724,15 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             myList.resetSearch();
         }
     },
-
     /**
      * selectSubscribers
      */
-    selectHardbounces: function (rootLevelId) {
+    selectHardbounces: function(rootLevelId) {
         if (!this.actionMenu || this.actionMenu.isOpen == false) {
-            if ($('importList')) $('importList').show();
-            if ($('exportList')) $('exportList').show();
+            if ($('importList'))
+                $('importList').show();
+            if ($('exportList'))
+                $('exportList').show();
 
             if (typeof(viewType) == 'undefined') {
                 viewType = 'list';
@@ -753,7 +767,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                     rootLevelId: this.rootLevelId
                 },
                 evalScripts: true,
-                onComplete: function () {
+                onComplete: function() {
 
                 }.bind(this)
             });
@@ -763,11 +777,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             myList.getListPage(1, 0, true);
         }
     },
-
     /**
      * changeViewType
      */
-    changeViewType: function (rootLevelId, rootLevelGroupId, url) {
+    changeViewType: function(rootLevelId, rootLevelGroupId, url) {
         // select root level with layout change
 
         var myForm = document.createElement('form');
@@ -789,11 +802,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
         document.body.appendChild(myForm);
         myForm.submit();
     },
-
     /**
      * selectNavigationItem
      */
-    selectNavigationItem: function (parentLevel, elType, itemId, categoryTypeId) {
+    selectNavigationItem: function(parentLevel, elType, itemId, categoryTypeId) {
         $(this.genFormContainer).hide();
         $(this.genFormSaveContainer).hide();
 
@@ -836,20 +848,21 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
 
             var levelPos = this.levelArray.indexOf(this.currLevel);
             for (var i = levelPos; i < this.levelArray.length; i++) {
-                if ($('navlevel' + this.levelArray[i])) $('navlevel' + this.levelArray[i]).innerHTML = '';
+                if ($('navlevel' + this.levelArray[i]))
+                    $('navlevel' + this.levelArray[i]).innerHTML = '';
             }
 
         }
 
         if (Prototype.Browser.IE) {
             newNavHeight = $('divNaviCenter').getHeight();
-            $$('.navlevel').each(function (elDiv) {
+            $$('.navlevel').each(function(elDiv) {
                 $(elDiv).setStyle({height: (newNavHeight - 42) + 'px'});
             });
         }
         else if (Prototype.Browser.WebKit) {
             newNavHeight = $('divNaviCenter').getHeight();
-            $$('.navlevel').each(function (elDiv) {
+            $$('.navlevel').each(function(elDiv) {
                 $(elDiv).setStyle({height: (newNavHeight - 40) + 'px'});
             });
         }
@@ -862,7 +875,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 categoryTypeId: categoryTypeId
             },
             evalScripts: true,
-            onComplete: function () {
+            onComplete: function() {
                 this.initItemHover();
                 this.initAddMenuHover();
                 myCore.removeBusyClass('navlevel' + this.currLevel);
@@ -870,12 +883,11 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             }.bind(this)
         });
     },
-
     /**
      * updateNavigationLevel
      * @param integer level, integer parentItemId
      */
-    updateNavigationLevel: function (level, parentItemId) {
+    updateNavigationLevel: function(level, parentItemId) {
 
         var elementId;
         var currLevel;
@@ -885,18 +897,22 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
         if (typeof(level) != 'undefined' && level != '') {
             currLevel = level;
         } else {
-            if ($('currLevel')) currLevel = $F('currLevel');
+            if ($('currLevel'))
+                currLevel = $F('currLevel');
         }
         this.currLevel = currLevel;
 
         if (typeof(parentItemId) != 'undefined' && parentItemId != '') {
             parentId = parentItemId;
         } else {
-            if ($('parentId')) parentId = $F('parentId');
+            if ($('parentId'))
+                parentId = $F('parentId');
         }
 
-        if ($('elementType') && $F('elementType') != '') elementType = $F('elementType');
-        if ($('id') && $F('id')) elementId = $F('id');
+        if ($('elementType') && $F('elementType') != '')
+            elementType = $F('elementType');
+        if ($('id') && $F('id'))
+            elementId = $F('id');
 
         var strAjaxAction = '';
         var strParams = '';
@@ -912,7 +928,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             new Ajax.Updater('navlevel' + currLevel, strAjaxAction, {
                 parameters: strParams,
                 evalScripts: true,
-                onComplete: function () {
+                onComplete: function() {
                     new Effect.Highlight('navlevel' + currLevel, {startcolor: '#ffd300', endcolor: '#ffffff'});
 
                     if (elementType != '' && elementId != '' && $(elementType + elementId)) {
@@ -937,7 +953,8 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                         if (this.levelArray.indexOf(currLevel) != -1 && elType == this.constPage) {
                             var levelPos = this.levelArray.indexOf(currLevel) + 1;
                             for (var i = levelPos; i < this.levelArray.length; i++) {
-                                if ($('navlevel' + this.levelArray[i])) $('navlevel' + this.levelArray[i]).innerHTML = '';
+                                if ($('navlevel' + this.levelArray[i]))
+                                    $('navlevel' + this.levelArray[i]).innerHTML = '';
                             }
                         }
                         if (elementType == this.constFolder) {
@@ -950,24 +967,23 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             });
         }
     },
-
     /**
      * getRootLevelActions
      */
-    getRootLevelActions: function (rootLevelId, rootLevelTypeId, gear) {
+    getRootLevelActions: function(rootLevelId, rootLevelTypeId, gear) {
         if (!this.actionMenu) {
-            this.actionMenu = new Massiveart.UI.Menu.Overlap({ items: ['<a href="#" onclick="myNavigation.getFilterAddOverlay(' + rootLevelId + ', ' + rootLevelTypeId + '); return false;">' + myCore.translate.Add_new_Filter + '</a>',
-                '<a href="#" onclick="myNavigation.getFilterOverviewOverlay(' + rootLevelId + ', ' + rootLevelTypeId + '); return false;">' + myCore.translate.Edit_Filter + '</a>'] });
+            this.actionMenu = new Massiveart.UI.Menu.Overlap({items: ['<a href="#" onclick="myNavigation.getFilterAddOverlay(' + rootLevelId + ', ' + rootLevelTypeId + '); return false;">' + myCore.translate.Add_new_Filter + '</a>',
+                    '<a href="#" onclick="myNavigation.getFilterOverviewOverlay(' + rootLevelId + ', ' + rootLevelTypeId + '); return false;">' + myCore.translate.Edit_Filter + '</a>']});
         }
 
         this.actionMenu.open(gear.viewportOffset());
     },
-
     /**
      * getFilterAddOverlay
      */
-    getFilterAddOverlay: function (rootLevelId, rootLevelTypeId) {
-        if ($('overlayBlack75')) $('overlayBlack75').show();
+    getFilterAddOverlay: function(rootLevelId, rootLevelTypeId) {
+        if ($('overlayBlack75'))
+            $('overlayBlack75').show();
         if ($('overlayFilterWrapper')) {
             myCore.putCenter('overlayFilterWrapper');
             $('overlayFilterWrapper').show();
@@ -981,19 +997,19 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                         rootLevelTypeId: rootLevelTypeId
                     },
                     evalScripts: true,
-                    onComplete: function () {
+                    onComplete: function() {
                         myCore.removeBusyClass('overlayFilterContent');
                     }.bind(this)
                 });
             }
         }
     },
-
     /**
      * getFilterOverviewOverlay
      */
-    getFilterOverviewOverlay: function (rootLevelId) {
-        if ($('overlayBlack75')) $('overlayBlack75').show();
+    getFilterOverviewOverlay: function(rootLevelId) {
+        if ($('overlayBlack75'))
+            $('overlayBlack75').show();
         if ($('overlayGenContentWrapper')) {
             myCore.putCenter('overlayGenContentWrapper');
             $('overlayGenContentWrapper').show();
@@ -1005,7 +1021,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                         rootLevelId: rootLevelId
                     },
                     evalScripts: true,
-                    onComplete: function () {
+                    onComplete: function() {
                         myCore.putCenter('overlayGenContentWrapper');
                         myCore.removeBusyClass('overlayGenContent');
                     }.bind(this)
@@ -1013,13 +1029,13 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             }
         }
     },
-
     /**
      * getFilterEditOverlay
      */
-    getFilterEditOverlay: function (rootLevelId, rootLevelTypeId, rootLevelFilterId) {
+    getFilterEditOverlay: function(rootLevelId, rootLevelTypeId, rootLevelFilterId) {
         $('overlayGenContentWrapper').hide();
-        if ($('overlayBlack75')) $('overlayBlack75').show();
+        if ($('overlayBlack75'))
+            $('overlayBlack75').show();
         if ($('overlayFilterWrapper')) {
             myCore.putCenter('overlayFilterWrapper');
             $('overlayFilterWrapper').show();
@@ -1034,7 +1050,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                         rootLevelFilterId: rootLevelFilterId
                     },
                     evalScripts: true,
-                    onComplete: function () {
+                    onComplete: function() {
                         myCore.removeBusyClass('overlayFilterContent');
                         myFilter.addLine();
                     }.bind(this)
