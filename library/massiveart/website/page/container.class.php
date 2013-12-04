@@ -56,6 +56,8 @@ class PageContainer
 
     protected $arrEntries = array();
 
+    protected $properties = array();
+
     /**
      * construct
      * @author Cornelius Hansjakob <cha@massiveart.com>
@@ -278,6 +280,42 @@ class PageContainer
     public function getEntries()
     {
         return $this->arrEntries;
+    }
+
+    /**
+     * setProperty
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function setProperty($key, $value)
+    {
+        $this->properties[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * unsetProperty
+     * @param $key
+     * @return $this
+     */
+    public function unsetProperty($key)
+    {
+        unset($this->properties[$key]);
+        return $this;
+    }
+
+    /**
+     * getProperty
+     * @param $key
+     * @return mixed
+     */
+    public function getProperty($key)
+    {
+        if (isset($this->properties[$key])) {
+            return $this->properties[$key];
+        }
+        return null;
     }
 }
 
