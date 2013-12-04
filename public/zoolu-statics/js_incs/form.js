@@ -2284,7 +2284,7 @@ Massiveart.Form = Class.create({
                 dstLanguage: dstLanguage,
                 formId: 'DEFAULT_FOLDER',
                 formVersion: $('formVersion').value
-            },
+            }
         });
     },
 
