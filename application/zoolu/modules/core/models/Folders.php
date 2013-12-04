@@ -995,7 +995,7 @@ class Model_Folders extends ModelAbstract
         if ($intSortTypeId > 0 && $intSortTypeId != '') {
             switch ($intSortTypeId) {
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $strSqlOrderBy = ' ORDER BY pages.sortPosition ' . $strSortOrder . ', pages.sortTimestamp ' . (($strSortOrder == 'DESC') ? 'ASC' : 'DESC');
+                    $strSqlOrderBy = ' ORDER BY folders.lft ' . $strSortOrder . ', pages.sortPosition ' . $strSortOrder . ', pages.sortTimestamp ' . (($strSortOrder == 'DESC') ? 'ASC' : 'DESC');
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
                     $strSqlOrderBy = ' ORDER BY pageProperties.created ' . $strSortOrder;
@@ -1157,7 +1157,7 @@ class Model_Folders extends ModelAbstract
         if ($intSortTypeId > 0 && $intSortTypeId != '') {
             switch ($intSortTypeId) {
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $strSqlOrderBy = ' ORDER BY pages.sortPosition ' . $strSortOrder . ', pages.sortTimestamp ' . (($strSortOrder == 'DESC') ? 'ASC' : 'DESC');
+                    $strSqlOrderBy = ' ORDER BY folders.lft ' . $strSortOrder . ', pages.sortPosition ' . $strSortOrder . ', pages.sortTimestamp ' . (($strSortOrder == 'DESC') ? 'ASC' : 'DESC');
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
                     $strSqlOrderBy = ' ORDER BY pageProperties.created ' . $strSortOrder;
@@ -1608,7 +1608,7 @@ class Model_Folders extends ModelAbstract
 
             switch($arrFilterOptions['SortType']){
                 case $this->core->sysConfig->sort->types->manual_sort->id:
-                    $objSelect->order(array('folders.sortPosition'.$strSortOrder, 'globals.sortPosition'.$strSortOrder, 'globals.sortTimestamp'.(($strSortOrder == 'DESC') ? ' ASC' : ' DESC')));
+                    $objSelect->order(array('folders.lft'.$strSortOrder, 'globals.sortPosition'.$strSortOrder, 'globals.sortTimestamp'.(($strSortOrder == 'DESC') ? ' ASC' : ' DESC')));
                     break;
                 case $this->core->sysConfig->sort->types->created->id:
           $objSelect->order(array('globalProperties.created'.$strSortOrder));
