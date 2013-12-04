@@ -287,15 +287,24 @@ class Model_Customers
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function updateGroups($arrData, $intCustomerId)
-    {
-        $strWhere = $this->getCustomerGroupTable()->getAdapter()->quoteInto('idCustomers = ?', $intCustomerId);
-        $this->getCustomerGroupTable()->delete($strWhere);
-
-        foreach($arrData as $intGroupId) {
+    public function updateGroups($arrData, $intCustomerId) {
+        $this->deleteGroups($intCustomerId);
+        foreach ($arrData as $intGroupId) {
             $arrInsertData = array('idCustomers' => $intCustomerId, 'idGroups' => $intGroupId);
             $this->getCustomerGroupTable()->insert($arrInsertData);
         }
+    }
+
+    /**
+     * addAddress
+     * @param $intCustomerId integer
+     * @return mixed
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteGroups ($intCustomerId) {
+        $strWhere = $this->getCustomerGroupTable()->getAdapter()->quoteInto('idCustomers = ?', $intCustomerId);
+        $this->getCustomerGroupTable()->delete($strWhere);
     }
 
     /**

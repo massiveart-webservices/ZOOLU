@@ -328,6 +328,8 @@ class Contacts_CustomerController extends AuthControllerAction
                     
                     if (count($this->getRequest()->getParam('group')) > 0) {
                         $this->getModelCustomers()->updateGroups($this->getRequest()->getParam('group'), $intCustomerId);
+                    } else {
+                        $this->getModelCustomers()->deleteGroups($intCustomerId);
                     }
 
                     $this->_forward('list', 'customer', 'contacts');
