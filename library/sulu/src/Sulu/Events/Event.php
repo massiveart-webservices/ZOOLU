@@ -125,8 +125,8 @@ class Event {
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param int $from
+     * @param int $to
      * @param bool $forceGenerate
      * @return mixed
      */
@@ -139,8 +139,8 @@ class Event {
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param int $from
+     * @param int $to
      * @return array
      */
     protected function generateDates ($from, $to)
@@ -161,8 +161,8 @@ class Event {
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param int $from
+     * @param int $to
      * @return \DatePeriod
      */
     protected function getFromToPeriod ($from, $to)
@@ -182,8 +182,7 @@ class Event {
     {
         if ($this->repeat) {
             if ($this->isInRange($date->getTimestamp())) {
-                $frequency = $this->getInterval();
-                return $this->isDateInFrequencyInterval($date, $frequency);
+                return $this->isDateInFrequencyInterval($date);
             }
         } else {
             if ($this->isFromDate($date)) {
@@ -195,24 +194,23 @@ class Event {
 
     /**
      * @param \Datetime $date
-     * @param int $interval
      * @return bool
      */
-    protected function isDateInFrequencyInterval($date, $interval)
+    protected function isDateInFrequencyInterval($date)
     {
         switch ($this->repeatFrequency)
         {
             case 'daily':
-                return $this->isDateInFrequencyIntervalDaily ($date, $interval);
+                return $this->isDateInFrequencyIntervalDaily ($date);
                 break;
             case 'weekly':
-                return $this->isDateInFrequencyIntervalWeekly($date, $interval);
+                return $this->isDateInFrequencyIntervalWeekly($date);
                 break;
             case 'monthly':
-                return $this->isDateInFrequencyIntervalMonthly($date, $interval);
+                return $this->isDateInFrequencyIntervalMonthly($date);
                 break;
             case 'yearly':
-                return $this->isDateInFrequencyIntervalYearly($date, $interval);
+                return $this->isDateInFrequencyIntervalYearly($date);
                 break;
         }
         return false;
@@ -220,13 +218,12 @@ class Event {
 
     /**
      * @param \Datetime $date
-     * @param $interval
      * @return bool
      */
-    protected function isDateInFrequencyIntervalDaily ($date, $interval)
+    protected function isDateInFrequencyIntervalDaily ($date)
     {
-        $intervalSeconds = $date->getTimestamp() - $this->fromDate->getTimestamp();
-        if ( $intervalSeconds % $interval == 0 ) {
+        $diffDays = intval($date->diff($this->fromDate)->format("%a"));
+        if ( $diffDays % $this->repeatInterval == 0 ) {
             return true;
         }
        return false;
@@ -234,10 +231,9 @@ class Event {
 
     /**
      * @param \Datetime $date
-     * @param $interval
      * @return bool
      */
-    protected function isDateInFrequencyIntervalWeekly($date, $interval)
+    protected function isDateInFrequencyIntervalWeekly($date)
     {
         $bitWiseDayOfWeek = Event::$weekdays[$date->format('w')];
         if ($bitWiseDayOfWeek & $this->repeatType) {
@@ -250,8 +246,8 @@ class Event {
             }
             $from->modify($symbol . $dayDifference . ' day');
 
-            $intervalSeconds = $date->getTimestamp() - $from->getTimestamp();
-            if ( $intervalSeconds % $interval == 0 ) {
+            $diffDays = intval($date->diff($this->fromDate)->format("%a"));
+            if ( $diffDays % ($this->repeatInterval * 7) == 0 ) {
                 return true;
             }
         }
@@ -260,13 +256,12 @@ class Event {
 
     /**
      * @param \Datetime $date
-     * @param $interval
      * @return bool
      */
-    protected function isDateInFrequencyIntervalMonthly($date, $interval)
+    protected function isDateInFrequencyIntervalMonthly($date)
     {
         $difference = $this->fromDate->diff($date);
-        if (intval($difference->format('m')) % $interval == 0) {
+        if (intval($difference->format('m')) % $this->repeatInterval == 0) {
             switch ($this->repeatType) {
                 case 2:
                     if ($date->format('D') == $this->fromDate->format('D')
@@ -296,13 +291,12 @@ class Event {
 
     /**
      * @param \Datetime $date
-     * @param $interval
      * @return bool
      */
-    protected function isDateInFrequencyIntervalYearly($date, $interval)
+    protected function isDateInFrequencyIntervalYearly($date)
     {
         $difference = $this->fromDate->diff($date);
-        if (intval($difference->format('Y')) % $interval == 0
+        if (intval($difference->format('Y')) % $this->repeatInterval == 0
             && $date->format('m') == $this->fromDate->format('m')
             && $date->format('d') == $this->fromDate->format('d')) {
             return true;
@@ -311,25 +305,8 @@ class Event {
     }
 
     /**
-     * @return int
-     */
-    protected function getInterval()
-    {
-        $interval = $this->repeatInterval;
-        switch ($this->repeatFrequency) {
-            case 'daily':
-                $interval = $interval * 86400;
-                break;
-            case 'weekly':
-                $interval = $interval * 604800;
-                break;
-        }
-        return $interval;
-    }
-
-    /**
-     * @param string $from
-     * @param null|string $to
+     * @param int $from
+     * @param null|int $to
      * @return bool
      */
     protected function isInRange($from, $to = null)
@@ -368,11 +345,15 @@ class Event {
             if (method_exists($this, $setMethod)) {
                 $this->$setMethod($value);
             } else {
-                $this->properties[$newKey] = $value;
+                $this->properties[$key] = $value;
             }
         }
     }
 
+    /**
+     * @param $string
+     * @return string
+     */
     protected function underlineToCamelCase($string)
     {
         $stringParts = explode('_', $string);
