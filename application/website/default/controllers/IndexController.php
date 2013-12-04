@@ -385,11 +385,7 @@ class IndexController extends WebControllerAction
                                 $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
                             } else {
                                 if (!$objNavigation->checkZonePrivileges()) {
-                                    $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-                                    $this->getResponse()->setHeader('Status', '403 Forbidden');
-                                    $this->getResponse()->setHttpResponseCode(403);
-                                    $this->strRenderScript = 'error-403.php';
-                                    $this->blnCachingStart = false;
+                                    throw new ForbiddenException('User has no access to this folder');
                                 }
                             }
                         }
@@ -457,6 +453,14 @@ class IndexController extends WebControllerAction
             $this->getResponse()->setHeader('Status', '404 Not Found');
             $this->getResponse()->setHttpResponseCode(404);
             $this->renderScript('error-404.php');
+            $this->blnCachingStart = false;
+            $this->core->logger->warn($e->getMessage());
+        } catch (ForbiddenException $e) {
+            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
+            $this->getResponse()->setHeader('HTTP/1.1', '403 Not Found');
+            $this->getResponse()->setHeader('Status', '403 Not Found');
+            $this->getResponse()->setHttpResponseCode(403);
+            $this->renderScript('error-403.php');
             $this->blnCachingStart = false;
             $this->core->logger->warn($e->getMessage());
         }
