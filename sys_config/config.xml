@@ -98,6 +98,8 @@
         <cache>
             <page>true</page>
             <generic_form_structure>true</generic_form_structure>
+            <options>all</options><!-- all/groups/customer -->
+            <mobile_seperate>false</mobile_seperate>
         </cache>
 
         <!-- DATABASE -->
@@ -1176,7 +1178,7 @@
 
         <!-- CACHE -->
         <cache>
-            <page>false</page>
+            <page>true</page>
             <generic_form_structure>false</generic_form_structure>
         </cache>
 

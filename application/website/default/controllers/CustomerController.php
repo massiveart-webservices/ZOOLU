@@ -132,6 +132,7 @@ class CustomerController extends WebControllerAction
 
                 switch ($objResult->getCode()) {
                     case Zend_Auth_Result::SUCCESS:
+                        $arrCustomerGroups = array();
                         if (ClientHelper::get('Authentication')->isActive()) {
                             $objUserData = ClientHelper::get('Authentication')->getUserData();
                             $objCustomerRoleProvider = ClientHelper::get('Authentication')->getUserRoleProvider();
@@ -146,6 +147,8 @@ class CustomerController extends WebControllerAction
                                 }
                             }
                         }
+                        // Add Groups to Storage
+                        $objUserData->groups = $arrCustomerGroups;
 
                         //Set Security
                         $objSecurity = new Security();
