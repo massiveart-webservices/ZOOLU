@@ -1178,7 +1178,7 @@
 
         <!-- CACHE -->
         <cache>
-            <page>true</page>
+            <page>false</page>
             <generic_form_structure>false</generic_form_structure>
         </cache>
 
