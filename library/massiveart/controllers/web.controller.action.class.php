@@ -599,9 +599,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
 
         // Cache Display Type
         if ($this->core->sysConfig->cache->display_type_seperate == 'true') {
-            if ($this->core->sysConfig->display_type->enabled) {
-                $cachingPrefix .= $this->core->strDisplayType;
-            }
+            $cachingPrefix .= $this->core->strDisplayType;
         }
 
         // Normalize Caching Prefix
