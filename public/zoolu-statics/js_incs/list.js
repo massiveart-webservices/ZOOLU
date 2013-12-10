@@ -30,41 +30,58 @@ Massiveart.List = Class.create({
     /**
      * getListPage
      */
-    getListPage: function (page) {
-        if (myNavigation) {
-
-            if (typeof(page) != 'undefined' && page > 0) {
-                this.page = page;
-            }
-
-            // wait
-            setTimeout(function () {
-                return true;
-            }, 10);
-
-            new Ajax.Updater(myNavigation.genListContainer, myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/list', {
-                parameters: {
-                    rootLevelId: myNavigation.rootLevelId,
-                    folderId: myNavigation.currItemId,
-                    page: this.page,
-                    itemsPerPage: this.ItemsPerPage,
-                    order: this.sortColumn,
-                    sort: this.sortOrder,
-                    search: this.searchValue
-                },
-                evalScripts: true,
-                onComplete: function (transport) {
-                    if ($(myNavigation.genFormContainer)) $(myNavigation.genFormContainer).hide();
-                    if ($(myNavigation.genFormFunctions)) $(myNavigation.genFormFunctions).hide();
-                    if ($(myNavigation.genFormSaveContainer)) $(myNavigation.genFormSaveContainer).hide();
-                    if ($(myNavigation.genListContainer)) $(myNavigation.genListContainer).show();
-                    if ($(myNavigation.genListFunctions)) $(myNavigation.genListFunctions).show();
-                    myCore.initSelectAll();
-                    myCore.initListHover();
-                }.bind(this)
-            });
-        }
-    },
+    getListPage: function(page, rootLevelFilter, hardbounced){
+    if(myNavigation){
+      
+      if(typeof(page) != 'undefined' && page > 0){ 
+        this.page = page;
+      }
+      
+      if(typeof(hardbounced) == 'undefined'){
+        hardbounced = false;
+      }
+      this.hardbounced = hardbounced;
+      
+      var languageId = null;
+      var rootLevelId = myNavigation.rootLevelId;
+      if($('rootLevelLanguageId'+rootLevelId) && $F('rootLevelLanguageId'+rootLevelId) != ''){
+    	  languageId = $F('rootLevelLanguageId'+rootLevelId);
+      }
+      
+      // wait
+      setTimeout(function(){ return true; }, 10);
+      
+      var ajaxAction = myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/list';
+      
+      new Ajax.Updater(myNavigation.genListContainer, ajaxAction, {
+        parameters: { 
+      	  rootLevelId: myNavigation.rootLevelId,
+      	  folderId: myNavigation.currItemId,
+      	  page: this.page, 
+      	  itemsPerPage: this.ItemsPerPage,
+      	  order: this.sortColumn,
+      	  sort: this.sortOrder,
+      	  search: this.searchValue,
+      	  currLevel: myNavigation.currLevel,
+      	  rootLevelFilter: rootLevelFilter,
+      	  hardbounced: this.hardbounced,
+      	  languageId: languageId,
+      	  search: this.searchValue
+      	},      
+        evalScripts: true,     
+        onComplete: function(transport) {
+      	    if($(myNavigation.genFormContainer)) $(myNavigation.genFormContainer).hide();
+            if($(myNavigation.genFormFunctions)) $(myNavigation.genFormFunctions).hide();
+            if($(myNavigation.genFormSaveContainer)) $(myNavigation.genFormSaveContainer).hide();
+            if($(myNavigation.genListContainer)) $(myNavigation.genListContainer).show();
+            if($(myNavigation.genListFunctions)) $(myNavigation.genListFunctions).show();
+    	    myCore.initSelectAll();
+    	    myCore.initListHover();
+//    	    myCore.removeBusyClass(myNavigation.genListContainer);
+        }.bind(this)
+      });
+    }
+  },
 
     /**
      * backFilter

@@ -771,7 +771,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
 
                 }.bind(this)
             });
-
+            
             myList.sortColumn = '';
             myList.sortOrder = '';
             myList.getListPage(1, 0, true);

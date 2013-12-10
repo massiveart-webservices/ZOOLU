@@ -148,6 +148,11 @@
                     <title>Language</title>
                 </interest_group>
             </interest_groups>
+            <field_mappings>
+                <portal>229</portal>
+                <interestgroup>230</interestgroup>
+                <language>242</language>
+            </field_mappings>
         </contact>
 
         <!-- Subscriber  -->

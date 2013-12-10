@@ -181,22 +181,23 @@ class Model_Subscribers
         if ($intRootLevelFilterId != null) {
             foreach ($objRootLevelFilterValues as $objRootLevelFilterValue) {
                 //Load FieldInformation
-                $strInterest = $objRootLevelFilterValue->field;
+                $strField = $objRootLevelFilterValue->field;
+                
                 $objSelectFields = $objTableFields->select();
                 $objSelectFields->from('fields')
-                    ->where('id = ?', $this->core->sysConfig->mail_chimp->mappings->$strInterest);
+                    ->where('id = ?', $this->core->sysConfig->contact->field_mappings->$strField);
 
                 $objField = $objTableFields->fetchRow($objSelectFields);
 
                 $objField->sqlSelect = str_replace('%WHERE_ADDON%', '', $objField->sqlSelect);
-                $objField->sqlSelect = str_replace('%LANGUAGE_ID%', 2, $objField->sqlSelect);
+                $objField->sqlSelect = str_replace('%LANGUAGE_ID%', $this->core->intZooluLanguageId, $objField->sqlSelect);
 
                 //Build Subselect
-                $strSubselect = 'SELECT f.title FROM (' . $objField->sqlSelect . ') AS f
+                $strSubselect = 'SELECT f.id FROM (' . $objField->sqlSelect . ') AS f
                                       	INNER JOIN `subscriber-DEFAULT_SUBSCRIBER-1-InstanceMultiFields` AS simf ON simf.idRelation = f.id
                                       	WHERE simf.idSubscribers = s.id
                                       		AND simf.idFields = ' . $objField->id;
-
+                
                 $strOperator = '';
                 $arrValues = explode(',', $objRootLevelFilterValue->value);
                 switch ($objRootLevelFilterValue->operator) {
@@ -237,12 +238,14 @@ class Model_Subscribers
             }
         }
         $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
+
         if ($strSearchValue != '') {
             $objSelect->where('s.fname LIKE ?', '%' . $strSearchValue . '%');
             $objSelect->orWhere('s.sname LIKE ?', '%' . $strSearchValue . '%');
         }
         $objSelect->order($strOrderColumn . ' ' . strtoupper($strSortOrder));
-        $this->core->logger->debug(strval($objSelect));
+        //$this->core->logger->debug(strval($objSelect));
+        
         if ($blnReturnSelect) {
             return $objSelect;
         } else {

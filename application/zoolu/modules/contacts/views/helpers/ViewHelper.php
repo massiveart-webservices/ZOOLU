@@ -105,9 +105,9 @@ class ViewHelper {
                 $this->core->logger->debug($strSelect);
                 $objOptions = $this->core->dbh->query($strSelect)->fetchAll();
                 foreach ($objOptions as $objOption) {
-                    $strSelectValue = ((isset($arrValues) && in_array($objOption['altTitle'], $arrValues)) ? ' selected="selected"' : '');
+                    $strSelectValue = ((isset($arrValues) && in_array($objOption['id'], $arrValues)) ? ' selected="selected"' : '');
                     $strCss = ($intFilterId != $objFilter->id) ? 'display:none;' : '';
-                    $strOutput .= '<option style="' . $strCss . '" filterid="' . $objFilter->id . '" value="' . $objOption['altTitle'] . '"' . $strSelectValue . '>' . $objOption['title'] . '</option>';
+                    $strOutput .= '<option style="' . $strCss . '" filterid="' . $objFilter->id . '" value="' . $objOption['id'] . '"' . $strSelectValue . '>' . $objOption['title'] . '</option>';
                 }
             }
         }
