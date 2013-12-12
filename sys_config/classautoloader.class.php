@@ -62,7 +62,7 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         'PasswordHelper'                => '/library/massiveart/utilities/password.class.php',
         'Replacer'                      => '/library/massiveart/utilities/replacer.class.php',
         'HtmlTranslate'                 => '/library/massiveart/utilities/html.translate.class.php',
-        'ReCaptchaService'              => '/library/massiveart/utilities/recaptcha.service.class.php', 
+        'ReCaptchaService'              => '/library/massiveart/utilities/recaptcha.service.class.php',
         'Security'                      => '/library/massiveart/security/security.class.php',
         'Acl'                           => '/library/massiveart/security/acl.class.php',
         'RoleProvider'                  => '/library/massiveart/security/role.provider.class.php',
@@ -77,7 +77,7 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         'FormElementMultiAbstract'      => '/library/massiveart/generic/forms/fields/form.element.multi.abstract.class.php',
         'Export'                        => '/library/massiveart/utilities/export.class.php',
         'Zip'                           => '/library/massiveart/utilities/zip.class.php',
-    
+
         // Undefined
         'UndefinedMethod'               => '/library/massiveart/undefined/Method.php',
         'UndefinedMethodHandler'        => '/library/massiveart/undefined/MethodHandler.php',
@@ -85,12 +85,15 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
 
         // URL
         'UniformResourceLocator'        => '/library/massiveart/locator/UniformResourceLocator.php',
-    
+
         // Gearman
         'GearmanReplicationMailChimp'   => '/library/massiveart/gearman/replication/mailchimp.replication.class.php',
-    
+
         // Service
         'Service_Core'                  => '/library/massiveart/services/core.class.php',
+
+        // NotFoundException
+        'NotFoundException'             => '/library/massiveart/website/notfoundexception.class.php',
     );
 
     /**
@@ -106,6 +109,7 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
             if (strpos($class, 'Zend_') === 0 || strpos($class, 'ZendX_') === 0) {
                 // load Zend Class
                 return parent::autoload($class);
+
             } else if (strpos($class, 'Elastica\\') === 0) {
                 // load Elastica
                 $path = GLOBAL_ROOT_PATH . $sysConfig->path->root . 'library/Elastica/lib/' . ($class = strtr($class, '\\', '/')) . '.php';

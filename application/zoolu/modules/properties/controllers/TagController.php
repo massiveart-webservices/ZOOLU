@@ -140,16 +140,73 @@ class Properties_TagController extends AuthControllerAction
         $this->core->logger->debug('properties->controllers->TagController->editformAction()');
         try {
 
+
             $this->initForm();
             $this->objForm->setAction('/zoolu/properties/tag/edit');
 
             $intTagId = $this->getRequest()->getParam('id');
             $objTag = $this->getModelTags()->loadTag($intTagId)->current();
 
+            $strTagUsedIn = '';
+            $intCounter = 0;
+            $strSeperator = ', ';
+
+            foreach ($this->getModelTags()->loadElementWithTag('file', $objTag->id, 1) as $objElement) {
+                if ($intCounter === 0 && $objElement->title) {
+                    $strTagUsedIn .= '<br /><b>Files:</b><br />';
+                } else {
+                    $strTagUsedIn .= $strSeperator;
+                }
+                $strTagUsedIn .= $objElement->title;
+                $intCounter++;
+            }
+
+            $intCounter = 0;
+            foreach ($this->getModelTags()->loadElementWithTag('page', $objTag->id, 1) as $objElement) {
+                if ($intCounter === 0 && $objElement->title) {
+                    $strTagUsedIn .= '<br /><br /><b>Pages:</b><br />';
+                } else {
+                    $strTagUsedIn .= $strSeperator;
+                }
+                $strTagUsedIn .= $objElement->title;
+                $intCounter++;
+            }
+
+            $intCounter = 0;
+            foreach ($this->getModelTags()->loadElementWithTag('global', $objTag->id, 1) as $objElement) {
+                if ($intCounter === 0 && $objElement->title) {
+                    $strTagUsedIn .= '<br /><br /><b>Globals:</b><br />';
+                } else {
+                    $strTagUsedIn .= $strSeperator;
+                }
+                $strTagUsedIn .= $objElement->title;
+                $intCounter++;
+            }
+
+            $intCounter = 0;
+
+            foreach ($this->getModelTags()->loadElementWithTag('folder', $objTag->id, 1) as $objElement) {
+                if ($intCounter === 0 && $objElement->title) {
+                    $strTagUsedIn .= '<br /><br /><b>Folders:</b><br />';
+                } else {
+                    $strTagUsedIn .= $strSeperator;
+                }
+                $strTagUsedIn .= $objElement->title;
+                $intCounter++;
+            }
+
+            if ($strTagUsedIn == '') {
+                $strTagUsedIn = $this->core->translate->_('tag_not_used');
+            }
+
             foreach ($this->objForm->getElements() as $objElement) {
                 $name = $objElement->getName();
                 if (isset($objTag->$name)) {
                     $objElement->setValue($objTag->$name);
+                }
+
+                if ($name === 'usedTitle') {
+                    $objElement->setValue($strTagUsedIn);
                 }
             }
 
@@ -337,8 +394,9 @@ class Properties_TagController extends AuthControllerAction
         $this->objForm->addElement('hidden', 'formType', array('value' => 'tag', 'decorators' => array('Hidden')));
 
         $this->objForm->addElement('text', 'title', array('label' => $this->core->translate->_('Tagname', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
+        $this->objForm->addElement('freeText', 'usedTitle', array('label' => $this->core->translate->_('tag_used_in', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
 
-        $this->objForm->addDisplayGroup(array('title'), 'main-group');
+        $this->objForm->addDisplayGroup(array('title', 'usedTitle'), 'main-group');
         $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information', false));
         $this->objForm->getDisplayGroup('main-group')->setDecorators(array('FormElements', 'Region'));
     }

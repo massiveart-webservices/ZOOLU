@@ -95,6 +95,7 @@ class GenericForm extends Zend_Form
         'objItemInternalLinks',
         'objInstanceInternalLinks',
         'objInstanceArticles',
+        'objInstanceMultipleChoice',
         'objPageCollection'
     );
 

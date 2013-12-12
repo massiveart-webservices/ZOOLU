@@ -558,7 +558,7 @@ class ViewHelper
 						   <div class="clear" style=""></div>
                            ';
                 $strOutput .=
-                    HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = ' . $this->core->intLanguageId . ' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter' . $intFileId . '_' . $objFileFilter->id, $objFileFilter->values);
+                    HtmlOutput::getCheckboxesOfSql($this->core, 'SELECT tbl.id AS VALUE, categoryTitles.title AS DISPLAY FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = ' . $this->core->intZooluLanguageId . ' WHERE tbl.idParentCategory = ' . $objFileFilter->id . ' AND (tbl.depth-1) != 0 ORDER BY categoryTitles.title ASC', 'fileFilter' . $intFileId . '_' . $objFileFilter->id, $objFileFilter->values);
                 $strOutput .= '
                        </div> <!--fileFilter -->';
             }

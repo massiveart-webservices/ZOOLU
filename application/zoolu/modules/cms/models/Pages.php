@@ -108,6 +108,11 @@ class Model_Pages extends ModelAbstract
     protected $groupsTable;
 
     /**
+     * @var Model_Table_PageDates
+     */
+    protected $objPageDatetimesTable;
+
+    /**
      * @var Core
      */
     protected $core;
@@ -608,7 +613,7 @@ class Model_Pages extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes)
+    public function updateStartPageMainData($intFolderId, $arrProperties, $arrTitle, $arrPageAttributes, $rootLevel)
     {
         $objSelect = $this->getPageTable()->select();
         $objSelect->from($this->objPageTable, array('pageId', 'version'));
@@ -645,6 +650,20 @@ class Model_Pages extends ModelAbstract
             if ($intNumOfEffectedRows == 0) {
                 $arrTitle = array_merge($arrTitle, array('pageId' => $objStartPage->pageId, 'version' => $objStartPage->version, 'idLanguages' => $this->intLanguageId));
                 $this->core->dbh->insert('pageTitles', $arrTitle);
+            }
+            
+            if ($arrProperties['idStatus'] == $this->core->sysConfig->status->live) {
+                 $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexPage.php';
+                 if (file_exists($strIndexPageFilePath)) {
+                    //run page index in background
+                    exec("php $strIndexPageFilePath --pageId='" . $objStartPage->pageId . "' --version=" . $objStartPage->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevel . " > /dev/null &#038;");   
+                 }
+            } else {
+                $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
+                //run remove page from index in background
+                if (file_exists($strIndexPageFilePath)) {
+                    exec("php " . $strIndexPageFilePath . " --key='" . $objStartPage->pageId . "_" . $this->intLanguageId . "' > /dev/null &#038;");
+                }
             }
         }
     }
@@ -1097,6 +1116,65 @@ class Model_Pages extends ModelAbstract
     }
 
     /**
+     * loadMonthEvents
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function loadMonthEvents($rootLevelId, $parentId, $fieldId, $category, $label, $depth)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadMonthEvents('.$parentId.', '.$category.', '.$label.', '.$depth.')');
+        $select = $this->getPageTable()->select()->setIntegrityCheck(false);
+
+        $select->from('folders', array());
+
+        if ($depth == $this->core->sysConfig->filter->depth->all) {
+            $select->join(array('subFolders' => 'folders'), 'folders.idRootLevels = subFolders.idRootLevels AND subFolders.lft BETWEEN folders.lft AND folders.rgt AND subFolders.depth >= 0', array());
+        } else {
+            $select->join(array('subFolders' => 'folders'), 'folders.idRootLevels = subFolders.idRootLevels AND subFolders.lft BETWEEN folders.lft AND folders.rgt AND subFolders.depth = (folders.depth)', array());
+        }
+        $select->join('pages', 'pages.idParent = subFolders.id AND idParentTypes = 2', array('id', 'pageId', 'idParent'));
+        $select->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.idLanguages = ' . intval($this->intLanguageId), array());
+        $select->join('urls', 'urls.relationId = pages.pageId AND
+                               urls.version = pages.version AND
+                               urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND
+                               urls.idLanguages = pageProperties.idLanguages AND
+                               urls.idParent IS NULL AND
+                               urls.isMain = 1', array('url'));
+        $select->joinLeft('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.idLanguages = pageProperties.idLanguages', array('title', 'language' => 'idLanguages'));
+        $select->joinLeft('templates', 'templates.id = pageProperties.idTemplates', array('genericFormId'));
+
+        if (!empty($category)) {
+            $select->join('pageCategories', 'pageCategories.pageId = pages.pageId AND pageCategories.idLanguages = pageProperties.idLanguages AND pageCategories.category = ' . intval($category), array());
+        }
+
+        if (!empty($label)) {
+            $select->join('pageLabels', 'pageLabels.pageId = pages.pageId AND pageLabels.idLanguages = pageProperties.idLanguages AND pageLabels.label = ' . intval($label), array());
+        }
+
+        if (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false)) {
+            $timestamp = time();
+            $now = date('Y-m-d H:i:s', $timestamp);
+            $select->where('pageProperties.idStatus = ?', $this->core->sysConfig->status->live);
+            $select->where('pageProperties.published <= \'' . $now . '\'');
+        }
+
+        $select->join('pageDates', 'pageDates.pageId = pages.pageId AND pageDates.idLanguages = pageProperties.idLanguages AND pageDates.idFields = ' . intval($fieldId), array('from_date', 'from_time', 'to_date', 'to_time', 'fulltime', 'repeat', 'repeat_frequency', 'repeat_interval', 'repeat_type', 'end', 'end_date'));
+
+        $select->join('page-DEFAULT_EVENT-1-Instances', '`page-DEFAULT_EVENT-1-Instances`.pageId = pages.pageId AND `page-DEFAULT_EVENT-1-Instances`.idLanguages = pageProperties.idLanguages', array('description', 'shortdescription'));
+
+        $select->joinLeft(array('iFiles' => 'page-DEFAULT_EVENT-1-InstanceFiles'), 'iFiles.id = (SELECT iFl.id FROM `page-DEFAULT_EVENT-1-InstanceFiles` AS iFl
+                                                         WHERE iFl.pageId = pages.pageId AND iFl.version = pages.version AND iFl.idLanguages = pageProperties.idLanguages AND iFl.idFields IN (5,55)
+                                                         ORDER BY iFl.idFields DESC LIMIT 1)', array());
+
+        $select->joinLeft('files', 'files.id = iFiles.idFiles AND files.isImage = 1', array('filepath' => 'path', 'fileversion' => 'version', 'filename'));
+        $select->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = pageProperties.idLanguages', array('filetitle' => 'title'));
+
+        $select->where('folders.idRootLevels = ' . intval($rootLevelId) . ' AND folders.id = ' . intval($parentId));
+
+        return $this->getPageTable()->fetchAll($select);
+    }
+
+    /**
      * loadPagesByfilter
      * @param integer $intParentFolderId
      * @param array $arrTagIds
@@ -1421,22 +1499,12 @@ class Model_Pages extends ModelAbstract
 
         if (count($objPageData) > 0) {
             $objPage = $objPageData->current();
-            $strIndexPath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId);
             $strPageId = $objPage->pageId;
-
-            if (count(scandir($strIndexPath)) > 2) {
-                $this->objIndex = Zend_Search_Lucene::open($strIndexPath);
-
-                $objTerm = new Zend_Search_Lucene_Index_Term($strPageId . '_*', 'key');
-                $objQuery = new Zend_Search_Lucene_Search_Query_Wildcard($objTerm);
-
-                $objHits = $this->objIndex->find($objQuery);
-
-                foreach ($objHits as $objHit) {
-                    $this->objIndex->delete($objHit->id);
-                }
-
-                $this->objIndex->commit();
+            
+            $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
+            //run remove page from index in background
+            if (file_exists($strIndexPageFilePath)) {
+                exec("php " . $strIndexPageFilePath . " --key='" . $strPageId . "_*' > /dev/null &#038;");
             }
 
             $strWhere = $this->objPageTable->getAdapter()->quoteInto('relationId = ?', $strPageId);
@@ -2246,6 +2314,129 @@ class Model_Pages extends ModelAbstract
             }
         }
         return array_unique($arrGroups);
+    }
+    
+    /**
+     * loadEntryPoint
+     * @param type $name Description
+     */
+    public function loadEntryPoint($strPageId, $version, $strGenericFormId) {
+        $this->core->logger->debug('cms->models->Model_Pages->loadEntryPoint(' . $strPageId . ', ' . $version . ', ' . $strGenericFormId . ')');
+
+        $sqlStmt = $this->core->dbh->query("SELECT entry_point FROM `page-" . $strGenericFormId . "-1-Instances`
+                                            WHERE pageId = ? AND idLanguages = ? AND version = ?;",
+                                            array($strPageId,
+                                                  $this->intLanguageId,
+                                                  $version)
+                                          );
+        return $sqlStmt->fetch(Zend_Db::FETCH_OBJ);
+    }
+
+
+
+    /**
+     * addDatetimes
+     * @param array $arrDatetimes
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @return integer
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function addDatetimes($datetime, $strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->addDatetimes(' . print_r($datetime, true) . ', ' . $strElementId . ', ' . $intVersion . ', ' . $intFieldId . ')');
+
+        $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
+
+        $arrData = array(
+            'pageId'     => $strElementId,
+            'version'      => $intVersion,
+            'idLanguages'  => $this->intLanguageId,
+            'idFields'     => $intFieldId,
+            'idUsers'      => $intUserId,
+            'creator'      => $intUserId,
+            'created'      => date('Y-m-d H:i:s')
+        );
+
+        if (!empty($datetime)) {
+
+            $this->getPagesDatetimesTable()->insert(array_merge(array(
+                'from_date'             => $datetime->from_date,
+                'from_time'             => $datetime->from_time,
+                'to_date'               => $datetime->to_date,
+                'to_time'               => $datetime->to_time,
+                'fulltime'              => $datetime->fulltime,
+                'repeat'                => $datetime->repeat,
+                'repeat_frequency'      => $datetime->repeat_frequency,
+                'repeat_interval'       => $datetime->repeat_interval,
+                'repeat_type'           => $datetime->repeat_type,
+                'end'                   => $datetime->end,
+                'end_date'              => $datetime->end_date
+            ), $arrData));
+        }
+    }
+
+    /**
+     * deleteDatetimes
+     * @param $strElementId
+     * @param $intVersion
+     * @param $intFieldId
+     * @return int
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteDatetimes($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->deleteDatetimes(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $strWhere = $this->getPagesDatetimesTable()->getAdapter()->quoteInto('pageId = ?', $strElementId);
+        $strWhere .= $this->objPageDatetimesTable->getAdapter()->quoteInto(' AND version = ?', $intVersion);
+        $strWhere .= $this->objPageDatetimesTable->getAdapter()->quoteInto(' AND idFields = ?', $intFieldId);
+        $strWhere .= $this->objPageDatetimesTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->intLanguageId);
+
+        return $this->objPageDatetimesTable->delete($strWhere);
+    }
+
+    /**
+     * loadDatetimes
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function loadDatetimes($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadDatetimes(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $objSelect = $this->getPagesDatetimesTable()->select();
+
+        $objSelect->from('pageDates', array('from_date', 'from_time', 'to_date', 'to_time', 'fulltime', 'repeat', 'repeat_frequency', 'repeat_interval', 'repeat_type', 'end', 'end_date'))
+            ->where('pageId = ?', $strElementId)
+            ->where('version = ?', $intVersion)
+            ->where('idLanguages = ?', $this->intLanguageId)
+            ->where('idFields = ?', $intFieldId);
+
+        return $this->objPageDatetimesTable->fetchRow($objSelect);
+    }
+
+    /**
+     * getPagesDatetimesTable
+     * @return Zend_Db_Table_Abstract
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function getPagesDatetimesTable()
+    {
+        if ($this->objPageDatetimesTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'cms/models/tables/PageDates.php';
+            $this->objPageDatetimesTable = new Model_Table_PageDates();
+        }
+
+        return $this->objPageDatetimesTable;
     }
 
     /**

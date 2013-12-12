@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-17 15:10+0100\n"
+"POT-Creation-Date: 2013-11-11 11:47+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -204,6 +204,14 @@ msgstr "Letzte Änderung von"
 #: application/zoolu/language/addon-language-keys.php:121
 msgid "please_choose_language"
 msgstr "Bitte wählen Sie eine Sprache"
+
+#: application/zoolu/language/addon-language-keys.php:128
+msgid "true"
+msgstr "Richtig"
+
+#: application/zoolu/language/addon-language-keys.php:129
+msgid "false"
+msgstr "Falsch"
 
 #: application/zoolu/modules/contacts/views/helpers/ImportHelper.php:65
 #: application/zoolu/modules/contacts/controllers/SubscriberController.php:684
@@ -431,19 +439,27 @@ msgstr "Medien zuweisen"
 msgid "Assign_documents"
 msgstr "Dokumente zuweisen"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:157
+#: application/zoolu/modules/properties/controllers/TagController.php:199
+msgid "tag_not_used"
+msgstr "Tag nicht verwendet"
+
 #: application/zoolu/modules/properties/controllers/TagController.php:214
+#: application/zoolu/modules/properties/controllers/TagController.php:271
 msgid "Edit_Tag"
 msgstr "Tag Bearbeiten"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:281
-#: application/zoolu/modules/properties/controllers/TagController.php:319
+#: application/zoolu/modules/properties/controllers/TagController.php:338
+#: application/zoolu/modules/properties/controllers/TagController.php:376
 msgid "New_Tag"
 msgstr "Neuer Tag"
 
-#: application/zoolu/modules/properties/controllers/TagController.php:339
+#: application/zoolu/modules/properties/controllers/TagController.php:396
 msgid "Tagname"
 msgstr "Tagname"
+
+#: application/zoolu/modules/properties/controllers/TagController.php:397
+msgid "tag_used_in"
+msgstr "Tagverwendung"
 
 #: application/zoolu/modules/cms/views/helpers/OverlayHelper.php:99
 msgid "All_Images"
@@ -823,8 +839,8 @@ msgstr "Jahr"
 msgid "time_difference"
 msgstr "vor %d %s"
 
-#: application/zoolu/modules/core/controllers/FolderController.php:549
-#: application/zoolu/modules/core/controllers/FolderController.php:606
+#: application/zoolu/modules/core/controllers/FolderController.php:575
+#: application/zoolu/modules/core/controllers/FolderController.php:632
 msgid "Select_folder"
 msgstr "Ordner wählen"
 
@@ -1001,6 +1017,10 @@ msgstr "Interne Links hinzufügen"
 msgid "Add_groups"
 msgstr "Rolle hinzufügen"
 
+#: library/massiveart/generic/fields/MultipleChoice/forms/helpers/FormMultipleChoice.php:149
+msgid "option"
+msgstr "Option"
+
 #: library/massiveart/generic/fields/Document/forms/helpers/FormDocument.php:72
 msgid "Add_documents"
 msgstr "Dokumente hinzufügen"
@@ -1052,6 +1072,126 @@ msgstr "Dokument filtern nach Tags"
 #: library/massiveart/generic/fields/Video/forms/helpers/FormVideo.php:72
 msgid "Add_videos"
 msgstr "Videos hinzufügen "
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:78
+msgid "From_date"
+msgstr "Von"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:84
+msgid "From_time"
+msgstr "&nbsp;"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:90
+msgid "To_time"
+msgstr "&nbsp;"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:96
+msgid "To_date"
+msgstr "Bis"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:106
+msgid "Fulltime"
+msgstr "Ganztägig"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:114
+msgid "Repeated"
+msgstr "Wiederholen ..."
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:122
+msgid "Is_repeated_at"
+msgstr "Wird wiederholt"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:131
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:141
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:157
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:173
+msgid "repeat_all"
+msgstr "Wiederholen alle"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:135
+msgid "days"
+msgstr "Tage"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:145
+msgid "weeks"
+msgstr "Wochen"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:149
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:165
+msgid "repeat_at"
+msgstr "Wiederholem am"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:161
+msgid "months"
+msgstr "Monate"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:177
+msgid "years"
+msgstr "Jahre"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:183
+msgid "Ended"
+msgstr "Endet"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:206
+msgid "daily"
+msgstr "täglich"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:207
+msgid "weekly"
+msgstr "wöchentlich"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:208
+msgid "monthly"
+msgstr "monatlich"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:209
+msgid "yearly"
+msgstr "jährlich"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:230
+msgid "Mo"
+msgstr "Mo"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:231
+msgid "Tu"
+msgstr "Di"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:232
+msgid "We"
+msgstr "Mi"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:233
+msgid "Th"
+msgstr "Do"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:234
+msgid "Fr"
+msgstr "Fr"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:235
+msgid "Sa"
+msgstr "Sa"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:236
+msgid "Su"
+msgstr "So"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:240
+msgid "day_of_month"
+msgstr "Tag des Monats"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:241
+msgid "weekday"
+msgstr "Tag der Woche"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:248
+msgid "never"
+msgstr "Nie"
+
+#: library/massiveart/generic/fields/Datetimes/forms/helpers/FormDatetimes.php:249
+msgid "at"
+msgstr "Am"
 
 #: library/massiveart/generic/fields/LandingPageUrl/forms/helpers/FormLandingPageUrl.php:77
 msgid "Landing_page"
@@ -1164,14 +1304,11 @@ msgid "Delete_subscriber"
 msgstr "Wollen Sie diesen Kontakt löschen?<br /><br /><strong>Dabei gehen alle Daten dieses Kontaktes verloren!</strong>"
 
 #: application/zoolu/modules/global/views/scripts/navigation/rootnavigation.phtml:24
-#: application/zoolu/modules/global/views/scripts/navigation/childnavigation.phtml:15
 msgid "Show_Add_Menu"
 msgstr "Hinzufügen"
 
 #: application/zoolu/modules/global/views/scripts/navigation/rootnavigation.phtml:34
 #: application/zoolu/modules/global/views/scripts/navigation/rootnavigation.phtml:36
-#: application/zoolu/modules/global/views/scripts/navigation/childnavigation.phtml:39
-#: application/zoolu/modules/global/views/scripts/navigation/childnavigation.phtml:41
 msgid "New_Folder"
 msgstr "Neuer Ordner"
 
@@ -1281,8 +1418,6 @@ msgid "show_in_mobile"
 msgstr "auf Mobile"
 
 #: application/zoolu/modules/cms/views/scripts/page/formentrieslist.phtml:10
-#: application/zoolu/modules/cms/views/scripts/overlay/exportdynform.phtml:1
-#: application/zoolu/modules/cms/views/scripts/overlay/exportdynform.phtml:7
 msgid "Export"
 msgstr "Export"
 
@@ -1460,7 +1595,7 @@ msgstr "Inhalte hinzufügen"
 msgid "Edit_media"
 msgstr "Medien bearbeiten"
 
-#: application/zoolu/modules/media/views/scripts/upload/index.phtml:34
+#: application/zoolu/modules/media/views/scripts/upload/index.phtml:37
 msgid "Medium_is_language_specific"
 msgstr "Medium ist sprachspezifisch"
 
@@ -1470,112 +1605,37 @@ msgstr "Tag Administration"
 
 #: application/zoolu/layouts/tags-list.phtml:29
 #: application/zoolu/layouts/index.phtml:26
-#: application/zoolu/layouts/properties.phtml:28
-#: application/zoolu/layouts/global-list.phtml:28
-#: application/zoolu/layouts/media.phtml:28
-#: application/zoolu/layouts/global-tree.phtml:28
-#: application/zoolu/layouts/cms.phtml:28
-#: application/zoolu/layouts/users.phtml:27
-#: application/zoolu/layouts/newsletters-list.phtml:28
-#: application/zoolu/layouts/contacts-tree.phtml:28
-#: application/zoolu/layouts/cms-list.phtml:28
 msgid "Open_website"
 msgstr "Website öffnen"
 
 #: application/zoolu/layouts/tags-list.phtml:32
 #: application/zoolu/layouts/index.phtml:29
-#: application/zoolu/layouts/contacts-list.phtml:29
-#: application/zoolu/layouts/properties.phtml:31
-#: application/zoolu/layouts/global-list.phtml:31
-#: application/zoolu/layouts/media.phtml:31
-#: application/zoolu/layouts/global-tree.phtml:31
-#: application/zoolu/layouts/cms.phtml:31
-#: application/zoolu/layouts/users.phtml:30
-#: application/zoolu/layouts/newsletters-list.phtml:31
-#: application/zoolu/layouts/contacts-tree.phtml:31
-#: application/zoolu/layouts/cms-list.phtml:31
 msgid "Report_bugs"
 msgstr "Fehler melden"
 
 #: application/zoolu/layouts/tags-list.phtml:33
 #: application/zoolu/layouts/index.phtml:30
-#: application/zoolu/layouts/contacts-list.phtml:30
-#: application/zoolu/layouts/properties.phtml:32
-#: application/zoolu/layouts/global-list.phtml:32
-#: application/zoolu/layouts/media.phtml:32
-#: application/zoolu/layouts/global-tree.phtml:32
-#: application/zoolu/layouts/cms.phtml:32
-#: application/zoolu/layouts/users.phtml:31
-#: application/zoolu/layouts/newsletters-list.phtml:32
-#: application/zoolu/layouts/contacts-tree.phtml:32
-#: application/zoolu/layouts/cms-list.phtml:32
 msgid "Help_and_FAQ"
 msgstr "Hilfe & FAQ"
 
 #: application/zoolu/layouts/tags-list.phtml:68
-#: application/zoolu/layouts/contacts-list.phtml:69
-#: application/zoolu/layouts/properties.phtml:139
-#: application/zoolu/layouts/global-list.phtml:67
-#: application/zoolu/layouts/media.phtml:82
-#: application/zoolu/layouts/global-tree.phtml:78
-#: application/zoolu/layouts/cms.phtml:78
-#: application/zoolu/layouts/users.phtml:66
-#: application/zoolu/layouts/newsletters-list.phtml:67
-#: application/zoolu/layouts/contacts-tree.phtml:133
-#: application/zoolu/layouts/cms-list.phtml:67
 msgid "Saved"
 msgstr "Gespeichert"
 
 #: application/zoolu/layouts/tags-list.phtml:69
-#: application/zoolu/layouts/contacts-list.phtml:70
-#: application/zoolu/layouts/properties.phtml:140
-#: application/zoolu/layouts/global-list.phtml:68
-#: application/zoolu/layouts/media.phtml:83
-#: application/zoolu/layouts/global-tree.phtml:79
-#: application/zoolu/layouts/cms.phtml:79
-#: application/zoolu/layouts/users.phtml:67
-#: application/zoolu/layouts/newsletters-list.phtml:68
-#: application/zoolu/layouts/contacts-tree.phtml:134
-#: application/zoolu/layouts/cms-list.phtml:68
 msgid "Can_not_Save"
 msgstr "Speichern nicht möglich"
 
 #: application/zoolu/layouts/tags-list.phtml:70
-#: application/zoolu/layouts/contacts-list.phtml:71
-#: application/zoolu/layouts/properties.phtml:141
-#: application/zoolu/layouts/global-list.phtml:69
-#: application/zoolu/layouts/media.phtml:84
-#: application/zoolu/layouts/global-tree.phtml:80
-#: application/zoolu/layouts/cms.phtml:80
-#: application/zoolu/layouts/users.phtml:68
-#: application/zoolu/layouts/newsletters-list.phtml:69
-#: application/zoolu/layouts/contacts-tree.phtml:135
-#: application/zoolu/layouts/cms-list.phtml:69
 msgid "Deleted"
 msgstr "Gelöscht"
 
 #: application/zoolu/layouts/tags-list.phtml:79
-#: application/zoolu/layouts/contacts-list.phtml:80
-#: application/zoolu/layouts/properties.phtml:73
-#: application/zoolu/layouts/media.phtml:135
-#: application/zoolu/layouts/users.phtml:77
-#: application/zoolu/layouts/newsletters-list.phtml:78
-#: application/zoolu/layouts/contacts-tree.phtml:67
 msgid "New"
 msgstr "Neu"
 
 #: application/zoolu/layouts/tags-list.phtml:292
 #: application/zoolu/layouts/index.phtml:298
-#: application/zoolu/layouts/contacts-list.phtml:442
-#: application/zoolu/layouts/properties.phtml:316
-#: application/zoolu/layouts/global-list.phtml:293
-#: application/zoolu/layouts/media.phtml:528
-#: application/zoolu/layouts/global-tree.phtml:343
-#: application/zoolu/layouts/cms.phtml:397
-#: application/zoolu/layouts/users.phtml:294
-#: application/zoolu/layouts/newsletters-list.phtml:390
-#: application/zoolu/layouts/contacts-tree.phtml:318
-#: application/zoolu/layouts/cms-list.phtml:387
 msgid "Delete_"
 msgstr "Löschen?"
 
@@ -1588,9 +1648,6 @@ msgid "Dashboard"
 msgstr "Dashboard"
 
 #: application/zoolu/layouts/index.phtml:55
-#: application/zoolu/layouts/media.phtml:288
-#: application/zoolu/layouts/global-tree.phtml:199
-#: application/zoolu/layouts/cms.phtml:252
 msgid "New_message"
 msgstr "Neue Nachricht"
 

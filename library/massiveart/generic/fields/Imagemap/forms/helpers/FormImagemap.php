@@ -71,7 +71,7 @@ class Form_Helper_FormImagemap extends Zend_View_Helper_FormElement
         
         $strOutput .= '<div class="imagemapWrapper">
                            <div class="imagemapTop">
-            			        <div class="left">' . $this->core->translate->_('Size') . ': ' . $this->getSizeSelect( ($value != '' ? $value->dimensions[0] : ''), $this->view->escape($id)) . '</div>
+            			        <div class="left">' . $this->core->translate->_('Size') . ': ' . $this->getSizeSelect( ($value != '' ? $value->size : ''), $this->view->escape($id)) . '</div>
             			        <div class="right">' . $this->core->translate->_('Edit backgorund image') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddMediaOverlay(\'divImagemap_' . $this->view->escape($id) . '\', true, $(\'' . $this->view->escape($id) . '_size\' ).value, \'imagemap\'); return false;"' . $endTag . '</div>
             			        <div class="clear"></div>
             			    </div>

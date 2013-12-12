@@ -159,6 +159,11 @@ Massiveart.Form = Class.create({
                 this.getFormSaveLoader();
 
                 myCore.resetTinyMCE(true);
+                
+                var navlevel = 1;
+                if ($F('currLevel')) {
+                    navlevel = $F('currLevel');
+                }
 
                 new Ajax.Updater(this.updateContainer, strAjaxActionBase + 'delete', {
                     parameters: {
@@ -166,7 +171,9 @@ Massiveart.Form = Class.create({
                         linkId: linkId,
                         rootLevelId: $F('rootLevelId'),
                         languageId: $F('languageId'),
-                        languageCode: (($('languageCode')) ? $F('languageCode') : '')
+                        languageCode: (($('languageCode')) ? $F('languageCode') : ''),
+                        navlevel: navlevel
+                        
                     },
                     evalScripts: true,
                     onComplete: function () {
@@ -1477,6 +1484,56 @@ Massiveart.Form = Class.create({
     },
 
     /**
+     * addOption
+     */
+    addOption: function(fieldId) {
+        var arrWidgets = [], n, emptyOption, newOption;
+
+        $(fieldId + '_Instances').value.scan(/\[\d*\]/, function(widgets) {
+            arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))
+        });
+        n = Number(arrWidgets[arrWidgets.length - 1]) + 1;
+
+        emptyOption = $(fieldId + '_REPLACE_x');
+        newOption = new Element(emptyOption.tagName);
+
+        newOption.update(emptyOption.innerHTML.gsub(/REPLACE_x/, n));
+
+        newOption['id'] = fieldId + '_' + n;
+        newOption.addClassName(emptyOption.className);
+        arrWidgets.each(function(wId) {
+            if ($('addOption_' + fieldId + '_' + wId)) $('addOption_' + fieldId + '_' + wId).hide();
+            if ($('removeOption_' + fieldId + '_' + wId)) $('removeOption_' + fieldId + '_' + wId).show();
+        });
+
+        new Insertion.Before(emptyOption, newOption);
+
+        $(fieldId + '_Instances').value = $(fieldId + '_Instances').value + '[' + n + ']';
+    },
+
+    /**
+     * removeOption
+     */
+    removeOption: function(fieldId, n) {
+
+        $(fieldId + '_' + n).remove();
+        var regEx = "[" + n + "]", arrWidgets = [];
+
+        $(fieldId + '_Instances').value = $(fieldId + '_Instances').value.replace(regEx, '');
+
+        $(fieldId + '_Instances').value.scan(/\[\d*\]/, function(widgets) {
+            arrWidgets.push(widgets[0].gsub(/\[/, '').gsub(/\]/, ''))
+        });
+
+        if (arrWidgets.length == 1) {
+            if ($('removeOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1])) $('removeOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1]).hide();
+        }
+
+        if ($('addOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1])) $('addOption_' + fieldId + '_' + arrWidgets[arrWidgets.length - 1]).show();
+    },
+
+
+    /**
      * removeTinyMCEControl
      */
     removeTinyMCEControl: function (elementId) {
@@ -2454,5 +2511,60 @@ Massiveart.Form = Class.create({
             .removeClassName('plus')
             .removeClassName('minus')
             .addClassName(classname);
+    },
+
+    datetimeChanged: function (el, id) {
+        var hideClass = '.' + id + '_frequency_specific';
+        var showId = id + '_' + el.value;
+        $$(hideClass).each(Element.hide);
+        $(showId).show();
+    },
+
+    toggle: function(id, el, onValue) {
+        // $(id).toggle();
+        if (typeof el !== 'undefined') {
+            onValue = typeof onValue !== 'undefined' ? onValue : '1';
+            if (el.value == onValue) {
+                $(id).show();
+            } else {
+                $(id).hide();
+            }
+        } else {
+            $(id).toggle();
+        }
+    },
+
+    toggleCheckbox: function(id, el) {
+        // $(id).toggle();
+        if (typeof el !== 'undefined') {
+            if (el.checked) {
+                $(id).show();
+            } else {
+                $(id).hide();
+            }
+        } else {
+            $(id).toggle();
+        }
+    },
+
+    datetimeChangeFulltime: function(el, id) {
+        console.log('called');
+        console.log(el.checked);
+        console.log('hadsf');
+        var fromDateId = id + '_field_from_date';
+        var toDateId = id +'_field_to_date';
+        var fromTimeId = id +'_field_from_time';
+        var toTimeId = id +'_field_to_time';
+        if (el.checked) {
+            $(fromDateId).removeClassName('field-3').addClassName('field-6');
+            $(toDateId).removeClassName('field-3').addClassName('field-6');
+            $(fromTimeId).hide();
+            $(toTimeId).hide();
+        } else {
+            $(fromDateId).removeClassName('field-6').addClassName('field-3');
+            $(toDateId).removeClassName('field-6').addClassName('field-3');
+            $(fromTimeId).show();
+            $(toTimeId).show();
+        }
     }
 });
