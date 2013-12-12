@@ -10,6 +10,7 @@
 namespace Sulu\Search;
 
 use Sulu\Search\Config;
+use Sulu\Search\Handler\HandlerInterface;
 use Sulu\Search\Query;
 use Sulu\Search\Index;
 
@@ -60,7 +61,7 @@ class Search
     /**
      * different handlers
      *
-     * @var ZendLuceneHandler|ElasticaHandler
+     * @var HandlerInterface
      */
     protected $handler = null;
 
@@ -121,6 +122,9 @@ class Search
         return $this->index;
     }
 
+    /**
+     * @return HandlerInterface
+     */
     protected function getHandler()
     {
         if (null === $this->handler) {
@@ -138,9 +142,9 @@ class Search
 
     private function setType()
     {
-        if ($this->getConfig('type') !== null) {
+        if (null !== $this->getConfig()->getValue('type')) {
             // define search type by config
-            switch ($this->getConfig('type')) {
+            switch ($this->getConfig()->getValue('type')) {
                 case self::TYPE_ELASTICA:
                     $this->type = self::TYPE_ELASTICA;
                     break;
@@ -162,4 +166,5 @@ class Search
     {
         return $this->type;
     }
+
 }

@@ -30,6 +30,21 @@ abstract class AbstractHandler
     protected $languageId = null;
 
     /**
+     * @var string
+     */
+    protected $nodeSummary;
+
+    /**
+     * @var array
+     */
+    protected $queries = array();
+
+    /**
+     * @var array
+     */
+    protected $filters = array();
+
+    /**
      * @param \Sulu\Search\Config $config
      */
     public function __construct($config)

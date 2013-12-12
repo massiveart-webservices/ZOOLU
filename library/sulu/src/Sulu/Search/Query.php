@@ -51,9 +51,9 @@ class Query
      *
      * @return $this
      */
-    public function find($value, $key = null, $group = 0)
+    public function where($value, $key = null, $group = 0)
     {
-        $this->handler->find($value, $key, $group, true);
+        $this->handler->where($value, $key, $group, true);
         return $this;
     }
 
@@ -64,9 +64,9 @@ class Query
      *
      * @return $this
      */
-    public function orFind($value, $key = null, $group = 0)
+    public function orWhere($value, $key = null, $group = 0)
     {
-        $this->handler->find($value, $key, $group, false);
+        $this->handler->where($value, $key, $group, false);
         return $this;
     }
 
@@ -90,4 +90,5 @@ class Query
         $this->handler->clear();
         return $this;
     }
+
 }

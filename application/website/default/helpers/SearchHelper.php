@@ -260,11 +260,9 @@ class SearchHelper
 
         if (count($this->hits) > 0) {
             foreach ($this->hits as $objHit) {
+                /** @var \Sulu\Search\Hit $objHit */
 
-
-
-                $objDoc = $objHit->getDocument();
-                $arrDocFields = $objDoc->getFieldNames();
+                $arrDocFields = $objHit->getFieldNames();
 
                 $strHtmlOutput .= '<div class="item">';
 

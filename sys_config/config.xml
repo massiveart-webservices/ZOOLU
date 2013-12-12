@@ -121,7 +121,7 @@
         <!-- SEARCH -->
         <search>
             <client>default</client> <!-- client needed for Elastica -->
-            <type>ZendLucene</type> <!-- ZendLucene|Elastica -->
+            <type>Elastica</type> <!-- ZendLucene|Elastica -->
             <encoding>UTF-8</encoding>
             <index>
                 <!-- paths needed for ZendLucene -->

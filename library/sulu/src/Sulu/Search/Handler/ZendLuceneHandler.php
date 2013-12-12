@@ -26,21 +26,6 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
     private $path;
 
     /**
-     * @var string
-     */
-    private $nodeSummary;
-
-    /**
-     * @var array
-     */
-    private $query = array();
-
-    /**
-     * @var array
-     */
-    private $filters = array();
-
-    /**
      * @param $key
      * @param $data
      */
@@ -48,8 +33,11 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
     {
 
         if ($this->getIndex() !== false) {
+            echo "key\n";
 
-            \Zend_Search_Lucene_Analysis_Analyzer::setDefault(new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
+            \Zend_Search_Lucene_Analysis_Analyzer::setDefault(
+                new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive()
+            );
 
             $doc = new \Zend_Search_Lucene_Document();
 
@@ -81,10 +69,15 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
 
         if ($this->getIndex(false) !== false) {
 
-            \Zend_Search_Lucene_Analysis_Analyzer::setDefault(new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
+            \Zend_Search_Lucene_Analysis_Analyzer::setDefault(
+                new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive()
+            );
             \Zend_Search_Lucene_Search_Query_Wildcard::setMinPrefixLength(0);
 
-            $query = \Zend_Search_Lucene_Search_QueryParser::parse($this->renderQuery(), $this->config->getValue('encoding'));
+            $query = \Zend_Search_Lucene_Search_QueryParser::parse(
+                $this->renderQuery(),
+                $this->config->getValue('encoding')
+            );
 
             return $this->index->find($query);
         }
@@ -100,7 +93,10 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
         if ($this->getIndex(false) !== false) {
 
             $term = new \Zend_Search_Lucene_Index_Term($key, 'key');
-            $query = (strpos($key, '*') !== false) ? new \Zend_Search_Lucene_Search_Query_Wildcard($term) : new \Zend_Search_Lucene_Search_Query_Term($term);
+            $query = (strpos(
+                    $key,
+                    '*'
+                ) !== false) ? new \Zend_Search_Lucene_Search_Query_Wildcard($term) : new \Zend_Search_Lucene_Search_Query_Term($term);
 
             // find hits via query in index
             $hits = $this->index->find($query);
@@ -124,12 +120,12 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
      * @param int $group
      * @param bool $bool
      */
-    public function find($value, $field = null, $group = 0, $bool = true)
+    public function where($value, $field = null, $group = 0, $bool = true)
     {
         if (!empty($value)) {
 
             $cond = '';
-            if (isset($this->query[$group])) {
+            if (isset($this->queries[$group])) {
                 if ($bool === true) {
                     $cond = Query::Q_AND . ' ';
                 } else {
@@ -138,9 +134,9 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
             }
 
             if (!empty($field)) {
-                $this->query[$group][] = $cond . $field . ':' . $value;
+                $this->queries[$group][] = $cond . $field . ':' . $value;
             } else {
-                $this->query[$group][] = $cond . $value;
+                $this->queries[$group][] = $cond . $value;
             }
         }
     }
@@ -158,7 +154,7 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
 
     public function clear()
     {
-        $this->query = null;
+        $this->queries = null;
         $this->filters = null;
     }
 
@@ -168,15 +164,17 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
     protected function renderQuery()
     {
         $query = '';
-        if (count($this->query) > 0) {
-            foreach ($this->query as $group => $data) {
+        if (count($this->queries) > 0) {
+            foreach ($this->queries as $group => $data) {
                 $query .= '+(';
                 if (is_array($data) && count($data) > 0) {
                     foreach ($data as $line) {
                         $query .= $line . ' ';
                     }
-                } else if (is_string($data)) {
-                    $query .= $data;
+                } else {
+                    if (is_string($data)) {
+                        $query .= $data;
+                    }
                 }
                 $query .= ') ';
             }
@@ -204,10 +202,12 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
         if (!is_object($this->index) || !($this->index instanceof \Zend_Search_Lucene)) {
             if (is_dir($this->path) && count(scandir($this->path)) > 4) {
                 $this->index = \Zend_Search_Lucene::open($this->path);
-            } else if (true === $doCreate) {
-                $this->index = \Zend_Search_Lucene::create($this->path);
             } else {
-                return false;
+                if (true === $doCreate) {
+                    $this->index = \Zend_Search_Lucene::create($this->path);
+                } else {
+                    return false;
+                }
             }
         }
 
@@ -226,9 +226,11 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
             if (array_key_exists('path', $indexCfg)) {
                 if (array_key_exists($this->getType(true), $indexCfg['path'])) {
                     $this->path = $indexCfg['path'][$this->getType()];
-                } else if (array_key_exists(self::TYPE_PAGE, $indexCfg['path'])) {
-                    // default type page
-                    $this->path = $indexCfg['path'][self::TYPE_PAGE];
+                } else {
+                    if (array_key_exists(self::TYPE_PAGE, $indexCfg['path'])) {
+                        // default type page
+                        $this->path = $indexCfg['path'][self::TYPE_PAGE];
+                    }
                 }
             }
         }
@@ -265,7 +267,7 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
      *
      * @return \Zend_Search_Lucene_Document
      */
-    protected function addFieldToDocument ($key, $data, \Zend_Search_Lucene_Document $doc)
+    protected function addFieldToDocument($key, $data, \Zend_Search_Lucene_Document $doc)
     {
         // check if field has value (only add field to document when value exists)
         if (is_array($data) && array_key_exists('value', $data)) {
@@ -285,21 +287,44 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
             if (!empty($searchFieldTypeId)) {
                 switch ($searchFieldTypeId) {
                     case Search::FIELD_TYPE_KEYWORD:
-                        $doc->addField(\Zend_Search_Lucene_Field::keyword($key, $data['value'], $this->config->getValue('encoding')));
+                        $doc->addField(
+                            \Zend_Search_Lucene_Field::keyword(
+                                $key,
+                                $data['value'],
+                                $this->config->getValue('encoding')
+                            )
+                        );
                         break;
                     case Search::FIELD_TYPE_UNINDEXED: // for redisplay, not for searching
                         $addToNodeSummary = false;
-                        $doc->addField(\Zend_Search_Lucene_Field::unIndexed($key, $data['value'], $this->config->getValue('encoding')));
+                        $doc->addField(
+                            \Zend_Search_Lucene_Field::unIndexed(
+                                $key,
+                                $data['value'],
+                                $this->config->getValue('encoding')
+                            )
+                        );
                         break;
                     case Search::FIELD_TYPE_BINARY:
                         $addToNodeSummary = false;
-                        $doc->addField(\Zend_Search_Lucene_Field::binary($key, $data['value'], $this->config->getValue('encoding')));
+                        $doc->addField(
+                            \Zend_Search_Lucene_Field::binary($key, $data['value'], $this->config->getValue('encoding'))
+                        );
                         break;
                     case Search::FIELD_TYPE_TEXT:
-                        $doc->addField(\Zend_Search_Lucene_Field::text($key, $data['value'], $this->config->getValue('encoding')));
+                        $doc->addField(
+                            \Zend_Search_Lucene_Field::text($key, $data['value'], $this->config->getValue('encoding'))
+                        );
                         break;
+                    case Search::FIELD_TYPE_SUMMARY_INDEXED:
                     case Search::FIELD_TYPE_UNSTORED: // for searching, not for redisplay
-                        $doc->addField(\Zend_Search_Lucene_Field::unStored($key, $data['value'], $this->config->getValue('encoding')));
+                        $doc->addField(
+                            \Zend_Search_Lucene_Field::unStored(
+                                $key,
+                                $data['value'],
+                                $this->config->getValue('encoding')
+                            )
+                        );
                         break;
                 }
             } else {
@@ -330,7 +355,13 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
      */
     protected function indexNodeSummaryNow(\Zend_Search_Lucene_Document $doc)
     {
-        $doc->addField(\Zend_Search_Lucene_Field::unStored(Search::ZO_NODE_SUMMARY, $this->nodeSummary, $this->config->getValue('encoding')));
+        $doc->addField(
+            \Zend_Search_Lucene_Field::unStored(
+                Search::ZO_NODE_SUMMARY,
+                $this->nodeSummary,
+                $this->config->getValue('encoding')
+            )
+        );
         return $doc;
     }
 

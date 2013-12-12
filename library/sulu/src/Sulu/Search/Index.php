@@ -10,6 +10,7 @@
 namespace Sulu\Search;
 
 use Sulu\Search\Handler\ElasticaHandler;
+use Sulu\Search\Handler\HandlerInterface;
 use Sulu\Search\Handler\ZendLuceneHandler;
 
 class Index
@@ -23,7 +24,7 @@ class Index
     /**
      * @param $handler
      */
-    public function __construct($handler)
+    public function __construct(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }

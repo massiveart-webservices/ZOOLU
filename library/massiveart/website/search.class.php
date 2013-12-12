@@ -68,7 +68,7 @@ class Search
         $this->search->getConfig()->setDataType('global');
         $objGlobalHits = $this->search->getQuery()->fetch();
 
-        if (!empty($objGlobalHits)) {
+        if (null !== $objGlobalHits && !empty($objGlobalHits)) {
             $objHits = array_merge($objHits, $objGlobalHits);
             usort($objHits, array($this, 'cmp'));
         }
@@ -93,18 +93,18 @@ class Search
     private function setQuery()
     {
         if (strlen($this->strSearchValue) < 3) {
-            $this->search->getQuery()->find($this->strSearchValue);
+            $this->search->getQuery()->where($this->strSearchValue);
         } else {
             $arrSearchValue = explode(' ', $this->strSearchValue);
             $counter = 0;
             foreach ($arrSearchValue as $strSearchValue) {
-                $this->search->getQuery()->find($strSearchValue, self::ZO_NODE_SUMMARY, $counter);
+                $this->search->getQuery()->where($strSearchValue, self::ZO_NODE_SUMMARY, $counter);
 
                 $strSearchValue = preg_replace('/([^\pL\s\d])/u', '?', $strSearchValue);
-                $this->search->getQuery()->orFind($strSearchValue . \Sulu\Search\Query::Q_WILDCARD_MULTI, self::ZO_NODE_SUMMARY, $counter);
+                $this->search->getQuery()->orWhere($strSearchValue . \Sulu\Search\Query::Q_WILDCARD_MULTI, self::ZO_NODE_SUMMARY, $counter);
 
                 $strSearchValue = str_replace('?', '', $strSearchValue);
-                $this->search->getQuery()->orFind($strSearchValue . \Sulu\Search\Query::Q_FUZZY, self::ZO_NODE_SUMMARY, $counter);
+                $this->search->getQuery()->orWhere($strSearchValue . \Sulu\Search\Query::Q_FUZZY, self::ZO_NODE_SUMMARY, $counter);
 
                 $counter++;
             }
@@ -118,17 +118,18 @@ class Search
     /**
      * compare search hits
      *
-     * @param Zend_Search_Lucene_Search_QueryHit $objHitA
-     * @param Zend_Search_Lucene_Search_QueryHit $objHitB
+     * @param \Sulu\Search\Hit $objHitA
+     * @param \Sulu\Search\Hit $objHitB
      *
      * @return integer
      */
     private function cmp($objHitA, $objHitB)
     {
-        if ($objHitA->score == $objHitB->score) {
+        if ($objHitA->score() === $objHitB->score()) {
             return 0;
         }
-        return ($objHitA->score < $objHitB->score) ? 1 : -1;
+
+        return ($objHitA->score() < $objHitB->score()) ? 1 : -1;
     }
 
     /**
