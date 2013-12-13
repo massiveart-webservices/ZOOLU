@@ -184,7 +184,7 @@ class GenericDataTypePage extends GenericDataTypeAbstract
                 //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->page.'/'.sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId.'_'.$this->setup->getLanguageId());
                 $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
                 //run remove page from index in background
-                exec("php " . $strIndexPageFilePath . " --key='" . $objPage->pageId . "_" . $this->setup->getLanguageId() . "*' > /dev/null &#038;");
+                exec("php " . $strIndexPageFilePath . " --key='" . $objPage->pageId . "_" . $this->setup->getLanguageId() . "' > /dev/null &#038;");
             }
 
             //cache expiring

@@ -410,7 +410,7 @@ class IndexController extends WebControllerAction
 
                         // forward to SearchController
                         if ($this->blnSearch == true) {
-                            $this->forward('index', 'Search', null, array(
+                            $this->forward('search', 'Search', null, array(
                                     'rootLevelId'  => $this->objPage->getRootLevelId(),
                                     'theme'        => $this->objTheme->path,
                                     'urlPrefix'    => $this->strUrlPrefix,

@@ -18,10 +18,11 @@ use Elastica\Query\Bool;
 use Elastica\Query\Common;
 use Elastica\Query\Fuzzy;
 use Elastica\Query\Match;
+use Elastica\Query\Prefix;
 use Elastica\Query\QueryString;
-use Elastica\Query\Text;
 use Elastica\Query\Wildcard;
 use Elastica\Result;
+use Elastica\Exception\NotFoundException;
 use Sulu\Search\Hit;
 use Sulu\Search\Search;
 use Sulu\Search\Query;
@@ -61,7 +62,7 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
                 }
 
                 if ('' !== strip_tags($this->nodeSummary)) {
-                    $doc->set(Search::ZO_NODE_SUMMARY, strip_tags($this->nodeSummary));
+                    $doc->set(Search::NODE_SUMMARY, strip_tags($this->nodeSummary));
                 }
             }
 
@@ -77,30 +78,76 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
     public function delete($key)
     {
         if ($this->getIndex() !== false) {
-            // TODO: Implement delete() method.
+            if (false !== strpos($key, Query::Q_WILDCARD)) {
+
+                $this->where(trim($key, ' ' . Query::Q_WILDCARD), Query::Q_PREFIX, '_id');
+                $hits = $this->fetch();
+                if (null !== $hits) {
+                    foreach ($hits as $hit) {
+                        /** @var Hit $hit */
+                        $this->deleteById($hit->getFieldValue('_id'));
+                    }
+                }
+
+            } else {
+                $this->deleteById($key);
+            }
+        }
+    }
+
+    private function deleteById($id)
+    {
+        try {
+            $type = $this->getIndex()->getType($this->getType());
+            $type->deleteById($id);
+        } catch (NotFoundException $exc) {
+            // ignored not found exception
         }
     }
 
     /**
      * add where statement
      * @param $value
+     * @param $type
      * @param null $field
      * @param int $group
      * @param bool $bool
      */
-    public function where($value, $field = null, $group = 0, $bool = true)
+    public function where($value, $type, $field = null, $group = 0, $bool = true)
     {
         if (!empty($value)) {
+            $query = null;
             if (null !== $field) {
-                //$query = new Common($field, $value, 0.001);
-                $query = new Match();
-                $query->setField($field, $value);
+                switch ($type) {
+                    case Query::Q_WILDCARD:
+                        $query = new Wildcard();
+                        $value = (false !== strpos($value, Query::Q_WILDCARD)) ? $value : $value . Query::Q_WILDCARD;
+                        $query->setValue($field, $value);
+                        break;
+                    case Query::Q_FUZZY:
+                        $query = new Fuzzy();
+                        $value = (false !== strpos($value, Query::Q_FUZZY)) ? $value : $value . Query::Q_FUZZY;
+                        $query->setField($field, $value);
+                        break;
+                    case Query::Q_PREFIX:
+                        $query = new Prefix();
+                        $query->setPrefix($field, $value);
+                        break;
+                    default:
+                        //$query = new Common($field, $value, 0.001);
+                        $query = new Match();
+                        $query->setField($field, $value);
+                        break;
+                }
             } else {
                 $query = new QueryString();
                 $query->setQuery($value);
             }
 
-            $this->queries[] = $query;
+            if (null !== $query) {
+                $this->queries[] = $query;
+            }
+
         }
     }
 
@@ -145,7 +192,8 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
             } else {
                 return null;
             }
-
+        } else {
+            return null;
         }
     }
 
@@ -229,8 +277,8 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
             $query->setFilter($andFilter);
         }
 
-        echo '<pre>';
-        var_dump($query->getQuery());
+        //echo '<pre>';
+        //var_dump($query->toArray());
 
         return $query;
     }
@@ -240,9 +288,8 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
      */
     protected function getIndex()
     {
-
         if (!is_object($this->index) || !($this->index instanceof Index)) {
-            $this->index = $this->getClient()->getIndex('zoolu'); // TODO config ??
+            $this->index = $this->getClient()->getIndex($this->getConfig()->getValue('client'));
         }
 
         return $this->index;
@@ -254,7 +301,14 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
     protected function getClient()
     {
         if (null === $this->client) {
-            $this->client = new Client(); // TODO config ??
+            $indexCfg = $this->config->getValue('index');
+            $host = array_key_exists('es_host', $indexCfg) ? $indexCfg['es_host'] : 'localhost';
+            $port = array_key_exists('es_port', $indexCfg) ? intval($indexCfg['es_port']) : 9200;
+
+            $this->client = new Client(array(
+                'host' => $host,
+                'port' => $port,
+            ));
         }
 
         return $this->client;

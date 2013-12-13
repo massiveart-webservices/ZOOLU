@@ -97,21 +97,13 @@ class Index
     }
 
     /**
-     * @param $strKey
+     * @param $key
      */
-    public function indexRemovePages($strKey)
+    public function indexRemovePages($key)
     {
         try {
-            $strIndexRootPath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page;
-
-            $arrFolderContent = array_diff(scandir($strIndexRootPath), array('.', '..'));
-            if ($arrFolderContent > 0) {
-                foreach ($arrFolderContent as $item) {
-                    if (is_dir($strIndexRootPath . '/' . $item)) {
-                        $this->indexRemoveElement($strIndexRootPath . '/' . $item, $strKey);
-                    }
-                }
-            }
+            $search = new \Sulu\Search\Search($this->core->sysConfig->search->toArray(), 'page');
+            $search->getIndex()->delete($key);
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -127,7 +119,9 @@ class Index
     public function indexGlobal($strGlobalId, $intGlobalLinkId, $intGlobalVersion, $intLanguageId, $intRootLevelId)
     {
         try {
-            $this->core->logger->debug('massiveart->website->index->indexGlobal(' . $strGlobalId . ', ' . $intGlobalLinkId . ', ' . $intGlobalVersion . ', ' . $intLanguageId . ', ' . $intRootLevelId . ')');
+            $this->core->logger->debug(
+                'massiveart->website->index->indexGlobal(' . $strGlobalId . ', ' . $intGlobalLinkId . ', ' . $intGlobalVersion . ', ' . $intLanguageId . ', ' . $intRootLevelId . ')'
+            );
 
             $objPage = $this->getPage();
             $objPage->setPageId($strGlobalId);
@@ -150,48 +144,13 @@ class Index
     }
 
     /**
-     * @param $strKey
+     * @param $key
      */
-    public function indexRemoveGlobals($strKey)
+    public function indexRemoveGlobals($key)
     {
         try {
-            $strIndexRootPath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global;
-
-            $arrFolderContent = array_diff(scandir($strIndexRootPath), array('.', '..'));
-            if (count($arrFolderContent) > 0) {
-                foreach ($arrFolderContent as $item) {
-                    if (is_dir($strIndexRootPath . '/' . $item)) {
-                        $this->indexRemoveElement($strIndexRootPath . '/' . $item, $strKey);
-                    }
-                }
-            }
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-        }
-    }
-
-    /**
-     * @param $strIndexPath
-     * @param $strKey
-     */
-    protected function indexRemoveElement($strIndexPath, $strKey)
-    {
-        try {
-            $arrFolderContent = array_diff(scandir($strIndexPath), array('.', '..'));
-            if (count($arrFolderContent) > 0) {
-                $objIndex = Zend_Search_Lucene::open($strIndexPath);
-
-                $objTerm = new Zend_Search_Lucene_Index_Term($strKey, 'key');
-                $objQuery = (strpos($strKey, '*') !== false) ? new Zend_Search_Lucene_Search_Query_Wildcard($objTerm) : new Zend_Search_Lucene_Search_Query_Term($objTerm);
-
-                $objHits = $objIndex->find($objQuery);
-                foreach ($objHits as $objHit) {
-                    $objIndex->delete($objHit->id);
-                }
-
-                $objIndex->commit();
-                $objIndex->optimize();
-            }
+            $search = new \Sulu\Search\Search($this->core->sysConfig->search->toArray(), 'global');
+            $search->getIndex()->delete($key);
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
@@ -207,7 +166,12 @@ class Index
 
             $objPagesData = $this->objModelPages->loadAllPublicPages();
             foreach ($objPagesData as $objPageData) {
-                $this->indexPage($objPageData->pageId, $objPageData->version, $objPageData->idLanguages, ((int) $objPageData->idRootLevels > 0) ? $objPageData->idRootLevels : $objPageData->idParent);
+                $this->indexPage(
+                    $objPageData->pageId,
+                    $objPageData->version,
+                    $objPageData->idLanguages,
+                    ((int)$objPageData->idRootLevels > 0) ? $objPageData->idRootLevels : $objPageData->idParent
+                );
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -234,7 +198,9 @@ class Index
                 $intCounter++;
                 echo $intCounter . "/" . $intTotal . " - mem usage is: " . memory_get_usage() . "\n";
                 //$this->indexGlobal($objGlobalData->globalId, $objGlobalData->idLink, $objGlobalData->version, $objGlobalData->idLanguages, ((int) $objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent);
-                exec("php $strIndexGlobalFilePath --globalId='" . $objGlobalData->globalId . "' --linkId='" . $objGlobalData->idLink . "' --version=" . $objGlobalData->version . " --languageId=" . $objGlobalData->idLanguages . " --rootLevelId=" . (((int) $objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent));
+                exec(
+                    "php $strIndexGlobalFilePath --globalId='" . $objGlobalData->globalId . "' --linkId='" . $objGlobalData->idLink . "' --version=" . $objGlobalData->version . " --languageId=" . $objGlobalData->idLanguages . " --rootLevelId=" . (((int)$objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent)
+                );
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);

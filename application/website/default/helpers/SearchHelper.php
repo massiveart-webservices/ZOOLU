@@ -422,7 +422,7 @@ class SearchHelper
                     $strHtmlOutput .= '<li>
                                            <a href="#" onclick="
                                               _gaq.push([\'_set\', \'hitCallback\', function(){ window.location.href=\'' . $strUrl . '\'; }]);
-                                              _gaq.push([\'_trackPageview\', \'' . $searchBase . '?q=' . $this->subject . '\']);
+                                              _gaq.push([\'_trackPageview\', \'' . $this->base . '?q=' . $this->subject . '\']);
                                               return false;
                                               ">
                                                <table cellpadding="0" cellspacing="0">

@@ -124,6 +124,9 @@
             <type>Elastica</type> <!-- ZendLucene|Elastica -->
             <encoding>UTF-8</encoding>
             <index>
+                <!-- host & port for Elastica -->
+                <es_host>localhost</es_host>
+                <es_port>9200</es_port>
                 <!-- paths needed for ZendLucene -->
                 <path>
                     <page><![CDATA[{ROOT_PATH}tmp/search_index/pages{LANG_ID}]]></page>

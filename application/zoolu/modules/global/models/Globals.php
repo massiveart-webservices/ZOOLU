@@ -1275,7 +1275,7 @@ class Model_Globals extends ModelAbstract
             
             if ($indexToRemove !== null) {
                 $objIndex = new Index();
-                $objIndex->indexRemoveGlobals($indexToRemove . '_*_r*');
+                $objIndex->indexRemoveGlobals($indexToRemove . '_*');
                 $this->indexOtherProduktLinks($intElementId, $indexToRemove, $rootLevelId);
             }
             $strWhere = $this->objGlobalTable->getAdapter()->quoteInto('relationId = ?', $strGlobalId);

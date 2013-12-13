@@ -33,11 +33,12 @@ interface HandlerInterface
     /**
      * add where statement
      * @param $value
+     * @param $type
      * @param null $field
      * @param int $group
      * @param bool $bool
      */
-    public function where($value, $field = null, $group = 0, $bool = true);
+    public function where($value, $type, $field = null, $group = 0, $bool = true);
 
     /**
      * filter search result by

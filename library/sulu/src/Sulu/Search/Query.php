@@ -19,8 +19,10 @@ class Query
     const Q_OR = 'OR';
     const Q_REQUIRED = '+';
     const Q_PROHIBIT = '-';
-    const Q_WILDCARD_MULTI = '*';
-    const Q_WILDCARD_SINGLE = '?';
+
+    const Q_MATCH = '-';
+    const Q_WILDCARD = '*';
+    const Q_PREFIX = 'p';
     const Q_FUZZY = '~';
 
     /**
@@ -46,27 +48,29 @@ class Query
 
     /**
      * @param $value
+     * @param $type
      * @param null $key
      * @param int $group
      *
      * @return $this
      */
-    public function where($value, $key = null, $group = 0)
+    public function where($value, $type, $key = null, $group = 0)
     {
-        $this->handler->where($value, $key, $group, true);
+        $this->handler->where($value, $type, $key, $group, true);
         return $this;
     }
 
     /**
      * @param $value
+     * @param $type
      * @param null $key
      * @param int $group
      *
      * @return $this
      */
-    public function orWhere($value, $key = null, $group = 0)
+    public function orWhere($value, $type, $key = null, $group = 0)
     {
-        $this->handler->where($value, $key, $group, false);
+        $this->handler->where($value, $type, $key, $group, false);
         return $this;
     }
 

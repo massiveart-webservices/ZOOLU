@@ -36,7 +36,7 @@ class Search
     /**
      * constant for search field node summary
      */
-    const ZO_NODE_SUMMARY = 'zo_node_summary';
+    const NODE_SUMMARY = '_summary';
 
     /**
      * @var string

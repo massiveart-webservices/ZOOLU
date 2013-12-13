@@ -27,8 +27,6 @@ class Search
      */
     protected $search = null;
 
-    const ZO_NODE_SUMMARY = 'zo_node_summary';
-
     protected $strSearchValue;
     protected $intLimitSearch;
     protected $intLimitLiveSearch;
@@ -42,7 +40,9 @@ class Search
     public function __construct()
     {
         $this->core = Zend_Registry::get('Core');
-        Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
+        Zend_Search_Lucene_Analysis_Analyzer::setDefault(
+            new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive()
+        );
         Zend_Search_Lucene_Search_Query_Wildcard::setMinPrefixLength(0);
     }
 
@@ -69,8 +69,12 @@ class Search
         $objGlobalHits = $this->search->getQuery()->fetch();
 
         if (null !== $objGlobalHits && !empty($objGlobalHits)) {
-            $objHits = array_merge($objHits, $objGlobalHits);
-            usort($objHits, array($this, 'cmp'));
+            if (null !== $objHits && !empty($objHits)) {
+                $objHits = array_merge($objHits, $objGlobalHits);
+                usort($objHits, array($this, 'cmp'));
+            } else {
+                $objHits = $objGlobalHits;
+            }
         }
 
         return $objHits;
@@ -93,18 +97,33 @@ class Search
     private function setQuery()
     {
         if (strlen($this->strSearchValue) < 3) {
-            $this->search->getQuery()->where($this->strSearchValue);
+            $this->search->getQuery()->where($this->strSearchValue, \Sulu\Search\Query::Q_MATCH);
         } else {
             $arrSearchValue = explode(' ', $this->strSearchValue);
             $counter = 0;
             foreach ($arrSearchValue as $strSearchValue) {
-                $this->search->getQuery()->where($strSearchValue, self::ZO_NODE_SUMMARY, $counter);
+                $this->search->getQuery()->where(
+                    $strSearchValue,
+                    \Sulu\Search\Query::Q_MATCH,
+                    \Sulu\Search\Search::NODE_SUMMARY,
+                    $counter
+                );
 
                 $strSearchValue = preg_replace('/([^\pL\s\d])/u', '?', $strSearchValue);
-                $this->search->getQuery()->orWhere($strSearchValue . \Sulu\Search\Query::Q_WILDCARD_MULTI, self::ZO_NODE_SUMMARY, $counter);
+                $this->search->getQuery()->orWhere(
+                    $strSearchValue,
+                    \Sulu\Search\Query::Q_WILDCARD,
+                    \Sulu\Search\Search::NODE_SUMMARY,
+                    $counter
+                );
 
                 $strSearchValue = str_replace('?', '', $strSearchValue);
-                $this->search->getQuery()->orWhere($strSearchValue . \Sulu\Search\Query::Q_FUZZY, self::ZO_NODE_SUMMARY, $counter);
+                $this->search->getQuery()->orWhere(
+                    $strSearchValue,
+                    \Sulu\Search\Query::Q_FUZZY,
+                    \Sulu\Search\Search::NODE_SUMMARY,
+                    $counter
+                );
 
                 $counter++;
             }

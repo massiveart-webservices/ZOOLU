@@ -93,10 +93,8 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
         if ($this->getIndex(false) !== false) {
 
             $term = new \Zend_Search_Lucene_Index_Term($key, 'key');
-            $query = (strpos(
-                    $key,
-                    '*'
-                ) !== false) ? new \Zend_Search_Lucene_Search_Query_Wildcard($term) : new \Zend_Search_Lucene_Search_Query_Term($term);
+            $query = (strpos($key, '*') !== false) ? new \Zend_Search_Lucene_Search_Query_Wildcard($term) :
+                new \Zend_Search_Lucene_Search_Query_Term($term);
 
             // find hits via query in index
             $hits = $this->index->find($query);
@@ -116,13 +114,27 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
 
     /**
      * @param $field
+     * @param $type
      * @param null $value
      * @param int $group
      * @param bool $bool
      */
-    public function where($value, $field = null, $group = 0, $bool = true)
+    public function where($value, $type, $field = null, $group = 0, $bool = true)
     {
         if (!empty($value)) {
+
+            switch ($type) {
+                case Query::Q_WILDCARD:
+                    if (false === strpos($value, Query::Q_WILDCARD)) {
+                        $value .= '*';
+                    }
+                    break;
+                case Query::Q_FUZZY:
+                    if (false === strpos($value, Query::Q_FUZZY)) {
+                        $value .= Query::Q_FUZZY;
+                    }
+                    break;
+            }
 
             $cond = '';
             if (isset($this->queries[$group])) {
@@ -357,7 +369,7 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
     {
         $doc->addField(
             \Zend_Search_Lucene_Field::unStored(
-                Search::ZO_NODE_SUMMARY,
+                Search::NODE_SUMMARY,
                 $this->nodeSummary,
                 $this->config->getValue('encoding')
             )
