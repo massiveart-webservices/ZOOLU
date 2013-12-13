@@ -130,8 +130,8 @@ class Search
         }
 
         $this->search->getQuery()
-            ->filterBy('languageId', $this->intLanguageId)
-            ->filterBy('rootLevelId', $this->intRootLevelId);
+            ->filterBy('languageId', (int)$this->intLanguageId)
+            ->filterBy('rootLevelId', (int)$this->intRootLevelId);
     }
 
     /**

@@ -4,8 +4,8 @@ require_once 'Zend/Console/Getopt.php';
 
 // define application options and read params from CLI
 $getopt = new Zend_Console_Getopt(array(
-    'env|e-s'    => 'defines application environment (defaults to "development")',
-    'help|h'     => 'displays usage information',
+    'env|e-s' => 'defines application environment (defaults to "development")',
+    'help|h' => 'displays usage information',
 ));
 
 try {
@@ -25,7 +25,7 @@ if ($getopt->getOption('h')) {
 // Define application environment
 $env = $getopt->getOption('e');
 defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (null === $env) ? 'development' : $env);
+|| define('APPLICATION_ENV', (null === $env) ? 'production' : $env);
 
 // include general (autoloader, config)
 require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
@@ -33,62 +33,75 @@ require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 $client = new \Elastica\Client();
 
 // load index
-$index = $client->getIndex('zoolu');
+$index = $client->getIndex($core->sysConfig->search->client);
 
 // create the index new
 $index->create(
     array(
-        'number_of_shards'   => 4,
+        'number_of_shards' => 4,
         'number_of_replicas' => 1,
-        'analysis'           => array(
-            'analyzer' => array(
-                'indexAnalyzer'  => array(
-                    'type'      => 'custom',
-                    'tokenizer' => 'standard',
-                    'filter'    => array('lowercase', 'mySnowball')
-                ),
-                'searchAnalyzer' => array(
-                    'type'      => 'custom',
-                    'tokenizer' => 'standard',
-                    'filter'    => array('standard', 'lowercase', 'mySnowball')
-                )
-            ),
-            'filter'   => array(
-                'mySnowball' => array(
-                    'type'     => 'snowball',
-                    'language' => 'German'
-                )
-            )
-        )
     ),
     true
 );
 
-// create a type
-$type = $index->getType('game');
-
-// The Id of the document
-$id = 1;
-
-// Create a document
-$tweet = array(
-    'id'      => $id,
-    'user'    => array(
-        'name'      => 'mewantcookie',
-        'fullName'  => 'Cookie Monster'
-    ),
-    'msg'     => 'Me wish there were expression for cookies like there is for apples. "A cookie a day make the doctor diagnose you with diabetes" not catchy.',
-    'tstamp'  => '1238081389',
-    'location'=> '41.12,-71.34',
-    '_boost'  => 1.0
+$mapping = new \Elastica\Type\Mapping();
+$mapping->setType($index->getType('page'));
+$mapping->setProperties(
+    array(
+        'rootLevelId' => array('type' => 'integer', 'store' => 'yes'),
+        'templateId' => array('type' => 'integer', 'store' => 'yes'),
+        'elementTypeId' => array('type' => 'integer', 'store' => 'yes'),
+        'languageId' => array('type' => 'integer', 'store' => 'yes'),
+        'segmentId' => array('type' => 'integer', 'store' => 'yes'),
+        'url' => array(
+            'type' => 'string',
+            'store' => 'yes'
+        ),
+        'title' => array(
+            'type' => 'string',
+            'store' => 'yes'
+        ),
+        'articletitle' => array(
+            'type' => 'string',
+            'store' => 'yes'
+        ),
+        '_summary' => array(
+            'type' => 'string',
+            'store' => 'no',
+            'index' => 'analyzed',
+        ),
+    )
 );
-// First parameter is the id of document.
-$tweetDocument = new \Elastica\Document($id);
 
-$index->delete();
+$mapping->send();
 
-// Add tweet to type
-//$type->addDocument($tweetDocument);
+$mapping = new \Elastica\Type\Mapping();
+$mapping->setType($index->getType('global'));
+$mapping->setProperties(
+    array(
+        'rootLevelId' => array('type' => 'integer', 'store' => 'yes'),
+        'templateId' => array('type' => 'integer', 'store' => 'yes'),
+        'elementTypeId' => array('type' => 'integer', 'store' => 'yes'),
+        'languageId' => array('type' => 'integer', 'store' => 'yes'),
+        'segmentId' => array('type' => 'integer', 'store' => 'yes'),
+        'url' => array(
+            'type' => 'string',
+            'store' => 'yes'
+        ),
+        'title' => array(
+            'type' => 'string',
+            'store' => 'yes'
+        ),
+        'articletitle' => array(
+            'type' => 'string',
+            'store' => 'yes'
+        ),
+        '_summary' => array(
+            'type' => 'string',
+            'store' => 'no',
+            'index' => 'analyzed',
+        ),
+    )
+);
 
-// Refresh Index
-//$type->getIndex()->refresh();
+$mapping->send();
