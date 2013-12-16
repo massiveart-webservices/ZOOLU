@@ -279,6 +279,208 @@ class Properties_TagController extends AuthControllerAction
     }
 
     /**
+     *
+     */
+    public function mergeAction()
+    {
+        $this->core->logger->debug('contacts->controllers->TagController->mergeAction()');
+        $mergeTagIds = $this->getParam('tags');
+
+        $status = 0;
+        $message = '';
+        try {
+            if (!empty($mergeTagIds)) {
+                if (!is_array($mergeTagIds)) {
+                    $mergeTagIds = explode(',', $mergeTagIds);
+                }
+                if (count($mergeTagIds) > 1) {
+                    $defaultId = $mergeTagIds[0];
+                    unset($mergeTagIds[0]);
+
+                    foreach ($mergeTagIds as $mergeTagId) {
+                        $this->merge($defaultId, $mergeTagId);
+                    }
+
+                    $status = 1;
+                    $message = $this->core->translate->_('merge_complete');
+                } else {
+                    $this->core->logger->warn('No merge able Tags');
+                    throw new Exception ('nothing to merge');
+                }
+            } else {
+                $this->core->logger->warn('No Tags');
+                throw new Exception ('nothing to merge');
+            }
+        } catch (Exception $e) {
+            $status = 0;
+            $message = $this->core->translate->_('merge_not_calculated');
+            $this->core->logger->warn($this->core->translate->_('merge_not_calculated'));
+        }
+        $this->view->assign('status', $status);
+        $this->view->assign('message', $message);
+    }
+
+    /**
+     * merge
+     * @param int $defaultId
+     * @param int $mergeTagId
+     */
+    protected function merge ($defaultId, $mergeTagId)
+    {
+        $mergeTagId = intval($mergeTagId);
+        $this->core->logger->debug('contacts->controllers->TagController->merge('.$defaultId.', '.$mergeTagId.')');
+
+        $tables = $this->getMergeTables();
+        $hasErrors = false;
+        foreach ($tables as $table => $values) {
+            try {
+                $this->getModelTags()->mergeTags($defaultId, $mergeTagId, $table, $values);
+            } catch (Exception $e) {
+                $hasErrors = true;
+                $this->core->logger->err($e->getMessage());
+            }
+        }
+        // Do not delete
+        if (!$hasErrors) {
+            $this->objModelTags->deleteTag($mergeTagId);
+        }
+    }
+
+    /**
+     * getMergeTables
+     * @return array
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     */
+    protected function getMergeTables()
+    {
+        return array_merge($this->getMergeDynTables(), $this->getMergeStaticTables());
+    }
+
+    /**
+     * getMergeDynTables
+     * @return array
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     */
+    protected function getMergeDynTables()
+    {
+        $dynTableDatas = $this->getModelTags()->getFieldGenericForm();
+
+        $dynTables = array();
+        if (count($dynTableDatas)) {
+            foreach($dynTableDatas as $tableData) {
+                $tableName = '';
+                $tableName .= $tableData->title . '-' . $tableData->genericFormId . '-' . $tableData->version;
+                if ($tableData->isMultiply == 1) {
+                    $tableName .= '-Region'.$tableData->regionId;
+                }
+                $tableName .= '-InstanceFileFilters';
+
+                $dynTables[$tableName] = array(
+                    'has4References'   => true,
+                    'referenceColumn'  => $tableData->title  . 'Id',
+                    'referenceColumn2' => 'idLanguages',
+                    'referenceColumn3' => 'idRegionInstances',
+                    'referenceColumn4' => 'idFields',
+                    'placerColumn'     => 'referenceId'
+                );
+            }
+        }
+
+        return $dynTables;
+    }
+
+    /**
+     * getMergeStaticTables
+     * @return array
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     */
+    protected function getMergeStaticTables()
+    {
+        return array(
+            'tagPages' => array(
+                'has4References'   => false,
+                'referenceColumn'  => 'pageId',
+                'referenceColumn2' => 'idLanguages',
+                'placerColumn'     => 'idTags'
+            ),
+            'tagGlobals' => array(
+                'has4References'   => false,
+                'referenceColumn'  => 'globalId',
+                'referenceColumn2' => 'idLanguages',
+                'placerColumn'     => 'idTags'
+            ),
+            'tagFiles' => array(
+                'has4References'   => false,
+                'referenceColumn'  => 'fileId',
+                'referenceColumn2' => 'idLanguages',
+                'placerColumn'     => 'idTags'
+            ),
+        );
+    }
+
+    /**
+     * mergeformAction
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     */
+    public function mergeformAction()
+    {
+        $this->core->logger->debug('contacts->controllers->TagController->mergeformAction()');
+
+        try {
+            $tags = array();
+            $mergeTagIds = $this->getParam('tags');
+            if (!empty($mergeTagIds)) {
+                $objSelect = $this->getModelTags()->getTagsTable()->select();
+                $objSelect->setIntegrityCheck(false);
+                $objSelect->from($this->getModelTags()->getTagsTable(), array('id', 'title'));
+                $objSelect->where('tags.id IN (?)', $mergeTagIds);
+                $objTags = $this->getModelTags()->getTagsTable()->fetchAll($objSelect);
+                if (count($objTags) > 0) {
+                    $tags = $objTags;
+                }
+            }
+
+            $this->view->assign('core', $this->core);
+            $this->view->assign('tags', $tags);
+            $this->view->assign('allTags', $this->getAllTagsForAutocompleter($tags));
+            $this->renderScript('tag/merge-form.phtml');
+        } catch (Exception $exc) {
+            $this->core->logger->err($exc);
+        }
+    }
+    /**
+     * getAllTagsForAutocompleter
+     * @return Zend_Db_Table_Rowset $objAllTags
+     * @return string $strElementId
+     * @param array $filterTags
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function getAllTagsForAutocompleter($filterTags = array())
+    {
+        $filterTagsId = array();
+        foreach ($filterTags as $filterTag) {
+            $filterTagsId[] = $filterTag->id;
+        }
+        $objSelect = $this->getModelTags()->getTagsTable()->select();
+        $objSelect->setIntegrityCheck(false);
+        $objSelect->from($this->getModelTags()->getTagsTable(), array('id', 'title'));
+        $objAllTags = $this->getModelTags()->getTagsTable()->fetchAll($objSelect);
+        $core = Zend_Registry::get('Core');
+        $strAllTags = '[';
+        if (count($objAllTags) > 0) {
+            foreach ($objAllTags as $objTag) {
+                if (!in_array($objTag->id, $filterTagsId)) {
+                    $strAllTags .= '{"caption":"' . htmlentities($objTag->title, ENT_COMPAT, $core->sysConfig->encoding->default) . '","value":' . $objTag->id . '},';
+                }
+            }
+            $strAllTags = trim($strAllTags, ',');
+        }
+        $strAllTags .= ']';
+        return $strAllTags;
+    }
+
+    /**
      * deleteAction
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -349,7 +551,7 @@ class Properties_TagController extends AuthControllerAction
 
         try {
 
-            $this->initForm();
+            $this->initForm(false);
             if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
                 $arrFormData = $this->getRequest()->getPost();
                 if ($this->objForm->isValid($arrFormData) && count($this->getModelTags()->loadTagByName($arrFormData['title'])) == 0 && $arrFormData['title'] !== '') {
@@ -384,7 +586,7 @@ class Properties_TagController extends AuthControllerAction
         }
     }
 
-    protected function initForm()
+    protected function initForm($showUsed = true)
     {
         $this->objForm = new GenericForm();
 
@@ -394,8 +596,11 @@ class Properties_TagController extends AuthControllerAction
         $this->objForm->addElement('hidden', 'formType', array('value' => 'tag', 'decorators' => array('Hidden')));
 
         $this->objForm->addElement('text', 'title', array('label' => $this->core->translate->_('Tagname', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
-        $this->objForm->addElement('freeText', 'usedTitle', array('label' => $this->core->translate->_('tag_used_in', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
 
+        if (!$showUsed) {
+            $this->objForm->addElement('freeText', 'usedTitle', array('label' => $this->core->translate->_('tag_used_in', false), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'select'));
+
+        }
         $this->objForm->addDisplayGroup(array('title', 'usedTitle'), 'main-group');
         $this->objForm->getDisplayGroup('main-group')->setLegend($this->core->translate->_('General_information', false));
         $this->objForm->getDisplayGroup('main-group')->setDecorators(array('FormElements', 'Region'));

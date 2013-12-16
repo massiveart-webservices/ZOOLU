@@ -1,0 +1,24 @@
+<div class="merge-tags">
+    <br/>
+    <h3><?php echo $this->core->translate->_('Tags'); ?>:</h3>
+    <ol>
+        <li id="autocompletList_mergeTags" class="autocompletList input-text">
+            <input type="text" value="" id="mergeTags" name="mergeTags" />
+            <div id="mergeTags_autocompleter" class="autocompleter">
+                <div class="default"><?php echo $this->core->translate->_('Search_or_add_tags'); ?></div>
+                <ul class="feed">
+                    <?php
+                    if (is_object($this->tags) || is_array($this->tags)) {
+                        foreach ($this->tags as $objTag) {
+                            echo '<li value="' . $objTag->id . '">' . htmlentities($objTag->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</li>';
+                        }
+                    }
+                    ?>
+                </ul>
+            </div>
+        </li>
+    </ol>
+</div>
+<script type="text/javascript">//<![CDATA[
+    myForm.initTag("mergeTags", <?php echo $this->allTags; ?>);
+//]]></script>
