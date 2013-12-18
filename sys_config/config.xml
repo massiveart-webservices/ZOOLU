@@ -154,6 +154,36 @@
                 <language>242</language>
             </field_mappings>
         </contact>
+        
+        <!-- Newsletter  -->
+        <newsletter>
+            <theme>default</theme>
+            <campaign>Mandrill</campaign>
+        </newsletter>
+        
+        <mandrill>
+            <api_key>2pRfqNdjhCOZA2dBJQW_7g</api_key>
+            <from_email>matest@massiveart.com</from_email>
+            <from_name>ZOOLU Newsletter</from_name>
+            <send_mail>
+                <track_opens>true</track_opens>
+                <track_clicks>true</track_clicks>
+                <preserve_recipients>false</preserve_recipients>
+                <zoolu_newsletter_id>zoolu_newsletter_id</zoolu_newsletter_id>
+            </send_mail>
+            <global_merge_vars>
+                <fname>fname</fname>
+                <lname>sname</lname>
+                <salutation>salutation</salutation>
+            </global_merge_vars>
+        </mandrill>
+        
+        <!-- GEARMAN -->
+        <gearman>
+            <server>
+                <host>127.0.0.1</host>
+            </server>
+        </gearman>
 
         <!-- Subscriber  -->
         <subscriber>
@@ -1058,11 +1088,6 @@
                 <private></private>
             </keys>
         </recaptcha>
-
-        <newsletter>
-            <theme>default</theme>
-        </newsletter>
-
     </production>
 
     <!--

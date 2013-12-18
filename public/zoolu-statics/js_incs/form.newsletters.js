@@ -310,12 +310,12 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
         },
         evalScripts: true,
         onComplete: function(){
-          if(!test){
-            $('buttonsend').hide();
-            $('buttontestsend').hide();
-            $('buttonsave').hide();
-            $('sent').value = 1;
-          }
+//          if(!test){
+//            $('buttonsend').hide();
+//            $('buttontestsend').hide();
+//            $('buttonsave').hide();
+//            $('sent').value = 1;
+//          }
           $('divFormSaveLoader').hide();
         }.bind(this)
       });

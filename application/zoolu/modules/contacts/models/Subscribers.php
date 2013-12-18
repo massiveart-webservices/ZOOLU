@@ -163,20 +163,22 @@ class Model_Subscribers
 
         $arrValues = array();
         if ($blnExtendSelect) {
-            $arrValues = array('id', 'salutation', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'salutation', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         } else {
-            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'hardbounce' => 'cct.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'hardbounce' => 'cct.title', 'created', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
+        $objSelect->join(array('c' => 'categories'), 'c.id = s.salutation', array());
+        $objSelect->join(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array('salutation' => 'title'));
         $objSelect->joinInner(array('gf' => 'genericForms'), 'gf.id = s.idGenericForms', array('gf.genericFormId', 'gf.version'));
-        $objSelect->joinLeft(array('u' => 'users'), 'u.id = s.idUsers', array('s.changed'));
         $objSelect->joinLeft(array('cs' => 'categories'), 'cs.id = s.subscribed', array());
         $objSelect->joinLeft(array('cst' => 'categoryTitles'), 'cst.idCategories = cs.id AND cst.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cd' => 'categories'), 'cd.id = s.dirty', array());
         $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cc' => 'categories'), 'cc.id = s.hardbounce', array());
         $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.id AND cct.idLanguages = ' . $this->intLanguageId, array());
+        
         //Apply rootLevelFilters
         if ($intRootLevelFilterId != null) {
             foreach ($objRootLevelFilterValues as $objRootLevelFilterValue) {

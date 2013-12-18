@@ -60,3 +60,19 @@ INSERT INTO `rootLevelTypeFilterTypes` (`id`, `idRootLevelTypes`, `name`, `opera
 (2, 18, 'interestgroup', '["one", "none", "all"]', 'SELECT tbl.id AS id, categoryTitles.title AS title, alternateCategoryTitles.title AS altTitle FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = %LANGUAGE_ID% LEFT JOIN categoryTitles AS alternateCategoryTitles ON alternateCategoryTitles.idCategories = tbl.id AND alternateCategoryTitles.idLanguages = 2, categories AS rootCat WHERE rootCat.id = 615 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt ORDER BY tbl.lft, categoryTitles.title'),
 (3, 18, 'language', '["one", "none", "all"]', 'SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = %LANGUAGE_ID%, categories AS rootCat WHERE rootCat.id = 634 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt ORDER BY tbl.lft, categoryTitles.title');
 SET FOREIGN_KEY_CHECKS=1;
+
+INSERT INTO `zo-zoolu`.`rootLevelGroupTitles` (`id`, `idRootLevelGroups`, `idLanguages`, `title`) VALUES (NULL, '15', '1', 'Newsletter'), (NULL, '15', '2', 'Newsletters');
+
+UPDATE `zo-zoolu`.`templates` SET `active` = '1' WHERE `templates`.`id` =40;
+
+DELETE FROM `zo-zoolu`.`regionFields` WHERE `regionFields`.`id` = 307;
+
+CREATE TABLE IF NOT EXISTS `newsletterUnsubscribeHashes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `idSubscriber` bigint(20) unsigned NOT NULL,
+  `hash` varchar(128) NOT NULL DEFAULT '',
+  `used` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idSubscriber` (`idSubscriber`),
+  UNIQUE KEY `hash` (`hash`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;

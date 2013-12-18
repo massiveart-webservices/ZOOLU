@@ -88,7 +88,10 @@ class CommandChain
         }
         return true;
     }
-
+    
+    public function getCommands() {
+        return $this->arrCommands;
+    }
 }
 
 ?>

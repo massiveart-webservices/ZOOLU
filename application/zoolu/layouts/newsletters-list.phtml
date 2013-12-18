@@ -402,7 +402,6 @@
 
         myNavigation.topNaviTitle = '<?php echo $this->translate->_('newsletters'); ?>';
         myNavigation.module = <?php echo $this->module; ?>;
-
         myNavigation.rootLevelType = 'newsletter';
 
         if ((typeof(rootLevelId) != 'undefined') && (typeof(rootLevelGroupId) != 'undefined')) {
@@ -422,7 +421,7 @@
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
         new Draggable('overlayNewsletterWrapper', {handle: 'handle', scroll: window });
     });
-
+    
     //]]>
     </script>
 </body>

@@ -85,7 +85,7 @@ class NewsletterHelper {
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
    */
-  public function getTitle($strTag, $blnTitleFallback) {
+  public function getTitle($strTag) {
     $strReturn = '';
   
     if($strTag != '') $strReturn .= '<'.$strTag.'>';
@@ -110,10 +110,10 @@ class NewsletterHelper {
    * @author Cornelius Hansjakob <cha@massiveart.com>
    * @version 1.0
    */
-  public function getTextBlocks($strImageFolder, $strImageFolderZoom, $strImageContainerClass){
+  public function getTextBlocks($strImageFolder){
     $strReturn = '';
     
-    $objMyMultiRegion = $this->objGenericSetup->getRegion(11); //11 is the default textblock region
+    $objMyMultiRegion = $this->objGenericSetup->getRegion(98); // 98 is the default textblock region for newsletter
   
     if($objMyMultiRegion instanceof GenericElementRegion){
       foreach($objMyMultiRegion->RegionInstanceIds() as $intRegionInstanceId){
@@ -132,6 +132,7 @@ class NewsletterHelper {
           if(!isset($objDisplayOption->size) || $objDisplayOption->size == null) $objDisplayOption->size = $strImageFolder;
           
           $strHtmlOutputImage = '<td>';
+          
           if($objFiles != '' && count($objFiles) > 0){
             $intImgCounter = 0;
             foreach($objFiles as $objFile){

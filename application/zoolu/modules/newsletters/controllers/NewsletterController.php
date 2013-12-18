@@ -40,8 +40,6 @@
  * @version 1.0
  */
 
-require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpCampaign.php');
-
 class Newsletters_NewsletterController extends AuthControllerAction
 {
 
@@ -103,13 +101,19 @@ class Newsletters_NewsletterController extends AuthControllerAction
             $this->_redirect('/zoolu');
         }
         $this->objRequest = $this->getRequest();
+        $this->initCommandChain();
     }
-
+    
     /**
-     * The default action
+     * init command chain
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @return void
      */
-    public function indexAction()
+    private function initCommandChain()
     {
+        $this->core->logger->debug('core->controllers->NewsletterController->initCommandChain()');
+        $this->objCommandChain = new CampaignCommandChain();
+        $this->objCommandChain->addCommand(new NewsletterCampaignCommand());
     }
 
     /**
@@ -220,46 +224,6 @@ class Newsletters_NewsletterController extends AuthControllerAction
     }
 
     /**
-     * buildCampaign
-     * @param GenericData $objGenericData
-     * @author Daniel Rotter <daniel.rotter@massiveart.com>
-     * @version 1.0
-     */
-    private function buildCampaign($objNewsletter)
-    {
-        $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
-        $objCampaign = new MailChimpCampaign();
-        $objCampaign->setCampaignType($this->core->sysConfig->mail_chimp->type);
-        $objCampaign->setOptions(array(
-                                      'list_id'    => $this->core->sysConfig->mail_chimp->list_id,
-                                      'subject'    => $objGenericData->Setup()->getField('title')->getValue(),
-                                      'title'      => $objGenericData->Setup()->getField('title')->getValue(),
-                                      'from_email' => $this->core->sysConfig->mail_chimp->from_email,
-                                      'from_name'  => $this->core->sysConfig->mail_chimp->from_name
-                                 ));
-        if ($objNewsletter->remoteId) {
-            $objCampaign->setCampaignId($objNewsletter->remoteId);
-        }
-        $this->renderNewsletter($objNewsletter);
-        $strContent = $this->view->render('master.php');
-
-        $objCampaign->setContent($strContent);
-
-        //Set Filter
-        $intFilterId = $objGenericData->Setup()->getField('filter')->getValue();
-        if ($intFilterId != 0) {
-            $objRootLevelFilterValues = $this->getModelRootLevels()->loadRootLevelFilterValues($intFilterId);
-            $arrCondition = array();
-            foreach ($objRootLevelFilterValues as $objRootLevelFilterValue) {
-                $arrCondition[] = array('field' => $objRootLevelFilterValue->field, 'op' => $objRootLevelFilterValue->operator, 'value' => $objRootLevelFilterValue->value);
-            }
-            $arrSegmentationOptions = array('match' => 'all', 'conditions' => $arrCondition);
-            $objCampaign->setSegmentationOptions($arrSegmentationOptions);
-        }
-        return $objCampaign;
-    }
-
-    /**
      * sendmessageAction
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
@@ -267,7 +231,6 @@ class Newsletters_NewsletterController extends AuthControllerAction
     public function sendmessageAction()
     {
         $this->core->logger->debug('newsletters->controllers->NewsletterController->sendmessageAction()');
-
         $blnTestMail = $this->getRequest()->getParam('test');
         $this->view->assign('test', $blnTestMail);
         $objNewsletters = $this->getModelNewsletters()->load($this->getRequest()->getParam('id'));
@@ -279,15 +242,14 @@ class Newsletters_NewsletterController extends AuthControllerAction
                 $strEmail = Zend_Auth::getInstance()->getIdentity()->email;
                 $this->view->assign('recipients', $strEmail);
             } else {
+                $intRecipients = 0;
                 $objFilter = $this->getModelRootLevels()->loadRootLevelFilter($objGenericData->Setup()->getField('filter')->getValue());
                 if (count($objFilter) > 0) {
                     $objFilter = $objFilter->current();
-                    $objFilterValues = $this->getModelRootLevels()->loadRootLevelFilterValues($objFilter->id);
-
                     $this->view->assign('filtertitle', $objFilter->filtertitle);
+                    $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'filter' => $objFilter));
+                    $intRecipients = $this->objCommandChain->runCommand('recipients:count:get', array());
                 }
-                $objCampaign = $this->buildCampaign($objNewsletter);
-                $intRecipients = $objCampaign->segmentTest();
                 $this->view->assign('recipients', $intRecipients);
             }
             $this->view->assign('subject', $objGenericData->Setup()->getField('title')->getValue());
@@ -314,23 +276,35 @@ class Newsletters_NewsletterController extends AuthControllerAction
         if (count($objNewsletters) > 0) {
             $objNewsletter = $objNewsletters->current();
             $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
+            $objFilter = $this->getModelRootLevels()->loadRootLevelFilter($objGenericData->Setup()->getField('filter')->getValue());
+            if (count($objFilter) > 0) {
+                $objFilter = $objFilter->current();
 
-            $objCampaign = $this->buildCampaign($objNewsletter);
+                // init before send
+                $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'filter' => $objFilter));
 
-            $strCampaignId = $objCampaign->update($objNewsletter->remoteId);
-            $this->getModelNewsletters()->update($objGenericData->Setup(), array(self::REMOTE_ID => $strCampaignId));
-            $this->core->logger->info('Sending Newsletter...');
-            if ($blnTestSend) {
-                $strEmail = $this->getRequest()->getParam('recipient');
-                $objCampaign->sendTest(array($strEmail));
-            } else {
-                $objCampaign->send();
-                $this->getModelNewsletters()->update($objGenericData->Setup(),
-                    array(
-                         'sent'               => 1,
-                         'delivered'          => date('Y-m-d H:i:s'),
-                         'idRootLevelFilters' => $objGenericData->Setup()->getField('filter')->getValue()
-                    ));
+                // create or update cmapaing on a remote system
+                $remoteId = $this->objCommandChain->runCommand('campaign:update', array('remoteId' => $objNewsletter->remoteId));
+                $this->getModelNewsletters()->update($objGenericData->Setup(), array(self::REMOTE_ID => $remoteId));
+
+                $this->renderNewsletter($objNewsletter);      
+                $content = $this->view->render('master.php');
+                $title = $objNewsletter->title;
+                if ($blnTestSend) {
+                    $strEmail = $this->getRequest()->getParam('recipient');
+                    // send Testnewsletter
+                    $this->objCommandChain->runCommand('newsletter:sendTest', array('content' => $content, 'title' => $title, 'email' => $strEmail));
+                } else {
+                    // ==>
+                    $this->objCommandChain->runCommand('newsletter:send', array('content' => $content, 'title' => $title));
+//                    $this->getModelNewsletters()->update($objGenericData->Setup(),
+//                        array(
+//                             'sent'               => 1,
+//                             'delivered'          => date('Y-m-d H:i:s'),
+//                             'idRootLevelFilters' => $objGenericData->Setup()->getField('filter')->getValue()
+//                        )
+//                    );
+                }
             }
         }
     }

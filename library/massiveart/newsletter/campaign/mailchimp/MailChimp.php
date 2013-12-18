@@ -31,7 +31,7 @@
  */
 
 /**
- * MailChimpList
+ * NewsletterCampaign_MailChimp
  *
  *
  * Version history (please keep backward compatible):
@@ -40,7 +40,7 @@
  * @author Daniel Rotter <daniel.rotter@massiveart.com>
  * @version 1.0
  * @package massiveart.contact.replication.MailChimp
- * @subpackage MailChimpCampaign
+ * @subpackage NewsletterCampaign_MailChimp
  */
 
 // MailChimp API Class v1.3
@@ -51,7 +51,7 @@ require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChi
 require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpList.php');
 require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/mailchimp/MailChimpMember.php');
 
-class MailChimpCampaign
+class NewsletterCampaign_MailChimp
 {
 
     const API_ERROR_CODE_UNABLE_TO_UPDATE_CAMPAIGN = -90;

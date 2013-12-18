@@ -67,15 +67,18 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         'Acl'                           => '/library/massiveart/security/acl.class.php',
         'RoleProvider'                  => '/library/massiveart/security/role.provider.class.php',
         'CommandChain'                  => '/library/massiveart/command/command.chain.class.php',
+        'CampaignCommandChain'          => '/library/massiveart/command/newsletter/campaign.command.chain.class.php',
         'PageCommand'                   => '/library/massiveart/command/page.command.class.php',
         'GlobalCommand'                 => '/library/massiveart/command/global.command.class.php',
         'ContactReplicationCommand'     => '/library/massiveart/command/contact/replication.command.class.php',
         'ContactReplicationInterface'   => '/library/massiveart/contact/replication/contact.replication.interface.php',
+        'NewsletterCampaignCommand'     => '/library/massiveart/command/newsletter/campaign.command.class.php',
+        'NewsletterCampaignInterface'   => '/library/massiveart/newsletter/newsletter.campaign.interface.php',
         'phMagick'                      => '/library/phmagick/phMagick.php',
         'PluginLoader'                  => '/library/massiveart/loader/pluginLoader.class.php',
         'FormElementXhtmlAbstract'      => '/library/massiveart/generic/forms/fields/form.element.xhtml.abstract.class.php',
         'FormElementMultiAbstract'      => '/library/massiveart/generic/forms/fields/form.element.multi.abstract.class.php',
-        'Export'						=> '/library/massiveart/utilities/export.class.php',
+        'Export'			=> '/library/massiveart/utilities/export.class.php',
         'Zip'                           => '/library/massiveart/utilities/zip.class.php',
     
         // Undefined
@@ -88,6 +91,13 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
     
         // Gearman
         'GearmanReplicationMailChimp'	=> '/library/massiveart/gearman/replication/mailchimp.replication.class.php',
+        
+        // Mandrill
+        'Mandrill'                      => '/library/mandrill/src/Mandrill.php',
+
+        // GearmanMandrillHandler
+        'GearmanMandrillHandler'        => '/library/massiveart/gearman/mandrill/GearmanMandrillHandler.php',
+        'GearmanMandrillClient'         => '/library/massiveart/gearman/mandrill/GearmanMandrillClient.php',
     
         // Service
         'Service_Core'                  => '/library/massiveart/services/core.class.php',
