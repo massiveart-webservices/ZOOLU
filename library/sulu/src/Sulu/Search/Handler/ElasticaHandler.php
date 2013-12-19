@@ -277,9 +277,6 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
             $query->setFilter($andFilter);
         }
 
-        //echo '<pre>';
-        //var_dump($query->toArray());
-
         return $query;
     }
 

@@ -9,6 +9,7 @@
 
 namespace Sulu\Search\Handler;
 
+use Sulu\Search\Hit;
 use Sulu\Search\Search;
 use Sulu\Search\Query;
 
@@ -33,7 +34,6 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
     {
 
         if ($this->getIndex() !== false) {
-            echo "key\n";
 
             \Zend_Search_Lucene_Analysis_Analyzer::setDefault(
                 new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive()
@@ -79,7 +79,30 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
                 $this->config->getValue('encoding')
             );
 
-            return $this->index->find($query);
+            $resultSet = $this->index->find($query);;
+            if (count($resultSet) > 0) {
+                $hits = array();
+
+                foreach ($resultSet as $result) {
+                    /** @var \Zend_Search_Lucene_Search_QueryHit $result */
+                    $fieldNames = $result->getDocument()->getFieldNames();
+                    $data = array();
+                    foreach ($fieldNames as $fieldName) {
+                        $data[$fieldName] = $result->getDocument()->getFieldValue($fieldName);
+                    }
+
+                    $hits[] = new Hit($result->score, array_merge(
+                        array(
+                            '_id' => $result->id,
+                            '_type' => $this->type,
+                        ),
+                        $data
+                    ));
+                }
+                return $hits;
+            } else {
+                return null;
+            }
         }
 
         return null;
@@ -90,25 +113,36 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
      */
     public function delete($key)
     {
-        if ($this->getIndex(false) !== false) {
 
-            $term = new \Zend_Search_Lucene_Index_Term($key, 'key');
-            $query = (strpos($key, '*') !== false) ? new \Zend_Search_Lucene_Search_Query_Wildcard($term) :
-                new \Zend_Search_Lucene_Search_Query_Term($term);
+        $indexRootPath = $this->clearRawPathLanguage($this->clearRawPathRoot($this->getRawIndexPath()));
 
-            // find hits via query in index
-            $hits = $this->index->find($query);
+        if (is_dir($indexRootPath)) {
+            $folders = array_diff(scandir($indexRootPath), array('.', '..'));
+            if ($folders > 0) {
+                foreach ($folders as $folder) {
+                    if (is_dir($indexRootPath . '/' . $folder)) {
+                        $this->index = \Zend_Search_Lucene::open($indexRootPath . '/' . $folder);
 
-            // delete hits
-            if (count($hits) > 0) {
-                foreach ($hits as $hit) {
-                    $this->index->delete($hit->id);
+                        $term = new \Zend_Search_Lucene_Index_Term($key, 'key');
+                        $query = (strpos($key, '*') !== false) ? new \Zend_Search_Lucene_Search_Query_Wildcard($term) :
+                            new \Zend_Search_Lucene_Search_Query_Term($term);
+
+                        // find hits via query in index
+                        $hits = $this->index->find($query);
+
+                        // delete hits
+                        if (count($hits) > 0) {
+                            foreach ($hits as $hit) {
+                                $this->index->delete($hit->id);
+                            }
+                        }
+
+                        $this->index->commit();
+
+                        $this->index->optimize();
+                    }
                 }
             }
-
-            $this->index->commit();
-
-            $this->index->optimize();
         }
     }
 
@@ -233,18 +267,7 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
     {
         // get path from config
         if (empty($this->path)) {
-            $indexCfg = $this->config->getValue('index');
-
-            if (array_key_exists('path', $indexCfg)) {
-                if (array_key_exists($this->getType(true), $indexCfg['path'])) {
-                    $this->path = $indexCfg['path'][$this->getType()];
-                } else {
-                    if (array_key_exists(self::TYPE_PAGE, $indexCfg['path'])) {
-                        // default type page
-                        $this->path = $indexCfg['path'][self::TYPE_PAGE];
-                    }
-                }
-            }
+            $this->path = $this->getRawIndexPath();
         }
 
         // clean replacers in config path
@@ -253,16 +276,45 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
         return $this->path;
     }
 
+    protected function getRawIndexPath()
+    {
+        $indexCfg = $this->config->getValue('index');
+
+        if (array_key_exists('path', $indexCfg)) {
+            if (array_key_exists($this->getType(true), $indexCfg['path'])) {
+                return $indexCfg['path'][$this->getType()];
+            } else {
+                if (array_key_exists(self::TYPE_PAGE, $indexCfg['path'])) {
+                    // default type page
+                    return $this->path = $indexCfg['path'][self::TYPE_PAGE];
+                }
+            }
+        }
+    }
+
     protected function cleanPath()
     {
-        // replace placeholder: {ROOT_PATH}
-        if (strpos($this->path, '{ROOT_PATH}') !== false) {
-            $this->path = str_replace('{ROOT_PATH}', GLOBAL_ROOT_PATH, $this->path);
-        }
+        $this->path = $this->clearRawPathRoot($this->path);
+        $this->path = $this->clearRawPathLanguage($this->path, $this->getLanguageId());
+    }
 
+    protected function clearRawPathRoot($path)
+    {
+        // replace placeholder: {ROOT_PATH}
+        if (strpos($path, '{ROOT_PATH}') !== false) {
+            return str_replace('{ROOT_PATH}', GLOBAL_ROOT_PATH, $path);
+        }
+    }
+
+    protected function clearRawPathLanguage($path, $languageId = null)
+    {
         // replace placeholder: {LANG_ID}
-        if (strpos($this->path, '{LANG_ID}') !== false) {
-            $this->path = str_replace('{LANG_ID}', '/' . sprintf('%02d', $this->getLanguageId()), $this->path);
+        if (strpos($path, '{LANG_ID}') !== false) {
+            if (null !== $languageId) {
+                return str_replace('{LANG_ID}', '/' . sprintf('%02d', $languageId), $path);
+            } else {
+                return str_replace('{LANG_ID}', '', $path);
+            }
         }
     }
 
@@ -277,7 +329,7 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
      * @param array $data
      * @param \Zend_Search_Lucene_Document $doc
      *
-     * @return \Zend_Search_Lucene_Document
+     * @return \Zend_Sea    rch_Lucene_Document
      */
     protected function addFieldToDocument($key, $data, \Zend_Search_Lucene_Document $doc)
     {
