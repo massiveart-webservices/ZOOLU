@@ -90,4 +90,20 @@ ALTER TABLE `newsletters` ADD `baseportal` INT UNSIGNED NULL DEFAULT NULL AFTER 
 
 UPDATE `zo-zoolu`.`fields` SET `sqlSelect` = 'SELECT CONCAT(''{"rootlevel":'', tbl.id, '', "language":"'', languages.languageCode, ''"}'') AS id, CONCAT(rootLevelTitles.title, '' '', languages.languageCode) AS title FROM rootLevelTitles INNER JOIN rootLevels AS tbl ON tbl.id = rootLevelTitles.idRootLevels INNER JOIN rootLevelLanguages ON rootLevelLanguages.idRootLevels = tbl.id INNER JOIN languages ON languages.id = rootLevelLanguages.idLanguages WHERE tbl.idRootLevelTypes = 1 AND tbl.active = 1 AND rootLevelTitles.idLanguages = %LANGUAGE_ID% %WHERE_ADDON% ORDER BY rootLevelTitles.title' WHERE `fields`.`id` =278;
 
-ALTER TABLE `newsletters` CHANGE `baseportal` `baseportal` VARCHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 
+ALTER TABLE `newsletters` CHANGE `baseportal` `baseportal` VARCHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+
+CREATE TABLE IF NOT EXISTS `newsletterStatistics` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `idNewsletter` bigint(20) unsigned NOT NULL,
+  `idSubscriber` bigint(20) unsigned NOT NULL,
+  `sent` bigint(1) unsigned NOT NULL,
+  `hard_bounced` bigint(1) unsigned NOT NULL,
+  `soft_bounced` bigint(1) unsigned NOT NULL,
+  `opened` bigint(1) unsigned NOT NULL,
+  `clicked` bigint(1) unsigned NOT NULL,
+  `spam` bigint(1) unsigned NOT NULL,
+  `unsubscribed` bigint(1) unsigned NOT NULL,
+  `rejected` bigint(1) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;

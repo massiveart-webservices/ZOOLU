@@ -186,19 +186,18 @@ class Newsletters_NewsletterController extends AuthControllerAction
     public function statsAction()
     {
         $this->core->logger->debug('newsletters->controllers->newsletter->statsAction');
-        $strNewsletterId = $this->getRequest()->getParam('id');
-        $objNewsletterData = $this->getModelNewsletters()->load($strNewsletterId);
-        if (count($objNewsletterData) > 0) {
-//            $objNewsletterDb = $objNewsletterData->current();
-//            $objNewsletter = $this->buildCampaign($objNewsletterDb);
-//            $objNewsletter->loadStatistics();
-//
-//            $strFilterTitle = ($objNewsletterDb->filtertitle == '') ? $this->core->translate->_('All') : $objNewsletterDb->filtertitle;
-//
-//            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'application/zoolu/modules/newsletters/views/scripts');
-//            $this->view->assign('objNewsletter', $objNewsletter);
-//            $this->view->assign('strDeliveryDate', $objNewsletterDb->delivered);
-//            $this->view->assign('strFilterTitle', $strFilterTitle);
+        $newsletterId = $this->getRequest()->getParam('id');
+        $newsletterData = $this->getModelNewsletters()->load($newsletterId);
+        if (count($newsletterData) > 0 && $newsletterData->current()->sent == 1) {
+            $newsletter = $newsletterData->current();
+            $objFilterData = $this->getModelRootLevels()->loadRootLevelFilter($newsletter->idRootLevelFilters);
+            $objFilter = $objFilterData->current();
+            $campaign = $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $newsletter, 'filter' => $objFilter));
+            $this->view->assign('campaign', $campaign);
+            $this->view->assign('deliveryDate', $newsletter->delivered);
+            $this->view->assign('filterTitle', $newsletter->filtertitle);
+        } else {
+            $this->_helper->viewRenderer->setNoRender();
         }
     }
 
@@ -289,7 +288,7 @@ class Newsletters_NewsletterController extends AuthControllerAction
                 // init before send
                 $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'filter' => $objFilter));
 
-                // create or update cmapaing on a remote system
+                // create or update campaing on a remote system
                 $remoteId = $this->objCommandChain->runCommand('campaign:update', array('remoteId' => $objNewsletter->remoteId));
                 $this->getModelNewsletters()->update($objGenericData->Setup(), array(self::REMOTE_ID => $remoteId));
 
