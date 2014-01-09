@@ -78,6 +78,18 @@ function get_bottom_content() { }
 
 function get_dom_loaded_js() { }
 
-function get_subscriber_form() {
-    echo getSubscriberHelperObject()->getSubscribeForm();
+function get_error_css_for($strFieldName) {
+    echo getSubscriberHelperObject()->getErrorCssFor($strFieldName);
+}
+
+function get_error_msg_for($strFieldName) {
+    echo getSubscriberHelperObject()->getErrorMsgFor($strFieldName);
+}
+
+function get_data_for($strFieldName, $ret = false) {
+    if ($ret) {
+        return getSubscriberHelperObject()->getDataFor($strFieldName);
+    } else {
+        echo getSubscriberHelperObject()->getDataFor($strFieldName);
+    }
 }

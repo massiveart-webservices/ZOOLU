@@ -79,7 +79,7 @@ class Model_Newsletters
         $objSelect = $this->getNewsletterTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('newsletters', array('id', 'idRootLevels', 'idGenericForms', 'idTemplates', 'title', 'remoteId', 'sent', 'idUsers', 'delivered', 'creator', 'created', 'changed'))
+        $objSelect->from('newsletters', array('id', 'idRootLevels', 'idGenericForms', 'idTemplates', 'title', 'remoteId', 'sent', 'baseportal', 'idUsers', 'delivered', 'creator', 'created', 'changed'))
             ->joinLeft(array('uc' => 'users'), 'uc.id = newsletters.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
             ->joinLeft('genericForms', 'genericForms.id = newsletters.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'))
             ->joinLeft('rootLevelFilters', 'rootLevelFilters.id = newsletters.idRootLevelFilters', array('filtertitle'))

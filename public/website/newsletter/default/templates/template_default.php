@@ -8,5 +8,8 @@
     <tr>
         <td colspan="2"><?php echo $objHelper->getArticle(); ?></td>
     </tr>
-    <?php echo $objHelper->getTextBlocks('220x') ?>
+    <?php echo $objHelper->getTextBlocks('220x'); ?>
+    <tr>
+        <td><?php echo $objHelper->getUnsubscribeLink(); ?></td>
+    </tr>
 </table>

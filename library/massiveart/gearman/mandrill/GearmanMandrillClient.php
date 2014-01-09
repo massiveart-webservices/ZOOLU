@@ -87,16 +87,16 @@ class GearmanMandrillClient
         // Send newsletter
         if (count($recipients) > 0) {
             foreach ($recipients as $recipient) {
-                $recipient->content = $mandrillCampaign->getContent();
-                $recipient->global_merge_vars = $this->buildGlobalMergeVars($recipient);
-                $recipient->subject = $mandrillCampaign->getTitle();
-               
                 if ($testMode) {
                     $recipient->newsletterId = 0;
                 } else {
                     $recipient->unsubLink = $unsubLink[$recipient->id];
                     $recipient->newsletterId = $mandrillCampaign->getNewsletterId();
                 }
+                $recipient->content = $mandrillCampaign->getContent();
+                $recipient->global_merge_vars = $this->buildGlobalMergeVars($recipient);
+                $recipient->subject = $mandrillCampaign->getTitle();
+               
                 $this->core->logger->debug('GearmanMandrillClient->sendNewsletter(): Trying to send newsletter to ' . $recipient->email);
                 self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_send', serialize($recipient));
             }

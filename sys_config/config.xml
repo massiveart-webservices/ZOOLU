@@ -153,6 +153,16 @@
                 <interestgroup>230</interestgroup>
                 <language>242</language>
             </field_mappings>
+            <language_mappings>
+                <language>
+                    <id>1</id>
+                    <category>635</category>
+                </language>
+                <language>
+                    <id>2</id>
+                    <category>636</category>
+                </language>
+            </language_mappings>
         </contact>
         
         <!-- Newsletter  -->

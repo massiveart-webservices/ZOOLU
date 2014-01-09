@@ -1,7 +1,8 @@
 <?php
 require_once(dirname(__FILE__).'/helpers/NewsletterHelper.php');
 $objHelper = new NewsletterHelper();
-$objHelper->setNewsletter($this->setup); 
+$objHelper->setNewsletter($this->setup);
+$objHelper->setTranslate($this->translate);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

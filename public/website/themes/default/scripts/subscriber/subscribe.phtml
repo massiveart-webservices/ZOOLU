@@ -1,3 +1,73 @@
-<?php
-get_subscriber_form();
-?>
+    <!-- Top Content -->
+    <div class="top">
+        <div class="inner">
+            <!-- TODO : header image or flash -->
+            <div class="clear"></div>
+        </div>
+    </div> <!-- /.top -->
+    <!-- Content --> 
+    <div class="contentContainer">
+        <div class="inner">          
+            <article class="content">
+                <?php if (!$this->success): ?>
+                <form method="post">
+                    <div class="<?php echo get_error_css_for('salutation'); ?>">
+                        <label><?php echo $this->translate->_('salutation'); ?></label>
+                        <select name="salutation">
+                            <option value=""><?php echo $this->translate->_('salutation'); ?></option>
+                            <?php foreach($this->salutations as $salutation): ?>
+                            <option <?php if(get_data_for('salutation', true) == $salutation->id) echo 'selected="selected"'; ?> value="<?php echo $salutation->id; ?>">
+                                <?php echo $salutation->title ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <?php echo get_error_msg_for('salutation'); ?>
+                    </div>
+
+                    <div class="<?php echo get_error_css_for('title'); ?>">
+                        <label><?php echo $this->translate->_('title'); ?></label>
+                        <input name="title" type="text" value="<?php echo get_data_for('title') ?>" />
+                        <?php echo get_error_msg_for('title'); ?>
+                    </div>
+                    
+                    <div class="<?php echo get_error_css_for('fname'); ?>">
+                        <label><?php echo $this->translate->_('fname'); ?></label>
+                        <input name="fname" type="text" value="<?php echo get_data_for('fname') ?>" />
+                        <?php echo get_error_msg_for('fname'); ?>
+                    </div>
+                    
+                    <div class="<?php echo get_error_css_for('sname'); ?>">
+                        <label><?php echo $this->translate->_('sname'); ?></label>
+                        <input name="sname" type="text" value="<?php echo get_data_for('sname') ?>" />
+                        <?php echo get_error_msg_for('sname'); ?>
+                    </div>                    
+                    
+                    <div class="<?php echo get_error_css_for('email'); ?>">
+                        <label><?php echo $this->translate->_('email'); ?></label>
+                        <input name="email" type="text" value="<?php echo get_data_for('email') ?>" />
+                        <?php echo get_error_msg_for('email'); ?>
+                    </div>
+                    
+                    <div class="<?php echo get_error_css_for('interestgroup'); ?>">
+                        <?php foreach($this->interestgroups as $interestgroup): ?>
+                        <input type="checkbox" name="interestgroups[]" value="<?php echo $interestgroup->id; ?>" id="interestgroup_<?php echo $interestgroup->id; ?>"
+                            <?php if(is_array(get_data_for('interestgroups', true)) && in_array($interestgroup->id, get_data_for('interestgroups', true))) echo 'checked="checked"'; ?>
+                        >
+                        <label for="interestgroup_<?php echo $interestgroup->id; ?>"><?php echo $interestgroup->title ?></label>
+                        <br>
+                        <?php endforeach; ?>
+                        <?php echo get_error_msg_for('interestgroups'); ?>
+                    </div>
+                    
+                    <input type="submit" value="<?php echo $this->translate->_('register'); ?>" />
+                </form>
+                <?php else: ?>
+                    <?php echo $this->translate->_('subscribe_confirmation'); ?>
+                <?php endif; ?>
+            </article>
+            <aside class="sidebar">
+            </aside>          
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div> <!-- /.content -->

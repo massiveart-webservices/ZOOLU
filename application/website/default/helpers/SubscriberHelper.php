@@ -48,6 +48,9 @@ class SubscriberHelper
     protected $core;
     private $translate;
     private $interesGroups;
+    
+    private $formErrors = array();
+    private $formDatas = array();
 
     public function __construct($blnRequireFunctionWrapper = true)
     {
@@ -100,17 +103,6 @@ class SubscriberHelper
     }
     
     /**
-     * getSubscribeForm
-     */
-    public function getSubscribeForm() {
-        $strReturn = '';
-        foreach ($this->interesGroups as $interestGroup) {
-            $strReturn .= $interestGroup->title .'<br>';
-        }
-        return $strReturn;
-    }
-    
-    /**
      * setTranslate
      */
     public function setTranslate($translate) {
@@ -120,8 +112,45 @@ class SubscriberHelper
     /**
      * setInterestGroup
      */
-    public function setInterestGroup($interesGroups) {
-        $this->interesGroups = $interesGroups;
+    public function setInterestGroup($interestGroups) {
+        $this->interesGroups = $interestGroups;
+    }
+    
+    public function setFormError($field, $error) {
+        $this->formErrors[$field] = $error;
+    }
+    
+    public function setFormData($field, $data) {
+        $this->formDatas[$field] = $data;
+    }
+    
+    /**
+     * getErrorCssFor
+     */
+    public function getErrorCssFor($field) {
+        if (key_exists($field, $this->formErrors)) {
+            if ($this->formErrors[$field] !== false) {
+                return 'error';
+            }
+        }
+    }
+    
+    /**
+     * getErrorMsgFor
+     */
+    public function getErrorMsgFor($field) {
+        if (key_exists($field, $this->formErrors)) {
+            return $this->formErrors[$field];
+        }
+    }
+    
+    /**
+     * getDataFor
+     */
+    public function getDataFor($field) {
+        if (key_exists($field, $this->formDatas)) {
+            return $this->formDatas[$field];
+        }
     }
 }
 

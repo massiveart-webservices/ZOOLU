@@ -30,6 +30,7 @@
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
+
 /**
  * SubscriberController
  * 
@@ -42,22 +43,27 @@
 class SubscriberController extends WebControllerAction {
 
     const INTEREST_GROUPS_ID = 615;
-    
+    const SALUTATIONS_ID = 640;
+    const SUBSCRIBER_ROOTLEVEL_ID = 48;
+    const SUBSCRIBER_GENERICFORM_ID = 36;
+    const SUBSCRIBED_FLAG_ID = 632;
+    const UN_SUBSCRIBED_FLAG_ID = 633;
+
     /**
      * @var Core
      */
     protected $core;
-    
+
     /**
      * @var Model_Subscribers
      */
     private $objModelSubscribers;
-    
+
     /**
      * @var Model_Categories
      */
     public $objModelCategories;
-    
+
     /**
      * preDispatch
      * Called before action method.
@@ -69,14 +75,13 @@ class SubscriberController extends WebControllerAction {
         $this->core = Zend_Registry::get('Core');
         $this->request = $this->getRequest();
     }
-    
+
     /**
      * init
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function init()
-    {
+    public function init() {
         parent::init();
         $this->validateLanguage();
 
@@ -84,14 +89,13 @@ class SubscriberController extends WebControllerAction {
 
         $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/scripts');
     }
-    
+
     /**
      * initPageView
      * @author Raphael Stocker <raphael.stocker@massiveart.com>
      * @version 1.0
      */
-    private function initPageView()
-    {
+    private function initPageView() {
         Zend_Layout::startMvc(array(
             'layout' => 'master',
             'layoutPath' => GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path
@@ -126,7 +130,7 @@ class SubscriberController extends WebControllerAction {
         $this->_helper->viewRenderer->setNoRender();
         echo 'index';
     }
-    
+
     /**
      * subscribeAction
      * @author Raphael Stocker <raphael.stocker@massiveart.com>
@@ -136,30 +140,152 @@ class SubscriberController extends WebControllerAction {
         $this->initPageView();
         $objSubscriberHelper = Zend_Registry::get('SubscriberHelper');
         $objSubscriberHelper->setMetaTitle($this->translate->_('Newsletter_subscribe'), false);
+        $this->view->success = false;
+        
+        foreach ($this->getRequest()->getParams() as $key => $val) {
+            $objSubscriberHelper->setFormData($key, $val);
+        }
+
+        if ($this->getRequest()->isPost() || $this->getRequest()->getParam('key', '') != '') {
+
+            // Email validation
+            $email = $this->getRequest()->getParam('email', '');
+            $objMailValidator = new Zend_Validate_EmailAddress();
+            $validEmail = $objMailValidator->isValid($email);
+            if (!$validEmail) {
+                $objSubscriberHelper->setFormError('email', $this->translate->_('please_insert_valid_emailaddress'));
+            }
+            $objSubscribersEmail = $this->getModelSubscribers()->loadByEmail($email);
+            if (count($objSubscribersEmail) > 0) {
+                $validEmail = false;
+                $objSubscriberHelper->setFormError('email', $this->translate->_('emailaddress_already_used'));
+            }
+
+            // Name validation
+            $salutation = $this->getRequest()->getParam('salutation', 0);
+            if ($salutation > 0) {
+                $validSalutation = true;
+            } else {
+                $validSalutation = false;
+                $objSubscriberHelper->setFormError('salutation', $this->translate->_('Salutation_mandatory'));
+            }
+
+            $title = $this->getRequest()->getParam('title', '');
+
+            $fname = $this->getRequest()->getParam('fname', '');
+            if ($fname != '') {
+                $validFname = true;
+            } else {
+                $validFname = false;
+                $objSubscriberHelper->setFormError('fname', $this->translate->_('Fname_mandatory'));
+            }
+
+            $sname = $this->getRequest()->getParam('sname', '');
+            if ($sname != '') {
+                $validSname = true;
+            } else {
+                $validSname = false;
+                $objSubscriberHelper->setFormError('sname', $this->translate->_('Sname_mandatory'));
+            }
+
+            // Interesgroup validation
+            $interestgroups = $this->getRequest()->getParam('interestgroups', array());
+            if (count($interestgroups) > 0) {
+                $validInterestgroups = true;
+            } else {
+                $validInterestgroups = false;
+                $objSubscriberHelper->setFormData('interestgroups', $interestgroups);
+            }
+
+            $valid = ($validEmail && $validSalutation && $validFname && $validSname && $validInterestgroups);
+            if ($valid) {
+                
+                // language evaluation
+                $languages = array();
+                foreach ($this->core->sysConfig->contact->language_mappings->language as $language) {
+                    if ($language->id == $this->core->intLanguageId) {
+                        $languages[] = $language->category;
+                    }
+                    break;
+                }
+                
+                // portal evaluation
+                $portals = array($this->objTheme->idRootLevels);
+                
+                $this->core->dbh->beginTransaction();
+                
+                // add subscriber
+                $data = array(
+                    'idRootLevels'      =>  self::SUBSCRIBER_ROOTLEVEL_ID,
+                    'idGenericForms'    =>  self::SUBSCRIBER_GENERICFORM_ID,
+                    'salutation'        =>  $salutation,
+                    'title'             =>  $title,
+                    'fname'             =>  $fname,
+                    'sname'             =>  $sname,
+                    'email'             =>  $email,
+                    'subscribed'        =>  self::SUBSCRIBED_FLAG_ID,
+                    'created'           =>  date('Y-m-d H:i:s')
+                );
+                $id = $this->getModelSubscribers()->add($data);
+                
+                // add interests
+                $interests = array(
+                    'interest_group' => $interestgroups,
+                    'portal'         => $portals,
+                    'language'       => $languages
+                );
+                $this->objModelSubscribers->updateInterests($id, $interests);
+                $this->core->dbh->commit();
+                
+                $this->view->success = true;
+            }
+        }
+
         $this->getModelCategories()->setLanguageId($this->core->intLanguageId);
         $interestGroupsData = $this->getModelCategories()->loadCategoryTree(self::INTEREST_GROUPS_ID);
-        $objSubscriberHelper->setInterestGroup($interestGroupsData);
+        $this->view->interestgroups = $interestGroupsData;
+
+        $salutationsData = $this->getModelCategories()->loadCategoryTree(self::SALUTATIONS_ID);
+        $this->view->salutations = $salutationsData;
     }
-    
+
     /**
      * unsubscribeAction
      * @author Raphael Stocker <raphael.stocker@massiveart.com>
      */
     public function unsubscribeAction() {
+        $this->view->error = true;
+        $this->view->success = false;
         $this->loadTheme();
         $this->initPageView();
-        
-        $objCustomerHelper = Zend_Registry::get('SubscriberHelper');
-        $objCustomerHelper->setMetaTitle($this->translate->_('Newsletter_unsubscribe'), false);
+        $objSubscriberHelper = Zend_Registry::get('SubscriberHelper');
+        $objSubscriberHelper->setMetaTitle($this->translate->_('Newsletter_unsubscribe'), false);
+        $hash = $this->getRequest()->getParam('hash', '');
+        if ($hash != '') {
+            $subscribers = $this->getModelSubscribers()->loadByHash($hash);
+            if (count($subscribers) == 1) {
+                $this->view->error = false;
+                $confirm = $this->getRequest()->getParam('confirm', '');
+                if ($this->getRequest()->isPost() && $confirm == 'true') {
+                    $subscriber = $subscribers->current();
+                    $data = array(
+                        'subscribed' => self::UN_SUBSCRIBED_FLAG_ID
+                    );
+                    $this->getModelSubscribers()->update($subscriber->id, $data);
+                    $this->view->success = true;
+                } else {
+                    $this->view->hash = $hash;
+                }
+            }
+        }
     }
-    
+
     /**
      * getModelSubscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    protected function getModelSubscribers()
-    {
+    protected function getModelSubscribers() {
         if (null === $this->objModelSubscribers) {
             /**
              * autoload only handles "library" compoennts.
@@ -172,14 +298,13 @@ class SubscriberController extends WebControllerAction {
         }
         return $this->objModelSubscribers;
     }
-    
+
     /**
      * getModelCategories
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    protected function getModelCategories()
-    {
+    protected function getModelCategories() {
         if (null === $this->objModelCategories) {
             /**
              * autoload only handles "library" compoennts.
@@ -192,5 +317,7 @@ class SubscriberController extends WebControllerAction {
 
         return $this->objModelCategories;
     }
+
 }
+
 ?>

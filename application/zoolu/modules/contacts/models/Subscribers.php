@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ZOOLU - Content Management System
  * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
@@ -39,9 +40,7 @@
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  */
-
-class Model_Subscribers
-{
+class Model_Subscribers {
 
     private $intLanguageId;
 
@@ -70,8 +69,7 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->core = Zend_Registry::get('Core');
     }
 
@@ -82,16 +80,15 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function load($intElementId)
-    {
+    public function load($intElementId) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->load(' . $intElementId . ')');
 
         $objSelect = $this->getSubscriberTable()->select();
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('subscribers')
-            ->joinLeft(array('uc' => 'users'), 'uc.id = subscribers.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
-            ->where('subscribers.id = ?', $intElementId);
+                ->joinLeft(array('uc' => 'users'), 'uc.id = subscribers.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
+                ->where('subscribers.id = ?', $intElementId);
 
         return $this->getSubscriberTable()->fetchAll($objSelect);
     }
@@ -103,15 +100,14 @@ class Model_Subscribers
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function loadByDirtyStatus($blnDirty = true)
-    {
+    public function loadByDirtyStatus($blnDirty = true) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByDirtyStatus(' . $blnDirty . ')');
 
         $objSelect = $this->getSubscriberTable()->select()->setIntegrityCheck(false);
 
         $objSelect->from('subscribers', array('fname', 'sname', 'email', 'created' => 'UNIX_TIMESTAMP(created)', 'subscribed' => 'categoryTitles.title'))
-            ->joinLeft('categoryTitles', 'categoryTitles.idCategories = subscribers.subscribed AND categoryTitles.idLanguages = ' . $this->intLanguageId, array())
-            ->where('subscribers.dirty = ?', $blnDirty ? $this->core->sysConfig->mail_chimp->mappings->dirty : $this->core->sysConfig->mail_chimp->mappings->dirty);
+                ->joinLeft('categoryTitles', 'categoryTitles.idCategories = subscribers.subscribed AND categoryTitles.idLanguages = ' . $this->intLanguageId, array())
+                ->where('subscribers.dirty = ?', $blnDirty ? $this->core->sysConfig->mail_chimp->mappings->dirty : $this->core->sysConfig->mail_chimp->mappings->dirty);
 
         return $this->getSubscriberTable()->fetchAll($objSelect);
     }
@@ -123,16 +119,15 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadByEmail($strEmail)
-    {
+    public function loadByEmail($strEmail) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByEmail(' . $strEmail . ')');
 
         $objSelect = $this->getSubscriberTable()->select();
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('subscribers')
-            ->joinLeft(array('uc' => 'users'), 'uc.id = subscribers.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
-            ->where('subscribers.email = ?', $strEmail);
+                ->joinLeft(array('uc' => 'users'), 'uc.id = subscribers.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
+                ->where('subscribers.email = ?', $strEmail);
 
         return $this->getSubscriberTable()->fetchAll($objSelect);
     }
@@ -147,8 +142,7 @@ class Model_Subscribers
      * @param boolean $blnReturnSelect
      * @return Zend_Db_Table_Select | Zend_Db_Table_Rowset
      */
-    public function loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false)
-    {
+    public function loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByRootLevelFilter(' . $intRootLevelId . ', ' . $intRootLevelFilterId . ')');
 
         $objTableFields = new Zend_Db_Table('fields');
@@ -160,7 +154,6 @@ class Model_Subscribers
         //Build the query
         $objSelect = $this->getSubscriberTable()->select();
         $objSelect->setIntegrityCheck(false);
-
         $arrValues = array();
         if ($blnExtendSelect) {
             $arrValues = array('id', 'salutation', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
@@ -169,8 +162,8 @@ class Model_Subscribers
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
-        $objSelect->join(array('c' => 'categories'), 'c.id = s.salutation', array());
-        $objSelect->join(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array('salutation' => 'title'));
+        //$objSelect->join(array('c' => 'categories'), 'c.id = s.salutation', array());
+        //$objSelect->join(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array('salutation' => 'title'));
         $objSelect->joinInner(array('gf' => 'genericForms'), 'gf.id = s.idGenericForms', array('gf.genericFormId', 'gf.version'));
         $objSelect->joinLeft(array('cs' => 'categories'), 'cs.id = s.subscribed', array());
         $objSelect->joinLeft(array('cst' => 'categoryTitles'), 'cst.idCategories = cs.id AND cst.idLanguages = ' . $this->intLanguageId, array());
@@ -178,16 +171,16 @@ class Model_Subscribers
         $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cc' => 'categories'), 'cc.id = s.hardbounce', array());
         $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.id AND cct.idLanguages = ' . $this->intLanguageId, array());
-        
+
         //Apply rootLevelFilters
         if ($intRootLevelFilterId != null) {
             foreach ($objRootLevelFilterValues as $objRootLevelFilterValue) {
                 //Load FieldInformation
                 $strField = $objRootLevelFilterValue->field;
-                
+
                 $objSelectFields = $objTableFields->select();
                 $objSelectFields->from('fields')
-                    ->where('id = ?', $this->core->sysConfig->contact->field_mappings->$strField);
+                        ->where('id = ?', $this->core->sysConfig->contact->field_mappings->$strField);
 
                 $objField = $objTableFields->fetchRow($objSelectFields);
 
@@ -199,7 +192,7 @@ class Model_Subscribers
                                       	INNER JOIN `subscriber-DEFAULT_SUBSCRIBER-1-InstanceMultiFields` AS simf ON simf.idRelation = f.id
                                       	WHERE simf.idSubscribers = s.id
                                       		AND simf.idFields = ' . $objField->id;
-                
+
                 $strOperator = '';
                 $arrValues = explode(',', $objRootLevelFilterValue->value);
                 switch ($objRootLevelFilterValue->operator) {
@@ -225,7 +218,8 @@ class Model_Subscribers
                         }
                         break;
                     case 'none':
-                        if ($strOperator == '') $strOperator = 'NOT IN';
+                        if ($strOperator == '')
+                            $strOperator = 'NOT IN';
                         foreach ($arrValues as $strValue) {
                             $objSelect->where('\'' . $strValue . '\' ' . $strOperator . ' (' . $strSubselect . ')');
                         }
@@ -247,7 +241,7 @@ class Model_Subscribers
         }
         $objSelect->order($strOrderColumn . ' ' . strtoupper($strSortOrder));
         //$this->core->logger->debug(strval($objSelect));
-        
+
         if ($blnReturnSelect) {
             return $objSelect;
         } else {
@@ -265,8 +259,7 @@ class Model_Subscribers
      * @param boolean $blnReturnSelect
      * @return Zend_Db_Table_Select | Zend_Db_Table_Rowset
      */
-    public function loadHardbounced($intRootLevelId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false)
-    {
+    public function loadHardbounced($intRootLevelId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByRootLevelFilter(' . $intRootLevelId . ')');
 
         $objTableFields = new Zend_Db_Table('fields');
@@ -313,17 +306,31 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadProperties($intElementId)
-    {
+    public function loadProperties($intElementId) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadProperties(' . $intElementId . ')');
 
         $objSelect = $this->getSubscriberTable()->select();
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('subscribers', array())
-            ->join('genericForms', 'genericForms.id = subscribers.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version', 'genericFormType' => 'idGenericFormTypes'))
-            ->where('subscribers.id = ?', $intElementId);
+                ->join('genericForms', 'genericForms.id = subscribers.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version', 'genericFormType' => 'idGenericFormTypes'))
+                ->where('subscribers.id = ?', $intElementId);
 
+        return $this->getSubscriberTable()->fetchAll($objSelect);
+    }
+
+    /**
+     * loadByHash
+     * @param String $hash
+     * @author Raphael Stocker <raphael.stocker@massiveart.com>
+     */
+    public function loadByHash($hash) {
+        $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByHash(' . $hash . ')');
+        $objSelect = $this->getSubscriberTable()->select();
+        $objSelect->setIntegrityCheck(false);
+        $objSelect->from('subscribers', array())
+                  ->join('newsletterUnsubscribeHashes', 'newsletterUnsubscribeHashes.idSubscriber = subscribers.id', array())
+                  ->where('newsletterUnsubscribeHashes.hash = ?', array($hash));
         return $this->getSubscriberTable()->fetchAll($objSelect);
     }
 
@@ -333,15 +340,13 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function add($arrData)
-    {
+    public function add($arrData) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->add()');
 
         $arrData = array_merge(
-            $arrData,
-            array(
-                 'changed' => date('Y-m-d H:i:s')
-            )
+                $arrData, array(
+            'changed' => date('Y-m-d H:i:s')
+                )
         );
 
         return $this->getSubscriberTable()->insert($arrData);
@@ -354,17 +359,15 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update($intElementId, $arrData)
-    {
-        $this->core->logger->debug('subscribers->models->Model_Subscribers->update()');
+    public function update($intElementId, $arrData) {
+        $this->core->logger->debug('subscribers->models->Model_Subscribers->update(' . $intElementId . ')');
 
         $strWhere = $this->getSubscriberTable()->getAdapter()->quoteInto('id = ?', $intElementId);
 
         $arrData = array_merge(
-            $arrData,
-            array(
-                 'changed' => date('Y-m-d H:i:s')
-            )
+                $arrData, array(
+            'changed' => date('Y-m-d H:i:s')
+                )
         );
 
         return $this->getSubscriberTable()->update($arrData, $strWhere);
@@ -377,8 +380,7 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function updateInterests($intElementId, $arrInterests)
-    {
+    public function updateInterests($intElementId, $arrInterests) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->updateInterests()');
 
         $objGenTable = $this->getModelGenericData()->getGenericTable('subscriber-DEFAULT_SUBSCRIBER-1-InstanceMultiFields');
@@ -391,13 +393,13 @@ class Model_Subscribers
             $fieldId = false;
             switch ($strField) {
                 case 'portal':
-                    $fieldId = 229;
+                    $fieldId = $this->core->sysConfig->contact->field_mappings->portal;
                     break;
                 case 'interest_group':
-                    $fieldId = 230;
+                    $fieldId = $this->core->sysConfig->contact->field_mappings->interestgroup;
                     break;
                 case 'language':
-                    $fieldId = 242;
+                    $fieldId = $this->core->sysConfig->contact->field_mappings->language;
                     break;
             }
 
@@ -405,8 +407,8 @@ class Model_Subscribers
                 foreach ($arrIds as $intId) {
                     $arrData = array(
                         'idSubscribers' => $intElementId,
-                        'idRelation'    => $intId,
-                        'idFields'      => $fieldId
+                        'idRelation' => $intId,
+                        'idFields' => $fieldId
                     );
 
                     $objGenTable->insert($arrData);
@@ -422,8 +424,7 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function delete($intElementId)
-    {
+    public function delete($intElementId) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->delete()');
         $strWhere = $this->getSubscriberTable()->getAdapter()->quoteInto('id = ?', $intElementId);
         return $this->objSubscriberTable->delete($strWhere);
@@ -436,8 +437,7 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function deleteMultiple($arrElementIds)
-    {
+    public function deleteMultiple($arrElementIds) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->deleteMultiple()');
 
         try {
@@ -467,8 +467,7 @@ class Model_Subscribers
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function getSubscriberTable()
-    {
+    public function getSubscriberTable() {
 
         if ($this->objSubscriberTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'contacts/models/tables/Subscribers.php';
@@ -483,8 +482,7 @@ class Model_Subscribers
      * @return Model_GenericData
      * @author Thomas Schedler <tsh@massiveart.com>
      */
-    protected function getModelGenericData()
-    {
+    protected function getModelGenericData() {
         if (null === $this->objModelGenericData) {
             /**
              * autoload only handles "library" compoennts.
@@ -504,8 +502,7 @@ class Model_Subscribers
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    protected function getModelRootLevels()
-    {
+    protected function getModelRootLevels() {
         if (null === $this->objModelRootLevels) {
             /**
              * autoload only handles "library" compoennts.
@@ -524,8 +521,7 @@ class Model_Subscribers
      * setLanguageId
      * @param integer $intLanguageId
      */
-    public function setLanguageId($intLanguageId)
-    {
+    public function setLanguageId($intLanguageId) {
         $this->intLanguageId = $intLanguageId;
     }
 
@@ -533,8 +529,8 @@ class Model_Subscribers
      * getLanguageId
      * @param integer $intLanguageId
      */
-    public function getLanguageId()
-    {
+    public function getLanguageId() {
         return $this->intLanguageId;
     }
+
 }

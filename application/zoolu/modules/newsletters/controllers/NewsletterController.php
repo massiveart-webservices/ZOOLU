@@ -125,12 +125,22 @@ class Newsletters_NewsletterController extends AuthControllerAction
     private function renderNewsletter($objNewsletter)
     {
         $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
-
+        
         //Load Template
         $objTemplate = $this->getModelTemplates()->loadTemplateById($objGenericData->Setup()->getTemplateId());
 
         //Assign the values to the template
         $this->view->assign('setup', $objGenericData->Setup());
+        
+        // set up translate obj
+        $languageCode = $objGenericData->Setup()->getField('language')->getValue();
+        if (file_exists(GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo')) {
+            $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo');
+        } else {
+            $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->core->sysConfig->languages->default->code . '.mo');
+        }
+        $this->view->translate = $translate;
+        
         if (count($objTemplate) > 0) {
             $this->view->assign('template_file', $objTemplate->current()->filename);
         }
@@ -176,23 +186,19 @@ class Newsletters_NewsletterController extends AuthControllerAction
     public function statsAction()
     {
         $this->core->logger->debug('newsletters->controllers->newsletter->statsAction');
-
-        //TODO: Apply cache
-
         $strNewsletterId = $this->getRequest()->getParam('id');
-
         $objNewsletterData = $this->getModelNewsletters()->load($strNewsletterId);
         if (count($objNewsletterData) > 0) {
-            $objNewsletterDb = $objNewsletterData->current();
-            $objNewsletter = $this->buildCampaign($objNewsletterDb);
-            $objNewsletter->loadStatistics();
-
-            $strFilterTitle = ($objNewsletterDb->filtertitle == '') ? $this->core->translate->_('All') : $objNewsletterDb->filtertitle;
-
-            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'application/zoolu/modules/newsletters/views/scripts');
-            $this->view->assign('objNewsletter', $objNewsletter);
-            $this->view->assign('strDeliveryDate', $objNewsletterDb->delivered);
-            $this->view->assign('strFilterTitle', $strFilterTitle);
+//            $objNewsletterDb = $objNewsletterData->current();
+//            $objNewsletter = $this->buildCampaign($objNewsletterDb);
+//            $objNewsletter->loadStatistics();
+//
+//            $strFilterTitle = ($objNewsletterDb->filtertitle == '') ? $this->core->translate->_('All') : $objNewsletterDb->filtertitle;
+//
+//            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'application/zoolu/modules/newsletters/views/scripts');
+//            $this->view->assign('objNewsletter', $objNewsletter);
+//            $this->view->assign('strDeliveryDate', $objNewsletterDb->delivered);
+//            $this->view->assign('strFilterTitle', $strFilterTitle);
         }
     }
 
@@ -297,13 +303,13 @@ class Newsletters_NewsletterController extends AuthControllerAction
                 } else {
                     // ==>
                     $this->objCommandChain->runCommand('newsletter:send', array('content' => $content, 'title' => $title));
-//                    $this->getModelNewsletters()->update($objGenericData->Setup(),
-//                        array(
-//                             'sent'               => 1,
-//                             'delivered'          => date('Y-m-d H:i:s'),
-//                             'idRootLevelFilters' => $objGenericData->Setup()->getField('filter')->getValue()
-//                        )
-//                    );
+                    $this->getModelNewsletters()->update($objGenericData->Setup(),
+                        array(
+                             'sent'               => 1,
+                             'delivered'          => date('Y-m-d H:i:s'),
+                             'idRootLevelFilters' => $objGenericData->Setup()->getField('filter')->getValue()
+                        )
+                    );
                 }
             }
         }

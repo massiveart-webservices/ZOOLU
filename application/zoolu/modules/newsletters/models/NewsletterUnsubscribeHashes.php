@@ -146,7 +146,7 @@ class Model_NewsletterUnsubscribeHashes {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function delete($intElementId){
+  public function delete($intElementId) {
     $this->core->logger->debug('newsletters->models->Model_Newsletters->delete()');
     $strWhere = $this->getNewsletterTable()->getAdapter()->quoteInto('id = ?', $intElementId);
     return $this->objNewsletterTable->delete($strWhere);
@@ -158,13 +158,11 @@ class Model_NewsletterUnsubscribeHashes {
    * @author Thomas Schedler <tsh@massiveart.com>
    * @version 1.0
    */
-  public function getNewsletterUnsubcribeHashesTable(){
-  
+  public function getNewsletterUnsubcribeHashesTable() {
       if($this->objNewsletterHashesTable === null) {
           require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'newsletters/models/tables/NewsletterUnsubscribeHashes.php';
           $this->objNewsletterHashesTable = new Model_Table_NewsletterUnsubscribeHashes();
       }
-  
       return $this->objNewsletterHashesTable;
   }
 
