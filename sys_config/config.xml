@@ -169,12 +169,14 @@
         <newsletter>
             <theme>default</theme>
             <campaign>Mandrill</campaign>
+            <statistics>Mandrill</statistics>
         </newsletter>
         
         <mandrill>
             <api_key>2pRfqNdjhCOZA2dBJQW_7g</api_key>
             <from_email>matest@massiveart.com</from_email>
             <from_name>ZOOLU Newsletter</from_name>
+            <password>CsfxJ3nitJ-p0JXzTSYngg</password>
             <send_mail>
                 <track_opens>true</track_opens>
                 <track_clicks>true</track_clicks>
