@@ -536,7 +536,7 @@ class File
                  */
                 $this->checkUploadPath();
 
-                $arrFileInfos = $this->pathinfo($this->objUpload->getFileName($this->_FILE_NAME));
+                $arrFileInfos = pathinfo($this->objUpload->getFileName($this->_FILE_NAME));
                 $this->strExtension = strtolower($arrFileInfos['extension']);
                 $this->strTitle = $arrFileInfos['filename'];
                 $this->dblSize = $this->objUpload->getFileSize($this->_FILE_NAME);
@@ -1260,21 +1260,6 @@ class File
     public function getNumberOfSegments()
     {
         return $this->intNumberOfSegments;
-    }
-
-    /**
-     * pathinfo
-     * @param $filePath
-     * @return array
-     */
-    protected function pathinfo($filePath)
-    {
-        preg_match('%^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^\.\\\\/]+?)|))[\\\\/\.]*$%im',$filePath,$infoParts);
-        if ($infoParts[1]) $infos['dirname'] = $infoParts[1];
-        if ($infoParts[2]) $infos['basename'] = $infoParts[2];
-        if ($infoParts[5]) $infos['extension'] = $infoParts[5];
-        if ($infoParts[3]) $infos['filename'] = $infoParts[3];
-        return $infos;
     }
 }
 
