@@ -462,7 +462,11 @@ class Event {
      */
     public function setEndDate($endDate)
     {
-        $this->endDate = $endDate;
+        if (is_string($endDate)) {
+            $this->endDate = new \DateTime($endDate);
+        } else {
+            $this->endDate = $endDate;
+        }
         return $this;
     }
 
