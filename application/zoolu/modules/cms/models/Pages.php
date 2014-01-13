@@ -632,7 +632,7 @@ class Model_Pages extends ModelAbstract
 
             $intNumOfEffectedRows = $this->core->dbh->update('pages', $arrPageAttributes, $strWhere);
             if ($intNumOfEffectedRows == 0) {
-                $arrPageAttributes = array_merge($arrPageAttributes, array('pageId' => $objStartPage->pageId, 'version' => $objStartPage->version, 'idLanguages' => $this->intLanguageId));
+                $arrPageAttributes = array_merge($arrPageAttributes, array('pageId' => $objStartPage->pageId, 'version' => $objStartPage->version));
                 $this->core->dbh->insert('pages', $arrPageAttributes);
             }
 
