@@ -94,6 +94,9 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         
         // NotFoundException
         'NotFoundException'             => '/library/massiveart/website/notfoundexception.class.php',
+
+        // Portal Exporter
+        'PortalExporter'                => '/library/massiveart/export/portal.exporter.class.php',
     );
 
     /**

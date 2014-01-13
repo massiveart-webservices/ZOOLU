@@ -2440,6 +2440,32 @@ class Model_Pages extends ModelAbstract
     }
 
     /**
+     *
+     */
+    public function getPages($rootLevelId)
+    {
+        $objSelect = $this->getPageTable()->select()->setIntegrityCheck(false);
+
+        $objSelect->from('pages', array('id', 'pageId', 'isStartPage', 'idParentTypes', 'idSegments'))
+            ->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE),
+                array('idTemplates', 'creator', 'idStatus', 'published', 'showInNavigation', 'idDestination', 'hideInSitemap', 'showInWebsite', 'showInTablet', 'showInMobile', 'idPageTypes'))
+            ->join('pageTitles', 'pageProperties.idLanguages = pageTitles.idLanguages AND pages.pageId = pageTitles.pageId AND pageTitles.version = pages.version',
+                array('title'))
+            ->join('genericForms', 'pageProperties.idGenericForms = genericForms.id',
+                array('genericFormId', 'genericFormVersion' => 'version'))
+            ->join('languages', 'languages.id = pageProperties.idLanguages',
+                array('languageId' => 'id','languageCode'))
+            ->join('rootLevels', 'rootLevels.id = ' . intval($rootLevelId),
+                array('languageDefinitionType'))
+            ->joinLeft('folders', 'pages.idParentTypes = 2 AND pages.idParent = folders.id',
+                array('parentId' => 'id'))
+            ->where('folders.idRootLevels = ?', $rootLevelId)
+            ->orWhere('pages.idParentTypes = 1 AND pages.idParent = ?', $rootLevelId);
+
+        return $this->getPageTable()->fetchAll($objSelect);
+    }
+
+    /**
      * getModelFolders
      * @return Model_Folders
      * @author Thomas Schedler <tsh@massiveart.com>
