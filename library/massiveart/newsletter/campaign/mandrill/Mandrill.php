@@ -88,7 +88,6 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
      */
     public function __construct() {
         $this->core = Zend_Registry::get('Core');
-        $this->gearmanMandrillClient = new GearmanMandrillClient($this->core);
     }
     
     /*
@@ -123,6 +122,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
      * @param type $args
      */
     public function sendTest($args) {
+        $this->gearmanMandrillClient = new GearmanMandrillClient($this->core);
         $recipient = new stdClass();
         $recipient->email = $args['email'];
         $recipient->salutation = 'Test';
@@ -148,7 +148,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
      */
     public function send($args)
     {
-        
+        $this->gearmanMandrillClient = new GearmanMandrillClient($this->core);
         // set the content
         $this->setContent($args['content']);
         
