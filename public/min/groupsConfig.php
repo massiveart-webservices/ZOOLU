@@ -180,6 +180,7 @@ return array(
         '//zoolu-statics/js_incs/form.js',
         '//zoolu-statics/js_incs/form.properties.js',
         '//zoolu-statics/js_incs/overlay.js',
+        '//zoolu-statics/js_incs/tags.js',
         '//zoolu-statics/js_incs/filter.js'),
     'zUserCss' => array(
         '//zoolu-statics/css/core_main.css',
