@@ -94,6 +94,9 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
 
         // NotFoundException
         'NotFoundException'             => '/library/massiveart/website/notfoundexception.class.php',
+
+        // ForbiddenException
+        'ForbiddenException'             => '/library/massiveart/website/forbiddenexception.class.php',
     );
 
     /**

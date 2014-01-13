@@ -304,10 +304,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 Security::get('CustomerSecurity')->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->cms, Security::ZONE_WEBSITE);
                 Security::get()->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->cms, Security::ZONE_WEBSITE);
                 if (!Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objTheme->idRootLevels, Security::PRIVILEGE_VIEW, false, false, Security::ZONE_WEBSITE) && !Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objTheme->idRootLevels . '_' . $this->intLanguageId, Security::PRIVILEGE_VIEW, false, false, Security::ZONE_WEBSITE)) {
-                    $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-                    $this->getResponse()->setHeader('Status', '403 Forbidden');
-                    $this->getResponse()->setHttpResponseCode(403);
-                    $this->strRenderScript = 'error-403.php';
+                    throw new ForbiddenException('User has no access to this portal');
                 }
             }
         }
