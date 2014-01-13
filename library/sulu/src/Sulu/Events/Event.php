@@ -313,7 +313,7 @@ class Event {
     protected function isInRange($from, $to = null)
     {
         $to = ($to !== null) ? $to : $from;
-        if ((empty($this->endDate) || $from <= $this->endDate->getTimestamp()) && $to >= $this->fromDate->getTimestamp()) {
+        if ((empty($this->endDate) || $from <= $this->endDate->getTimestamp()) && !empty($this->fromDate) && $to >= $this->fromDate->getTimestamp()) {
             return true;
         }
         return false;
@@ -376,6 +376,9 @@ class Event {
      */
     public function setPropertyDates($date)
     {
+        if (empty($this->toDate)) {
+            $this->toDate = $this->fromDate;
+        }
         $interval = $this->fromDate->diff($this->toDate);
 
         $fromDate = new \DateTime($date);
