@@ -169,6 +169,7 @@ class Event {
     {
         $from = new \DateTime(date('Y-m-d', $from));
         $to = new \DateTime(date('Y-m-d', $to));
+        $to->modify('+ 1 day');
         $interval = new \DateInterval('P1D');
 
         return new \DatePeriod($from, $interval, $to);
