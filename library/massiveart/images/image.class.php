@@ -82,7 +82,7 @@ class Image extends File
                  */
                 $this->checkUploadPath();
 
-                $arrFileInfos = pathinfo($this->objUpload->getFileName($this->_FILE_NAME));
+                $arrFileInfos = $this->pathinfo($this->objUpload->getFileName($this->_FILE_NAME));
                 $this->strExtension = strtolower($arrFileInfos['extension']);
                 $this->strTitle = $arrFileInfos['filename'];
                 $this->dblSize = $this->objUpload->getFileSize($this->_FILE_NAME);
