@@ -62,7 +62,7 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         'PasswordHelper'                => '/library/massiveart/utilities/password.class.php',
         'Replacer'                      => '/library/massiveart/utilities/replacer.class.php',
         'HtmlTranslate'                 => '/library/massiveart/utilities/html.translate.class.php',
-        'ReCaptchaService'              => '/library/massiveart/utilities/recaptcha.service.class.php', 
+        'ReCaptchaService'              => '/library/massiveart/utilities/recaptcha.service.class.php',
         'Security'                      => '/library/massiveart/security/security.class.php',
         'Acl'                           => '/library/massiveart/security/acl.class.php',
         'RoleProvider'                  => '/library/massiveart/security/role.provider.class.php',
@@ -75,23 +75,23 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
         'PluginLoader'                  => '/library/massiveart/loader/pluginLoader.class.php',
         'FormElementXhtmlAbstract'      => '/library/massiveart/generic/forms/fields/form.element.xhtml.abstract.class.php',
         'FormElementMultiAbstract'      => '/library/massiveart/generic/forms/fields/form.element.multi.abstract.class.php',
-        'Export'						=> '/library/massiveart/utilities/export.class.php',
+        'Export'                        => '/library/massiveart/utilities/export.class.php',
         'Zip'                           => '/library/massiveart/utilities/zip.class.php',
-    
+
         // Undefined
         'UndefinedMethod'               => '/library/massiveart/undefined/Method.php',
         'UndefinedMethodHandler'        => '/library/massiveart/undefined/MethodHandler.php',
         'UndefinedMethodListener'       => '/library/massiveart/undefined/MethodListener.php',
 
         // URL
-        'UniformResourceLocator'        => '/library/massiveart/locator/UniformResourceLocator.php',    
-    
+        'UniformResourceLocator'        => '/library/massiveart/locator/UniformResourceLocator.php',
+
         // Gearman
-        'GearmanReplicationMailChimp'	=> '/library/massiveart/gearman/replication/mailchimp.replication.class.php',
-    
+        'GearmanReplicationMailChimp'   => '/library/massiveart/gearman/replication/mailchimp.replication.class.php',
+
         // Service
         'Service_Core'                  => '/library/massiveart/services/core.class.php',
-        
+
         // NotFoundException
         'NotFoundException'             => '/library/massiveart/website/notfoundexception.class.php',
     );
@@ -109,12 +109,19 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
             if (strpos($class, 'Zend_') === 0 || strpos($class, 'ZendX_') === 0) {
                 // load Zend Class
                 return parent::autoload($class);
+
+            } else if (strpos($class, 'Elastica\\') === 0) {
+                // load Elastica
+                $path = GLOBAL_ROOT_PATH . $sysConfig->path->root . 'library/Elastica/lib/' . ($class = strtr($class, '\\', '/')) . '.php';
+                if (file_exists($path) && is_readable($path)) {
+                    require_once $path;
+                    return true;
+                }
             } else if (strpos($class, 'Sulu\\') === 0) {
                 // load Sulu components
                 $path = GLOBAL_ROOT_PATH . $sysConfig->path->root . 'library/sulu/src/' . ($class = strtr($class, '\\', '/')) . '.php';
                 if (file_exists($path) && is_readable($path)) {
                     require_once $path;
-
                     return true;
                 }
             } else {
@@ -122,13 +129,12 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
                 if (array_key_exists($class, self::$arrClasses)) {
                     if (file_exists(GLOBAL_ROOT_PATH . $sysConfig->path->root . self::$arrClasses[$class])) {
                         require_once(GLOBAL_ROOT_PATH . $sysConfig->path->root . self::$arrClasses[$class]);
-
                         return true;
                     }
                 }
             }
 
-            return $class;
+            return false;
         } catch (Exception $e) {
             return false;
         }
@@ -158,15 +164,7 @@ class ClassAutoLoader extends Zend_Loader_Autoloader {
     spl_autoload_register(array(__CLASS__, 'autoload'));
     $this->_internalAutoloader = array($this, '_autoload');
   }
-
-
-
 }
 
-/**
- * register class ClassAutoLoader
- */
-#$autoloader = ClassAutoLoader::getInstance();
+// register class ClassAutoLoader
 Zend_Loader_Autoloader::getInstance()->pushAutoloader(array('ClassAutoLoader', 'autoload'));
-
-?>

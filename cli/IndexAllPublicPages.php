@@ -30,17 +30,43 @@
  * @version    $Id: version.php
  */
 
-/**
- * include general (autoloader, config)
- */
+// Zend_Console_Getopt
+require_once 'Zend/Console/Getopt.php';
+
+// define application options and read params from CLI
+$opt = new Zend_Console_Getopt(array(
+    'env|e-s' => 'defines application environment (defaults to "production")',
+    'help|h' => 'displays usage information',
+));
+
+try {
+    $opt->parse();
+} catch (Zend_Console_Getopt_Exception $exc) {
+    // Bad options passed: report usage
+    echo $exc->getUsageMessage();
+    return false;
+}
+
+// Show help message in case it was requested or params were incorrect (module, controller and action)
+if ($opt->getOption('h')) {
+    echo $opt->getUsageMessage();
+    return true;
+}
+
+// Define application environment
+$env = $opt->getOption('e');
+defined('APPLICATION_ENV')
+|| define('APPLICATION_ENV', (null === $env) ? 'production' : $env);
+
+// include general (autoloader, config)
 require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 
 try {
-    $objIndex = new Index();
-    $objIndex->indexAllPublicPages();
+
+    $index = new Index();
+    $index->indexAllPublicPages();
 
 } catch (Exception $exc) {
-    $core->logger->err($exc);
-    exit();
+    echo $exc->getMessage();
+    return false;
 }
-?>

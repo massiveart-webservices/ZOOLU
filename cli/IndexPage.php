@@ -30,30 +30,54 @@
  * @version    $Id: version.php
  */
 
-/**
- * include general (autoloader, config)
- */
-require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
+// Zend_Console_Getopt
+require_once 'Zend/Console/Getopt.php';
+
+// define application options and read params from CLI
+$opt = new Zend_Console_Getopt(array(
+    'env|e-s' => 'defines application environment (defaults to "production")',
+    'help|h' => 'displays usage information',
+    'pageId|p=s' => 'Page Id',
+    'version|v=i' => 'Page Version',
+    'languageId|l=i' => 'Language Id',
+    'rootLevelId|r=i' => 'RootLevelId Id',
+));
 
 try {
-    $objConsoleOpts = new Zend_Console_Getopt(
-        array(
-             'pageId|p=s'      => 'Page Id',
-             'version|v=i'     => 'Page Version',
-             'languageId|l=i'  => 'Language Id',
-             'rootLevelId|r=i' => 'RootLevelId Id'
-        )
-    );
+    $opt->parse();
+} catch (Zend_Console_Getopt_Exception $exc) {
+    // Bad options passed: report usage
+    echo $exc->getUsageMessage();
+    return false;
+}
 
-    if (isset($objConsoleOpts->pageId) && isset($objConsoleOpts->version) && isset($objConsoleOpts->languageId) && isset($objConsoleOpts->rootLevelId)) {
-        $objIndex = new Index();
+// Show help message in case it was requested or params were incorrect (module, controller and action)
+if ($opt->getOption('h')) {
+    echo $opt->getUsageMessage();
+    return true;
+}
+
+// Define application environment
+$env = $opt->getOption('e');
+defined('APPLICATION_ENV')
+|| define('APPLICATION_ENV', (null === $env) ? 'production' : $env);
+
+// include general (autoloader, config)
+require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
+
+
+try {
+
+    if (isset($opt->pageId) && isset($opt->version) &&
+        isset($opt->languageId) && isset($opt->rootLevelId)
+    ) {
+        $index = new Index();
         $core->logger->info('index page now ...');
-        $objIndex->indexPage($objConsoleOpts->pageId, $objConsoleOpts->version, $objConsoleOpts->languageId, $objConsoleOpts->rootLevelId);
+        $index->indexPage($opt->pageId, $opt->version, $opt->languageId, $opt->rootLevelId);
         $core->logger->info('... finished!');
     }
 
 } catch (Exception $exc) {
-    $core->logger->err($exc);
-    exit();
+    echo $exc->getMessage();
+    return false;
 }
-?>

@@ -70,20 +70,17 @@ class Index
     }
 
     /**
-     * indexPage
-     * @param string $strPageId
-     * @param integer $intPageVersion
-     * @param integer $intLanguageId
-     * @param integer $intRootLevelId
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @param $strPageId
+     * @param $intPageVersion
+     * @param $intLanguageId
+     * @param $intRootLevelId
      */
     public function indexPage($strPageId, $intPageVersion, $intLanguageId, $intRootLevelId)
     {
         try {
             $this->core->logger->debug('massiveart->website->index->indexPage(' . $strPageId . ', ' . $intPageVersion . ', ' . $intLanguageId . ', ' . $intRootLevelId . ')');
-            $objPage = new Page();
+
+            $objPage = $this->getPage();
             $objPage->setPageId($strPageId);
             $objPage->setPageVersion($intPageVersion);
             $objPage->setLanguageId($intLanguageId);
@@ -100,45 +97,33 @@ class Index
     }
 
     /**
-     * indexRemovePages
-     * @return void
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
+     * @param $key
      */
-    public function indexRemovePages($strKey)
+    public function indexRemovePages($key)
     {
         try {
-            $strIndexRootPath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page;
-
-            $arrFolderContent = array_diff(scandir($strIndexRootPath), array('.', '..'));
-            if ($arrFolderContent > 0) {
-                foreach ($arrFolderContent as $item) {
-                    if (is_dir($strIndexRootPath . '/' . $item)) {
-                        $this->indexRemoveElement($strIndexRootPath . '/' . $item, $strKey);
-                    }
-                }
-            }
+            $search = new \Sulu\Search\Search($this->core->sysConfig->search->toArray(), 'page');
+            $search->getIndex()->delete($key);
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
     }
 
     /**
-     * indexGlobal
-     * @param string $strGlobalId
-     * @param integer $intGlobalLinkId
-     * @param integer $intGlobalVersion
-     * @param integer $intLanguageId
-     * @param integer $intRootLevelId
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @param $strGlobalId
+     * @param $intGlobalLinkId
+     * @param $intGlobalVersion
+     * @param $intLanguageId
+     * @param $intRootLevelId
      */
     public function indexGlobal($strGlobalId, $intGlobalLinkId, $intGlobalVersion, $intLanguageId, $intRootLevelId)
     {
         try {
-            $this->core->logger->debug('massiveart->website->index->indexGlobal(' . $strGlobalId . ', ' . $intGlobalLinkId . ', ' . $intGlobalVersion . ', ' . $intLanguageId . ', ' . $intRootLevelId . ')');
-            $objPage = new Page();
+            $this->core->logger->debug(
+                'massiveart->website->index->indexGlobal(' . $strGlobalId . ', ' . $intGlobalLinkId . ', ' . $intGlobalVersion . ', ' . $intLanguageId . ', ' . $intRootLevelId . ')'
+            );
+
+            $objPage = $this->getPage();
             $objPage->setPageId($strGlobalId);
             $objPage->setPageVersion($intGlobalVersion);
             $objPage->setLanguageId($intLanguageId);
@@ -159,63 +144,20 @@ class Index
     }
 
     /**
-     * indexRemoveGlobals
-     * @return void
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
+     * @param $key
      */
-    public function indexRemoveGlobals($strKey)
+    public function indexRemoveGlobals($key)
     {
         try {
-            $strIndexRootPath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global;
-
-            $arrFolderContent = array_diff(scandir($strIndexRootPath), array('.', '..'));
-            if (count($arrFolderContent) > 0) {
-                foreach ($arrFolderContent as $item) {
-                    if (is_dir($strIndexRootPath . '/' . $item)) {
-                        $this->indexRemoveElement($strIndexRootPath . '/' . $item, $strKey);
-                    }
-                }
-            }
+            $search = new \Sulu\Search\Search($this->core->sysConfig->search->toArray(), 'global');
+            $search->getIndex()->delete($key);
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
     }
 
     /**
-     * indexRemoveElement
-     * @return void
-     * @author Cornelius Hansjakob <cha@massiveart.com>
-     * @version 1.0
-     */
-    protected function indexRemoveElement($strIndexPath, $strKey)
-    {
-        try {
-            $arrFolderContent = array_diff(scandir($strIndexPath), array('.', '..'));
-            if (count($arrFolderContent) > 0) {
-                $objIndex = Zend_Search_Lucene::open($strIndexPath);
-
-                $objTerm = new Zend_Search_Lucene_Index_Term($strKey, 'key');
-                $objQuery = (strpos($strKey, '*') !== false) ? new Zend_Search_Lucene_Search_Query_Wildcard($objTerm) : new Zend_Search_Lucene_Search_Query_Term($objTerm);
-
-                $objHits = $objIndex->find($objQuery);
-                foreach ($objHits as $objHit) {
-                    $objIndex->delete($objHit->id);
-                }
-
-                $objIndex->commit();
-                $objIndex->optimize();
-            }
-        } catch (Exception $exc) {
-            $this->core->logger->err($exc);
-        }
-    }
-
-    /**
-     * indexAllPublicPages
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     *
      */
     public function indexAllPublicPages()
     {
@@ -224,7 +166,12 @@ class Index
 
             $objPagesData = $this->objModelPages->loadAllPublicPages();
             foreach ($objPagesData as $objPageData) {
-                $this->indexPage($objPageData->pageId, $objPageData->version, $objPageData->idLanguages, ((int) $objPageData->idRootLevels > 0) ? $objPageData->idRootLevels : $objPageData->idParent);
+                $this->indexPage(
+                    $objPageData->pageId,
+                    $objPageData->version,
+                    $objPageData->idLanguages,
+                    ((int)$objPageData->idRootLevels > 0) ? $objPageData->idRootLevels : $objPageData->idParent
+                );
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -232,12 +179,8 @@ class Index
     }
 
     /**
-     * indexAllPublicGlobals
-     * @param integer $intRootLevelId
-     * @param integer $intLanguageId
-     * @return void
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
+     * @param null $intRootLevelId
+     * @param null $intLanguageId
      */
     public function indexAllPublicGlobals($intRootLevelId = null, $intLanguageId = null)
     {
@@ -255,7 +198,9 @@ class Index
                 $intCounter++;
                 echo $intCounter . "/" . $intTotal . " - mem usage is: " . memory_get_usage() . "\n";
                 //$this->indexGlobal($objGlobalData->globalId, $objGlobalData->idLink, $objGlobalData->version, $objGlobalData->idLanguages, ((int) $objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent);
-                exec("php $strIndexGlobalFilePath --globalId='" . $objGlobalData->globalId . "' --linkId='" . $objGlobalData->idLink . "' --version=" . $objGlobalData->version . " --languageId=" . $objGlobalData->idLanguages . " --rootLevelId=" . (((int) $objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent));
+                exec(
+                    "php $strIndexGlobalFilePath --globalId='" . $objGlobalData->globalId . "' --linkId='" . $objGlobalData->idLink . "' --version=" . $objGlobalData->version . " --languageId=" . $objGlobalData->idLanguages . " --rootLevelId=" . (((int)$objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent)
+                );
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
@@ -263,10 +208,22 @@ class Index
     }
 
     /**
-     * getModelPages
+     * @return Client_Page|Page
+     */
+    protected function getPage()
+    {
+        if (file_exists(GLOBAL_ROOT_PATH . 'client/website/page.class.php')) {
+            require_once(GLOBAL_ROOT_PATH . 'client/website/page.class.php');
+            $objPage = new Client_Page();
+        } else {
+            $objPage = new Page();
+        }
+
+        return $objPage;
+    }
+
+    /**
      * @return Model_Pages
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
      */
     protected function getModelPages()
     {
@@ -284,10 +241,7 @@ class Index
     }
 
     /**
-     * getModelGlobals
      * @return Model_Globals
-     * @author Thomas Schedler <tsh@massiveart.com>
-     * @version 1.0
      */
     protected function getModelGlobals()
     {
@@ -304,5 +258,3 @@ class Index
         return $this->objModelGlobals;
     }
 }
-
-?>

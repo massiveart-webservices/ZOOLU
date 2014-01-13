@@ -174,7 +174,7 @@ class GenericDataTypePage extends GenericDataTypeAbstract
             if (!in_array($this->setup->getElementTypeId(), $arrTreeTypes) && $this->setup->getElementTypeId() != $this->core->sysConfig->page_types->link->id && $this->setup->getStatusId() == $this->core->sysConfig->status->live) {
                 if (substr(PHP_OS, 0, 3) === 'WIN') {
                     $this->core->logger->warning('slow page index on windows based OS!');
-                    $this->updateIndex(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId . '_' . $this->setup->getLanguageId());
+                    // TODO : $this->updateIndex(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId . '_' . $this->setup->getLanguageId());
                 } else {
                     $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexPage.php';
                     //run page index in background
@@ -184,7 +184,7 @@ class GenericDataTypePage extends GenericDataTypeAbstract
                 //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->page.'/'.sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId.'_'.$this->setup->getLanguageId());
                 $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
                 //run remove page from index in background
-                exec("php " . $strIndexPageFilePath . " --key='" . $objPage->pageId . "_" . $this->setup->getLanguageId() . "*' > /dev/null &#038;");
+                exec("php " . $strIndexPageFilePath . " --key='" . $objPage->pageId . "_" . $this->setup->getLanguageId() . "' > /dev/null &#038;");
             }
 
             //cache expiring
