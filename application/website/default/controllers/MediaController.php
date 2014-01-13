@@ -330,8 +330,68 @@ class MediaController extends Zend_Controller_Action
                 if (file_exists($strFilePath)) {
                     if (isset($objFileData->mimeType) && $objFileData->mimeType != '') {
                         $this->objModelFiles->increaseDownloadCounter($objFileData->id);
-                        header('Content-Type: ' . $objFileData->mimeType);
-                        readfile($strFilePath);
+
+                        if ($this->core->sysConfig->media->download->chunk_videos == 'true') {
+                            $fileStream = @fopen ( $strFilePath, 'rb' );
+
+                            $size = filesize ( $strFilePath ); // File size
+                            $length = $size; // Content length
+                            $start = 0; // Start byte
+                            $end = $size - 1; // End byte
+
+                            header('Content-Type: ' . $objFileData->mimeType);
+                            //header("Accept-Ranges: 0-$length");
+                            header("Accept-Ranges: bytes");
+                            if (isset($_SERVER['HTTP_RANGE'])) {
+
+                                $chunk_start = $start;
+                                $chunk_end = $end;
+
+                                list(, $range) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+                                if (strpos($range, ',') !== false) {
+                                    header('HTTP/1.1 416 Requested Range Not Satisfiable');
+                                    header("Content-Range: bytes $start-$end/$size");
+                                    exit;
+                                }
+                                if ($range == '-') {
+                                    $chunk_start = $size - substr($range, 1);
+                                }else{
+                                    $range = explode('-', $range);
+                                    $chunk_start = $range[0];
+                                    $chunk_end = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $size;
+                                }
+                                $chunk_end = ($chunk_end > $end) ? $end : $chunk_end;
+                                if ($chunk_start > $chunk_end || $chunk_start > $size - 1 || $chunk_end >= $size) {
+                                    header('HTTP/1.1 416 Requested Range Not Satisfiable');
+                                    header("Content-Range: bytes $start-$end/$size");
+                                    exit;
+                                }
+                                $start = $chunk_start;
+                                $end = $chunk_end;
+                                $length = $end - $start + 1;
+                                fseek($fileStream, $start);
+                                header('HTTP/1.1 206 Partial Content');
+                            }
+                            header("Content-Range: bytes $start-$end/$size");
+                            header("Content-Length: ".$length);
+
+                            $buffer = 1024 * 8;
+                            while(!feof($fileStream) && ($pointer = ftell($fileStream)) <= $end) {
+
+                                if ($pointer + $buffer > $end) {
+                                    $buffer = $end - $pointer + 1;
+                                }
+                                set_time_limit(0);
+                                echo fread($fileStream, $buffer);
+                                flush();
+                            }
+
+                            fclose($fileStream);
+                            exit();
+                        } else {
+                            header('Content-Type: ' . $objFileData->mimeType);
+                            readfile($strFilePath);
+                        }
                     } else {
                         // no mimetype
                     }

@@ -677,6 +677,7 @@
                 <zip_extensions>
                     <extension>dxf</extension>
                 </zip_extensions>
+                <chunk_videos>true</chunk_videos>
             </download>
         </media>
 
