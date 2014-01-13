@@ -259,7 +259,7 @@ class Model_Customers
     }
 
     /**
-     * addAddress
+     * updateAddresses
      * @param $arrData array
      * @param $intCustomerId integer
      * @return mixed
@@ -280,7 +280,7 @@ class Model_Customers
     }
 
     /**
-     * addAddress
+     * updateGroups
      * @param $arrData array
      * @param $intCustomerId integer
      * @return mixed
@@ -296,7 +296,7 @@ class Model_Customers
     }
 
     /**
-     * addAddress
+     * deleteGroups
      * @param $intCustomerId integer
      * @return mixed
      * @author Alexander Schranz <alexander.schranz@massiveart.com>
