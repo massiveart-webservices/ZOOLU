@@ -141,7 +141,7 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
     protected function getSpecificValue($array, $property)
     {
         if (!is_array($array)) {
-            throw new Exception('getSpecificValue(): The passsed array was not recognized as such. Please provide valide parameters.');
+            throw new Exception('getSpecificValue(' . $property . '): The passsed array was not recognized as such. Please provide valide parameters.');
         }
         // traverse array for passed key
         foreach ($array as $obj) {
