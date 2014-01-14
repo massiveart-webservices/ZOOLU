@@ -30,6 +30,11 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     private $newsletterId;
     
     /**
+     * @var Object
+     */
+    private $objNewsletter;
+    
+    /**
      * @var string
      */
     private $content;
@@ -75,6 +80,11 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
      * @var Model_NewsletterUnsubscribeHashes
      */
     protected $objModelUnsubscribeHashes;
+        
+    /**
+     * @var Model_RootLevels
+     */
+    protected $objModelRootLevels;
     
     /**
      * rootLevelFilterId
@@ -152,8 +162,10 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         // set the content
         $this->setContent($args['content']);
         
+        $this->objNewsletter = $args['newsletter'];
+        
         //set Subject title
-        $this->setTitle($args['title']);
+        $this->setTitle($this->objNewsletter->title);
         
         $this->loadRecipients();
         $this->buildUnsubscribeLinks();
@@ -169,19 +181,29 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     protected function buildUnsubscribeLinks()
     {
         if (sizeof($this->recipients) > 0) {
+           
+            $baseportalJSON = $this->objNewsletter->baseportal;
+            $baseportal = json_decode($baseportalJSON);
+            $rootLevelId = $baseportal->rootlevel;
+            $language = $baseportal->language;
+            $objUrl = $this->getModelRootLevels()->loadRootLevelUrl($rootLevelId);
+            
+            // load baseportal for unscubscribe link
             foreach ($this->recipients as $recipient) {
+                $hash = '';
                 $subscriber = $this->getModelNewsletterUnsubscribeHashes()->loadBySubscriberId($recipient->id);
                 // hash for subscriber does not exist 
                 if (count($subscriber) != 1) {
                     $arrData['idSubscriber'] = $recipient->id;
                     $arrData['hash'] = $this->buildHashValue($recipient->email);
                     $this->getModelNewsletterUnsubscribeHashes()->getNewsletterUnsubcribeHashesTable()->insert($arrData);
-                    $this->unsubscribeLinks[$recipient->id] = $arrData['hash'];
+                    $hash = $arrData['hash'];
                     $this->core->logger->debug('Wrote unsubscription link for user ' . $arrData['idSubscriber']);
                 // else load existing hash
                 } else {
-                    $this->unsubscribeLinks[$recipient->id] = $subscriber->current()->hash;
+                    $hash = $subscriber->current()->hash;
                 }
+                $this->unsubscribeLinks[$recipient->id] = 'http://' . $objUrl->url . '/unsubscribe?language=' . strtolower($language) . '&hash=' . $hash . '&nid=' . $this->newsletterId;
             }
         }
     }
@@ -673,6 +695,27 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     public function getUnsubscribeLinks()
     {
         return $this->unsubscribeLinks;
+    }
+    
+     /**
+     * getModelRootLevels
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     * @return Model_RootLevels
+     */
+    protected function getModelRootLevels()
+    {
+        if (null === $this->objModelRootLevels) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/RootLevels.php';
+            $this->objModelRootLevels = new Model_RootLevels();
+        }
+
+        return $this->objModelRootLevels;
     }
     
 }

@@ -298,10 +298,10 @@ class Newsletters_NewsletterController extends AuthControllerAction
                 if ($blnTestSend) {
                     $strEmail = $this->getRequest()->getParam('recipient');
                     // send Testnewsletter
-                    $this->objCommandChain->runCommand('newsletter:sendTest', array('content' => $content, 'title' => $title, 'email' => $strEmail));
+                    $this->objCommandChain->runCommand('newsletter:sendTest', array('content' => $content, 'newsletter' => $objNewsletter, 'email' => $strEmail));
                 } else {
                     // ==>
-                    $this->objCommandChain->runCommand('newsletter:send', array('content' => $content, 'title' => $title));
+                    $this->objCommandChain->runCommand('newsletter:send', array('content' => $content, 'newsletter' => $objNewsletter));
                     $this->getModelNewsletters()->update($objGenericData->Setup(),
                         array(
                              'sent'               => 1,

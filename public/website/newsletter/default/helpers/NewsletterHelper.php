@@ -53,11 +53,6 @@ class NewsletterHelper {
     protected $objModelFiles;
     
     /**
-     * @var Model_RootLevels
-     */
-    protected $objModelRootLevels;
-    
-    /**
      * @var Zend_Translate
      */
     protected $objTranslate;
@@ -195,13 +190,7 @@ class NewsletterHelper {
      * getUnsubscribeLink
      */
     public function getUnsubscribeLink() {
-        $baseportalJSON = $this->objGenericSetup->getField('baseportal')->getValue();
-        $baseportal = json_decode($baseportalJSON);
-        $rootLevelId = $baseportal->rootlevel;
-        $language = $baseportal->language;
-        $objUrl = $this->getModelRootLevels()->loadRootLevelUrl($rootLevelId);
-        $url = $objUrl->url . '/unsubscribe?language=' . strtolower($language) . '&hash=*|UNSUB|*';
-        return '<a href="http://' . $url . '">' . $this->objTranslate->_('Unsubscribe') . '</a>';
+        return '<a href="*|UNSUB|*">' . $this->objTranslate->_('Unsubscribe') . '</a>';
     }
 
     /**
@@ -223,28 +212,6 @@ class NewsletterHelper {
         }
 
         return $this->objModelFiles;
-    }
-    
-    
-    /**
-     * getModelRootLevels
-     * @author Daniel Rotter <daniel.rotter@massiveart.com>
-     * @version 1.0
-     * @return Model_RootLevels
-     */
-    protected function getModelRootLevels()
-    {
-        if (null === $this->objModelRootLevels) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
-            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/RootLevels.php';
-            $this->objModelRootLevels = new Model_RootLevels();
-        }
-
-        return $this->objModelRootLevels;
     }
     
     /**

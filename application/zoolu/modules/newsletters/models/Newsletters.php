@@ -241,12 +241,38 @@ class Model_Newsletters {
     }
 
     /**
+     * Gets subscribers newsletter statistics.
+     */
+    public function loadSubscribersNewsletterStatistics($idSubscribers, $idNewsletter) {
+        
+        $this->core->logger->debug('newsletters->models->Model_Newsletters->loadSubscribersNewsletterStatistics(' . $idSubscribers . ', ' . $idNewsletter .')');
+        $objSelect = $this->getModelNewsletterStatisticsTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('newsletterStatistics');
+        $objSelect->where('newsletterStatistics.idSubscriber = ?', $idSubscribers);
+        $objSelect->where('newsletterStatistics.idNewsletter = ?', $idNewsletter);
+
+        return $this->getModelNewsletterStatisticsTable()->fetchAll($objSelect);
+    }
+    
+    /**
      * Saves newsletter statistics.
      * @param array $arrData
      */
     public function addNewsletterStatistics($arrData) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->addNewsletterStatistics()');
         return $this->getModelNewsletterStatisticsTable()->insert($arrData);
+    }
+    
+    /**
+     * Updates newsletter statistics.
+     * @param array $arrData
+     */
+    public function updateNewsletterStatistics($id, $arrData) {
+        $this->core->logger->debug('newsletters->models->Model_Newsletters->updateNewsletterStatistics()');
+        $strWhere = $this->getModelNewsletterStatisticsTable()->getAdapter()->quoteInto('id = ?', $id);
+        $this->getModelNewsletterStatisticsTable()->update($arrData, $strWhere);
     }
 
     /**

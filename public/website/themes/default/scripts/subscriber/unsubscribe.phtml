@@ -14,6 +14,7 @@
                     <?php echo $this->translate->_('unsubscribe_description_text'); ?> 
                     <form method="POST">
                         <input type="hidden" name="hash" value="<?php echo $this->hash; ?>" />
+                        <input type="hidden" name="nid" value="<?php echo $this->nid; ?>" />
                         <input type="hidden" name="confirm" value="true" />
                         <input type="submit" value="<?php echo $this->translate->_('unsubscribe'); ?>" />
                     </form>

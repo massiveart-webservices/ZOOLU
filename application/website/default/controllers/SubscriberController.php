@@ -63,6 +63,11 @@ class SubscriberController extends WebControllerAction {
      * @var Model_Categories
      */
     public $objModelCategories;
+    
+    /**
+     * @var Model_Newsletter
+     */
+    protected $objModelNewsletters;
 
     /**
      * preDispatch
@@ -261,7 +266,8 @@ class SubscriberController extends WebControllerAction {
         $objSubscriberHelper = Zend_Registry::get('SubscriberHelper');
         $objSubscriberHelper->setMetaTitle($this->translate->_('Newsletter_unsubscribe'), false);
         $hash = $this->getRequest()->getParam('hash', '');
-        if ($hash != '') {
+        $newsletterId = $this->getRequest()->getParam('nid', 0);
+        if ($hash != '' && $newsletterId != 0) {
             $subscribers = $this->getModelSubscribers()->loadByHash($hash);
             if (count($subscribers) == 1) {
                 $this->view->error = false;
@@ -272,9 +278,22 @@ class SubscriberController extends WebControllerAction {
                         'subscribed' => self::UN_SUBSCRIBED_FLAG_ID
                     );
                     $this->getModelSubscribers()->update($subscriber->id, $data);
+                    
+                    $data = array();
+                    $data['unsubscribed'] = 1;
+                    $subscriberStats = $this->getModelNewsletters()->loadSubscribersNewsletterStatistics($subscriber->id, $newsletterId);
+                    if (count($subscriberStats) > 0) {
+                        $subscriberStat = $subscriberStats->current();
+                        $this->getModelNewsletters()->updateNewsletterStatistics($subscriberStat->id, $data);
+                    } else {
+                        $data['idNewsletter'] = 1;
+                        $data['idSubscriber'] = $subscriber->id;
+                        $this->getModelNewsletters()->addNewsletterStatistics($data);
+                    }
                     $this->view->success = true;
                 } else {
                     $this->view->hash = $hash;
+                    $this->view->nid = $newsletterId;
                 }
             }
         }
@@ -317,7 +336,25 @@ class SubscriberController extends WebControllerAction {
 
         return $this->objModelCategories;
     }
-
+    
+    /**
+     * getModelNewsletters
+     * @return Model_Newsletters
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelNewsletters() {
+        if (null === $this->objModelNewsletters) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'newsletters/models/Newsletters.php';
+            $this->objModelNewsletters = new Model_Newsletters();
+        }
+        return $this->objModelNewsletters;
+    }
 }
 
 ?>
