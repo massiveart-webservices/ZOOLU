@@ -10,11 +10,6 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
     protected $core;
 
     /**
-     * @var array
-     */
-    protected $event;
-
-    /**
      * @var Model_Newsletters
      */
     protected $objModelNewsletters;
@@ -54,24 +49,25 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
     {
         $this->core->logger->debug('Webhooks->controller->contacts->processWebhook()');
         if (key_exists(self::MANDRILL_EVENTS_KEY, $request)) {
-            $this->event = $request[self::MANDRILL_EVENTS_KEY];
-            $this->decodeRequest();
-            $this->parseRequest();
+            $json = $request[self::MANDRILL_EVENTS_KEY];
+            $event = $this->decodeRequest($json);
+            $this->parseRequest($event, $json);
         }
     }
     
     /**
      * Parses the json response and create
      * database entries.
+     * @param obj $event
      */
-    protected function parseRequest()
+    protected function parseRequest($event, $json)
     {
         $arrData = array();
 
         // If event contains data
-        if (count($this->event) > 0) {
+        if (count($event) > 0) {
             // stdClass object
-            foreach ($this->event as $key) {
+            foreach ($event as $key) {
                 $newsletterId = $this->getSpecificValue($key->msg->metadata, $this->core->sysConfig->mandrill->send_mail->zoolu_newsletter_id);
                 // a newsletter id of 0 marks a test email, so skip those
                 if ($newsletterId > 0) {
@@ -94,6 +90,7 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
                     $arrData['spam'] = ($key->event == self::MANDRILL_EVENT_SPAM) ? 1 : 0;
                     $arrData['unsubscribed'] = ($key->event == self::MANDRILL_EVENT_UNSUBSCRIBE) ? 1 : 0;
                     $arrData['rejected'] = ($key->event == self::MANDRILL_EVENT_REJECT) ? 1 : 0;
+                    $arrData['json'] = $json;
                     
                     // Check if there is already a record for the subscriber => update row
                     $oldData = $this->userStatisticsExist($subscriber[0]->id, $newsletterId);
@@ -103,7 +100,7 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
                         $data = array($updateField => $arrData[$updateField]);
                         $whr =  $this->core->dbh->quoteInto('idSubscriber = ?', $subscriber[0]->id);
                         $whr .=  $this->core->dbh->quoteInto(' AND idNewsletter = ?', $newsletterId);
-                        $affectedRows = $this->core->dbh->update('newsletterStatistics', $data , $whr);
+                        $this->core->dbh->update('newsletterStatistics', $data , $whr);
                     // No record found, create new record                        
                     } else {
                         $this->core->logger->debug('Adding new statistics for subscriber ' . $subscriber[0]->id . ' with newsletter ' . $newsletterId);
@@ -123,10 +120,11 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
     /**
      * Decodes the json and replaces escape
      * characters.
+     * @param JSON $json
      */
-    protected function decodeRequest()
+    protected function decodeRequest($json)
     {
-        $this->event = json_decode(preg_replace('/\\\"/', '"', $this->event));
+        return json_decode(preg_replace('/\\\"/', '"', $json));
     }    
     
     /**

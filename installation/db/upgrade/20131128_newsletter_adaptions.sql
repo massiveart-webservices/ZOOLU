@@ -107,3 +107,8 @@ CREATE TABLE IF NOT EXISTS `newsletterStatistics` (
   `rejected` bigint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;
+
+
+ALTER TABLE `newsletterStatistics` CHANGE `sent` `sent` TINYINT(1) UNSIGNED NOT NULL, CHANGE `hard_bounced` `hard_bounced` TINYINT(1) UNSIGNED NOT NULL, CHANGE `soft_bounced` `soft_bounced` TINYINT(1) UNSIGNED NOT NULL, CHANGE `opened` `opened` TINYINT(1) UNSIGNED NOT NULL, CHANGE `clicked` `clicked` TINYINT(1) UNSIGNED NOT NULL, CHANGE `spam` `spam` TINYINT(1) UNSIGNED NOT NULL, CHANGE `unsubscribed` `unsubscribed` TINYINT(1) UNSIGNED NOT NULL, CHANGE `rejected` `rejected` TINYINT(1) UNSIGNED NOT NULL;
+
+ALTER TABLE `newsletterStatistics` ADD `json` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `rejected` ;
