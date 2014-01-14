@@ -1,27 +1,27 @@
-UPDATE `zo-zoolu`.`rootLevelTitles` SET `title` = 'Zoolu Newsletter' WHERE `rootLevelTitles`.`id` =93;
+UPDATE `rootLevelTitles` SET `title` = 'Zoolu Newsletter' WHERE `rootLevelTitles`.`id` =93;
 
-UPDATE `zo-zoolu`.`rootLevelTitles` SET `title` = 'Zoolu Newsletter' WHERE `rootLevelTitles`.`id` =94;
+UPDATE `rootLevelTitles` SET `title` = 'Zoolu Newsletter' WHERE `rootLevelTitles`.`id` =94;
 
 
-DELETE FROM `zo-zoolu`.`rootLevelTypeFilterTypes` WHERE `rootLevelTypeFilterTypes`.`id` = 4;
+DELETE FROM `rootLevelTypeFilterTypes` WHERE `rootLevelTypeFilterTypes`.`id` = 4;
 
-UPDATE `zo-zoolu`.`rootLevelTypeFilterTypes` SET `name` = 'portal' WHERE `rootLevelTypeFilterTypes`.`id` =1;
+UPDATE `rootLevelTypeFilterTypes` SET `name` = 'portal' WHERE `rootLevelTypeFilterTypes`.`id` =1;
 
-UPDATE `zo-zoolu`.`rootLevelTypeFilterTypes` SET `name` = 'interestgroup' WHERE `rootLevelTypeFilterTypes`.`id` =2;
+UPDATE `rootLevelTypeFilterTypes` SET `name` = 'interestgroup' WHERE `rootLevelTypeFilterTypes`.`id` =2;
 
-UPDATE `zo-zoolu`.`rootLevelTypeFilterTypes` SET `name` = 'language',
+UPDATE `rootLevelTypeFilterTypes` SET `name` = 'language',
 `sqlSelect` = 'SELECT tbl.id AS id, languages.title AS title, languages.title AS altTitle FROM languages AS tbl ORDER BY tbl.title' WHERE `rootLevelTypeFilterTypes`.`id` =3;
 
 ALTER TABLE `subscribers` ADD `hardbounce` TINYINT UNSIGNED NULL AFTER `dirty`;
 
 ALTER TABLE `subscribers` CHANGE `salutation` `salutation` BIGINT( 20 ) UNSIGNED NULL DEFAULT NULL; 
 
-UPDATE `zo-zoolu`.`fields` SET `idFieldTypes` = '9',
+UPDATE `fields` SET `idFieldTypes` = '9',
 `sqlSelect` = 'SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = %LANGUAGE_ID%, categories AS rootCat WHERE rootCat.id = 640 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt %WHERE_ADDON% ORDER BY tbl.lft, categoryTitles.title' WHERE `fields`.`id` =226;
 
-DELETE FROM `zo-zoolu`.`regionFields` WHERE `regionFields`.`id` = 321;
+DELETE FROM `regionFields` WHERE `regionFields`.`id` = 321;
 
-DELETE FROM `zo-zoolu`.`fields` WHERE `fields`.`id` = 246;
+DELETE FROM `fields` WHERE `fields`.`id` = 246;
 
 ALTER TABLE `subscribers` CHANGE `street` `street` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
 
@@ -61,11 +61,11 @@ INSERT INTO `rootLevelTypeFilterTypes` (`id`, `idRootLevelTypes`, `name`, `opera
 (3, 18, 'language', '["one", "none", "all"]', 'SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = %LANGUAGE_ID%, categories AS rootCat WHERE rootCat.id = 634 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt ORDER BY tbl.lft, categoryTitles.title');
 SET FOREIGN_KEY_CHECKS=1;
 
-INSERT INTO `zo-zoolu`.`rootLevelGroupTitles` (`id`, `idRootLevelGroups`, `idLanguages`, `title`) VALUES (NULL, '15', '1', 'Newsletter'), (NULL, '15', '2', 'Newsletters');
+INSERT INTO `rootLevelGroupTitles` (`id`, `idRootLevelGroups`, `idLanguages`, `title`) VALUES (NULL, '15', '1', 'Newsletter'), (NULL, '15', '2', 'Newsletters');
 
-UPDATE `zo-zoolu`.`templates` SET `active` = '1' WHERE `templates`.`id` =40;
+UPDATE `templates` SET `active` = '1' WHERE `templates`.`id` =40;
 
-DELETE FROM `zo-zoolu`.`regionFields` WHERE `regionFields`.`id` = 307;
+DELETE FROM `regionFields` WHERE `regionFields`.`id` = 307;
 
 CREATE TABLE IF NOT EXISTS `newsletterUnsubscribeHashes` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -80,15 +80,15 @@ CREATE TABLE IF NOT EXISTS `newsletterUnsubscribeHashes` (
 ALTER TABLE `newsletterUnsubscribeHashes` ENGINE = InnoDB;
 ALTER TABLE `newsletterUnsubscribeHashes` ADD INDEX ( `idSubscriber` ) ;
 
-INSERT INTO `zo-zoolu`.`fields` (`id`, `idFieldTypes`, `name`, `idSearchFieldTypes`, `idRelationPage`, `idCategory`, `sqlSelect`, `columns`, `height`, `isCoreField`, `isKeyField`, `isSaveField`, `isRegionTitle`, `isDependentOn`, `showDisplayOptions`, `options`, `copyValue`, `validators`) VALUES (NULL, '9', 'baseportal', '1', NULL, NULL, 'SELECT tbl.id AS id, rootLevelTitles.title AS title FROM rootLevelTitles INNER JOIN rootLevels AS tbl ON tbl.id = rootLevelTitles.idRootLevels WHERE tbl.idRootLevelTypes = 1 AND tbl.active = 1 AND rootLevelTitles.idLanguages = %LANGUAGE_ID% %WHERE_ADDON% ORDER BY rootLevelTitles.title', '12', '0', '1', '1', '1', '0', NULL, '0', NULL, '0', '');
+INSERT INTO `fields` (`id`, `idFieldTypes`, `name`, `idSearchFieldTypes`, `idRelationPage`, `idCategory`, `sqlSelect`, `columns`, `height`, `isCoreField`, `isKeyField`, `isSaveField`, `isRegionTitle`, `isDependentOn`, `showDisplayOptions`, `options`, `copyValue`, `validators`) VALUES (NULL, '9', 'baseportal', '1', NULL, NULL, 'SELECT tbl.id AS id, rootLevelTitles.title AS title FROM rootLevelTitles INNER JOIN rootLevels AS tbl ON tbl.id = rootLevelTitles.idRootLevels WHERE tbl.idRootLevelTypes = 1 AND tbl.active = 1 AND rootLevelTitles.idLanguages = %LANGUAGE_ID% %WHERE_ADDON% ORDER BY rootLevelTitles.title', '12', '0', '1', '1', '1', '0', NULL, '0', NULL, '0', '');
 
-INSERT INTO `zo-zoolu`.`fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `description`) VALUES (NULL, '278', '1', 'Basisportal', NULL), (NULL, '278', '2', 'Base portal', NULL);
+INSERT INTO `fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `description`) VALUES (NULL, '278', '1', 'Basisportal', NULL), (NULL, '278', '2', 'Base portal', NULL);
 
-INSERT INTO `zo-zoolu`.`regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL, '96', '278', '40');
+INSERT INTO `regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL, '96', '278', '40');
 
 ALTER TABLE `newsletters` ADD `baseportal` INT UNSIGNED NULL DEFAULT NULL AFTER `idRootLevelFilters` ;
 
-UPDATE `zo-zoolu`.`fields` SET `sqlSelect` = 'SELECT CONCAT(''{"rootlevel":'', tbl.id, '', "language":"'', languages.languageCode, ''"}'') AS id, CONCAT(rootLevelTitles.title, '' '', languages.languageCode) AS title FROM rootLevelTitles INNER JOIN rootLevels AS tbl ON tbl.id = rootLevelTitles.idRootLevels INNER JOIN rootLevelLanguages ON rootLevelLanguages.idRootLevels = tbl.id INNER JOIN languages ON languages.id = rootLevelLanguages.idLanguages WHERE tbl.idRootLevelTypes = 1 AND tbl.active = 1 AND rootLevelTitles.idLanguages = %LANGUAGE_ID% %WHERE_ADDON% ORDER BY rootLevelTitles.title' WHERE `fields`.`id` =278;
+UPDATE `fields` SET `sqlSelect` = 'SELECT CONCAT(''{"rootlevel":'', tbl.id, '', "language":"'', languages.languageCode, ''"}'') AS id, CONCAT(rootLevelTitles.title, '' '', languages.languageCode) AS title FROM rootLevelTitles INNER JOIN rootLevels AS tbl ON tbl.id = rootLevelTitles.idRootLevels INNER JOIN rootLevelLanguages ON rootLevelLanguages.idRootLevels = tbl.id INNER JOIN languages ON languages.id = rootLevelLanguages.idLanguages WHERE tbl.idRootLevelTypes = 1 AND tbl.active = 1 AND rootLevelTitles.idLanguages = %LANGUAGE_ID% %WHERE_ADDON% ORDER BY rootLevelTitles.title' WHERE `fields`.`id` =278;
 
 ALTER TABLE `newsletters` CHANGE `baseportal` `baseportal` VARCHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
@@ -112,3 +112,9 @@ CREATE TABLE IF NOT EXISTS `newsletterStatistics` (
 ALTER TABLE `newsletterStatistics` CHANGE `sent` `sent` TINYINT(1) UNSIGNED NOT NULL, CHANGE `hard_bounced` `hard_bounced` TINYINT(1) UNSIGNED NOT NULL, CHANGE `soft_bounced` `soft_bounced` TINYINT(1) UNSIGNED NOT NULL, CHANGE `opened` `opened` TINYINT(1) UNSIGNED NOT NULL, CHANGE `clicked` `clicked` TINYINT(1) UNSIGNED NOT NULL, CHANGE `spam` `spam` TINYINT(1) UNSIGNED NOT NULL, CHANGE `unsubscribed` `unsubscribed` TINYINT(1) UNSIGNED NOT NULL, CHANGE `rejected` `rejected` TINYINT(1) UNSIGNED NOT NULL;
 
 ALTER TABLE `newsletterStatistics` ADD `json` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `rejected` ;
+
+ALTER TABLE `subscribers` CHANGE `hardbounce` `bounced` VARCHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ; 
+
+INSERT INTO `fields` (`id`, `idFieldTypes`, `name`, `idSearchFieldTypes`, `idRelationPage`, `idCategory`, `sqlSelect`, `columns`, `height`, `isCoreField`, `isKeyField`, `isSaveField`, `isRegionTitle`, `isDependentOn`, `showDisplayOptions`, `options`, `copyValue`, `validators`) VALUES (NULL, '9', 'bounced', '1', NULL, NULL, 'SELECT categoryCodes.code AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = %LANGUAGE_ID% INNER JOIN categoryCodes ON categoryCodes.idCategories = tbl.id AND categoryCodes.idLanguages = %LANGUAGE_ID%, categories AS rootCat  WHERE rootCat.id = 691 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN (rootCat.lft + 1) AND rootCat.rgt %WHERE_ADDON% ORDER BY tbl.lft, categoryTitles.title', '3', '0', '1', '0', '1', '0', NULL, '0', NULL, '0', '');
+INSERT INTO `fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `description`) VALUES (NULL, '279', '1', 'Bounced', NULL), (NULL, '279', '2', 'Bounced', NULL);
+INSERT INTO `regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL, '90', '279', '110');

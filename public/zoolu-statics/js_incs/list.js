@@ -30,17 +30,17 @@ Massiveart.List = Class.create({
     /**
      * getListPage
      */
-    getListPage: function(page, rootLevelFilter, hardbounced){
+    getListPage: function(page, rootLevelFilter, bounced){
     if(myNavigation){
       
       if(typeof(page) != 'undefined' && page > 0){ 
         this.page = page;
       }
       
-      if(typeof(hardbounced) == 'undefined'){
-        hardbounced = false;
+      if(typeof(bounced) == 'undefined') {
+        bounced = '';
       }
-      this.hardbounced = hardbounced;
+      this.bounced = bounced;
       
       var languageId = null;
       var rootLevelId = myNavigation.rootLevelId;
@@ -64,9 +64,8 @@ Massiveart.List = Class.create({
       	  search: this.searchValue,
       	  currLevel: myNavigation.currLevel,
       	  rootLevelFilter: rootLevelFilter,
-      	  hardbounced: this.hardbounced,
-      	  languageId: languageId,
-      	  search: this.searchValue
+      	  bounced: this.bounced,
+      	  languageId: languageId
       	},      
         evalScripts: true,     
         onComplete: function(transport) {

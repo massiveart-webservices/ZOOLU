@@ -727,7 +727,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
     /**
      * selectSubscribers
      */
-    selectHardbounces: function(rootLevelId) {
+    selectBounces: function(type, rootLevelId) {
         if (!this.actionMenu || this.actionMenu.isOpen == false) {
             if ($('importList'))
                 $('importList').show();
@@ -774,7 +774,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             
             myList.sortColumn = '';
             myList.sortOrder = '';
-            myList.getListPage(1, 0, true);
+            myList.getListPage(1, 0, type);
         }
     },
     /**

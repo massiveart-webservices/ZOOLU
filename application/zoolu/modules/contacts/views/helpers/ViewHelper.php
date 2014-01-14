@@ -165,7 +165,10 @@ class ViewHelper {
             $strOutput .= '
       		  <div class="menulink">
                 <div class="menutitle portalnoicon">
-                	<a onclick="myNavigation.selectHardbounces(' . $objRootLevelFilters->current()->idRootLevels . ')" href="#">' . htmlentities($this->core->translate->_('Hardbounces'), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
+                	<a onclick="myNavigation.selectBounces(\'' . $this->core->sysConfig->contact->bounce_mapping->hard . '\', ' . $objRootLevelFilters->current()->idRootLevels . ')" href="#">' . htmlentities($this->core->translate->_('Hardbounces'), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
+                </div>
+                <div class="menutitle portalnoicon">
+                	<a onclick="myNavigation.selectBounces(\'' . $this->core->sysConfig->contact->bounce_mapping->soft . '\', ' . $objRootLevelFilters->current()->idRootLevels . ')" href="#">' . htmlentities($this->core->translate->_('Softbounces'), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
                 </div>
                 <div class="clear"></div>
               </div>';

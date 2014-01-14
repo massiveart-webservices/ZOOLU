@@ -163,6 +163,10 @@
                     <category>636</category>
                 </language>
             </language_mappings>
+            <bounce_mapping>
+                <hard>hard</hard>
+                <soft>soft</soft>
+            </bounce_mapping>
         </contact>
         
         <!-- Newsletter  -->

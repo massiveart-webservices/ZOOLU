@@ -148,10 +148,10 @@ class Contacts_SubscriberController extends AuthControllerAction
         $strSearchValue = (($this->getRequest()->getParam('search') != '') ? $this->getRequest()->getParam('search') : '');
         $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilter', null);
         $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
-        $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
+        $bounced = $this->getRequest()->getParam('bounced', '');
 
-        if ($blnHardBounce) {
-            $objSelect = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+        if ($bounced != '' && ($bounced == $this->core->sysConfig->contact->bounce_mapping->hard || $bounced == $this->core->sysConfig->contact->bounce_mapping->soft) ) {
+            $objSelect = $this->getModelSubscribers()->loadBounced($bounced, $intRootLevelId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
         } else {
             $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
         }
@@ -196,10 +196,10 @@ class Contacts_SubscriberController extends AuthControllerAction
 
         $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilterId');
         $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
-        $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
+        $bounced = $this->getRequest()->getParam('bounced') == '';
 
-        if ($blnHardBounce) {
-            $objRowset = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, '', 'ASC', 'sname', false, true);
+        if ($bounced != '' && ($bounced == $this->core->sysConfig->contact->bounce_mapping->hard || $bounced == $this->core->sysConfig->contact->bounce_mapping->soft) ) {
+            $objRowset = $this->getModelSubscribers()->loadBounced($bounced, $intRootLevelId, '', 'ASC', 'sname', false, true);
         } else {
             $objRowset = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, '', 'ASC', 'sname', false, true);
         }

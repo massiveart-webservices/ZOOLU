@@ -125,7 +125,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         $this->gearmanMandrillClient = new GearmanMandrillClient($this->core);
         $recipient = new stdClass();
         $recipient->email = $args['email'];
-        $recipient->salutation = 'Test';
+        $recipient->salutation = 'Salutatuon';
         $recipient->title = '';
         $recipient->fname = 'FirstName';
         $recipient->sname = 'LastName';

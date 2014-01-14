@@ -50,6 +50,32 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
         $this->core->logger->debug('Webhooks->controller->contacts->processWebhook()');
         if (key_exists(self::MANDRILL_EVENTS_KEY, $request)) {
             $json = $request[self::MANDRILL_EVENTS_KEY];
+            
+//            $json = '[
+//   {
+//      "event":"soft_bounce",
+//      "ts":1389684449,
+//      "_id":"b5735d22304748cd9051ac71b63a3b3b",
+//      "msg":{
+//         "ts":1389684441,
+//         "_id":"b5735d22304748cd9051ac71b63a3b3b",
+//         "state":"sent",
+//         "subject":"The better letter",
+//         "email":"raphael.stocker@massiveart.com",
+//         "tags":[
+//
+//         ],
+//         "metadata":[
+//            {
+//               "zoolu_newsletter_id":"1"
+//            }
+//         ],
+//         "sender":"matest@massiveart.com",
+//         "template":null
+//      }
+//   }
+//]';
+            
             $event = $this->decodeRequest($json);
             $this->parseRequest($event, $json);
         }
@@ -106,9 +132,11 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
                         $this->core->logger->debug('Adding new statistics for subscriber ' . $subscriber[0]->id . ' with newsletter ' . $newsletterId);
                         $this->getModelNewsletters()->addNewsletterStatistics($arrData);
                     }
-                    // Mark hardbounced
-                    if ($key->event == self::MANDRILL_EVENT_HARD_BOUNCE OR $key->event == self::MANDRILL_EVENT_SOFT_BOUNCE) {
-                        $this->hardbounceSubscriber($subscriber[0]->id);
+                    // Mark bounced
+                    if ($key->event == self::MANDRILL_EVENT_HARD_BOUNCE) {
+                        $this->bounceSubscriber($this->core->sysConfig->contact->bounce_mapping->hard, $subscriber[0]->id);
+                    } else if($key->event == self::MANDRILL_EVENT_SOFT_BOUNCE) {
+                        $this->bounceSubscriber($this->core->sysConfig->contact->bounce_mapping->soft, $subscriber[0]->id);
                     }
                 }
             }
@@ -181,13 +209,12 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
     }
     
     /**
-     * Hardbounce subscriber.
-     * 
+     * bounceSubscriber
      * @param integer $subscriberId
      */
-    protected function hardbounceSubscriber($subscriberId) 
+    protected function bounceSubscriber($type, $subscriberId) 
     {
-        $data = array('hardbounce' => $this->core->sysConfig->mandrill->mappings->hardbounce);
+        $data = array('bounced' => $type);
         $where =  $this->core->dbh->quoteInto('id = ?', $subscriberId);
         return $this->core->dbh->update('subscribers', $data, $where);    
     }
