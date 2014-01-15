@@ -579,7 +579,11 @@ class Users_UserController extends Zend_Controller_Action
         //$objAuth->setStorage(new Zend_Auth_Storage_Session('UserAuth'));
 
         if ($objAuth->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true) {
-            $this->_redirect('/zoolu');
+            if ($this->core->getDashboard() !== true) {
+                $this->_redirect('/zoolu/cms');
+            } else {
+                $this->_redirect('/zoolu');
+            }
         }
 
         $this->view->strErrMessage = '';
@@ -701,7 +705,12 @@ class Users_UserController extends Zend_Controller_Action
 
                         $_SESSION['sesTestMode'] = true;
                         $_SESSION['sesZooluLogin'] = true;
-                        $this->_redirect('/zoolu');
+
+                        if ($this->core->getDashboard() !== true) {
+                            $this->_redirect('/zoolu/cms');
+                        } else {
+                            $this->_redirect('/zoolu');
+                        }
                         break;
 
                     default:
@@ -726,7 +735,11 @@ class Users_UserController extends Zend_Controller_Action
         $auth->clearIdentity();
         unset($_SESSION['sesTestMode']);
         unset($_SESSION['sesZooluLogin']);
-        $this->_redirect('/zoolu');
+        if ($this->core->getDashboard() !== true) {
+            $this->_redirect('/zoolu/cms');
+        } else {
+            $this->_redirect('/zoolu');
+        }
     }
 
     /**

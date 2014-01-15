@@ -3,9 +3,11 @@ require_once (dirname(__FILE__) . '/../../helpers/NavigationHelper.php');
 $objHelper = new ModulesNavigationHelper();
 ?>
 <div id="navtopinner">
-    <div class="navtop">
-        <div id="navDashboardLink" onclick="location.href='/zoolu/'" onmouseover="this.style.cursor='pointer';" class="navtoplink">DASHBOARD</div>
-    </div>
+    <?php if (Zend_Registry::get('Core')->getDashboard() === true) : ?>
+        <div class="navtop">
+            <div id="navDashboardLink" onclick="location.href='/zoolu/'" onmouseover="this.style.cursor='pointer';" class="navtoplink">DASHBOARD</div>
+        </div>
+    <?php endif; ?>
     <?php echo $objHelper->getTopNavigation($this->modules, $this->module); ?>
     <div class="clear"></div>
 </div>
