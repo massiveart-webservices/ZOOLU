@@ -710,6 +710,8 @@ class Cms_PageController extends AuthControllerAction
                 $this->view->pageurl = $strProtocol . '://' . $strBaseUrl . $this->objForm->Setup()->getField('url')->getValue();
             }
 
+            $this->view->languageOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT languages.id AS VALUE, languages.languageCode AS DISPLAY FROM languages INNER JOIN rootLevelLanguages ON rootLevelLanguages.idLanguages = languages.id AND rootLevelLanguages.idRootLevels = ' . $this->objForm->Setup()->getRootLevelId() . ' ORDER BY languages.sortOrder, languages.languageCode', $this->objForm->Setup()->getLanguageId());
+
             $blnGeneralDeleteAuthorization = Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId(), Security::PRIVILEGE_DELETE, false, false);
             $blnGeneralUpdateAuthorization = Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId(), Security::PRIVILEGE_UPDATE, false, false);
 
