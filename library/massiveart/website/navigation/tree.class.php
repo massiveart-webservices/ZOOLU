@@ -2,27 +2,20 @@
 /**
  * ZOOLU - Content Management System
  * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
- *
  * LICENSE
- *
  * This file is part of ZOOLU.
- *
  * ZOOLU is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
  * ZOOLU is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
  * You should have received a copy of the GNU General Public License
  * along with ZOOLU. If not, see http://www.gnu.org/licenses/gpl-3.0.html.
- *
  * For further information visit our website www.getzoolu.org
  * or contact us at zoolu@getzoolu.org
- *
  * @category   ZOOLU
  * @package    library.massiveart.website.cache.navigation
  * @copyright  Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
@@ -31,11 +24,8 @@
  */
 /**
  * NavigationTree
- *
- *
  * Version history (please keep backward compatible):
  * 1.0, 2009-02-17: Thomas Schedler
- *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  * @package massiveart.website.navigation
@@ -65,8 +55,10 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
 
     /**
      * addItem
+     *
      * @param NavigationItem $objItem
      * @param string $strName
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -90,7 +82,9 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
 
     /**
      * hasSubTree
+     *
      * @param string $strName
+     *
      * @return boolean
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -102,8 +96,10 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
 
     /**
      * addTree
+     *
      * @param NavigationTree $objTree
      * @param string $strName
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -116,8 +112,10 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
 
     /**
      * addToParentTree
+     *
      * @param NavigationTree|NavigationItem $objNav
      * @param string $strName
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
@@ -163,7 +161,7 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
                         $arrItems[$intOrder] = $strKey;
                     }
                 } else {
-                    $arrItems[$intOrder] = $strKey;
+                    $this->uniqueOrder($arrItems, $intOrder, $strKey);
                 }
             }
 
@@ -175,8 +173,28 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
     }
 
     /**
+     * @param $arrItems
+     * @param $intOrder
+     * @param $strKey
+     *
+     * @return bool
+     */
+    private function uniqueOrder(&$arrItems, &$intOrder, &$strKey)
+    {
+        if (array_key_exists($intOrder, $arrItems) && count($arrItems[$intOrder]) > 0) {
+            $intOrder++;
+            $this->uniqueOrder($arrItems, $intOrder, $strKey);
+        } else {
+            $arrItems[$intOrder] = $strKey;
+            return true;
+        }
+    }
+
+    /**
      * Overloading: access to navigation items and trees
+     *
      * @param  string $strName
+     *
      * @return NavigationItem|NavigationTree|null
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -194,8 +212,10 @@ class NavigationTree extends NavigationItem implements Iterator, Countable
 
     /**
      * Overloading: access to navigation items and trees
+     *
      * @param  string $strName
      * @param  NavigationItem|NavigationTree $obj
+     *
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
