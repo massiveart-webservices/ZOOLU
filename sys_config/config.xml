@@ -57,7 +57,7 @@
 
         <!-- DISPLAY ENVIRONMENTS -->
         <display_type>
-            <enabled>true</enabled>
+            <enabled>false</enabled>
             <!-- true/false -->
             <website>website</website>
             <tablet>tablet</tablet>
@@ -87,9 +87,9 @@
         </minify>
 
         <!-- LOGGER / DEBUGGING -->
-        <show_errors>true</show_errors>
+        <show_errors>false</show_errors>
         <logger>
-            <priority>7</priority>
+            <priority>3</priority>
             <path>logs/</path>
             <firebug>false</firebug>
         </logger>
@@ -726,6 +726,7 @@
         <!-- MODULES -->
         <!-- table: modules -->
         <modules>
+            <dashboard>false</dashboard>
             <cms>1</cms>
             <media>2</media>
             <properties>3</properties>

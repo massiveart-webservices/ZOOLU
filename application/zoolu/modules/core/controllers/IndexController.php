@@ -51,18 +51,23 @@ class Zoolu_IndexController extends AuthControllerAction
 
         $this->_helper->viewRenderer->setNoRender();
 
-        Zend_Layout::startMvc(array(
-                                   'layout'     => 'index',
-                                   'layoutPath' => '../application/zoolu/layouts'
-                              ));
+        if ($this->core->getDashboard() !== true) {
+            $this->_redirect('/zoolu/cms');
+        } else {
 
-        $objLayout = Zend_Layout::getMvcInstance();
-        $objLayout->assign('navigation', '');
-        $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
-        $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
+            Zend_Layout::startMvc(array(
+                                       'layout'     => 'index',
+                                       'layoutPath' => '../application/zoolu/layouts'
+                                  ));
 
-        $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
-        $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+            $objLayout = Zend_Layout::getMvcInstance();
+            $objLayout->assign('navigation', '');
+            $objLayout->assign('userinfo', $this->view->action('userinfo', 'User', 'users'));
+            $objLayout->assign('modules', $this->view->action('navtop', 'Modules', 'core'));
+
+            $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
+            $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
+        }
     }
 
 }
