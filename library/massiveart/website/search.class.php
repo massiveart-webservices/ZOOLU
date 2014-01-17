@@ -90,7 +90,7 @@ class Search
     public function livesearch()
     {
         $this->core->logger->debug('massiveart->website->search->livesearch()');
-
+        return $this->search();
         // TODO : livesearch
     }
 
