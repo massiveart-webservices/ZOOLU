@@ -86,7 +86,7 @@ class NavigationHelper
         <div id="portal' . $objNavigationTree->getItemId() . 'menu" style="display:none;" class="portalmenu">';
 
                 foreach ($objNavigationTree as $objNavigation) {
-                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objNavigation->getId(), Security::PRIVILEGE_VIEW)) {
+                    if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objNavigation->getId(), Security::PRIVILEGE_VIEW, true, false)) {
                         $strOutput .= '
             <div class="portalmenulink">
               <div class="portalcontenticon"></div>
