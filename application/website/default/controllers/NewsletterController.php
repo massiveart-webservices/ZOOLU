@@ -80,8 +80,14 @@ class NewsletterController extends WebControllerAction {
         if (count($objNewsletters) > 0) {
             $objNewsletter = $objNewsletters->current();
             $this->renderNewsletter($objNewsletter);
+            
+            $this->setTranslate();
+            $this->view->translate = $this->translate;
+            $this->view->isPreview = true;
+            
             $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/newsletter/' . $this->core->sysConfig->newsletter->theme);
             $this->renderScript('/master.php');
+            
         }
     }
 
@@ -102,9 +108,6 @@ class NewsletterController extends WebControllerAction {
         if (count($objTemplate) > 0) {
             $this->view->assign('template_file', $objTemplate->current()->filename);
         }
-
-        $this->view->assign('extended', true);
-        $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/newsletter/' . $this->core->sysConfig->newsletter->theme);
     }
 
     /**

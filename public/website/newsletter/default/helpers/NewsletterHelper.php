@@ -56,6 +56,11 @@ class NewsletterHelper {
      * @var Zend_Translate
      */
     protected $objTranslate;
+    
+    /**
+     * @var Model_RootLevels
+     */
+    protected $objModelRootLevels;
 
     /**
      * @var GenericSetup
@@ -69,12 +74,32 @@ class NewsletterHelper {
     public function setNewsletter(GenericSetup $objGenericSetup) {
         $this->objGenericSetup = $objGenericSetup;
     }
+    
+    /**
+     * getPreviewLink
+     */
+    public function getPreviewLink() {
+        $previewLink = '';
+        $baseportalJSON = $this->objGenericSetup->getField('baseportal')->getValue();
+        $baseportal = json_decode($baseportalJSON);
+        $rootLevelId = $baseportal->rootlevel;
+        $language = strtolower($baseportal->language);
+        
+        $objUrl = $this->getModelRootLevels()->loadRootLevelUrl($rootLevelId);
+        $previewLink = '<a href="http://' . $objUrl->url . '/zoolu-website/newsletter/preview/?id=' . $this->objGenericSetup->getElementId() . '&salutation=*|SALUTATION|*&fname=*|FNAME|*&lname=*|LNAME|*&unsub=*|UNSUB|*&language=' . $language . '">'
+                        . $this->objTranslate->_('Newsletter_preview') .
+                       '</a>';
+        return $previewLink;
+    }
 
     /**
      * getSalutation
      * @return string
      */
-    public function getSalutation($strSalutation = null, $strFname = null, $strLname = null) {
+    public function getSalutation() {
+        $strSalutation = (isset($_GET['salutation'])) ? $_GET['salutation'] : null;
+        $strFname = (isset($_GET['fname'])) ? $_GET['fname'] : null;
+        $strLname = (isset($_GET['lname'])) ? $_GET['lname'] : null;
         $strReturn = '';
         $strReturn .= ($strSalutation == null) ? '*|SALUTATION|* ' : $strSalutation . ' ';
         $strReturn .= ($strFname == null) ? '*|FNAME|* ' : $strFname . ' ';
@@ -190,7 +215,8 @@ class NewsletterHelper {
      * getUnsubscribeLink
      */
     public function getUnsubscribeLink() {
-        return '<a href="*|UNSUB|*">' . $this->objTranslate->_('Unsubscribe') . '</a>';
+        $unsub = (isset($_GET['unsub'])) ? $_GET['unsub'] : '*|UNSUB|*';
+        return '<a href="'. $unsub . '">' . $this->objTranslate->_('Unsubscribe') . '</a>';
     }
 
     /**
@@ -221,6 +247,26 @@ class NewsletterHelper {
      */
     public function setTranslate(Zend_Translate $objTranslate){
         $this->objTranslate = $objTranslate;
+    }
+    
+    /**
+     * getModelRootLevels
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     * @return Model_RootLevels
+     */
+    protected function getModelRootLevels()
+    {
+        if (null === $this->objModelRootLevels) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/RootLevels.php';
+            $this->objModelRootLevels = new Model_RootLevels();
+        }
+        return $this->objModelRootLevels;
     }
 }
 
