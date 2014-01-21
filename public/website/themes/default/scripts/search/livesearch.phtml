@@ -1,0 +1,19 @@
+<?php
+    $objSearchHelper = getSearchHelperObject();
+
+    // set variables
+    $objSearchHelper->setHits($this->hits)
+        ->setSubject($this->subject)
+        ->setBase($this->base)
+        ->setSegmentCode($this->segmentCode)
+        ->setSegmentId($this->segmentId)
+        ->setHasSegments($this->hasSegments)
+        ->setLanguageDefinitionType($this->languageDefinitionType);
+
+    // output of search result list
+    echo $objSearchHelper->getLiveSearchList();
+?>
+
+<div class="detailSearch" onclick="Web.search(); return false;">
+    <a href="#" onclick="Web.search(); return false;"><?php echo $this->translate->_('Advanced_Search')?></a>
+</div>

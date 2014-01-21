@@ -6,6 +6,7 @@
  *
  * Version history (please keep backward compatible):
  * 1.0, 2009-02-09: Thomas Schedler
+ * 1.1, 2013-08-20: Cornelius Hansjakob
  *
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
@@ -21,14 +22,10 @@ class Search
      */
     protected $core;
 
-    const FIELD_TYPE_NONE = 1;
-    const FIELD_TYPE_KEYWORD = 2;
-    const FIELD_TYPE_UNINDEXED = 3;
-    const FIELD_TYPE_BINARY = 4;
-    const FIELD_TYPE_TEXT = 5;
-    const FIELD_TYPE_UNSTORED = 6;
-    const FIELD_TYPE_SUMMARY_INDEXED = 7;
-    const ZO_NODE_SUMMARY = 'zo_node_summary';
+    /**
+     * @var \Sulu\Search\Search
+     */
+    protected $search = null;
 
     protected $strSearchValue;
     protected $intLimitSearch;
@@ -43,12 +40,15 @@ class Search
     public function __construct()
     {
         $this->core = Zend_Registry::get('Core');
-        Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
+        Zend_Search_Lucene_Analysis_Analyzer::setDefault(
+            new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive()
+        );
         Zend_Search_Lucene_Search_Query_Wildcard::setMinPrefixLength(0);
     }
 
     /**
      * search
+     *
      * @return object $objHits
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
@@ -57,56 +57,32 @@ class Search
     {
         $this->core->logger->debug('massiveart->website->search->search()');
 
-        $objHits = array();
-        if (is_dir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId))) {
-            if (count(scandir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId))) > 2) {
-                $objHits = $this->searchByPath(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId));
+        $this->search = new \Sulu\Search\Search($this->core->sysConfig->search->toArray());
+        $this->search->getConfig()->setLanguageId($this->intLanguageId);
+
+        $this->setQuery();
+
+        $this->search->getConfig()->setDataType('page');
+        $objHits = $this->search->getQuery()->fetch();
+
+        $this->search->getConfig()->setDataType('global');
+        $objGlobalHits = $this->search->getQuery()->fetch();
+
+        if (null !== $objGlobalHits && !empty($objGlobalHits)) {
+            if (null !== $objHits && !empty($objHits)) {
+                $objHits = array_merge($objHits, $objGlobalHits);
+                usort($objHits, array($this, 'cmp'));
+            } else {
+                $objHits = $objGlobalHits;
             }
         }
 
-        if (is_dir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', $this->intLanguageId))) {
-            if (count(scandir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', $this->intLanguageId))) > 2) {
-                $objGlobalHits = $this->searchByPath(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', $this->intLanguageId));
-                $objHits = array_merge($objHits, $objGlobalHits);
-                usort($objHits, array($this, 'cmp'));
-            }
-        }
         return $objHits;
     }
 
     /**
-     * searchByPath
-     * @param string $strIndexPath
-     * @return Zend_Search_Lucene_Search_QueryHit
-     */
-    private function searchByPath($strIndexPath)
-    {
-        if ($this->intLimitLiveSearch > 0 && $this->intLimitLiveSearch != '') {
-            Zend_Search_Lucene::setResultSetLimit($this->intLimitLiveSearch);
-        }
-        $objIndex = Zend_Search_Lucene::open($strIndexPath);
-        $strQuery = '';
-        if (strlen($this->strSearchValue) < 3) {
-            $strQuery = $this->strSearchValue;
-        } else {
-            $arrSearchValue = explode(' ', $this->strSearchValue);
-            foreach ($arrSearchValue as $strSearchValue) {
-                $strQuery .= '+(' . Search::ZO_NODE_SUMMARY . ':' . $strSearchValue . ' OR ';
-                $strSearchValue = preg_replace('/([^\pL\s\d])/u', '?', $strSearchValue);
-                $strQuery .= Search::ZO_NODE_SUMMARY . ':' . $strSearchValue . '* OR ';
-                $strSearchValue = str_replace('?', '', $strSearchValue);
-                $strQuery .= Search::ZO_NODE_SUMMARY . ':' . $strSearchValue . '~)';
-            }
-        }
-
-        $strQuery = $strQuery . ' +(languageId:' . $this->intLanguageId . ') +(rootLevelId:' . $this->intRootLevelId . ')';
-        $objQuery = Zend_Search_Lucene_Search_QueryParser::parse($strQuery, $this->core->sysConfig->encoding->default);
-
-        return $objIndex->find($objQuery);
-    }
-
-    /**
      * livesearch
+     *
      * @return object $objHits
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
@@ -114,82 +90,80 @@ class Search
     public function livesearch()
     {
         $this->core->logger->debug('massiveart->website->search->livesearch()');
-
-        $objHits = array();
-        if (is_dir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId))) {
-            if (count(scandir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId))) > 2) {
-                $objHits = $this->searchByPath(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->page . '/' . sprintf('%02d', $this->intLanguageId));
-            }
-        }
-
-        if (is_dir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', $this->intLanguageId))) {
-            if (count(scandir(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', $this->intLanguageId))) > 2) {
-                $objGlobalHits = $this->searchByPath(GLOBAL_ROOT_PATH . $this->core->sysConfig->path->search_index->global . '/' . sprintf('%02d', $this->intLanguageId));
-                $objHits = array_merge($objHits, $objGlobalHits);
-                usort($objHits, array($this, 'cmp'));
-            }
-        }
-        return $objHits;
+        return $this->search();
+        // TODO : livesearch
     }
 
-    /**
-     * livesearchByPath
-     * @param string $strIndexPath
-     * @return Zend_Search_Lucene_Search_QueryHit
-     */
-    private function livesearchByPath($strIndexPath)
+    private function setQuery()
     {
-        if ($this->intLimitLiveSearch > 0 && $this->intLimitLiveSearch != '') {
-            Zend_Search_Lucene::setResultSetLimit($this->intLimitLiveSearch);
-        }
-        $objIndex = Zend_Search_Lucene::open($strIndexPath);
-        $strQuery = '';
         if (strlen($this->strSearchValue) < 3) {
-            $strQuery = $this->strSearchValue;
+            $this->search->getQuery()->where($this->strSearchValue, \Sulu\Search\Query::Q_MATCH);
         } else {
             $arrSearchValue = explode(' ', $this->strSearchValue);
+            $counter = 0;
             foreach ($arrSearchValue as $strSearchValue) {
-                if (strlen($strSearchValue) > 2) {
-                    $strQuery .= '+(' . Search::ZO_NODE_SUMMARY . ':"' . $strSearchValue . '" OR ' . Search::ZO_NODE_SUMMARY . ':' . preg_replace('/([^\pL\s\d])/u', '?', str_replace('\\', '', $strSearchValue)) . '* OR ' . Search::ZO_NODE_SUMMARY . ':' . $strSearchValue . '~) ';
-                } else {
-                    $strQuery .= '+(' . Search::ZO_NODE_SUMMARY . ':"' . $strSearchValue . '") ';
-                }
+                $this->search->getQuery()->where(
+                    $strSearchValue,
+                    \Sulu\Search\Query::Q_MATCH,
+                    \Sulu\Search\Search::NODE_SUMMARY,
+                    $counter
+                );
+
+                $strSearchValue = preg_replace('/([^\pL\s\d])/u', '?', $strSearchValue);
+                $this->search->getQuery()->orWhere(
+                    $strSearchValue,
+                    \Sulu\Search\Query::Q_WILDCARD,
+                    \Sulu\Search\Search::NODE_SUMMARY,
+                    $counter
+                );
+
+                $strSearchValue = str_replace('?', '', $strSearchValue);
+                $this->search->getQuery()->orWhere(
+                    $strSearchValue,
+                    \Sulu\Search\Query::Q_FUZZY,
+                    \Sulu\Search\Search::NODE_SUMMARY,
+                    $counter
+                );
+
+                $counter++;
             }
         }
 
-        $strQuery = $strQuery . ' +(languageId:' . $this->intLanguageId . ') +(rootLevelId:' . $this->intRootLevelId . ')';
-        if ($this->strParentFolderId != '') $strQuery .= ' +(parentFolderIds:' . $this->strParentFolderId . ')';
-        $objQuery = Zend_Search_Lucene_Search_QueryParser::parse($strQuery, $this->core->sysConfig->encoding->default);
-
-        return $objIndex->find($objQuery);
+        $this->search->getQuery()
+            ->filterBy('languageId', (int)$this->intLanguageId)
+            ->filterBy('rootLevelId', (int)$this->intRootLevelId);
     }
 
     /**
      * compare search hits
-     * @param Zend_Search_Lucene_Search_QueryHit $objHitA
-     * @param Zend_Search_Lucene_Search_QueryHit $objHitB
+     *
+     * @param \Sulu\Search\Hit $objHitA
+     * @param \Sulu\Search\Hit $objHitB
+     *
      * @return integer
      */
     private function cmp($objHitA, $objHitB)
     {
-        if ($objHitA->score == $objHitB->score) {
+        if ($objHitA->score() === $objHitB->score()) {
             return 0;
         }
-        return ($objHitA->score < $objHitB->score) ? 1 : -1;
+
+        return ($objHitA->score() < $objHitB->score()) ? 1 : -1;
     }
 
     /**
-     * setSearchValue
-     * @param string $strSearchValue
+     * @param $strSearchValue
+     *
+     * @return $this
      */
     public function setSearchValue($strSearchValue)
     {
         $this->strSearchValue = $strSearchValue;
+        return $this;
     }
 
     /**
-     * getSearchValue
-     * @return string $strSearchValue
+     * @return mixed
      */
     public function getSearchValue()
     {
@@ -197,17 +171,18 @@ class Search
     }
 
     /**
-     * setLimitSearch
-     * @param integer $intLimitSearch
+     * @param $intLimitSearch
+     *
+     * @return $this
      */
     public function setLimitSearch($intLimitSearch)
     {
         $this->intLimitSearch = $intLimitSearch;
+        return $this;
     }
 
     /**
-     * getLimitSearch
-     * @return integer $intLimitSearch
+     * @return mixed
      */
     public function getLimitSearch()
     {
@@ -215,17 +190,18 @@ class Search
     }
 
     /**
-     * setLimitLiveSearch
-     * @param integer $intLimitLiveSearch
+     * @param $intLimitLiveSearch
+     *
+     * @return $this
      */
     public function setLimitLiveSearch($intLimitLiveSearch)
     {
         $this->intLimitLiveSearch = $intLimitLiveSearch;
+        return $this;
     }
 
     /**
-     * getLimitLiveSearch
-     * @return integer $intLimitLiveSearch
+     * @return mixed
      */
     public function getLimitLiveSearch()
     {
@@ -233,17 +209,18 @@ class Search
     }
 
     /**
-     * setRootLevelId
-     * @param integer $intRootLevelId
+     * @param $intRootLevelId
+     *
+     * @return $this
      */
     public function setRootLevelId($intRootLevelId)
     {
         $this->intRootLevelId = $intRootLevelId;
+        return $this;
     }
 
     /**
-     * getRootLevelId
-     * @param integer $intRootLevelId
+     * @return mixed
      */
     public function getRootLevelId()
     {
@@ -251,17 +228,18 @@ class Search
     }
 
     /**
-     * setLanguageId
-     * @param integer $intLanguageId
+     * @param $intLanguageId
+     *
+     * @return $this
      */
     public function setLanguageId($intLanguageId)
     {
         $this->intLanguageId = $intLanguageId;
+        return $this;
     }
 
     /**
-     * getLanguageId
-     * @param integer $intLanguageId
+     * @return mixed
      */
     public function getLanguageId()
     {
@@ -269,22 +247,21 @@ class Search
     }
 
     /**
-     * setParentFolderId
-     * @param string $strParentFolderId
+     * @param $strParentFolderId
+     *
+     * @return $this
      */
     public function setParentFolderId($strParentFolderId)
     {
         $this->strParentFolderId = $strParentFolderId;
+        return $this;
     }
 
     /**
-     * getParentFolderId
-     * @return string $strParentFolderId
+     * @return mixed
      */
     public function getParentFolderId()
     {
         return $this->strParentFolderId;
     }
 }
-
-?>

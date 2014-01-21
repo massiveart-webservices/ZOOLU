@@ -38,7 +38,8 @@ require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 try {
     $objConsoleOpts = new Zend_Console_Getopt(
         array(
-             'key|k=s'  => 'Page Index Key'
+            'key|k=s' => 'Page Index Key',
+            'languageId|l=i' => 'Language Id',
         )
     );
 
@@ -52,4 +53,3 @@ try {
     $core->logger->err($exc);
     exit();
 }
-?>

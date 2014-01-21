@@ -180,5 +180,19 @@ Massiveart.List = Class.create({
                 $(elementId).addClassName('white');
             }
         }
+    },
+
+    /**
+     * toggle
+     */
+    toggle: function (id, elementId) {
+        if ($(id)) {
+            Effect.toggle(id, 'appear', { delay: 0, duration: 0.3 });
+            if ($(elementId) && $(elementId).hasClassName('white')) {
+                $(elementId).removeClassName('white');
+            } else {
+                $(elementId).addClassName('white');
+            }
+        }
     }
 });

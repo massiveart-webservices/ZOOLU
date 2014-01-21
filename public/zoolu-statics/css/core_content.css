@@ -638,6 +638,7 @@ Document Chooser Element */
 }
 
 .docitem, .fileitem, .contactitem {
+    zoom: 1;
     margin: 0 0 0 10px;
     border-bottom: 1px solid #e4e4e4;
     cursor: move;
@@ -1319,7 +1320,7 @@ Buttons: Save, Delete */
 }
 
 .buttoneditmenuinner {
-    padding: 10px;
+    padding: 5px 10px 0px;
     width: 121px;
     border-left: 1px solid #000;
     border-right: 1px solid #000;
@@ -2706,4 +2707,9 @@ Dashboard Overlay */
     float:left;
     margin-left:10px;
     cursor: pointer;
+}
+
+/* Merge Tags */
+.merge-tags .holder {
+    background-color: white;
 }

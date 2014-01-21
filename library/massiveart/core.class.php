@@ -118,6 +118,11 @@ class Core
     public $strDisplayType;
 
     /**
+     * @var bool
+     */
+    public $blnDashboard = true;
+
+    /**
      * Constructor
      */
     protected function __construct($blnWithDbh = true, Zend_Config_Xml $sysConfig, Zend_Config_Xml $zooConfig, Zend_Config_Xml $config)
@@ -164,6 +169,9 @@ class Core
 
         // set the display environment
         $this->initDisplayEnvironment();
+
+        // set if dashboard is shown
+        $this->setDashboard();
         
         // get language and set translate object
         $this->logger->info('get language from ... ');
@@ -385,6 +393,26 @@ class Core
             }
         }
         return $strDomain;
+    }
+
+    /**
+     * @param boolean $blnDashboard
+     */
+    public function setDashboard($blnDashboard = null)
+    {
+        if (null === $blnDashboard) {
+            $this->blnDashboard = ((!empty($this->sysConfig->modules->dashboard) && ($this->sysConfig->modules->dashboard === 'false' || $this->sysConfig->modules->dashboard === false)) ? false : true);
+        } else {
+            $this->blnDashboard = (bool) $blnDashboard;
+        }
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDashboard()
+    {
+        return $this->blnDashboard;
     }
 }
 

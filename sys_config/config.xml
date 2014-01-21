@@ -57,7 +57,7 @@
 
         <!-- DISPLAY ENVIRONMENTS -->
         <display_type>
-            <enabled>true</enabled>
+            <enabled>false</enabled>
             <!-- true/false -->
             <website>website</website>
             <tablet>tablet</tablet>
@@ -98,6 +98,8 @@
         <cache>
             <page>true</page>
             <generic_form_structure>true</generic_form_structure>
+            <options>all</options><!-- all/groups/customer -->
+            <display_type_seperate>false</display_type_seperate>
         </cache>
 
         <!-- DATABASE -->
@@ -117,6 +119,23 @@
             <ajax>UTF-8</ajax>
             <db>UTF8</db>
         </encoding>
+
+        <!-- SEARCH -->
+        <search>
+            <client>default</client> <!-- client needed for Elastica -->
+            <type>ZendLucene</type> <!-- ZendLucene|Elastica -->
+            <encoding>UTF-8</encoding>
+            <index>
+                <!-- host & port for Elastica -->
+                <es_host>localhost</es_host>
+                <es_port>9200</es_port>
+                <!-- paths needed for ZendLucene -->
+                <path>
+                    <page><![CDATA[{ROOT_PATH}tmp/search_index/pages{LANG_ID}]]></page>
+                    <global><![CDATA[{ROOT_PATH}tmp/search_index/globals{LANG_ID}]]></global>
+                </path>
+            </index>
+        </search>
 
         <!-- Helpers -->
         <helpers>
@@ -674,6 +693,7 @@
                 <zip_extensions>
                     <extension>dxf</extension>
                 </zip_extensions>
+                <chunk_videos>true</chunk_videos>
             </download>
         </media>
 
@@ -703,6 +723,7 @@
         <!-- MODULES -->
         <!-- table: modules -->
         <modules>
+            <dashboard>false</dashboard>
             <cms>1</cms>
             <media>2</media>
             <properties>3</properties>

@@ -402,6 +402,77 @@ class Model_Tags
 
         return $this->objTagTypeTable->fetchAll($objSelect);
     }
-}
 
-?>
+    /**
+     * mergeTags
+     * @param $defaultId
+     * @param $mergeTagId
+     * @param $table
+     * @param $values
+     */
+    public function mergeTags ($defaultId, $mergeTagId, $table, $values)
+    {
+        $select = $this->getTagsTable()->select();
+        $select->setIntegrityCheck(false);
+        if ($values['has4References']) {
+            $select->from($table, array('reference1' => $values['referenceColumn'], 'reference2' => $values['referenceColumn2'], 'reference3' => $values['referenceColumn3'], 'reference4' => $values['referenceColumn4']))->where($values['placerColumn'] . ' = ?', $defaultId);
+        } else {
+            $select->from($table, array('reference1' => $values['referenceColumn'], 'reference2' => $values['referenceColumn2']))->where($values['placerColumn'] . ' = ?', $defaultId);
+        }
+        // $this->core->logger->debug($select);
+        $hasTagPages = $this->getTagsTable()->fetchAll($select);
+        $strWhere = '';
+        $strDeleteWhere = $this->getTagsTable()->getAdapter()->quoteInto($values['placerColumn'] . ' = ?', $mergeTagId); // used also for delete
+        $strWhere .= $strDeleteWhere;
+
+        if (count($hasTagPages)) {
+            $strWhere .= ' AND (';
+            $filteredPages = '';
+            foreach ($hasTagPages as $hasTagPage) {
+                $filteredPages .= ' AND ';
+                if ($values['has4References']) {
+                    $filteredPages .= $this->getTagsTable()->getAdapter()->quoteInto('
+                                (
+                                    '.$values['referenceColumn'].' != ? AND '.$values['referenceColumn2'].' != '.intval($hasTagPage->reference2).' AND '.$values['referenceColumn3'].' != '.intval($hasTagPage->reference3).' AND '.$values['referenceColumn4'].' != '.intval($hasTagPage->reference4).'
+                                )
+                            ', $hasTagPage->reference1);
+                } else {
+                    $filteredPages .= $this->getTagsTable()->getAdapter()->quoteInto('
+                                (
+                                    '.$values['referenceColumn'].' != ? AND '.$values['referenceColumn2'].' != '.intval($hasTagPage->reference2).'
+                                )
+                            ', $hasTagPage->reference1);
+                }
+            }
+            $filteredPages = trim($filteredPages, ' AND');
+            $strWhere .= $filteredPages;
+            $strWhere .= ')';
+        }
+
+        // $this->core->logger->debug($strWhere);
+        $data = array(
+            $values['placerColumn'] => $defaultId
+        );
+        $this->getTagsTable()->getAdapter()->update($table, $data, $strWhere);
+        $this->getTagsTable()->getAdapter()->delete($table, $strDeleteWhere);
+    }
+
+    /**
+     * @param int $idFields
+     * @return mixed
+     */
+    public function getFieldGenericForm ($idFields = 28)
+    {
+        $select = $this->getTagsTable()->select();
+        $select->setIntegrityCheck(false);
+        $select->from('fields', array('fieldName' => 'name', 'fieldId' => 'id'))
+            ->join('regionFields', 'regionFields.idFields = fields.id AND fields.idFieldTypes = ' . intval($idFields), array())
+            ->join('regions', 'regions.id = regionFields.idRegions', array('isMultiply', 'regionId' => 'id'))
+            ->join('tabRegions', 'tabRegions.idRegions = regions.id', array())
+            ->join('genericFormTabs', 'genericFormTabs.idTabs = tabRegions.idTabs', array())
+            ->join('genericForms', 'genericFormTabs.idGenericForms = genericForms.id', array('genericFormId', 'version'))
+            ->join('genericFormTypes', 'genericForms.idGenericFormTypes = genericFormTypes.id', array('title'));
+
+        return $this->getTagsTable()->fetchAll($select);
+    }
+}

@@ -78,7 +78,7 @@ class IndexController extends WebControllerAction
      * @var boolean
      */
     private $blnIsLandingPage = false;
-    
+
     /**
      * init index controller and get core obj
      */
@@ -128,26 +128,26 @@ class IndexController extends WebControllerAction
                  * you to not only clean and otherwise manipulate HTML documents,
                  * but also traverse the document tree.
                  */
-                $arrConfig = array(          
-  					'tidy-mark'           => false,
-                  	'indent'              => true,
-                  	'indent-spaces'       => 4,
-                  	'new-blocklevel-tags' => 'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section',
-                  	'new-inline-tags'     => 'video,audio,canvas',
-                  	'doctype'             => '<!doctype html>',
-                  	'sort-attributes'     => 'alpha',
-                  	'vertical-space'      => false,
-                  	'output-xhtml'        => true,
-                  	'wrap'                => 200,
-                  	'wrap-attributes'     => false,
-                  	'break-before-br'     => false,
+                $arrConfig = array(
+                    'tidy-mark'           => false,
+                    'indent'              => true,
+                    'indent-spaces'       => 4,
+                    'new-blocklevel-tags' => 'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section',
+                    'new-inline-tags'     => 'video,audio,canvas',
+                    'doctype'             => '<!doctype html>',
+                    'sort-attributes'     => 'alpha',
+                    'vertical-space'      => false,
+                    'output-xhtml'        => true,
+                    'wrap'                => 200,
+                    'wrap-attributes'     => false,
+                    'break-before-br'     => false,
                 );
-                
-                $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);    
+
+                $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);
                 $objTidy->cleanRepair();
                 // tidy bugfix - doctype for html5
                 $objTidy = str_replace('<!--%TIDY_DOCTYPE%-->', '<!doctype html>', $objTidy);
-                
+
                 $this->getResponse()->setBody($objTidy);
             }
 
@@ -173,7 +173,7 @@ class IndexController extends WebControllerAction
             }
             // trigger client specific dispatch helper
             if ($this->core->sysConfig->helpers->client->dispatcher === 'enabled') ClientHelper::get('Dispatcher')->postDispatch($this);
-            
+
             parent::postDispatch();
         }
     }
@@ -187,7 +187,7 @@ class IndexController extends WebControllerAction
     {
         // load theme
         $this->loadTheme();
-        
+
         try {
             // get cleaned url
             $strUrl = $this->getUrl($_SERVER['REQUEST_URI']);
@@ -200,15 +200,15 @@ class IndexController extends WebControllerAction
 
 
             // validate root level segment
-            $this->validateSegment();        
+            $this->validateSegment();
 
             // check if rootlevel has portal gate
             if ($this->isPortalGate()) {
                 $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/' . $this->objTheme->path.'/');
                 $this->renderScript('portalgate.php');
-            } else {        
+            } else {
 
-                //validate the url check if landingpage     
+                //validate the url check if landingpage
                 $objUrl = $this->getValidatedUrlObject($strUrl);
 
                 $this->checkforLanguageRedirects($strUrl);
@@ -252,8 +252,8 @@ class IndexController extends WebControllerAction
 
                         $strRelationId = $objUrlData->relationId;
                         if ($objUrlData->linkId != NULL) {
-                            $strRelationId = $objUrlData->linkId; 
-                        }            
+                            $strRelationId = $objUrlData->linkId;
+                        }
                         // check if url is main
                         if (!$objUrlData->isMain) {
                             $objMainUrl = $this->objModelUrls->loadUrl($strRelationId, $objUrlData->version, $objUrlData->idUrlTypes);
@@ -264,16 +264,16 @@ class IndexController extends WebControllerAction
                                 $this->getResponse()->setHttpResponseCode(301);
                                 $uriLanguageFolder = '';
                                 if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder) {
-                                     $uriLanguageFolder = strtolower($objMainUrl->languageCode) . '/';
+                                    $uriLanguageFolder = strtolower($objMainUrl->languageCode) . '/';
                                 }
                                 if (!$objUrlData->isLandingPage) {
                                     $baseUrl = '';
                                     if (isset($objUrl->baseUrl)) {
-                                        $baseUrl = $objUrl->baseUrl->url;   
+                                        $baseUrl = $objUrl->baseUrl->url;
                                     }
-                                    $this->_redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
+                                    $this->redirect($this->getPrefix() . $uriLanguageFolder . $baseUrl.$objMainUrl->url);
                                 } else {
-                                    $this->_redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
+                                    $this->redirect($this->getRedirectDomain(strtolower($objMainUrl->languageCode)) . $this->getPrefix() . $uriLanguageFolder . $objMainUrl->url);
                                 }
                             }
                         }
@@ -350,7 +350,7 @@ class IndexController extends WebControllerAction
                          * check status
                          */
                         if ($this->objPage->getStatus() != $this->core->sysConfig->status->live && (!isset($_SESSION['sesTestMode']) || (isset($_SESSION['sesTestMode']) && $_SESSION['sesTestMode'] == false))) {
-                            $this->_redirect($this->getPrefix() . '/');
+                            $this->redirect($this->getPrefix() . '/');
                         }
 
                         if ($this->objPage->ParentPage() instanceof Page) {
@@ -382,14 +382,10 @@ class IndexController extends WebControllerAction
                             list($blnHasIdentity, $blnHasIdentityCustomer) = $this->isZooluOrCustomerIdentity();
 
                             if ($blnHasIdentity == false && $blnHasIdentityCustomer == false) {
-                                $this->_redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
+                                $this->redirect($this->getPrefix() . '/login?re=' . urlencode($_SERVER['REQUEST_URI']));
                             } else {
                                 if (!$objNavigation->checkZonePrivileges()) {
-                                    $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-                                    $this->getResponse()->setHeader('Status', '403 Forbidden');
-                                    $this->getResponse()->setHttpResponseCode(403);
-                                    $this->strRenderScript = 'error-403.php';
-                                    $this->blnCachingStart = false;
+                                    throw new ForbiddenException('User has no access to this folder');
                                 }
                             }
                         }
@@ -410,23 +406,23 @@ class IndexController extends WebControllerAction
 
                         // forward to SearchController
                         if ($this->blnSearch == true) {
-                            $this->_forward('index', 'Search', null, array(
-                                                                          'rootLevelId'  => $this->objPage->getRootLevelId(),
-                                                                          'theme'        => $this->objTheme->path,
-                                                                          'urlPrefix'    => $this->strUrlPrefix,
-                                                                          'segmentation' => array(
-                                                                              'id'           => $this->intSegmentId,
-                                                                              'code'         => $this->strSegmentCode,
-                                                                              'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
-                                                                          )
-                                                                     ));
+                            $this->forward('search', 'Search', null, array(
+                                    'rootLevelId'  => $this->objPage->getRootLevelId(),
+                                    'theme'        => $this->objTheme->path,
+                                    'urlPrefix'    => $this->strUrlPrefix,
+                                    'segmentation' => array(
+                                        'id'           => $this->intSegmentId,
+                                        'code'         => $this->strSegmentCode,
+                                        'hasSegments'  => ($this->objTheme->hasSegments == 1 ? true : false)
+                                    )
+                                ));
                         }
                         // forward to RssController
                         elseif ($this->blnIsRss == true) {
-                            $this->_forward('index', 'Rss', null, array(
-                                                                       'page'  => $this->objPage,
-                                                                       'theme' => $this->objTheme
-                                                                  ));
+                            $this->forward('index', 'Rss', null, array(
+                                    'page'  => $this->objPage,
+                                    'theme' => $this->objTheme
+                                ));
                         } else {
                             /*
                              * get page template filename
@@ -457,6 +453,14 @@ class IndexController extends WebControllerAction
             $this->getResponse()->setHeader('Status', '404 Not Found');
             $this->getResponse()->setHttpResponseCode(404);
             $this->renderScript('error-404.php');
+            $this->blnCachingStart = false;
+            $this->core->logger->warn($e->getMessage());
+        } catch (ForbiddenException $e) {
+            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/themes/' . $this->objTheme->path . '/');
+            $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
+            $this->getResponse()->setHeader('Status', '403 Forbidden');
+            $this->getResponse()->setHttpResponseCode(403);
+            $this->renderScript('error-403.php');
             $this->blnCachingStart = false;
             $this->core->logger->warn($e->getMessage());
         }
@@ -501,22 +505,22 @@ class IndexController extends WebControllerAction
                     $strMainUrl = $this->strLanguageCode . '.' . $strMainUrl;
                 }
             } else {
-                  $arrUrlParts = explode('.', $strMainUrl);
-                  if(count($arrUrlParts) == 2){
+                $arrUrlParts = explode('.', $strMainUrl);
+                if(count($arrUrlParts) == 2){
                     $strMainUrl = 'www.' . $strMainUrl;
-                  }   
+                }
             }
-            
+
             if (file_exists(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml')) {
                 $this->_helper->viewRenderer->setNoRender();
                 $this->blnPostDispatch = false;
                 $this->getResponse()->setHeader('Content-Type', 'text/xml')
-                     ->setBody(file_get_contents(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml'));
+                    ->setBody(file_get_contents(GLOBAL_ROOT_PATH . 'public/sitemaps/' . $strMainUrl . '/sitemap.xml'));
             } else {
-                $this->_redirect($this->getPrefix() . '/');
+                $this->redirect($this->getPrefix() . '/');
             }
         } else {
-            $this->_redirect($this->getPrefix() . '/');
+            $this->redirect($this->getPrefix() . '/');
         }
     }
 
@@ -531,7 +535,7 @@ class IndexController extends WebControllerAction
 
         $objAuth = Zend_Auth::getInstance();
         if ($objAuth->hasIdentity()) {
-            $this->_redirect($this->getRequest()->getParam('re', '/'));
+            $this->redirect($this->getRequest()->getParam('re', '/'));
         } else {
 
             $this->view->strErrMessage = '';
@@ -632,7 +636,7 @@ class IndexController extends WebControllerAction
                             }
 
                             $objAuth->getStorage()->write($objUserData);
-                            $this->_redirect($this->getRequest()->getParam('re', '/'));
+                            $this->redirect($this->getRequest()->getParam('re', '/'));
                             break;
 
                         default:
@@ -658,7 +662,7 @@ class IndexController extends WebControllerAction
     {
         $objAuth = Zend_Auth::getInstance();
         $objAuth->clearIdentity();
-        $this->_redirect($this->getPrefix() . '/');
+        $this->redirect($this->getPrefix() . '/');
     }
 
     /**
@@ -682,12 +686,12 @@ class IndexController extends WebControllerAction
     {
         $this->strClientAction = $strClientAction;
     }
-    
-   /**
-    * getValidatedUrlObject
-    * @param string $strUrl
-    */
-private function getValidatedUrlObject($strUrl) {
+
+    /**
+     * getValidatedUrlObject
+     * @param string $strUrl
+     */
+    private function getValidatedUrlObject($strUrl) {
         $objUrl = null;
         $blnCheckAlternative = false;
         //Load URL now, because language is alredy needed if more then one language is defined
@@ -704,7 +708,7 @@ private function getValidatedUrlObject($strUrl) {
                     $strAlternativeUrl = $strUrl.'/';
                 }
             }
-            
+
             //Load landingpage if there is no language in the url
             $objUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strUrl, PHP_URL_PATH) === null) ? '' : parse_url($strUrl, PHP_URL_PATH), null, true, false);
             $objAlternativeUrl = $this->getModelUrls()->loadByUrl($this->objTheme->idRootLevels, (parse_url($strAlternativeUrl, PHP_URL_PATH) === null) ? '' : parse_url($strAlternativeUrl, PHP_URL_PATH), null, true, false);
@@ -740,7 +744,7 @@ private function getValidatedUrlObject($strUrl) {
             return $objAlternativeUrl;
         }
     }
-    
+
     /**
      * checkForLanguageRedirects
      * @param string $strUrl
@@ -755,7 +759,7 @@ private function getValidatedUrlObject($strUrl) {
             if(preg_match('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUri, $arrMatches)){
                 $strMatch = trim($arrMatches[0], '/');
                 foreach($this->core->config->languages->language->toArray() as $arrLanguage){
-                    //check if language exists in config 
+                    //check if language exists in config
                     if(array_key_exists('code', $arrLanguage) && $arrLanguage['code'] == strtolower($strMatch)){
                         $strRedirectUrl = '/'.preg_replace('/^\/[a-zA-Z\-]{2,5}\//', '', $strUri);
                         //check if language is not default language of rootLevel
@@ -775,11 +779,11 @@ private function getValidatedUrlObject($strUrl) {
                                 $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').$strMatch.'.'.$strDomain.$strRedirectUrl;
                             }
                         }
-                    }                        
+                    }
                 }
-            }                
+            }
         }
-        
+
         if ($this->intLanguageDefinitionType == $this->core->config->language_definition->folder && !$this->blnIsLandingPage) {
             $strRedirectUri = $strUri;
             $strRedirectDomain = $strDomain;
@@ -794,27 +798,27 @@ private function getValidatedUrlObject($strUrl) {
             //check if language not contained in uri
             if (!preg_match('/^\/[a-zA-Z\-]{2,5}\//', $strUri, $arrMatches)) {
                 //add langauge if not in uri
-                $strRedirectUri = $this->getPrefix() . '/' . $strRedirectLanguage . '/' . $strUrl;         
+                $strRedirectUri = $this->getPrefix() . '/' . $strRedirectLanguage . '/' . $strUrl;
             }
             if ($strRedirectUri != $strUri || $strRedirectDomain != $strDomain || $strRedirectLanguage != $this->strLanguageCode) {
                 $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $this->core->getMainDomain($strDomain) . $strRedirectUri;
             }
         }
-        
+
         if ($this->intLanguageDefinitionType == $this->core->config->language_definition->none) {
             //check if language contained in uri, then remove it
             if (preg_match('/^\/([a-zA-Z]{2}|[a-zA-Z]{2}\-[a-zA-Z]{2})\//', $strUri, $arrMatches)) {
-                 $strMatch = $arrMatches[0];
-                 $strRedirectUri = str_replace($strMatch, '', $strUri);
-                 $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $strDomain . '/' . $strRedirectUri;         
-            } 
+                $strMatch = $arrMatches[0];
+                $strRedirectUri = str_replace($strMatch, '', $strUri);
+                $strRedirectUrl = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $strDomain . '/' . $strRedirectUri;
+            }
         }
-        
+
         if ($strRedirectUrl != '') {
             $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
             $this->getResponse()->setHeader('Status', '301 Moved Permanently');
             $this->getResponse()->setHttpResponseCode(301);
-            $this->_redirect($strRedirectUrl);    
+            $this->redirect($strRedirectUrl);
         }
     }
 
@@ -833,29 +837,29 @@ private function getValidatedUrlObject($strUrl) {
      * isPortalGate
      * @return boolean
      */
-    private function isPortalGate() 
+    private function isPortalGate()
     {
-      // cut off url prefix path
-      $strUrl = $this->cutUrlPrefix($_SERVER['REQUEST_URI']);
-      if (isset($this->objTheme->hasPortalGate) && (bool) $this->objTheme->hasPortalGate == true && parse_url($strUrl, PHP_URL_PATH) == '/') {
-          // load portal gate of rootlevel
-          return true;  
-      } else if (parse_url($strUrl, PHP_URL_PATH) == '/' && $this->objTheme->languageDefinitionType == $this->core->config->language_definition->folder) {
-          // redirect to language
-          $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
-          $this->getResponse()->setHeader('Status', '301 Moved Permanently');
-          $this->getResponse()->setHttpResponseCode(301);
-          $this->_redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/');
-      } else if (parse_url($strUrl, PHP_URL_PATH) == '/'.$this->strLanguageCode.'/' && $this->objTheme->languageDefinitionType == $this->core->config->language_definition->none) {
-          // redirect url without language
-          $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
-          $this->getResponse()->setHeader('Status', '301 Moved Permanently');
-          $this->getResponse()->setHttpResponseCode(301);
-          $this->_redirect($this->getPrefix());
-      } else {
-          // rootlevel has no portal gate
-          return false;
-      }
+        // cut off url prefix path
+        $strUrl = $this->cutUrlPrefix($_SERVER['REQUEST_URI']);
+        if (isset($this->objTheme->hasPortalGate) && (bool) $this->objTheme->hasPortalGate == true && parse_url($strUrl, PHP_URL_PATH) == '/') {
+            // load portal gate of rootlevel
+            return true;
+        } else if (parse_url($strUrl, PHP_URL_PATH) == '/' && $this->objTheme->languageDefinitionType == $this->core->config->language_definition->folder) {
+            // redirect to language
+            $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
+            $this->getResponse()->setHeader('Status', '301 Moved Permanently');
+            $this->getResponse()->setHttpResponseCode(301);
+            $this->redirect($this->getPrefix() . '/' . $this->strLanguageCode . '/');
+        } else if (parse_url($strUrl, PHP_URL_PATH) == '/'.$this->strLanguageCode.'/' && $this->objTheme->languageDefinitionType == $this->core->config->language_definition->none) {
+            // redirect url without language
+            $this->getResponse()->setHeader('HTTP/1.1', '301 Moved Permanently');
+            $this->getResponse()->setHeader('Status', '301 Moved Permanently');
+            $this->getResponse()->setHttpResponseCode(301);
+            $this->redirect($this->getPrefix());
+        } else {
+            // rootlevel has no portal gate
+            return false;
+        }
     }
 
     /**
@@ -873,7 +877,7 @@ private function getValidatedUrlObject($strUrl) {
 
         $this->_helper->viewRenderer->setNoRender();
     }
-    
+
     /**
      * validateEntrypoint
      * @param stdClass $objUrl
@@ -962,10 +966,8 @@ private function getValidatedUrlObject($strUrl) {
                 echo $data;
                 exit();
             }else{
-                $this->_redirect($objUrl->url->current()->external);
+                $this->redirect($objUrl->url->current()->external);
             }
         }
     }
 }
-
-?>

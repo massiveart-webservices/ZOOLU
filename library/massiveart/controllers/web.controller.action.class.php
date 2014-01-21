@@ -122,6 +122,11 @@ abstract class WebControllerAction extends Zend_Controller_Action
     protected $blnUrlWithLanguage;
 
     /**
+     * @var string
+     */
+    const STORAGE_NAME_CUSTOMER = 'customer';
+
+    /**
      * init index controller and get core obj
      */
     public function init()
@@ -288,7 +293,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
             }
             // for members
             $blnHasIdentityCustomer = true;
-            $objAuth->setStorage(new Zend_Auth_Storage_Session('customer'));
+            $objAuth->setStorage(new Zend_Auth_Storage_Session(self::STORAGE_NAME_CUSTOMER));
             if (!$objAuth->hasIdentity()) {
                 $blnHasIdentityCustomer = false;
             }
@@ -299,10 +304,7 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 Security::get('CustomerSecurity')->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->cms, Security::ZONE_WEBSITE);
                 Security::get()->addRootLevelsToAcl($this->getModelFolders(), $this->core->sysConfig->modules->cms, Security::ZONE_WEBSITE);
                 if (!Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objTheme->idRootLevels, Security::PRIVILEGE_VIEW, false, false, Security::ZONE_WEBSITE) && !Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objTheme->idRootLevels . '_' . $this->intLanguageId, Security::PRIVILEGE_VIEW, false, false, Security::ZONE_WEBSITE)) {
-                    $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-                    $this->getResponse()->setHeader('Status', '403 Forbidden');
-                    $this->getResponse()->setHttpResponseCode(403);
-                    $this->strRenderScript = 'error-403.php';
+                    throw new ForbiddenException('User has no access to this portal');
                 }
             }
         }
@@ -576,7 +578,34 @@ abstract class WebControllerAction extends Zend_Controller_Action
             $this->strCacheId .= '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $this->strSegmentCode);
         }
 
-        $this->strCacheId .= '_' . strtolower(str_replace('-', '_', $this->strLanguageCode)) . '_' . strtolower(str_replace('-', '_', $this->objTheme->path)) . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
+        // Caching Prefix
+        $cachingPrefix = '';
+
+        // Caching Options
+        switch ($this->core->sysConfig->cache->options) {
+            case 'customer';
+                $cachingPrefix .= '_' . $this->getCustomerId();
+                break;
+            case 'groups':
+                $cachingPrefix .= '_' . $this->getUserGroups();
+                break;
+            case 'all':
+            default:
+                break;
+        }
+
+        // Cache Display Type
+        if ($this->core->sysConfig->cache->display_type_seperate == 'true') {
+            $cachingPrefix .= $this->core->strDisplayType;
+        }
+
+        // Normalize Caching Prefix
+        if (!empty($cachingPrefix)) {
+            $cachingPrefix = '_' . strtolower(str_replace('-', '_', $cachingPrefix));
+        }
+
+        $this->strCacheId .= '_' . strtolower(str_replace('-', '_', $this->strLanguageCode)) . '_' . strtolower(str_replace('-', '_', $this->objTheme->path)) . $cachingPrefix . '_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $strUrl);
+
 
         $arrFrontendOptions = array(
             'lifetime'                => 604800, // cache lifetime (in seconds), if set to null, the cache is valid forever.
@@ -592,6 +621,44 @@ abstract class WebControllerAction extends Zend_Controller_Action
             'File',
             $arrFrontendOptions,
             $arrBackendOptions);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCustomerId()
+    {
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session('customer'));
+        if ($objAuth->hasIdentity()) {
+            $storage = $objAuth->getStorage()->read();
+            if (isset($storage->id)) {
+                return 'CUSTOMER_' . $storage->id;
+            }
+        }
+        return 'NOCUSTOMER_0';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getUserGroups()
+    {
+        $userGroups = '';
+        $objAuth = Zend_Auth::getInstance();
+        $objAuth->setStorage(new Zend_Auth_Storage_Session(self::STORAGE_NAME_CUSTOMER));
+        if ($objAuth->hasIdentity()) {
+            $storage = $objAuth->getStorage()->read();
+            if (isset($storage->groups)) {
+                foreach ($storage->groups as $group) {
+                    if (isset($group->idGroups)) {
+                        $userGroups .= $group->idGroups . ',';
+                    }
+                }
+                $userGroups = trim($userGroups, ',-');
+            }
+        }
+        return $userGroups;
     }
 
     /**

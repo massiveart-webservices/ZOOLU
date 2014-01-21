@@ -712,8 +712,11 @@ class Cms_PageController extends AuthControllerAction
 
             $this->view->languageOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT languages.id AS VALUE, languages.languageCode AS DISPLAY FROM languages INNER JOIN rootLevelLanguages ON rootLevelLanguages.idLanguages = languages.id AND rootLevelLanguages.idRootLevels = ' . $this->objForm->Setup()->getRootLevelId() . ' ORDER BY languages.sortOrder, languages.languageCode', $this->objForm->Setup()->getLanguageId());
 
-            $this->view->authorizedDelete = ($this->objForm->Setup()->getIsStartElement(false) == true || $this->objForm->Setup()->getActionType() == $this->core->sysConfig->generic->actions->add) ? false : Security::get()->isAllowed('portals', Security::PRIVILEGE_DELETE, false, false);
-            $this->view->authorizedUpdate = Security::get()->isAllowed('portals', Security::PRIVILEGE_UPDATE, false, false);
+            $blnGeneralDeleteAuthorization = Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId(), Security::PRIVILEGE_DELETE, false, false);
+            $blnGeneralUpdateAuthorization = Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId(), Security::PRIVILEGE_UPDATE, false, false);
+
+            $this->view->authorizedDelete = ($this->objForm->Setup()->getIsStartElement(false) == true || $this->objForm->Setup()->getActionType() == $this->core->sysConfig->generic->actions->add) ? false : (($blnGeneralDeleteAuthorization == true) ? $blnGeneralDeleteAuthorization : Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId() . '_' . $this->objForm->Setup()->getLanguageId(), Security::PRIVILEGE_DELETE, false, false));
+            $this->view->authorizedUpdate = ($blnGeneralUpdateAuthorization == true) ? $blnGeneralUpdateAuthorization : Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objForm->Setup()->getRootLevelId() . '_' . $this->objForm->Setup()->getLanguageId(), Security::PRIVILEGE_UPDATE, false, false);
         }
     }
 

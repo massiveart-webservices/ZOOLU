@@ -254,7 +254,69 @@ var Tags = Class.create({
         }
       }
     }.bind(this));
-  }
+  },
+
+    /**
+     * getMergeTagForm
+     */
+    getMergeTagForm: function () {
+        $('overlayGenContent').innerHTML = '';
+
+        myCore.putCenter('overlayGenContentWrapper');
+        $('overlayGenContentWrapper').show();
+
+        var checkedList = [];
+        $$('#genListContainer .listSelectRow').each(function(ele){
+            if( $(ele).checked )
+            {
+                checkedList.push($(ele).value);
+            }
+        });
+        if (checkedList.length == 0) {
+            checkedList = '';
+        }
+
+        new Ajax.Updater('overlayGenContent', '/zoolu/properties/tag/mergeform', {
+            parameters: {
+                'tags[]': checkedList
+            },
+            evalScripts: true,
+            onComplete: function () {
+                myCore.putOverlayCenter('overlayGenContentWrapper');
+                myCore.removeBusyClass('overlayGenContent');
+                if ($('overlayBlack75')) $('overlayBlack75').show();
+                $('overlayButtons').show();
+                $('buttonCancel').stopObserving('click');
+                $('buttonCancel').observe('click', function () {
+                    myOverlay.close('overlayGenContentWrapper');
+                });
+                $('buttonOk').stopObserving('click');
+                $(('buttonOk')).observe('click', function () {
+                    myTags.mergeTags($('mergeTags').value);
+                });
+            }
+        });
+    },
+
+    mergeTags: function(ids) {
+        if (typeof(ids) !== 'undefined') {
+            new Ajax.Updater('overlayGenContent', '/zoolu/properties/tag/merge', {
+
+                parameters: {
+                    'tags': ids
+                },
+                evalScripts: true,
+                onComplete: function () {
+                    $('buttonOk').stopObserving('click');
+                    $(('buttonOk')).observe('click', function () {
+                        myOverlay.close('overlayGenContentWrapper');
+                        myList.resetSearch();
+
+                    });
+                }
+            });
+        }
+    }
 });
 
 /**

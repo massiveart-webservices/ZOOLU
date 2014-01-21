@@ -102,6 +102,11 @@ class Model_Globals extends ModelAbstract
     protected $objModelGlobals;
 
     /**
+     * @var Model_Table_GlobalDates
+     */
+    protected $objGlobalDatetimesTable;
+
+    /**
      * @var Core
      */
     protected $core;
@@ -1275,7 +1280,7 @@ class Model_Globals extends ModelAbstract
             
             if ($indexToRemove !== null) {
                 $objIndex = new Index();
-                $objIndex->indexRemoveGlobals($indexToRemove . '_*_r*');
+                $objIndex->indexRemoveGlobals($indexToRemove . '_*');
                 $this->indexOtherProduktLinks($intElementId, $indexToRemove, $rootLevelId);
             }
             $strWhere = $this->objGlobalTable->getAdapter()->quoteInto('relationId = ?', $strGlobalId);
@@ -1838,6 +1843,69 @@ class Model_Globals extends ModelAbstract
         }
 
         return $this->objGlobalTable->fetchAll($objSelect);
+    }
+
+
+
+    /**
+     * deleteDatetimes
+     * @param $strElementId
+     * @param $intVersion
+     * @param $intFieldId
+     * @return int
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function deleteDatetimes($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('global->models->Model_Globals->deleteDatetimes(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $strWhere = $this->getGlobalDatetimesTable()->getAdapter()->quoteInto('globalId = ?', $strElementId);
+        $strWhere .= $this->objGlobalDatetimesTable->getAdapter()->quoteInto(' AND version = ?', $intVersion);
+        $strWhere .= $this->objGlobalDatetimesTable->getAdapter()->quoteInto(' AND idFields = ?', $intFieldId);
+        $strWhere .= $this->objGlobalDatetimesTable->getAdapter()->quoteInto(' AND idLanguages = ?', $this->intLanguageId);
+
+        return $this->objGlobalDatetimesTable->delete($strWhere);
+    }
+
+    /**
+     * loadDatetimes
+     * @param string $strElementId
+     * @param integer $intVersion
+     * @param integer $intFieldId
+     * @return Zend_Db_Table_Rowset_Abstract
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    public function loadDatetimes($strElementId, $intVersion, $intFieldId)
+    {
+        $this->core->logger->debug('global->models->Model_Globals->loadDatetimes(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+
+        $objSelect = $this->getGlobalDatetimesTable()->select();
+
+        $objSelect->from('globalDates', array('from_date', 'from_time', 'to_date', 'to_time', 'fulltime', 'repeat', 'repeat_frequency', 'repeat_interval', 'repeat_type', 'end', 'end_date'))
+            ->where('globalId = ?', $strElementId)
+            ->where('version = ?', $intVersion)
+            ->where('idLanguages = ?', $this->intLanguageId)
+            ->where('idFields = ?', $intFieldId);
+
+        return $this->objGlobalDatetimesTable->fetchRow($objSelect);
+    }
+
+    /**
+     * getPagesDatetimesTable
+     * @return Zend_Db_Table_Abstract
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function getGlobalDatetimesTable()
+    {
+        if ($this->objGlobalDatetimesTable === null) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'global/models/tables/GlobalDates.php';
+            $this->objGlobalDatetimesTable = new Model_Table_GlobalDates();
+        }
+
+        return $this->objGlobalDatetimesTable;
     }
 
     /**

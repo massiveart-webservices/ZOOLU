@@ -73,21 +73,32 @@ function get_meta_robots()
     echo getCustomerHelperObject()->getMetaRobots();
 }
 
-function get_canonical_tag() { }
+function get_canonical_tag()
+{
+}
 
 function get_static_component_domain()
 {
     echo getCoreObject()->config->domains->static->components;
 }
 
-function get_zoolu_header() { }
+function get_zoolu_header()
+{
+}
 
-function get_language_chooser() { }
+function get_language_chooser()
+{
+}
 
-function get_content($objView) {
+function get_content($objView)
+{
     echo getCustomerHelperObject()->getContent($objView);
 }
 
-function get_bottom_content() { }
+function get_bottom_content()
+{
+}
 
-function get_dom_loaded_js() { }
+function get_dom_loaded_js()
+{
+}
