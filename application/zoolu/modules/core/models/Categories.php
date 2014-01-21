@@ -144,7 +144,7 @@ class Model_Categories
      */
     public function loadCategoryTree($intElementId, $blnFallbackCodes = false)
     {
-        $this->core->logger->debug('core->models->Folders->loadCategory(' . $intElementId . ')');
+        $this->core->logger->debug('core->models->Categories->loadCategoryTree(' . $intElementId . ')');
 
         $objSelect = $this->getCategoriesTable()->select();
         $objSelect->setIntegrityCheck(false);

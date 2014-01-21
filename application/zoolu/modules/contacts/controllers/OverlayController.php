@@ -124,11 +124,13 @@ class Contacts_OverlayController extends AuthControllerAction
         $arrFilterNr = explode('][', trim($this->getRequest()->getParam('lineInstances'), '[]'));
         $arrFilterValues = array();
         foreach ($arrFilterNr as $intFilterNr) {
-            $arrFilterValues[] = array(
-                'field'    => $this->getRequest()->getParam('filter_' . $intFilterNr),
-                'operator' => $this->getRequest()->getParam('operator_' . $intFilterNr),
-                'value'    => $this->getRequest()->getParam('value_' . $intFilterNr)
-            );
+            if ($this->getRequest()->getParam('value_' . $intFilterNr) != '') {
+                $arrFilterValues[] = array(
+                    'field'    => $this->getRequest()->getParam('filter_' . $intFilterNr),
+                    'operator' => $this->getRequest()->getParam('operator_' . $intFilterNr),
+                    'value'    => $this->getRequest()->getParam('value_' . $intFilterNr)
+                );
+            }
         }
 
         $this->getModelRootLevels()->addRootLevelFilter($arrFilter, $arrFilterValues);

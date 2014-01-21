@@ -1,0 +1,33 @@
+    <!-- Top Content -->
+    <div class="top">
+        <div class="inner">
+            <!-- TODO : header image or flash -->
+            <div class="clear"></div>
+        </div>
+    </div> <!-- /.top -->
+    <!-- Content --> 
+    <div class="contentContainer">
+        <div class="inner">          
+            <article class="content">
+                <?php if ($this->error == false) : ?>
+                    <?php if (!$this->success): ?>
+                    <?php echo $this->translate->_('unsubscribe_description_text'); ?> 
+                    <form method="POST">
+                        <input type="hidden" name="hash" value="<?php echo $this->hash; ?>" />
+                        <input type="hidden" name="nid" value="<?php echo $this->nid; ?>" />
+                        <input type="hidden" name="confirm" value="true" />
+                        <input type="submit" value="<?php echo $this->translate->_('unsubscribe'); ?>" />
+                    </form>
+                    <?php else: ?>
+                        <?php echo $this->translate->_('subscribe_confirmation'); ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php echo $this->translate->_('an_error_occured during_unsubscribing'); ?>
+                <?php endif; ?>
+            </article>
+            <aside class="sidebar">
+            </aside>          
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div> <!-- /.content -->

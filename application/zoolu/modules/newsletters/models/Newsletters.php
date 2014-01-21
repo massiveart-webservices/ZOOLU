@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ZOOLU - Content Management System
  * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
@@ -39,9 +40,7 @@
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  */
-
-class Model_Newsletters
-{
+class Model_Newsletters {
 
     private $intLanguageId;
 
@@ -49,6 +48,11 @@ class Model_Newsletters
      * @var Model_Table_Newsletters
      */
     protected $objNewsletterTable;
+
+    /**
+     * @var Model_Table_NewsletterStatistics
+     */
+    protected $objNewsletterStatisticsTable;
 
     /**
      * @var Core
@@ -60,8 +64,7 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->core = Zend_Registry::get('Core');
     }
 
@@ -72,18 +75,17 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function load($intElementId)
-    {
+    public function load($intElementId) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->load(' . $intElementId . ')');
 
         $objSelect = $this->getNewsletterTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('newsletters', array('id', 'idRootLevels', 'idGenericForms', 'idTemplates', 'title', 'remoteId', 'sent', 'idUsers', 'delivered', 'creator', 'created', 'changed'))
-            ->joinLeft(array('uc' => 'users'), 'uc.id = newsletters.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
-            ->joinLeft('genericForms', 'genericForms.id = newsletters.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'))
-            ->joinLeft('rootLevelFilters', 'rootLevelFilters.id = newsletters.idRootLevelFilters', array('filtertitle'))
-            ->where('newsletters.id = ?', $intElementId);
+        $objSelect->from('newsletters', array('id', 'idRootLevels', 'idRootLevelFilters', 'idGenericForms', 'idTemplates', 'title', 'remoteId', 'sent', 'baseportal', 'idUsers', 'delivered', 'creator', 'created', 'changed'))
+                ->joinLeft(array('uc' => 'users'), 'uc.id = newsletters.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
+                ->joinLeft('genericForms', 'genericForms.id = newsletters.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'))
+                ->joinLeft('rootLevelFilters', 'rootLevelFilters.id = newsletters.idRootLevelFilters', array('filtertitle'))
+                ->where('newsletters.id = ?', $intElementId);
 
         return $this->getNewsletterTable()->fetchAll($objSelect);
     }
@@ -95,8 +97,7 @@ class Model_Newsletters
      * @author Daniel Rotter <daniel.rotter@massiveart.com>
      * @version 1.0
      */
-    public function loadGenericForm($objNewsletter)
-    {
+    public function loadGenericForm($objNewsletter) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->loadGenericForm()');
         //Load data from genericForm
         $objGenericData = new GenericData();
@@ -118,8 +119,7 @@ class Model_Newsletters
      * @param number $intElementId
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function loadInstanceData($strGenForm, $intElementId)
-    {
+    public function loadInstanceData($strGenForm, $intElementId) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->loadInstanceData(' . $strGenForm . ', ' . $intElementId . ')');
 
         $strTableName = 'newsletter-' . $strGenForm . '-Instances';
@@ -127,7 +127,7 @@ class Model_Newsletters
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from($strTableName, array('article'))
-            ->where('idNewsletters = ?', $intElementId);
+                ->where('idNewsletters = ?', $intElementId);
 
         return $this->getNewsletterTable()->fetchAll($objSelect);
     }
@@ -139,16 +139,15 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadProperties($intElementId)
-    {
+    public function loadProperties($intElementId) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->loadProperties(' . $intElementId . ')');
 
         $objSelect = $this->getNewsletterTable()->select();
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('newsletters', array())
-            ->join('genericForms', 'genericForms.id = newsletters.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version', 'genericFormType' => 'idGenericFormTypes'))
-            ->where('newsletters.id = ?', $intElementId);
+                ->join('genericForms', 'genericForms.id = newsletters.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version', 'genericFormType' => 'idGenericFormTypes'))
+                ->where('newsletters.id = ?', $intElementId);
 
         return $this->getNewsletterTable()->fetchAll($objSelect);
     }
@@ -160,18 +159,16 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function add(GenericSetup $objGenericSetup, $arrData)
-    {
+    public function add(GenericSetup $objGenericSetup, $arrData) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->add()');
 
         $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
 
         $arrData = array_merge(
-            $arrData,
-            array(
-                 'idUsers'  => $intUserId,
-                 'changed'  => date('Y-m-d H:i:s')
-            )
+                $arrData, array(
+            'idUsers' => $intUserId,
+            'changed' => date('Y-m-d H:i:s')
+                )
         );
 
         return $this->getNewsletterTable()->insert($arrData);
@@ -184,8 +181,7 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function update(GenericSetup $objGenericSetup, $arrData)
-    {
+    public function update(GenericSetup $objGenericSetup, $arrData) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->update()');
 
         $intUserId = Zend_Auth::getInstance()->getIdentity()->id;
@@ -193,11 +189,10 @@ class Model_Newsletters
         $strWhere = $this->getNewsletterTable()->getAdapter()->quoteInto('id = ?', $objGenericSetup->getElementId());
 
         $arrData = array_merge(
-            $arrData,
-            array(
-                 'idUsers'  => $intUserId,
-                 'changed'  => date('Y-m-d H:i:s')
-            )
+                $arrData, array(
+            'idUsers' => $intUserId,
+            'changed' => date('Y-m-d H:i:s')
+                )
         );
 
         return $this->getNewsletterTable()->update($arrData, $strWhere);
@@ -210,8 +205,7 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function delete($intElementId)
-    {
+    public function delete($intElementId) {
         $this->core->logger->debug('newsletters->models->Model_Newsletters->delete()');
         $strWhere = $this->getNewsletterTable()->getAdapter()->quoteInto('id = ?', $intElementId);
         return $this->objNewsletterTable->delete($strWhere);
@@ -223,8 +217,7 @@ class Model_Newsletters
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function getNewsletterTable()
-    {
+    public function getNewsletterTable() {
 
         if ($this->objNewsletterTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'newsletters/models/tables/Newsletters.php';
@@ -232,6 +225,67 @@ class Model_Newsletters
         }
 
         return $this->objNewsletterTable;
+    }
+
+    /**
+     * Gets newsletter statistics.
+     */
+    public function loadNewsletterStatistics($idNewsletter) {
+        $objSelect = $this->getModelNewsletterStatisticsTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('newsletterStatistics');
+        $objSelect->where('newsletterStatistics.idNewsletter = ?', $idNewsletter);
+
+        return $this->getModelNewsletterStatisticsTable()->fetchAll($objSelect);
+    }
+
+    /**
+     * Gets subscribers newsletter statistics.
+     */
+    public function loadSubscribersNewsletterStatistics($idSubscribers, $idNewsletter) {
+        
+        $this->core->logger->debug('newsletters->models->Model_Newsletters->loadSubscribersNewsletterStatistics(' . $idSubscribers . ', ' . $idNewsletter .')');
+        $objSelect = $this->getModelNewsletterStatisticsTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('newsletterStatistics');
+        $objSelect->where('newsletterStatistics.idSubscriber = ?', $idSubscribers);
+        $objSelect->where('newsletterStatistics.idNewsletter = ?', $idNewsletter);
+
+        return $this->getModelNewsletterStatisticsTable()->fetchAll($objSelect);
+    }
+    
+    /**
+     * Saves newsletter statistics.
+     * @param array $arrData
+     */
+    public function addNewsletterStatistics($arrData) {
+        $this->core->logger->debug('newsletters->models->Model_Newsletters->addNewsletterStatistics()');
+        return $this->getModelNewsletterStatisticsTable()->insert($arrData);
+    }
+    
+    /**
+     * Updates newsletter statistics.
+     * @param array $arrData
+     */
+    public function updateNewsletterStatistics($id, $arrData) {
+        $this->core->logger->debug('newsletters->models->Model_Newsletters->updateNewsletterStatistics()');
+        $strWhere = $this->getModelNewsletterStatisticsTable()->getAdapter()->quoteInto('id = ?', $id);
+        $this->getModelNewsletterStatisticsTable()->update($arrData, $strWhere);
+    }
+
+    /**
+     * getModelNewsletterStatistics
+     * @return Model_NewsletterStatistics
+     * @author Christian Durak <cdu@massiveart.com>
+     */
+    protected function getModelNewsletterStatisticsTable() {
+        if (null === $this->objNewsletterStatisticsTable) {
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'newsletters/models/tables/NewsletterStatistics.php';
+            $this->objNewsletterStatisticsTable = new Model_Table_NewsletterStatistics();
+        }
+        return $this->objNewsletterStatisticsTable;
     }
 
 }

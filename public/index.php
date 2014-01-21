@@ -53,7 +53,7 @@ try{
      * default website routing regex
      */
     $route = new Zend_Controller_Router_Route_Regex('(?!(^zoolu))(.*)', array('controller' => 'Index',
-                                                                            'action'     => 'index'));
+                                                                              'action'     => 'index'));
     $router->addRoute('index', $route);
 
     /**
@@ -85,6 +85,15 @@ try{
 
     $route = new Zend_Controller_Router_Route('zoolu-website/:controller/:action/:id/*');
     $router->addRoute('zooluWebControllerActionParams', $route);
+
+    /**
+     * default subscriber routings
+     */
+    $route = new Zend_Controller_Router_Route('subscribe', array('controller' => 'Subscriber', 'action' => 'subscribe'));
+    $router->addRoute('subscriberWebControllerAction', $route);
+
+    $route = new Zend_Controller_Router_Route('unsubscribe', array('controller' => 'Subscriber', 'action' => 'unsubscribe'));
+    $router->addRoute('subscriberWebControllerActionParams', $route);
 
     /**
      * default customer routings

@@ -84,26 +84,28 @@ class ContactReplicationCommand implements CommandInterface
     public function onCommand($strName, $arrArgs)
     {
 
-        $arrReplications = $this->core->sysConfig->contact->replications->toArray();
-        $arrReplications = is_array($arrReplications['replication']) ? $arrReplications['replication'] : array($arrReplications['replication']);
+        if (is_object($this->core->sysConfig->contact->replications)) {
+            $arrReplications = $this->core->sysConfig->contact->replications->toArray();
+            $arrReplications = is_array($arrReplications['replication']) ? $arrReplications['replication'] : array($arrReplications['replication']);
 
-        foreach ($arrReplications as $strReplicationClass) {
-            $this->getReplicationHelper($strReplicationClass);
-        }
-
-        if (count($this->arrReplications) > 0) {
-            switch ($strName) {
-                case 'added':
-                    return $this->added($arrArgs);
-                case 'updated':
-                    return $this->updated($arrArgs);
-                case 'deleted':
-                    return $this->deleted($arrArgs);
-                default:
-                    return true;
+            foreach ($arrReplications as $strReplicationClass) {
+                $this->getReplicationHelper($strReplicationClass);
             }
-        } else {
-            return true;
+
+            if (count($this->arrReplications) > 0) {
+                switch ($strName) {
+                    case 'added':
+                        return $this->added($arrArgs);
+                    case 'updated':
+                        return $this->updated($arrArgs);
+                    case 'deleted':
+                        return $this->deleted($arrArgs);
+                    default:
+                        return true;
+                }
+            } else {
+                return true;
+            }
         }
     }
 

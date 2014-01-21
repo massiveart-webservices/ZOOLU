@@ -179,6 +179,7 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
     if($('overlayGenContent')) $('overlayGenContent').innerHTML = '';
     if($('overlayButtons')) $('overlayButtons').hide();
     if($('overlayBlack75')) $('overlayBlack75').hide();
+    myOverlay.overlayCounter--;
   },
   
   /**
@@ -323,6 +324,7 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
     
     $('buttonCancel').observe('click', function(event){
       this.hideSendAlertMessage();
+      
     }.bind(this));
   },
   

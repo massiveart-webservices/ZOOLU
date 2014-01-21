@@ -185,6 +185,7 @@ Content List View */
 .toporganisation,
 .topbuilding,
 .topbranch,
+.topbounced 
 .tophardbounce {
     background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
     height: 26px;

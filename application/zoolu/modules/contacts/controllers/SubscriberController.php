@@ -148,10 +148,10 @@ class Contacts_SubscriberController extends AuthControllerAction
         $strSearchValue = (($this->getRequest()->getParam('search') != '') ? $this->getRequest()->getParam('search') : '');
         $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilter', null);
         $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
-        $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
+        $bounced = $this->getRequest()->getParam('bounced', '');
 
-        if ($blnHardBounce) {
-            $objSelect = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
+        if ($bounced != '' && ($bounced == $this->core->sysConfig->contact->bounce_mapping->hard || $bounced == $this->core->sysConfig->contact->bounce_mapping->soft) ) {
+            $objSelect = $this->getModelSubscribers()->loadBounced($bounced, $intRootLevelId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
         } else {
             $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
         }
@@ -196,10 +196,10 @@ class Contacts_SubscriberController extends AuthControllerAction
 
         $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilterId');
         $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
-        $blnHardBounce = $this->getRequest()->getParam('hardbounced') == 'true';
+        $bounced = $this->getRequest()->getParam('bounced') == '';
 
-        if ($blnHardBounce) {
-            $objRowset = $this->getModelSubscribers()->loadHardbounced($intRootLevelId, '', 'ASC', 'sname', false, true);
+        if ($bounced != '' && ($bounced == $this->core->sysConfig->contact->bounce_mapping->hard || $bounced == $this->core->sysConfig->contact->bounce_mapping->soft) ) {
+            $objRowset = $this->getModelSubscribers()->loadBounced($bounced, $intRootLevelId, '', 'ASC', 'sname', false, true);
         } else {
             $objRowset = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, '', 'ASC', 'sname', false, true);
         }
@@ -748,6 +748,7 @@ class Contacts_SubscriberController extends AuthControllerAction
              */
             $this->objForm->prepareForm();
 
+            
             if ($this->objForm->isValid($arrFormData)) {
 
                 /**
@@ -861,7 +862,6 @@ class Contacts_SubscriberController extends AuthControllerAction
         $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
         if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
-
             $arrFormData = $this->getRequest()->getPost();
             $this->objForm->Setup()->setFieldValues($arrFormData);
 
@@ -874,11 +874,10 @@ class Contacts_SubscriberController extends AuthControllerAction
              * prepare form (add fields and region to the Zend_Form)
              */
             $this->objForm->prepareForm();
-
+            
             if ($this->objForm->isValid($arrFormData)) {
                 $this->objForm->saveFormData();
                 $this->view->blnShowFormAlert = true;
-
                 try {
                     $this->objCommandChain->runCommand('updated', array(
                                                                        'Id'                    => $this->objForm->Setup()->getElementId(),
@@ -1081,7 +1080,6 @@ class Contacts_SubscriberController extends AuthControllerAction
              * add location & unit specific hidden fields
              */
             $this->objForm->addElement('hidden', 'rootLevelId', array('value' => $this->objRequest->getParam("rootLevelId"), 'decorators' => array('Hidden')));
-            //$this->objForm->addElement('hidden', 'parentId', array('value' => $this->objRequest->getParam("parentId"), 'decorators' => array('Hidden')));
 
             /**
              * add currlevel hidden field

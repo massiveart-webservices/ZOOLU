@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ZOOLU - Content Management System
  * Copyright (c) 2008-2012 HID GmbH (http://www.hid.ag)
@@ -29,7 +30,6 @@
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, Version 3
  * @version    $Id: version.php
  */
-
 /**
  * ContentController
  * 
@@ -39,114 +39,116 @@
  * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  */
+class NewsletterController extends WebControllerAction {
 
-require_once(GLOBAL_ROOT_PATH.'/library/IP2Location/ip2location.class.php');
+    /**
+     * @var Core
+     */
+    protected $core;
 
-class NewsletterController extends Zend_Controller_Action {
+    /**
+     * @var Model_Newsletter
+     */
+    protected $objModelNewsletters;
 
-  /**
-   * @var Core
-   */
-  protected $core; 
-  
-  /**
-   * @var Model_Newsletter
-   */
-  protected $objModelNewsletters;
-  
-  /**
-   * @var Model_Templates
-   */
-  protected $objModelTemplates;
-  
-  /**
-   * preDispatch
-   * Called before action method.
-   * 
-   * @return void  
-   * @author Thomas Schedler <tsh@massiveart.com>
-   */
-  public function preDispatch(){
-    $this->core = Zend_Registry::get('Core');    
-    $this->request = $this->getRequest();
-  }
-  
-  /**
-   * previewAction
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  public function previewAction() {
-    //Load the newsletter with the given Id
-    $intNewsletterId = $this->getRequest()->getParam('id');
-    $objNewsletters = $this->getModelNewsletters()->load($intNewsletterId);
-    if(count($objNewsletters) > 0) {
-      $objNewsletter = $objNewsletters->current();
-      $this->renderNewsletter($objNewsletter);
-      $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/newsletter/'.$this->core->sysConfig->newsletter->theme);
-      $this->renderScript('/master.php');
-    }
-  }
-    
-  /**
-   * renderNewsletter
-   * @param Zend_Db_Table_Row $objNewsletter
-   * @author Daniel Rotter <daniel.rotter@massiveart.com>
-   * @version 1.0
-   */
-  private function renderNewsletter($objNewsletter){
-    $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
-    
-    //Load Template
-    $objTemplate = $this->getModelTemplates()->loadTemplateById($objGenericData->Setup()->getTemplateId());
-    
-    //Assign the values to the template
-    $this->view->assign('setup', $objGenericData->Setup());
-    if(count($objTemplate) > 0) {
-      $this->view->assign('template_file', $objTemplate->current()->filename);
-    }
-    
-    $this->view->assign('extended', true);
-    $this->view->setScriptPath(GLOBAL_ROOT_PATH.'public/website/newsletter/'.$this->core->sysConfig->newsletter->theme);
-  }
-  
-  /**
-   * getModelNewsletters
-   * @return Model_Newsletters
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelNewsletters(){
-    if (null === $this->objModelNewsletters) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'newsletters/models/Newsletters.php';
-      $this->objModelNewsletters = new Model_Newsletters();
+    /**
+     * @var Model_Templates
+     */
+    protected $objModelTemplates;
+
+    /**
+     * preDispatch
+     * Called before action method.
+     * 
+     * @return void  
+     * @author Thomas Schedler <tsh@massiveart.com>
+     */
+    public function preDispatch() {
+        $this->core = Zend_Registry::get('Core');
+        $this->request = $this->getRequest();
     }
 
-    return $this->objModelNewsletters;
-  }
-  
-  /**
-   * getModelTemplates
-   * @author Thomas Schedler <tsh@massiveart.com>
-   * @version 1.0
-   */
-  protected function getModelTemplates(){
-    if (null === $this->objModelTemplates) {
-      /**
-       * autoload only handles "library" compoennts.
-       * Since this is an application model, we need to require it
-       * from its modules path location.
-       */
-      require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'core/models/Templates.php';
-      $this->objModelTemplates = new Model_Templates();
+    /**
+     * previewAction
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    public function previewAction() {
+        //Load the newsletter with the given Id
+        $intNewsletterId = $this->getRequest()->getParam('id');
+        $objNewsletters = $this->getModelNewsletters()->load($intNewsletterId);
+        if (count($objNewsletters) > 0) {
+            $objNewsletter = $objNewsletters->current();
+            $this->renderNewsletter($objNewsletter);
+            
+            $this->setTranslate();
+            $this->view->translate = $this->translate;
+            $this->view->isPreview = true;
+            
+            $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/newsletter/' . $this->core->sysConfig->newsletter->theme);
+            $this->renderScript('/master.php');
+            
+        }
     }
 
-    return $this->objModelTemplates;
-  }
+    /**
+     * renderNewsletter
+     * @param Zend_Db_Table_Row $objNewsletter
+     * @author Daniel Rotter <daniel.rotter@massiveart.com>
+     * @version 1.0
+     */
+    private function renderNewsletter($objNewsletter) {
+        $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
+
+        //Load Template
+        $objTemplate = $this->getModelTemplates()->loadTemplateById($objGenericData->Setup()->getTemplateId());
+
+        //Assign the values to the template
+        $this->view->assign('setup', $objGenericData->Setup());
+        if (count($objTemplate) > 0) {
+            $this->view->assign('template_file', $objTemplate->current()->filename);
+        }
+    }
+
+    /**
+     * getModelNewsletters
+     * @return Model_Newsletters
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelNewsletters() {
+        if (null === $this->objModelNewsletters) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'newsletters/models/Newsletters.php';
+            $this->objModelNewsletters = new Model_Newsletters();
+        }
+
+        return $this->objModelNewsletters;
+    }
+
+    /**
+     * getModelTemplates
+     * @author Thomas Schedler <tsh@massiveart.com>
+     * @version 1.0
+     */
+    protected function getModelTemplates() {
+        if (null === $this->objModelTemplates) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Templates.php';
+            $this->objModelTemplates = new Model_Templates();
+        }
+
+        return $this->objModelTemplates;
+    }
+
 }
+
 ?>

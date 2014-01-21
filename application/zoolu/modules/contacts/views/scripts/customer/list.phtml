@@ -4,6 +4,7 @@ require_once (dirname(__FILE__) . '/../../helpers/ListHelper.php');
 $objHelper = new ListHelper();
 
 ?>
+
 <?php echo $objHelper->getList($this->paginator, $this->orderColumn, $this->sortOrder, $this->searchValue); ?>
 <?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
 <div class="spacer2"></div>
