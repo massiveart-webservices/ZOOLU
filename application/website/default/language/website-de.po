@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-26 10:50+0100\n"
+"POT-Creation-Date: 2014-01-21 15:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
@@ -111,38 +111,52 @@ msgstr "Bemerkungen"
 msgid "Attachment"
 msgstr "Anhang/Beilage"
 
-#: application/website/default/views/helpers/SearchHelper.php:47
-#, php-format
-msgid "Search_Result_Text"
-msgstr "<strong>%s</strong> %s für <strong>\"%s\"</strong>"
+#: application/website/default/controllers/SubscriberController.php:147
+msgid "Newsletter_subscribe"
+msgstr "Newsletter anmelden"
 
-#: application/website/default/views/helpers/SearchHelper.php:47
-msgid "Searchresult"
-msgstr "Suchergebnis"
+#: application/website/default/controllers/SubscriberController.php:161
+msgid "please_insert_valid_emailaddress"
+msgstr "Bitte geben sie ein korrekte Emailadresse ein"
 
-#: application/website/default/views/helpers/SearchHelper.php:47
-msgid "Searchresults"
-msgstr "Suchergebnisse"
+#: application/website/default/controllers/SubscriberController.php:166
+msgid "emailaddress_already_used"
+msgstr "Emailadresse ist bereits registriert"
 
-#: application/website/default/views/helpers/SearchHelper.php:204
-msgid "Sorry, no search result."
-msgstr "Keine Suchergebnisse gefunden"
+#: application/website/default/controllers/SubscriberController.php:175
+#: application/website/default/controllers/CustomerController.php:397
+msgid "Salutation_mandatory"
+msgstr "Andrede benötigt"
 
-#: application/website/default/controllers/IndexController.php:527
+#: application/website/default/controllers/SubscriberController.php:185
+#: application/website/default/controllers/CustomerController.php:391
+msgid "Fname_mandatory"
+msgstr "Vorname benötigt"
+
+#: application/website/default/controllers/SubscriberController.php:193
+#: application/website/default/controllers/CustomerController.php:394
+msgid "Sname_mandatory"
+msgstr "Nachname benötigt"
+
+#: application/website/default/controllers/SubscriberController.php:267
+msgid "Newsletter_unsubscribe"
+msgstr "Von Newsletter abmelden"
+
+#: application/website/default/controllers/IndexController.php:556
 msgid "Please_enter_username"
 msgstr "Bitte Benutzername eingeben."
 
-#: application/website/default/controllers/IndexController.php:558
-#: application/website/default/controllers/CustomerController.php:161
+#: application/website/default/controllers/IndexController.php:587
+#: application/website/default/controllers/CustomerController.php:164
 msgid "Username_not_found"
 msgstr "Benutzername nicht gefunden"
 
-#: application/website/default/controllers/IndexController.php:565
-#: application/website/default/controllers/CustomerController.php:164
+#: application/website/default/controllers/IndexController.php:594
+#: application/website/default/controllers/CustomerController.php:167
 msgid "Wrong_password"
 msgstr "Falsches Passwort"
 
-#: application/website/default/controllers/IndexController.php:617
+#: application/website/default/controllers/IndexController.php:646
 msgid "Login_failed"
 msgstr "Login fehlgeschlagen"
 
@@ -163,57 +177,42 @@ msgstr "Erfolgsmeldung"
 msgid "Login"
 msgstr "Anmelden"
 
-#: application/website/default/controllers/CustomerController.php:194
+#: application/website/default/controllers/CustomerController.php:197
 msgid "Reset_password"
 msgstr "Password zurücksetzen"
 
-#: application/website/default/controllers/CustomerController.php:211
-#: application/website/default/controllers/CustomerController.php:412
+#: application/website/default/controllers/CustomerController.php:214
+#: application/website/default/controllers/CustomerController.php:415
 msgid "Email_invalid"
 msgstr "Email-Addresse ist ungültig"
 
-#: application/website/default/controllers/CustomerController.php:224
-#: application/website/default/controllers/CustomerController.php:409
+#: application/website/default/controllers/CustomerController.php:227
+#: application/website/default/controllers/CustomerController.php:412
 msgid "Password_confirm_wrong"
 msgstr "Passwörter stimmen nicht überein"
 
-#: application/website/default/controllers/CustomerController.php:257
-#: application/website/default/controllers/CustomerController.php:333
+#: application/website/default/controllers/CustomerController.php:260
+#: application/website/default/controllers/CustomerController.php:336
 msgid "Registration"
 msgstr "Registrierung"
 
-#: application/website/default/controllers/CustomerController.php:388
-#, fuzzy
-msgid "Fname_mandatory"
-msgstr "Benutzername ist ein Pflichtfeld"
-
-#: application/website/default/controllers/CustomerController.php:391
-#, fuzzy
-msgid "Sname_mandatory"
-msgstr "Benutzername ist ein Pflichtfeld"
-
-#: application/website/default/controllers/CustomerController.php:394
-#, fuzzy
-msgid "Salutation_mandatory"
-msgstr "Email ist ein Pflichtfeld"
-
-#: application/website/default/controllers/CustomerController.php:397
+#: application/website/default/controllers/CustomerController.php:400
 msgid "Email_mandatory"
 msgstr "Email ist ein Pflichtfeld"
 
-#: application/website/default/controllers/CustomerController.php:400
+#: application/website/default/controllers/CustomerController.php:403
 msgid "Username_mandatory"
 msgstr "Benutzername ist ein Pflichtfeld"
 
-#: application/website/default/controllers/CustomerController.php:403
+#: application/website/default/controllers/CustomerController.php:406
 msgid "Username_already_exists"
 msgstr "Username bereits vergeben"
 
-#: application/website/default/controllers/CustomerController.php:406
+#: application/website/default/controllers/CustomerController.php:409
 msgid "Password_mandatory"
 msgstr "Passwort ist ein Pflichtfeld"
 
-#: application/website/default/controllers/CustomerController.php:415
+#: application/website/default/controllers/CustomerController.php:418
 msgid "Email_not_unique"
 msgstr "Email-Adresse wurde bereits benutzt."
 
@@ -233,6 +232,31 @@ msgstr "Typ des Unternehmens"
 msgid "ZipCode"
 msgstr "PLZ"
 
+#: application/website/default/helpers/SearchHelper.php:256
+#, php-format
+msgid "Search_Result_Text"
+msgstr "<strong>%s</strong> %s für <strong>\"%s\"</strong>"
+
+#: application/website/default/helpers/SearchHelper.php:256
+msgid "Searchresult"
+msgstr "Suchergebnis"
+
+#: application/website/default/helpers/SearchHelper.php:256
+msgid "Searchresults"
+msgstr "Suchergebnisse"
+
+#: application/website/default/helpers/SearchHelper.php:440
+msgid "Sorry, no search result."
+msgstr "Keine Suchergebnisse gefunden"
+
+#: public/website/newsletter/default/helpers/NewsletterHelper.php:90
+msgid "Newsletter_preview"
+msgstr "Newsletter in Browser öffnen"
+
+#: public/website/newsletter/default/helpers/NewsletterHelper.php:219
+msgid "Unsubscribe"
+msgstr "Abmelden"
+
 #: public/website/themes/default/login.php:71
 msgid "Username"
 msgstr "Benutzername"
@@ -243,16 +267,15 @@ msgstr "Passwort"
 
 #: public/website/themes/default/error-404.php:46
 msgid "Error 404"
-msgstr ""
+msgstr "Error 404"
 
 #: public/website/themes/default/error-404.php:48
 msgid "Continue on"
-msgstr ""
+msgstr "Weiter auf"
 
-#: public/website/themes/default/search.php:12
-#: public/website/themes/default/search.php:66
-#: public/website/themes/default/search.php:106
+#: public/website/themes/default/search.php:74
 #: public/website/themes/default/master.php:76
+#: public/website/themes/default/includes/header.inc.php:9
 msgid "Search"
 msgstr "Suche"
 
@@ -294,104 +317,151 @@ msgstr "Ähnliche Seiten"
 msgid "Created_at"
 msgstr "Erstell am"
 
-#: public/website/themes/default/helpers/PageHelper.php:1932
-#: public/website/themes/default/helpers/PageHelper.php:1941
-#: public/website/themes/default/helpers/PageHelper.php:1948
-#: public/website/themes/default/helpers/PageHelper.php:2098
-#: public/website/themes/default/helpers/PageHelper.php:2107
-#: public/website/themes/default/helpers/PageHelper.php:2120
-#: public/website/themes/default/helpers/PageHelper.php:2144
+#: public/website/themes/default/helpers/PageHelper.php:1811
+msgid "read_more_text"
+msgstr "weiterlesen"
+
+#: public/website/themes/default/helpers/PageHelper.php:2070
+#: public/website/themes/default/helpers/PageHelper.php:2079
+#: public/website/themes/default/helpers/PageHelper.php:2086
+#: public/website/themes/default/helpers/PageHelper.php:2236
+#: public/website/themes/default/helpers/PageHelper.php:2245
+#: public/website/themes/default/helpers/PageHelper.php:2258
+#: public/website/themes/default/helpers/PageHelper.php:2282
+#: public/website/themes/default/scripts/customer/register.phtml:20
 msgid "Please_choose"
 msgstr "Bitte wählen"
 
-#: public/website/themes/default/helpers/PageHelper.php:1933
-#: public/website/themes/default/helpers/PageHelper.php:2099
+#: public/website/themes/default/helpers/PageHelper.php:2071
+#: public/website/themes/default/helpers/PageHelper.php:2237
 msgid "Mr."
 msgstr "Herr"
 
-#: public/website/themes/default/helpers/PageHelper.php:1934
-#: public/website/themes/default/helpers/PageHelper.php:2100
+#: public/website/themes/default/helpers/PageHelper.php:2072
+#: public/website/themes/default/helpers/PageHelper.php:2238
 msgid "Ms."
 msgstr "Frau"
 
-#: public/website/themes/default/helpers/PageHelper.php:1974
-#: public/website/themes/default/helpers/PageHelper.php:1975
-#: public/website/themes/default/helpers/PageHelper.php:2274
-#: public/website/themes/default/helpers/PageHelper.php:2275
+#: public/website/themes/default/helpers/PageHelper.php:2112
+#: public/website/themes/default/helpers/PageHelper.php:2113
+#: public/website/themes/default/helpers/PageHelper.php:2412
+#: public/website/themes/default/helpers/PageHelper.php:2413
 msgid "Get_a_new_challenge"
 msgstr "Get a new challenge"
 
-#: public/website/themes/default/helpers/PageHelper.php:1977
-#: public/website/themes/default/helpers/PageHelper.php:1978
-#: public/website/themes/default/helpers/PageHelper.php:2277
-#: public/website/themes/default/helpers/PageHelper.php:2278
+#: public/website/themes/default/helpers/PageHelper.php:2115
+#: public/website/themes/default/helpers/PageHelper.php:2116
+#: public/website/themes/default/helpers/PageHelper.php:2415
+#: public/website/themes/default/helpers/PageHelper.php:2416
 msgid "Get_an_audio_challenge"
 msgstr "Get a audio challenge"
 
-#: public/website/themes/default/helpers/PageHelper.php:1980
-#: public/website/themes/default/helpers/PageHelper.php:1981
-#: public/website/themes/default/helpers/PageHelper.php:2280
-#: public/website/themes/default/helpers/PageHelper.php:2281
+#: public/website/themes/default/helpers/PageHelper.php:2118
+#: public/website/themes/default/helpers/PageHelper.php:2119
+#: public/website/themes/default/helpers/PageHelper.php:2418
+#: public/website/themes/default/helpers/PageHelper.php:2419
 msgid "Get_a_visual_challenge"
 msgstr "Get a visual challenge"
 
-#: public/website/themes/default/helpers/PageHelper.php:1983
-#: public/website/themes/default/helpers/PageHelper.php:1984
-#: public/website/themes/default/helpers/PageHelper.php:2283
-#: public/website/themes/default/helpers/PageHelper.php:2284
+#: public/website/themes/default/helpers/PageHelper.php:2121
+#: public/website/themes/default/helpers/PageHelper.php:2122
+#: public/website/themes/default/helpers/PageHelper.php:2421
+#: public/website/themes/default/helpers/PageHelper.php:2422
 msgid "Help"
 msgstr "Hilfe"
 
-#: public/website/themes/default/helpers/PageHelper.php:2017
-#: public/website/themes/default/helpers/PageHelper.php:2234
+#: public/website/themes/default/helpers/PageHelper.php:2155
+#: public/website/themes/default/helpers/PageHelper.php:2372
 msgid "Fields_with_*_are_mandatory"
 msgstr "Felder mit * müssen ausgefüllt werden."
 
-#: public/website/themes/default/helpers/PageHelper.php:2021
-#: public/website/themes/default/helpers/PageHelper.php:2249
+#: public/website/themes/default/helpers/PageHelper.php:2159
+#: public/website/themes/default/helpers/PageHelper.php:2387
 msgid "Send"
 msgstr "Senden"
 
-#: public/website/themes/default/helpers/PageHelper.php:2024
-#: public/website/themes/default/helpers/PageHelper.php:2237
+#: public/website/themes/default/helpers/PageHelper.php:2162
+#: public/website/themes/default/helpers/PageHelper.php:2375
 msgid "LegalNotes"
 msgstr "Ich bin damit einverstanden, dass meine oben eingegebenen Daten von MASSIVE ART und den Gesellschaften der MASSIVE ART Gruppe gespeichert, verarbeitet und genutzt werden, um mich mit Informationen über Produkte, Dienstleistungen oder Aktivitäten der MASSIVE ART Gruppe schriftlich, per Telefax, telefonisch oder per E-mail zu versorgen. Meine Einwilligung kann ich jederzeit ganz oder teilweise mit Wirkung für die Zukunft durch eine Mitteilung an MAIL@MASSIVEART.AT widerrufen."
 
-#: public/website/themes/default/helpers/PageHelper.php:2108
+#: public/website/themes/default/helpers/PageHelper.php:2246
 msgid "Dental_office"
 msgstr "Praxis"
 
-#: public/website/themes/default/helpers/PageHelper.php:2109
+#: public/website/themes/default/helpers/PageHelper.php:2247
 msgid "Dental_office_laboratory"
 msgstr "Praxis/Labor"
 
-#: public/website/themes/default/helpers/PageHelper.php:2110
+#: public/website/themes/default/helpers/PageHelper.php:2248
 msgid "Laboratory"
 msgstr "Labor"
 
-#: public/website/themes/default/helpers/PageHelper.php:2111
+#: public/website/themes/default/helpers/PageHelper.php:2249
 msgid "School"
 msgstr "Schule"
 
-#: public/website/themes/default/helpers/PageHelper.php:2112
+#: public/website/themes/default/helpers/PageHelper.php:2250
 msgid "Student"
 msgstr "Student"
 
-#: public/website/themes/default/helpers/PageHelper.php:2113
+#: public/website/themes/default/helpers/PageHelper.php:2251
 msgid "Private_person"
 msgstr "Privatperson"
 
-#: public/website/themes/default/helpers/PageHelper.php:2332
+#: public/website/themes/default/helpers/PageHelper.php:2470
 msgid "Contact"
 msgstr "Kontakt"
 
-#: public/website/themes/default/helpers/PageHelper.php:2344
+#: public/website/themes/default/helpers/PageHelper.php:2482
 msgid "Tel"
 msgstr "Tel"
 
-#: application/website/default/views/scripts/search/livesearch.phtml:6
+#: public/website/themes/default/scripts/search/livesearch.phtml:18
 msgid "Advanced_Search"
 msgstr "Detaillierte Suche"
+
+#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:14
+msgid "unsubscribe_description_text"
+msgstr "Vom Newsletter abmelden "
+
+#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:19
+msgid "unsubscribe"
+msgstr "abmelden"
+
+#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:22
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:65
+msgid "subscribe_confirmation"
+msgstr "Sie wurden zum Newsletter hinzugefügt"
+
+#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:25
+msgid "an_error_occured during_unsubscribing"
+msgstr "Während der Abmeldung ist ein Fehler aufgetreten"
+
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:15
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:17
+msgid "salutation"
+msgstr "Anrede"
+
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:28
+msgid "title"
+msgstr "Titel"
+
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:34
+msgid "fname"
+msgstr "Vorname"
+
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:40
+msgid "sname"
+msgstr "Vorname"
+
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:46
+msgid "email"
+msgstr "Email"
+
+#: public/website/themes/default/scripts/subscriber/subscribe.phtml:62
+msgid "register"
+msgstr "Registrieren"
 
 #~ msgid "Enter_new_password"
 #~ msgstr "Geben Sie ein neues Passwort ein."
@@ -641,19 +711,8 @@ msgstr "Detaillierte Suche"
 #~ msgid "Font_Size"
 #~ msgstr "Schriftgrösse"
 
-#~ msgid "Unsubscription_text"
-#~ msgstr "Vom Newsletter abmelden"
-
-#~ msgid "Newsletter_footer_address"
-#~ msgstr ""
-#~ "Ivoclar Vivadent AG, Bendererstraße 2, 9494 Schaan, Principality of "
-#~ "Liechtenstein"
-
 #~ msgid "Interested_in"
 #~ msgstr "Interessen"
-
-#~ msgid "Subscribe"
-#~ msgstr "abonnieren"
 
 #~ msgid "Wrong_user_password"
 #~ msgstr "Falsches Benutzer Passwort"
