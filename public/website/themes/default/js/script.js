@@ -208,7 +208,7 @@ var Web = Web || {};
          * validateAlphabethic
          */
         validateAlphabethic: function(element){
-            this.validateFilter(/^[a-zA-Z äöüßÄÖÜ]+$/, element);
+            this.validateFilter(/^([^0-9]*)$/, element);
         },
 
         validateNumeric: function(element){
