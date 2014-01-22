@@ -155,6 +155,7 @@ class Newsletters_NewsletterController extends AuthControllerAction
      */
     public function previewAction()
     {
+        $this->core->logger->debug('core->controllers->NewsletterController->previewAction()');
         //Load the newsletter with the given Id
         $intNewsletterId = $this->getRequest()->getParam('newsletterId');
         $objNewsletters = $this->getModelNewsletters()->load($intNewsletterId);
@@ -173,9 +174,13 @@ class Newsletters_NewsletterController extends AuthControllerAction
      */
     public function viewAction()
     {
-        $this->core->logger->debug('newsletters->controllers->newsletter->viewAction()');
-
-        $this->view->assign('newsletterId', $this->getRequest()->getParam('id'));
+        $intNewsletterId = $this->getRequest()->getParam('id', 0);
+        if ($intNewsletterId > 0) {
+            $this->core->logger->debug('newsletters->controllers->newsletter->viewAction()');
+            $this->view->assign('newsletterId', $this->getRequest()->getParam('id'));
+        } else {
+            $this->_helper->viewRenderer->setNoRender();
+        }
     }
 
     /**

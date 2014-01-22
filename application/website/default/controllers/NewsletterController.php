@@ -74,6 +74,7 @@ class NewsletterController extends WebControllerAction {
      * @version 1.0
      */
     public function previewAction() {
+        $this->core->logger->debug('controllers->newsletter->previewAction()');
         //Load the newsletter with the given Id
         $intNewsletterId = $this->getRequest()->getParam('id');
         $objNewsletters = $this->getModelNewsletters()->load($intNewsletterId);
@@ -87,7 +88,8 @@ class NewsletterController extends WebControllerAction {
             
             $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/newsletter/' . $this->core->sysConfig->newsletter->theme);
             $this->renderScript('/master.php');
-            
+        } else {
+            $this->_helper->viewRenderer->setNoRender();
         }
     }
 
