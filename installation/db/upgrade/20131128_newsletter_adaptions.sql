@@ -120,3 +120,6 @@ INSERT INTO `fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `descriptio
 INSERT INTO `regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL, '90', '279', '110');
 
 ALTER TABLE `newsletterStatistics` ENGINE = InnoDB;
+
+
+UPDATE `zo-zoolu`.`fields` SET `isKeyField` = '1' WHERE `fields`.`id` =226;
