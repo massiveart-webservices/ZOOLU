@@ -299,7 +299,6 @@ class Newsletters_NewsletterController extends AuthControllerAction
 
                 $this->renderNewsletter($objNewsletter);      
                 $content = $this->view->render('master.php');
-                $title = $objNewsletter->title;
                 if ($blnTestSend) {
                     $strEmail = $this->getRequest()->getParam('recipient');
                     // send Testnewsletter
