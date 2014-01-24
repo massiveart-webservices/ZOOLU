@@ -144,8 +144,10 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         // set the content
         $this->setContent($args['content']);
         
+        $this->objNewsletter = $args['newsletter'];
+        
         //set Subject title
-        $this->setTitle($args['title']);
+        $this->setTitle($this->objNewsletter->title);
         
         // Send newsletter
         $this->gearmanMandrillClient->sendNewsletter($this, true);
