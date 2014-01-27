@@ -122,4 +122,3 @@ INSERT INTO `regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL
 ALTER TABLE `newsletterStatistics` ENGINE = InnoDB;
 
 
-UPDATE `zo-zoolu`.`fields` SET `isKeyField` = '1' WHERE `fields`.`id` =226;

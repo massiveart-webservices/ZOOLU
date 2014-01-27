@@ -162,8 +162,8 @@ class Model_Subscribers {
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
-        $objSelect->join(array('c' => 'categories'), 'c.id = s.salutation', array());
-        $objSelect->join(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('c' => 'categories'), 'c.id = s.salutation', array());
+        $objSelect->joinLeft(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinInner(array('gf' => 'genericForms'), 'gf.id = s.idGenericForms', array('gf.genericFormId', 'gf.version'));
         $objSelect->joinLeft(array('cs' => 'categories'), 'cs.id = s.subscribed', array());
         $objSelect->joinLeft(array('cst' => 'categoryTitles'), 'cst.idCategories = cs.id AND cst.idLanguages = ' . $this->intLanguageId, array());

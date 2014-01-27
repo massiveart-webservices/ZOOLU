@@ -194,5 +194,39 @@ Massiveart.List = Class.create({
                 $(elementId).addClassName('white');
             }
         }
+    },
+
+    /**
+     * importListUpload
+     */
+    importListUpload: function() {
+        if ($('overlayBlack75'))
+            $('overlayBlack75').show();
+        if ($('overlayGenContentWrapper')) {
+            myCore.putCenter('overlayGenContentWrapper');
+            $('overlayGenContentWrapper').show();
+
+            if ($('overlayGenContent')) {
+                myCore.addBusyClass('overlayGenContent');
+                new Ajax.Updater('overlayGenContent', myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/importupload', {
+                    parameters: {
+                        rootLevelId: $('rootLevelId').getValue()
+                    },
+                    evalScripts: true,
+                    onComplete: function() {
+                        $('buttonOk').observe('click', function() {
+                            $('importForm').submit();
+                        });
+                        $('buttonCancel').observe('click', function() {
+                            myOverlay.close();
+                        });
+                        $('overlayButtons').show();
+                        myCore.putCenter('overlayGenContentWrapper');
+                        myCore.removeBusyClass('overlayGenContent');
+                    }.bind(this)
+                });
+            }
+        }
     }
+  
 });
