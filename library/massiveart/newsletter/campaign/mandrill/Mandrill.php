@@ -235,7 +235,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         // Get campaign subscribers
         $modelSubscribers = $this->getModelSubscribers();
         $modelSubscribers->setLanguageId(1);
-        return $this->recipients = $modelSubscribers->loadByRootLevelFilter($this->objFilter->idRootLevels, $this->campaignId, '', 'ASC', 'sname', false, true);
+        return $this->recipients = $modelSubscribers->loadByRootLevelFilter($this->objFilter->idRootLevels, $this->campaignId, '', 'ASC', 'sname', false, true, true);
     }
 
     /**

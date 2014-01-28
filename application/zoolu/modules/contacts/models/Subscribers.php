@@ -142,7 +142,7 @@ class Model_Subscribers {
      * @param boolean $blnReturnSelect
      * @return Zend_Db_Table_Select | Zend_Db_Table_Rowset
      */
-    public function loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false) {
+    public function loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false, $filterReachable = false) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByRootLevelFilter(' . $intRootLevelId . ', ' . $intRootLevelFilterId . ')');
 
         $objTableFields = new Zend_Db_Table('fields');
@@ -170,7 +170,7 @@ class Model_Subscribers {
         $objSelect->joinLeft(array('cd' => 'categories'), 'cd.id = s.dirty', array());
         $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cc' => 'categoryCodes'), 'cc.code = s.bounced AND s.bounced != "" AND cc.idLanguages = ' . $this->intLanguageId, array());
-        $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.id AND cct.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.idCategories AND cct.idLanguages = ' . $this->intLanguageId, array());
 
         //Apply rootLevelFilters
         if ($intRootLevelFilterId != null) {
@@ -239,8 +239,13 @@ class Model_Subscribers {
             $objSelect->where('s.fname LIKE ?', '%' . $strSearchValue . '%');
             $objSelect->orWhere('s.sname LIKE ?', '%' . $strSearchValue . '%');
         }
+        
+        if ($filterReachable) {
+            $objSelect->where('s.subscribed = ?', $this->core->sysConfig->contact->subscribed);
+            $objSelect->where('s.bounced  != ?', $this->core->sysConfig->contact->bounce_mapping->hard);
+        }
+        
         $objSelect->order($strOrderColumn . ' ' . strtoupper($strSortOrder));
-        //$this->core->logger->debug(strval($objSelect));
 
         if ($blnReturnSelect) {
             return $objSelect;
@@ -275,7 +280,7 @@ class Model_Subscribers {
         $objSelect->joinLeft(array('cd' => 'categories'), 'cd.id = s.dirty', array());
         $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cc' => 'categoryCodes'), 'cc.code = s.bounced AND cc.idLanguages = ' . $this->intLanguageId, array());
-        $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.id AND cct.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.idCategories AND cct.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
         $objSelect->where('s.bounced = ?', $bouncetype);
         if ($strSearchValue != '') {

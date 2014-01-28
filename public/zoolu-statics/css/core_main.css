@@ -185,7 +185,7 @@ Content List View */
 .toporganisation,
 .topbuilding,
 .topbranch,
-.topbounced 
+.topbounced,
 .tophardbounce {
     background: #e4e4e4 url(/zoolu-statics/images/main/pixel_white.gif) repeat-x 0 0;
     height: 26px;
@@ -310,6 +310,9 @@ Content List View */
 .roworganisation,
 .rowbuilding,
 .rowbranch,
+.rowsubscribed,
+.rowbounced,
+.rowdirty,
 .rowdownloadcounter {
     height: 30px;
     padding: 0 11px 0 11px;

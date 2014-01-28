@@ -167,6 +167,10 @@
                     <title>Language</title>
                 </interest_group>
             </interest_groups>
+            <interest_group_categories>
+                <languages>634</languages>
+                <interests>615</interests>
+            </interest_group_categories>
             <field_mappings>
                 <portal>229</portal>
                 <interestgroup>230</interestgroup>
@@ -186,6 +190,7 @@
                 <hard>hard</hard>
                 <soft>soft</soft>
             </bounce_mapping>
+            <subscribed>632</subscribed>
         </contact>
         
         <!-- Newsletter  -->

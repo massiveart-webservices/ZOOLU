@@ -43,14 +43,14 @@
 class Contacts_SubscriberController extends AuthControllerAction
 {
 
-    const PORTALS_ID = 229;
-    const INTEREST_GROUPS_ID = 230;
-    const FILTER_ID = 246;
-    const SUBSCRIBER_GENERIC_FORM_ID = 'DEFAULT_SUBSCRIBER';
-    const MYSQL_ERROR_DUPLICATE_ENTRY = 1062;
-    const IMPORT_PREVIEW_COUNT = 100;
-
-    const MCAPI_ERROR_CODE_TIMEOUT = -98;
+//    const PORTALS_ID = 229;
+//    const INTEREST_GROUPS_ID = 230;
+//    const FILTER_ID = 246;
+//    const SUBSCRIBER_GENERIC_FORM_ID = 'DEFAULT_SUBSCRIBER';
+//    const MYSQL_ERROR_DUPLICATE_ENTRY = 1062;
+//    const IMPORT_PREVIEW_COUNT = 100;
+//
+//    const MCAPI_ERROR_CODE_TIMEOUT = -98;
 
     /**
      * @var GenericForm
@@ -334,7 +334,7 @@ class Contacts_SubscriberController extends AuthControllerAction
         $intRootLevelId = $arrFields['rootLevelId'];
         $arrPortals = array_key_exists('portal', $arrFields) ? $arrFields['portal'] : array();
         $arrInterestGroups = array_key_exists('interest_group', $arrFields) ? $arrFields['interest_group'] : array();
-        $arrFilter = array_key_exists('filter', $arrFields) ? $arrFields['filter'] : array();
+        $arrLanguages = array_key_exists('languages', $arrFields) ? $arrFields['languages'] : array();
         $blnImportHeader = $arrFields['import_header'];
         $blnChangeEncoding = ($this->arrEncodings[$arrFields['encoding']] == 'ISO-8859');
         unset($arrFields['']);
@@ -343,18 +343,13 @@ class Contacts_SubscriberController extends AuthControllerAction
         unset($arrFields['action']);
         unset($arrFields['portal']);
         unset($arrFields['interest_group']);
-        unset($arrFields['filter']);
+        unset($arrFields['languages']);
         unset($arrFields['fileId']);
         unset($arrFields['rootLevelId']);
         unset($arrFields['import_header']);
         unset($arrFields['encoding']);
 
-        if ($this->objRequest->getParam('filter', false) != false) {
-            $this->core->logger->debug('DELETE FILTER!'); //TODO
-        }
-
         $strFile = GLOBAL_ROOT_PATH . '/uploads/subscribers/' . $strFileId;
-
         $fh = fopen($strFile, 'r');
 
         $strLine = fgets($fh); //header line
@@ -399,13 +394,7 @@ class Contacts_SubscriberController extends AuthControllerAction
                         require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/HostNotFoundException.php');
                         throw new HostNotFoundException($arrData['email']);
                     }
-                    //FIXME Doesn't work: Does the email-address exist?
-                    /*          require_once(GLOBAL_ROOT_PATH.'library/smtpvalidate/smtpvalidate.class.php');
-                              $objSmtpValidate = new SMTP_validateEmail();
-                              if(!$objSmtpValidate->validate(array($arrData['email']))){
-                                  throw new AddressNotFoundException($arrData['email']);
-                              }
-                    */
+
                     //Update Userdata
                     $blnUpdate = false; //Update an old user or insert a new one
                     if (isset($arrData['email']) && $arrData['email'] != '') {
@@ -444,7 +433,7 @@ class Contacts_SubscriberController extends AuthControllerAction
                             $arrPortalDataMailChimp[] = array('id' => $intPortalId, 'title' => $objRootLevel->current()->title);
                         }
                         $arrInterestDataMailChimp = $this->updateInterests($arrInterestGroups, $intSubscriberId, self::INTEREST_GROUPS_ID);
-                        $arrFilterDataMailChimp = $this->updateInterests($arrFilter, $intSubscriberId, self::FILTER_ID);
+                        $arrFilterDataMailChimp = $this->updateInterests($arrLanguages, $intSubscriberId, self::FILTER_ID);
                         if ($blnUpdate) {
                             //If subscriber already existed only update interestgroups
                             try {
@@ -637,27 +626,38 @@ class Contacts_SubscriberController extends AuthControllerAction
             $arrOptions[$arrOption['id']] = $arrOption['title'];
         }
         $objForm->addElement('multiCheckbox', 'portal', array('label' => $this->core->translate->_('Import_portals'), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'multiCheckbox', 'required' => false, 'multiOptions' => $arrOptions));
+        
         //Interest Groups
-        $arrTmpOptions = $this->core->dbh->query($this->core->dbh->quoteInto('SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = ?, categories AS rootCat WHERE rootCat.id = 615 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt  ORDER BY tbl.lft, categoryTitles.title', $this->core->intZooluLanguageId))->fetchAll();
+        $arrTmpOptions = $this->core->dbh->query($this->core->dbh->quoteInto('SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = ?, categories AS rootCat WHERE rootCat.id = ' . $this->core->sysConfig->contact->interest_group_categories->interests . ' AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt  ORDER BY tbl.lft, categoryTitles.title', $this->core->intZooluLanguageId))->fetchAll();
         $arrOptions = array();
         foreach ($arrTmpOptions as $arrOption) {
             $arrOptions[$arrOption['id']] = $arrOption['title'];
         }
         $objForm->addElement('multiCheckbox', 'interest_group', array('label' => $this->core->translate->_('Import_interest_groups'), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'multiCheckbox', 'required' => false, 'multiOptions' => $arrOptions));
 
-        //Filter
-        $arrTmpOptions = $this->core->dbh->query($this->core->dbh->quoteInto('SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = ?, categories AS rootCat WHERE rootCat.id = 644 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt  ORDER BY tbl.lft, categoryTitles.title', $this->core->intZooluLanguageId))->fetchAll();
+        //Languages
+        $arrTmpOptions = $this->core->dbh->query($this->core->dbh->quoteInto('SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = ?, categories AS rootCat WHERE rootCat.id = ' . $this->core->sysConfig->contact->interest_group_categories->languages . ' AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN ( rootCat.lft +1 ) AND rootCat.rgt  ORDER BY tbl.lft, categoryTitles.title', $this->core->intZooluLanguageId))->fetchAll();
         $arrOptions = array();
         foreach ($arrTmpOptions as $arrOption) {
             $arrOptions[$arrOption['id']] = $arrOption['title'];
         }
-        $objForm->addElement('multiCheckbox', 'filter', array('label' => $this->core->translate->_('Filter'), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'multiCheckbox', 'required' => false, 'multiOptions' => $arrOptions));
+        $objForm->addElement('multiCheckbox', 'languages', array('label' => $this->core->translate->_('Languages'), 'decorators' => array('Input'), 'columns' => 6, 'class' => 'multiCheckbox', 'required' => false, 'multiOptions' => $arrOptions));
 
-        $objForm->addDisplayGroup(array('encoding', 'portal', 'interest_group', 'filter'), 'preferences-group');
-
+        $importHeaderElement = new Zend_Form_Element_Checkbox('import_header'); 
+        $importHeaderElement ->setLabel($this->core->translate->_('Import_header'))
+                             ->setDecorators(array( array('ViewHelper', array('helper' => 'formCheckbox')), array('Errors'), array('Label', array('placement' =>'APPEND'))));
+        $objForm->addElement($importHeaderElement);
+        $objForm->addElement('textDisplay', 'blank', array('label' => '', 'decorators' => array('Input'), 'columns' => 12));
+        
+        $objForm->addDisplayGroup(array('encoding', 'portal', 'interest_group', 'languages'), 'preferences-group');
         $objForm->getDisplayGroup('preferences-group')->setLegend($this->core->translate->_('Import_preferences', false));
         $objForm->getDisplayGroup('preferences-group')->setDecorators(array('FormElements', 'Region'));
 
+        $objForm->addDisplayGroup(array('import_header', 'blank'), 'row-import-preves');
+        $objForm->getDisplayGroup('row-import-preves')->setLegend($this->core->translate->_('Import_header', false));
+        $objForm->getDisplayGroup('row-import-preves')->setDecorators(array('FormElements', 'Region'));
+
+        
         //Assignments
         $arrOptions = array();
         foreach ($arrHeadlines as $intCount => $strHeadline) {
@@ -669,7 +669,8 @@ class Contacts_SubscriberController extends AuthControllerAction
         $arrAssignment = array();
         foreach ($arrTmpOptions as $arrTmpOption) {
             $arrAssignment[] = $arrTmpOption['title'];
-            $objForm->addElement('select', $arrTmpOption['title'], array('label' => ($arrTmpOption['title'] != '') ? $arrTmpOption['title'] : '(' . $this->core->translate->_('Empty') . ')', 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => false, 'MultiOptions' => array_merge(array('' => ''), $arrOptions)));
+            $label = ($arrTmpOption['title'] != '') ? $this->core->translate->_($arrTmpOption['title'], false) : '(' . $this->core->translate->_('Empty') . ')';
+            $objForm->addElement('select', $arrTmpOption['title'], array('label' => $label, 'decorators' => array('Input'), 'columns' => 6, 'class' => 'select', 'required' => false, 'MultiOptions' => array_merge(array('' => ''), $arrOptions)));
             foreach ($arrHeadlines as $intCount => $strHeadline) {
                 if (array_search($strHeadline, $arrTmpOption['defaults']['default']) !== FALSE) {
                     $objForm->setDefault($arrTmpOption['title'], 'headline' . $intCount);
@@ -677,10 +678,9 @@ class Contacts_SubscriberController extends AuthControllerAction
                 }
             }
         }
+        //$objForm->addElement('checkbox', 'import_header', array('label' => $this->core->translate->_('Import_header'), 'decorators' => array('Label', 'Input'), 'columns' => 12, 'class' => 'checkbox', 'required' => false));
 
-        $objForm->addElement('checkbox', 'import_header', array('label' => $this->core->translate->_('Import_header'), 'decorators' => array('Input'), 'columns' => 12, 'class' => 'checkbox', 'required' => false));
-
-        $objForm->addDisplayGroup(array_merge(array('import_header'), $arrAssignment), 'assignment-group');
+        $objForm->addDisplayGroup($arrAssignment, 'assignment-group');
         $objForm->getDisplayGroup('assignment-group')->setLegend($this->core->translate->_('Import_assignment', false));
         $objForm->getDisplayGroup('assignment-group')->setDecorators(array('FormElements', 'Region'));
 
