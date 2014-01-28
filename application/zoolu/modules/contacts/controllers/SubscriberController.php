@@ -42,15 +42,9 @@
 
 class Contacts_SubscriberController extends AuthControllerAction
 {
-
-//    const PORTALS_ID = 229;
-//    const INTEREST_GROUPS_ID = 230;
-//    const FILTER_ID = 246;
-//    const SUBSCRIBER_GENERIC_FORM_ID = 'DEFAULT_SUBSCRIBER';
-//    const MYSQL_ERROR_DUPLICATE_ENTRY = 1062;
-//    const IMPORT_PREVIEW_COUNT = 100;
-//
-//    const MCAPI_ERROR_CODE_TIMEOUT = -98;
+    const SUBSCRIBER_GENERIC_FORM_ID = 'DEFAULT_SUBSCRIBER';
+    const MYSQL_ERROR_DUPLICATE_ENTRY = 1062;
+    const IMPORT_PREVIEW_COUNT = 100;
 
     /**
      * @var GenericForm
@@ -372,12 +366,12 @@ class Contacts_SubscriberController extends AuthControllerAction
                         $arrData[$strKey] = trimQuotes($arrTmpData[$intCount]);
                     }
                 }
-                $arrData['subscribed'] = $this->core->sysConfig->mail_chimp->mappings->subscribe;
+                $arrData['subscribed'] = $this->core->sysConfig->contact->subscribed;
                 $arrData['idRootLevels'] = $intRootLevelId;
                 $arrData['idGenericForms'] = $this->core->sysConfig->subscriber->default->genericFormId;
                 $arrData['creator'] = Zend_Auth::getInstance()->getIdentity()->id;
                 $arrData['idUsers'] = Zend_Auth::getInstance()->getIdentity()->id;
-                $arrData['dirty'] = $this->core->sysConfig->mail_chimp->mappings->clean;
+                $arrData['created'] = date('Y-m-d H:i:s');
 
                 try {
                     //Check Preconditions
@@ -401,15 +395,15 @@ class Contacts_SubscriberController extends AuthControllerAction
                         $objSubscriber = $this->getModelSubscribers()->loadByEmail($arrData['email']);
                         if (count($objSubscriber) > 0) {
                             //Check Preconditions
-                            if ($objSubscriber->current()->hardbounce == $this->core->sysConfig->mail_chimp->mappings->hardbounce) {
+                            if ($objSubscriber->current()->bounced == $this->core->sysConfig->contact->bounce_mapping->hard) {
                                 require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/HardBounceException.php');
                                 throw new HardBounceException($arrData['email']);
                             }
-                            if ($objSubscriber->current()->dirty == $this->core->sysConfig->mail_chimp->mappings->dirty) {
+                            if ($objSubscriber->current()->dirty == $this->core->sysConfig->contact->dirty) {
                                 require_once(GLOBAL_ROOT_PATH . 'library/massiveart/newsletter/DirtyException.php');
                                 throw new DirtyException($arrData['email']);
                             }
-                            if ($objSubscriber->current()->subscribed == $this->core->sysConfig->mail_chimp->mappings->unsubscribe) {
+                            if ($objSubscriber->current()->subscribed != $this->core->sysConfig->subscribed) {
                                 $arrWarnings[] = $arrData['email'] . ' was unsubscribed!';
                             }
                             $this->core->logger->warn('Subscriber ' . $arrData['email'] . ' already exists! User will be updated.');
@@ -421,57 +415,11 @@ class Contacts_SubscriberController extends AuthControllerAction
                             $intSubscriberId = $this->getModelSubscribers()->getSubscriberTable()->insert($arrData);
                             $intSubscriberAdded++;
                         }
+                        
                         //Update Interests
-                        $arrPortalDataMailChimp = array();
-                        foreach ($arrPortals as $intPortalId) {
-                            //Insert Data in database
-                            $arrPortalData = array('idSubscribers' => $intSubscriberId, 'idRelation' => $intPortalId, 'idFields' => self::PORTALS_ID);
-                            $objTable = $this->getModelGenericData()->getGenericTable('subscriber-' . self::SUBSCRIBER_GENERIC_FORM_ID . '-1-InstanceMultiFields');
-                            $objTable->insert($arrPortalData);
-                            //Create array for mailchimp
-                            $objRootLevel = $this->getModelRootLevels()->loadRootLevelTitle($intPortalId, 2);
-                            $arrPortalDataMailChimp[] = array('id' => $intPortalId, 'title' => $objRootLevel->current()->title);
-                        }
-                        $arrInterestDataMailChimp = $this->updateInterests($arrInterestGroups, $intSubscriberId, self::INTEREST_GROUPS_ID);
-                        $arrFilterDataMailChimp = $this->updateInterests($arrLanguages, $intSubscriberId, self::FILTER_ID);
-                        if ($blnUpdate) {
-                            //If subscriber already existed only update interestgroups
-                            try {
-                                $this->objCommandChain->runCommand('updated', array(
-                                                                                   'Id'                => $intSubscriberId,
-                                                                                   'FirstName'         => $arrData['fname'],
-                                                                                   'LastName'          => $arrData['sname'],
-                                                                                   'Salutation'        => $arrData['salutation'],
-                                                                                   'Email'             => $arrData['email'],
-                                                                                   'InterestGroups'    => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp, 'Filter' => $arrFilterDataMailChimp),
-                                                                                   'Subscribed'        => $this->core->sysConfig->mail_chimp->mappings->subscribe,
-                                                                                   'HardBounce'        => $objSubscriber->current()->hardbounce,
-                                                                                   'ReplaceInterests'  => false
-                                                                              ));
-                            } catch (MailChimpException $mce) {
-                                if ($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT) {
-                                    $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-                                }
-                                throw $mce;
-                            }
-                        } else {
-                            try {
-                                $this->objCommandChain->runCommand('added', array(
-                                                                                 'Id'              => $intSubscriberId,
-                                                                                 'FirstName'       => (isset($arrData['fname'])) ? $arrData['fname'] : '',
-                                                                                 'LastName'        => (isset($arrData['sname'])) ? $arrData['sname'] : '',
-                                                                                 'Salutation'      => (isset($arrData['salutation'])) ? $arrData['salutation'] : '',
-                                                                                 'Email'           => (isset($arrData['email'])) ? $arrData['email'] : '',
-                                                                                 'Subscribed'      => $this->core->sysConfig->mail_chimp->mappings->subscribe,
-                                                                                 'InterestGroups'  => array('Portal' => $arrPortalDataMailChimp, 'Interested In' => $arrInterestDataMailChimp),
-                                                                            ));
-                            } catch (MailChimpException $mce) {
-                                if ($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT) {
-                                    $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-                                }
-                                throw $mce;
-                            }
-                        }
+                        $this->updateInterests($arrPortals, $intSubscriberId, $this->core->sysConfig->contact->field_mappings->portal);
+                        $this->updateInterests($arrInterestGroups, $intSubscriberId, $this->core->sysConfig->contact->field_mappings->interestgroup);
+                        $this->updateInterests($arrLanguages, $intSubscriberId, $this->core->sysConfig->contact->field_mappings->language);
                     } else {
                         $blnEmailAddress = false;
                     }
@@ -481,24 +429,12 @@ class Contacts_SubscriberController extends AuthControllerAction
                     $arrErrors[] = $exc->getEmail() . ' is hard bounced!';
                 } catch (DirtyException $exc) {
                     $arrErrors[] = $exc->getEmail() . ' has changed!';
-                } catch (HostNotFoundException $exc) {
-                    $arrErrors[] = $exc->getEmail() . ' has a non-exsistent Domain-Part!';
                 }
             }
         }
         //Delete the file in the end
         fclose($fh);
         unlink(GLOBAL_ROOT_PATH . '/uploads/subscribers/' . $strFileId);
-
-        if (class_exists('GearmanClient') && !empty(Zend_Auth::getInstance()->getIdentity()->email)) {
-            $client = new GearmanClient();
-            $client->addServer();
-            $workload = new stdClass();
-            $workload->email = Zend_Auth::getInstance()->getIdentity()->email;
-            $workload->errors = $arrErrors;
-            $workload->warnings = $arrWarnings;
-            $client->doLowBackground($this->core->sysConfig->client->id . '_contact_replication_mailchimp_done', serialize($workload));
-        }
 
         //Return a success message
         echo str_replace('%t', $intSubscriberUpdated, str_replace('%s', $intSubscriberAdded, $this->core->translate->_('Import_success_message')));
@@ -510,24 +446,16 @@ class Contacts_SubscriberController extends AuthControllerAction
 
     /**
      * updateInterests
-     *
-     * Converts the array of interests for update mailChimp
-     *
      * @author Daniel Rotter <daniel.roter@massiveart.com>
      * @version 1.0
      */
     private function updateInterests($arrInterestGroups, $intSubscriberId, $intFieldId)
     {
-        $arrInterestDataMailChimp = array();
         foreach ($arrInterestGroups as $intInterestGroupId) {
             $arrInterestData = array('idSubscribers' => $intSubscriberId, 'idRelation' => $intInterestGroupId, 'idFields' => $intFieldId);
             $objTable = $this->getModelGenericData()->getGenericTable('subscriber-' . self::SUBSCRIBER_GENERIC_FORM_ID . '-1-InstanceMultiFields');
             $objTable->insert($arrInterestData);
-            //Create array for mailchimp
-            $objCategory = $this->getModelCategories()->loadCategory($intInterestGroupId, 2);
-            $arrInterestDataMailChimp[] = array('id' => $intInterestGroupId, 'title' => $objCategory->current()->title);
         }
-        return $arrInterestDataMailChimp;
     }
 
     /**
@@ -764,22 +692,6 @@ class Contacts_SubscriberController extends AuthControllerAction
 
                 $intSubscriberId = $this->objForm->saveFormData();
                 $this->objForm->getElement('id')->setValue($intSubscriberId);
-                try {
-                    $this->objCommandChain->runCommand('added', array(
-                                                                     'Id'              => $intSubscriberId,
-                                                                     'FirstName'       => $this->objForm->Setup()->getField('fname')->getValue(),
-                                                                     'LastName'        => $this->objForm->Setup()->getField('sname')->getValue(),
-                                                                     'Salutation'      => $this->objForm->Setup()->getField('salutation')->getValue(),
-                                                                     'Email'           => $this->objForm->Setup()->getField('email')->getValue(),
-                                                                     'Subscribed'      => $this->objForm->Setup()->getField('subscribed')->getValue(),
-                                                                     'InterestGroups'  => $this->getInterestGroups()
-                                                                ));
-                } catch (MailChimpException $mce) {
-                    if ($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT) {
-                        $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-                    }
-                    throw $mce;
-                }
 
                 $this->view->blnShowFormAlert = true;
             }
@@ -878,22 +790,6 @@ class Contacts_SubscriberController extends AuthControllerAction
             if ($this->objForm->isValid($arrFormData)) {
                 $this->objForm->saveFormData();
                 $this->view->blnShowFormAlert = true;
-                try {
-                    $this->objCommandChain->runCommand('updated', array(
-                                                                       'Id'                    => $this->objForm->Setup()->getElementId(),
-                                                                       'FirstName'             => $this->objForm->Setup()->getField('fname')->getValue(),
-                                                                       'LastName'              => $this->objForm->Setup()->getField('sname')->getValue(),
-                                                                       'Salutation'            => $this->objForm->Setup()->getField('salutation')->getValue(),
-                                                                       'Email'                 => $this->objForm->Setup()->getField('email')->getValue(),
-                                                                       'Subscribed'            => $this->objForm->Setup()->getField('subscribed')->getValue(),
-                                                                       'InterestGroups'        => $this->getInterestGroups()
-                                                                  ));
-                } catch (MailChimpException $exc) {
-                    if ($exc->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT) {
-                        $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-                    }
-                    throw $exc;
-                }
             }
         }
 
@@ -924,22 +820,6 @@ class Contacts_SubscriberController extends AuthControllerAction
             $this->objModelSubscribers->delete($this->objRequest->getParam("id"));
             $this->view->blnShowFormAlert = true;
 
-            if (count($objSubscriber) > 0) {
-                $objSubscriber = $objSubscriber->current();
-                try {
-                    $this->objCommandChain->runCommand('deleted', array(
-                                                                       'Id'        => $objSubscriber->id,
-                                                                       'FirstName' => $objSubscriber->fname,
-                                                                       'LastName'  => $objSubscriber->sname,
-                                                                       'Email'     => $objSubscriber->email
-                                                                  ));
-                } catch (MailChimpExceptin $mce) {
-                    if ($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT) {
-                        $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-                    }
-                    throw $mce;
-                }
-            }
         }
         $this->renderScript('form.phtml');
     }
@@ -964,19 +844,6 @@ class Contacts_SubscriberController extends AuthControllerAction
                     if (count($objSubscribers) > 0) {
                         foreach ($objSubscribers as $objSubscriber) {
                             $this->objModelSubscribers->delete($intSubscriberId);
-                            try {
-                                $this->objCommandChain->runCommand('deleted', array(
-                                                                                   'Id'        => $objSubscriber->id,
-                                                                                   'FirstName' => $objSubscriber->fname,
-                                                                                   'LastName'  => $objSubscriber->sname,
-                                                                                   'Email'     => $objSubscriber->email
-                                                                              ));
-                            } catch (MailChimpException $mce) {
-                                if ($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT) {
-                                    $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-                                }
-                                throw $mce;
-                            }
                         }
                     }
                 }
@@ -1015,20 +882,6 @@ class Contacts_SubscriberController extends AuthControllerAction
                     if (count($objSubscribers) > 0) {
                         foreach ($objSubscribers as $objSubscriber) {
                             $this->objModelSubscribers->update($intSubscriberId, array('subscribed' => $this->core->sysConfig->mail_chimp->mappings->unsubscribe));
-                            try {
-                                $this->objCommandChain->runCommand('updated', array(
-                                                                                   'Id'        => $objSubscriber->id,
-                                                                                   'FirstName' => $objSubscriber->fname,
-                                                                                   'LastName'  => $objSubscriber->sname,
-                                                                                   'Email'     => $objSubscriber->email,
-                                                                                   'Subscribed'=> $this->core->sysConfig->mail_chimp->mappings->unsubscribe
-                                                                              ));
-                            } catch (MailChimpException $mce) {
-                                if ($mce->getCode() == self::MCAPI_ERROR_CODE_TIMEOUT) {
-                                    $this->sendTimeoutMail($this->objForm->Setup()->getField('email')->getValue());
-                                }
-                                throw $mce;
-                            }
                         }
                     }
                 }
@@ -1103,26 +956,6 @@ class Contacts_SubscriberController extends AuthControllerAction
     }
 
     /**
-     * getInterestGroups
-     * @return array
-     * @author Thomas Schedler <tsh@massiveart.com>
-     */
-    private function getInterestGroups()
-    {
-        $intTmpLanguageId = $this->objForm->Setup()->getLanguageId();
-        $this->objForm->Setup()->setLanguageId(2); //2 is the english language
-        $arrInterestGroups = array();
-        $arrConfigInterestGroups = $this->core->sysConfig->contact->interest_groups->toArray();
-        $arrConfigInterestGroups = is_array($arrConfigInterestGroups['interest_group']) ? $arrConfigInterestGroups['interest_group'] : array($arrConfigInterestGroups['interest_group']);
-        foreach ($arrConfigInterestGroups as $arrConfigInterestGroup) {
-            $arrInterestGroups[$arrConfigInterestGroup['title']] = $this->objForm->getMultiFieldValues($arrConfigInterestGroup['field']);
-        }
-        $this->objForm->Setup()->setLanguageId($intTmpLanguageId);
-        $this->core->logger->debug($arrInterestGroups);
-        return $arrInterestGroups;
-    }
-
-    /**
      * setViewMetaInfos
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -1193,64 +1026,6 @@ class Contacts_SubscriberController extends AuthControllerAction
                 unset($array[$i]);
             }
         }
-    }
-
-    /**
-     * Send an email message when a timeout occured
-     * @param string $strEmail
-     * @author Daniel Rotter
-     * @version 1.0
-     */
-    private function sendTimeoutMail($strEmail)
-    {
-        $mail = new Zend_Mail();
-
-        $config = array(
-            'auth'     => 'login',
-            'username' => $this->core->config->mail->params->username,
-            'password' => $this->core->config->mail->params->password
-        );
-
-        $transport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $config);
-        $strHtmlBody = '
-      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-      <html>
-        <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-          <title></title>
-          <style type="text/css">
-            body { margin:0; padding:20px; color:#333333; width:100%; height:100%; font-size:12px; font-family: Arial, Sans-Serif; background-color:#ffffff; line-height:16px;}
-            span { line-height:15px; font-size:12px; }
-            h1 { color:#333333; font-weight:bold; font-size:16px; font-family: Arial, Sans-Serif; padding:0; margin: 20px 0 15px 0; }
-            h2 { color:#333333; font-weight:bold; font-size:14px; font-family: Arial, Sans-Serif; padding:0; margin: 20px 0 15px 0; }
-            h3 { color:#333333; font-weight:bold; font-size:12px; font-family: Arial, Sans-Serif; padding:0; margin: 20px 0 15px 0; }
-            a { color:#000000; font-size:12px; text-decoration:underline; margin:0; padding:0; }
-            a:hover { color:#000000; font-size:12px; text-decoration:underline; margin:0; padding:0; }
-            p { margin:0 0 10px 0; padding:0; }
-          </style>
-        </head>
-        <body>
-          <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr>
-              <td>
-                The MailChimp API threw an Request Timeout message when updating the subscriber ' . $strEmail . '.<br />
-                Please update this user manually over the MailChimp homepage.
-              </td>
-            </tr>
-          </table>
-        </body>
-      </html>';
-
-        $mail->setSubject('Request Timeout when updating ' . $strEmail);
-
-        $mail->setBodyHtml($strHtmlBody);
-
-        $mail->setFrom($this->core->config->mail->from->address, $this->core->config->mail->from->name);
-
-        $arrRecipient = $this->core->config->mail->recipient->toArray();
-        $mail->addTo($arrRecipient['address'], $arrRecipient['name']);
-
-        $mail->send($transport);
     }
 
     /**
