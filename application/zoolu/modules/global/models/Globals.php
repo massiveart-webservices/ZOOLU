@@ -994,7 +994,7 @@ class Model_Globals extends ModelAbstract
             if ($objGenericSetup->getParentId() != '' && $objGenericSetup->getParentId() > 0) {
                 $objGlobal->parentId = $objGenericSetup->getParentId();
                 $objGlobal->parentTypeId = $this->core->sysConfig->parent_types->folder;
-                $objData = $this->getModelFolders()->countChilds($objGlobal->parentId);
+                $objData = $this->getModelFolders()->countGlobalChilds($objGlobal->parentId);
             } else {
                 if ($objGenericSetup->getRootLevelId() != '' && $objGenericSetup->getRootLevelId() > 0) {
                     $objGlobal->parentId = $objGenericSetup->getRootLevelId();
