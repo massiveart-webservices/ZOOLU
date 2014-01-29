@@ -267,12 +267,14 @@ class Model_Subscribers {
 
         $arrValues = array();
         if ($blnExtendSelect) {
-            $arrValues = array('id', 'salutation', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'salutation' => 'ct.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
         } else {
             $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'bounced' => 'cct.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
+        $objSelect->joinLeft(array('c' => 'categories'), 'c.id = s.salutation', array());
+        $objSelect->joinLeft(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinInner(array('gf' => 'genericForms'), 'gf.id = s.idGenericForms', array('gf.genericFormId', 'gf.version'));
         $objSelect->joinLeft(array('u' => 'users'), 'u.id = s.idUsers', array('s.changed'));
         $objSelect->joinLeft(array('cs' => 'categories'), 'cs.id = s.subscribed', array());

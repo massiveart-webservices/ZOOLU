@@ -296,6 +296,25 @@ Massiveart.List = Class.create({
         myCore.putOverlayCenter('overlayGenContentWrapper');
       }
     });
+  },
+  
+  /**
+   * exportList
+   */
+  exportList: function(){
+    var rootLevelId = null;
+    var rootLevelFilterId = null;
+    if($('rootLevelId')) rootLevelId = $('rootLevelId').getValue();
+    if($('rootLevelFilterListId')) rootLevelFilterId = $F('rootLevelFilterListId');
+    
+    var url = myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/exportlist?rootLevelId='+rootLevelId;
+    if(rootLevelFilterId == '') {
+        url = url + '&rootLevelFilterId='+rootLevelFilterId;
+    }
+    else if(this.bounced) {
+        url = url + '&bounced=' + this.bounced;
+    }
+    location.href = url;
   }
   
 });
