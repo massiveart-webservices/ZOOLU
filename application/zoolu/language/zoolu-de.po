@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-21 15:19+0100\n"
+"POT-Creation-Date: 2014-01-29 09:25+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
@@ -141,72 +141,76 @@ msgstr "Abonniert"
 msgid "dirty"
 msgstr "Bearbeitet"
 
-#: application/zoolu/language/addon-language-keys.php:94
+#: application/zoolu/language/addon-language-keys.php:89
+msgid "bounced"
+msgstr "Bounced"
+
+#: application/zoolu/language/addon-language-keys.php:95
 msgid "New_Content"
 msgstr "Neuer Inhalt"
 
-#: application/zoolu/language/addon-language-keys.php:95
+#: application/zoolu/language/addon-language-keys.php:96
 msgid "New_Product"
 msgstr "Neues Produkt"
 
-#: application/zoolu/language/addon-language-keys.php:96
+#: application/zoolu/language/addon-language-keys.php:97
 msgid "New_Product_Link"
 msgstr "Neuer Produktlink"
 
-#: application/zoolu/language/addon-language-keys.php:97
+#: application/zoolu/language/addon-language-keys.php:98
 msgid "New_Press"
 msgstr "Neue Pressemitteilung"
 
-#: application/zoolu/language/addon-language-keys.php:98
+#: application/zoolu/language/addon-language-keys.php:99
 msgid "New_Course"
 msgstr "Neuer Kurs"
 
-#: application/zoolu/language/addon-language-keys.php:99
+#: application/zoolu/language/addon-language-keys.php:100
 msgid "New_Event"
 msgstr "Neue Veranstaltung"
 
-#: application/zoolu/language/addon-language-keys.php:104
+#: application/zoolu/language/addon-language-keys.php:105
 msgid "private"
 msgstr "Privat"
 
-#: application/zoolu/language/addon-language-keys.php:105
+#: application/zoolu/language/addon-language-keys.php:106
 msgid "work"
 msgstr "Geschäftlich"
 
-#: application/zoolu/language/addon-language-keys.php:110
+#: application/zoolu/language/addon-language-keys.php:111
 msgid "Meta_description"
 msgstr "Die Meta Beschreibung"
 
-#: application/zoolu/language/addon-language-keys.php:111
+#: application/zoolu/language/addon-language-keys.php:112
 msgid "Meta_title"
 msgstr "Der Meta TItel"
 
-#: application/zoolu/language/addon-language-keys.php:116
+#: application/zoolu/language/addon-language-keys.php:117
 msgid "targetpage"
 msgstr "Zielseite"
 
-#: application/zoolu/language/addon-language-keys.php:117
+#: application/zoolu/language/addon-language-keys.php:118
 msgid "url"
 msgstr "Landingpage URL"
 
-#: application/zoolu/language/addon-language-keys.php:118
+#: application/zoolu/language/addon-language-keys.php:119
 msgid "targetlanguage"
 msgstr "Sprache"
 
-#: application/zoolu/language/addon-language-keys.php:119
+#: application/zoolu/language/addon-language-keys.php:120
 msgid "redirect"
 msgstr "Weiterleitung"
 
-#: application/zoolu/language/addon-language-keys.php:120
+#: application/zoolu/language/addon-language-keys.php:121
 msgid "changeUser"
 msgstr "Letzte Änderung von"
 
-#: application/zoolu/language/addon-language-keys.php:121
+#: application/zoolu/language/addon-language-keys.php:122
 msgid "please_choose_language"
 msgstr "Bitte wählen Sie eine Sprache"
 
 #: application/zoolu/modules/contacts/views/helpers/ImportHelper.php:65
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:684
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:612
 msgid "Import_assignment"
 msgstr "Zuweisungen"
 
@@ -248,41 +252,42 @@ msgstr "Reset"
 msgid "No_entries_available"
 msgstr "Es sind keine weiteren Einträge vorhanden"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:515
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:440
 msgid "Import_success_message"
 msgstr "%s Kontakte hinzugefügt, %t Kontakte geändert"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:518
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:443
 msgid "Missing_email"
 msgstr "<strong>Es wurden keine Kontakte importiert, da keine E-Mail Adresse zugewiesen wurde!</strong>"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:631
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:548
 msgid "Encoding"
 msgstr "Verschlüsselung"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:639
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:556
 msgid "Import_portals"
 msgstr "Portal"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:646
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:564
 msgid "Import_interest_groups"
 msgstr "Interessensgruppe"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:654
-msgid "Filter"
-msgstr "Filter"
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:572
+msgid "Languages"
+msgstr "Sprachen"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:658
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:575
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:585
+msgid "Import_header"
+msgstr "Erste Zeile importieren"
+
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:581
 msgid "Import_preferences"
 msgstr "Einstellungen"
 
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:672
+#: application/zoolu/modules/contacts/controllers/SubscriberController.php:600
 msgid "Empty"
 msgstr "Leer"
-
-#: application/zoolu/modules/contacts/controllers/SubscriberController.php:681
-msgid "Import_header"
-msgstr "Erste Zeile importieren"
 
 #: application/zoolu/modules/contacts/controllers/CustomerController.php:118
 msgid "New_Customer"
@@ -920,10 +925,6 @@ msgstr "Inhalt wählen"
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:424
 msgid "Tags"
 msgstr "Tags"
-
-#: application/zoolu/modules/media/views/helpers/ViewHelper.php:172
-msgid "Languages"
-msgstr "Sprachen"
 
 #: application/zoolu/modules/media/views/helpers/ViewHelper.php:178
 msgid "Downloadcounter"
@@ -1786,6 +1787,10 @@ msgstr "Daten zusenden"
 #: application/zoolu/layouts/contacts-list.phtml:273
 msgid "Preview"
 msgstr "Vorschau"
+
+#: application/zoolu/layouts/contacts-list.phtml:375
+msgid "Filter"
+msgstr "Filter"
 
 #: application/zoolu/layouts/contacts-list.phtml:445
 msgid "Unsubscribe_subscriber"
