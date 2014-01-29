@@ -188,10 +188,10 @@ class Contacts_SubscriberController extends AuthControllerAction
     {
         $this->core->logger->debug('contacts->controllers->SubscriberController->exportlistAction()');
 
-        $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilterId');
+        $intRootLevelFilterId = $this->getRequest()->getParam('rootLevelFilter', null);
         $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
-        $bounced = $this->getRequest()->getParam('bounced') == '';
-
+        $bounced = $this->getRequest()->getParam('bounced', '');
+        
         if ($bounced != '' && ($bounced == $this->core->sysConfig->contact->bounce_mapping->hard || $bounced == $this->core->sysConfig->contact->bounce_mapping->soft) ) {
             $objRowset = $this->getModelSubscribers()->loadBounced($bounced, $intRootLevelId, '', 'ASC', 'sname', false, true);
         } else {

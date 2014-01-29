@@ -362,25 +362,24 @@ class Newsletters_NewsletterController extends AuthControllerAction
     {
         $this->core->logger->debug('newsletters->controllers->NewsletterController->exportAction()');
 
-        $strNewsletterId = $this->getRequest()->getParam('id');
-        $strData = $this->getRequest()->getParam('data');
-        $strExport = '';
-
-        $objNewsletterData = $this->getModelNewsletters()->load($strNewsletterId);
-        if (count($objNewsletterData) > 0) {
-            $objNewsletterDb = $objNewsletterData->current();
-            $objNewsletter = $this->buildCampaign($objNewsletterDb);
-            $objNewsletter->loadStatistics();
-
+        $newsletterId = $this->getRequest()->getParam('id');
+        $newsletterData = $this->getModelNewsletters()->load($newsletterId);
+        if (count($newsletterData) > 0 && $newsletterData->current()->sent == 1) {
+            $newsletter = $newsletterData->current();
+            $objFilterData = $this->getModelRootLevels()->loadRootLevelFilter($newsletter->idRootLevelFilters);
+            $objFilter = $objFilterData->current();
+            $campaign = $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $newsletter, 'filter' => $objFilter));
+            $strData = $this->getRequest()->getParam('data');
+            $strExport = '';
             switch ($strData) {
                 case 'unsubscribes':
-                    $arrData = $objNewsletter->getUnsubscribes();
+                    $arrData = $campaign->getUnsubscribes();
                     break;
                 case 'complaints':
-                    $arrData = $objNewsletter->getComplaints();
+                    $arrData = $campaign->getComplaints();
                     break;
                 case 'bounces':
-                    $arrData = $objNewsletter->getBounces();
+                    $arrData = $campaign->getBounces();
                     break;
             }
 
@@ -407,7 +406,7 @@ class Newsletters_NewsletterController extends AuthControllerAction
             header("Content-Type: application/csv; charset=utf-8");
 
             // Set filename
-            header("Content-Disposition: attachment; filename=\"newsletter" . $strNewsletterId . "-Statistics.csv\"");
+            header("Content-Disposition: attachment; filename=\"newsletter" . $newsletterId . "-Statistics.csv\"");
 
             /**
              * The Content-transfer-encoding header should be binary, since the file will be read
