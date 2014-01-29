@@ -2150,6 +2150,11 @@ Overlay Inner */
     white-space: nowrap;
 }
 
+#importPreview table tr th {
+    text-align: left;
+    padding: 5px;
+}
+
 /* ----------------
 video select */
 
