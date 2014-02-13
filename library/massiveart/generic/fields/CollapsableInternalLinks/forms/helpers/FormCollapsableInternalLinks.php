@@ -65,6 +65,12 @@ class Form_Helper_FormCollapsableInternalLinks extends Zend_View_Helper_FormElem
             $disabled = ' disabled="disabled"';
         }
 
+        $targetRootLevel = 0;
+        if (array_key_exists('fieldOptions', $attribs)) {
+            $fieldOptions = json_decode($attribs['fieldOptions']);
+            $targetRootLevel = $fieldOptions->targetRootLevel;
+        }
+
         $strItemInternalLinks = '';
         if (isset($element->objItemInternalLinks)) {
             foreach ($element->objItemInternalLinks as $objItemInternalLink) {
@@ -98,19 +104,7 @@ class Form_Helper_FormCollapsableInternalLinks extends Zend_View_Helper_FormElem
          * build the element
          */
         $strOutput = '<div class="internallinkswrapper">
-                    <div class="top">' . $core->translate->_('Add_internal_links') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddTreeOverlay(\'divInternalLinksContainer_' . $this->view->escape($id) . '\'); return false;"/></div>
-                    <div id="divInternalLinksContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '">
-                    ' . $strItemInternalLinks . '
-                    <div id="divClear_' . $this->view->escape($name) . '" class="clear"></div>
-                    </div>
-                    <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . $attribs['isCoreField'] . '" fieldId="' . $attribs['fieldId'] . '" value="' . $this->view->escape($value) . '"/>
-                  </div>';
-
-        /**
-         * build the element
-         */
-        $strOutput = '<div class="internallinkswrapper">
-                    <div class="top">' . $core->translate->_('Add_internal_links') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddInternalLinksOverlay(\'divInternalLinksContainer_' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div class="top">' . $core->translate->_('Add_internal_links') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddInternalLinksOverlay(\'divInternalLinksContainer_' . $this->view->escape($id) . '\',' . $targetRootLevel . '); return false;"/></div>
                     <div id="divInternalLinksContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '">
                     ' . $strItemInternalLinks . '
                     </div>
