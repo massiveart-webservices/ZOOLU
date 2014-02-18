@@ -1491,23 +1491,39 @@ class Model_Globals extends ModelAbstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadInternalLinks($strElementId, $intVersion, $intFieldId)
+    public function loadInternalLinks($strElementId, $intVersion, $intFieldId, $intRootLevelId = null)
     {
-        $this->core->logger->debug('global->models->Model_Globals->loadInternalLinks(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ')');
+        $this->core->logger->debug('global->models->Model_Globals->loadInternalLinks(' . $strElementId . ',' . $intVersion . ',' . $intFieldId . ',' . $intRootLevelId . ')');
 
         $objSelect = $this->getGlobalInternalLinkTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('globals', array('globals.id', 'relationId' => 'lP.globalId', 'globals.globalId', 'globals.version', 'globalProperties.idGlobalTypes', 'isStartItem' => 'globals.isStartGlobal', 'globals.isStartGlobal', 'globalProperties.idStatus'));
-        $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
-        $objSelect->join('globalLinks', 'globalLinks.globalId = globals.globalId', array());
-        $objSelect->join(array('lP' => 'globals'), 'lP.id = globalLinks.idGlobals', array('lPId' => 'globalId'));
-        $objSelect->joinLeft('urls', 'urls.relationId = lP.globalId AND urls.version = lP.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->global . ' AND urls.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE) . ' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
-        $objSelect->joinLeft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
-        $objSelect->join('globalInternalLinks', 'globalInternalLinks.linkedGlobalId = lP.globalId AND globalInternalLinks.globalId = ' . $this->core->dbh->quote($strElementId) . ' AND globalInternalLinks.version = ' . $this->core->dbh->quote($intVersion, Zend_Db::INT_TYPE) . ' AND globalInternalLinks.idFields = ' . $this->core->dbh->quote($intFieldId, Zend_Db::INT_TYPE) . ' AND globalInternalLinks.idLanguages = ' . $this->intLanguageId, array('sortPosition'));
-        $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('title'));
-        $objSelect->where('globals.id = (SELECT p.id FROM globals AS p WHERE globals.globalId = p.globalId ORDER BY p.version DESC LIMIT 1)');
-        $objSelect->order('globalInternalLinks.sortPosition ASC');
+        //if rootlevel is products, load globalLinks
+        if (!empty($intRootLevelId) && $intRootLevelId != $this->core->sysConfig->product->rootLevels->list->id && $intRootLevelId != $this->core->sysConfig->product->rootLevels->tree->id) {
+            $objSelect->from('globals', array('globals.id', 'relationId' => 'globals.globalId', 'globals.globalId', 'globals.version', 'globalProperties.idGlobalTypes', 'isStartItem' => 'globals.isStartGlobal', 'globals.isStartGlobal', 'globalProperties.idStatus'));
+            $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('idTemplates'));
+            $objSelect->joinLeft('urls', 'urls.relationId = globals.globalId AND urls.version = globals.version AND urls.idUrlTypes = '.$this->core->sysConfig->url_types->global.' AND urls.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
+            $objSelect->joinLeft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
+            $objSelect->join('globalInternalLinks', 'globalInternalLinks.linkedGlobalId = globals.globalId AND globalInternalLinks.globalId = '.$this->core->dbh->quote($strElementId).' AND globalInternalLinks.version = '.$this->core->dbh->quote($intVersion, Zend_Db::INT_TYPE).' AND globalInternalLinks.idFields = '.$this->core->dbh->quote($intFieldId, Zend_Db::INT_TYPE).' AND globalInternalLinks.idLanguages = '.$this->intLanguageId, array('sortPosition'));
+            $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('title'));
+            $objSelect->joinLeft('globalFiles', 'globalFiles.id = (SELECT iFl.id FROM globalFiles AS iFl WHERE iFl.globalId = globals.globalId AND iFl.version = globals.version AND iFl.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).' AND iFl.idFields IN (174, 5, 55) ORDER BY iFl.idFields DESC LIMIT 1)', array()); //FIXME
+            $objSelect->joinLeft('files', 'files.id = globalFiles.idFiles AND files.isImage = 1', array('filename', 'fileversion' => 'version', 'filepath' => 'path'));
+            $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('filetitle' => 'title'));
+            $objSelect->order('globalInternalLinks.sortPosition ASC');
+        } else {
+            $objSelect->from('globals', array('globals.id', 'relationId' => 'globals.globalId', 'globals.globalId', 'globals.version', 'globalProperties.idGlobalTypes', 'isStartItem' => 'globals.isStartGlobal', 'globals.isStartGlobal', 'globalProperties.idStatus'));
+            $objSelect->joinLeft('globalProperties', 'globalProperties.globalId = globals.globalId AND globalProperties.version = globals.version AND globalProperties.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array());
+            $objSelect->join('globalLinks', 'globalLinks.globalId = globals.globalId', array());
+            $objSelect->join(array('lP' => 'globals'), 'lP.id = globalLinks.idGlobals', array('lPId' => 'globalId'));
+            $objSelect->joinLeft('urls', 'urls.relationId = lP.globalId AND urls.version = lP.version AND urls.idUrlTypes = '.$this->core->sysConfig->url_types->global.' AND urls.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).' AND urls.isMain = 1 AND urls.idParent IS NULL', array('url'));
+            $objSelect->joinLeft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
+            $objSelect->join('globalInternalLinks', 'globalInternalLinks.linkedGlobalId = lP.globalId AND globalInternalLinks.globalId = '.$this->core->dbh->quote($strElementId).' AND globalInternalLinks.version = '.$this->core->dbh->quote($intVersion, Zend_Db::INT_TYPE).' AND globalInternalLinks.idFields = '.$this->core->dbh->quote($intFieldId, Zend_Db::INT_TYPE).' AND globalInternalLinks.idLanguages = '.$this->intLanguageId, array('sortPosition'));
+            $objSelect->join('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('title'));
+            $objSelect->joinLeft(array('iFiles' => 'global-DEFAULT_PRODUCT-1-InstanceFiles'), 'iFiles.id = (SELECT iFl.id FROM `global-DEFAULT_PRODUCT-1-InstanceFiles` AS iFl WHERE iFl.globalId = globals.globalId AND iFl.version = globals.version AND iFl.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).' AND iFl.idFields IN (174, 5, 55) ORDER BY iFl.idFields DESC LIMIT 1)', array()); //FIXME
+            $objSelect->joinLeft('files', 'files.id = iFiles.idFiles AND files.isImage = 1', array('filename', 'fileversion' => 'version', 'filepath' => 'path'));
+            $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('filetitle' => 'title'));
+            $objSelect->order('globalInternalLinks.sortPosition ASC');
+        }
 
         return $this->objGlobalInternalLinkTable->fetchAll($objSelect);
     }

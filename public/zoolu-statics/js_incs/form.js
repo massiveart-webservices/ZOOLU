@@ -818,7 +818,7 @@ Massiveart.Form = Class.create({
     /**
      * getAddInternalLinksOverlay
      */
-    getAddInternalLinksOverlay: function (areaId) {
+    getAddInternalLinksOverlay: function (areaId, idRootLevel) {
         $(this.updateOverlayContainer).innerHTML = '';
         myCore.putCenter('overlayGenContentWrapper');
         $('overlayGenContentWrapper').show();
@@ -832,9 +832,14 @@ Massiveart.Form = Class.create({
                 ajaxRequestUrl = '/zoolu/cms/overlay/internallink';
             }
 
+            var rootLevelId = $F('rootLevelId');
+            if (typeof (idRootLevel) != 'undefined' && idRootLevel != 0) {
+                rootLevelId = idRootLevel;
+            }
+
             new Ajax.Updater(this.updateOverlayContainer, ajaxRequestUrl, {
                 parameters: {
-                    rootLevelId: $F('rootLevelId'),
+                    rootLevelId: rootLevelId,
                     languageId: $F('languageId')
                 },
                 evalScripts: true,
@@ -900,7 +905,7 @@ Massiveart.Form = Class.create({
     /**
      * getAddTreeOverlay
      */
-    getAddTreeOverlay: function (areaId) {
+    getAddTreeOverlay: function (areaId, idRootLevel) {
         $(this.updateOverlayContainer).innerHTML = '';
         myCore.putCenter('overlayGenContentWrapper');
         $('overlayGenContentWrapper').show();
@@ -915,11 +920,16 @@ Massiveart.Form = Class.create({
 
             var intRootLevelGroupId = $('rootLevelGroupId') ? $F('rootLevelGroupId') : 0;
 
+            var rootLevelId = $F('rootLevelId');
+            if (typeof (idRootLevel) != 'undefined' && idRootLevel != 0) {
+                rootLevelId = idRootLevel;
+            }
+
             var fieldname = areaId.substring(areaId.indexOf('_') + 1);
             new Ajax.Updater(this.updateOverlayContainer, ajaxRequestUrl, {
                 parameters: {
                     portalId: myNavigation.rootLevelId,
-                    rootLevelId: $F('rootLevelId'),
+                    rootLevelId: rootLevelId,
                     rootLevelGroupId: intRootLevelGroupId,
                     rootLevelGroupKey: (($('rootLevelGroupKey' + intRootLevelGroupId)) ? $F('rootLevelGroupKey' + intRootLevelGroupId) : ''),
                     languageId: $F('languageId'),

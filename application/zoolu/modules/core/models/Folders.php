@@ -1331,21 +1331,21 @@ class Model_Folders extends ModelAbstract
             ->join('folderTitles', 'folderTitles.folderId = folders.folderId AND
                                       folderTitles.version = folders.version AND
                                       folderTitles.idLanguages = ' . $this->intLanguageId, array('folderTitle' => 'title'));
-        if ($intRootLevelGroupId == $this->core->sysConfig->root_level_groups->product) {
+        if ($intRootLevelId != $this->core->sysConfig->product->rootLevels->list->id && $intRootLevelId != $this->core->sysConfig->product->rootLevels->tree->id) {
+            $objSelect->join('globals', 'globals.idParent = folders.id AND
+                                         globals.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idGlobal' => 'id', 'globalId', 'isStartGlobal'));
+        } else {
             $objSelect->join('globals AS lP', 'lP.idParent = folders.id AND
-                                         lP.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idGlobal' => 'id', 'globalId', 'isStartGlobal'))
+                                               lP.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idGlobal' => 'id', 'globalId', 'isStartGlobal'))
                 ->join('globalLinks', 'globalLinks.idGlobals = lP.id', array())
                 ->join('globals', 'globals.globalId = globalLinks.globalId', array());
-        } else {
-            $objSelect->join('globals', 'globals.idParent = folders.id AND
-                                   globals.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idGlobal' => 'id', 'globalId', 'isStartGlobal'));
+
         }
         $objSelect->join('globalProperties', 'globalProperties.globalId = globals.globalId AND
-                                          globalProperties.version = globals.version AND
-                                          globalProperties.idLanguages = ' . $this->intLanguageId, array('globalStatus' => 'idStatus'))
+                                              globalProperties.version = globals.version AND
+                                              globalProperties.idLanguages = ' . $this->intLanguageId, array('globalStatus' => 'idStatus'))
             ->joinLeft('globalTitles', 'globalTitles.globalId = globals.globalId AND globalTitles.version = globals.version AND globalTitles.idLanguages = ' . $this->intLanguageId, array('globalTitle' => 'title'))
             ->where('folders.idRootLevels = ?', $intRootLevelId)
-            ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)')
             ->order('folders.lft')
             ->order('globals.isStartGlobal DESC')
             ->order('globals.sortPosition ASC')

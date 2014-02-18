@@ -1682,8 +1682,10 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             $objField = $objRegion->getField($strFieldName);
                             $objField->setGenericSetup($this->Setup());
                             $arrInstanceData = $objField->loadInstanceData($strType, $arrTypeProperties['Id'], $objRegion, $arrTypeProperties['Version']);
-                            foreach ($arrInstanceData as $intInstanceId => $arrInstanceDataRow) {
-                                $objRegion->getField($arrInstanceDataRow['name'])->setInstanceValue($intInstanceId, $arrInstanceDataRow['value']);
+                            if (count($arrInstanceData) > 0) {
+                                foreach ($arrInstanceData as $intInstanceId => $arrInstanceDataRow) {
+                                    $objRegion->getField($arrInstanceDataRow['name'])->setInstanceValue($intInstanceId, $arrInstanceDataRow['value']);
+                                }
                             }
                         }
                     }
