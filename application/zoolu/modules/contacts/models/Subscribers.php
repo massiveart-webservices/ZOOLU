@@ -311,7 +311,7 @@ class Model_Subscribers {
         $objSelect = $this->getSubscriberTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('subscribers', array())
+        $objSelect->from('subscribers')
                 ->join('genericForms', 'genericForms.id = subscribers.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version', 'genericFormType' => 'idGenericFormTypes'))
                 ->where('subscribers.id = ?', $intElementId);
 
@@ -327,9 +327,23 @@ class Model_Subscribers {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByHash(' . $hash . ')');
         $objSelect = $this->getSubscriberTable()->select();
         $objSelect->setIntegrityCheck(false);
-        $objSelect->from('subscribers', array())
+        $objSelect->from('subscribers')
                   ->join('newsletterUnsubscribeHashes', 'newsletterUnsubscribeHashes.idSubscriber = subscribers.id', array())
                   ->where('newsletterUnsubscribeHashes.hash = ?', array($hash));
+        return $this->getSubscriberTable()->fetchAll($objSelect);
+    }
+    
+    /**
+     * loadByOptinkey
+     * @param String $optinkey
+     * @author Raphael Stocker <raphael.stocker@massiveart.com>
+     */
+    public function loadByOptinkey($optinkey) {
+        $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByOptinkey(' . $optinkey . ')');
+        $objSelect = $this->getSubscriberTable()->select();
+        $objSelect->setIntegrityCheck(false);
+        $objSelect->from('subscribers')
+                  ->where('subscribers.optinkey = ?', array($optinkey));
         return $this->getSubscriberTable()->fetchAll($objSelect);
     }
 
@@ -371,9 +385,9 @@ class Model_Subscribers {
 
         return $this->getSubscriberTable()->update($arrData, $strWhere);
     }
-
+    
     /**
-     * update interests
+     * updateInterests
      * @param integer $intElementId
      * @param array $arrInterests
      * @author Thomas Schedler <tsh@massiveart.com>

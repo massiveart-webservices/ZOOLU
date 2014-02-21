@@ -89,9 +89,8 @@ class Global_OverlayController extends AuthControllerAction
         $strTmpElementIds = trim($strElementIds, '[]');
         $arrElementIds = explode('][', $strTmpElementIds);
 
-
         $this->loadGlobalTreeForRootLevel($intRootLevelId, $intRootLevelGroupId);
-        $this->view->assign('overlaytitle', $this->core->translate->_('Select_product'));
+        $this->view->assign('overlaytitle', $this->core->translate->_('Assign_internal_links'));
         $this->view->assign('itemAction', $strItemAction);
         $this->view->assign('elementIds', $arrElementIds);
     }
@@ -112,7 +111,7 @@ class Global_OverlayController extends AuthControllerAction
         $objGlobals = $this->getModelGlobals()->loadGlobalByParentFolder($intFolderId);
 
         $this->view->assign('globals', $objGlobals);
-        $this->view->assign('globalIds', $arrPageIds);
+        $this->view->assign('globalIds', $arrGlobalIds);
     }
 
     /**

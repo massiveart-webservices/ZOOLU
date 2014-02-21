@@ -66,6 +66,12 @@ class Form_Helper_FormInternalLinks extends Zend_View_Helper_FormElement
             $disabled = ' disabled="disabled"';
         }
 
+        $targetRootLevel = 0;
+        if (array_key_exists('fieldOptions', $attribs)) {
+            $fieldOptions = json_decode($attribs['fieldOptions']);
+            $targetRootLevel = $fieldOptions->targetRootLevel;
+        }
+
         $strItemInternalLinks = '';
         if (isset($element->objItemInternalLinks)) {
             foreach ($element->objItemInternalLinks as $objItemInternalLink) {
@@ -95,7 +101,7 @@ class Form_Helper_FormInternalLinks extends Zend_View_Helper_FormElement
          * build the element
          */
         $strOutput = '<div class="internallinkswrapper">
-                    <div class="top">' . $core->translate->_('Add_internal_links') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddTreeOverlay(\'divInternalLinksContainer_' . $this->view->escape($id) . '\'); return false;"/></div>
+                    <div class="top">' . $core->translate->_('Add_internal_links') . ': <img src="/zoolu-statics/images/icons/icon_addmedia.png" width="16" height="16" onclick="myForm.getAddTreeOverlay(\'divInternalLinksContainer_' . $this->view->escape($id) . '\', ' . $targetRootLevel .  '); return false;"/></div>
                     <div id="divInternalLinksContainer_' . $this->view->escape($id) . '"' . $disabled . ' class="' . $attribs['class'] . '">
                     ' . $strItemInternalLinks . '
                     <div id="divClear_' . $this->view->escape($name) . '" class="clear"></div>

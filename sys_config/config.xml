@@ -227,6 +227,7 @@
 
         <!-- Subscriber  -->
         <subscriber>
+            <optInStrategy>single</optInStrategy> <!-- single | double -->
             <default>
                 <rootLevelId>48</rootLevelId>
                 <genericFormId>36</genericFormId>

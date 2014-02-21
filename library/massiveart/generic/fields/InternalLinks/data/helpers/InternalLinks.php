@@ -50,14 +50,14 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract
     /**
      * @var Model_Pages|Model_Products
      */
-    private $objModel;
+    protected $objModel;
 
     /**
      * @var Model_GenericData
      */
     protected $objModelGenericData;
 
-    private $strType;
+    protected $strType;
 
     /**
      * save()
@@ -102,7 +102,12 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract
 
             $this->getModel();
 
-            $objItemInternalLinksData = $this->objModel->loadInternalLinks($strElementId, $intVersion, $this->objElement->id);
+            $intRootLevelId = 0;
+            if ($this->objElement->fieldOptions) {
+                $intRootLevelId = json_decode($this->objElement->fieldOptions)->targetRootLevel;
+            }
+
+            $objItemInternalLinksData = $this->objModel->loadInternalLinks($strElementId, $intVersion, $this->objElement->id, $intRootLevelId);
 
             if (count($objItemInternalLinksData) > 0) {
                 $this->objElement->objItemInternalLinks = $objItemInternalLinksData;
