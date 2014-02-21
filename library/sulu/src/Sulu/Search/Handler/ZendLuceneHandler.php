@@ -380,7 +380,6 @@ class ZendLuceneHandler extends AbstractHandler implements HandlerInterface
                             \Zend_Search_Lucene_Field::text($key, $data['value'], $this->config->getValue('encoding'))
                         );
                         break;
-                    case Search::FIELD_TYPE_SUMMARY_INDEXED:
                     case Search::FIELD_TYPE_UNSTORED: // for searching, not for redisplay
                         $doc->addField(
                             \Zend_Search_Lucene_Field::unStored(
