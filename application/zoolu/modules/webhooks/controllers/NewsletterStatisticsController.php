@@ -82,8 +82,12 @@ class Webhooks_NewsletterStatisticsController extends Zend_Controller_Action
      * trackAction
      */
     public function trackAction() {
-        $this->_helper->viewRenderer->setNoRender();
-        $this->core->logger->debug(var_export($this->getRequest()->getParams(), true));
-        $this->objCommandChain->runCommand('newsletter:statistics:track', array('request' => $this->getRequest()->getParams()));
+        try {
+            $this->_helper->viewRenderer->setNoRender();
+            $this->core->logger->debug(var_export($this->getRequest()->getParams(), true));
+            $this->objCommandChain->runCommand('newsletter:statistics:track', array('request' => $this->getRequest()->getParams()));
+        } catch(Exception $e) {
+            $this->core->logger->error($e);
+        }
     }
 }
