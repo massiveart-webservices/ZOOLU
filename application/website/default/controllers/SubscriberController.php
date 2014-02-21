@@ -122,7 +122,6 @@ class SubscriberController extends WebControllerAction {
         }
 
         Zend_Registry::set('SubscriberHelper', $objSubscriberHelper);
-
         Zend_Registry::set('TemplateCss', '');
         Zend_Registry::set('TemplateJs', '');
     }
@@ -146,103 +145,67 @@ class SubscriberController extends WebControllerAction {
         $objSubscriberHelper = Zend_Registry::get('SubscriberHelper');
         $objSubscriberHelper->setMetaTitle($this->translate->_('Newsletter_subscribe'), false);
         $this->view->success = false;
+        $this->view->successMsg = '';
         
         foreach ($this->getRequest()->getParams() as $key => $val) {
             $objSubscriberHelper->setFormData($key, $val);
         }
-
+        
+        //check if request is post or a opt in key is transmitted
         if ($this->getRequest()->isPost() || $this->getRequest()->getParam('key', '') != '') {
-
-            // Email validation
-            $email = $this->getRequest()->getParam('email', '');
-            $objMailValidator = new Zend_Validate_EmailAddress();
-            $validEmail = $objMailValidator->isValid($email);
-            if (!$validEmail) {
-                $objSubscriberHelper->setFormError('email', $this->translate->_('please_insert_valid_emailaddress'));
-            }
-            $objSubscribersEmail = $this->getModelSubscribers()->loadByEmail($email);
-            if (count($objSubscribersEmail) > 0) {
-                $validEmail = false;
-                $objSubscriberHelper->setFormError('email', $this->translate->_('emailaddress_already_used'));
-            }
-
-            // Name validation
-            $salutation = $this->getRequest()->getParam('salutation', 0);
-            if ($salutation > 0) {
-                $validSalutation = true;
-            } else {
-                $validSalutation = false;
-                $objSubscriberHelper->setFormError('salutation', $this->translate->_('Salutation_mandatory'));
-            }
-
-            $title = $this->getRequest()->getParam('title', '');
-
-            $fname = $this->getRequest()->getParam('fname', '');
-            if ($fname != '') {
-                $validFname = true;
-            } else {
-                $validFname = false;
-                $objSubscriberHelper->setFormError('fname', $this->translate->_('Fname_mandatory'));
-            }
-
-            $sname = $this->getRequest()->getParam('sname', '');
-            if ($sname != '') {
-                $validSname = true;
-            } else {
-                $validSname = false;
-                $objSubscriberHelper->setFormError('sname', $this->translate->_('Sname_mandatory'));
-            }
-
-            // Interesgroup validation
-            $interestgroups = $this->getRequest()->getParam('interestgroups', array());
-            if (count($interestgroups) > 0) {
-                $validInterestgroups = true;
-            } else {
-                $validInterestgroups = false;
-                $objSubscriberHelper->setFormData('interestgroups', $interestgroups);
-            }
-
-            $valid = ($validEmail && $validSalutation && $validFname && $validSname && $validInterestgroups);
-            if ($valid) {
-                
-                // language evaluation
-                $languages = array();
-                foreach ($this->core->sysConfig->contact->language_mappings->language as $language) {
-                    if ($language->id == $this->core->intLanguageId) {
-                        $languages[] = $language->category;
-                    }
-                    break;
+            $formData['email'] = $this->getRequest()->getParam('email', '');
+            $formData['salutation'] = $this->getRequest()->getParam('salutation', 0);
+            $formData['title'] = $this->getRequest()->getParam('title', '');
+            $formData['fname'] = $this->getRequest()->getParam('fname', '');
+            $formData['sname'] = $this->getRequest()->getParam('sname', '');
+            $formData['interestgroups'] = $this->getRequest()->getParam('interestgroups', array());
+            // portals evaluation
+            $formData['portals'] = array($this->objTheme->idRootLevels);    
+            // language evaluation
+            $formData['languages'] = array();
+            foreach ($this->core->sysConfig->contact->language_mappings->language as $language) {
+                if ($language->id == $this->core->intLanguageId) {
+                    $formData['languages'][] = $language->category;
                 }
-                
-                // portal evaluation
-                $portals = array($this->objTheme->idRootLevels);
-                
-                $this->core->dbh->beginTransaction();
-                
-                // add subscriber
-                $data = array(
-                    'idRootLevels'      =>  self::SUBSCRIBER_ROOTLEVEL_ID,
-                    'idGenericForms'    =>  self::SUBSCRIBER_GENERICFORM_ID,
-                    'salutation'        =>  $salutation,
-                    'title'             =>  $title,
-                    'fname'             =>  $fname,
-                    'sname'             =>  $sname,
-                    'email'             =>  $email,
-                    'subscribed'        =>  self::SUBSCRIBED_FLAG_ID,
-                    'created'           =>  date('Y-m-d H:i:s')
-                );
-                $id = $this->getModelSubscribers()->add($data);
-                
-                // add interests
-                $interests = array(
-                    'interest_group' => $interestgroups,
-                    'portal'         => $portals,
-                    'language'       => $languages
-                );
-                $this->objModelSubscribers->updateInterests($id, $interests);
-                $this->core->dbh->commit();
-                
-                $this->view->success = true;
+                break;
+            }
+            
+            $valid = $this->validateFormData($formData, $objSubscriberHelper);
+            if ($valid) {
+                $subscribed = false;
+                $key = '';
+                $optInStrategy = $this->core->sysConfig->subscriber->optInStrategy;
+                if ($this->validateEmail($formData['email'], $objSubscriberHelper)) {
+                    $key = $this->addSubscriber($formData, $optInStrategy);
+                    $subscribed = true;
+                } else {
+                    // reactivate if subscriber exists but was unsubscribed
+                    $objInactiveSubscriber = $this->getInactiveSubscriber($formData['email']);
+                    if ($objInactiveSubscriber != null) {
+                        $key = $this->reactivateSubscriber($formData, $objInactiveSubscriber, $optInStrategy);
+                        $subscribed = true;
+                    }
+                }
+                if ($subscribed) {
+                    if ($optInStrategy == 'double') {
+                        if ($key != '') {
+                            //send mail
+                            $this->sendDoubleOptInMail($formData, $key, $optInStrategy);
+                            $this->view->success = true;
+                            $this->view->successMsg = $this->translate->_('subscribe_doubleoptin_information');
+                        }
+                    } else if ($optInStrategy == 'single') {
+                        $this->view->success = true;
+                        $this->view->successMsg = $this->translate->_('subscribe_confirmation');
+                    }
+                }
+            } else {
+                // try to activate subscriber if a key was set
+                $key = $this->getRequest()->getParam('key', '');
+                if ($key != '' && $this->activateSubscriber($key)) {
+                    $this->view->success = true;    
+                    $this->view->successMsg = $this->translate->_('subscribe_confirmation');
+                }
             }
         }
 
@@ -252,6 +215,179 @@ class SubscriberController extends WebControllerAction {
 
         $salutationsData = $this->getModelCategories()->loadCategoryTree(self::SALUTATIONS_ID);
         $this->view->salutations = $salutationsData;
+    }
+    
+    /*
+     * validateEmail
+     */
+    private function validateEmail($email, $objSubscriberHelper) {
+        // Email validation
+        $objMailValidator = new Zend_Validate_EmailAddress();
+        $validEmail = $objMailValidator->isValid($email);
+        if (!$validEmail) {
+            $objSubscriberHelper->setFormError('email', $this->translate->_('please_insert_valid_emailaddress'));
+        }
+        $objSubscribersEmail = $this->getModelSubscribers()->loadByEmail($email);
+        if (count($objSubscribersEmail) > 0) {
+            $validEmail = false;
+            $objSubscriberHelper->setFormError('email', $this->translate->_('emailaddress_already_used'));
+        }
+        return $validEmail;
+    }
+    
+    /*
+     * validateFormData
+     */
+    private function validateFormData($formData, $objSubscriberHelper) {
+
+        // Name validation
+        if ($formData['salutation'] > 0) {
+            $validSalutation = true;
+        } else {
+            $validSalutation = false;
+            $objSubscriberHelper->setFormError('salutation', $this->translate->_('Salutation_mandatory'));
+        }
+
+        if ($formData['fname'] != '') {
+            $validFname = true;
+        } else {
+            $validFname = false;
+            $objSubscriberHelper->setFormError('fname', $this->translate->_('Fname_mandatory'));
+        }
+
+        if ($formData['sname'] != '') {
+            $validSname = true;
+        } else {
+            $validSname = false;
+            $objSubscriberHelper->setFormError('sname', $this->translate->_('Sname_mandatory'));
+        }
+
+        // Interesgroup validation
+        if (count($formData['interestgroups']) > 0) {
+            $validInterestgroups = true;
+        } else {
+            $validInterestgroups = false;
+            $objSubscriberHelper->setFormData('interestgroups', $formData['interestgroups']);
+        }
+
+        $valid = ($validSalutation && $validFname && $validSname && $validInterestgroups);
+        return $valid;
+    }
+    
+    /**
+     * getInactiveSubscriber
+     * return checks if subscriber already was registrated and unsubscribed later and return id of subscriber
+     */
+    private function getInactiveSubscriber($email) {
+        $objSubscribers = $this->getModelSubscribers()->loadByEmail($email);
+        if (count($objSubscribers) == 1) {
+            $objSubscriber = $objSubscribers->current();
+            if ($objSubscriber->subscribed != self::SUBSCRIBED_FLAG_ID) {
+                return $objSubscriber;
+            } else {
+                return null;
+            }
+        }
+    }
+    
+    /**
+     * reactivateSubscriber
+     * @return Sting optInKey;
+     */
+    private function reactivateSubscriber($formData, $objInactiveSubscriber, $optInStrategy) {
+        $optInKey  = '';
+        $subscribed = '';
+        if ($optInStrategy == 'single') {
+            $subscribed = self::SUBSCRIBED_FLAG_ID;
+        }
+        if ($optInStrategy == 'double') {
+            $optInKey  = md5(uniqid(rand(), true));
+        }
+        
+        $this->core->dbh->beginTransaction();
+        // add subscriber
+        $data = array(
+            'salutation'        =>  $formData['salutation'],
+            'title'             =>  $formData['title'],
+            'fname'             =>  $formData['fname'],
+            'sname'             =>  $formData['sname'],
+            'email'             =>  $formData['email'],
+            'subscribed'        =>  $subscribed,
+            'reactivated'       =>  date('Y-m-d H:i:s'),
+            'optinkey'          =>  $optInKey,
+        );
+        $this->getModelSubscribers()->update($objInactiveSubscriber->id, $data);
+
+        // add interests
+        $interests = array(
+            'interest_group' => $formData['interestgroups'],
+            'portal'         => $formData['portals'],
+            'language'       => $formData['languages']
+        );
+        $this->objModelSubscribers->updateInterests($objInactiveSubscriber->id, $interests);
+        $this->core->dbh->commit();        
+        return $optInKey;
+    }
+    
+    /**
+     * activateSubscriber
+     */
+    private function activateSubscriber($key) {
+        $objSubscribers = $this->getModelSubscribers()->loadByOptinkey($key);
+        if (count($objSubscribers) == 1) {
+            $objSubscriber = $objSubscribers->current();
+            $data = array(
+                'subscribed' => self::SUBSCRIBED_FLAG_ID,
+                'optInKey'   => ''
+            );
+            $this->getModelSubscribers()->update($objSubscriber->id, $data);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * addSubscriber
+     * @return Sting $optInStrategy;
+     */
+    private function addSubscriber($formData, $optInStrategy) {
+        $optInKey  = '';
+        $subscribed = '';
+        if ($optInStrategy == 'single') {
+            $subscribed = self::SUBSCRIBED_FLAG_ID;
+        }
+        if ($optInStrategy == 'double') {
+            $optInKey  = md5(uniqid(rand(), true));
+        }
+        
+        $this->core->dbh->beginTransaction();
+        // add subscriber
+        $data = array(
+            'idUsers'           =>  $this->core->sysConfig->subscriber->default->userId,
+            'creator'           =>  $this->core->sysConfig->subscriber->default->userId,
+            'idRootLevels'      =>  self::SUBSCRIBER_ROOTLEVEL_ID,
+            'idGenericForms'    =>  self::SUBSCRIBER_GENERICFORM_ID,
+            'salutation'        =>  $formData['salutation'],
+            'title'             =>  $formData['title'],
+            'fname'             =>  $formData['fname'],
+            'sname'             =>  $formData['sname'],
+            'email'             =>  $formData['email'],
+            'subscribed'        =>  $subscribed,
+            'created'           =>  date('Y-m-d H:i:s'),
+            'optinkey'          =>  $optInKey
+        );
+        $id = $this->getModelSubscribers()->add($data);
+
+        // add interests
+        $interests = array(
+            'interest_group' => $formData['interestgroups'],
+            'portal'         => $formData['portals'],
+            'language'       => $formData['languages']
+        );
+        $this->objModelSubscribers->updateInterests($id, $interests);
+        $this->core->dbh->commit();        
+        return $optInKey;
     }
 
     /**
@@ -296,6 +432,54 @@ class SubscriberController extends WebControllerAction {
                     $this->view->nid = $newsletterId;
                 }
             }
+        }
+    }
+    
+    /**
+     * sendDoubleOptInMail
+     */
+    private function sendDoubleOptInMail($formData, $key, $optInStrategy) {
+        $objMail = new Zend_Mail('utf-8');
+
+        $objTransport = null;
+        if (!empty($this->core->config->mail->params->host)) {
+            // config for SMTP with auth
+            $arrConfig = array('auth' => 'login',
+                'username' => $this->core->config->mail->params->username,
+                'password' => $this->core->config->mail->params->password);
+
+            // smtp
+            $objTransport = new Zend_Mail_Transport_Smtp($this->core->config->mail->params->host, $arrConfig);
+        }
+
+        // set mail subject
+        $objMail->setSubject($this->translate->_('Subscriber_' . $optInStrategy . 'optin_subject'));
+
+        $strUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/subscribe?key=' . $key;
+
+        $objView = new Zend_View();
+        $objView->setScriptPath(GLOBAL_ROOT_PATH.'public/website/themes/'.$this->getTheme()->path.'/scripts/');
+        $objView->url = $strUrl;
+        $objView->translate = $this->translate;
+        $strBody = $objView->render('subscriber/mail/' . $optInStrategy . 'OptIn.phtml');
+
+        // set body
+        $objMail->setBodyHtml($strBody);
+
+        // set mail from address
+        $objMail->setFrom($this->core->config->mail->from->address, $this->core->config->mail->from->name);
+
+        // add to address
+        $objMail->addTo($formData['email'], $formData['fname'] . ' ' . $formData['sname']);
+
+        //set header for sending mail
+        $objMail->addHeader('Sender', $this->core->config->mail->params->username);
+
+        // send mail now
+        if ($this->core->config->mail->transport == 'smtp') {
+            $objMail->send($objTransport);
+        } else {
+            $objMail->send();
         }
     }
 

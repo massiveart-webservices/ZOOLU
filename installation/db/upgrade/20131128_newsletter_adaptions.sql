@@ -122,3 +122,6 @@ INSERT INTO `regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL
 ALTER TABLE `newsletterStatistics` ENGINE = InnoDB;
 
 
+ALTER TABLE `subscribers` ADD `reactivated` TIMESTAMP NULL DEFAULT NULL AFTER `changed` ;
+
+ALTER TABLE `subscribers` ADD `optinkey` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `reactivated` 

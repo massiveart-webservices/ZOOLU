@@ -31,7 +31,7 @@
  */
 
 /**
- * SubscriberController
+ * SubscriberHelper
  *
  * Version History (please keep backward compatible):
  * 1.0, 2012-10-09: Daniel Rotter
@@ -47,7 +47,7 @@ class SubscriberHelper
      */
     protected $core;
     private $translate;
-    private $interesGroups;
+    private $interestGroups;
     
     private $formErrors = array();
     private $formDatas = array();
@@ -113,7 +113,7 @@ class SubscriberHelper
      * setInterestGroup
      */
     public function setInterestGroup($interestGroups) {
-        $this->interesGroups = $interestGroups;
+        $this->interestGroups = $interestGroups;
     }
     
     public function setFormError($field, $error) {
