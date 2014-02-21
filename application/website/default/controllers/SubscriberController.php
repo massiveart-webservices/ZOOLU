@@ -190,7 +190,7 @@ class SubscriberController extends WebControllerAction {
                     if ($optInStrategy == 'double') {
                         if ($key != '') {
                             //send mail
-                            $this->sendDoubleOptInMail($formData, $key, $optInStrategy);
+                            $this->sendOptInMail($formData, $key, $optInStrategy);
                             $this->view->success = true;
                             $this->view->successMsg = $this->translate->_('subscribe_doubleoptin_information');
                         }
@@ -438,7 +438,7 @@ class SubscriberController extends WebControllerAction {
     /**
      * sendDoubleOptInMail
      */
-    private function sendDoubleOptInMail($formData, $key, $optInStrategy) {
+    private function sendOptInMail($formData, $key, $optInStrategy) {
         $objMail = new Zend_Mail('utf-8');
 
         $objTransport = null;
