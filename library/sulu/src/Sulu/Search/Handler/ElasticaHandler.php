@@ -233,7 +233,6 @@ class ElasticaHandler extends AbstractHandler implements HandlerInterface
                         $addToNodeSummary = false;
                         // TODO binary handling
                         break;
-                    case Search::FIELD_TYPE_SUMMARY_INDEXED:
                     case Search::FIELD_TYPE_UNSTORED: // for searching, not for redisplay
                         // only index within the summary field
                         break;

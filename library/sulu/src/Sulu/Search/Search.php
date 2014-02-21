@@ -31,7 +31,6 @@ class Search
     const FIELD_TYPE_BINARY = 4;
     const FIELD_TYPE_TEXT = 5;
     const FIELD_TYPE_UNSTORED = 6;
-    const FIELD_TYPE_SUMMARY_INDEXED = 7;
 
     /**
      * constant for search field node summary
