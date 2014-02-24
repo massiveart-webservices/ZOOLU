@@ -87,6 +87,11 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     protected $objModelRootLevels;
     
     /**
+     * int $languageId
+     */
+    protected $languageId;
+    
+    /**
      * rootLevelFilterId
      */
     const ROOT_LEVEL_FILTER_ID = '67';
@@ -110,6 +115,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
             $objFilter= $args['filter'];
             $this->objFilter = $objFilter;
             $this->setCampaignId($objFilter->id);
+            $this->languageId = $objNewsletter->languageId;
         }
         $this->loadInformation();
         $this->loadStatistics();
@@ -234,7 +240,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         $this->core->logger->debug('Getting all subscribers of campaign with id: ' . $this->campaignId);
         // Get campaign subscribers
         $modelSubscribers = $this->getModelSubscribers();
-        $modelSubscribers->setLanguageId(1);
+        $modelSubscribers->setLanguageId($this->languageId);
         return $this->recipients = $modelSubscribers->loadByRootLevelFilter($this->objFilter->idRootLevels, $this->campaignId, '', 'ASC', 'sname', false, true, true);
     }
 

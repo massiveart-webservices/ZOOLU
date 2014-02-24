@@ -124,6 +124,16 @@ class Newsletters_NewsletterController extends AuthControllerAction
      */
     private function renderNewsletter($objNewsletter)
     {
+        //set up newsletter language not using zoolu language
+        $languageCode = strtolower($objNewsletter->languageCode);
+        if (file_exists(GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo')) {
+            $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo');
+        } else {
+            $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->core->sysConfig->languages->default->code . '.mo');
+        }
+        $this->view->translate = $translate;
+        $this->view->languageCode = $languageCode;
+        
         $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
         
         //Load Template
@@ -131,16 +141,7 @@ class Newsletters_NewsletterController extends AuthControllerAction
 
         //Assign the values to the template
         $this->view->assign('setup', $objGenericData->Setup());
-        
-        // set up translate obj
-        $languageCode = $objGenericData->Setup()->getField('language')->getValue();
-        if (file_exists(GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo')) {
-            $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo');
-        } else {
-            $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->core->sysConfig->languages->default->code . '.mo');
-        }
-        $this->view->translate = $translate;
-        
+
         if (count($objTemplate) > 0) {
             $this->view->assign('template_file', $objTemplate->current()->filename);
         }
