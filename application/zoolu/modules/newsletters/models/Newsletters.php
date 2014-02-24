@@ -82,6 +82,8 @@ class Model_Newsletters {
         $objSelect->setIntegrityCheck(false);
 
         $objSelect->from('newsletters', array('id', 'idRootLevels', 'idRootLevelFilters', 'idGenericForms', 'idTemplates', 'title', 'remoteId', 'sent', 'baseportal', 'idUsers', 'delivered', 'creator', 'created', 'changed'))
+                ->join(array('ni' => 'newsletter-DEFAULT_NEWSLETTER-1-Instances'), 'ni.idNewsletters = newsletters.id', array('languageCode' => 'language'))
+                ->join('languages', 'languages.languageCode = ni.language', array('languageId' => 'id'))
                 ->joinLeft(array('uc' => 'users'), 'uc.id = newsletters.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
                 ->joinLeft('genericForms', 'genericForms.id = newsletters.idGenericForms', array('genericFormId', 'version', 'idGenericFormTypes'))
                 ->joinLeft('rootLevelFilters', 'rootLevelFilters.id = newsletters.idRootLevelFilters', array('filtertitle'))

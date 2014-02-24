@@ -80,10 +80,16 @@ class NewsletterController extends WebControllerAction {
         $objNewsletters = $this->getModelNewsletters()->load($intNewsletterId);
         if (count($objNewsletters) > 0) {
             $objNewsletter = $objNewsletters->current();
-            $this->renderNewsletter($objNewsletter);
             
-            $this->setTranslate();
-            $this->view->translate = $this->translate;
+            //set up newsletter language not using language in core obj
+            $languageCode = strtolower($objNewsletter->languageCode);
+            if (file_exists(GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo')) {
+                $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $languageCode . '.mo');
+            } else {
+                $translate = new HtmlTranslate('gettext', GLOBAL_ROOT_PATH . 'application/website/default/language/website-' . $this->core->sysConfig->languages->default->code . '.mo');
+            }
+            
+            $this->renderNewsletter($objNewsletter);
             $this->view->isPreview = true;
             
             $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/newsletter/' . $this->core->sysConfig->newsletter->theme);

@@ -58,6 +58,11 @@ class NewsletterHelper {
     protected $objTranslate;
     
     /**
+     * @var String
+     */
+    protected $languageCode;
+    
+    /**
      * @var Model_RootLevels
      */
     protected $objModelRootLevels;
@@ -83,10 +88,9 @@ class NewsletterHelper {
         $baseportalJSON = $this->objGenericSetup->getField('baseportal')->getValue();
         $baseportal = json_decode($baseportalJSON);
         $rootLevelId = $baseportal->rootlevel;
-        $language = strtolower($baseportal->language);
         
         $objUrl = $this->getModelRootLevels()->loadRootLevelUrl($rootLevelId);
-        $previewLink = '<a href="http://' . $objUrl->url . '/zoolu-website/newsletter/preview/?id=' . $this->objGenericSetup->getElementId() . '&salutation=*|SALUTATION|*&fname=*|FNAME|*&lname=*|LNAME|*&unsub=*|UNSUB|*&language=' . $language . '">'
+        $previewLink = '<a href="http://' . $objUrl->url . '/zoolu-website/newsletter/preview/?id=' . $this->objGenericSetup->getElementId() . '&salutation=*|SALUTATION|*&fname=*|FNAME|*&lname=*|LNAME|*&unsub=*|UNSUB|*&language=' . $this->languageCode . '">'
                         . $this->objTranslate->_('Newsletter_preview') .
                        '</a>';
         return $previewLink;
@@ -247,6 +251,14 @@ class NewsletterHelper {
      */
     public function setTranslate(Zend_Translate $objTranslate){
         $this->objTranslate = $objTranslate;
+    }
+    
+    /**
+     * setLanguageCode
+     * @param String languageCode
+     */
+    public function setLanguageCode($languageCode){
+        $this->languageCode = $languageCode;
     }
     
     /**
