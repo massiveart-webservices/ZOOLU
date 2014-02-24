@@ -242,7 +242,7 @@ class Model_Subscribers {
         
         if ($filterReachable) {
             $objSelect->where('s.subscribed = ?', $this->core->sysConfig->contact->subscribed);
-            $objSelect->where('s.bounced  != ?', $this->core->sysConfig->contact->bounce_mapping->hard);
+            $objSelect->where('s.bounced != \''. $this->core->sysConfig->contact->bounce_mapping->hard . '\' OR s.bounced IS NULL');
         }
         
         $objSelect->order($strOrderColumn . ' ' . strtoupper($strSortOrder));
