@@ -145,8 +145,7 @@ class NavigationHelper
                                     <div id="divRootLevelTitle_' . $objNavigation->getId() . '" class="itemtitle">';
 
                         if ($objNavigation->getTypeId() == $this->core->sysConfig->root_level_types->subscribers) {
-                            $strOutput .= '
-                                        <div class="gear" onclick="myNavigation.getRootLevelActions(' . $objNavigation->getId() . ',' . $objNavigation->getTypeId() . ', this); return false;"></div>';
+                            $strOutput .= '<div class="gear" onclick="myNavigation.getRootLevelActions(' . $objNavigation->getId() . ',' . $objNavigation->getTypeId() . ', this); return false;"></div>';
                         }
 
                         $strOutput .= htmlentities($objNavigation->getTitle(), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '
