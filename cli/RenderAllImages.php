@@ -44,8 +44,19 @@ try {
     $objImage->setPublicFilePath(GLOBAL_ROOT_PATH . $core->sysConfig->upload->images->path->local->public);
     $objImage->setDefaultImageSizes($core->sysConfig->upload->images->default_sizes->default_size->toArray());
 
+    $objConsoleOpts = new Zend_Console_Getopt(
+        array(
+             'size=s'     => 'Image size folder'
+        )
+    );
+
+    $size = isset($objConsoleOpts->size) ? $objConsoleOpts->size : null;
+    
     $core->logger->debug('start render all images ...');
-    $objImage->renderAllImages();
+    if ($size != null) {
+        $core->logger->debug('for image size ' . $size);
+    }
+    $objImage->renderAllImages($size, true);
     $core->logger->debug('... finished render all images!');
 
 } catch (Exception $exc) {
