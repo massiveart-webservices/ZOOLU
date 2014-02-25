@@ -177,7 +177,7 @@ class Image extends File
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    public function renderAllImages()
+    public function renderAllImages($size = null, $debug = false)
     {
         $this->core->logger->debug('massiveart.images.Image->renderAllImages()');
         try {
@@ -194,7 +194,6 @@ class Image extends File
 
             if (count($objImageFiles) > 0) {
                 foreach ($objImageFiles as $objImageFile) {
-
                     $this->setSegmentPath($objImageFile->path);
                     $srcFile = $this->getUploadPath() . $objImageFile->filename;
 
@@ -213,26 +212,32 @@ class Image extends File
                          * render default image sizes
                          */
                         foreach ($this->arrDefaultImageSizes as $arrImageSize) {
-                            $objImageAdapter->setSource($srcFile);
-                            $objImageAdapter->setDestination($this->getPublicFilePath() . $arrImageSize['folder'] . '/' . $objImageFile->filename);
+                            if ($size === null || $size == $arrImageSize['folder']) {
+                                if ($debug) {
+                                    echo $objImageFile->filename . " => " . $arrImageSize['folder'] . "\n";
+                                }
 
-                            $this->checkPublicFilePath($arrImageSize['folder'] . '/');
+                                $objImageAdapter->setSource($srcFile);
+                                $objImageAdapter->setDestination($this->getPublicFilePath() . $arrImageSize['folder'] . '/' . $objImageFile->filename);
 
-                            if (array_key_exists('actions', $arrImageSize) && is_array($arrImageSize['actions'])) {
-                                if (array_key_exists('method', $arrImageSize['actions']['action'])) {
-                                    $arrAction = $arrImageSize['actions']['action'];
-                                    $strMethode = $arrAction['method'];
-                                    $arrParams = (array_key_exists('params', $arrAction)) ? explode(',', $arrAction['params']) : array();
-                                    if (method_exists($objImageAdapter, $strMethode)) {
-                                        call_user_func_array(array($objImageAdapter, $strMethode), $arrParams);
-                                    }
-                                } else {
-                                    foreach ($arrImageSize['actions']['action'] as $arrAction) {
-                                        if (array_key_exists('method', $arrAction)) {
-                                            $strMethode = $arrAction['method'];
-                                            $arrParams = (array_key_exists('params', $arrAction)) ? explode(',', $arrAction['params']) : array();
-                                            if (method_exists($objImageAdapter, $strMethode)) {
-                                                call_user_func_array(array($objImageAdapter, $strMethode), $arrParams);
+                                $this->checkPublicFilePath($arrImageSize['folder'] . '/');
+
+                                if (array_key_exists('actions', $arrImageSize) && is_array($arrImageSize['actions'])) {
+                                    if (array_key_exists('method', $arrImageSize['actions']['action'])) {
+                                        $arrAction = $arrImageSize['actions']['action'];
+                                        $strMethode = $arrAction['method'];
+                                        $arrParams = (array_key_exists('params', $arrAction)) ? explode(',', $arrAction['params']) : array();
+                                        if (method_exists($objImageAdapter, $strMethode)) {
+                                            call_user_func_array(array($objImageAdapter, $strMethode), $arrParams);
+                                        }
+                                    } else {
+                                        foreach ($arrImageSize['actions']['action'] as $arrAction) {
+                                            if (array_key_exists('method', $arrAction)) {
+                                                $strMethode = $arrAction['method'];
+                                                $arrParams = (array_key_exists('params', $arrAction)) ? explode(',', $arrAction['params']) : array();
+                                                if (method_exists($objImageAdapter, $strMethode)) {
+                                                    call_user_func_array(array($objImageAdapter, $strMethode), $arrParams);
+                                                }
                                             }
                                         }
                                     }
