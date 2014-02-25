@@ -390,6 +390,7 @@ class Contacts_SubscriberController extends AuthControllerAction
                     }
 
                     //Update Userdata
+                    $intSubscriberId = null;
                     $blnUpdate = false; //Update an old user or insert a new one
                     if (isset($arrData['email']) && $arrData['email'] != '') {
                         $objSubscriber = $this->getModelSubscribers()->loadByEmail($arrData['email']);
@@ -451,9 +452,10 @@ class Contacts_SubscriberController extends AuthControllerAction
      */
     private function updateInterests($arrInterestGroups, $intSubscriberId, $intFieldId)
     {
+        $objTable = $this->getModelGenericData()->getGenericTable('subscriber-' . self::SUBSCRIBER_GENERIC_FORM_ID . '-1-InstanceMultiFields');
+        $objTable->delete('idSubscribers = ' . $intSubscriberId . ' AND idFields = ' . $intFieldId);
         foreach ($arrInterestGroups as $intInterestGroupId) {
             $arrInterestData = array('idSubscribers' => $intSubscriberId, 'idRelation' => $intInterestGroupId, 'idFields' => $intFieldId);
-            $objTable = $this->getModelGenericData()->getGenericTable('subscriber-' . self::SUBSCRIBER_GENERIC_FORM_ID . '-1-InstanceMultiFields');
             $objTable->insert($arrInterestData);
         }
     }
