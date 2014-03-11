@@ -430,6 +430,8 @@ class Contacts_SubscriberController extends AuthControllerAction
                     $arrErrors[] = $exc->getEmail() . ' is hard bounced!';
                 } catch (DirtyException $exc) {
                     $arrErrors[] = $exc->getEmail() . ' has changed!';
+                } catch (HostNotFoundException $exc) {
+                    $arrErrors[] = $exc->getEmail() . ' is not a valid Host!';
                 }
             }
         }
@@ -439,6 +441,15 @@ class Contacts_SubscriberController extends AuthControllerAction
 
         //Return a success message
         echo str_replace('%t', $intSubscriberUpdated, str_replace('%s', $intSubscriberAdded, $this->core->translate->_('Import_success_message')));
+        
+        if (count($arrErrors)) {
+            echo '<br><br>';
+            echo count($arrErrors) . ' Errors occured: ';
+            foreach ($arrErrors as $error) {
+                echo $error . '<br/>';
+            }
+        }
+        
         if (!$blnEmailAddress) {
             echo '<br /><br />';
             echo $this->core->translate->_('Missing_email', false);
