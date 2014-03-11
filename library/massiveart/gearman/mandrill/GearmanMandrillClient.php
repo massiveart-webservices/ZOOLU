@@ -130,6 +130,9 @@ class GearmanMandrillClient
                 $tmpClass->name = $var;
                 $tmpClass->content = $recipient->$field;
                 //$tmpClass->content = ($field == 'salutation') ? $recipient->$field . ' ' . $recipient->title : $recipient->$field;
+                if ($recipient->$field == null) {
+                    $tmpClass->content = '';
+                }
                 array_push($result, $tmpClass);
             }
         }
