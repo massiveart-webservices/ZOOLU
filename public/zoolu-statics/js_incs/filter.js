@@ -34,6 +34,7 @@ Massiveart.Filter = Class.create({
         element.show();
       }else{
         element.hide();
+        element.selected = '';
       }
     });
   },
