@@ -51,31 +51,7 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
         if (key_exists(self::MANDRILL_EVENTS_KEY, $request)) {
             $json = $request[self::MANDRILL_EVENTS_KEY];
             
-//            $json = '[
-//   {
-//      "event":"soft_bounce",
-//      "ts":1389684449,
-//      "_id":"b5735d22304748cd9051ac71b63a3b3b",
-//      "msg":{
-//         "ts":1389684441,
-//         "_id":"b5735d22304748cd9051ac71b63a3b3b",
-//         "state":"sent",
-//         "subject":"The better letter",
-//         "email":"raphael.stocker@massiveart.com",
-//         "tags":[
-//
-//         ],
-//         "metadata":[
-//            {
-//               "zoolu_newsletter_id":"1"
-//            }
-//         ],
-//         "sender":"matest@massiveart.com",
-//         "template":null
-//      }
-//   }
-//]';
-            
+            //$json = '[{"event":"soft_bounce","ts":1389684449,"_id":"b5735d22304748cd9051ac71b63a3b3b","msg":{"ts":1389684441,"_id":"b5735d22304748cd9051ac71b63a3b3b","state":"sent","subject":"The better letter","email":"raphael.stocker@massiveart.com","tags":[],"metadata":[{"zoolu_newsletter_id":"1"}],"sender":"matest@massiveart.com","template":null}}]';
             $event = $this->decodeRequest($json);
             $this->parseRequest($event, $json);
         }
@@ -94,17 +70,21 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
         if (count($event) > 0) {
             // stdClass object
             foreach ($event as $key) {
+                
+                
                 $newsletterId = $this->getSpecificValue($key->msg->metadata, $this->core->sysConfig->mandrill->send_mail->zoolu_newsletter_id);
                 // a newsletter id of 0 marks a test email, so skip those
                 if ($newsletterId > 0) {
                     // Get subscriber of message
                     $subscriber = $this->getModelSubscribers()->loadByEmail($key->msg->email);
+                    
                     // No subscriber found, log error
-                    if(empty($subscriber)) {
+                    if(count($subscriber) < 1) {
                         throw new Exception('Subscriber for newsletter not found.');
                     }
                     // Populate array with statistics to be saved
                     // TODO refactor: only set event data
+
                     $arrData = array();
                     $arrData['idNewsletter'] = $newsletterId;
                     $arrData['idSubscriber'] = $subscriber[0]->id;
@@ -116,14 +96,19 @@ class NewsletterStatistics_Mandrill implements NewsletterStatisticsInterface {
                     $arrData['spam'] = ($key->event == self::MANDRILL_EVENT_SPAM) ? 1 : 0;
                     $arrData['unsubscribed'] = ($key->event == self::MANDRILL_EVENT_UNSUBSCRIBE) ? 1 : 0;
                     $arrData['rejected'] = ($key->event == self::MANDRILL_EVENT_REJECT) ? 1 : 0;
-                    $arrData['json'] = $json;
+                    $arrData['json'] = json_encode(array($json));
                     
                     // Check if there is already a record for the subscriber => update row
                     $oldData = $this->userStatisticsExist($subscriber[0]->id, $newsletterId);
                     if ($oldData != null) {
                         $this->core->logger->debug('Updating statistics for subscriber ' . $subscriber[0]->id . ' with newsletter ' . $newsletterId);
                         $updateField = $this->determineFieldToUpdate($key->event);
-                        $data = array($updateField => $arrData[$updateField]);
+
+                        $arrJsons = json_decode($oldData[0]['json']);
+                        $arrJsons[] = $json;
+                        $jsons = json_encode($arrJsons);
+                        
+                        $data = array($updateField => $arrData[$updateField], 'json' => $jsons);
                         $whr =  $this->core->dbh->quoteInto('idSubscriber = ?', $subscriber[0]->id);
                         $whr .=  $this->core->dbh->quoteInto(' AND idNewsletter = ?', $newsletterId);
                         $this->core->dbh->update('newsletterStatistics', $data , $whr);
