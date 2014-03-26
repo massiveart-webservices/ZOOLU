@@ -149,7 +149,6 @@ class Contacts_SubscriberController extends AuthControllerAction
         } else {
             $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
         }
-
         $objAdapter = new Zend_Paginator_Adapter_DbTableSelect($objSelect);
         $objPaginator = new Zend_Paginator($objAdapter);
         $objPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
