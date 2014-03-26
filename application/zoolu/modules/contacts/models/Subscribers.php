@@ -143,6 +143,7 @@ class Model_Subscribers {
      * @return Zend_Db_Table_Select | Zend_Db_Table_Rowset
      */
     public function loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue = '', $strSortOrder = 'ASC', $strOrderColumn = 'sname', $blnReturnSelect = false, $blnExtendSelect = false, $filterReachable = false) {
+        
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByRootLevelFilter(' . $intRootLevelId . ', ' . $intRootLevelFilterId . ')');
 
         $objTableFields = new Zend_Db_Table('fields');
@@ -156,21 +157,21 @@ class Model_Subscribers {
         $objSelect->setIntegrityCheck(false);
         $arrValues = array();
         if ($blnExtendSelect) {
-            $arrValues = array('id', 'salutation' => 'ct.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'salutation' => 'csat.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         } else {
-            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'bounced' => 'cct.title', 'created', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'csat.title', 'bounced' => 'cbt.title', 'created', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
         $objSelect->joinInner(array('gf' => 'genericForms'), 'gf.id = s.idGenericForms', array('gf.genericFormId', 'gf.version'));
-        $objSelect->joinLeft(array('c' => 'categories'), 'c.id = s.salutation', array());
-        $objSelect->joinLeft(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array());
-        $objSelect->joinLeft(array('cs' => 'categories'), 'cs.id = s.subscribed', array());
-        $objSelect->joinLeft(array('cst' => 'categoryTitles'), 'cst.idCategories = cs.id AND cst.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('csa' => 'categories'), 'csa.id = s.salutation', array());
+        $objSelect->joinLeft(array('csat' => 'categoryTitles'), 'csat.idCategories = csa.id AND csat.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cd' => 'categories'), 'cd.id = s.dirty', array());
         $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = ' . $this->intLanguageId, array());
-        $objSelect->joinLeft(array('cc' => 'categoryCodes'), 'cc.code = s.bounced AND s.bounced != "" AND cc.idLanguages = ' . $this->intLanguageId, array());
-        $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.idCategories AND cct.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('csu' => 'categories'), 'csu.id = s.subscribed', array());
+        $objSelect->joinLeft(array('csut' => 'categoryTitles'), 'csut.idCategories = csu.id AND csut.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('cb' => 'categories'), 'cb.id = s.bounced', array());
+        $objSelect->joinLeft(array('cbt' => 'categoryTitles'), 'cbt.idCategories = cb.id AND cbt.idLanguages = ' . $this->intLanguageId, array());
 
         //Apply rootLevelFilters
         if ($intRootLevelFilterId != null) {
@@ -252,6 +253,7 @@ class Model_Subscribers {
         } else {
             return $this->getSubscriberTable()->fetchAll($objSelect);
         }
+
     }
 
     /**
@@ -267,22 +269,22 @@ class Model_Subscribers {
 
         $arrValues = array();
         if ($blnExtendSelect) {
-            $arrValues = array('id', 'salutation' => 'ct.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'salutation' => 'csat.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
         } else {
-            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'cst.title', 'dirty' => 'cdt.title', 'bounced' => 'cct.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'csut.title', 'dirty' => 'cdt.title', 'bounced' => 'cbt.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
-        $objSelect->joinLeft(array('c' => 'categories'), 'c.id = s.salutation', array());
-        $objSelect->joinLeft(array('ct' => 'categoryTitles'), 'ct.idCategories = c.id AND ct.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinInner(array('gf' => 'genericForms'), 'gf.id = s.idGenericForms', array('gf.genericFormId', 'gf.version'));
-        $objSelect->joinLeft(array('u' => 'users'), 'u.id = s.idUsers', array('s.changed'));
-        $objSelect->joinLeft(array('cs' => 'categories'), 'cs.id = s.subscribed', array());
-        $objSelect->joinLeft(array('cst' => 'categoryTitles'), 'cst.idCategories = cs.id AND cst.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('csa' => 'categories'), 'csa.id = s.salutation', array());
+        $objSelect->joinLeft(array('csat' => 'categoryTitles'), 'csat.idCategories = csa.id AND csat.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cd' => 'categories'), 'cd.id = s.dirty', array());
         $objSelect->joinLeft(array('cdt' => 'categoryTitles'), 'cdt.idCategories = cd.id AND cdt.idLanguages = ' . $this->intLanguageId, array());
-        $objSelect->joinLeft(array('cc' => 'categoryCodes'), 'cc.code = s.bounced AND cc.idLanguages = ' . $this->intLanguageId, array());
-        $objSelect->joinLeft(array('cct' => 'categoryTitles'), 'cct.idCategories = cc.idCategories AND cct.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('csu' => 'categories'), 'csu.id = s.subscribed', array());
+        $objSelect->joinLeft(array('csut' => 'categoryTitles'), 'csut.idCategories = csu.id AND csut.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('cb' => 'categories'), 'cb.id = s.bounced', array());
+        $objSelect->joinLeft(array('cbt' => 'categoryTitles'), 'cbt.idCategories = cb.id AND cbt.idLanguages = ' . $this->intLanguageId, array());
+
         $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
         $objSelect->where('s.bounced = ?', $bouncetype);
         if ($strSearchValue != '') {

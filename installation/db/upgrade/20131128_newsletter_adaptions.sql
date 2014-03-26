@@ -124,4 +124,7 @@ ALTER TABLE `newsletterStatistics` ENGINE = InnoDB;
 
 ALTER TABLE `subscribers` ADD `reactivated` TIMESTAMP NULL DEFAULT NULL AFTER `changed` ;
 
-ALTER TABLE `subscribers` ADD `optinkey` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `reactivated` 
+ALTER TABLE `subscribers` ADD `optinkey` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `reactivated`;
+
+
+UPDATE `zo-zoolu`.`fields` SET `sqlSelect` = 'SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = %LANGUAGE_ID%, categories AS rootCat WHERE rootCat.id = 691 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN (rootCat.lft + 1) AND rootCat.rgt %WHERE_ADDON% ORDER BY tbl.lft, categoryTitles.title' WHERE `fields`.`id` =279;
