@@ -128,3 +128,14 @@ ALTER TABLE `subscribers` ADD `optinkey` VARCHAR( 32 ) CHARACTER SET utf8 COLLAT
 
 
 UPDATE `zo-zoolu`.`fields` SET `sqlSelect` = 'SELECT tbl.id AS id, categoryTitles.title AS title FROM categories AS tbl INNER JOIN categoryTitles ON categoryTitles.idCategories = tbl.id AND categoryTitles.idLanguages = %LANGUAGE_ID%, categories AS rootCat WHERE rootCat.id = 691 AND tbl.idRootCategory = rootCat.idRootCategory AND tbl.lft BETWEEN (rootCat.lft + 1) AND rootCat.rgt %WHERE_ADDON% ORDER BY tbl.lft, categoryTitles.title' WHERE `fields`.`id` =279;
+
+
+
+INSERT INTO `zo-zoolu`.`fields` (`id`, `idFieldTypes`, `name`, `idSearchFieldTypes`, `idRelationPage`, `idCategory`, `sqlSelect`, `columns`, `height`, `isCoreField`, `isKeyField`, `isSaveField`, `isRegionTitle`, `isDependentOn`, `showDisplayOptions`, `options`, `copyValue`, `validators`) VALUES (NULL, '1', 'newsletter_from_name', '1', NULL, NULL, NULL, '12', '0', '1', '0', '1', '0', NULL, '0', NULL, '0', ''), (NULL, '1', 'newsletter_from_email', '1', NULL, NULL, NULL, '12', '0', '1', '0', '1', '0', NULL, '0', NULL, '0', '');
+INSERT INTO `zo-zoolu`.`fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `description`) VALUES (NULL, '280', '1', 'Absendername', NULL), (NULL, '280', '2', 'Sender name', NULL);
+INSERT INTO `zo-zoolu`.`fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `description`) VALUES (NULL, '281', '1', 'Absender Email', NULL), (NULL, '281', '2', 'Sender email', NULL);
+INSERT INTO `zo-zoolu`.`regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL, '96', '280', '50'), (NULL, '96', '281', '60');
+
+ALTER TABLE `newsletters` ADD `newsletter_from_name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER `title` ;
+ALTER TABLE `newsletters` ADD `newsletter_from_email` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER `newsletter_from_name`;
+
