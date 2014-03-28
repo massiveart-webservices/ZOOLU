@@ -96,6 +96,8 @@ class GearmanMandrillClient
                 $recipient->content = $mandrillCampaign->getContent();
                 $recipient->global_merge_vars = $this->buildGlobalMergeVars($recipient);
                 $recipient->subject = $mandrillCampaign->getTitle();
+                $recipient->from_name = $mandrillCampaign->getSenderName();
+                $recipient->from_email = $mandrillCampaign->getSenderEmail();
                
                 $this->core->logger->debug('GearmanMandrillClient->sendNewsletter(): Trying to send newsletter to ' . $recipient->email);
                 self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_send', serialize($recipient));
