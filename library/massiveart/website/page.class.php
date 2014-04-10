@@ -325,7 +325,7 @@ class Page
                 
                 $this->objGenericData->loadData();
 
-                if ($this->objGenericData->Setup()->getLanguageFallbackId() > 0 && $this->objGenericData->Setup()->getLanguageFallbackId() != $this->getLanguageId()) {
+                 if ($this->objGenericData->Setup()->getLanguageFallbackId() > 0 && $this->objGenericData->Setup()->getLanguageFallbackId() != $this->getLanguageId()) {
                     $this->objFallbackPage = clone $this;
                     $this->setLanguageId($this->objGenericData->Setup()->getLanguageFallbackId());
                     $this->loadPage();
@@ -380,6 +380,7 @@ class Page
                     }
 
                     if ($this->objBaseUrl instanceof Zend_Db_Table_Row_Abstract) {
+                        
                         $this->objParentPage = new Page();
                         $this->objParentPage->setRootLevelId($this->intRootLevelId);
                         $this->objParentPage->setRootLevelTitle($this->strRootLevelTitle);
@@ -1178,7 +1179,6 @@ class Page
     {
         try {
             $this->getModel();
-
             if ($this->intNavParentId !== null && $this->intNavParentId > 0) {
                 $objPages = $this->objModel->loadItems((($this->ParentPage() instanceof Page) ? array('id' => $this->ParentPage()->getTypeId(), 'key' => $this->ParentPage()->getType()) : array('id' => $this->intTypeId, 'key' => $this->strType)), $this->intNavParentId, $intCategoryId, $intLabelId, $intEntryNumber, $intSortType, $intSortOrder, $intEntryDepth, $arrPageIds, $blnOnlyPages, $blnOnlyShowInNavigation, $blnFilterDisplayEnvironment);
             } else {
@@ -2064,28 +2064,44 @@ class Page
      * @author Cornelius Hansjakob <cha@massiveart.com>
      * @version 1.0
      */
-    protected function getModel($blnReset = false)
+    protected function getModel($blnReset = false, $forcedLanguage = null)
     {
-        if ($this->objModel === null || $blnReset === true) {
-            /**
-             * autoload only handles "library" compoennts.
-             * Since this is an application model, we need to require it
-             * from its modules path location.
-             */
+        if ($forcedLanguage == null) {
+            if ($this->objModel === null || $blnReset === true) {
+                /**
+                 * autoload only handles "library" compoennts.
+                 * Since this is an application model, we need to require it
+                 * from its modules path location.
+                 */
+                $strModelFilePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . $this->getModelSubPath() . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's') . '.php';
+                if (file_exists($strModelFilePath)) {
+                    require_once $strModelFilePath;
+                    $strModel = 'Model_' . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's');
+                    $this->objModel = new $strModel();
+                    $this->objModel->setLanguageId($this->intLanguageId);
+                    if ($this->blnHasSegments) {
+                        $this->objModel->setSegmentId($this->intSegmentId);
+                    }
+                } else {
+                    throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "' . $this->strType . '"');
+                }
+            }
+            return $this->objModel;
+        } else {
             $strModelFilePath = GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . $this->getModelSubPath() . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's') . '.php';
             if (file_exists($strModelFilePath)) {
                 require_once $strModelFilePath;
                 $strModel = 'Model_' . ((substr($this->strType, strlen($this->strType) - 1) == 'y') ? ucfirst(rtrim($this->strType, 'y')) . 'ies' : ucfirst($this->strType) . 's');
-                $this->objModel = new $strModel();
-                $this->objModel->setLanguageId($this->intLanguageId);
+                $objModel = new $strModel();
+                $objModel->setLanguageId($forcedLanguage);
                 if ($this->blnHasSegments) {
-                    $this->objModel->setSegmentId($this->intSegmentId);
+                    $objModel->setSegmentId($this->intSegmentId);
                 }
+                return $objModel;
             } else {
                 throw new Exception('Not able to load type specific model, because the file didn\'t exist! - strType: "' . $this->strType . '"');
             }
         }
-        return $this->objModel;
     }
 
     /**

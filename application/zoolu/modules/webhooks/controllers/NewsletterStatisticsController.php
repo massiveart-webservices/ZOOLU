@@ -87,7 +87,7 @@ class Webhooks_NewsletterStatisticsController extends Zend_Controller_Action
             $this->core->logger->debug(var_export($this->getRequest()->getParams(), true));
             $this->objCommandChain->runCommand('newsletter:statistics:track', array('request' => $this->getRequest()->getParams()));
         } catch(Exception $e) {
-            $this->core->logger->error($e);
+            $this->core->logger->err($e);
         }
     }
 }

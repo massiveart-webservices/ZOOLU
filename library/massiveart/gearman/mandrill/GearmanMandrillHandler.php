@@ -109,8 +109,8 @@ class GearmanMandrillHandler
                 'html' => self::$workload->content,
                 'text' => $h2t->get_text(),
                 'subject' => self::$workload->subject,
-                'from_email' => self::$core->sysConfig->mandrill->from_email,
-                'from_name' => self::$core->sysConfig->mandrill->from_name,
+                'from_name' => self::$workload->from_name,
+                'from_email' => self::$workload->from_email,
                 'to' => array(
                     array('email' => self::$workload->email, 'name' => self::$workload->fname . " " . self::$workload->sname)                
                 ),
@@ -143,8 +143,8 @@ class GearmanMandrillHandler
                             'html' => self::$workload->html,
                             'text' => self::$workload->text,
                             'subject' => self::$workload->subject,
-                            'from_email' => self::$core->sysConfig->mandrill->from_email,
-                            'from_name' => self::$core->sysConfig->mandrill->from_name,
+                            'from_name' => self::$workload->from_name,
+                            'from_email' => self::$workload->from_email,
                             'to' => array(
                                 array('email' => self::$workload->email, 'name' => self::$workload->fname . " " . self::$workload->sname)
                             ),

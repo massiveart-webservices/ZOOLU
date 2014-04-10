@@ -50,6 +50,16 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     private $title;
     
     /**
+     * @var String
+     */
+    private $senderName;
+    
+    /**
+     * @var String
+     */
+    private $senderEmail;
+    
+    /**
      * @var boolean
      */
     private $delivered;
@@ -155,6 +165,9 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         //set Subject title
         $this->setTitle($this->objNewsletter->title);
         
+        //set Sender data
+        $this->setSenderData();
+        
         // Send newsletter
         $this->gearmanMandrillClient->sendNewsletter($this, true);
     }
@@ -175,11 +188,29 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         //set Subject title
         $this->setTitle($this->objNewsletter->title);
         
+        //set Sender data
+        $this->setSenderData();
+        
         $this->loadRecipients();
         $this->buildUnsubscribeLinks();
         
         // Send newsletter
         $this->gearmanMandrillClient->sendNewsletter($this, false);
+    }
+    
+    private function setSenderData() {
+        //set Sender data
+        if ($this->objNewsletter->newsletter_from_name != '') {
+            $this->setSenderName($this->objNewsletter->newsletter_from_name);
+        } else {
+            $this->setSenderName($this->core->sysConfig->mandrill->from_name);
+        }
+        
+        if ($this->objNewsletter->newsletter_from_email != '') {
+            $this->setSenderEmail($this->objNewsletter->newsletter_from_email);
+        } else {
+            $this->setSenderEmail($this->core->sysConfig->mandrill->from_email);
+        }
     }
     
     /**
@@ -662,7 +693,39 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     {
         $this->title = $title;
     }
+    
+    /**
+     * setSenderName
+     * @param String $senderName
+     */
+    public function setSenderName($senderName) {
+        $this->senderName = $senderName;
+    }
+    
+    /**
+     * getSenderName
+     * @return String
+     */
+    public function getSenderName() {
+        return $this->senderName;
+    }
 
+    /**
+     * setSenderEmail
+     * @param String $senderEmail
+     */
+    public function setSenderEmail($senderEmail) {
+        $this->senderEmail= $senderEmail;
+    }
+    
+    /**
+     * getSenderEmail
+     * @return String
+     */
+    public function getSenderEmail() {
+        return $this->senderEmail;
+    }
+    
     /**
      * 
      * @return 
