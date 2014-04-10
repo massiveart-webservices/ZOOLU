@@ -156,22 +156,35 @@ class Index
         }
     }
 
-    /**
-     *
+/**
+     * indexAllPublicPages
      */
     public function indexAllPublicPages()
     {
         try {
+            $arrTreeTypes = array( 
+                $this->core->sysConfig->page_types->product_tree->id,
+                $this->core->sysConfig->page_types->press_area->id,
+                $this->core->sysConfig->page_types->courses->id,
+                $this->core->sysConfig->page_types->events->id
+            );
+            
             $this->getModelPages();
-
             $objPagesData = $this->objModelPages->loadAllPublicPages();
+
+            $i = 0;
             foreach ($objPagesData as $objPageData) {
-                $this->indexPage(
-                    $objPageData->pageId,
-                    $objPageData->version,
-                    $objPageData->idLanguages,
-                    ((int)$objPageData->idRootLevels > 0) ? $objPageData->idRootLevels : $objPageData->idParent
-                );
+                echo ++$i . "/" . count($objPagesData) . "  Pagetype: " . $objPageData->idPageTypes . "  index: ";
+                if (!in_array($objPageData->idPageTypes, $arrTreeTypes)) {
+                    echo "yes";
+                    $this->indexPage(
+                        $objPageData->pageId,
+                        $objPageData->version,
+                        $objPageData->idLanguages,
+                        ((int)$objPageData->idRootLevels > 0) ? $objPageData->idRootLevels : $objPageData->idParent
+                    );
+                }
+                echo "\n";
             }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);

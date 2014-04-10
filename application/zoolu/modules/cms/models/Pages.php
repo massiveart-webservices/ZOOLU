@@ -1701,7 +1701,7 @@ class Model_Pages extends ModelAbstract
 
         $objSelect->from($this->objPageUrlTable, array('pages.pageId', 'version', 'idLanguages'));
         $objSelect->join('pages', 'pages.pageId = urls.relationId AND pages.version = urls.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page, array('idParent'));
-        $objSelect->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = urls.idLanguages', array());
+        $objSelect->join('pageProperties', 'pageProperties.pageId = pages.pageId AND pageProperties.version = pages.version AND pageProperties.idLanguages = urls.idLanguages', array('idPageTypes'));
         $objSelect->joinleft('folders', 'pages.idParent = folders.id AND pages.idParentTypes = ' . $this->core->sysConfig->parent_types->folder, array('idRootLevels'));
         $objSelect->where('pageProperties.idStatus = ?', $this->core->sysConfig->status->live)
             ->where('pageProperties.idPageTypes != ?', $this->core->sysConfig->page_types->link->id)
