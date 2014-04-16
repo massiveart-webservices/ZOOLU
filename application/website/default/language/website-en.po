@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZOOLU Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-21 15:23+0100\n"
+"POT-Creation-Date: 2014-04-16 14:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: rs <raphael.stocker@massiveart.com>\n"
 "Language-Team: \n"
@@ -15,453 +15,304 @@ msgstr ""
 "X-Poedit-SearchPath-0: application/website\n"
 "X-Poedit-SearchPath-1: public/website\n"
 
-#: application/website/default/language/addon-language-keys.php:38
-#: application/website/default/controllers/DatareceiverController.php:96
-#: application/website/default/controllers/SweepstakeController.php:311
-msgid "Salutation"
-msgstr "Salutation"
-
-#: application/website/default/language/addon-language-keys.php:39
-#: application/website/default/controllers/DatareceiverController.php:97
-#: application/website/default/controllers/SweepstakeController.php:312
-msgid "Title"
-msgstr "Title"
-
-#: application/website/default/language/addon-language-keys.php:40
-#: application/website/default/controllers/DatareceiverController.php:98
-msgid "Fname"
-msgstr "First name"
-
-#: application/website/default/language/addon-language-keys.php:41
-#: application/website/default/controllers/DatareceiverController.php:99
-msgid "Sname"
-msgstr "Last name"
-
-#: application/website/default/language/addon-language-keys.php:42
-#: application/website/default/controllers/DatareceiverController.php:100
-#: application/website/default/controllers/SweepstakeController.php:315
-msgid "Company"
-msgstr "Company"
-
-#: application/website/default/language/addon-language-keys.php:43
-#: application/website/default/controllers/DatareceiverController.php:101
-#: application/website/default/controllers/SweepstakeController.php:316
-msgid "Email"
-msgstr "E-mail"
-
-#: application/website/default/language/addon-language-keys.php:44
-#: application/website/default/controllers/DatareceiverController.php:102
-#: application/website/default/controllers/SweepstakeController.php:317
-msgid "Phone"
-msgstr "Phone"
-
-#: application/website/default/language/addon-language-keys.php:45
-#: application/website/default/controllers/DatareceiverController.php:103
-#: application/website/default/controllers/SweepstakeController.php:318
-msgid "Fax"
-msgstr "Fax"
-
-#: application/website/default/language/addon-language-keys.php:46
-#: application/website/default/controllers/DatareceiverController.php:104
-#: application/website/default/controllers/SweepstakeController.php:319
-msgid "Function"
-msgstr "Function"
-
-#: application/website/default/language/addon-language-keys.php:47
-#: application/website/default/controllers/DatareceiverController.php:105
-msgid "Type"
-msgstr "Company type"
-
-#: application/website/default/language/addon-language-keys.php:48
-#: application/website/default/controllers/DatareceiverController.php:106
-#: application/website/default/controllers/SweepstakeController.php:321
-msgid "Street"
-msgstr "Street"
-
-#: application/website/default/language/addon-language-keys.php:49
-#: application/website/default/controllers/DatareceiverController.php:107
-msgid "Zip"
-msgstr "ZIP"
-
-#: application/website/default/language/addon-language-keys.php:50
-#: application/website/default/controllers/DatareceiverController.php:108
-#: application/website/default/controllers/SweepstakeController.php:323
-msgid "City"
-msgstr "City"
-
-#: application/website/default/language/addon-language-keys.php:51
-#: application/website/default/controllers/DatareceiverController.php:109
-#: application/website/default/controllers/SweepstakeController.php:324
-msgid "State"
-msgstr "State/Province"
-
-#: application/website/default/language/addon-language-keys.php:52
-#: application/website/default/controllers/DatareceiverController.php:110
-#: application/website/default/controllers/SweepstakeController.php:325
-msgid "Country"
-msgstr "Country"
-
-#: application/website/default/language/addon-language-keys.php:53
-#: application/website/default/controllers/DatareceiverController.php:111
-msgid "Message"
-msgstr "What can we do for you?"
-
-#: application/website/default/language/addon-language-keys.php:54
-#: application/website/default/controllers/DatareceiverController.php:112
 msgid "Attachment"
 msgstr "CV/Resume"
 
-#: application/website/default/controllers/SubscriberController.php:147
-msgid "Newsletter_subscribe"
-msgstr "Subscribe Newsletter"
-
-#: application/website/default/controllers/SubscriberController.php:161
-msgid "please_insert_valid_emailaddress"
-msgstr "please insert valid email address"
-
-#: application/website/default/controllers/SubscriberController.php:166
-msgid "emailaddress_already_used"
-msgstr "email address is already used"
-
-#: application/website/default/controllers/SubscriberController.php:175
-#: application/website/default/controllers/CustomerController.php:397
-msgid "Salutation_mandatory"
-msgstr "Salutation required"
-
-#: application/website/default/controllers/SubscriberController.php:185
-#: application/website/default/controllers/CustomerController.php:391
-msgid "Fname_mandatory"
-msgstr "First name required"
-
-#: application/website/default/controllers/SubscriberController.php:193
-#: application/website/default/controllers/CustomerController.php:394
-msgid "Sname_mandatory"
-msgstr "Lastname required"
-
-#: application/website/default/controllers/SubscriberController.php:267
-msgid "Newsletter_unsubscribe"
-msgstr "Unsubscribe newsletter"
-
-#: application/website/default/controllers/IndexController.php:556
-msgid "Please_enter_username"
-msgstr "Please enter username"
-
-#: application/website/default/controllers/IndexController.php:587
-#: application/website/default/controllers/CustomerController.php:164
-msgid "Username_not_found"
-msgstr "Username not found"
-
-#: application/website/default/controllers/IndexController.php:594
-#: application/website/default/controllers/CustomerController.php:167
-msgid "Wrong_password"
-msgstr "Wrong password"
-
-#: application/website/default/controllers/IndexController.php:646
-msgid "Login_failed"
-msgstr "Login failed"
-
-#: application/website/default/controllers/DatareceiverController.php:113
-#: application/website/default/controllers/SweepstakeController.php:326
 msgid "Check_Legalnotes"
 msgstr "Legal notes"
 
-#: application/website/default/controllers/DatareceiverController.php:471
+msgid "City"
+msgstr "City"
+
+msgid "Company"
+msgstr "Company"
+
+msgid "Country"
+msgstr "Country"
+
 msgid "Dear"
 msgstr "Dear"
 
-#: application/website/default/controllers/DatareceiverController.php:476
-msgid "Success_message"
-msgstr "Success message"
+msgid "Email"
+msgstr "E-mail"
 
-#: application/website/default/controllers/CustomerController.php:123
-msgid "Login"
-msgstr "Login"
-
-#: application/website/default/controllers/CustomerController.php:197
-msgid "Reset_password"
-msgstr "Reset password"
-
-#: application/website/default/controllers/CustomerController.php:214
-#: application/website/default/controllers/CustomerController.php:415
 msgid "Email_invalid"
 msgstr "Invalid email addres"
 
-#: application/website/default/controllers/CustomerController.php:227
-#: application/website/default/controllers/CustomerController.php:412
-msgid "Password_confirm_wrong"
-msgstr "Password confirmation wrong"
-
-#: application/website/default/controllers/CustomerController.php:260
-#: application/website/default/controllers/CustomerController.php:336
-msgid "Registration"
-msgstr "Registration"
-
-#: application/website/default/controllers/CustomerController.php:400
 msgid "Email_mandatory"
 msgstr "E-mail "
 
-#: application/website/default/controllers/CustomerController.php:403
-msgid "Username_mandatory"
-msgstr "Username reuqierd"
-
-#: application/website/default/controllers/CustomerController.php:406
-msgid "Username_already_exists"
-msgstr "Username already exists"
-
-#: application/website/default/controllers/CustomerController.php:409
-msgid "Password_mandatory"
-msgstr "Password requi"
-
-#: application/website/default/controllers/CustomerController.php:418
 msgid "Email_not_unique"
 msgstr "Email not unique"
 
-#: application/website/default/controllers/SweepstakeController.php:313
+msgid "Fax"
+msgstr "Fax"
+
 msgid "Firstname"
 msgstr "First name"
 
-#: application/website/default/controllers/SweepstakeController.php:314
+msgid "Fname"
+msgstr "First name"
+
+msgid "Fname_mandatory"
+msgstr "First name required"
+
+msgid "Function"
+msgstr "Function"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Login_failed"
+msgstr "Login failed"
+
+msgid "Message"
+msgstr "What can we do for you?"
+
+msgid "Newsletter_subscribe"
+msgstr "Subscribe Newsletter"
+
+msgid "Newsletter_unsubscribe"
+msgstr "Unsubscribe newsletter"
+
+msgid "Password_confirm_wrong"
+msgstr "Password confirmation wrong"
+
+msgid "Password_mandatory"
+msgstr "Password requi"
+
+msgid "Phone"
+msgstr "Phone"
+
+msgid "Please_enter_username"
+msgstr "Please enter username"
+
+msgid "Registration"
+msgstr "Registration"
+
+msgid "Reset_password"
+msgstr "Reset password"
+
+msgid "Salutation"
+msgstr "Salutation"
+
+msgid "Salutation_mandatory"
+msgstr "Salutation required"
+
+msgid "Sname"
+msgstr "Last name"
+
+msgid "Sname_mandatory"
+msgstr "Lastname required"
+
+msgid "State"
+msgstr "State/Province"
+
+msgid "Street"
+msgstr "Street"
+
+#, fuzzy
+msgid "Subscriber_"
+msgstr "Subscribe RSS"
+
+msgid "Success_message"
+msgstr "Success message"
+
 msgid "Surname"
 msgstr "Last name"
 
-#: application/website/default/controllers/SweepstakeController.php:320
+msgid "Title"
+msgstr "Title"
+
+msgid "Type"
+msgstr "Company type"
+
 msgid "Type_of_company"
 msgstr "Company type"
 
-#: application/website/default/controllers/SweepstakeController.php:322
+msgid "Username_already_exists"
+msgstr "Username already exists"
+
+msgid "Username_mandatory"
+msgstr "Username reuqierd"
+
+msgid "Username_not_found"
+msgstr "Username not found"
+
+msgid "Wrong_password"
+msgstr "Wrong password"
+
+msgid "Zip"
+msgstr "ZIP"
+
 msgid "ZipCode"
 msgstr "ZIP"
 
-#: application/website/default/helpers/SearchHelper.php:256
+msgid "emailaddress_already_used"
+msgstr "email address is already used"
+
+msgid "please_insert_valid_emailaddress"
+msgstr "please insert valid email address"
+
+msgid "subscribe_confirmation"
+msgstr "You subscribed the newsletter"
+
+#, fuzzy
+msgid "subscribe_doubleoptin_information"
+msgstr "You subscribed the newsletter"
+
+msgid "Newsletter_preview"
+msgstr "Open newsletter in Browser"
+
+msgid "Password"
+msgstr "Password"
+
 #, php-format
 msgid "Search_Result_Text"
 msgstr "<strong>%1$s</strong> %2$s for <strong>\"%3$s\"</strong>"
 
-#: application/website/default/helpers/SearchHelper.php:256
 msgid "Searchresult"
 msgstr "Search Result"
 
-#: application/website/default/helpers/SearchHelper.php:256
 msgid "Searchresults"
 msgstr "Search Results"
 
-#: application/website/default/helpers/SearchHelper.php:440
 msgid "Sorry, no search result."
 msgstr "Sorry, no search result."
 
-#: public/website/newsletter/default/helpers/NewsletterHelper.php:90
-msgid "Newsletter_preview"
-msgstr "Open newsletter in Browser"
-
-#: public/website/newsletter/default/helpers/NewsletterHelper.php:219
 msgid "Unsubscribe"
 msgstr "unsubscribe"
 
-#: public/website/themes/default/login.php:71
 msgid "Username"
 msgstr "Username"
 
-#: public/website/themes/default/login.php:80
-msgid "Password"
-msgstr "Password"
-
-#: public/website/themes/default/error-404.php:46
-msgid "Error 404"
-msgstr "Error 404"
-
-#: public/website/themes/default/error-404.php:48
 msgid "Continue on"
 msgstr "Continue on"
 
-#: public/website/themes/default/search.php:74
-#: public/website/themes/default/master.php:76
-#: public/website/themes/default/includes/header.inc.php:9
+msgid "Error 404"
+msgstr "Error 404"
+
 msgid "Search"
 msgstr "Search"
 
-#: public/website/themes/default/helpers/PageHelper.php:514
-msgid "Image_gallery"
-msgstr "Image gallery"
-
-#: public/website/themes/default/helpers/PageHelper.php:544
-msgid "Show_all_images"
-msgstr "Show all images"
-
-#: public/website/themes/default/helpers/PageHelper.php:618
-msgid "Video"
-msgstr "Video"
-
-#: public/website/themes/default/helpers/PageHelper.php:710
-msgid "Brochures"
-msgstr "Brochures"
-
-#: public/website/themes/default/helpers/PageHelper.php:878
-#: public/website/themes/default/helpers/PageHelper.php:902
-msgid "Internal_links"
-msgstr "Internal links"
-
-#: public/website/themes/default/helpers/PageHelper.php:1231
-#: public/website/themes/default/helpers/PageHelper.php:1385
-#: public/website/themes/default/helpers/PageHelper.php:1495
-#: public/website/themes/default/helpers/PageHelper.php:1535
-#: public/website/themes/default/helpers/PageHelper.php:1575
-#: public/website/themes/default/helpers/PageHelper.php:1627
-msgid "more_information"
-msgstr "More information"
-
-#: public/website/themes/default/helpers/PageHelper.php:1313
-msgid "Similar_pages"
-msgstr "Similar pages"
-
-#: public/website/themes/default/helpers/PageHelper.php:1323
-msgid "Created_at"
-msgstr "Created at"
-
-#: public/website/themes/default/helpers/PageHelper.php:1811
-msgid "read_more_text"
-msgstr "read more"
-
-#: public/website/themes/default/helpers/PageHelper.php:2070
-#: public/website/themes/default/helpers/PageHelper.php:2079
-#: public/website/themes/default/helpers/PageHelper.php:2086
-#: public/website/themes/default/helpers/PageHelper.php:2236
-#: public/website/themes/default/helpers/PageHelper.php:2245
-#: public/website/themes/default/helpers/PageHelper.php:2258
-#: public/website/themes/default/helpers/PageHelper.php:2282
-#: public/website/themes/default/scripts/customer/register.phtml:20
-msgid "Please_choose"
-msgstr "Please choose"
-
-#: public/website/themes/default/helpers/PageHelper.php:2071
-#: public/website/themes/default/helpers/PageHelper.php:2237
-msgid "Mr."
-msgstr "Mr."
-
-#: public/website/themes/default/helpers/PageHelper.php:2072
-#: public/website/themes/default/helpers/PageHelper.php:2238
-msgid "Ms."
-msgstr "Ms."
-
-#: public/website/themes/default/helpers/PageHelper.php:2112
-#: public/website/themes/default/helpers/PageHelper.php:2113
-#: public/website/themes/default/helpers/PageHelper.php:2412
-#: public/website/themes/default/helpers/PageHelper.php:2413
-msgid "Get_a_new_challenge"
-msgstr "Neue Aufgabe"
-
-#: public/website/themes/default/helpers/PageHelper.php:2115
-#: public/website/themes/default/helpers/PageHelper.php:2116
-#: public/website/themes/default/helpers/PageHelper.php:2415
-#: public/website/themes/default/helpers/PageHelper.php:2416
-msgid "Get_an_audio_challenge"
-msgstr "Höraufgabe"
-
-#: public/website/themes/default/helpers/PageHelper.php:2118
-#: public/website/themes/default/helpers/PageHelper.php:2119
-#: public/website/themes/default/helpers/PageHelper.php:2418
-#: public/website/themes/default/helpers/PageHelper.php:2419
-msgid "Get_a_visual_challenge"
-msgstr "Visuell Aufgabe"
-
-#: public/website/themes/default/helpers/PageHelper.php:2121
-#: public/website/themes/default/helpers/PageHelper.php:2122
-#: public/website/themes/default/helpers/PageHelper.php:2421
-#: public/website/themes/default/helpers/PageHelper.php:2422
-msgid "Help"
-msgstr "Help"
-
-#: public/website/themes/default/helpers/PageHelper.php:2155
-#: public/website/themes/default/helpers/PageHelper.php:2372
-msgid "Fields_with_*_are_mandatory"
-msgstr "Fields with * are mandatory."
-
-#: public/website/themes/default/helpers/PageHelper.php:2159
-#: public/website/themes/default/helpers/PageHelper.php:2387
-msgid "Send"
-msgstr "Send"
-
-#: public/website/themes/default/helpers/PageHelper.php:2162
-#: public/website/themes/default/helpers/PageHelper.php:2375
-msgid "LegalNotes"
-msgstr "I agree that the above personal data are stored, processed and used by MASSIVE ART and the companies of the MASSIVE ART Group to provide me with information about products, services, or activities of the MASSIVE ART Group in writing, by fax, phone, or e-mail. I can revoke my consent completely or partially with immediate effect by sending a corresponding notification to MAIL@MASSIVE ART.AT."
-
-#: public/website/themes/default/helpers/PageHelper.php:2246
-msgid "Dental_office"
-msgstr "Dental office"
-
-#: public/website/themes/default/helpers/PageHelper.php:2247
-msgid "Dental_office_laboratory"
-msgstr "Dental office/laboratory"
-
-#: public/website/themes/default/helpers/PageHelper.php:2248
-msgid "Laboratory"
-msgstr "Laboratory"
-
-#: public/website/themes/default/helpers/PageHelper.php:2249
-msgid "School"
-msgstr "School"
-
-#: public/website/themes/default/helpers/PageHelper.php:2250
-msgid "Student"
-msgstr "Student"
-
-#: public/website/themes/default/helpers/PageHelper.php:2251
-msgid "Private_person"
-msgstr "Private person"
-
-#: public/website/themes/default/helpers/PageHelper.php:2470
-msgid "Contact"
-msgstr "Contact"
-
-#: public/website/themes/default/helpers/PageHelper.php:2482
-msgid "Tel"
-msgstr "Tel"
-
-#: public/website/themes/default/scripts/search/livesearch.phtml:18
 msgid "Advanced_Search"
 msgstr "Advanced Search"
 
-#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:14
-msgid "unsubscribe_description_text"
-msgstr "Unsubscribe from Newsletter"
+msgid "Brochures"
+msgstr "Brochures"
 
-#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:19
-msgid "unsubscribe"
-msgstr "unsubscribe"
+msgid "Contact"
+msgstr "Contact"
 
-#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:22
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:65
-msgid "subscribe_confirmation"
-msgstr "You subscribed the newsletter"
+msgid "Created_at"
+msgstr "Created at"
 
-#: public/website/themes/default/scripts/subscriber/unsubscribe.phtml:25
-msgid "an_error_occured during_unsubscribing"
+msgid "Dental_office"
+msgstr "Dental office"
+
+msgid "Dental_office_laboratory"
+msgstr "Dental office/laboratory"
+
+msgid "Fields_with_*_are_mandatory"
+msgstr "Fields with * are mandatory."
+
+msgid "Get_a_new_challenge"
+msgstr "Neue Aufgabe"
+
+msgid "Get_a_visual_challenge"
+msgstr "Visuell Aufgabe"
+
+msgid "Get_an_audio_challenge"
+msgstr "Höraufgabe"
+
+msgid "Help"
+msgstr "Help"
+
+msgid "Image_gallery"
+msgstr "Image gallery"
+
+msgid "Internal_links"
+msgstr "Internal links"
+
+msgid "Laboratory"
+msgstr "Laboratory"
+
+msgid "LegalNotes"
+msgstr "I agree that the above personal data are stored, processed and used by MASSIVE ART and the companies of the MASSIVE ART Group to provide me with information about products, services, or activities of the MASSIVE ART Group in writing, by fax, phone, or e-mail. I can revoke my consent completely or partially with immediate effect by sending a corresponding notification to MAIL@MASSIVE ART.AT."
+
+msgid "Mr."
+msgstr "Mr."
+
+msgid "Ms."
+msgstr "Ms."
+
+msgid "Please_choose"
+msgstr "Please choose"
+
+msgid "Private_person"
+msgstr "Private person"
+
+msgid "School"
+msgstr "School"
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Show_all_images"
+msgstr "Show all images"
+
+msgid "Similar_pages"
+msgstr "Similar pages"
+
+msgid "Student"
+msgstr "Student"
+
+msgid "Tel"
+msgstr "Tel"
+
+msgid "Video"
+msgstr "Video"
+
+#, fuzzy
+msgid "an_error_occured_during_unsubscribing"
 msgstr "An error occured during unsubscribe from newlsetters"
 
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:15
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:17
-msgid "salutation"
-msgstr "Salutation"
-
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:28
-msgid "title"
-msgstr "Title"
-
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:34
-msgid "fname"
-msgstr "First name"
-
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:40
-msgid "sname"
-msgstr "Last name"
-
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:46
 msgid "email"
 msgstr "E-mail"
 
-#: public/website/themes/default/scripts/subscriber/subscribe.phtml:62
+msgid "fname"
+msgstr "First name"
+
+msgid "more_information"
+msgstr "More information"
+
+msgid "read_more_text"
+msgstr "read more"
+
 msgid "register"
 msgstr "register"
+
+msgid "salutation"
+msgstr "Salutation"
+
+msgid "sname"
+msgstr "Last name"
+
+msgid "title"
+msgstr "Title"
+
+msgid "unsubscribe"
+msgstr "unsubscribe"
+
+msgid "unsubscribe_confirmation"
+msgstr "You unsubscribed the newsletter"
+
+msgid "unsubscribe_description_text"
+msgstr "Unsubscribe from Newsletter"
+
+#, fuzzy
+msgid "Subscriber_doubleoptin_subject"
+msgstr "Unsubscribe from Newsletter"
 
 #~ msgid "Identity_not_found"
 #~ msgstr "Username not found"
@@ -591,9 +442,6 @@ msgstr "register"
 
 #~ msgid "Apply"
 #~ msgstr "Apply"
-
-#~ msgid "Subscribe_RSS"
-#~ msgstr "Subscribe RSS"
 
 #~ msgid "Book_now"
 #~ msgstr "Book now"
