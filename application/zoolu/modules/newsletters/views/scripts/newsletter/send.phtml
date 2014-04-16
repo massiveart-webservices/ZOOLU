@@ -1,0 +1,8 @@
+<?php
+require_once (dirname(__FILE__) . '/../../helpers/OverlayHelper.php');
+$objHelper = new OverlayHelper();
+?>
+<div class="oltitle"><?php echo $objHelper->getOverlayTitle($this->test); ?></div>
+<p class="confirmation">
+    <?php echo $objHelper->getSentConfirmationText(); ?>
+</p>
