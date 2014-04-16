@@ -93,7 +93,7 @@ class StatisticHelper {
                 ' . $this->core->translate->_('Recipients') . '
               </label>
               <br>
-              ' . $objCampaign->getRecipientsCount() . '
+              ' . $objCampaign->getRecipientsCountOnDelivery() . '
             </div>
           </div>
           <div class="field-6">
@@ -129,7 +129,7 @@ class StatisticHelper {
      * @return string
      */
     public function getNewsletterStatistics(NewsletterCampaignInterface $objCampaign) {
-        $intRecipients = $objCampaign->getRecipientsCount();
+        $intRecipients = $objCampaign->getRecipientsCountOnDelivery();
         $strOutput = '';
         $intTimestamp = time();
         $this->drawChart($this->getPercentage($intRecipients, $objCampaign->getStatisticsOpensCount()), 'OpenChart_' . $objCampaign->getNewsletterId());

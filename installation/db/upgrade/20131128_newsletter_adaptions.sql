@@ -139,3 +139,6 @@ INSERT INTO `zo-zoolu`.`regionFields` (`id`, `idRegions`, `idFields`, `order`) V
 ALTER TABLE `newsletters` ADD `newsletter_from_name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER `title` ;
 ALTER TABLE `newsletters` ADD `newsletter_from_email` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER `newsletter_from_name`;
 
+ALTER TABLE `newsletters` ADD `recipients_on_delivery` INT( 8 ) UNSIGNED NULL DEFAULT NULL AFTER `sent`;
+
+

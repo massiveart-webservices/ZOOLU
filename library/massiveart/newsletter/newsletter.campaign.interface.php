@@ -54,4 +54,6 @@ interface NewsletterCampaignInterface
     public function sendTest($args);
     
     public function getRecipientsCount($args);
+    
+    public function getRecipientsCountOnDelivery($args);
 }
