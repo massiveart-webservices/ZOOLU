@@ -120,6 +120,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
      */
     public function init($args) {
         $objNewsletter = $args['newsletter'];
+        $this->objNewsletter = $objNewsletter;
         $this->setNewsletterId($objNewsletter->id);
         if (key_exists('filter', $args)) {
             $objFilter= $args['filter'];
@@ -665,6 +666,16 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     }
     
     /**
+     * getRecipientsCountOnDelivery
+     * 
+     * @return number
+     */
+    public function getRecipientsCountOnDelivery($args = null)
+    {
+        return $this->objNewsletter->recipients_on_delivery;
+    }
+    
+    /**
      * Get content.
      *  
      * @return string 
@@ -760,7 +771,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     public function getSuccessfullDelivered()
     {
         $fails = $this->getBouncesCount() + $this->getStatisticsRejectsCount();
-        return $this->getRecipientsCount() - $fails;   
+        return $this->getRecipientsCountOnDelivery() - $fails;   
     }
     
     public function getUnsubscribeLinks()

@@ -292,34 +292,43 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
    */
   sendNewsletter: function(test){    
     var recipient;
-    
+    var sent = false;
     this.showSendAlertMessage(test);
-    
+    $('buttonCancel').show();
     $('buttonOk').observe('click', function(event){
-      if($('testemail')) {
-        recipient = $('testemail').getValue()
-      }else{
-        recipient = null;
+      if (sent == false) {
+        if($('testemail')) {
+          recipient = $('testemail').getValue()
+        }else{
+          recipient = null;
+        }
+        if (test) {
+          this.hideSendAlertMessage();
+        }
+        $('divFormSaveLoader').show();
+        new Ajax.Request(this.requestNewsletterSend, {
+          parameters: {
+            newsletterId: $('id').value,
+            test: test,
+            recipient: recipient
+          },
+          evalScripts: true,
+          onComplete: function(response){
+            sent = true;
+            $('buttonCancel').hide();
+            if(!test){
+              $('overlayGenContent').innerHTML = response.responseText;
+              $('buttonsend').hide();
+              $('buttontestsend').hide();
+              $('buttonsave').hide();
+              $('sent').value = 1;
+            }
+            $('divFormSaveLoader').hide();
+          }.bind(this)
+        });
+      } else {
+        this.hideSendAlertMessage();
       }
-      this.hideSendAlertMessage();
-      $('divFormSaveLoader').show();
-      new Ajax.Request(this.requestNewsletterSend, {
-        parameters: {
-          newsletterId: $('id').value,
-          test: test,
-          recipient: recipient
-        },
-        evalScripts: true,
-        onComplete: function(){
-          if(!test){
-            $('buttonsend').hide();
-            $('buttontestsend').hide();
-            $('buttonsave').hide();
-            $('sent').value = 1;
-          }
-          $('divFormSaveLoader').hide();
-        }.bind(this)
-      });
     }.bind(this));
     
     $('buttonCancel').observe('click', function(event){

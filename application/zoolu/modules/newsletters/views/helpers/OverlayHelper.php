@@ -62,6 +62,11 @@ class OverlayHelper
     {
         return $this->core->translate->_('send_newsletter');
     }
+    
+    public function getSentConfirmationText()
+    {
+        return $this->core->translate->_('sent_confirmation_newsletter');
+    }
 
     public function getOverlayTitle($blnTest)
     {

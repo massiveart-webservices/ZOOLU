@@ -277,9 +277,8 @@ class Newsletters_NewsletterController extends AuthControllerAction
     {
         $this->core->logger->debug('newsletters->controllers->NewsletterController->sendAction()');
 
-        $this->_helper->viewRenderer->setNoRender();
-
         $blnTestSend = $this->getRequest()->getParam('test');
+        $this->view->test = $blnTestSend;
 
         //Load the newsletter with the given Id
         $intNewsletterId = $this->getRequest()->getParam('newsletterId');
@@ -317,6 +316,7 @@ class Newsletters_NewsletterController extends AuthControllerAction
                 }
             }
         }
+        $this->view->setScriptPath(dirname(__FILE__) . '/../views/scripts');
     }
 
     /**

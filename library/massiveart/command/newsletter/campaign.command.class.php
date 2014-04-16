@@ -103,6 +103,7 @@ class NewsletterCampaignCommand implements CommandInterface
                     case 'recipients:count:get':
                         return $this->campaign->getRecipientsCount($arrArgs);
                         break;
+                    
                 }
             }
         }
