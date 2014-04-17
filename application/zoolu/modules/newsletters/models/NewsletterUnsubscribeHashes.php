@@ -114,28 +114,15 @@ class Model_NewsletterUnsubscribeHashes {
   
   /**
    * update
-   * @param GenericSetup $objGenericSetup
+   * @param int $id
    * @param Array $arrData
-   * @author Thomas Schedler <tsh@massiveart.com>
+   * @author Raphael Stocker <rst@massiveart.com>
    * @version 1.0
    */
-  public function update(GenericSetup &$objGenericSetup, $arrData){
-    $this->core->logger->debug('newsletters->models->Model_Newsletters->update()');
+  public function update($id, $arrData){
+    $this->core->logger->debug('newsletters->models->Model_NewsletterUnsubscribeHashes->update(' . $id . ')');
 
-    $objAuth = Zend_Auth::getInstance();
-    $objAuth->setStorage(new Zend_Auth_Storage_Session('Zoolu'));
-    $intUserId = $objAuth->getIdentity()->id;
-
-    $strWhere = $this->getNewsletterTable()->getAdapter()->quoteInto('id = ?', $objGenericSetup->getElementId());
-
-    $arrData = array_merge(
-      $arrData,
-      array(
-        'idUsers'  => $intUserId,
-        'changed' => date('Y-m-d H:i:s')
-      )
-    );
-    
+    $strWhere = $this->getNewsletterUnsubcribeHashesTable()->getAdapter()->quoteInto('id = ?', $id);
     return $this->getNewsletterUnsubcribeHashesTable()->update($arrData, $strWhere);
   }
 

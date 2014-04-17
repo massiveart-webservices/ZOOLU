@@ -58,6 +58,11 @@ class SubscriberController extends WebControllerAction {
      * @var Model_Subscribers
      */
     private $objModelSubscribers;
+    
+    /**
+     * @var Model_NewsletterUnsubscribeHashes
+     */
+    private $objModelUnsubscribeHashes;
 
     /**
      * @var Model_Categories
@@ -422,10 +427,13 @@ class SubscriberController extends WebControllerAction {
                         $subscriberStat = $subscriberStats->current();
                         $this->getModelNewsletters()->updateNewsletterStatistics($subscriberStat->id, $data);
                     } else {
-                        $data['idNewsletter'] = 1;
+                        $data['idNewsletter'] = $newsletterId;
                         $data['idSubscriber'] = $subscriber->id;
                         $this->getModelNewsletters()->addNewsletterStatistics($data);
                     }
+                    
+                    $hashData = array('used' => date('Y-m-d H:i:s'));
+                    $this->getModelNewsletterUnsubscribeHashes()->update($subscriber->hashId, $hashData);
                     $this->view->success = true;
                 } else {
                     $this->view->hash = $hash;
@@ -538,6 +546,24 @@ class SubscriberController extends WebControllerAction {
             $this->objModelNewsletters = new Model_Newsletters();
         }
         return $this->objModelNewsletters;
+    }
+    
+    /**
+     * getModelNewsletterUnsubscribeHashes
+     * @return Model_Newsletters
+     */
+    protected function getModelNewsletterUnsubscribeHashes(){
+        if (null === $this->objModelUnsubscribeHashes) {
+            /**
+             * autoload only handles "library" compoennts.
+             * Since this is an application model, we need to require it
+             * from its modules path location.
+             */
+            require_once GLOBAL_ROOT_PATH.$this->core->sysConfig->path->zoolu_modules.'newsletters/models/NewsletterUnsubscribeHashes.php';
+            $this->objModelUnsubscribeHashes = new Model_NewsletterUnsubscribeHashes();
+        }
+    
+        return $this->objModelUnsubscribeHashes;
     }
 }
 

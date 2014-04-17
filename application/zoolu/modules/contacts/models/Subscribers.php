@@ -330,7 +330,7 @@ class Model_Subscribers {
         $objSelect = $this->getSubscriberTable()->select();
         $objSelect->setIntegrityCheck(false);
         $objSelect->from('subscribers')
-                  ->join('newsletterUnsubscribeHashes', 'newsletterUnsubscribeHashes.idSubscriber = subscribers.id', array())
+                  ->join('newsletterUnsubscribeHashes', 'newsletterUnsubscribeHashes.idSubscriber = subscribers.id', array('hashId' => 'id'))
                   ->where('newsletterUnsubscribeHashes.hash = ?', array($hash));
         return $this->getSubscriberTable()->fetchAll($objSelect);
     }

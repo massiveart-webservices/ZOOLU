@@ -306,9 +306,11 @@ class Newsletters_NewsletterController extends AuthControllerAction
                 } else {
                     // ==>
                     $this->objCommandChain->runCommand('newsletter:send', array('content' => $content, 'newsletter' => $objNewsletter));
+                    $intRecipients = $this->objCommandChain->runCommand('recipients:count:get', array());
                     $this->getModelNewsletters()->update($objGenericData->Setup(),
                         array(
                              'sent'               => 1,
+                             'recipients_on_delivery' => $intRecipients,
                              'delivered'          => date('Y-m-d H:i:s'),
                              'idRootLevelFilters' => $objGenericData->Setup()->getField('filter')->getValue()
                         )
