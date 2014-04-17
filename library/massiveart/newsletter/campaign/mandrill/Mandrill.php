@@ -289,7 +289,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         }
         // Get stats
         $statistics = $this->getModelNewsletters()->loadNewsletterStatistics($this->newsletterId);
-        
+
         // Load statistics
         if (count($statistics) > 0) {
             $this->sends = $this->calculateStat($statistics, 'sent');

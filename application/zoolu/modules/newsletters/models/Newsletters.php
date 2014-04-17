@@ -233,6 +233,7 @@ class Model_Newsletters {
      * Gets newsletter statistics.
      */
     public function loadNewsletterStatistics($idNewsletter) {
+        $this->core->logger->debug('newsletters->models->Model_Newsletters->loadNewsletterStatistics(' . $idNewsletter .')');
         $objSelect = $this->getModelNewsletterStatisticsTable()->select();
         $objSelect->setIntegrityCheck(false);
 

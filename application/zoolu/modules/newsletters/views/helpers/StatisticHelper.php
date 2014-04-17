@@ -130,6 +130,7 @@ class StatisticHelper {
      */
     public function getNewsletterStatistics(NewsletterCampaignInterface $objCampaign) {
         $intRecipients = $objCampaign->getRecipientsCountOnDelivery();
+        
         $strOutput = '';
         $intTimestamp = time();
         $this->drawChart($this->getPercentage($intRecipients, $objCampaign->getStatisticsOpensCount()), 'OpenChart_' . $objCampaign->getNewsletterId());
@@ -138,6 +139,7 @@ class StatisticHelper {
 
         // Transform data
         $arrUnsubscribes = $objCampaign->getUnsubscribes();
+        
         $strUnsubscribes = (count($arrUnsubscribes) > 0) ? json_encode((object) $arrUnsubscribes) : '';
 
         $arrBounces = $objCampaign->getBounces();
