@@ -1377,6 +1377,27 @@ class Cms_PageController extends AuthControllerAction
     }
 
     /**
+     * @return array
+     */
+    protected function getDefaultTemplate()
+    {
+        $rootLevelId = $this->objRequest->getParam('rootLevelId');
+        $intTemplateId = $this->objRequest->getParam("templateId");
+        $defaultTemplateId = $intTemplateId;
+        $strFormId = $this->objRequest->getParam("formId");
+        $templates = $this->getModelTemplates()->loadRootLevelTemplates($rootLevelId, $this->core->sysConfig->types->page);
+        foreach ($templates as $template) {
+            $intTemplateId = $template->id;
+            $strFormId = $template->genericFormId;
+            if ($defaultTemplateId == $intTemplateId) {
+                break;
+            }
+        }
+
+        return array($strFormId, $intTemplateId);
+    }
+
+    /**
      * getForm
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -1386,9 +1407,12 @@ class Cms_PageController extends AuthControllerAction
         $this->core->logger->debug('cms->controllers->PageController->getForm(' . $intActionType . ')');
 
         try {
-
-            $strFormId = $this->objRequest->getParam("formId");
-            $intTemplateId = $this->objRequest->getParam("templateId");
+            if ($intActionType == $this->core->sysConfig->generic->actions->add) {
+                list($strFormId, $intTemplateId) = $this->getDefaultTemplate();
+            } else {
+                $intTemplateId = $this->objRequest->getParam("templateId");
+                $strFormId = $this->objRequest->getParam("formId");
+            }
 
             /**
              * if there is now formId, try to load form template
