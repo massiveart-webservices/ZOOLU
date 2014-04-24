@@ -142,3 +142,14 @@ ALTER TABLE `newsletters` ADD `newsletter_from_email` VARCHAR( 255 ) CHARACTER S
 ALTER TABLE `newsletters` ADD `recipients_on_delivery` INT( 8 ) UNSIGNED NULL DEFAULT NULL AFTER `sent`;
 
 
+INSERT INTO `fields` (`id`, `idFieldTypes`, `name`, `idSearchFieldTypes`, `idRelationPage`, `idCategory`, `sqlSelect`, `columns`, `height`, `isCoreField`, `isKeyField`, `isSaveField`, `isRegionTitle`, `isDependentOn`, `showDisplayOptions`, `options`, `copyValue`, `validators`) VALUES (NULL, '21', 'newsletter_variables', '1', NULL, NULL, NULL, '12', '0', '0', '0', '0', '0', NULL, '0', NULL, '0', '');
+
+INSERT INTO `fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `description`) VALUES (NULL, '282', '1', 'Newsletter Variablen', '<b>*|FNAME|*</b> Vorname');
+
+INSERT INTO `fieldTitles` (`id`, `idFields`, `idLanguages`, `title`, `description`) VALUES (NULL, '282', '2', 'Newsletter variables', '<b>*|FNAME|*</b> Firstname');
+
+INSERT INTO `regionFields` (`id`, `idRegions`, `idFields`, `order`) VALUES (NULL, '96', '282', '70');
+
+UPDATE `zo-zoolu`.`fieldTitles` SET `description` = '<b>*|FNAME|*</b> Vorname<br /> <b>*|LNAME|*</b> Nachname<br /> <b>*|SALUTATION|*</b> Anrede<br /> <b>*|EMAIL|*</b> Email' WHERE `fieldTitles`.`id` =461;
+
+UPDATE `zo-zoolu`.`fieldTitles` SET `description` = '<b>*|FNAME|*</b> Firstname<br /> <b>*|LNAME|*</b> Lastname<br /> <b>*|SALUTATION|*</b> Salutation<br /> <b>*|EMAIL|*</b> Email' WHERE `fieldTitles`.`id` =462;

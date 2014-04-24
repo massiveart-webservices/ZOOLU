@@ -479,10 +479,11 @@ class GenericSetup
 
                             $this->getTab($objFieldRegionTagData->tabId)->addRegion($objGenRegion);
                         }
-
+                        
                         $objGenField = new GenericElementField();
                         $objGenField->id = $objFieldRegionTagData->id;
                         $objGenField->title = $objFieldRegionTagData->title;
+                        $objGenField->description = $objFieldRegionTagData->description;
                         $objGenField->name = $objFieldRegionTagData->name;
                         $objGenField->typeId = $objFieldRegionTagData->idFieldTypes;
                         $objGenField->type = $objFieldRegionTagData->type;
@@ -504,6 +505,7 @@ class GenericSetup
                         $objGenField->idFieldTypeGroup = $objFieldRegionTagData->idFieldTypeGroup;
                         $objGenField->validators = ($objFieldRegionTagData->validators != null) ? json_decode($objFieldRegionTagData->validators) : array();
 
+                        
                         /**
                          * select field container
                          */
