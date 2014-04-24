@@ -286,25 +286,27 @@ class Newsletters_NewsletterController extends AuthControllerAction
         if (count($objNewsletters) > 0) {
             $objNewsletter = $objNewsletters->current();
             $objGenericData = $this->getModelNewsletters()->loadGenericForm($objNewsletter);
-            $objFilter = $this->getModelRootLevels()->loadRootLevelFilter($objGenericData->Setup()->getField('filter')->getValue());
-            if (count($objFilter) > 0) {
-                $objFilter = $objFilter->current();
 
+            if ($blnTestSend) {
                 // init before send
-                $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'filter' => $objFilter));
+                $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'filter' => null));
+                $strEmail = $this->getRequest()->getParam('recipient');
+                // send Testnewsletter
+                $this->objCommandChain->runCommand('newsletter:sendTest', array('content' => $content, 'newsletter' => $objNewsletter, 'email' => $strEmail));
+            } else {
+                $objFilter = $this->getModelRootLevels()->loadRootLevelFilter($objGenericData->Setup()->getField('filter')->getValue());
+                if (count($objFilter) > 0) {
+                    $objFilter = $objFilter->current();
 
-                // create or update campaing on a remote system
-                $remoteId = $this->objCommandChain->runCommand('campaign:update', array('remoteId' => $objNewsletter->remoteId));
-                $this->getModelNewsletters()->update($objGenericData->Setup(), array(self::REMOTE_ID => $remoteId));
+                    // init before send
+                    $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'filter' => $objFilter));
 
-                $this->renderNewsletter($objNewsletter);      
-                $content = $this->view->render('master.php');
-                if ($blnTestSend) {
-                    $strEmail = $this->getRequest()->getParam('recipient');
-                    // send Testnewsletter
-                    $this->objCommandChain->runCommand('newsletter:sendTest', array('content' => $content, 'newsletter' => $objNewsletter, 'email' => $strEmail));
-                } else {
-                    // ==>
+                    // create or update campaing on a remote system
+                    $remoteId = $this->objCommandChain->runCommand('campaign:update', array('remoteId' => $objNewsletter->remoteId));
+                    $this->getModelNewsletters()->update($objGenericData->Setup(), array(self::REMOTE_ID => $remoteId));
+
+                    $this->renderNewsletter($objNewsletter);      
+                    $content = $this->view->render('master.php');
                     $this->objCommandChain->runCommand('newsletter:send', array('content' => $content, 'newsletter' => $objNewsletter));
                     $intRecipients = $this->objCommandChain->runCommand('recipients:count:get', array());
                     $this->getModelNewsletters()->update($objGenericData->Setup(),
