@@ -301,7 +301,7 @@ class Model_GenericForms
             ->joinLeft('regionTitles', 'regionTitles.idRegions = regions.id AND regionTitles.idLanguages = ' . $this->intLanguageId, array('regionTitle' => 'title'))
             ->joinLeft('regionFields', 'regionFields.idRegions = regions.id', array('order'))
             ->joinLeft('fields', 'fields.id = regionFields.idFields', array('id', 'idFieldTypes', 'name', 'idSearchFieldTypes', 'idRelationPage', 'idCategory', 'sqlSelect', 'columns', 'isCoreField', 'isKeyField', 'isSaveField', 'isRegionTitle', 'isDependentOn', 'showDisplayOptions', 'options', 'copyValue', 'validators'))
-            ->joinLeft('fieldTitles', 'fieldTitles.idFields = fields.id AND fieldTitles.idLanguages = ' . $this->intLanguageId, array('title'))
+            ->joinLeft('fieldTitles', 'fieldTitles.idFields = fields.id AND fieldTitles.idLanguages = ' . $this->intLanguageId, array('title', 'description'))
             ->joinLeft('fieldTypes', 'fieldTypes.id = fields.idFieldTypes', array('type' => 'title', 'defaultValue', 'idFieldTypeGroup'))
             ->joinLeft('decorators', 'decorators.id = fieldTypes.idDecorator', array('decorator' => 'title'))
             ->where('genericFormTabs.idGenericForms = ?', $intGenFormId)
