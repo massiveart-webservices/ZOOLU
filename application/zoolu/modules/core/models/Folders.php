@@ -1425,7 +1425,7 @@ class Model_Folders extends ModelAbstract
 
         if ($intDisplayOptionId > 0) {
             $objSelect1->where('((folderProperties.showInNavigation = ? AND folders.depth = 0) OR (folderProperties.showInNavigation = 1 AND folders.depth > 0))', $intDisplayOptionId)
-                ->where('((pageProperties.showInNavigation = ? AND folders.depth = 0) OR (pageProperties.showInNavigation = 1 AND folders.depth > 0))', $intDisplayOptionId);
+                ->where('((pageProperties.showInNavigation = ? AND folders.depth = 0) OR (pageProperties.showInNavigation = 1 AND folders.depth >= 0))', $intDisplayOptionId);
         } elseif ($intDisplayOptionId != -1) {
             $objSelect1->where('folderProperties.showInNavigation > 0')
                 ->where('pageProperties.showInNavigation > 0');
