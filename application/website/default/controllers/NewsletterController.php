@@ -91,6 +91,7 @@ class NewsletterController extends WebControllerAction {
             
             $this->renderNewsletter($objNewsletter);
             $this->view->isPreview = true;
+            $this->view->translate = $translate;
             
             $this->view->setScriptPath(GLOBAL_ROOT_PATH . 'public/website/newsletter/' . $this->core->sysConfig->newsletter->theme);
             $this->renderScript('/master.php');
