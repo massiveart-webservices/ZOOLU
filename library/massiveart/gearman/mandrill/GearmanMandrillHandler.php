@@ -74,7 +74,11 @@ class GearmanMandrillHandler
      */
     private static function init($job){
         self::$job = $job;
-        self::$workload = unserialize($job->workload());
+        if (method_exists($job, 'workload')) {
+            self::$workload = unserialize($job->workload());
+        } else {
+            self::$workload = unserialize($job);
+        }
     
         if(empty(self::$core)){
             self::$core = Zend_Registry::get('Core');
