@@ -1145,16 +1145,17 @@ class Cms_PageController extends AuthControllerAction
         try {
             //Set backlink
             $this->objRequest->setParam('backLink', $this->objRequest->getParam('backLink', false));
+            $rootLevelId = $this->objRequest->getParam('rootLevelId');
             if ($this->objRequest->getParam('pageTypeId') != '' && $this->objRequest->getParam('pageTypeId') > 0) {
                 switch ($this->objRequest->getParam('pageTypeId')) {
                     case $this->core->sysConfig->page_types->page->id :
                         $this->objRequest->setParam('formId', '');
                         if ($this->objRequest->getParam('isStartPage') == 'true' && $this->objRequest->getParam('parentTypeId') == $this->core->sysConfig->parent_types->rootlevel) {
-                            $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->page->portal_startpage_templateId);
+                            $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->page->portal_startpage_templateId, $this->core->sysConfig->page_types->page->default_formId, $this->objRequest->getParam('pageTypeId'), $this->objRequest->getParam('pageTypeId'), true));
                         } else if ($this->objRequest->getParam('isStartPage') == 'true') {
-                            $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->page->startpage_templateId);
+                            $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->page->startpage_templateId, $this->core->sysConfig->page_types->page->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         } else {
-                            $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->page->default_templateId);
+                            $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->page->default_templateId, $this->core->sysConfig->page_types->page->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         }
                         break;
                     case $this->core->sysConfig->page_types->link->id :
@@ -1162,50 +1163,50 @@ class Cms_PageController extends AuthControllerAction
                         break;
                     case $this->core->sysConfig->page_types->overview->id :
                         $this->objRequest->setParam('formId', '');
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->overview->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->overview->default_templateId, $this->core->sysConfig->page_types->overview->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->external->id :
                         $this->objRequest->setParam('formId', $this->core->sysConfig->page_types->external->default_formId);
                         break;
                     case $this->core->sysConfig->page_types->process->id :
                         $this->objRequest->setParam('formId', $this->core->sysConfig->page_types->process->default_formId);
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->process->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->process->default_templateId, $this->core->sysConfig->page_types->process->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->collection->id :
                         $this->objRequest->setParam('formId', $this->core->sysConfig->page_types->collection->default_formId);
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->collection->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->collection->default_templateId, $this->core->sysConfig->page_types->collection->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->product_tree->id :
                         $this->objRequest->setParam('formId', '');
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->product_tree->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->product_tree->default_templateId, $this->core->sysConfig->page_types->product_tree->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->press_area->id :
                         $this->objRequest->setParam('formId', '');
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->press_area->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->press_area->default_templateId, $this->core->sysConfig->page_types->press_area->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->courses->id :
                         $this->objRequest->setParam('formId', '');
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->courses->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->courses->default_templateId, $this->core->sysConfig->page_types->courses->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->events->id :
                         $this->objRequest->setParam('formId', '');
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->events->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->events->default_templateId, $this->core->sysConfig->page_types->events->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->iframe->id :
                         $this->objRequest->setParam('formId', $this->core->sysConfig->page_types->iframe->default_formId);
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->iframe->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->iframe->default_templateId, $this->core->sysConfig->page_types->iframe->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->download_center->id :
                         $this->objRequest->setParam('formId', $this->core->sysConfig->page_types->download_center->default_formId);
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->download_center->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->download_center->default_templateId, $this->core->sysConfig->page_types->download_center->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->sitemap->id :
                         $this->objRequest->setParam('formId', $this->core->sysConfig->page_types->sitemap->default_formId);
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->sitemap->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->sitemap->default_templateId, $this->core->sysConfig->page_types->sitemap->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                     case $this->core->sysConfig->page_types->service->id :
                         $this->objRequest->setParam('formId', $this->core->sysConfig->page_types->service->default_formId);
-                        $this->objRequest->setParam('templateId', $this->core->sysConfig->page_types->service->default_templateId);
+                        $this->objRequest->setParam('templateId', $this->getDefaultTemplate($rootLevelId, $this->core->sysConfig->page_types->service->default_templateId, $this->core->sysConfig->page_types->service->default_formId, $this->objRequest->getParam('pageTypeId'), true));
                         break;
                 }
             }
@@ -1377,21 +1378,42 @@ class Cms_PageController extends AuthControllerAction
     }
 
     /**
+     * getDefaultTemplate
+     * @param null $rootLevelId
+     * @param null $intTemplateId
+     * @param null $strFormId
+     * @param null $pageType
+     * @param bool $returnTemplateOnly
      * @return array
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
      */
-    protected function getDefaultTemplate()
+    protected function getDefaultTemplate($rootLevelId = null, $intTemplateId = null, $strFormId = null, $pageType = null, $returnTemplateOnly = false )
     {
-        $rootLevelId = $this->objRequest->getParam('rootLevelId');
-        $intTemplateId = $this->objRequest->getParam("templateId");
+        if ($rootLevelId ===  null) {
+            $rootLevelId = $this->objRequest->getParam('rootLevelId');
+        }
+        if ($intTemplateId === null) {
+            $intTemplateId = $this->objRequest->getParam("templateId");
+        }
+        if ($strFormId === null) {
+            $strFormId = $this->objRequest->getParam("formId");
+        }
+        if ($pageType === null) {
+            $pageType = $this->core->sysConfig->types->page;
+        }
         $defaultTemplateId = $intTemplateId;
-        $strFormId = $this->objRequest->getParam("formId");
-        $templates = $this->getModelTemplates()->loadRootLevelTemplates($rootLevelId, $this->core->sysConfig->types->page);
-        foreach ($templates as $template) {
-            $intTemplateId = $template->id;
-            $strFormId = $template->genericFormId;
+        $templates = $this->getModelTemplates()->loadRootLevelTemplates($rootLevelId, $pageType);
+        foreach ($templates->toArray() as $template) {
+            $intTemplateId = $template['id'];
+            $strFormId = $template['genericFormId'];
             if ($defaultTemplateId == $intTemplateId) {
                 break;
             }
+        }
+
+        if ($returnTemplateOnly) {
+            return $intTemplateId;
         }
 
         return array($strFormId, $intTemplateId);
