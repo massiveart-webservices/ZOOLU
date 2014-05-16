@@ -69,7 +69,9 @@ class Form_Helper_FormInternalLinks extends Zend_View_Helper_FormElement
         $targetRootLevel = 0;
         if (array_key_exists('fieldOptions', $attribs)) {
             $fieldOptions = json_decode($attribs['fieldOptions']);
-            $targetRootLevel = $fieldOptions->targetRootLevel;
+            if ($fieldOptions != null && $fieldOptions != false) {
+                $targetRootLevel = $fieldOptions->targetRootLevel;
+            }
         }
 
         $strItemInternalLinks = '';
