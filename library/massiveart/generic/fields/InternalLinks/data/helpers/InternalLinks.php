@@ -104,7 +104,10 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract
 
             $intRootLevelId = 0;
             if ($this->objElement->fieldOptions) {
-                $intRootLevelId = json_decode($this->objElement->fieldOptions)->targetRootLevel;
+                $fieldOptions = json_decode($this->objElement->fieldOptions);
+                if ($fieldOptions != null && $fieldOptions != false) {
+                    $intRootLevelId = $fieldOptions->targetRootLevel;
+                }
             }
 
             $objItemInternalLinksData = $this->objModel->loadInternalLinks($strElementId, $intVersion, $this->objElement->id, $intRootLevelId);
