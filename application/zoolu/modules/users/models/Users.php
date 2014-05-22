@@ -718,6 +718,7 @@ class Model_Users
 
         if ($this->objUserTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Users.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/UserGroups.php';
             $this->objUserTable = new Model_Table_Users();
         }
 
@@ -752,6 +753,9 @@ class Model_Users
 
         if ($this->objGroupTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Groups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/GroupPermissions.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/ResourceGroups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/UserGroups.php';
             $this->objGroupTable = new Model_Table_Groups();
         }
 
@@ -803,6 +807,7 @@ class Model_Users
 
         if ($this->objResourceTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Resources.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/ResourceGroups.php';
             $this->objResourceTable = new Model_Table_Resources();
         }
 
