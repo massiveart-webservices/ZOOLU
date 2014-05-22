@@ -2642,6 +2642,9 @@ class Model_Pages extends ModelAbstract
 
         if ($this->groupsTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Groups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/GroupPermissions.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/ResourceGroups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/UserGroups.php';
             $this->groupsTable = new Model_Table_Groups();
         }
         return $this->groupsTable;
