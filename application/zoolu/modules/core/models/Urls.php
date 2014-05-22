@@ -367,7 +367,7 @@ class Model_Urls
                          ->where('urls.idUrlTypes = ?', $this->core->sysConfig->url_types->global)
                          ->where('globals.id = (SELECT p.id FROM globals p WHERE p.globalId = globals.globalId ORDER BY p.version DESC LIMIT 1)');
         if($blnLanguage){
-            $objGlobalSelect->joinLeft('folders', 'folders.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
+            $objGlobalSelect->join('folders', 'folders.id = urls.idParent AND urls.idParentTypes = '.$this->core->sysConfig->parent_types->folder, array());
         }
         $objGlobalSelect->where('urls.isLandingPage = ?', (int) $blnLandingPage);
 
