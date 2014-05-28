@@ -1132,6 +1132,11 @@
                 <private></private>
             </keys>
         </recaptcha>
+
+        <!-- Tidy Config -->
+        <tidy>
+            <show_body_only_by_ajax>false</show_body_only_by_ajax>
+        </tidy>
     </production>
 
     <!--
