@@ -123,6 +123,11 @@ class Core
     public $blnDashboard = true;
 
     /**
+     * @var bool
+     */
+    public $blnIsAjaxRequest = false;
+
+    /**
      * Constructor
      */
     protected function __construct($blnWithDbh = true, Zend_Config_Xml $sysConfig, Zend_Config_Xml $zooConfig, Zend_Config_Xml $config)
@@ -285,6 +290,21 @@ class Core
                 header('Location: http://' . $this->sysConfig->hostname);
                 die();
             }
+        }
+
+        // is AjaxRequest
+        $this->blnIsAjaxRequest = $this->isAjaxRequest();
+    }
+
+    /**
+     * @return bool
+     * @author Phuc Le <phuc.le@massiveart.com>, Alexander Schranz <alexander.schranz@massiveart.com>
+     */
+    protected function isAjaxRequest() {
+        if( !empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == "xmlhttprequest" ) {
+            return true;
+        }else{
+            return false;
         }
     }
 
