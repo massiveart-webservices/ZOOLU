@@ -48,12 +48,12 @@ class Model_Table_UserGroups extends Zend_Db_Table_Abstract
     protected $_referenceMap = array(
         'User'  => array(
             'columns'           => array('idUsers'),
-            'refTableClass'     => 'users',
+            'refTableClass'     => 'Model_Table_Users',
             'refColumns'        => array('id')
         ),
         'Group' => array(
             'columns'           => array('idGroups'),
-            'refTableClass'     => 'groups',
+            'refTableClass'     => 'Model_Table_Groups',
             'refColumns'        => array('id')
         )
     );
