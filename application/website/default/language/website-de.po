@@ -304,7 +304,7 @@ msgid "salutation"
 msgstr "Anrede"
 
 msgid "sname"
-msgstr "Vorname"
+msgstr "Nachname"
 
 msgid "title"
 msgstr "Titel"
