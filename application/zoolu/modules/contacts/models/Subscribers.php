@@ -159,7 +159,7 @@ class Model_Subscribers {
         if ($blnExtendSelect) {
             $arrValues = array('id', 'salutation' => 'csat.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         } else {
-            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'csat.title', 'bounced' => 'cbt.title', 'created', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'csut.title', 'bounced' => 'cbt.title', 'created', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
