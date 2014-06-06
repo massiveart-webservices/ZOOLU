@@ -82,6 +82,7 @@ class NavigationHelper
                     $strJsClickFunc = '';
                     $strRootLevelIconCss = '';
                     $strRootLevelType = '';
+                    $openSubMenu = 'false';
 
                     switch ($objNavigation->getTypeId()) {
                         case $this->core->sysConfig->root_level_types->contacts:
@@ -107,6 +108,7 @@ class NavigationHelper
                         case $this->core->sysConfig->root_level_types->subscribers:
                             $strRootLevelType = 'subscriber';
                             $strJsClickFunc = 'myNavigation.selectSubscribers(' . $objNavigation->getId() . ', ' . $objNavigationTree->getTypeId() . ', \'' . $objNavigation->getUrl() . '\', \'' . $strViewType . '\', \'' . $strRootLevelType . '\'); return false;';
+                            $openSubMenu = 'true';
                             $strRootLevelIconCss = 'usericon';
                             break;
                         case $this->core->sysConfig->root_level_types->customers:
@@ -129,6 +131,7 @@ class NavigationHelper
                             $strOutput .= '
                                 <script type="text/javascript">//<![CDATA[
                                     var preSelectedNaviItem = \'naviitem' . $objNavigation->getId() . '\';
+                                    var openSubMenu = '.$openSubMenu.';
                                     //]]>
                                 </script>';
                         }
@@ -179,6 +182,8 @@ class NavigationHelper
                     $strJsClickFunc = '';
                     $strRootLevelIconCss = '';
                     $strRootLevelType = '';
+                    $addJsFunc = '';
+                    $openSubMenu = 'false';
 
                     switch ($objNavigation->getTypeId()) {
                         case $this->core->sysConfig->root_level_types->contacts:
@@ -203,6 +208,7 @@ class NavigationHelper
                             break;
                         case $this->core->sysConfig->root_level_types->subscribers:
                             $strRootLevelType = 'subscriber';
+                            $openSubMenu = 'true';
                             $strJsClickFunc = 'myNavigation.selectSubscribers(' . $objNavigation->getId() . ', ' . $objNavigationTree->getTypeId() . ', \'' . $objNavigation->getUrl() . '\', \'' . $strViewType . '\', \'' . $strRootLevelType . '\'); return false;';
                             $strRootLevelIconCss = 'usericon';
                             break;
@@ -229,6 +235,7 @@ class NavigationHelper
                                 <script type="text/javascript">//<![CDATA[
                                     var preSelectedNaviItem = \'naviitem' . $objNavigationTree->getId() . '\';
                                     var preSelectedSubNaviItem = \'subnaviitem' . $objNavigation->getId() . '\';
+                                    var openSubMenu = '.$openSubMenu.';
                                     //]]>
                                 </script>';
                         }

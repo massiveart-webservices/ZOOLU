@@ -472,6 +472,10 @@
             myNavigation.preSelectedSubNaviItem = preSelectedSubNaviItem;
         }
 
+        if (!!openSubMenu) {
+            $$('.naviitem.selected').first().onclick()
+        }
+
         new Draggable('overlayGenContentWrapper', {handle: 'handle', scroll: window });
 
         <?php if ($this->fileId): ?>
