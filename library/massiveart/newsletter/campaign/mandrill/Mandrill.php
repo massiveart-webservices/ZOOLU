@@ -65,7 +65,6 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     private $delivered;
 
     private $sends;
-    private $bounces;
     private $bouncesHard;
     private $bouncesSoft;
     private $unsubscribes;
@@ -736,10 +735,9 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     public function getSenderEmail() {
         return $this->senderEmail;
     }
-    
+
     /**
-     * 
-     * @return 
+     * @return int
      */
     public function getNewsletterId()
     {
@@ -753,14 +751,6 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     public function setNewsletterId($newsletterId)
     {
         $this->newsletterId = $newsletterId;
-    }
-    
-    /**
-     * @param object $recipient
-     */
-    private function setTestRecipient($recipient)
-    {
-        $this->recipients = $recipient;    
     }
     
     /**
