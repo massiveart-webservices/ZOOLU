@@ -99,6 +99,7 @@
             <page>true</page>
             <generic_form_structure>true</generic_form_structure>
             <options>all</options><!-- all/groups/customer -->
+            <ajax_seperate>false</ajax_seperate>
             <display_type_seperate>false</display_type_seperate>
         </cache>
 
@@ -1132,6 +1133,11 @@
                 <private></private>
             </keys>
         </recaptcha>
+
+        <!-- Tidy Config -->
+        <tidy>
+            <show_body_only_by_ajax>false</show_body_only_by_ajax>
+        </tidy>
     </production>
 
     <!--

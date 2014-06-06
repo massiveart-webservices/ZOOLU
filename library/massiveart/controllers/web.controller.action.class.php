@@ -594,6 +594,11 @@ abstract class WebControllerAction extends Zend_Controller_Action
                 break;
         }
 
+        // Own Cache for Ajax
+        if ($this->core->blnIsAjaxRequest && $this->core->sysConfig->cache->ajax_seperate == 'true') {
+            $cachingPrefix .= '_AJAX';
+        }
+
         // Cache Display Type
         if ($this->core->sysConfig->cache->display_type_seperate == 'true') {
             $cachingPrefix .= $this->core->strDisplayType;

@@ -144,6 +144,10 @@ class IndexController extends WebControllerAction
                     'break-before-br'     => false,
                 );
 
+                if ($this->core->blnIsAjaxRequest && $this->core->sysConfig->tidy->show_body_only_by_ajax == 'true') {
+                    $arrConfig['show-body-only'] = true;
+                }
+
                 $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);
                 $objTidy->cleanRepair();
                 // tidy bugfix - doctype for html5
