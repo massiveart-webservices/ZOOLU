@@ -71,6 +71,7 @@
                 <div id="divFormDeleteSucces" class="alertdeletesucces" style="display:none;"><?php echo $this->translate->_('Deleted'); ?>!</div>
 
                 <div id="genListFunctions" style="display:none;">
+                    <?php if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_ADD)) : ?>
                     <!-- new button -->
                     <div id="buttonnew" onclick="myNavigation.getAddFormList();">
                         <div class="button25leftOn"></div>
@@ -82,6 +83,7 @@
                         <div class="button25rightOn"></div>
                         <div class="clear"></div>
                     </div>
+                    <?php endif; ?>
 
                     <!-- edit menu -->
                     <div id="buttonedit" onclick="return false;">
@@ -93,10 +95,15 @@
 
                     <div id="buttonEditMenu" class="buttoneditmenu" style="display:none;">
                         <div class="buttoneditmenuinner">
+                            <?php if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_DELETE)) : ?>
                             <div class="buttoneditlink" onclick="myList.deleteListItem(); return false;"><?php echo $this->translate->_('Delete'); ?></div>
+                            <?php endif; if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_UPDATE)) : ?>
                             <div class="buttoneditlink" onclick="myList.unsubscribeListItem(); return false;"><?php echo $this->translate->_('Unsubscribe'); ?></div>
+                            <?php endif; if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_VIEW)) : ?>
                             <div id="exportList" class="buttoneditlink" style="display:none;" onclick="myList.exportList(); return false;"><?php echo $this->translate->_('Export'); ?></div>
+                            <?php endif; if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_UPDATE)) : ?>
                             <div id="importList" class="buttoneditlink" style="display:none;" onclick="myList.importListUpload(); return false;"><?php echo $this->translate->_('Import'); ?></div>
+                            <?php endif; ?>
                             <div class="clear"></div>
                         </div>
                         <div class="buttoneditbottom"></div>
@@ -128,6 +135,10 @@
                     </div>
 
                     <!-- save button -->
+                    <?php if (
+                        Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_UPDATE) ||
+                        Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_ADD)
+                    ) : ?>
                     <div id="buttonsave" onclick="myForm.save();">
                         <div class="button25leftOn"></div>
                         <div class="button25centerOn">
@@ -138,6 +149,7 @@
                         <div class="button25rightOn"></div>
                         <div class="clear"></div>
                     </div>
+                    <?php endif; ?>
 
                     <!-- send data to user -->
                     <div id="sendDataLink" style="display:none;">
@@ -145,6 +157,7 @@
                     </div>
 
                     <!-- delete button -->
+                    <?php if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->rootLevelId, Security::PRIVILEGE_DELETE)) : ?>
                     <div id="buttondelete" onclick="myForm.deleteElement();">
                         <div class="button25leftOff"></div>
                         <div class="button25centerOff">
@@ -155,6 +168,7 @@
                         <div class="button25rightOff"></div>
                         <div class="clear"></div>
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="clear"></div>

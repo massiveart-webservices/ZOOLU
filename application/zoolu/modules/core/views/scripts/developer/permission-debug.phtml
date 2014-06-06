@@ -1,0 +1,62 @@
+<?php
+function showAclList ($aclList, $checkAllLanguages = false, $whenResourceNotExists = false) {
+    $return = '';
+
+    $return .= '
+    <table cellpadding="5" style="text-align: left; font-family: Arial;">
+        <thead>
+            <tr>
+                <th>Resource</th>
+                <th>View</th>
+                <th>Add</th>
+                <th>Update</th>
+                <th>Delete</th>
+                <th>Archive</th>
+                <th>Live</th>
+                <th>Security</th>
+            </tr>
+        </thead>';
+    /**
+     * @var Acl $acl
+     */
+    $counter = 0;
+    foreach ($aclList as $key => $acl) {
+        foreach ($acl->getResources() as $resource) {
+            $counter++;
+            $color = '#efefef';
+            if ($counter % 2 == 0) {
+                $color = '#cccccc';
+            }
+            $return .=  '<tr style="background-color: '.$color.';">';
+            $return .=  '<td>' . $resource . '</td>';
+            $return .=  '<td>' . Security::get()->isAllowed($resource, Security::PRIVILEGE_VIEW, $checkAllLanguages, $whenResourceNotExists) . '</td>';
+            $return .=  '<td>' . Security::get()->isAllowed($resource, Security::PRIVILEGE_ADD, $checkAllLanguages, $whenResourceNotExists) . '</td>';
+            $return .=  '<td>' . Security::get()->isAllowed($resource, Security::PRIVILEGE_UPDATE, $checkAllLanguages, $whenResourceNotExists) . '</td>';
+            $return .=  '<td>' . Security::get()->isAllowed($resource, Security::PRIVILEGE_DELETE, $checkAllLanguages, $whenResourceNotExists) . '</td>';
+            $return .=  '<td>' . Security::get()->isAllowed($resource, Security::PRIVILEGE_ARCHIVE, $checkAllLanguages, $whenResourceNotExists) . '</td>';
+            $return .=  '<td>' . Security::get()->isAllowed($resource, Security::PRIVILEGE_LIVE, $checkAllLanguages, $whenResourceNotExists) . '</td>';
+            $return .=  '<td>' . Security::get()->isAllowed($resource, Security::PRIVILEGE_SECURITY, $checkAllLanguages, $whenResourceNotExists) . '</td>';
+            $return .=  '</tr>';
+        }
+        $return .=  '
+            <tr style="background-color: white;height: 10px; line-height: 10px;">
+                <td colspan="7">&nbsp;</td>
+            </tr>';
+    }
+
+    $return .= '
+    </table>';
+
+    return $return;
+}
+
+if (count($this->aclList)) {
+    echo '<h2>ACL List</h2>';
+    echo  showAclList($this->aclList, false, true);
+    echo '<h2>ACL List (all Languages)</h2>';
+    echo  showAclList($this->aclList, true, true);
+    echo '<h2>ACL List (when resource not exists = false)</h2>';
+    echo  showAclList($this->aclList, false, false);
+    echo '<h2>ACL LIST (all Languages, when resource not exists = false)</h2>';
+    echo  showAclList($this->aclList, true, false);
+}

@@ -1131,6 +1131,10 @@
                 <private></private>
             </keys>
         </recaptcha>
+
+        <developer>
+            <accessKey>ef2c3d9b4ef9729ea204246d3d264ea3</accessKey>
+        </developer>
     </production>
 
     <!--

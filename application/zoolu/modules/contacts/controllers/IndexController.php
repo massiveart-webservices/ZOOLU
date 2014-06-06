@@ -81,7 +81,6 @@ class Contacts_IndexController extends AuthControllerAction
         $strFileId = $this->getRequest()->getParam('fileId', '');
         if ($strFileId != '') {
             $this->view->assign('fileId', $strFileId);
-            $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
         }
 
         $objLayout = Zend_Layout::getMvcInstance();
@@ -92,6 +91,7 @@ class Contacts_IndexController extends AuthControllerAction
         $this->view->assign('jsVersion', $this->core->sysConfig->version->js);
         $this->view->assign('cssVersion', $this->core->sysConfig->version->css);
         $this->view->assign('rootLevelTypeId', $this->core->sysConfig->root_level_types->contacts);
+        $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
         $this->view->assign('module', $this->core->sysConfig->modules->contacts);
     }
 
