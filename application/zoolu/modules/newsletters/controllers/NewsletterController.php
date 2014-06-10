@@ -291,7 +291,7 @@ class Newsletters_NewsletterController extends AuthControllerAction
 
             if ($blnTestSend) {
                 // init before send
-                $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'filter' => null));
+                $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $objNewsletter, 'prevent_load_information' => true, 'prevent_load_statistics' => true));
                 $strEmail = $this->getRequest()->getParam('recipient');
                 // send Testnewsletter
                 $this->objCommandChain->runCommand('newsletter:sendTest', array('content' => $content, 'newsletter' => $objNewsletter, 'email' => $strEmail));
