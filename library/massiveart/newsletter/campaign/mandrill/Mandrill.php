@@ -121,7 +121,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         $objNewsletter = $args['newsletter'];
         $this->objNewsletter = $objNewsletter;
         $this->setNewsletterId($objNewsletter->id);
-        if (key_exists('filter', $args)) {
+        if (key_exists('filter', $args) && $args['filter']) {
             $objFilter= $args['filter'];
             $this->objFilter = $objFilter;
             $this->setCampaignId($objFilter->id);
