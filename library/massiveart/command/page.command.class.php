@@ -106,7 +106,8 @@ class PageCommand implements CommandInterface
             if (array_key_exists('GenericSetup', $arrArgs) && $arrArgs['GenericSetup'] instanceof GenericSetup) {
                 $objGenericSetup = $arrArgs['GenericSetup'];
 
-                $intTemplateId = $this->core->sysConfig->page_types->page->startpage_templateId;
+                $intTemplateId = $this->getDefaultTemplate($objGenericSetup->getRootLevelId(), $this->core->sysConfig->page_types->page->startpage_templateId);
+
                 $objTemplateData = $this->getModelTemplates()->loadTemplateById($intTemplateId);
 
                 if (count($objTemplateData) == 1) {
@@ -152,6 +153,25 @@ class PageCommand implements CommandInterface
             $this->core->logger->err($exc);
             return false;
         }
+    }
+
+    /**
+     * @param $rootLevelId
+     * @param $intTemplateId
+     * @return mixed
+     */
+    protected function getDefaultTemplate($rootLevelId, $intTemplateId)
+    {
+        $defaultTemplateId = $intTemplateId;
+        $templates = $this->getModelTemplates()->loadRootLevelTemplates($rootLevelId, $this->core->sysConfig->types->startpage);
+        foreach ($templates as $template) {
+            $intTemplateId = $template->id;
+            if ($defaultTemplateId == $intTemplateId) {
+                break;
+            }
+        }
+
+        return $intTemplateId;
     }
 
     /**

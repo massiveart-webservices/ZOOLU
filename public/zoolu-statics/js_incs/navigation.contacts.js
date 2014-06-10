@@ -473,7 +473,7 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
             viewType = 'tree';
         }
 
-        if (typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType != 'list')) {
+        if (typeof(url) != 'undefined' && url != '' && (!location.href.endsWith(url) || viewType == 'list')) {
             this.changeViewType(rootLevelId, rootLevelGroupId, url);
         } else {
             if (typeof(makeRequest) == 'undefined') {
