@@ -376,6 +376,7 @@ class Newsletters_NewsletterController extends AuthControllerAction
             $campaign = $this->objCommandChain->runCommand('campaign:init', array('newsletter' => $newsletter, 'filter' => $objFilter));
             $strData = $this->getRequest()->getParam('data');
             $strExport = '';
+            $arrData = array();
             switch ($strData) {
                 case 'unsubscribes':
                     $arrData = $campaign->getUnsubscribes();
@@ -385,6 +386,9 @@ class Newsletters_NewsletterController extends AuthControllerAction
                     break;
                 case 'bounces':
                     $arrData = $campaign->getBounces();
+                    break;
+                case 'rejects':
+                    $arrData = $campaign->getStatisticsRejects();
                     break;
             }
 

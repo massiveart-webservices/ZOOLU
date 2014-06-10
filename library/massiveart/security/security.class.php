@@ -316,6 +316,14 @@ class Security
         self::$objInstance = null;
     }
 
+    /**
+     * @return array
+     */
+    public function getAcl()
+    {
+        return $this->arrZoneAcls;
+    }
+
 }
 
 ?>

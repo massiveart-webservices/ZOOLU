@@ -667,7 +667,7 @@ Navigtion left */
     cursor: pointer;
 }
 
-.naviitemcontainer:hover .selected .gear {
+.naviitemcontainer .selected .gear {
     background: transparent url(/zoolu-statics/images/icons/icon_edit.png) no-repeat 0 0;
     cursor: pointer;
     float: right;
