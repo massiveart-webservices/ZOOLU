@@ -239,6 +239,7 @@ class Model_Subscribers {
         if ($strSearchValue != '') {
             $objSelect->where('s.fname LIKE ?', '%' . $strSearchValue . '%');
             $objSelect->orWhere('s.sname LIKE ?', '%' . $strSearchValue . '%');
+            $objSelect->orWhere('s.email LIKE ?', '%' . $strSearchValue . '%');
         }
         
         if ($filterReachable) {

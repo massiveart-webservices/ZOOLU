@@ -117,7 +117,7 @@ class ListHelper
 
                     if ($intColumCounter <= 2) {
                         $strTbody .= '
-                            <td class="row' . $column . '"' . $strColspan . '><a href="#" onclick="myNavigation.' . $strJsNavigationFunction . '(' . $objItem->id . ',\'' . $type . '\',\'' . $objItem->genericFormId . '\',' . $objItem->version . '); return false;">' . htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a></td>';
+                            <td class="row' . $column . '"' . $strColspan . '><a href="#" onclick="myNavigation.' . $strJsNavigationFunction . '(' . $objItem->id . ',\'' . $type . '\',\'' . $objItem->genericFormId . '\',' . $objItem->version . '); return false;">' . (($value != '') ? htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) : '- - -') . '</a></td>';
                     } else {
                         $strTbody .= '
                             <td class="row' . $column . '"' . $strColspan . '>' . (($value != '') ? htmlentities($value, ENT_COMPAT, $this->core->sysConfig->encoding->default) : '- - -') . '</td>';

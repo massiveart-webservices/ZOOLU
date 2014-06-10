@@ -1,7 +1,3 @@
-/* Fname Sname no keyfields */
-UPDATE  `fields` SET  `isKeyField` =  '0' WHERE  `fields`.`id` =224;
-UPDATE  `fields` SET  `isKeyField` =  '0' WHERE  `fields`.`id` =225;
-
 /* Add 2 groups admin and manager for subscriber */
 
 -- Change RootlevelPermission from Newsletter Manager to Subscriber Admin
