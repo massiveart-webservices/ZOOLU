@@ -48,12 +48,12 @@ class Model_Table_ResourceGroups extends Zend_Db_Table_Abstract
     protected $_referenceMap = array(
         'Resource' => array(
             'columns'           => array('idResources'),
-            'refTableClass'     => 'resources',
+            'refTableClass'     => 'Model_Table_Resources',
             'refColumns'        => array('id')
         ),
         'Group'    => array(
             'columns'           => array('idGroups'),
-            'refTableClass'     => 'groups',
+            'refTableClass'     => 'Model_Table_Groups',
             'refColumns'        => array('id')
         )
     );

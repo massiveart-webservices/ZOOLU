@@ -283,6 +283,29 @@ class Model_Templates
     }
 
     /**
+     * @param $intRootlevel
+     * @param int $intTemplateType
+     * @return Zend_Db_Table_Rowset_Abstract
+     */
+    public function loadRootLevelTemplates ($intRootlevel, $intTemplateType = null)
+    {
+        $objSelect = $this->getTemplateTable()->select();
+        $objSelect->setIntegrityCheck(false);
+
+        $objSelect->from('templates')
+            ->join(array('rt' => 'rootLevelTemplates'), 'templates.active = 1 AND rt.idTemplates = templates.id AND rt.idRootLevels =' . intval($intRootlevel), array());
+
+        if ($intTemplateType !== null) {
+            $objSelect
+                ->join('templateTypes', 'templateTypes.idTemplates = templates.id AND templateTypes.idTypes = ' . intval($intTemplateType), array());
+        }
+        $objSelect->
+            order('templates.id DESC');
+
+        return $this->getTemplateTable()->fetchAll($objSelect);
+    }
+
+    /**
      * getTemplateTable
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0

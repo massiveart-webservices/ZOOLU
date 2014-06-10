@@ -48,17 +48,17 @@ class Model_Table_GroupPermissions extends Zend_Db_Table_Abstract
     protected $_referenceMap = array(
         'Group'      => array(
             'columns'           => array('idGroups'),
-            'refTableClass'     => 'groups',
+            'refTableClass'     => 'Model_Table_Groups',
             'refColumns'        => array('id')
         ),
         'Language'   => array(
             'columns'           => array('idLanguages'),
-            'refTableClass'     => 'languages',
+            'refTableClass'     => 'Model_Table_Languages',
             'refColumns'        => array('id')
         ),
         'Permission' => array(
             'columns'           => array('idPermissions'),
-            'refTableClass'     => 'permissions',
+            'refTableClass'     => 'Model_Table_Permissions',
             'refColumns'        => array('id')
         )
     );

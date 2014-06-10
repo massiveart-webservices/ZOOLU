@@ -58,15 +58,17 @@ class GearmanMandrillClient
      * @param Core $core Core object
      */
     public function __construct($core) {
-        // create gearman client
-        if (self::$gearmanClient === null) {
-            self::$gearmanClient = new GearmanClient();    
-        }
-        
         $this->core = $core;
+        // create gearman client
+        if ($this->core->sysConfig->mandrill->gearman == 'true' && self::$gearmanClient === null) {
+            self::$gearmanClient = new GearmanClient();
+        }
+
         $this->strPrefix = $this->core->sysConfig->client->id;
         // add gearman server
-        self::$gearmanClient->addServer($this->core->sysConfig->gearman->server->host);
+        if ($this->core->sysConfig->mandrill->gearman == 'true' && self::$gearmanClient instanceof GearmanClient) {
+            self::$gearmanClient->addServer($this->core->sysConfig->gearman->server->host);
+        }
         $this->core->logger->debug('GearmanMandrillClient->__construct(): Added GearmanClient with server ' . $this->core->sysConfig->gearman->server->host);
     }
     
@@ -100,7 +102,7 @@ class GearmanMandrillClient
                 $recipient->from_email = $mandrillCampaign->getSenderEmail();
                
                 $this->core->logger->debug('GearmanMandrillClient->sendNewsletter(): Trying to send newsletter to ' . $recipient->email);
-                self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_send', serialize($recipient));
+                $this->callFunction($this->strPrefix . '_contact_replication_mandrill_send', serialize($recipient));
             }
         }
         else {
@@ -110,7 +112,7 @@ class GearmanMandrillClient
     
     public function sendSingleMail($object)
     {
-        self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_send_single', serialize($object));
+        $this->callFunction($this->strPrefix . '_contact_replication_mandrill_send_single', serialize($object));
     }
     
     /**
@@ -155,7 +157,7 @@ class GearmanMandrillClient
     public function sendTemplateNewsletter($campaigns) 
     {
         $this->core->logger->debug('Sending newsletter with template.');
-        self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_template_send', serialize($campaigns));    
+        $this->callFunction($this->strPrefix . '_contact_replication_mandrill_template_send', serialize($campaigns));
     }
     
     /**
@@ -164,7 +166,7 @@ class GearmanMandrillClient
     public function listTemplates()
     {
         $this->core->logger->debug('Listing templates available to user.');
-        self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_templates_list', serialize('null'));
+        $this->callFunction($this->strPrefix . '_contact_replication_mandrill_templates_list', serialize('null'));
     }
     
     /**
@@ -173,7 +175,7 @@ class GearmanMandrillClient
     public function listTags()
     {
         $this->core->logger->debug('Listing user-defined tag information.');
-        self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_tags_list', serialize('null'));
+        $this->callFunction($this->strPrefix . '_contact_replication_mandrill_tags_list', serialize('null'));
     }
     
     /**
@@ -182,7 +184,7 @@ class GearmanMandrillClient
     public function listTagsAllTimeSeries()
     {
         $this->core->logger->debug('Listing recent history for all tags.');
-        self::$gearmanClient->doBackground($this->strPrefix . '_contact_replication_mandrill_tags_list_all_time_history', serialize('null'));
+        $this->callFunction($this->strPrefix . '_contact_replication_mandrill_tags_list_all_time_history', serialize('null'));
     }
     
     /**
@@ -203,6 +205,49 @@ class GearmanMandrillClient
             array_push($stdObjects, $stdObjectTmp);
         } 
         return $stdObjects;
+    }
+
+    /**
+     * use gearman when set in config
+     *
+     *
+     * @param $function
+     * @param $workParams
+     */
+    public function callFunction($function, $workParams)
+    {
+        if ($this->core->sysConfig->mandrill->gearman == 'true') {
+            self::$gearmanClient->doBackground($function, $workParams);
+        } else {
+            try {
+                $handler = new GearmanMandrillHandler();
+                switch ($function) {
+                    case $this->strPrefix . '_contact_replication_mandrill_send':
+                        $handler::send($workParams);
+                        break;
+                    case $this->strPrefix . '_contact_replication_mandrill_send_single':
+                        $handler::sendSingle($workParams);
+                        break;
+                    case $this->strPrefix . '_contact_replication_mandrill_templates_list':
+                        $handler::listTemplates($workParams);
+                        break;
+                    case $this->strPrefix . '_contact_replication_mandrill_template_send':
+                        $handler::sendTemplate($workParams);
+                        break;
+                    case $this->strPrefix . '_contact_replication_mandrill_tags_list':
+                        $handler::listTags($workParams);
+                        break;
+                    case $this->strPrefix . '_contact_replication_mandrill_tags_list_all_time_history':
+                        $handler::listTagsAllTimeSeries($workParams);
+                        break;
+                    case $this->strPrefix . '_contact_replication_mandrill_templates_render':
+                        $handler::renderTemplate($workParams);
+                        break;
+                }
+            } catch (Exception $e) {
+                $this->core->logger->err($e->getMessage());
+            }
+        }
     }
     
 }

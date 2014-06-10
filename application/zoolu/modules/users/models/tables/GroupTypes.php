@@ -31,32 +31,22 @@
  */
 
 /**
- * Model_Table_GroupGroupTypes
+ * Model_Table_Groups
  *
  * Version history (please keep backward compatible):
- * 1.0, 2010-12-03: Cornelius Hansjakob
+ * 1.0, 2009-10-06: Thomas Schedler
  *
- * @author Cornelius Hansjakob <cha@massiveart.com>
+ * @author Thomas Schedler <tsh@massiveart.com>
  * @version 1.0
  */
 
-class Model_Table_GroupGroupTypes extends Zend_Db_Table_Abstract
+class Model_Table_GroupTypes extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'groupGroupTypes';
+    protected $_name = 'groupTypes';
+    protected $_primary = 'id';
 
-    protected $_referenceMap = array(
-        'Group'      => array(
-            'columns'           => array('idGroups'),
-            'refTableClass'     => 'Model_Table_Groups',
-            'refColumns'        => array('id')
-        ),
-        'GroupTypes' => array(
-            'columns'           => array('idGroupTypes'),
-            'refTableClass'     => 'Model_Table_GroupTypes',
-            'refColumns'        => array('id')
-        )
-    );
+    protected $_dependentTables = array('Model_Table_GroupGroupTypes');
 }
 
 ?>

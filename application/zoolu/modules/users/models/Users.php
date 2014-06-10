@@ -736,6 +736,8 @@ class Model_Users
 
         if ($this->objUserGroupTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/UserGroups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Users.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Groups.php';
             $this->objUserGroupTable = new Model_Table_UserGroups();
         }
 
@@ -773,6 +775,9 @@ class Model_Users
 
         if ($this->objGroupPermissionTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/GroupPermissions.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Groups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/tables/Languages.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Permissions.php';
             $this->objGroupPermissionTable = new Model_Table_GroupPermissions();
         }
 
@@ -790,6 +795,8 @@ class Model_Users
 
         if ($this->objGroupGroupTypeTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/GroupGroupTypes.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Groups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/GroupTypes.php';
             $this->objGroupGroupTypeTable = new Model_Table_GroupGroupTypes();
         }
 
@@ -825,6 +832,8 @@ class Model_Users
 
         if ($this->objResourceGroupTable === null) {
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/ResourceGroups.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Resources.php';
+            require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'users/models/tables/Groups.php';
             $this->objResourceGroupTable = new Model_Table_ResourceGroups();
         }
 

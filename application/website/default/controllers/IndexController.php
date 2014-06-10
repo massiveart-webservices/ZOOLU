@@ -132,16 +132,21 @@ class IndexController extends WebControllerAction
                     'tidy-mark'           => false,
                     'indent'              => true,
                     'indent-spaces'       => 4,
-                    'new-blocklevel-tags' => 'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section',
-                    'new-inline-tags'     => 'video,audio,canvas',
+                    'new-blocklevel-tags' => 'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,main,summary',
+                    'new-inline-tags'     => 'video,audio,canvas,address,track,svg,time,datalist',
                     'doctype'             => '<!doctype html>',
                     'sort-attributes'     => 'alpha',
+                    'drop-empty-elements' => false,
                     'vertical-space'      => false,
                     'output-xhtml'        => true,
                     'wrap'                => 200,
                     'wrap-attributes'     => false,
                     'break-before-br'     => false,
                 );
+
+                if ($this->core->blnIsAjaxRequest && $this->core->sysConfig->tidy->show_body_only_by_ajax == 'true') {
+                    $arrConfig['show-body-only'] = true;
+                }
 
                 $objTidy = tidy_parse_string($this->getResponse()->getBody(), $arrConfig, $this->core->sysConfig->encoding->db);
                 $objTidy->cleanRepair();
