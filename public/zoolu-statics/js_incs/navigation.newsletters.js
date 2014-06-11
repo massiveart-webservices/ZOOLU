@@ -73,6 +73,8 @@ Massiveart.Navigation.Newsletters = Class.create(Massiveart.Navigation, {
           $('buttontestsend').hide();
           //$('buttonprint').show();  @TODO Implementation buggy since using mandrill
         }else{
+          $('buttonsend').show();
+          $('buttontestsend').show();
           $('buttonprint').hide();
           $(this.constStatisticTab).hide();
         }
