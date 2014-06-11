@@ -65,7 +65,6 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     private $delivered;
 
     private $sends;
-    private $bounces;
     private $bouncesHard;
     private $bouncesSoft;
     private $unsubscribes;
@@ -122,14 +121,18 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         $objNewsletter = $args['newsletter'];
         $this->objNewsletter = $objNewsletter;
         $this->setNewsletterId($objNewsletter->id);
-        if (key_exists('filter', $args)) {
-            $objFilter= $args['filter'];
+        if (key_exists('filter', $args) && isset($args['filter']->id)) {
+            $objFilter = $args['filter'];
             $this->objFilter = $objFilter;
             $this->setCampaignId($objFilter->id);
             $this->languageId = $objNewsletter->languageId;
         }
-        $this->loadInformation();
-        $this->loadStatistics();
+        if (!key_exists('prevent_load_information', $args) || !$args['prevent_load_information']) {
+            $this->loadInformation();
+        }
+        if (!key_exists('prevent_load_statistics', $args) || !$args['prevent_load_statistics']) {
+            $this->loadStatistics();
+        }
         return $this;
     }
     
@@ -152,7 +155,7 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
         $this->gearmanMandrillClient = new GearmanMandrillClient($this->core);
         $recipient = new stdClass();
         $recipient->email = $args['email'];
-        $recipient->salutation = 'Salutatuon';
+        $recipient->salutation = 'Salutation';
         $recipient->title = '';
         $recipient->fname = 'FirstName';
         $recipient->sname = 'LastName';
@@ -736,10 +739,9 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     public function getSenderEmail() {
         return $this->senderEmail;
     }
-    
+
     /**
-     * 
-     * @return 
+     * @return int
      */
     public function getNewsletterId()
     {
@@ -753,14 +755,6 @@ class NewsletterCampaign_Mandrill implements NewsletterCampaignInterface
     public function setNewsletterId($newsletterId)
     {
         $this->newsletterId = $newsletterId;
-    }
-    
-    /**
-     * @param object $recipient
-     */
-    private function setTestRecipient($recipient)
-    {
-        $this->recipients = $recipient;    
     }
     
     /**

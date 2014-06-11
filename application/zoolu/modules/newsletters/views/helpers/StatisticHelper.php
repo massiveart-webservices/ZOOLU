@@ -210,7 +210,7 @@ class StatisticHelper {
                <label class="fieldtitle">
                  <a onclick="myForm.showStatisticTable(\'bounces\', \'statBounces\', false)" href="#">' . $this->core->translate->_('Bounce') . '</a>
                </label>
-               ' . $objCampaign->getBouncesCount() . '
+               ' . $this->getPercentage($intRecipients, $objCampaign->getBouncesCount()) . '
                <a onclick="myForm.exportStatistics(\'bounces\')" href="#">(CSV)</a>
              </div>
            </div>
@@ -219,7 +219,7 @@ class StatisticHelper {
                <label class="fieldtitle">
                  <a onclick="myForm.showStatisticTable(\'spams\', \'statSpams\', false)" href="#">' . $this->core->translate->_('Spam') . '</a>
                </label>
-               ' . $objCampaign->getStatisticsSpamsCount() . '
+               ' . $this->getPercentage($intRecipients, $objCampaign->getStatisticsSpamsCount()) . '
                <a onclick="myForm.exportStatistics(\'spams\')" href="#">(CSV)</a>
              </div>
            </div>
@@ -237,7 +237,7 @@ class StatisticHelper {
                <label class="fieldtitle">
                  ' . $this->core->translate->_('Opens') . '
                </label>
-               ' . $objCampaign->getStatisticsOpensCount() . '
+               ' . $this->getPercentage($intRecipients, $objCampaign->getStatisticsOpensCount()) . '
              </div>
            </div>                               
            <div class="field-4">

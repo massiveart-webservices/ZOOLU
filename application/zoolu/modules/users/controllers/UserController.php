@@ -742,6 +742,34 @@ class Users_UserController extends Zend_Controller_Action
         }
     }
 
+    public function updatePermissionsAction()
+    {
+        $objAuth = Zend_Auth::getInstance();
+
+        if ($objAuth->hasIdentity() && isset($_SESSION['sesZooluLogin']) && $_SESSION['sesZooluLogin'] == true) {;
+            $objUserRoleProvider = new RoleProvider();
+            $arrUserGroups = $this->getModelUsers()->getUserGroups($objAuth->getStorage()->read()->id);
+            if (count($arrUserGroups) > 0) {
+                foreach ($arrUserGroups as $objUserGroup) {
+                    $objUserRoleProvider->addRole(new Zend_Acl_Role($objUserGroup->key), $objUserGroup->key);
+                }
+            }
+
+            $objSecurity = new Security();
+            $objSecurity->setRoleProvider($objUserRoleProvider);
+            $objSecurity->buildAcl($this->getModelUsers());
+            Security::save($objSecurity);
+        }
+
+        $redirect = $this->_getParam('redirect');
+
+        if (!$redirect) {
+            $this->_redirect('/zoolu');
+        } else {
+            $this->_redirect($redirect);
+        }
+    }
+
     /**
      * getModelUsers
      * @author Thomas Schedler <tsh@massiveart.com>

@@ -228,7 +228,7 @@ class Model_Newsletters {
 
         return $this->objNewsletterTable;
     }
-
+    
     /**
      * Gets newsletter statistics.
      */
@@ -237,7 +237,7 @@ class Model_Newsletters {
         $objSelect = $this->getModelNewsletterStatisticsTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('newsletterStatistics');
+        $objSelect->from('newsletterStatistics', array('id', 'idNewsletter','idSubscriber', 'sent', 'hard_bounced', 'soft_bounced', 'opened', 'clicked', 'spam', 'unsubscribed', 'rejected'));
         $objSelect->where('newsletterStatistics.idNewsletter = ?', $idNewsletter);
 
         return $this->getModelNewsletterStatisticsTable()->fetchAll($objSelect);
@@ -252,7 +252,7 @@ class Model_Newsletters {
         $objSelect = $this->getModelNewsletterStatisticsTable()->select();
         $objSelect->setIntegrityCheck(false);
 
-        $objSelect->from('newsletterStatistics');
+        $objSelect->from('newsletterStatistics', array('id', 'idNewsletter','idSubscriber', 'sent', 'hard_bounced', 'soft_bounced', 'opened', 'clicked', 'spam', 'unsubscribed', 'rejected'));
         $objSelect->where('newsletterStatistics.idSubscriber = ?', $idSubscribers);
         $objSelect->where('newsletterStatistics.idNewsletter = ?', $idNewsletter);
 

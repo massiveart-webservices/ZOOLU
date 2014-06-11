@@ -678,7 +678,7 @@ class Contacts_SubscriberController extends AuthControllerAction
          */
         $this->objForm->setAction('/zoolu/contacts/subscriber/add');
 
-        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest() && Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objRequest->getParam('rootLevelId'), Security::PRIVILEGE_ADD)) {
 
             $arrFormData = $this->getRequest()->getPost();
             $this->objForm->Setup()->setFieldValues($arrFormData);
@@ -785,7 +785,7 @@ class Contacts_SubscriberController extends AuthControllerAction
          */
         $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
-        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest()) {
+        if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest() && Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $this->objRequest->getParam('rootLevelId'), Security::PRIVILEGE_UPDATE)) {
             $arrFormData = $this->getRequest()->getPost();
             $this->objForm->Setup()->setFieldValues($arrFormData);
 
@@ -826,12 +826,12 @@ class Contacts_SubscriberController extends AuthControllerAction
         $this->getModelSubscribers();
 
         if ($this->objRequest->isPost() && $this->objRequest->isXmlHttpRequest()) {
-
             $objSubscriber = $this->getModelSubscribers()->load($this->objRequest->getParam("id"));
 
-            $this->objModelSubscribers->delete($this->objRequest->getParam("id"));
-            $this->view->blnShowFormAlert = true;
-
+            if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objSubscriber->current()->idRootLevels, Security::PRIVILEGE_DELETE)) {
+                $this->objModelSubscribers->delete($this->objRequest->getParam("id"));
+                $this->view->blnShowFormAlert = true;
+            }
         }
         $this->renderScript('form.phtml');
     }
@@ -855,7 +855,9 @@ class Contacts_SubscriberController extends AuthControllerAction
                     $objSubscribers = $this->getModelSubscribers()->load($intSubscriberId);
                     if (count($objSubscribers) > 0) {
                         foreach ($objSubscribers as $objSubscriber) {
-                            $this->objModelSubscribers->delete($intSubscriberId);
+                            if (Security::get()->isAllowed(Security::RESOURCE_ROOT_LEVEL_PREFIX . $objSubscriber->idRootLevels, Security::PRIVILEGE_DELETE)) {
+                                $this->objModelSubscribers->delete($intSubscriberId);
+                            }
                         }
                     }
                 }

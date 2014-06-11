@@ -1134,6 +1134,10 @@
             </keys>
         </recaptcha>
 
+        <developer>
+            <accessKey>ef2c3d9b4ef9729ea204246d3d264ea3</accessKey>
+        </developer>
+
         <!-- Tidy Config -->
         <tidy>
             <show_body_only_by_ajax>false</show_body_only_by_ajax>
