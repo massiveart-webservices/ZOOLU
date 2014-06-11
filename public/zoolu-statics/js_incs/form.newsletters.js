@@ -296,6 +296,7 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
     this.showSendAlertMessage(test);
     $('buttonCancel').show();
     $('buttonOk').observe('click', function(event){
+      $('buttonOk').hide();
       if (sent == false) {
         if($('testemail')) {
           recipient = $('testemail').getValue()
@@ -314,6 +315,7 @@ Massiveart.Form.Newsletters = Class.create(Massiveart.Form, {
           },
           evalScripts: true,
           onComplete: function(response){
+            $('buttonOk').show();
             sent = true;
             $('buttonCancel').hide();
             if(!test){
