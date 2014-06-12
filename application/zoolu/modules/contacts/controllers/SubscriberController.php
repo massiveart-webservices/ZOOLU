@@ -482,9 +482,14 @@ class Contacts_SubscriberController extends AuthControllerAction
 
         if (isset($_FILES['importFile'])) {
             if (isset($_FILES['importFile']['tmp_name'])) {
-                $target_path = dirname(__FILE__) . '/../../../../../uploads/subscribers/';
+                $target_path = dirname(__FILE__) . '/../../../../../uploads/subscribers';
+
+                if (!is_dir($target_path)) {
+                    mkdir($target_path);
+                }
+
                 $strFileId = uniqid();
-                $target_path = $target_path . basename($strFileId);
+                $target_path = $target_path . '/' . basename($strFileId);
 
                 if (move_uploaded_file($_FILES['importFile']['tmp_name'], $target_path)) {
                     $this->core->logger->debug('The file ' . basename($_FILES['importFile']['name']) . ' has been uploaded to' . $target_path);

@@ -486,7 +486,7 @@
             myNavigation.preSelectedSubNaviItem = preSelectedSubNaviItem;
         }
 
-        if (!!openSubMenu) {
+        if ((typeof(openSubMenu) != 'undefined') && openSubMenu) {
             $$('.naviitem.selected').first().onclick()
         }
 
