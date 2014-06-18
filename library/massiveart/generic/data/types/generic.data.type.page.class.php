@@ -178,13 +178,13 @@ class GenericDataTypePage extends GenericDataTypeAbstract
                 } else {
                     $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexPage.php';
                     //run page index in background
-                    exec("php $strIndexPageFilePath --pageId='" . $objPage->pageId . "' --version=" . $objPage->version . " --languageId=" . $this->setup->getLanguageId() . " --rootLevelId=" . $this->setup->getRootLevelId() . " > /dev/null &#038;");
+                    exec("php $strIndexPageFilePath --pageId='" . $objPage->pageId . "' --version=" . $objPage->version . " --languageId=" . $this->setup->getLanguageId() . " --rootLevelId=" . $this->setup->getRootLevelId() . " --env=" . APPLICATION_ENV . " > /dev/null &#038;");
                 }
             } else {
                 //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->page.'/'.sprintf('%02d', $this->setup->getLanguageId()), $objPage->pageId.'_'.$this->setup->getLanguageId());
                 $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
                 //run remove page from index in background
-                exec("php " . $strIndexPageFilePath . " --key='" . $objPage->pageId . "_" . $this->setup->getLanguageId() . "' > /dev/null &#038;");
+                exec("php " . $strIndexPageFilePath . " --key='" . $objPage->pageId . "_" . $this->setup->getLanguageId() . "' --env=" . APPLICATION_ENV . " > /dev/null &#038;");
             }
 
             //cache expiring
