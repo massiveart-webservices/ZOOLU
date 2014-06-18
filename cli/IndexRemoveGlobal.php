@@ -30,18 +30,33 @@
  * @version    $Id: version.php
  */
 
-/**
- * include general (autoloader, config)
- */
-require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
+// Zend_Console_Getopt
+require_once 'Zend/Console/Getopt.php';
+
+$objConsoleOpts = new Zend_Console_Getopt(
+    array(
+        'env|e-s' => 'defines application environment (defaults to "production")',
+        'key|k=s' => 'Global Index Key'
+    )
+);
 
 try {
-    $objConsoleOpts = new Zend_Console_Getopt(
-        array(
-             'key|k=s'  => 'Global Index Key'
-        )
-    );
+    $objConsoleOpts->parse();
+} catch (Zend_Console_Getopt_Exception $exc) {
+    // Bad options passed: report usage
+    echo $exc->getUsageMessage();
+    return false;
+}
 
+// Define application environment
+$env = $objConsoleOpts->getOption('e');
+defined('APPLICATION_ENV')
+|| define('APPLICATION_ENV', (null === $env) ? 'production' : $env); 
+
+// include general (autoloader, config)
+require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
+    
+try {
     if (isset($objConsoleOpts->key)) {
         $objIndex = new Index();
         $core->logger->warn('remove global ' . $objConsoleOpts->key . ' from index now ...');

@@ -212,7 +212,7 @@ class Index
                 echo $intCounter . "/" . $intTotal . " - mem usage is: " . memory_get_usage() . "\n";
                 //$this->indexGlobal($objGlobalData->globalId, $objGlobalData->idLink, $objGlobalData->version, $objGlobalData->idLanguages, ((int) $objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent);
                 exec(
-                    "php $strIndexGlobalFilePath --globalId='" . $objGlobalData->globalId . "' --linkId='" . $objGlobalData->idLink . "' --version=" . $objGlobalData->version . " --languageId=" . $objGlobalData->idLanguages . " --rootLevelId=" . (((int)$objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent)
+                    "php $strIndexGlobalFilePath --globalId='" . $objGlobalData->globalId . "' --linkId='" . $objGlobalData->idLink . "' --version=" . $objGlobalData->version . " --languageId=" . $objGlobalData->idLanguages . " --rootLevelId=" . (((int)$objGlobalData->idRootLevels > 0) ? $objGlobalData->idRootLevels : $objGlobalData->idParent) . " --env=" . APPLICATION_ENV
                 );
             }
         } catch (Exception $exc) {

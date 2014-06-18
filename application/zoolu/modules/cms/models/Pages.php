@@ -656,13 +656,13 @@ class Model_Pages extends ModelAbstract
                  $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexPage.php';
                  if (file_exists($strIndexPageFilePath)) {
                     //run page index in background
-                    exec("php $strIndexPageFilePath --pageId='" . $objStartPage->pageId . "' --version=" . $objStartPage->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevel . " > /dev/null &#038;");   
+                    exec("php $strIndexPageFilePath --pageId='" . $objStartPage->pageId . "' --version=" . $objStartPage->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevel . " --env=" . APPLICATION_ENV . " > /dev/null &#038;");   
                  }
             } else {
                 $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
                 //run remove page from index in background
                 if (file_exists($strIndexPageFilePath)) {
-                    exec("php " . $strIndexPageFilePath . " --key='" . $objStartPage->pageId . "_" . $this->intLanguageId . "' > /dev/null &#038;");
+                    exec("php " . $strIndexPageFilePath . " --key='" . $objStartPage->pageId . "_" . $this->intLanguageId . "' --env=" . APPLICATION_ENV . " > /dev/null &#038;");
                 }
             }
         }
@@ -1504,7 +1504,7 @@ class Model_Pages extends ModelAbstract
             $strIndexPageFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemovePage.php';
             //run remove page from index in background
             if (file_exists($strIndexPageFilePath)) {
-                exec("php " . $strIndexPageFilePath . " --key='" . $strPageId . "_*' > /dev/null &#038;");
+                exec("php " . $strIndexPageFilePath . " --key='" . $strPageId . "_*' --env=" . APPLICATION_ENV . " > /dev/null &#038;");
             }
 
             $strWhere = $this->objPageTable->getAdapter()->quoteInto('relationId = ?', $strPageId);

@@ -65,7 +65,6 @@ defined('APPLICATION_ENV')
 // include general (autoloader, config)
 require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 
-
 try {
 
     if (isset($opt->pageId) && isset($opt->version) &&
