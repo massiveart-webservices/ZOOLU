@@ -212,13 +212,13 @@ class GenericDataTypeGlobal extends GenericDataTypeAbstract
                 } else {
                     $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexGlobal.php';
                     //run global index in background
-                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $objGlobal->globalId . "' --linkId='" . $this->setup->getElementLinkId() . "' --version=" . $objGlobal->version . " --languageId=" . $this->setup->getLanguageId() . " --rootLevelId=" . $this->setup->getRootLevelId() . " > /dev/null &#038;");
+                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $objGlobal->globalId . "' --linkId='" . $this->setup->getElementLinkId() . "' --version=" . $objGlobal->version . " --languageId=" . $this->setup->getLanguageId() . " --rootLevelId=" . $this->setup->getRootLevelId() . " --env=" . APPLICATION_ENV . " > /dev/null &#038;");
                 }
             } else {
                 //$this->removeFromIndex(GLOBAL_ROOT_PATH.$this->core->sysConfig->path->search_index->global, $objGlobal->globalId.'_'.$this->setup->getLanguageId().'_r*');
                 $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexRemoveGlobal.php';
                 //run remove global from index in background
-                exec("php " . $strIndexGlobalFilePath . " --key='" . $objGlobal->globalId . "_" . $this->setup->getLanguageId() . "_r*' > /dev/null &#038;");
+                exec("php " . $strIndexGlobalFilePath . " --key='" . $objGlobal->globalId . "_" . $this->setup->getLanguageId() . "_r*' --env=" . APPLICATION_ENV . " > /dev/null &#038;");
             }
 
             return $this->setup->getElementId();

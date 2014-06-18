@@ -1235,7 +1235,7 @@ class Model_Globals extends ModelAbstract
             if ($arrProperties['idStatus'] == $this->core->sysConfig->status->live) {
                 $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexGlobal.php';
                 if (file_exists($strIndexGlobalFilePath)) {
-                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $objStartGlobal->globalId . "' --linkId='" . $objStartGlobal->linkId . "' --version=" . $objStartGlobal->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevelId . " > /dev/null &#038;");
+                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $objStartGlobal->globalId . "' --linkId='" . $objStartGlobal->linkId . "' --version=" . $objStartGlobal->version . " --languageId=" . $this->intLanguageId . " --rootLevelId=" . $rootLevelId . " --env=" . APPLICATION_ENV . " > /dev/null &#038;");
                 }
             } else {
                 $objIndex = new Index();
@@ -1309,7 +1309,7 @@ class Model_Globals extends ModelAbstract
             $strIndexGlobalFilePath = GLOBAL_ROOT_PATH . 'cli/IndexGlobal.php';
             if (file_exists($strIndexGlobalFilePath)) {
                 if (!in_array($globalLink->idLanguages, $arrIndexedLanguages)) {
-                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $strGlobalId . "' --linkId='" . $globalLink->idGlobals . "' --version=" . $globalLink->version . " --languageId=" . $globalLink->idLanguages . " --rootLevelId=" . $rootLevelId . " > /dev/null &#038;");
+                    exec("php " . $strIndexGlobalFilePath . " --globalId='" . $strGlobalId . "' --linkId='" . $globalLink->idGlobals . "' --version=" . $globalLink->version . " --languageId=" . $globalLink->idLanguages . " --rootLevelId=" . $rootLevelId . " --env=" . APPLICATION_ENV . " > /dev/null &#038;");
                     $arrIndexedLanguages[] = $globalLink->idLanguages;
                 }
             }

@@ -30,22 +30,29 @@
  * @version    $Id: version.php
  */
 
-/**
- * include general (autoloader, config)
- */
+// Zend_Console_Getopt
+require_once 'Zend/Console/Getopt.php';
+
+$objConsoleOpts = new Zend_Console_Getopt(
+    array(
+         'env|e-s' => 'defines application environment (defaults to "production")',
+         'globalId|g=s'    => 'Global Id',
+         'linkId|gl=s'     => 'Global Link Id',
+         'version|v=i'     => 'Global Version',
+         'languageId|l=i'  => 'Language Id',
+         'rootLevelId|r=i' => 'RootLevelId Id'
+    )
+);
+
+// Define application environment
+$env = $opt->getOption('e');
+defined('APPLICATION_ENV')
+|| define('APPLICATION_ENV', (null === $env) ? 'production' : $env);
+
+// include general (autoloader, config)
 require_once(dirname(__FILE__) . '/../sys_config/general.inc.php');
 
 try {
-    $objConsoleOpts = new Zend_Console_Getopt(
-        array(
-             'globalId|g=s'    => 'Global Id',
-             'linkId|gl=s'     => 'Global Link Id',
-             'version|v=i'     => 'Global Version',
-             'languageId|l=i'  => 'Language Id',
-             'rootLevelId|r=i' => 'RootLevelId Id'
-        )
-    );
-
     if (isset($objConsoleOpts->globalId) && isset($objConsoleOpts->linkId) && isset($objConsoleOpts->version) && isset($objConsoleOpts->languageId) && isset($objConsoleOpts->rootLevelId)) {
         $objIndex = new Index();
         $core->logger->info('index global now ...');
