@@ -247,7 +247,7 @@ class Event {
             }
             $from->modify($symbol . $dayDifference . ' day');
 
-            $diffDays = intval($date->diff($this->fromDate)->format("%a"));
+            $diffDays = intval($date->diff($from)->format("%a"));
             if ( $diffDays % ($this->repeatInterval * 7) == 0 ) {
                 return true;
             }
