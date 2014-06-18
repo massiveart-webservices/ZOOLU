@@ -287,7 +287,7 @@ class Event {
      */
     protected function weekOfMonth($date)
     {
-        return ceil( date( 'j', strtotime( $date->getTimestamp() ) ) / 7 );
+        return ceil( date( 'j', $date->getTimestamp() ) / 7 );
     }
 
     /**
