@@ -900,7 +900,7 @@ class Contacts_SubscriberController extends AuthControllerAction
                     $objSubscribers = $this->getModelSubscribers()->load($intSubscriberId);
                     if (count($objSubscribers) > 0) {
                         foreach ($objSubscribers as $objSubscriber) {
-                            $this->objModelSubscribers->update($intSubscriberId, array('subscribed' => $this->core->sysConfig->mail_chimp->mappings->unsubscribe));
+                            $this->objModelSubscribers->update($objSubscriber->id, array('subscribed' => $this->core->sysConfig->contact->unsubscribed));
                         }
                     }
                 }

@@ -48,23 +48,37 @@ class Export
     /**
      * exports a Rowset into a Csv
      * @param Zend_Db_Table_Rowset $objRowset
+     * @param string $delimiter
+     * @return string
      */
-    public static function exportRowsetInCsv($objRowset)
+    public static function exportRowsetInCsv($objRowset, $delimiter = ';')
     {
         //Create Headline
         $arrRowset = $objRowset->toArray();
         $arrColumns = $arrRowset[0];
         $arrColumns = array_keys($arrColumns);
-        $strHeadLine = implode(';', $arrColumns) . ';
-';
+        $strHeadLine = self::csvOutput($arrColumns, $delimiter);
 
         //Create Datalines
         $strData = '';
         foreach ($arrRowset as $arrRow) {
-            $strData .= implode(';', $arrRow) . ';
-';
+            $strData .=  self::csvOutput($arrRow, $delimiter);
         }
         return $strHeadLine . $strData;
+    }
+
+    /**
+     * @param $data
+     * @param string $delimiter
+     * @return string
+     */
+    protected static function csvOutput($data, $delimiter = ';')
+    {
+        $output = fopen('php://output', 'w');
+        ob_start();
+        fputcsv($output, $data, $delimiter);
+        fclose($output);
+        return ob_get_clean();
     }
 }
 
