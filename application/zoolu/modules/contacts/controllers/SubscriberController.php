@@ -291,7 +291,7 @@ class Contacts_SubscriberController extends AuthControllerAction
                     $strLine = utf8_encode($strLine);
                 }
                 //Explode the field
-                $arrFields = array_map('trimQuotes', explode(';', $strLine));
+                $arrFields = str_getcsv($strLine, ';');
                 $strOutput .= '<tr>';
                 foreach ($arrFields as $strField) {
                     $strOutputTag = (!$blnImportHeader && $i == 0) ? 'th' : 'td';
@@ -346,7 +346,7 @@ class Contacts_SubscriberController extends AuthControllerAction
         $fh = fopen($strFile, 'r');
 
         $strLine = fgets($fh); //header line
-        $arrHeadlines = array_map('trimQuotes', explode(';', $strLine));
+        $arrHeadlines = str_getcsv($strLine, ';');
         $this->removeEmptyArrayElements($arrHeadlines);
         if ($blnImportHeader) {
             rewind($fh);
@@ -357,12 +357,12 @@ class Contacts_SubscriberController extends AuthControllerAction
                 $strLine = utf8_encode($strLine);
             }
 
-            if ($strLine != '') {
+            if (trim($strLine) != '') {
                 $arrData = array();
-                $arrTmpData = explode(';', $strLine);
+                $arrTmpData = str_getcsv($strLine, ';');
                 foreach ($arrHeadlines as $intCount => $strHeadline) {
-                    if (($strKey = array_search('headline' . $intCount, $arrFields)) !== false) {
-                        $arrData[$strKey] = trimQuotes($arrTmpData[$intCount]);
+                    if (($strKey = array_search('headline' . $intCount, $arrFields)) !== false && isset($arrTmpData[$intCount])) {
+                        $arrData[$strKey] = trim($arrTmpData[$intCount]);
                     }
                 }
                 $arrData['subscribed'] = $this->core->sysConfig->contact->subscribed;
@@ -515,7 +515,7 @@ class Contacts_SubscriberController extends AuthControllerAction
         $strFileId = $this->getRequest()->getParam('fileId');
         $fh = fopen(GLOBAL_ROOT_PATH . '/uploads/subscribers/' . $strFileId, 'r');
         $strLine = fgets($fh);
-        $arrHeadlines = array_map('trimQuotes', explode(';', $strLine));
+        $arrHeadlines = str_getcsv($strLine, ';');
         $this->removeEmptyArrayElements($arrHeadlines);
 
         $objForm = new Zend_Form();
@@ -1129,12 +1129,4 @@ class Contacts_SubscriberController extends AuthControllerAction
 
         return $this->objModelCategories;
     }
-}
-
-/**
- * callback for array_map
- */
-function trimQuotes($str)
-{
-    return trim(trim($str), '"\'');
 }
