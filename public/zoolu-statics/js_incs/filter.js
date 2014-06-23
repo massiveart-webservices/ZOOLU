@@ -24,16 +24,18 @@ Massiveart.Filter = Class.create({
     this.showOptionsByFilterId(this.constSelectOperator + '_' + lineId, filterId);
     this.showOptionsByFilterId(this.constSelectValue + '_' + lineId, filterId);
   },
-  
+
   /**
    * showOptionsByFilterId
    */
   showOptionsByFilterId: function(id, filterId){
+    if (!$(id).readAttribute('data-elements')) {
+      $(id).setAttribute('data-elements', $(id).innerHTML);
+    }
+    $(id).innerHTML = $(id).readAttribute('data-elements');
     $(id).childElements().each(function(element){
-      if(element.readAttribute('filterId') == filterId || element.readAttribute('filterId') == null){
-        element.show();
-      }else{
-        element.hide();
+      if(!element.readAttribute('filterId') == null && !element.readAttribute('filterId') == filterId){
+        element.remove();
         element.selected = '';
       }
     });
