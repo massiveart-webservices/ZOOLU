@@ -150,19 +150,28 @@ class NavigationHelper
             switch ($row->idCategoryTypes) {
                 case $this->core->sysConfig->category_types->default:
                     $strIconCss = 'img_category_on';
+                    if ($row->title == '') {
+                        $strIconCss = 'img_category_off';
+                    }
                     break;
                 case $this->core->sysConfig->category_types->label:
                     $strIconCss = 'img_label_on';
+                    if ($row->title == '') {
+                        $strIconCss = 'img_label_off';
+                    }
                     break;
                 case $this->core->sysConfig->category_types->system:
                     $strIconCss = 'img_sysintern_on';
+                    if ($row->title == '') {
+                        $strIconCss = 'img_sysintern_off';
+                    }
                     break;
             }
 
             $strOutput .= '<div id="category' . $row->id . '" class="category hoveritem">
 							         <div class="icon ' . $strIconCss . '" ondblclick="myNavigation.getEditForm(' . $row->id . ', \'category\', null , null, ' . $row->idCategoryTypes . '); return false;"></div>
 							         <div class="title" onclick="myNavigation.selectNavigationItem(' . $currLevel . ', \'category\', ' . $row->id . ', ' . $row->idCategoryTypes . '); return false;">
-							           ' . htmlentities($row->title, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '
+							           ' . htmlentities($row->title != '' ? $row->title : $row->fallbackTitle, ENT_COMPAT, $this->core->sysConfig->encoding->default) . '
 							         </div>
 							       </div>';
         }

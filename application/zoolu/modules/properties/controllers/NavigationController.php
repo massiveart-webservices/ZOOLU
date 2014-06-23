@@ -243,7 +243,7 @@ class Properties_NavigationController extends AuthControllerAction
              */
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Categories.php';
             $this->objModelCategories = new Model_Categories();
-            $this->objModelCategories->setLanguageId(1); // TODO : get language id
+            $this->objModelCategories->setLanguageId($this->core->intZooluLanguageId);
         }
 
         return $this->objModelCategories;
@@ -387,5 +387,3 @@ class Properties_NavigationController extends AuthControllerAction
 
 
 }
-
-?>
