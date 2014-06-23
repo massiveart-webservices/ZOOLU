@@ -169,6 +169,54 @@ Massiveart.List = Class.create({
     },
 
     /**
+     * unsubscribeListItem
+     */
+    unsubscribeListItem: function() {
+        var arrEntries = [];
+        var strEntries = '';
+        var index = 0;
+        $$('#listEntries input').each(function(e) {
+            if (e.type == 'checkbox') {
+                if (e.checked) {
+                    arrEntries[index] = e.value;
+                    strEntries += '[' + e.value + ']';
+                    index++;
+                }
+            }
+        });
+
+        if ($('buttonEditMenu')) {
+            Effect.toggle('buttonEditMenu', 'appear', { delay: 0, duration: 0.3 });
+        }
+        if (arrEntries.size() > 0) {
+            myCore.deleteAlertSingleMessage = myCore.translate['Unsubscribe_subscriber'];
+            myCore.deleteAlertMultiMessage = myCore.translate['Unsubscribe_subscriber'];
+            myCore.showDeleteAlertMessage(arrEntries.size());
+            $('buttonOk').observe('click', function(event) {
+                new Ajax.Updater(myNavigation.genListContainer, myNavigation.constBasePath + '/' + myNavigation.rootLevelType + '/listunsubscribe', {
+                    parameters: {
+                        values: strEntries,
+                        rootLevelId: myNavigation.rootLevelId,
+                        folderId: myNavigation.currItemId,
+                        page: this.page,
+                        itemsPerPage: this.ItemsPerPage,
+                        order: this.sortColumn,
+                        sort: this.sortOrder,
+                        search: this.searchValue
+                    },
+                    evalScripts: true,
+                    onComplete: function() {
+                        myCore.hideDeleteAlertMessage();
+                    }.bind(this)
+                });
+            }.bind(this));
+            $('buttonCancel').observe('click', function(event) {
+                myCore.hideDeleteAlertMessage();
+            }.bind(this));
+        }
+    },
+
+    /**
      * toggleEditMenu
      */
     toggleEditMenu: function (elementId) {
