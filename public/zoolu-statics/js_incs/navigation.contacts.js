@@ -629,6 +629,9 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
      */
     selectSubscribers: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType, rootLevelFilter) {
         if (!this.actionMenu || this.actionMenu.isOpen == false) {
+            if ($('search'))
+                $('search').setValue('');
+                myList.searchValue = '';
             if ($('importList'))
                 $('importList').show();
             if ($('exportList'))
@@ -673,7 +676,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                     },
                     evalScripts: true,
                     onComplete: function() {
-
+                        $$('#naviitem'+rootLevelId+' .menulink').each(function(el) {
+                            $(el).removeClassName('selected');
+                        });
+                        $('subnaviitem' + rootLevelFilter).addClassName('selected');
                     }.bind(this)
                 });
 
@@ -768,7 +774,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
                 },
                 evalScripts: true,
                 onComplete: function() {
-
+                    $$('#naviitem'+rootLevelId+' .menulink').each(function(el) {
+                        $(el).removeClassName('selected');
+                    });
+                    $('subnaviitem-bounce-' + type).addClassName('selected');
                 }.bind(this)
             });
             
