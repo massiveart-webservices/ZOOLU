@@ -38,6 +38,8 @@ Massiveart.Filter = Class.create({
         if(element.readAttribute('filterId') != null && element.readAttribute('filterId') != filterId){
           element.remove();
           element.selected = '';
+        } else {
+          element.show();
         }
       });
     });
