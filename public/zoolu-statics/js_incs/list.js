@@ -109,21 +109,13 @@ Massiveart.List = Class.create({
      * search
      */
     search: function () {
+        var rootLevelFilterId = null;
+        var rootLevelFilterListBounceId = null;
         if ($('search')) {
             this.searchValue = $F('search');
-            if ($('rootLevelFilterListId')) {
-                if ($('rootLevelFilterListBounceId')) {
-                    this.getListPage(0, $F('rootLevelFilterListId'), $F('rootLevelFilterListBounceId'));
-                } else {
-                    this.getListPage(0, $F('rootLevelFilterListId'));
-                }
-            } else {
-                if ($('rootLevelFilterListBounceId')) {
-                    this.getListPage(0, null, $F('rootLevelFilterListBounceId'));
-                } else {
-                    this.getListPage(0);
-                }
-            }
+            if ($('rootLevelFilterListId')) rootLevelFilterId = $F('rootLevelFilterListId');
+            if ($('rootLevelFilterListBounceId')) rootLevelFilterListBounceId = $F('rootLevelFilterListBounceId');
+            this.getListPage(0, rootLevelFilterId, rootLevelFilterListBounceId);
         }
     },
 
@@ -131,21 +123,13 @@ Massiveart.List = Class.create({
      * resetSearch
      */
     resetSearch: function () {
+        var rootLevelFilterId = null;
+        var rootLevelFilterListBounceId = null;
         if ($('search')) $('search').value = '';
         this.searchValue = '';
-        if ($('rootLevelFilterListId')) {
-            if ($('rootLevelFilterListBounceId')) {
-                this.getListPage(0, $F('rootLevelFilterListId'), $F('rootLevelFilterListBounceId'));
-            } else {
-                this.getListPage(0, $F('rootLevelFilterListId'));
-            }
-        } else {
-            if ($('rootLevelFilterListBounceId')) {
-                this.getListPage(0, null, $F('rootLevelFilterListBounceId'));
-            } else {
-                this.getListPage(0);
-            }
-        }
+        if ($('rootLevelFilterListId')) rootLevelFilterId = $F('rootLevelFilterListId');
+        if ($('rootLevelFilterListBounceId')) rootLevelFilterListBounceId = $F('rootLevelFilterListBounceId');
+        this.getListPage(0, rootLevelFilterId, rootLevelFilterListBounceId);
     },
 
     /**
