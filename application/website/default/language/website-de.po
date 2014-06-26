@@ -112,9 +112,8 @@ msgstr "Bundesland"
 msgid "Street"
 msgstr "Straße"
 
-#, fuzzy
 msgid "Subscriber_"
-msgstr "RSS abonnieren"
+msgstr "Subscriber_"
 
 msgid "Success_message"
 msgstr "Erfolgsmeldung"
@@ -158,9 +157,11 @@ msgstr "Bitte geben sie ein korrekte Emailadresse ein"
 msgid "subscribe_confirmation"
 msgstr "Sie wurden zum Newsletter hinzugefügt"
 
-#, fuzzy
 msgid "subscribe_doubleoptin_information"
-msgstr "Sie wurden zum Newsletter hinzugefügt"
+msgstr ""
+"Danke für Ihre Registrierung zum Newsletter. Um die Registrierung zu "
+"bestätigen klicken Sie bitte auf den Link, der Ihnen per Email gesendet "
+"wurde.<br><br><a href=\"/\">Zurück zur Startseite</a>"
 
 msgid "Newsletter_preview"
 msgstr "Newsletter in Browser öffnen"
@@ -281,9 +282,8 @@ msgstr "Tel"
 msgid "Video"
 msgstr "Video"
 
-#, fuzzy
 msgid "an_error_occured_during_unsubscribing"
-msgstr "Während der Abmeldung ist ein Fehler aufgetreten"
+msgstr "Während des Abmeldeprozesses ist ein Fehler aufgetreten."
 
 msgid "email"
 msgstr "Email"
@@ -318,9 +318,8 @@ msgstr "Sie wurden vom Newsletter abgemeldet"
 msgid "unsubscribe_description_text"
 msgstr "Vom Newsletter abmelden "
 
-#, fuzzy
 msgid "Subscriber_doubleoptin_subject"
-msgstr "Vom Newsletter abmelden "
+msgstr "Bestätigung der Newsletteranmeldung"
 
 #~ msgid "Enter_new_password"
 #~ msgstr "Geben Sie ein neues Passwort ein."
