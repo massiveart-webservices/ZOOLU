@@ -144,16 +144,17 @@ class ListHelper
         /**
          * if list is filtered by search
          */
+        $searchReset = '';
         if ($strSearchValue != '') {
             if (count($objPaginator) > 0) {
-                $strOutput = '
+                $searchReset = '
                     <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('Search_for_'), $strSearchValue) . '</div>';
             } else {
-                $strOutput = '
+                $searchReset = '
                     <div class="formsubtitle searchtitle">' . sprintf($this->core->translate->_('No_search_results_for_'), $strSearchValue) . '</div>';
             }
 
-            $strOutput .= '
+            $searchReset .= '
                 <div class="bttnSearchReset" onclick="myList.resetSearch();">
                   <div class="button17leftOff"></div>
                   <div class="button17centerOff">
@@ -169,10 +170,10 @@ class ListHelper
                 <div class="spacer2"></div>';
         }
 
-        if ($intCounter == 0) {
-            $strOutput = $this->core->translate->_('No_entries_available');
+        if ($intCounter == 0 && $strSearchValue == '') {
+            $strOutput = $searchReset . $this->core->translate->_('No_entries_available');
         } else {
-            $strOutput .= '
+            $strOutput .= $searchReset . '
                 <table class="tablelist">
                   ' . $strThead . '
                   ' . $strTbody . '

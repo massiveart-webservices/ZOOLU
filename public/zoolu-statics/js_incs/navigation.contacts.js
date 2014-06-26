@@ -629,9 +629,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
      */
     selectSubscribers: function(rootLevelId, rootLevelGroupId, url, viewType, rootLevelType, rootLevelFilter) {
         if (!this.actionMenu || this.actionMenu.isOpen == false) {
-            if ($('search'))
+            if ($('search')) {
                 $('search').setValue('');
                 myList.searchValue = '';
+            }
             if ($('importList'))
                 $('importList').show();
             if ($('exportList'))
@@ -735,6 +736,10 @@ Massiveart.Navigation.Contacts = Class.create(Massiveart.Navigation, {
      */
     selectBounces: function(type, rootLevelId) {
         if (!this.actionMenu || this.actionMenu.isOpen == false) {
+            if ($('search')) {
+                $('search').setValue('');
+                myList.searchValue = '';
+            }
             if ($('importList'))
                 $('importList').show();
             if ($('exportList'))

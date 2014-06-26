@@ -110,9 +110,19 @@ Massiveart.List = Class.create({
      */
     search: function () {
         if ($('search')) {
-            if ($F('search') != '') {
-                this.searchValue = $F('search');
-                this.getListPage();
+            this.searchValue = $F('search');
+            if ($('rootLevelFilterListId')) {
+                if ($('rootLevelFilterListBounceId')) {
+                    this.getListPage(0, $F('rootLevelFilterListId'), $F('rootLevelFilterListBounceId'));
+                } else {
+                    this.getListPage(0, $F('rootLevelFilterListId'));
+                }
+            } else {
+                if ($('rootLevelFilterListBounceId')) {
+                    this.getListPage(0, null, $F('rootLevelFilterListBounceId'));
+                } else {
+                    this.getListPage(0);
+                }
             }
         }
     },
@@ -123,7 +133,19 @@ Massiveart.List = Class.create({
     resetSearch: function () {
         if ($('search')) $('search').value = '';
         this.searchValue = '';
-        this.getListPage();
+        if ($('rootLevelFilterListId')) {
+            if ($('rootLevelFilterListBounceId')) {
+                this.getListPage(0, $F('rootLevelFilterListId'), $F('rootLevelFilterListBounceId'));
+            } else {
+                this.getListPage(0, $F('rootLevelFilterListId'));
+            }
+        } else {
+            if ($('rootLevelFilterListBounceId')) {
+                this.getListPage(0, null, $F('rootLevelFilterListBounceId'));
+            } else {
+                this.getListPage(0);
+            }
+        }
     },
 
     /**
