@@ -115,11 +115,12 @@ class Model_Subscribers {
     /**
      * load by email
      * @param string $strEmail
+     * @param int $portalId
      * @return Zend_Db_Table_Rowset_Abstract Subscriber
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function loadByEmail($strEmail) {
+    public function loadByEmail($strEmail, $portalId = null) {
         $this->core->logger->debug('subscribers->models->Model_Subscribers->loadByEmail(' . $strEmail . ')');
 
         $objSelect = $this->getSubscriberTable()->select();
@@ -128,6 +129,10 @@ class Model_Subscribers {
         $objSelect->from('subscribers')
                 ->joinLeft(array('uc' => 'users'), 'uc.id = subscribers.idUsers', array('changeUser' => 'CONCAT(uc.fname, \' \', uc.sname)'))
                 ->where('subscribers.email = ?', $strEmail);
+
+        if ($portalId != null) {
+            $objSelect->where('subscribers.portal = ?', $portalId);
+        }
 
         return $this->getSubscriberTable()->fetchAll($objSelect);
     }
@@ -157,9 +162,9 @@ class Model_Subscribers {
         $objSelect->setIntegrityCheck(false);
         $arrValues = array();
         if ($blnExtendSelect) {
-            $arrValues = array('id', 'salutation' => 'csat.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'portal' => 'pR.title', 'salutation' => 'csat.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         } else {
-            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'csut.title', 'bounced' => 'cbt.title', 'created', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'fname', 'sname', 'email', 'portal' => 'pR.title', 'subscribed' => 'csut.title', 'bounced' => 'cbt.title', 'created', 'changed', 'type' => new Zend_Db_Expr("'subscriber'"));
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
@@ -172,6 +177,7 @@ class Model_Subscribers {
         $objSelect->joinLeft(array('csut' => 'categoryTitles'), 'csut.idCategories = csu.id AND csut.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cb' => 'categories'), 'cb.id = s.bounced', array());
         $objSelect->joinLeft(array('cbt' => 'categoryTitles'), 'cbt.idCategories = cb.id AND cbt.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('pR' => 'rootLevelTitles'), 's.portal = pR.idRootLevels AND pR.idLanguages = ' . $this->intLanguageId, array());
 
         //Apply rootLevelFilters
         if ($intRootLevelFilterId != null) {
@@ -189,10 +195,16 @@ class Model_Subscribers {
                 $objField->sqlSelect = str_replace('%LANGUAGE_ID%', $this->core->intZooluLanguageId, $objField->sqlSelect);
 
                 //Build Subselect
-                $strSubselect = 'SELECT f.id FROM (' . $objField->sqlSelect . ') AS f
+                if ($objField->isCoreField) {
+                    $strSubselect = 'SELECT f.id FROM (' . $objField->sqlSelect . ') AS f
+                                      	INNER JOIN `subscribers` AS simf ON simf.'.$objField->name.' = f.id
+                                      	WHERE  simf.id = s.id';
+                } else {
+                    $strSubselect = 'SELECT f.id FROM (' . $objField->sqlSelect . ') AS f
                                       	INNER JOIN `subscriber-DEFAULT_SUBSCRIBER-1-InstanceMultiFields` AS simf ON simf.idRelation = f.id
                                       	WHERE simf.idSubscribers = s.id
                                       		AND simf.idFields = ' . $objField->id;
+                }
 
                 $strOperator = '';
                 $arrValues = explode(',', $objRootLevelFilterValue->value);
@@ -234,6 +246,7 @@ class Model_Subscribers {
                 }
             }
         }
+
         $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
 
         if ($strSearchValue != '') {
@@ -270,9 +283,9 @@ class Model_Subscribers {
 
         $arrValues = array();
         if ($blnExtendSelect) {
-            $arrValues = array('id', 'salutation' => 'csat.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'portal' => 'pR.title', 'salutation' => 'csat.title', 'title', 'fname', 'sname', 'email', 'phone', 'mobile', 'fax', 'website', 'street', 'city', 'state', 'zip', 'type' => new Zend_Db_Expr("'subscriber'"));
         } else {
-            $arrValues = array('id', 'fname', 'sname', 'email', 'subscribed' => 'csut.title', 'dirty' => 'cdt.title', 'bounced' => 'cbt.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
+            $arrValues = array('id', 'fname', 'sname', 'email', 'portal' => 'pR.title', 'subscribed' => 'csut.title', 'dirty' => 'cdt.title', 'bounced' => 'cbt.title', 'created', 'type' => new Zend_Db_Expr("'subscriber'"));
         }
 
         $objSelect->from(array('s' => 'subscribers'), $arrValues);
@@ -285,6 +298,7 @@ class Model_Subscribers {
         $objSelect->joinLeft(array('csut' => 'categoryTitles'), 'csut.idCategories = csu.id AND csut.idLanguages = ' . $this->intLanguageId, array());
         $objSelect->joinLeft(array('cb' => 'categories'), 'cb.id = s.bounced', array());
         $objSelect->joinLeft(array('cbt' => 'categoryTitles'), 'cbt.idCategories = cb.id AND cbt.idLanguages = ' . $this->intLanguageId, array());
+        $objSelect->joinLeft(array('pR' => 'rootLevelTitles'), 's.portal = pR.idRootLevels AND pR.idLanguages = ' . $this->intLanguageId, array());
 
         $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
         $objSelect->where('s.bounced = ?', $bouncetype);
