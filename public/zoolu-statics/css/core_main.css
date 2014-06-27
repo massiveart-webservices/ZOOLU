@@ -56,6 +56,10 @@ body {
     z-index: 30;
     margin: 0 10px 10px 0;
     background-color: #c6c6c6; /*E4E4E4;*/
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
 }
 
 #widgets {
@@ -161,6 +165,7 @@ Content List View */
 }
 
 .top,
+.topportal,
 .toptitle,
 .topurl,
 .toptargetpage,
@@ -291,6 +296,7 @@ Content List View */
 
 .row,
 .rowtitle,
+.rowportal,
 .rowsname,
 .rowfname,
 .rowname,
