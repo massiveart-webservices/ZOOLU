@@ -1387,13 +1387,16 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                 if (count($arrGenFormsData) > 0) {
                     $this->blnHasLoadedMultiFieldData = true;
                     foreach ($arrGenFormsData as $arrGenRowFormsData) {
-                        $arrTmpRelationIds = $this->setup->getMultiField($arrGenRowFormsData->name)->getValue();
-                        if (is_array($arrTmpRelationIds)) {
-                            array_push($arrTmpRelationIds, $arrGenRowFormsData->idRelation);
-                        } else {
-                            $arrTmpRelationIds = array($arrGenRowFormsData->idRelation);
+                        $field = $this->setup->getMultiField($arrGenRowFormsData->name);
+                        if ($field) {
+                            $arrTmpRelationIds = $field->getValue();
+                            if (is_array($arrTmpRelationIds)) {
+                                array_push($arrTmpRelationIds, $arrGenRowFormsData->idRelation);
+                            } else {
+                                $arrTmpRelationIds = array($arrGenRowFormsData->idRelation);
+                            }
+                            $field->setValue($arrTmpRelationIds);
                         }
-                        $this->setup->getMultiField($arrGenRowFormsData->name)->setValue($arrTmpRelationIds);
                     }
                 }
             }

@@ -33,11 +33,13 @@ Massiveart.Filter = Class.create({
       $(id).setAttribute('data-elements', $(id).innerHTML);
     }
     $(id).innerHTML = $(id).readAttribute('data-elements');
-    $(id).childElements().each(function(element){
-      if(!element.readAttribute('filterId') == null && !element.readAttribute('filterId') == filterId){
-        element.remove();
-        element.selected = '';
-      }
+      $(id).childElements().each(function(element){
+      if(element.readAttribute('filterId') != null && element.readAttribute('filterId') != filterId){
+          element.remove();
+          element.selected = '';
+        } else {
+          element.show();
+        }
     });
   },
   

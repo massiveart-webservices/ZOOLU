@@ -221,12 +221,25 @@ Navigation Main */
     -moz-border-radius-topright: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomright: 5px;
+    border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
 }
 
 #divNaviLeft2 {
     width: 240px;
     top: 0;
     padding-top: 5px;
+}
+
+#divNaviLeft2 #divNaviLeftMain {
+    position: absolute;
+    z-index: 20;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #divNaviCenter {

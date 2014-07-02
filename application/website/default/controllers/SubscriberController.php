@@ -164,8 +164,8 @@ class SubscriberController extends WebControllerAction {
             $formData['fname'] = $this->getRequest()->getParam('fname', '');
             $formData['sname'] = $this->getRequest()->getParam('sname', '');
             $formData['interestgroups'] = $this->getRequest()->getParam('interestgroups', array());
-            // portals evaluation
-            $formData['portals'] = array($this->objTheme->idRootLevels);    
+            // portal evaluation
+            $formData['portal'] = $this->objTheme->idRootLevels;
             // language evaluation
             $formData['languages'] = array();
             foreach ($this->core->sysConfig->contact->language_mappings->language as $language) {
@@ -232,7 +232,7 @@ class SubscriberController extends WebControllerAction {
         if (!$validEmail) {
             $objSubscriberHelper->setFormError('email', $this->translate->_('please_insert_valid_emailaddress'));
         }
-        $objSubscribersEmail = $this->getModelSubscribers()->loadByEmail($email);
+        $objSubscribersEmail = $this->getModelSubscribers()->loadByEmail($email, $this->objTheme->idRootLevels);
         if (count($objSubscribersEmail) > 0) {
             $validEmail = false;
             $objSubscriberHelper->setFormError('email', $this->translate->_('emailaddress_already_used'));
@@ -267,15 +267,7 @@ class SubscriberController extends WebControllerAction {
             $objSubscriberHelper->setFormError('sname', $this->translate->_('Sname_mandatory'));
         }
 
-        // Interesgroup validation
-        if (count($formData['interestgroups']) > 0) {
-            $validInterestgroups = true;
-        } else {
-            $validInterestgroups = false;
-            $objSubscriberHelper->setFormData('interestgroups', $formData['interestgroups']);
-        }
-
-        $valid = ($validSalutation && $validFname && $validSname && $validInterestgroups);
+        $valid = ($validSalutation && $validFname && $validSname);
         return $valid;
     }
     
@@ -317,6 +309,7 @@ class SubscriberController extends WebControllerAction {
             'fname'             =>  $formData['fname'],
             'sname'             =>  $formData['sname'],
             'email'             =>  $formData['email'],
+            'portal'            =>  $formData['portal'],
             'subscribed'        =>  $subscribed,
             'reactivated'       =>  date('Y-m-d H:i:s'),
             'optinkey'          =>  $optInKey,
@@ -326,7 +319,6 @@ class SubscriberController extends WebControllerAction {
         // add interests
         $interests = array(
             'interest_group' => $formData['interestgroups'],
-            'portal'         => $formData['portals'],
             'language'       => $formData['languages']
         );
         $this->objModelSubscribers->updateInterests($objInactiveSubscriber->id, $interests);
@@ -378,6 +370,7 @@ class SubscriberController extends WebControllerAction {
             'fname'             =>  $formData['fname'],
             'sname'             =>  $formData['sname'],
             'email'             =>  $formData['email'],
+            'portal'             =>  $formData['portal'],
             'subscribed'        =>  $subscribed,
             'created'           =>  date('Y-m-d H:i:s'),
             'optinkey'          =>  $optInKey
@@ -387,7 +380,6 @@ class SubscriberController extends WebControllerAction {
         // add interests
         $interests = array(
             'interest_group' => $formData['interestgroups'],
-            'portal'         => $formData['portals'],
             'language'       => $formData['languages']
         );
         $this->objModelSubscribers->updateInterests($id, $interests);
