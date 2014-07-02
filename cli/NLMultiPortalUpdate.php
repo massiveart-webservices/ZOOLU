@@ -140,7 +140,6 @@ foreach ($stmt->fetchAll(PDO::FETCH_OBJ) as $row) {
 echo 'Try to delete all multifields from ' . $colors->getColoredString($fieldId, 'yellow') . PHP_EOL;
 
 try {
-    exit; // TODO DELETE
     $core->dbh->query('DELETE FROM `subscriber-DEFAULT_SUBSCRIBER-1-InstanceMultiFields` WHERE idFields = ' . intval($fieldId));
 } catch (Exception $e) {
     echo $colors->getColoredString($e->getMessage(), 'red');
