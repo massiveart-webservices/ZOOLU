@@ -105,6 +105,8 @@ class Properties_CategoryController extends AuthControllerAction
          */
         $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
 
+        $this->view->languageOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->objForm->Setup()->getLanguageId());
+
         $this->view->form = $this->objForm;
         $this->renderScript('category/form.phtml');
     }
@@ -167,7 +169,7 @@ class Properties_CategoryController extends AuthControllerAction
          * get form title
          */
         $this->view->formtitle = $this->objForm->Setup()->getFormTitle();
-        if ($this->objForm->Setup()->getActionType() == $this->core->sysConfig->generic->actions->edit) $this->view->languageOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->objForm->Setup()->getLanguageId());
+        $this->view->languageOptions = HtmlOutput::getOptionsOfSQL($this->core, 'SELECT id AS VALUE, languageCode AS DISPLAY FROM languages ORDER BY sortOrder, languageCode', $this->objForm->Setup()->getLanguageId());
 
         $this->view->form = $this->objForm;
 
@@ -282,7 +284,12 @@ class Properties_CategoryController extends AuthControllerAction
         $this->core->logger->debug('properties->controllers->CategoryController->changelanguageAction()');
 
         try {
-            $this->_forward('geteditform');
+            $id = $this->getRequest()->getParam('id');
+            if (empty($id)) {
+                $this->_forward('getaddform');
+            } else {
+                $this->_forward('geteditform');
+            }
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
             exit();
@@ -343,6 +350,7 @@ class Properties_CategoryController extends AuthControllerAction
              */
             require_once GLOBAL_ROOT_PATH . $this->core->sysConfig->path->zoolu_modules . 'core/models/Categories.php';
             $this->objModelCategories = new Model_Categories();
+            $this->objModelCategories->setLanguageId($this->core->intZooluLanguageId);
         }
 
         return $this->objModelCategories;

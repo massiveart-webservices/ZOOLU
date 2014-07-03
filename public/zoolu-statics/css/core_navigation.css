@@ -915,6 +915,10 @@ Icons */
     height: 16px;
 }
 
+.img_category_off {
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -102px;
+}
+
 .img_label_on,
 .img_label_off {
     background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -322px;
@@ -923,12 +927,20 @@ Icons */
     height: 16px;
 }
 
+.img_label_off {
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -305px;
+}
+
 .img_sysintern_on,
 .img_sysintern_off {
     background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -288px;
     position: relative;
     width: 16px;
     height: 16px;
+}
+
+.img_sysintern_off {
+    background: transparent url(/zoolu-statics/images/icons/icons_small.png) no-repeat scroll 50% -271px;
 }
 
 .img_page_on,

@@ -94,9 +94,11 @@ class Model_Categories
          * ORDER BY categories.lft
          */
         $objSelect->from('categories');
-        $objSelect->join('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+        $objSelect->joinLeft('categoryTitles', 'categoryTitles.idCategories = categories.id AND categoryTitles.idLanguages = ' . $this->intLanguageId, array('title'));
+        $objSelect->joinLeft(array('fallbackTitle' => 'categoryTitles'), 'fallbackTitle.idCategories = categories.id AND fallbackTitle.idLanguages', array('fallbackTitle' => 'title'));
         $objSelect->where('categories.idCategoryTypes = ' . $intCategoryTypeId);
         $objSelect->where('categories.idParentCategory = ' . $intItemId);
+        $objSelect->group('categories.id');
         $objSelect->order(array('categoryTitles.title', 'categories.lft'));
 
         return $this->getCategoriesTable()->fetchAll($objSelect);
