@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-16 14:29+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: rs <raphael.stocker@massiveart.com>\n"
+"Last-Translator: Alexander Schranz <alexander.schranz@massiveart.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,6 +12,7 @@ msgstr ""
 "Language: en_AT\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /Volumes/massive-bazinga/websites/zoolu.bazinga.at\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Poedit-SearchPath-0: application/website\n"
 "X-Poedit-SearchPath-1: public/website\n"
 
@@ -111,9 +112,8 @@ msgstr "State/Province"
 msgid "Street"
 msgstr "Street"
 
-#, fuzzy
 msgid "Subscriber_"
-msgstr "Subscribe RSS"
+msgstr "Subscriber_"
 
 msgid "Success_message"
 msgstr "Success message"
@@ -157,9 +157,11 @@ msgstr "please insert valid email address"
 msgid "subscribe_confirmation"
 msgstr "You subscribed the newsletter"
 
-#, fuzzy
 msgid "subscribe_doubleoptin_information"
-msgstr "You subscribed the newsletter"
+msgstr ""
+"Thank you for your registration to thenewsletter. To confirm your "
+"registration, please click the link which is sent to you by Mail.<br><br><a "
+"href=\"/\">Go to start page</a>"
 
 msgid "Newsletter_preview"
 msgstr "Open newsletter in Browser"
@@ -238,7 +240,13 @@ msgid "Laboratory"
 msgstr "Laboratory"
 
 msgid "LegalNotes"
-msgstr "I agree that the above personal data are stored, processed and used by MASSIVE ART and the companies of the MASSIVE ART Group to provide me with information about products, services, or activities of the MASSIVE ART Group in writing, by fax, phone, or e-mail. I can revoke my consent completely or partially with immediate effect by sending a corresponding notification to MAIL@MASSIVE ART.AT."
+msgstr ""
+"I agree that the above personal data are stored, processed and used by "
+"MASSIVE ART and the companies of the MASSIVE ART Group to provide me with "
+"information about products, services, or activities of the MASSIVE ART Group "
+"in writing, by fax, phone, or e-mail. I can revoke my consent completely or "
+"partially with immediate effect by sending a corresponding notification to "
+"MAIL@MASSIVE ART.AT."
 
 msgid "Mr."
 msgstr "Mr."
@@ -273,9 +281,8 @@ msgstr "Tel"
 msgid "Video"
 msgstr "Video"
 
-#, fuzzy
 msgid "an_error_occured_during_unsubscribing"
-msgstr "An error occured during unsubscribe from newlsetters"
+msgstr "An error occurred while unsubscribing from newsletter"
 
 msgid "email"
 msgstr "E-mail"
@@ -310,9 +317,8 @@ msgstr "You unsubscribed the newsletter"
 msgid "unsubscribe_description_text"
 msgstr "Unsubscribe from Newsletter"
 
-#, fuzzy
 msgid "Subscriber_doubleoptin_subject"
-msgstr "Unsubscribe from Newsletter"
+msgstr "Confirm newsletter subscription"
 
 #~ msgid "Identity_not_found"
 #~ msgstr "Username not found"

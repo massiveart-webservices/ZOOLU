@@ -81,5 +81,3 @@ class Export
         return ob_get_clean();
     }
 }
-
-?>
