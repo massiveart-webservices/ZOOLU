@@ -109,11 +109,13 @@ Massiveart.List = Class.create({
      * search
      */
     search: function () {
+        var rootLevelFilterId = null;
+        var rootLevelFilterListBounceId = null;
         if ($('search')) {
-            if ($F('search') != '') {
-                this.searchValue = $F('search');
-                this.getListPage();
-            }
+            this.searchValue = $F('search');
+            if ($('rootLevelFilterListId')) rootLevelFilterId = $F('rootLevelFilterListId');
+            if ($('rootLevelFilterListBounceId')) rootLevelFilterListBounceId = $F('rootLevelFilterListBounceId');
+            this.getListPage(0, rootLevelFilterId, rootLevelFilterListBounceId);
         }
     },
 
@@ -121,9 +123,13 @@ Massiveart.List = Class.create({
      * resetSearch
      */
     resetSearch: function () {
+        var rootLevelFilterId = null;
+        var rootLevelFilterListBounceId = null;
         if ($('search')) $('search').value = '';
         this.searchValue = '';
-        this.getListPage();
+        if ($('rootLevelFilterListId')) rootLevelFilterId = $F('rootLevelFilterListId');
+        if ($('rootLevelFilterListBounceId')) rootLevelFilterListBounceId = $F('rootLevelFilterListBounceId');
+        this.getListPage(0, rootLevelFilterId, rootLevelFilterListBounceId);
     },
 
     /**

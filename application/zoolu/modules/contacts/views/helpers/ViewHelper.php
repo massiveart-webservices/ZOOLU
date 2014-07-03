@@ -163,10 +163,12 @@ class ViewHelper {
 
         if (count($objRootLevelFilters) > 0) {
             $strOutput .= '
-      		  <div class="menulink">
+      		  <div id="subnaviitem-bounce-'.$this->core->sysConfig->contact->bounce_mapping->hard.'" class="menulink">
                 <div class="menutitle portalnoicon">
                 	<a onclick="myNavigation.selectBounces(\'' . $this->core->sysConfig->contact->bounce_mapping->hard . '\', ' . $objRootLevelFilters->current()->idRootLevels . ')" href="#">' . htmlentities($this->core->translate->_('Hardbounces'), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
                 </div>
+              </div>
+      		  <div id="subnaviitem-bounce-'.$this->core->sysConfig->contact->bounce_mapping->soft.'" class="menulink">
                 <div class="menutitle portalnoicon">
                 	<a onclick="myNavigation.selectBounces(\'' . $this->core->sysConfig->contact->bounce_mapping->soft . '\', ' . $objRootLevelFilters->current()->idRootLevels . ')" href="#">' . htmlentities($this->core->translate->_('Softbounces'), ENT_COMPAT, $this->core->sysConfig->encoding->default) . '</a>
                 </div>

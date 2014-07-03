@@ -144,11 +144,13 @@ class Contacts_SubscriberController extends AuthControllerAction
         $intRootLevelId = $this->getRequest()->getParam('rootLevelId');
         $bounced = $this->getRequest()->getParam('bounced', '');
 
+
         if ($bounced != '' && ($bounced == $this->core->sysConfig->contact->bounce_mapping->hard || $bounced == $this->core->sysConfig->contact->bounce_mapping->soft) ) {
             $objSelect = $this->getModelSubscribers()->loadBounced($bounced, $intRootLevelId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
         } else {
             $objSelect = $this->getModelSubscribers()->loadByRootLevelFilter($intRootLevelId, $intRootLevelFilterId, $strSearchValue, $strSortOrder, $strOrderColumn, true);
         }
+
         $objAdapter = new Zend_Paginator_Adapter_DbTableSelect($objSelect);
         $objPaginator = new Zend_Paginator($objAdapter);
         $objPaginator->setItemCountPerPage((int) $this->getRequest()->getParam('itemsPerPage', $this->core->sysConfig->list->default->itemsPerPage));
@@ -160,6 +162,7 @@ class Contacts_SubscriberController extends AuthControllerAction
         $this->view->assign('sortOrder', $strSortOrder);
         $this->view->assign('searchValue', $strSearchValue);
         $this->view->assign('rootLevelFilterId', $intRootLevelFilterId);
+        $this->view->assign('bounced', $bounced);
         $this->view->assign('rootLevelId', $this->getRequest()->getParam('rootLevelId'));
     }
 

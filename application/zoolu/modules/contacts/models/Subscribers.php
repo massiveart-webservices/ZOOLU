@@ -237,9 +237,7 @@ class Model_Subscribers {
         $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
 
         if ($strSearchValue != '') {
-            $objSelect->where('s.fname LIKE ?', '%' . $strSearchValue . '%');
-            $objSelect->orWhere('s.sname LIKE ?', '%' . $strSearchValue . '%');
-            $objSelect->orWhere('s.email LIKE ?', '%' . $strSearchValue . '%');
+            $objSelect->where('(s.fname LIKE ? OR s.sname LIKE ? OR s.email LIKE ?)', '%' . $strSearchValue . '%');
         }
         
         if ($filterReachable) {
@@ -289,9 +287,9 @@ class Model_Subscribers {
         $objSelect->where('s.idRootLevels = ?', $intRootLevelId);
         $objSelect->where('s.bounced = ?', $bouncetype);
         if ($strSearchValue != '') {
-            $objSelect->where('s.fname LIKE ?', '%' . $strSearchValue . '%');
-            $objSelect->orWhere('s.sname LIKE ?', '%' . $strSearchValue . '%');
+            $objSelect->where('(s.fname LIKE ? OR s.sname LIKE ? OR s.email LIKE ?)', '%' . $strSearchValue . '%');
         }
+
         $objSelect->order($strOrderColumn . ' ' . strtoupper($strSortOrder));
         $this->core->logger->debug(strval($objSelect));
         if ($blnReturnSelect) {

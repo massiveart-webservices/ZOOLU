@@ -5,6 +5,7 @@ $objHelper = new ListHelper();
 
 ?>
 <input type="hidden" name="rootLevelFilterListId" id="rootLevelFilterListId" value="<?php echo $this->rootLevelFilterId; ?>"/>
+<input type="hidden" name="rootLevelFilterListBounceId" id="rootLevelFilterListBounceId" value="<?php echo $this->bounced; ?>"/>
 <input type="hidden" name="rootLevelId" id="rootLevelId" value="<?php echo $this->rootLevelId; ?>"/>
 <?php echo $objHelper->getList($this->paginator, $this->orderColumn, $this->sortOrder, $this->searchValue); ?>
 <?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
