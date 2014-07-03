@@ -166,6 +166,12 @@ class Form_Helper_FormDocumentFilter extends Zend_View_Helper_FormElement
                   </div>
                   <input type="hidden" id="' . $this->view->escape($id) . '" name="' . $this->view->escape($name) . '" isCoreField="' . $attribs['isCoreField'] . '" fieldId="' . $attribs['fieldId'] . '" value=""/>';
 
+        $strOutput .= '
+            <script type="text/javascript">//<![CDATA[
+                myForm.loadFileFilterFieldContent(\'' . $this->view->escape($id) . '\', \'documentFilter\');
+            // ]]>
+            </script>';
+
         return $strOutput;
     }
 
