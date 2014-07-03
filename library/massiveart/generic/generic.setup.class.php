@@ -886,10 +886,10 @@ class GenericSetup
     {
         $datetime = new stdClass();
 
-        $datetime->from_date = array_key_exists($strFieldName . '_from_date', $arrValues) && !empty($arrValues[$strFieldName . '_from_date']) ? $arrValues[$strFieldName . '_from_date'] : null;
+        $datetime->from_date = array_key_exists($strFieldName . '_from_date', $arrValues) && !empty($arrValues[$strFieldName . '_from_date']) ? date('Y-m-d', strtotime($arrValues[$strFieldName . '_from_date'])) : null;
         $datetime->from_time = array_key_exists($strFieldName . '_from_time', $arrValues) && !empty($arrValues[$strFieldName . '_from_time']) ? $arrValues[$strFieldName . '_from_time'] . ':00' : null;
         $datetime->to_time = array_key_exists($strFieldName . '_to_time', $arrValues) && !empty($arrValues[$strFieldName . '_to_time']) ? $arrValues[$strFieldName . '_to_time'] . ':00' : null;
-        $datetime->to_date = array_key_exists($strFieldName . '_to_date', $arrValues) && !empty($arrValues[$strFieldName . '_to_date']) ? $arrValues[$strFieldName . '_to_date'] : null;
+        $datetime->to_date = array_key_exists($strFieldName . '_to_date', $arrValues) && !empty($arrValues[$strFieldName . '_to_date']) ? date('Y-m-d', strtotime($arrValues[$strFieldName . '_to_date'])) : null;
 
         $datetime->fulltime = array_key_exists($strFieldName . '_fulltime', $arrValues) & !empty($arrValues[$strFieldName . '_fulltime']) ? $arrValues[$strFieldName . '_fulltime'] : null;
 
@@ -921,7 +921,7 @@ class GenericSetup
         }
 
         $datetime->end = array_key_exists($strFieldName . '_repeat_ending', $arrValues) && !empty($arrValues[$strFieldName . '_repeat_ending']) ? $arrValues[$strFieldName . '_repeat_ending'] : null;
-        $datetime->end_date = array_key_exists($strFieldName . '_end_date', $arrValues) && !empty($arrValues[$strFieldName . '_end_date']) ? $arrValues[$strFieldName . '_end_date'] : null;
+        $datetime->end_date = array_key_exists($strFieldName . '_end_date', $arrValues) && !empty($arrValues[$strFieldName . '_end_date']) ? date('Y-m-d', strtotime($arrValues[$strFieldName . '_end_date'])) : null;
 
         if (count($datetime->repeat_type)) {
             $days = $datetime->repeat_type;
