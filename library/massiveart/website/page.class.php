@@ -885,22 +885,38 @@ class Page
 
     /**
      * getInternalLinks
-     * @param string $strFieldName
-     * @return object $objTagsData
+     * @param $fieldId
+     * @return Zend_Db_Table_Rowset_Abstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
      */
-    public function getInternalLinks()
+    public function getInternalLinks($fieldId = '120')
     {
         try {
-
             $this->getModel();
             $this->objModel->setLanguageId($this->intLanguageId);
-            return $this->objModel->loadInternalLinks($this->strPageId, $this->intPageVersion);
+            return $this->objModel->loadInternalLinks($this->strPageId, $this->intPageVersion, $fieldId);
 
         } catch (Exception $exc) {
             $this->core->logger->err($exc);
         }
+    }
+
+    /**
+     * @param $intPageId
+     * @param $strGenForm
+     * @param $intVersion
+     *
+     * @return mixed
+     */
+    public function getInternalLinkInfo($intPageId, $strGenForm, $intVersion)
+    {
+        $objLinkInfo = $this->getModel()->loadInternalLinkInfo($intPageId, $strGenForm, $intVersion);
+
+        if (!empty($objLinkInfo)) {
+            return $objLinkInfo->current();
+        }
+        return false;
     }
 
     /**

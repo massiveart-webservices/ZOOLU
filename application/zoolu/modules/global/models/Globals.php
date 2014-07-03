@@ -1487,6 +1487,7 @@ class Model_Globals extends ModelAbstract
      * @param string $strElementId
      * @param integer $intVersion
      * @param integer $intFieldId
+     * @param integer $intRootLevelId
      * @return Zend_Db_Table_Rowset_Abstract
      * @author Thomas Schedler <tsh@massiveart.com>
      * @version 1.0
@@ -1509,6 +1510,7 @@ class Model_Globals extends ModelAbstract
             $objSelect->joinLeft('globalFiles', 'globalFiles.id = (SELECT iFl.id FROM globalFiles AS iFl WHERE iFl.globalId = globals.globalId AND iFl.version = globals.version AND iFl.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).' AND iFl.idFields IN (174, 5, 55) ORDER BY iFl.idFields DESC LIMIT 1)', array()); //FIXME
             $objSelect->joinLeft('files', 'files.id = globalFiles.idFiles AND files.isImage = 1', array('filename', 'fileversion' => 'version', 'filepath' => 'path'));
             $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('filetitle' => 'title'));
+            $objSelect->joinLeft('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version'));
             $objSelect->order('globalInternalLinks.sortPosition ASC');
         } else {
             $objSelect->from('globals', array('globals.id', 'relationId' => 'globals.globalId', 'globals.globalId', 'globals.version', 'globalProperties.idGlobalTypes', 'isStartItem' => 'globals.isStartGlobal', 'globals.isStartGlobal', 'globalProperties.idStatus'));
@@ -1522,6 +1524,7 @@ class Model_Globals extends ModelAbstract
             $objSelect->joinLeft(array('iFiles' => 'global-DEFAULT_PRODUCT-1-InstanceFiles'), 'iFiles.id = (SELECT iFl.id FROM `global-DEFAULT_PRODUCT-1-InstanceFiles` AS iFl WHERE iFl.globalId = globals.globalId AND iFl.version = globals.version AND iFl.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE).' AND iFl.idFields IN (174, 5, 55) ORDER BY iFl.idFields DESC LIMIT 1)', array()); //FIXME
             $objSelect->joinLeft('files', 'files.id = iFiles.idFiles AND files.isImage = 1', array('filename', 'fileversion' => 'version', 'filepath' => 'path'));
             $objSelect->joinLeft('fileTitles', 'fileTitles.idFiles = files.id AND fileTitles.idLanguages = '.$this->core->dbh->quote($this->intLanguageId, Zend_Db::INT_TYPE), array('filetitle' => 'title'));
+            $objSelect->joinLeft('genericForms', 'genericForms.id = globalProperties.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version'));
             $objSelect->order('globalInternalLinks.sortPosition ASC');
         }
 
