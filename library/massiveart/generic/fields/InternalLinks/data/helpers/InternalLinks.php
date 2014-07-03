@@ -175,7 +175,8 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract
      * @param string $strType
      * @param string $strElementId
      * @param GenericElementRegion $objRegion
-     * @param number $intVersion
+     * @param int $intVersion
+     * @return array
      * @author Daniel Rotter
      * @version 1.0
      */
@@ -190,8 +191,8 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract
             $objSelect = $objGenTable->select();
             $objSelect->setIntegrityCheck(false);
 
-            $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('id', 'relationId' => 'linked' . ucfirst($strType) . 'Id', $strType . 'Id', 'idRegionInstances'));
-            $objSelect->join($strType . 's', $strType . 's.' . $strType . 'Id = `' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.`linked' . ucfirst($strType) . 'Id`', array('isStartItem' => 'isStart' . ucfirst($strType)));
+            $objSelect->from($objGenTable->info(Zend_Db_Table_Abstract::NAME), array('relationId' => 'linked' . ucfirst($strType) . 'Id', $strType . 'Id', 'idRegionInstances'));
+            $objSelect->join($strType . 's', $strType . 's.' . $strType . 'Id = `' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.`linked' . ucfirst($strType) . 'Id`', array('id', 'isStartItem' => 'isStart' . ucfirst($strType)));
             if ($strType == 'global') {
                 // FIXME : differences between products and standard gobals
                 // at the moment it's only for product internal links
@@ -209,6 +210,9 @@ class GenericDataHelper_InternalLinks extends GenericDataHelperAbstract
                 $objSelect->join($strType . 'Properties', $strType . 'Properties.' . $strType . 'Id = ' . $strType . 's.' . $strType . 'Id AND ' . $strType . 'Properties.version = ' . $intVersion . ' AND ' . $strType . 'Properties.idLanguages = ' . $this->objElement->Setup()->getLanguageId(), array('idStatus'));
                 $objSelect->join($strType . 'Titles', $strType . 'Titles.' . $strType . 'Id = ' . $strType . 's.' . $strType . 'Id AND ' . $strType . 'Titles.version = ' . $intVersion . ' AND ' . $strType . 'Titles.idLanguages = ' . $this->objElement->Setup()->getLanguageId(), array('title'));
             }
+            $objSelect->joinleft('urls', 'urls.relationId = '.$strType.'s.'.$strType.'Id AND urls.version = '.$strType.'s.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->$strType . ' AND urls.idLanguages = ' . $this->objElement->Setup()->getLanguageId() . ' AND urls.isMain = 1 AND urls.isLandingPage =  0 AND urls.idParent IS NULL', array('url'));
+            $objSelect->joinleft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
+            $objSelect->joinLeft('genericForms', 'genericForms.id = '.$strType.'Properties.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version'));
             $objSelect->join($strType . '-' . $this->objElement->Setup()->getFormId() . '-' . $this->objElement->Setup()->getFormVersion() . '-Region' . $objRegion->getRegionId() . '-Instances AS regionInstance', '`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idRegionInstances = regionInstance.id', array('sortPosition'));
             $objSelect->join('fields', 'fields.id = `' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.idFields', array('name'));
             $objSelect->where('`' . $objGenTable->info(Zend_Db_Table_Abstract::NAME) . '`.' . $strType . 'Id = ?', $strElementId);

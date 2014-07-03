@@ -751,10 +751,51 @@ class Model_Pages extends ModelAbstract
         $objSelect->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = ' . $this->intLanguageId, array('title'));
         $objSelect->joinleft('urls', 'urls.relationId = pages.pageId AND urls.version = pages.version AND urls.idUrlTypes = ' . $this->core->sysConfig->url_types->page . ' AND urls.idLanguages = ' . $this->intLanguageId . ' AND urls.isMain = 1 AND urls.isLandingPage =  0 AND urls.idParent IS NULL', array('url'));
         $objSelect->joinleft('languages', 'languages.id = urls.idLanguages', array('languageCode'));
+        $objSelect->joinLeft('genericForms', 'genericForms.id = pageProperties.idGenericForms', array('genericFormId', 'genericFormVersion' => 'version'));
         $objSelect->where('pages.id = (SELECT p.id FROM pages AS p WHERE pages.pageId = p.pageId ORDER BY p.version DESC LIMIT 1)');
         $objSelect->order('pageInternalLinks.sortPosition ASC');
 
         return $this->objPageInternalLinksTable->fetchAll($objSelect);
+    }
+
+    /**
+     * loadInternalLinkInfo
+     * @param $intPageId
+     * @param $strGenForm
+     * @param $intVersion
+     * @return array
+     * @author Alexander Schranz <alexander.schranz@massiveart.com>
+     * @version 1.0
+     */
+    public function loadInternalLinkInfo($intPageId, $strGenForm, $intVersion)
+    {
+        $this->core->logger->debug('cms->models->Model_Pages->loadInternalLinkSpecial');
+
+        $internalLinks = array();
+
+        try {
+            $objSelect = $this->getPageTable()->select()->setIntegrityCheck(false);
+            $objSelect->from('pages', array())
+                ->join('pageTitles', 'pageTitles.pageId = pages.pageId AND pageTitles.version = pages.version AND pageTitles.idLanguages = ' . $this->getLanguageId(), array('title'))
+                ->joinLeft('pageLabels', 'pageLabels.pageId = pages.pageId AND pageLabels.version = pages.version AND pageLabels.idLanguages = ' . $this->getLanguageId(), array())
+                ->joinLeft('categoryCodes', 'categoryCodes.idCategories = pageLabels.label AND categoryCodes.idLanguages = ' . $this->getLanguageId(), array('label' => 'code'))
+                ->join(array('instances' => 'page-' . $strGenForm . '-' . $intVersion . '-Instances'), 'instances.pageId = pages.pageId AND instances.version = pages.version AND instances.idLanguages = ' . $this->getLanguageId(), array('description', 'shortdescription', 'read_more_text'))
+                ->joinLeft(array('instanceFiles' => 'page-' . $strGenForm . '-' . $intVersion . '-InstanceFiles'), 'instanceFiles.pageId = pages.pageId AND instanceFiles.version = pages.version AND instanceFiles.idLanguages = ' . $this->getLanguageId() . ' AND instanceFiles.idFields IN (5,55)', array())
+                ->joinLeft('files', 'files.id = instanceFiles.idFiles', array('filepath' => 'path', 'filename', 'version'))
+                ->join('urls', 'urls.relationId = pages.pageId AND pages.version = urls.version AND urls.idLanguages = ' . $this->getLanguageId(), array('url'))
+                ->join('languages', 'languages.id = urls.idLanguages', array('languageCode' => 'LOWER(languageCode)'))
+                ->where('pages.id = ?', $intPageId)
+                ->where('pages.version = ?', $intVersion)
+                ->order('instanceFiles.idFields DESC')
+                ->limit(1);
+
+            $internalLinks = $this->getPageTable()->fetchAll($objSelect);
+
+        } catch (Exception $e) {
+            $this->core->logger->err('Error Loading InternanLinkInfor From GenericForm  ' . $strGenForm . '-'.$intVersion.', PageId: ' . $intPageId);
+        }
+
+        return $internalLinks;
     }
 
     /**
