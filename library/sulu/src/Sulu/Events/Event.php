@@ -247,7 +247,7 @@ class Event {
             }
             $from->modify($symbol . $dayDifference . ' day');
 
-            $diffDays = intval($date->diff($this->fromDate)->format("%a"));
+            $diffDays = intval($date->diff($from)->format("%a"));
             if ( $diffDays % ($this->repeatInterval * 7) == 0 ) {
                 return true;
             }
@@ -287,7 +287,7 @@ class Event {
      */
     protected function weekOfMonth($date)
     {
-        return ceil( date( 'j', strtotime( $date->getTimestamp() ) ) / 7 );
+        return ceil( date( 'j', $date->getTimestamp() ) / 7 );
     }
 
     /**
