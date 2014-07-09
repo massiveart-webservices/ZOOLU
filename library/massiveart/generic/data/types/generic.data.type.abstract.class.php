@@ -1206,7 +1206,6 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
         $this->loadMultiFieldData($strType, $arrTypeProperties);
         $this->loadInstanceData($strType, $arrTypeProperties);
         $this->loadMultiplyRegionData($strType, $arrTypeProperties);
-        echo 'data loaded... <br/>' . PHP_EOL;
 
     }
 
