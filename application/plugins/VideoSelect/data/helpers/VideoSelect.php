@@ -241,15 +241,15 @@ class Plugin_DataHelper_VideoSelect extends GenericDataHelperAbstract  {
 
             //Generate value-string array
             foreach ($arrRawInstanceData as $intInstanceDataId => $arrInstanceDataRow) {
-                $strValue = $arrInstanceDataRow['videoId']; 
-                
-                $this->objElement->setValue($strValue);
-                $this->objElement->intVideoTypeId = $arrInstanceDataRow['idVideoTypes'];
-                $this->objElement->strVideoUserId = $arrInstanceDataRow['userId'];
-                $this->objElement->strVideoThumb = $arrInstanceDataRow['thumb'];
-                $this->objElement->strVideoTitle = $arrInstanceDataRow['title'];
-                
-                $arrInstanceData[$intInstanceDataId] = array('name' => $arrInstanceFieldNames[$intInstanceDataId], 'value' => $strValue);
+                $strValue = $arrInstanceDataRow['videoId'];
+                $properties = array(
+                    'intVideoTypeId' => $arrInstanceDataRow['idVideoTypes'],
+                    'strVideoUserId' => $arrInstanceDataRow['userId'],
+                    'strVideoThumb' => $arrInstanceDataRow['thumb'],
+                    'strVideoTitle' => $arrInstanceDataRow['title'],
+                );
+
+                $arrInstanceData[$intInstanceDataId] = array('name' => $arrInstanceFieldNames[$intInstanceDataId], 'value' => $strValue, 'properties' => $properties);
             }
 
             return $arrInstanceData;

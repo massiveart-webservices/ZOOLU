@@ -1685,6 +1685,11 @@ abstract class GenericDataTypeAbstract implements GenericDataTypeInterface
                             if (count($arrInstanceData) > 0) {
                                 foreach ($arrInstanceData as $intInstanceId => $arrInstanceDataRow) {
                                     $objRegion->getField($arrInstanceDataRow['name'])->setInstanceValue($intInstanceId, $arrInstanceDataRow['value']);
+                                    if (!empty($arrInstanceDataRow['properties'])) {
+                                        foreach ($arrInstanceDataRow['properties'] as $key => $value) {
+                                            $objRegion->getField($arrInstanceDataRow['name'])->setInstanceProperty($intInstanceId, $key, $value);
+                                        }
+                                    }
                                 }
                             }
                         }
