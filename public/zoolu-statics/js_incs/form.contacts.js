@@ -44,7 +44,7 @@ realSave: function () {
         if ($(this.formId)) {
             // write/save texteditor content to generic form
             if ($$('.texteditor')) {
-                tinyMCE.triggerSave();
+                tinymce.triggerSave();
                 myCore.resetTinyMCE(true);
             }
 

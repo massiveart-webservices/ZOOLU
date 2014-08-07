@@ -63,7 +63,7 @@ Massiveart.Form = Class.create({
              * write/save texteditor content to generic form
              */
             if ($$('.texteditor')) {
-                tinyMCE.triggerSave();
+                tinymce.triggerSave();
                 myCore.resetTinyMCE(true);
             }
 
@@ -1398,7 +1398,7 @@ Massiveart.Form = Class.create({
         // remove tiny mce control
         if (this.regionTexteditorObj[regionId]) {
             this.regionTexteditorObj[regionId].each(function (elementId) {
-                tinyMCE.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
+                tinymce.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
             }.bind(this));
         }
 
@@ -1553,7 +1553,7 @@ Massiveart.Form = Class.create({
             widgetId = arrElementIds[2];
             if (this.regionTexteditorObj[regionId]) {
                 this.regionTexteditorObj[regionId].each(function (elementId) {
-                    tinyMCE.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
+                    tinymce.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
                 }.bind(this));
             }
         }
@@ -1569,7 +1569,7 @@ Massiveart.Form = Class.create({
             widgetId = arrElementIds[2];
             if (this.regionTexteditorObj[regionId]) {
                 this.regionTexteditorObj[regionId].each(function (elementId) {
-                    tinyMCE.execCommand('mceAddControl', false, elementId.gsub(/REPLACE_n/, widgetId));
+                    tinymce.execCommand('mceAddControl', false, elementId.gsub(/REPLACE_n/, widgetId));
                 }.bind(this));
             }
         }
@@ -1580,74 +1580,62 @@ Massiveart.Form = Class.create({
      */
     initTexteditor: function (elementId) {
         if ($(elementId)) {
-
-// ---------------------------------------- NEW ----------------------------------------      
-            tinyMCE.init({
-                // General options
-                mode: "exact",
-                elements: elementId,
-                theme: "advanced",
-                width: "100%",
-                height: "240",
-                debug: false,
+            tinymce.init({
+                selector: "textarea#" + elementId,
+                theme: "modern",
+                skin: "zoolu",
+                width: "99.3%",
+                height: 240,
                 valid_elements: '*[*]',
-                custom_shortcuts: false,
                 language: myCore.languageCode,
-
-                plugins: "lists,pagebreak,style,layer,table,advlink,inlinepopups,insertdatetime,media,paste,fullscreen,noneditable,visualchars,xhtmlxtras,wordcount,advlist",
-
-                // Theme options        
-                theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,bullist,numlist,|,outdent,indent,blockquote,|,justifyleft,justifycenter,justifyright,|,sub,sup,|,link,unlink,anchor",
-                theme_advanced_buttons2: "formatselect,|,tablecontrols",
-                theme_advanced_buttons3: "cut,copy,paste,pasteword,|,removeformat,charmap,|,fullscreen,code",
-                theme_advanced_buttons4: "",
-                theme_advanced_toolbar_location: "top",
-                theme_advanced_toolbar_align: "left",
-                theme_advanced_statusbar_location: "bottom",
-                theme_advanced_resizing: true,
-                theme_advanced_resize_horizontal: false,
-
-                // Example content CSS (should be your site CSS)
+                resize: true,
+                menubar: false,
+                plugins: [
+                    "advlist autolink link lists charmap hr anchor wordcount visualblocks visualchars code fullscreen nonbreaking table contextmenu directionality paste textcolor"
+                ],
                 content_css: "/website/themes/" + this.theme + "/css/style.css",
-
+                toolbar1: "bold italic underline strikethrough | alignleft aligncenter alignright | cut copy paste pasteword | bullist numlist | table", // styleselect
+                toolbar2: "undo redo | outdent indent blockquote | subscript superscript | link unlink anchor | removeformat charmap | fullscreen code",
+                /* able to define own styles for editor
+                style_formats: [
+                    {title: 'Bold text', inline: 'b'},
+                    {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}}
+                ],*/
                 relative_urls: false,
                 convert_urls: false
             });
-
-// ---------------------------------------- OLD ----------------------------------------
-//      tinyMCE.init({
-//        // General options
-//        //mode : "specific_textareas",
-//        //editor_selector : "texteditor",
-//        mode : "exact",
-//        elements : elementId,            
-//        theme : "advanced",
-//        skin : "zoolu",
-//        debug : false,
-//        width : "100%",
-//        height : "150px",
-//        valid_elements : '*[*]',
-//     
-//        // plugins
-//        plugins : "safari,table,advimage,advlink,media,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,inlinepopups",
-//                    
-//        // Theme options
-//        
-//        theme_advanced_buttons1 : "bold,italic,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,|,sub,sup,|,link,unlink,anchor,|,fullscreen,code",
-//        theme_advanced_buttons2 : "formatselect,|,tablecontrols",
-//        theme_advanced_buttons3 : "",
-//        theme_advanced_buttons4 : "",                
-//        theme_advanced_toolbar_location : "top",
-//        theme_advanced_toolbar_align : "left",
-//        theme_advanced_statusbar_location : "bottom",
-//        theme_advanced_resizing : true,
-//        theme_advanced_resize_horizontal : false,
-//          
-//        content_css: "/website/themes/" + this.theme + "/css/screen.css",
-//        
-//        relative_urls : false,
-//        convert_urls : false
-//      });
+// ---------------------------------------- OLD v2 ----------------------------------------
+//            tinymce.init({
+//                // General options
+//                mode: "exact",
+//                elements: elementId,
+//                theme: "advanced",
+//                width: "100%",
+//                height: "240",
+//                debug: false,
+//                valid_elements: '*[*]',
+//                custom_shortcuts: false,
+//                language: myCore.languageCode,
+//
+//                plugins: "lists,pagebreak,style,layer,table,advlink,inlinepopups,insertdatetime,media,paste,fullscreen,noneditable,visualchars,xhtmlxtras,wordcount,advlist",
+//
+//                // Theme options
+//                theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,bullist,numlist,|,outdent,indent,blockquote,|,justifyleft,justifycenter,justifyright,|,sub,sup,|,link,unlink,anchor",
+//                theme_advanced_buttons2: "formatselect,|,tablecontrols",
+//                theme_advanced_buttons3: "cut,copy,paste,pasteword,|,removeformat,charmap,|,fullscreen,code",
+//                theme_advanced_buttons4: "",
+//                theme_advanced_toolbar_location: "top",
+//                theme_advanced_toolbar_align: "left",
+//                theme_advanced_statusbar_location: "bottom",
+//                theme_advanced_resizing: true,
+//                theme_advanced_resize_horizontal: false,
+//
+//                // Example content CSS (should be your site CSS)
+//                content_css: "/website/themes/" + this.theme + "/css/style.css",
+//
+//                relative_urls: false,
+//                convert_urls: false
+//            });
         }
     },
 
