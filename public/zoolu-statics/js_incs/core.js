@@ -269,11 +269,11 @@ Massiveart.Core = Class.create({
         blnAndDestroy = false;
       }
 
-      if(tinyMCE.editors.length > 0){
+      if(tinymce.editors.length > 0){
         /**
          * reset some tiny mce issues
-         */
-        tinyMCE.editors.each(function(e) {
+
+        tinymce.editors.each(function(e) {
           if(e.controlManager.controls){
             if(e.controlManager.get('formatselect')){
               if(e.controlManager.get('formatselect').menu){
@@ -283,13 +283,13 @@ Massiveart.Core = Class.create({
               }
             }
           }
-        });  
+        });*/
         
         /**
          * destroy all editors
          */
         if(blnAndDestroy){
-          tinyMCE.editors = [];
+          tinymce.editors = [];
         }
       }
     }

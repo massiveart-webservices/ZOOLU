@@ -25,7 +25,7 @@ Massiveart.Form.Landingpages = Class.create(Massiveart.Form, {
       * write/save texteditor content to generic form
       */
       if($$('.texteditor')){
-        tinyMCE.triggerSave();
+        tinymce.triggerSave();
         myCore.resetTinyMCE(true);
       }
      
