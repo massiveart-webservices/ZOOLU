@@ -136,7 +136,8 @@ class IndexController extends WebControllerAction
                     'new-inline-tags'     => 'video,audio,canvas,address,track,svg,time,datalist',
                     'doctype'             => '<!doctype html>',
                     'sort-attributes'     => 'alpha',
-                    'drop-empty-elements' => false,
+                    // disabled because of missing tidy update for servers:
+                    // 'drop-empty-elements' => false,
                     'vertical-space'      => false,
                     'output-xhtml'        => true,
                     'wrap'                => 200,
