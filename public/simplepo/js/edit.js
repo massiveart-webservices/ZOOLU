@@ -26,7 +26,7 @@
     }
 
     function replaceSpecificChars(str) {
-        return str.replace(/\s/g, '--20--').replace(/\//g, '--2F--').replace(/\?/g, '--3F--').replace(/\:/g, '--3A--').replace(/\./g, '--46--').replace(/\'/g, '--39--').replace(/\*/g, '--42--').replace(/\,/g, '--44--');
+        return str.replace(/\s/g, '--20--').replace(/\//g, '--2F--').replace(/\?/g, '--3F--').replace(/\:/g, '--3A--').replace(/\./g, '--46--').replace(/\'/g, '--39--').replace(/\*/g, '--42--').replace(/\,/g, '--44--').replace(/\%/g, '--25--').replace(/\$/g, '--24--');
     }
 
     /* MASSIVEART Enhancements end*/
