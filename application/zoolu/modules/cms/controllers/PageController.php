@@ -1403,7 +1403,14 @@ class Cms_PageController extends AuthControllerAction
             $pageType = $this->core->sysConfig->types->page;
         }
         $defaultTemplateId = $intTemplateId;
-        $templates = $this->getModelTemplates()->loadRootLevelTemplates($rootLevelId, $pageType);
+        
+        $isStartpage = $this->objRequest->getParam('isStartPage') == 'true' || $this->objRequest->getParam('isStartPage') == 1;
+        $intParentTypeId = $this->objRequest->getParam('parentTypeId');
+        $intFormTypeId = $this->objRequest->getParam('formTypeId');
+
+        $modelTemplates = $this->getModelTemplates();
+        $modelTemplates->setLanguageId($this->core->intZooluLanguageId);
+        $templates = $this->getModelTemplates()->loadActiveTemplates($isStartpage, $pageType, $intParentTypeId, $intFormTypeId, $rootLevelId);
         foreach ($templates->toArray() as $template) {
             $intTemplateId = $template['id'];
             $strFormId = $template['genericFormId'];
