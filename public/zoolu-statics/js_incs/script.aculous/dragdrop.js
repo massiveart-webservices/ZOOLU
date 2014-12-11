@@ -382,13 +382,6 @@ var Draggable = Class.create({
         p = Position.page(this.options.scroll);
         p[0] += this.options.scroll.scrollLeft + Position.deltaX;
         p[1] += this.options.scroll.scrollTop + Position.deltaY;
-        //fix object to array
-            var tempData = [];
-            for ( var index=0; index<p.length; index++ ) {
-                tempData.push( p );
-            }
-            p = tempData;
-        // fix
         p.push(p[0]+this.options.scroll.offsetWidth);
         p.push(p[1]+this.options.scroll.offsetHeight);
       }
