@@ -1398,7 +1398,7 @@ Massiveart.Form = Class.create({
         // remove tiny mce control
         if (this.regionTexteditorObj[regionId]) {
             this.regionTexteditorObj[regionId].each(function (elementId) {
-                tinymce.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
+                tinymce.execCommand('mceRemoveEditor', false, elementId.gsub(/REPLACE_n/, widgetId));
             }.bind(this));
         }
 
@@ -1553,7 +1553,7 @@ Massiveart.Form = Class.create({
             widgetId = arrElementIds[2];
             if (this.regionTexteditorObj[regionId]) {
                 this.regionTexteditorObj[regionId].each(function (elementId) {
-                    tinymce.execCommand('mceRemoveControl', false, elementId.gsub(/REPLACE_n/, widgetId));
+                    tinymce.execCommand('mceRemoveEditor', false, elementId.gsub(/REPLACE_n/, widgetId));
                 }.bind(this));
             }
         }
@@ -1569,7 +1569,7 @@ Massiveart.Form = Class.create({
             widgetId = arrElementIds[2];
             if (this.regionTexteditorObj[regionId]) {
                 this.regionTexteditorObj[regionId].each(function (elementId) {
-                    tinymce.execCommand('mceAddControl', false, elementId.gsub(/REPLACE_n/, widgetId));
+                    tinymce.execCommand('mceAddEditor', false, elementId.gsub(/REPLACE_n/, widgetId));
                 }.bind(this));
             }
         }
