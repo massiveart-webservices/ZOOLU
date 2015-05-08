@@ -139,7 +139,7 @@ class Core_VideoController extends AuthControllerAction
     protected function getChannelVideos($key, $channelId, $searchQuery)
     {
         try {
-            $url = 'https://www.googleapis.com/youtube/v3/search?key=' . $key . '&part=snippet&type=video';
+            $url = 'https://www.googleapis.com/youtube/v3/search?key=' . $key . '&part=snippet&maxResults=50&order=viewCount&type=video';
 
             if(isset($channelId) && $channelId != '' && $channelId !== 'publicAccess') {
                 $url .= '&channelId=' . urlencode($channelId);
