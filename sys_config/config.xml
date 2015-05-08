@@ -1113,9 +1113,10 @@
             </vimeo> -->
             <youtube>
                 <id>2</id>
+                <unique_id>true</unique_id>
                 <users>
                     <user>
-                        <id>MASSIVEARTWebService</id>
+                        <id>UCLL7r-Ct3G_m9iUPcwjau1Q</id> <!-- MASSIVEARTWebService -->
                         <name>MASSIVE ART WebServices</name>
                     </user>
                 </users>

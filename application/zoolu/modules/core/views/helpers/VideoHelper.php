@@ -69,88 +69,89 @@ class VideoHelper
 
         $intCounter = 0;
         $strOutput = '';
+        if(count($objVideos) > 0) {
+            foreach ($objVideos as $objVideo) {
+                $intCounter++;
 
-        foreach ($objVideos as $objVideo) {
-            $intCounter++;
+                switch ($intVideoTypeId) {
+                    // Vimeo Controller
+                    /*case $this->core->sysConfig->video_channels->vimeo->id :
+                        $objThumbnails = $objVideo->getThumbnails();
+                        $objThumbnail = current(current($objThumbnails));
 
-            switch ($intVideoTypeId) {
-                // Vimeo Controller
-                /*case $this->core->sysConfig->video_channels->vimeo->id :
-                    $objThumbnails = $objVideo->getThumbnails();
-                    $objThumbnail = current(current($objThumbnails));
+                        $strBgClass = ($intCounter % 2) ? ' bg2' : ' bg1';
 
-                    $strBgClass = ($intCounter % 2) ? ' bg2' : ' bg1';
-
-                    $strOutput .= '
-                  <div class="videoItem' . $strBgClass . '" id="div_' . $strElementId . '_' . $objVideo->getID() . '"   >
-                    <div class="videoThumb"><img src="' . $objThumbnail->getContent() . '" width="100"/></div>
-                    <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideo->getID() . '" name="thumb_' . $strElementId . '_' . $objVideo->getID() . '" value="' . $objThumbnail->getContent() . '"/>
-                    <div class="videoInfos">
-                     <div class="buttonSelectVideo" onclick="myForm.selectVideo(\'' . $strElementId . '\', \'' . $objVideo->getID() . '\');">
-                      <div>
-                        <div class="button25leftOn"></div>
-                        <div class="button25centerOn">
-                          <div>Auswählen</div>
+                        $strOutput .= '
+                      <div class="videoItem' . $strBgClass . '" id="div_' . $strElementId . '_' . $objVideo->getID() . '"   >
+                        <div class="videoThumb"><img src="' . $objThumbnail->getContent() . '" width="100"/></div>
+                        <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideo->getID() . '" name="thumb_' . $strElementId . '_' . $objVideo->getID() . '" value="' . $objThumbnail->getContent() . '"/>
+                        <div class="videoInfos">
+                         <div class="buttonSelectVideo" onclick="myForm.selectVideo(\'' . $strElementId . '\', \'' . $objVideo->getID() . '\');">
+                          <div>
+                            <div class="button25leftOn"></div>
+                            <div class="button25centerOn">
+                              <div>Auswählen</div>
+                            </div>
+                            <div class="button25rightOn"></div>
+                            <div class="clear"></div>
+                          </div>
+                         </div>
+                         <div class="buttonUnselectVideo" style="display:none;" onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideo->getID() . '\');" >
+                          <div class="button25leftOff"></div>
+                          <div class="button25centerOff">
+                            <div>Löschen</div>
+                          </div>
+                          <div class="button25rightOff"></div>
+                          <div class="clear"></div>
+                         </div>
+                         <strong>' . $objVideo->getTitle() . '</strong>
+                         <br/><span class="gray666">(' . date('d.m.Y H:i', $objVideo->getUploadTimestamp()) . ')</span>
+                         <input type="hidden" id="title_' . $strElementId . '_' . $objVideo->getID() . '" name="title_' . $strElementId . '_' . $objVideo->getID() . '" value="' . $objVideo->getTitle() . '"/>
                         </div>
+                       <div class="clear"></div>
+                      </div>';
+
+                        break;*/
+
+                    // Youtube Controller
+                    case $this->core->sysConfig->video_channels->youtube->id :
+
+                        $objThumbnails = $objVideo->getVideoThumbnails();
+                        $arrThumbnail = current($objThumbnails);
+                        $arrTags = array();
+                        $strBgClass = ($intCounter % 2) ? ' bg2' : ' bg1';
+                        $strOutput .= '
+                  <div class="videoItem' . $strBgClass . '" id="div_' . $strElementId . '_' . $objVideo->getVideoId() . '"   >
+                    <div class="videoThumb"><img src="' . $arrThumbnail->url . '" width="100"/></div>
+                    <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideo->getVideoId() . '" name="thumb_' . $strElementId . '_' . $objVideo->getVideoId() . '" value="' . $arrThumbnail->url . '"/>
+                    <div class="videoInfos">
+                      <div class="buttonSelectVideo" onclick="myForm.selectVideo(\'' . $strElementId . '\', \'' . $objVideo->getVideoId() . '\');">
+                        <div class="button25leftOn"></div>
+                        <div class="button25centerOn"><div>Auswählen</div></div>
                         <div class="button25rightOn"></div>
                         <div class="clear"></div>
                       </div>
-                     </div>
-                     <div class="buttonUnselectVideo" style="display:none;" onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideo->getID() . '\');" >
-                      <div class="button25leftOff"></div>
-                      <div class="button25centerOff">
-                        <div>Löschen</div>
+                      <div class="buttonUnselectVideo" style="display:none;" onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideo->getVideoId() . '\');">
+                        <div class="button25leftOff"></div>
+                        <div class="button25centerOff"><div>Löschen</div></div>
+                        <div class="button25rightOff"></div>
+                        <div class="clear"></div>
                       </div>
-                      <div class="button25rightOff"></div>
-                      <div class="clear"></div>        
-                     </div>
-                     <strong>' . $objVideo->getTitle() . '</strong>
-                     <br/><span class="gray666">(' . date('d.m.Y H:i', $objVideo->getUploadTimestamp()) . ')</span>
-                     <input type="hidden" id="title_' . $strElementId . '_' . $objVideo->getID() . '" name="title_' . $strElementId . '_' . $objVideo->getID() . '" value="' . $objVideo->getTitle() . '"/>
+                      <strong>' . $objVideo->getTitle() . '</strong>';
+                        // Check if VideoRecorded Date isnt null
+                        if ($objVideo->getVideoRecorded() != null) {
+                            $strVideoUploadDate = date('d.m.Y H:i', strtotime($objVideo->getVideoRecorded()));
+                            $strOutput .= '<br/><span class="gray666">(' . $strVideoUploadDate . ')</span>';
+                        }
+                        $strOutput .= '
+                      <input type="hidden" id="title_' . $strElementId . '_' . $objVideo->getVideoId() . '" name="title_' . $strElementId . '_' . $objVideo->getVideoId() . '" value="' . $objVideo->getTitle() . '"/>
+                      <div class="clear"></div>
                     </div>
-                   <div class="clear"></div>
+                    <div class="clear"></div>
                   </div>';
 
-                    break;*/
-
-                // Youtube Controller
-                case $this->core->sysConfig->video_channels->youtube->id :
-
-                    $objThumbnails = $objVideo->getVideoThumbnails();
-                    $arrThumbnail = current($objThumbnails);
-                    $arrTags = array();
-                    $strBgClass = ($intCounter % 2) ? ' bg2' : ' bg1';
-                    $strOutput .= '
-              <div class="videoItem' . $strBgClass . '" id="div_' . $strElementId . '_' . $objVideo->getVideoId() . '"   >
-                <div class="videoThumb"><img src="' . $arrThumbnail['url'] . '" width="100"/></div>
-                <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideo->getVideoId() . '" name="thumb_' . $strElementId . '_' . $objVideo->getVideoId() . '" value="' . $arrThumbnail['url'] . '"/>
-                <div class="videoInfos">
-                  <div class="buttonSelectVideo" onclick="myForm.selectVideo(\'' . $strElementId . '\', \'' . $objVideo->getVideoId() . '\');">
-                    <div class="button25leftOn"></div>
-                    <div class="button25centerOn"><div>Auswählen</div></div>
-                    <div class="button25rightOn"></div>
-                    <div class="clear"></div>
-                  </div>                 
-                  <div class="buttonUnselectVideo" style="display:none;" onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideo->getVideoId() . '\');">
-                    <div class="button25leftOff"></div>
-                    <div class="button25centerOff"><div>Löschen</div></div>
-                    <div class="button25rightOff"></div>
-                    <div class="clear"></div>        
-                  </div>
-                  <strong>' . $objVideo->getTitle() . '</strong>';
-                    // Check if VideoRecorded Date isnt null
-                    if ($objVideo->getVideoRecorded() != null) {
-                        $strVideoUploadDate = date('d.m.Y H:i', strtotime($objVideo->getVideoRecorded()));
-                        $strOutput .= '<br/><span class="gray666">(' . $strVideoUploadDate . ')</span>';
-                    }
-                    $strOutput .= '
-                  <input type="hidden" id="title_' . $strElementId . '_' . $objVideo->getVideoId() . '" name="title_' . $strElementId . '_' . $objVideo->getVideoId() . '" value="' . $objVideo->getTitle() . '"/>
-                  <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-              </div>';
-
-                    break;
+                        break;
+                }
             }
         }
         /**
@@ -173,44 +174,18 @@ class VideoHelper
           <div id="' . $strElementId . 'SelectedService" class="field-12" style="padding: 0 0 2px 0;"><strong>' . $strVideoTypeName . '</strong> &raquo; ' . $strChannelUserId . '</div>';
 
         switch ($intVideoTypeId) {
-            // Vimeo Controller
-            /*case $this->core->sysConfig->video_channels->vimeo->id :
-
-                $objThumbnails = $objVideoEntity->getThumbnails();
-                $objThumbnail = current(current($objThumbnails));
-
-                $strOutput .= '
-            <div class="selectedVideo' . $strBgClass . '">
-              <div id="div_selected' . $strElementId . '" >
-                <div class="videoThumb"><img src="' . $objThumbnail->getContent() . '" width="100"/></div>
-                <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideoEntity->getID() . '" name="thumb_' . $strElementId . '_' . $objVideoEntity->getID() . '" value="' . $objThumbnail->getContent() . '"/>
-                <div class="videoInfos"> 
-                  <div  onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideoEntity->getID() . '\');" style="cursor:pointer; position:relative; float:right; padding-right:5px; padding-top:20px;">
-                    <div class="button25leftOff"></div>
-                    <div class="button25centerOff"><div>Löschen</div></div>
-                    <div class="button25rightOff"></div>
-                    <div class="clear"></div>
-                  </div>
-                </div>
-                <strong>' . $objVideoEntity->getTitle() . '</strong>
-                <br/><span class="gray666">(' . date('d.m.Y H:i', $objVideoEntity->getUploadTimestamp()) . ')</span>
-                <input type="hidden" id="title_' . $strElementId . '_' . $objVideoEntity->getID() . '" name="title_' . $strElementId . '_' . $objVideoEntity->getID() . '" value="' . $objVideoEntity->getTitle() . '"/>
-              </div>
-            </div>';
-                break;*/
 
             // Youtube Controller
             case $this->core->sysConfig->video_channels->youtube->id :
 
                 $objThumbnails = $objVideoEntity->getVideoThumbnails();
                 $arrThumbnail = current($objThumbnails);
-                $arrTags = $objVideoEntity->getVideoTags();
 
                 $strOutput .= '
             <div class="selectedVideo' . $strBgClass . '">
               <div id="div_selected' . $strElementId . '">
-                <div class="videoThumb"><img src="' . $arrThumbnail['url'] . '" width="100"/></div>
-                <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideoEntity->getVideoId() . '" name="thumb_' . $strElementId . '_' . $objVideoEntity->getVideoId() . '" value="' . $arrThumbnail['url'] . '"/>
+                <div class="videoThumb"><img src="' . $arrThumbnail->url . '" width="100"/></div>
+                <input type="hidden" id="thumb_' . $strElementId . '_' . $objVideoEntity->getVideoId() . '" name="thumb_' . $strElementId . '_' . $objVideoEntity->getVideoId() . '" value="' . $arrThumbnail->url . '"/>
                 <div class="videoInfos">              
                     <div onclick="myForm.unselectVideo(\'' . $strElementId . '\', \'' . $objVideoEntity->getVideoId() . '\');" style="cursor:pointer; position:relative; float:right; padding-right:5px; padding-top:20px;">
                       <div class="button25leftOff"></div>

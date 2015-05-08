@@ -27,6 +27,8 @@
 	    <file_filters>
 	      <parent_id>666</parent_id>
 	    </file_filters>
+
+        <youtube_api_key>AIzaSyCahRZs5cUwtxr71I2rVhsEVMHAa6CrmTo</youtube_api_key>
     </production>
 
     <!--
