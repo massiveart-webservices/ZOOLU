@@ -112,7 +112,7 @@ class Core_VideoController extends AuthControllerAction
         if($channelUser !== 'publicAccess') {
             if (!isset($this->core->sysConfig->video_channels->youtube->unique_id) || $this->core->sysConfig->video_channels->youtube->unique_id === 'false') {
                 $url = 'https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=' . $channelUser . '&key=' . $key;
-                $channel = json_decode($this->connectYouTube($url));
+                $channel = json_decode($this->connectYouTube($url));connectYouTube
 
                 if (count($channel->items) > 0) {
                     return $channel->items[0]->id;
@@ -167,7 +167,8 @@ class Core_VideoController extends AuthControllerAction
      *
      * @return mixed
      */
-    protected function connectYouTube($url) {
+    protected function connectYouTube($url) 
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_REFERER, $_SERVER['SERVER_NAME']);

@@ -38,7 +38,8 @@
  * @author Dominik MAtt <dma@massiveart.com>
  * @version 1.0
  */
-class Video {
+class Video 
+{
     protected $thumbnails = array();
     protected $videoId = null;
     protected $title = null;
@@ -48,7 +49,8 @@ class Video {
      * @method setThumbnail
      * @param $thumbnail
      */
-    public function setThumbnail($thumbnail) {
+    public function setThumbnail($thumbnail) 
+    {
         $this->thumbnails = $thumbnail;
     }
 
@@ -58,7 +60,8 @@ class Video {
      *
      * @return mixed
      */
-    public function getThumbnail($size) {
+    public function getThumbnail($size) 
+    {
         if(!isset($size)) {
             $size = 'default';
         }
@@ -70,7 +73,8 @@ class Video {
      * @method getVideoThumbnails
      * @return array
      */
-    public function getVideoThumbnails() {
+    public function getVideoThumbnails() 
+    {
         return $this->thumbnails;
     }
 
@@ -78,7 +82,8 @@ class Video {
      * @method setVideoId
      * @param $id
      */
-    public function setVideoId($id) {
+    public function setVideoId($id) 
+    {
         $this->videoId = $id;
     }
 
@@ -86,7 +91,8 @@ class Video {
      * @method getVideoId
      * @return null
      */
-    public function getVideoId() {
+    public function getVideoId() 
+    {
         return $this->videoId;
     }
 
@@ -94,7 +100,8 @@ class Video {
      * @method setTitle
      * @param $title
      */
-    public function setTitle($title) {
+    public function setTitle($title) 
+    {
         $this->title = $title;
     }
 
@@ -102,7 +109,8 @@ class Video {
      * @method getTitle
      * @return null
      */
-    public function getTitle() {
+    public function getTitle() 
+    {
         return $this->title;
     }
 
@@ -110,7 +118,8 @@ class Video {
      * @method setVideoRecorded
      * @param $recorded
      */
-    public function setVideoRecorded($recorded) {
+    public function setVideoRecorded($recorded) 
+    {
         $this->publishedAt = $recorded;
     }
 
@@ -118,7 +127,8 @@ class Video {
      * @method getVideoRecorded
      * @return null
      */
-    public function getVideoRecorded() {
+    public function getVideoRecorded() 
+    {
         return $this->publishedAt;
     }
 }
