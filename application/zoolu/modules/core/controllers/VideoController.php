@@ -194,7 +194,11 @@ class Core_VideoController extends AuthControllerAction
 
                 $element = new Video();
                 $element->setThumbnail($video->snippet->thumbnails);
-                $element->setVideoId($video->id->videoId);
+                if(is_object($video->id)) {
+                    $element->setVideoId($video->id->videoId);
+                } else {
+                    $element->setVideoId($video->id);
+                }
                 $element->setTitle($video->snippet->title);
                 $element->setVideoRecorded($video->snippet->publishedAt);
 
@@ -226,23 +230,27 @@ class Core_VideoController extends AuthControllerAction
             $strChannelUserId = $objRequest->getParam('channelUserId');
             $arrSelectedVideo = array();
 
+
+
             switch ($intChannelId) {
                 // Youtube Controller
                 case $this->core->sysConfig->video_channels->youtube->id :
                     $intVideoTypeId = 2;
                     $strVideoTypeName = "YouTube";
-
-                    $objResponse = new Zend_Gdata_YouTube();
-                    $objResponse->setMajorProtocolVersion(2);
-                    // Get the selected Video
-                    if (isset($strValue)) {
-                        $objSelectedVideo = $objResponse->getVideoEntry($strValue);
+                    $key = $this->core->zooConfig->youtube_api_key;
+                    $url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' . $strValue . '&key=' . $key;
+                    $result = json_decode($this->connectYouTube($url));
+                    
+                    $videos = $this->prepareYouTubeVideoData($result->items);
+                    if(count($videos) > 0) {
+                        $selectedVideo = $videos[0];
                     }
-                    break;
+                break;
             }
+
             $this->view->strVideoTypeName = $strVideoTypeName;
             $this->view->intVideoTypeId = $intVideoTypeId;
-            $this->view->objSelectedVideo = $objSelectedVideo;
+            $this->view->objSelectedVideo = $selectedVideo;
             $this->view->strValue = $strValue;
             $this->view->strElementId = $strElementId;
             $this->view->strChannelUserId = $strChannelUserId;
