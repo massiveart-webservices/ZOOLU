@@ -450,7 +450,10 @@ class File
 
                             $strWhere = $this->objModelFile->getFileTitleTable()->getAdapter()->quoteInto('idFiles = ?', $intEditFileId);
                             $strWhere .= $this->objModelFile->getFileTitleTable()->getAdapter()->quoteInto(' AND idLanguages = ?', $this->intLanguageId);
-                            $intNumOfEffectedRows = $this->objModelFile->getFileTitleTable()->update($arrData, $strWhere);
+
+                            $elements = $this->objModelFile->getFileTitleTable()->fetchAll($strWhere);
+                            $intNumOfEffectedRows = count($elements);
+                            $this->objModelFile->getFileTitleTable()->update($arrData, $strWhere);
 
                             if ($intNumOfEffectedRows == 0) {
                                 $this->saveFileData(array($intEditFileId));
