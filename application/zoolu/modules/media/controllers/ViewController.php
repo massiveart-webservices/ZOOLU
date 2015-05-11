@@ -111,6 +111,7 @@ class Media_ViewController extends AuthControllerAction
         $strSearchValue = $this->getRequest()->getParam('search');
         $strOrderColumn = (($this->getRequest()->getParam('order') != '') ? $this->getRequest()->getParam('order') : '');
         $strOrderSort = (($this->getRequest()->getParam('sort') != '') ? $this->getRequest()->getParam('sort') : '');
+        $languageId = (($this->getRequest()->getParam('languageId') != '') ? $this->getRequest()->getParam('languageId') : $this->core->intLanguageId);
 
         $objRequest = $this->getRequest();
         $intFolderId = $objRequest->getParam('folderId');
@@ -119,6 +120,7 @@ class Media_ViewController extends AuthControllerAction
          * get files
          */
         $this->getModelFiles();
+        $this->objModelFiles->setLanguageId($languageId);
         $objFilesSelect = $this->objModelFiles->loadFiles($intFolderId, -1, false, true, $strSearchValue, $strOrderColumn, $strOrderSort);
 
         $objAdapter = new Zend_Paginator_Adapter_DbTableSelect($objFilesSelect);
